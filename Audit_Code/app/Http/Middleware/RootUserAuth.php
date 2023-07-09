@@ -20,7 +20,7 @@ class RootUserAuth
         {
 
               if(Auth::user()->privilege_id==4){
-                //he is rot user
+                //he is root user
                     return $next($request);
 
               }   
