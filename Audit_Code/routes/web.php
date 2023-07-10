@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 
 Route::get('/', function () {
     return view('login-view');
-})->name('home');
+})->name('home')->middleware('guest');
 
 Route::middleware(['auth','is_root_user'])->group(function(){
 Route::get('/root_home',[UserController::class,'root_home'])->name('root_home');

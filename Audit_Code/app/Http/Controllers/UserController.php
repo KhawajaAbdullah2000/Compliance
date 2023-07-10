@@ -47,7 +47,7 @@ public function user_home(){
 public function logout(){
     Auth::logout();
 
-    return redirect()->route('home')->with('error','Logged out successfully');
+    return redirect()->route('home')->with('success','Logged out successfully');
 
 }
     

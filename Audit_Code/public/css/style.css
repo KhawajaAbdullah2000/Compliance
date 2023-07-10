@@ -4,7 +4,6 @@
 
 .navbar {
     padding: 15px 10px;
-    background: #fff;
     border: none;
     border-radius: 0;
     margin-bottom: 40px;
@@ -12,21 +11,15 @@
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.navbar-btn {
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    outline: none !important;
-    border: none;
-}
-
 #sidebar {
     min-width: 300px;
     max-width: 300px;
-    background: #1d1919;
-    color: #fff;
+    background: #7386D5;
+    color: black;
     -webkit-transition: all 0.3s;
     -o-transition: all 0.3s;
     transition: all 0.3s;
+    font-weight: bolder;
 }
 
 #sidebar.active {
@@ -57,23 +50,23 @@
 }
 
 #sidebar ul li>ul li {
-    font-size: 14px;
+    font-size: 18rem;
 }
 
 #sidebar ul li a {
     padding: 10px 0;
     display: block;
-    color: rgba(255, 255, 255, 0.8);
+    color: black;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 #sidebar ul li a:hover {
-    color: #f8b739;
+    color: purple;
 }
 
 #sidebar ul li.active>a {
     background: transparent;
-    color: #f8b739;
+    color: black;
 }
 
 @media (max-width: 991.98px) {

@@ -2,16 +2,41 @@
 @extends('master')
 
 @section('content')
+
+
+
+@if(Session::has('error'))
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  <p class="text-bold">{{Session::get('error')}}
+  <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true"></span>
+  </button>
+</div>
     
+@endif
+
+
+@if(Session::has('success'))
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  <p class="text-bold">{{Session::get('success')}}
+  <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true"></span>
+  </button>
+</div>
+    
+@endif
+
+
 
 
 <div class="container">
 
 <h1 class="text-center mt-3">Login</h1>
 
-@if(Session::has('error'))
-<h3 class="text-danger">{{Session::get('error')}}</h3>
-@endif
+
+
+
+
 
 @if(Session::has('status'))
 <h3 class="text-secondary">{{Session::get('status')}}</h3>
