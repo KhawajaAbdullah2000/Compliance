@@ -5,6 +5,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -47,7 +48,20 @@ public function user_home(){
 public function logout(){
     Auth::logout();
 
-    return redirect()->route('home')->with('success','Logged out successfully');
+    return redirect()->route('home')->with('sweetalert','Logged out successfully');
+
+}
+
+public function make_role(){
+    // $role = Role::create(['name' => 'root admin']);
+    // $role = Role::create(['name' => 'super user']);
+    // $role = Role::create(['name' => 'end user']);
+
+//    $user=User::where('id',2)->first();
+//     $user->assignRole('super user');
+
+   //$user=User::role('root admin')->get();
+   //dd($user);
 
 }
     

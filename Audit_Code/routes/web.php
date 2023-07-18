@@ -17,17 +17,39 @@ Route::get('/', function () {
     return view('login-view');
 })->name('home')->middleware('guest');
 
-Route::middleware(['auth','is_root_user'])->group(function(){
-Route::get('/root_home',[UserController::class,'root_home'])->name('root_home');
 
+//for root users
+Route::middleware(['auth','is_root_user','role:root admin'])->group(function(){
+Route::get('/root_home',[UserController::class,'root_home'])->name('root_home');
 }
 );
 
+
+
+
+
+//for home page of user
 Route::middleware(['auth','is_user'])->group(function(){
      Route::get('/user_home',[UserController::class,'user_home'])->name('user_home');
-
     }
     );
+
+
+//for super users roled
+Route::middleware(['auth','is_user','role:super user'])->group(function(){
+    Route::get('/super-user',function(){
+        dd('hello super user');
+    });
+  } );
+
+
+
+
+
+
+Route::get('/role',[UserController::class,'make_role']);
+
+
 
  Route::get('/logout',[UserController::class,'logout'])->name('logout');
 

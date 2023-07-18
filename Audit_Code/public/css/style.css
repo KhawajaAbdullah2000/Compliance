@@ -106,3 +106,8 @@ a[data-toggle="collapse"] {
     -o-transition: all 0.3s;
     transition: all 0.3s;
 }
+
+
+/* .swal-overlay {
+    background-color: rgba(43, 165, 137, 0.45);
+} */

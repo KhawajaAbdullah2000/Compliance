@@ -75,5 +75,15 @@
 </div>
 
 
-    
+@if(Session::has('sweetalert'))
+<script>
+    swal({
+  title: "You are logged out",
+  icon: "success",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script> 
+@endif
+
 @endsection

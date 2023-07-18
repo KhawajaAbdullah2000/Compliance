@@ -17,14 +17,14 @@
           <i class="fa fa-bars"></i>
           <span class="sr-only">Toggle Menu</span>
         </button>
+        <a href="{{ url('/logout') }}" class="btn btn-primary">Log out</a>
 
       </div>
     </nav>
     
 <h1>Welcome Root user  {{auth()->user()->first_name}}</h1>
 
-<br>
-<a href="{{ url('/logout') }}" class="btn btn-primary">Log out</a>
+
 </div>
 </div>
 
