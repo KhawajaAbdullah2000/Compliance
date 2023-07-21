@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -17,14 +18,15 @@ Route::get('/', function () {
     return view('login-view');
 })->name('home')->middleware('guest');
 
+Route::post('/login', [UserController::class,'login']);
+
 
 //for root users
 Route::middleware(['auth','is_root_user','role:root admin'])->group(function(){
 Route::get('/root_home',[UserController::class,'root_home'])->name('root_home');
+Route::get('organizations',[OrganizationController::class,'organizations'])->name('organizations');
 }
 );
-
-
 
 
 
@@ -55,7 +57,7 @@ Route::get('/role',[UserController::class,'make_role']);
 
 
 //Route::get('/add-root-user', [UserController::class,'changepass'])->name('pass');
-Route::post('/login', [UserController::class,'login']);
+
 
 
 

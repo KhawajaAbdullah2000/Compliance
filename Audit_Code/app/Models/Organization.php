@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Organization extends Model
 {
+    public $incrementing=false;
     use HasFactory;
 }

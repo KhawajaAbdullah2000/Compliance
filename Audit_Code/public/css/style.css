@@ -1,3 +1,7 @@
+body {
+    font-family: 'Poppins';
+}
+
 .wrapper {
     width: 100%;
 }
@@ -14,7 +18,7 @@
 #sidebar {
     min-width: 300px;
     max-width: 300px;
-    background: #7386D5;
+    background: rgb(81, 197, 250);
     color: black;
     -webkit-transition: all 0.3s;
     -o-transition: all 0.3s;
@@ -57,7 +61,7 @@
     padding: 10px 0;
     display: block;
     color: black;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 #sidebar ul li a:hover {
