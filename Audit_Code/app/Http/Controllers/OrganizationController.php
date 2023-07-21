@@ -3,15 +3,73 @@
 namespace App\Http\Controllers;
 
 use App\Models\Organization;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-
+use Exception;
+use Illuminate\Validation\Rule;
 class OrganizationController extends Controller
 {
-    public function organizations(){
+    public function organizations(Request $req){
         $orgs=Organization::query();
 
-        //paginate
+        if($req->has('search') and !empty($req->input('search'))){
+            $orgs->where('name','like','%'.$req->input('search').'%')
+            ->orwhere('country','like','%'.$req->input('search').'%')
+            ->orwhere('sub_org','like','%'.$req->input('search').'%')
+            ->orwhere('type','like','%'.$req->input('search').'%');
+        }
 
-        return view('root_user.organizations',['organizations'=>$orgs->get()]);
+        return view('root_user.organizations',['organizations'=>$orgs->orderby('created_at','desc')->paginate(5)->withQueryString()]);
+    }
+
+    public function add_new_org(){
+        return view('root_user.add_new_org');
+    }
+
+    public function register_new_org(Request $req){
+        $req->validate([
+            'name'=>'required|max:100',
+            'sub_org'=>['required','max:100', Rule::unique('organizations')->where(function ($query) use ($req) {
+                return $query->where('name', $req->input('name'));
+            })],
+            'type'=>'required',
+            'country'=>'required|max:100',
+            'state'=>'required|max:100',
+            'city'=>'required|max:100',
+            'zip_code'=>'required|numeric',
+            'address'=>'required|max:100',
+            'status'=>'required'
+        ],
+             [           
+                'sub_org.unique'=>'The department in this organization already exists'
+            ]
+
+        );
+        $currentDateTime = now();
+        $currentTime = $currentDateTime->format('H:i:s');
+        try{
+            $org=new Organization();
+            $org->name=$req->name;
+            $org->sub_org=$req->sub_org;
+            $org->type=$req->type;
+            $org->country=$req->country;
+            $org->state=$req->state;
+            $org->city=$req->city;
+            $org->zip_code=$req->zip_code;
+            $org->address=$req->address;
+            $org->status=$req->status;
+            $org->record_created_by=$req->record_created_by;
+            $org->record_creation_date=Carbon::now()->format('Y-m-d');
+           $org->record_creation_time=$currentTime;
+    
+           $org->save();
+           return redirect()->route('organizations')->with('success','Added Successfully');
+
+    
+        }catch(Exception $e){
+            return redirect()->route('organizations')->with('error','Could not add the organization');
+        }
+       
+
     }
 }

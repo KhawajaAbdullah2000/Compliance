@@ -3,7 +3,7 @@
         <div class="p-4 pt-5">
           <a href="#" class="img logo rounded-circle mb-5" style=""></a>
     <ul class="list-unstyled components mb-5">
-      <li class="active">
+      {{-- <li class="active">
         <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
         <ul class="collapse list-unstyled" id="homeSubmenu">
         <li>
@@ -16,7 +16,10 @@
             <a href="#">Home 3</a>
         </li>
         </ul>
-      </li>
+      </li> --}}
+      <li>
+        <a href="{{route('root_home')}}">Home</a>
+    </li>
       <li>
           <a href="{{route('organizations')}}">Organizations</a>
       </li>

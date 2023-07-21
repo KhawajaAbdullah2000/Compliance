@@ -111,6 +111,12 @@ a[data-toggle="collapse"] {
     transition: all 0.3s;
 }
 
+.boxstyling {
+    border: none;
+    font-size: 20px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+}
+
 
 /* .swal-overlay {
     background-color: rgba(43, 165, 137, 0.45);

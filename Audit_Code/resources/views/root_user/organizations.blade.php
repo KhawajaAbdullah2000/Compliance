@@ -25,12 +25,13 @@
     <div class="container">
     
     <h1 class="text-center mb-5">Organizations</h1>
+<form action="{{route('organizations')}}" method="get">
+    <input type="text" placeholder="search" name="search" value={{request()->input('search')}}> 
+    <button type="submit" class="btn btn-sm btn-primary">Search</button>
+</form>
 
-    <input type="text" placeholder="search"> 
-    <button type="button" class="btn btn-sm btn-primary">Search</button>
-
-    <a class="btn btn-success btn-md float-end" href="#" role="button">Add new <i class="fas fa-plus"></i></a>
-    <table class="table table-responsive table-sm table-hover mt-4">
+    <a class="btn btn-success btn-md float-end" href="{{route('add_new_org')}}" role="button">Add new <i class="fas fa-plus"></i></a>
+    <table class="table table-responsive table-hover mt-4">
         <thead>
             <tr>
                 <th>Name</th>
@@ -61,6 +62,8 @@
         </tbody>
     </table>
 
+    {{$organizations->links()}}
+
 </div>
 
 </div>
@@ -72,6 +75,30 @@
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
+
+@if(Session::has('error'))
+<script>
+    swal({
+  title: "{{Session::get('error')}}",
+  icon: "error",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script> 
+@endif
+
+@if(Session::has('success'))
+<script>
+    swal({
+  title: "{{Session::get('success')}}",
+  icon: "success",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script> 
+@endif
+
+
 @endsection
 
 @endsection
