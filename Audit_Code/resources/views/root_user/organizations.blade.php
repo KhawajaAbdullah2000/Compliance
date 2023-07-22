@@ -53,7 +53,7 @@
                 <td> <a href="" data-toggle="tooltip" data-placement="top" title="See more details"><i class="fas fa-eye" style="color: blue;"></i></a>
                 <a href="/edit_org/{{$org->name}}/{{$org->sub_org}}" data-toggle="tooltip" data-placement="top" title="Edit info"> <i class="fas fa-edit" style="color: #146e02;"></i></a>
              
-             <a href="" data-toggle="tooltip" data-placement="top" title="Delete record"><i class="fas fa-trash" style="color: #d01616;"></i></a>
+             <a href="/delete_org/{{$org->name}}/{{$org->sub_org}}" data-toggle="tooltip" data-placement="top" title="Delete record"><i class="fas fa-trash" style="color: #d01616;"></i></a>
                 
                 </td>
             </tr>

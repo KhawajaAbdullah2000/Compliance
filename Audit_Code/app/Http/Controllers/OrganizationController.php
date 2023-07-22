@@ -97,7 +97,6 @@ class OrganizationController extends Controller
             'status'=>'required'
         ]
         );
-
    
             try{
                 DB::table('organizations')->where('name',$name)->where('sub_org',$sub_org)->
@@ -116,12 +115,14 @@ class OrganizationController extends Controller
              
                 return redirect()->route('organizations')->with('error','The record exists already. please check the name and department of the record you were editing');
             }
-           
-        
         
 
 
+    }
 
+    public function delete_org($name,$sub_org){
+        Db::table('organizations')->where('name',$name)->where('sub_org',$sub_org)->delete();
+        return redirect()->route('organizations')->withSuccess('Organization deleted');
 
     }
 }

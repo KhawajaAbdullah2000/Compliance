@@ -29,6 +29,7 @@ Route::get('/add_new_org',[OrganizationController::class,'add_new_org'])->name('
 Route::post('/add_new_org',[OrganizationController::class,'register_new_org']);
 Route::get('edit_org/{name}/{sub_org}',[OrganizationController::class,'edit_org']);
 Route::put('edit_org/{name}/{sub_org}',[OrganizationController::class,'update_org']);
+Route::get('delete_org/{name}/{sub_org}',[OrganizationController::class,'delete_org']);
 
 }
 );
