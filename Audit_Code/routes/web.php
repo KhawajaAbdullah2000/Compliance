@@ -24,9 +24,12 @@ Route::post('/login', [UserController::class,'login']);
 //for root users
 Route::middleware(['auth','is_root_user','role:root admin'])->group(function(){
 Route::get('/root_home',[UserController::class,'root_home'])->name('root_home');
-Route::get('organizations',[OrganizationController::class,'organizations'])->name('organizations');
-Route::get('add_new_org',[OrganizationController::class,'add_new_org'])->name('add_new_org');
-Route::post('add_new_org',[OrganizationController::class,'register_new_org']);
+Route::get('/organizations',[OrganizationController::class,'organizations'])->name('organizations');
+Route::get('/add_new_org',[OrganizationController::class,'add_new_org'])->name('add_new_org');
+Route::post('/add_new_org',[OrganizationController::class,'register_new_org']);
+Route::get('edit_org/{name}/{sub_org}',[OrganizationController::class,'edit_org']);
+Route::put('edit_org/{name}/{sub_org}',[OrganizationController::class,'update_org']);
+
 }
 );
 

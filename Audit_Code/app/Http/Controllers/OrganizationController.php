@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 class OrganizationController extends Controller
 {
     public function organizations(Request $req){
@@ -70,6 +71,57 @@ class OrganizationController extends Controller
             return redirect()->route('organizations')->with('error','Could not add the organization');
         }
        
+
+    }
+
+    public function edit_org($name,$sub_org){
+        $org=Organization::where('name',$name)->where('sub_org',$sub_org)->first();
+        if($org){
+            return view('root_user.edit_org',['org'=>$org]);
+        }
+        else{
+            return redirect()->route('organizations')->with('error','Organization not found');
+        }
+    }
+
+    public function update_org(Request $req,$name,$sub_org){
+        $req->validate([
+            'name'=>'required|max:100|',
+            'sub_org'=>'required',
+            'type'=>'required',
+            'country'=>'required|max:100',
+            'state'=>'required|max:100',
+            'city'=>'required|max:100',
+            'zip_code'=>'required|numeric',
+            'address'=>'required|max:100',
+            'status'=>'required'
+        ]
+        );
+
+   
+            try{
+                DB::table('organizations')->where('name',$name)->where('sub_org',$sub_org)->
+                update(['name'=>$req->name,
+                'sub_org'=>$req->sub_org,
+                'type'=>$req->type,
+                'country'=>$req->country,
+                'city'=>$req->city,
+                'state'=>$req->state,
+                'zip_code'=>$req->zip_code,
+                'address'=>$req->address,
+                'status'=>$req->status
+            ]);
+                return redirect()->route('organizations')->withSuccess('Record updated');
+            }catch(Exception $e){
+             
+                return redirect()->route('organizations')->with('error','The record exists already. please check the name and department of the record you were editing');
+            }
+           
+        
+        
+
+
+
 
     }
 }
