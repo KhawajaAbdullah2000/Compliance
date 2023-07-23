@@ -24,16 +24,13 @@
           <a href="{{route('organizations')}}">Organizations</a>
       </li>
       <li>
-      <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
+      <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Users</a>
       <ul class="collapse list-unstyled" id="pageSubmenu">
         <li>
-            <a href="#">Page 1</a>
+            <a href="{{route('add_user')}}">Add a user</a>
         </li>
         <li>
-            <a href="#">Page 2</a>
-        </li>
-        <li>
-            <a href="#">Page 3</a>
+            <a href="#">All users</a>
         </li>
       </ul>
       </li>

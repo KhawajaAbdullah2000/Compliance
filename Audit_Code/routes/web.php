@@ -30,7 +30,9 @@ Route::post('/add_new_org',[OrganizationController::class,'register_new_org']);
 Route::get('edit_org/{name}/{sub_org}',[OrganizationController::class,'edit_org']);
 Route::put('edit_org/{name}/{sub_org}',[OrganizationController::class,'update_org']);
 Route::get('delete_org/{name}/{sub_org}',[OrganizationController::class,'delete_org']);
-
+Route::get('add_user',[UserController::class,'add_user'])->name('add_user');
+Route::get('add_new_user/{name}/{sub_org}',[UserController::class,'add_new_user'])->name('add_new_user');
+Route::post('add_new_user',[UserController::class,'register_new_user']);
 }
 );
 
