@@ -33,6 +33,10 @@ Route::get('delete_org/{name}/{sub_org}',[OrganizationController::class,'delete_
 Route::get('add_user',[UserController::class,'add_user'])->name('add_user');
 Route::get('add_new_user/{name}/{sub_org}',[UserController::class,'add_new_user'])->name('add_new_user');
 Route::post('add_new_user',[UserController::class,'register_new_user']);
+Route::get('users',[UserController::class,'users'])->name('users');
+Route::get('users/edit/{id}',[UserController::class,'user_edit_view']);
+Route::post('users/edit/{id}',[UserController::class,'user_edit']);
+
 }
 );
 
@@ -51,9 +55,6 @@ Route::middleware(['auth','is_user','role:super user'])->group(function(){
         dd('hello super user');
     });
   } );
-
-
-
 
 
 

@@ -30,7 +30,7 @@
             <a href="{{route('add_user')}}">Add a user</a>
         </li>
         <li>
-            <a href="#">All users</a>
+            <a href="{{route('users')}}">All users</a>
         </li>
       </ul>
       </li>

@@ -117,6 +117,10 @@ a[data-toggle="collapse"] {
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
 }
 
+.users {
+    font-weight: bolder;
+}
+
 
 /* .swal-overlay {
     background-color: rgba(43, 165, 137, 0.45);
