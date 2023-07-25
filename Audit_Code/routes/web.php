@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\SuperUserController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -51,9 +52,8 @@ Route::middleware(['auth','is_user'])->group(function(){
 
 //for super users roled
 Route::middleware(['auth','is_user','role:super user'])->group(function(){
-    Route::get('/super-user',function(){
-        dd('hello super user');
-    });
+Route::get('add_end_user/{name}/{sub_org}',[SuperUserController::class,'add_end_user']);
+Route::post('add_new_end_user',[SuperUserController::class,'add_end_user_form']);
   } );
 
 

@@ -57,9 +57,14 @@
                 <td><h5><span class="badge bg-info rounded-pill ">{{$user->privilege_name}}</span></h5></td>
                 @endif
 
+                @if($user->privilege_id!=5)
                 <td> <a href="/users/edit/{{$user->id}}" data-toggle="tooltip" data-placement="top" title="Edit"> <i class="fas fa-edit" style="color: #146e02;"></i></a>
                     <a href="" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash" style="color: #d01616;"></i></a>
                        </td>
+                @else
+                <td>Not allowed</td>
+
+                @endif
     
             </tr>
             @endforeach
