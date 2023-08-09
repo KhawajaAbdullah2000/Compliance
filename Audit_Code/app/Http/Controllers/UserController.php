@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Illuminate\Validation\Rule;
+use Excel;
 
 class UserController extends Controller
 {
@@ -208,9 +209,19 @@ if($req->privilege_id==1){
    return redirect()->route('users')->with('success','Record Updated Successfully');
 
 
+}
+
+public function excel(){
+    $filePath = storage_path('app/excel_files/PCI.xlsx');
+    $data = Excel::toArray([], $filePath);
+    $filteredData = collect($data[0])->filter(function ($row) {
+        return $row[0] == '1.1.1.a';
+    })->values()->all();
 
 
+   dd($filteredData);
 
+    
 
 }
 }

@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Support\Str;
 
+//Excel cript
+ROute::get('excel',[UserController::class,'excel']);
 
 
 Route::get('/', function () {
