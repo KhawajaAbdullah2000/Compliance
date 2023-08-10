@@ -91,6 +91,17 @@
                             <label for="address">Zip code</label>
                             <input type="text" class="form-control" name='zip_code' value="{{old('zip_code')}}">
                           </div>
+
+
+                          <div class="form-group mt-4">
+                            <label for="roles"><h3>Roles</h3></label>
+                            <br>
+                            @foreach ($permissions as $p)
+                               {{ $p->name}} <input type="checkbox" name="roles[]" value="{{$p->name}}">
+                            @endforeach
+              
+                          </div> 
+        
         
                           <div class="form-group mt-2">
                             <label for="">Password</label>

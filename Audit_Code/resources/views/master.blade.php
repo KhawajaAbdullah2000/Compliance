@@ -38,6 +38,8 @@
         });
     });
 
+
+
 </script> 
 
 @yield('scripts')

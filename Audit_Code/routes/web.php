@@ -54,9 +54,21 @@ Route::middleware(['auth','is_user'])->group(function(){
 
 //for super users roled
 Route::middleware(['auth','is_user','role:super user'])->group(function(){
-Route::get('add_end_user/{name}/{sub_org}',[SuperUserController::class,'add_end_user']);
-Route::post('add_new_end_user',[SuperUserController::class,'add_end_user_form']);
-  } );
+Route::get('/add_end_user/{name}/{sub_org}',[SuperUserController::class,'add_end_user']);
+Route::post('/add_new_end_user',[SuperUserController::class,'add_end_user_form']);
+Route::get('/end_users/{org}/{sub_org}',[SuperUserController::class,'end_users'])->name('end_users');
+Route::get('/end_user/edit/{id}',[SuperUserController::class,'edit_enduser']);
+route::put('/edit_enduser/{id}',[SuperUserController::class,'edit_enduser_form_submit']);
+route::get('/custom_roles',[SuperUserController::class,'custom_roles'])->name('custom_roles');
+route::get('add_global_role',function(){
+    return view('user.add_global_role');
+});
+route::post('add_new_role',[SuperUserController::class,'add_new_role'])->name('add_new_role');
+route::get('/edit_global_role/{id}',[SuperUserController::class,'edit_global_role']);
+route::put('edit_globalrole/{id}',[SuperUserController::class,'edit_globalrole']);
+
+} );
+
 
 
 
