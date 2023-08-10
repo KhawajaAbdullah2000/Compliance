@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 
@@ -14,22 +15,28 @@ use function PHPSTORM_META\type;
 class SuperUserController extends Controller
 {
     public function add_end_user($name,$sub_org){
-        $org=Organization::select('name','sub_org')->where('name',$name)->where('sub_org',$sub_org)->first();
+        $org=Organization::select('name','sub_org','type')->where('name',$name)->where('sub_org',$sub_org)->first();
+       $allorgs=Organization::all();
         $permissions=Permission::all();
          if($org){
-                return view('user.add_end_user',['org'=>$org,'permissions'=>$permissions]);
+                return view('user.add_end_user',['org'=>$org,'permissions'=>$permissions,'allorgs'=>$allorgs]);
         }else{
             return redirect()->route('user_home')->with('error','Organization not found');
         }
       
 }
-
+public function fetch_suborg(Request $req){
+    $data['sub_org'] = Organization::select('sub_org')->where('name',$req->org_name)->get();
+    return response()->json($data);
+}
 
 public function add_end_user_form(Request $req){
     $req->validate(
         [
             'first_name'=>'required|max:100',
             'last_name'=>'required|max:100',
+            'organization_name'=>'required',
+            'organizations_sub_org'=>'required',
             'email'=>'required|email|unique:users',
             'telephone'=>'required|numeric',
             'address'=>'required|max:100',
@@ -77,15 +84,31 @@ $user->givePermissionTo($global_roles);
 
 
 public function end_users($org,$suborg){
-$end_users=User::where('organization_name',$org)->where('organizations_sub_org',$suborg)
-->where('privilege_id',5)->get();
-return view('user.end_users',['end_users'=>$end_users]);
+    
+    $organ=Organization::where('name',$org)->where('sub_org',$suborg)->first();
+
+    if($organ->type=="host"){
+         $end_users=User::where('privilege_id',5)->get();
+        return view('user.end_users',['end_users'=>$end_users]);
+    }
+
+
+     if($organ->type=="guest"){
+         $end_users=User::where('organization_name',$org)
+          ->where('organizations_sub_org',$suborg)
+          ->where('privilege_id',5)->get();
+          return view('user.end_users',['end_users'=>$end_users]);
+
+       
+
+    }
+    // dd($end_users);
+
 }
 
 
 public function edit_enduser($id){
-    $user=User::where('id',$id)->where('organization_name',auth()->user()->organization_name)
-    ->where('organizations_sub_org',auth()->user()->organizations_sub_org)->first();
+    $user=User::where('id',$id)->first();
     $permissions=Permission::all();
     if($user){
         return view('user.edit_enduser',['user'=>$user,'permissions'=>$permissions]);

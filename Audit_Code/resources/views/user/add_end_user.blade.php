@@ -4,12 +4,6 @@
     
 @include('user-nav')
 
-<div class="mx-5">
-    <h2>Welcome {{auth()->user()->first_name}}</h2>
-
-    <br>
-<a href="{{ url('/logout') }}" class="btn btn-primary">Log out</a>
-</div>
 
 <div class="container">
 
@@ -22,6 +16,8 @@
                 <div class="card-header bg-primary text-center">
                     <h2 class="users">Add new End user in {{$org->name}} {{$org->sub_org}}</h2>
                  </div>
+
+  
 
                 <div class="card-body">
                     @if ($errors->any())
@@ -36,7 +32,28 @@
         
                     <form method="post" action="/add_new_end_user">
                         @csrf
+                        @if($org->type=='host')
                         <div class="form-group">
+                      <label for="" class="form-label">Organization</label>
+                         <select class="boxstyling bg-primary form-select" name="organization_name" id="organization_name">
+                         <option value="">Select organization</option>
+                          @foreach ($allorgs as $allorg)
+                                <option value="{{$allorg->name}}" {{ old('organization_name') == $allorg->name ? 'selected' : '' }}>{{$allorg->name}}</option>
+                                @endforeach
+                         </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="" class="form-label">Sub Organization</label>
+                             <select class="boxstyling bg-primary form-select" name="organizations_sub_org" id="sub_org">
+                             
+                                    {{-- <option value="{{$allorg->name}}" {{ old('organization_name') == $allorg->name ? 'selected' : '' }}>{{$allorg->name}}</option> --}}
+                                   
+                             </select>
+                            </div>
+                         @endif
+
+                        <div class="form-group mt-2">
                           <label for="name">First name:</label>
                           <input type="text" class="form-control" id="name" name='first_name' value="{{old('first_name')}}">
                         </div>
@@ -46,8 +63,10 @@
                             <input type="text" class="form-control" id="" name='last_name' value="{{old('last_name')}}">
                           </div>
         
+                          @if($org->type=='guest')
                           <input type="hidden" name="organization_name" value="{{$org->name}}">
                           <input type="hidden" name="organizations_sub_org" value="{{$org->sub_org}}">
+                          @endif
                   
                         <div class="form-group">
                           <label for="dob">National ID</label>
@@ -138,16 +157,7 @@
         
         
         </div>
-        
-
-
-
-
-
-
-
-
-
+    
 
 
 
@@ -155,7 +165,39 @@
 
 
 
+@section('scripts')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+<script>
+  $(document).ready(function () {
+
+   
+      $('#organization_name').on('change', function () {
+          var idCountry = $(this).val();
+          $("#sub_org").html('');
+          $.ajax({
+            url: "{{url('/fetch_suborg')}}",
+              type: "post",
+              data: {
+                  org_name: idCountry,
+                  _token: '{{csrf_token()}}'
+              },
+              dataType: 'json',
+              success: function (result) {
+                  $('#sub_org').html('<option value="">-- Select Sub Organization --</option>');
+                  $.each(result.sub_org, function (key, value) {
+                      $("#sub_org").append('<option value="' + value.sub_org
+                         + '">' + value.sub_org+ '</option>');
+                  });
+              }
+          });
+      });
+
+     
+  });
+</script>
+
+@endsection
 
 
 
