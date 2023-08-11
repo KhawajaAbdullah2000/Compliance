@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 class OrganizationController extends Controller
 {
     public function organizations(Request $req){
@@ -97,7 +98,8 @@ class OrganizationController extends Controller
             'status'=>'required'
         ]
         );
-   
+        $org= DB::table('organizations')->where('name',$name)->where('sub_org',$sub_org)->first('type');
+
             try{
                 DB::table('organizations')->where('name',$name)->where('sub_org',$sub_org)->
                 update(['name'=>$req->name,
@@ -110,6 +112,9 @@ class OrganizationController extends Controller
                 'address'=>$req->address,
                 'status'=>$req->status
             ]);
+
+
+
                 return redirect()->route('organizations')->withSuccess('Record updated');
             }catch(Exception $e){
              

@@ -34,7 +34,7 @@ Route::get('edit_org/{name}/{sub_org}',[OrganizationController::class,'edit_org'
 Route::put('edit_org/{name}/{sub_org}',[OrganizationController::class,'update_org']);
 Route::get('delete_org/{name}/{sub_org}',[OrganizationController::class,'delete_org']);
 Route::get('add_user',[UserController::class,'add_user'])->name('add_user');
-Route::get('add_new_user/{name}/{sub_org}',[UserController::class,'add_new_user'])->name('add_new_user');
+Route::get('add_new_user/{id}',[UserController::class,'add_new_user'])->name('add_new_user');
 Route::post('add_new_user',[UserController::class,'register_new_user']);
 Route::get('users',[UserController::class,'users'])->name('users');
 Route::get('users/edit/{id}',[UserController::class,'user_edit_view']);
@@ -55,9 +55,9 @@ Route::middleware(['auth','is_user'])->group(function(){
 //for super users roled
 Route::middleware(['auth','is_user','role:super user'])->group(function(){
 route::post('/fetch_suborg',[SuperUserController::class,'fetch_suborg'])->name('fetch_suborg');
-Route::get('/add_end_user/{name}/{sub_org}',[SuperUserController::class,'add_end_user']);
+Route::get('/add_end_user/{org_id}',[SuperUserController::class,'add_end_user']);
 Route::post('/add_new_end_user',[SuperUserController::class,'add_end_user_form']);
-Route::get('/end_users/{org}/{sub_org}',[SuperUserController::class,'end_users'])->name('end_users');
+Route::get('/end_users/{org_id}',[SuperUserController::class,'end_users'])->name('end_users');
 Route::get('/end_user/edit/{id}',[SuperUserController::class,'edit_enduser']);
 route::put('/edit_enduser/{id}',[SuperUserController::class,'edit_enduser_form_submit']);
 route::get('/custom_roles',[SuperUserController::class,'custom_roles'])->name('custom_roles');

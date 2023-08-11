@@ -76,8 +76,8 @@ public function add_user(){
     return view('root_user.add_user',['orgs'=>$orgs]);
 }
 
-public function add_new_user($name,$sub_org){
-    $org=Organization::select('name','sub_org')->where('name',$name)->where('sub_org',$sub_org)->first();
+public function add_new_user($id){
+    $org=Organization::select('org_id','name','sub_org')->where('org_id',$id)->first();
     $privileges=Privilege::where('privilege_name','!=','Root Admin')->where('privilege_name','!=','End User')->get();
     if($org){
         return view('root_user.add_new_user_form',['org'=>$org,'privilege'=>$privileges]);
@@ -105,7 +105,23 @@ $req->validate(
     ]
 
     );
-    $data=$req->all();
+    $data=$req->only( ['first_name',
+    'last_name',
+    'email',
+    'national_id',
+    'telephone',
+    'password',
+    'org_id',
+    'state',
+    'address',
+    'country',
+    'zip_code',
+    'city',
+    '2FA',
+    'status',
+    'privilege_id'
+    ]
+    );
     $data['password']=Hash::make($req->password);
 
    $user= User::create($data);
@@ -126,8 +142,9 @@ $req->validate(
 
 public function users(){
     $users=User::select('users.id','users.first_name','users.last_name',
-    'users.email','users.privilege_id','privileges.privilege_name','users.organization_name',
-    'users.organizations_sub_org')
+    'users.email','users.privilege_id','privileges.privilege_name','organizations.name',
+    'organizations.sub_org')
+    ->join('organizations','users.org_id','organizations.org_id')
     ->join('privileges','users.privilege_id','privileges.id')
     ->where('users.privilege_id','!=',4)->get();
     return view('root_user.users',['users'=>$users]);

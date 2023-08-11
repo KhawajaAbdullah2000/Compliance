@@ -38,7 +38,7 @@
                 <td>{{$org->name}}</td>
                 <td>{{$org->sub_org}}</td>
         
- <td> <a class="btn btn-warning btn-md" href="{{route('add_new_user',['name'=>$org->name,'sub_org'=>$org->sub_org])}}">Add a user  </a>  </td>
+ <td> <a class="btn btn-warning btn-md" href="{{route('add_new_user',['id'=>$org->org_id])}}">Add a user  </a>  </td>
             </tr>
             @endforeach
    

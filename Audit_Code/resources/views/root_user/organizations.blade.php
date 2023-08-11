@@ -34,6 +34,7 @@
     <table class="table table-responsive table-hover mt-4">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Name</th>
                 <th>Type</th>
                 <th>Sub-org</th>
@@ -46,6 +47,7 @@
 
    
             <tr>
+                <td>{{$org->org_id}}</td>
                 <td>{{$org->name}}</td>
                 <td>{{$org->type}}</td>
                 <td>{{$org->sub_org}}</td>
