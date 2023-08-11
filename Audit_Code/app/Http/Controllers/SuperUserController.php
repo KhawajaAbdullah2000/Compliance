@@ -77,6 +77,27 @@ public function add_end_user_form(Request $req){
        $global_roles = $req->input('roles', []);
         $user->givePermissionTo($global_roles);
 
+        if($req->org_id!=auth()->user()->org_id){
+            $check= Db::table('superusers')->where('user_id',auth()->user()->id)->where('org_id',$req->org_id)->first();
+            if(!$check){
+                Db::table('superusers')->insert([
+                    'user_id'=>auth()->user()->id,
+                    'org_id'=>$req->org_id
+                ]);
+            }
+
+         
+        }else{ //if guest super user is making nd user for its own organization
+            $check= Db::table('superusers')->where('user_id',auth()->user()->id)->where('org_id',$req->org_id)->first();
+            if(!$check){
+                Db::table('superusers')->insert([
+                    'user_id'=>auth()->user()->id,
+                    'org_id'=>$req->org_id
+                ]);
+            }
+
+        }
+
        return redirect()->route('end_users',
        ['org_id'=>auth()->user()->org_id]
         )->with('success','End user added successfully');
@@ -89,8 +110,12 @@ public function end_users($org_id){
     $organ=Organization::where('org_id',$org_id)->first();
 
     if($organ->type=="host"){
-         $end_users=User::join('organizations','users.org_id','organizations.org_id')->
-         where('privilege_id',5)->get();
+        $check=Db::table('superusers')->where('user_id',auth()->user()->id)->pluck('org_id');
+       $orgs=$check->toArray();
+
+         $end_users=User::join('organizations','users.org_id','organizations.org_id')
+         ->where('users.privilege_id',5)->whereIn('users.org_id',$orgs)
+         ->get();
         return view('user.end_users',['end_users'=>$end_users]);
     }
 
