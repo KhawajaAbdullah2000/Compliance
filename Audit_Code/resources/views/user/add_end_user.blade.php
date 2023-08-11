@@ -66,8 +66,8 @@
                           </div>
         
                           @if($org->type=='guest')
-                          <input type="hidden" name="organization_name" value="{{$org->name}}">
-                          <input type="hidden" name="organizations_sub_org" value="{{$org->sub_org}}">
+                          <input type="hidden" name="org_id" value="{{$org->org_id}}">
+                        
                           @endif
                   
                         <div class="form-group">

@@ -15,7 +15,7 @@ use function PHPSTORM_META\type;
 class SuperUserController extends Controller
 {
     public function add_end_user($org_id){
-        $org=Organization::select('name','sub_org','type')->where('org_id',$org_id)->first();
+        $org=Organization::select('name','sub_org','type','org_id')->where('org_id',$org_id)->first();
        $allorgs=Organization::all();
         $permissions=Permission::all();
          if($org){
@@ -75,10 +75,10 @@ public function add_end_user_form(Request $req){
        $user->assignRole('end user');
 
        $global_roles = $req->input('roles', []);
-$user->givePermissionTo($global_roles);
+        $user->givePermissionTo($global_roles);
 
        return redirect()->route('end_users',
-       ['org'=>auth()->user()->org_id]
+       ['org_id'=>auth()->user()->org_id]
         )->with('success','End user added successfully');
 }
 
@@ -97,7 +97,7 @@ public function end_users($org_id){
 
      if($organ->type=="guest"){
          $end_users=User::join('organizations','users.org_id','organizations.org_id')->
-         where('org_id',$org_id)
+         where('users.org_id',$org_id)
           ->where('privilege_id',5)->get();
           return view('user.end_users',['end_users'=>$end_users]);
 
