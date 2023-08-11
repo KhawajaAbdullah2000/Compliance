@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Illuminate\Validation\Rule;
 use Excel;
-
+use Illuminate\Support\Facades\DB;
 class UserController extends Controller
 {
     public function changepass(){
@@ -127,6 +127,14 @@ $req->validate(
    $user= User::create($data);
    if($user->privilege_id==1){
     $user->assignRole('super user');
+    $check= Db::table('superusers')->where('user_id',auth()->user()->id)->where('org_id',$req->org_id)->first();
+    if(!$check){
+        Db::table('superusers')->insert([
+            'user_id'=>$user->id,
+            'org_id'=>$req->org_id
+        ]);
+    }
+
    }
    if($user->privilege_id==2){
     $user->assignRole('primary contact');
@@ -187,6 +195,7 @@ public function user_edit(Request $req,$id){
 $user=User::where('id',$id)->first();
 
 $user->roles()->detach();
+
 // if($user->privilege_id==1){
 //     $user->removeRole('super user');
 // }
@@ -197,6 +206,30 @@ $user->roles()->detach();
 // if($user->privilege_id==3){
 //     $user->removeRole('secondary contact');
 // }
+
+
+if($req->privilege_id!=1){
+    $check= Db::table('superusers')->where('user_id',$id)->get();
+    if($check){
+        Db::table('superusers')->where([
+            'user_id'=>$user->id,
+        ])->delete();
+        
+    }
+}
+
+if($req->privilege_id==1){
+    $check= Db::table('superusers')->where('user_id',$id)->get();
+    
+    if($check->count()==0){
+        Db::table('superusers')->insert([
+            'user_id'=>$user->id,
+            'org_id'=>$user->org_id
+        ]);
+      
+        
+    }
+}
 
  $user->first_name=$req->first_name;
  $user->last_name=$req->last_name;

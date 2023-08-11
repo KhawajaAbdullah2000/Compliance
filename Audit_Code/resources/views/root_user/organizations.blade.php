@@ -36,8 +36,8 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Type</th>
                 <th>Sub-org</th>
+                <th>Type</th>
                 <th>Country</th>
                 <th>Actions</th>
             </tr>
@@ -49,8 +49,8 @@
             <tr>
                 <td>{{$org->org_id}}</td>
                 <td>{{$org->name}}</td>
-                <td>{{$org->type}}</td>
                 <td>{{$org->sub_org}}</td>
+                <td @if($org->type=="host") class="text-danger fw-bold" @endif>{{$org->type}}</td>
                 <td>{{$org->country}}</td>
                 <td> <a href="" data-toggle="tooltip" data-placement="top" title="See more details"><i class="fas fa-eye" style="color: blue;"></i></a>
                 <a href="/edit_org/{{$org->name}}/{{$org->sub_org}}" data-toggle="tooltip" data-placement="top" title="Edit info"> <i class="fas fa-edit" style="color: #146e02;"></i></a>
