@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\UserController;
+
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\SuperUserController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\EndUserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+
 
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
@@ -70,6 +73,18 @@ route::put('edit_globalrole/{id}',[SuperUserController::class,'edit_globalrole']
 
 
 } );
+
+//for project creator end user
+Route::middleware(['auth','is_user','permission:Project Creator'])->group(function(){
+route::get('create_project/{id}',[EndUserController::class,'create_project']);
+route::post('create_project/{id}',[EndUserController::class,'submit_create_project']);
+route::get('/projects/{user_id}',[EndUserController::class,'projects'])->name('projects');
+route::get('edit_my_project/{id}',[EndUserController::class,'edit_my_project']);
+route::put('/edit_project_submit/{id}',[EndUserController::class,'edit_project_submit']);
+route::get('assigned_endusers/{id}',[EndUserController::class,'assigned_endusers']);
+route::get('/assign_end_user/{id}',[EndUserController::class,'assign_end_user']);
+}
+);
 
 
 

@@ -168,36 +168,7 @@
 
 
 @section('scripts')
-{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<script>
-  $(document).ready(function () {
-
-   
-      $('#organization_name').on('change', function () {
-          var idCountry = $(this).val();
-          $("#sub_org").html('');
-          $.ajax({
-            url: "{{url('/fetch_suborg')}}",
-              type: "post",
-              data: {
-                  org_name: idCountry,
-                  _token: '{{csrf_token()}}'
-              },
-              dataType: 'json',
-              success: function (result) {
-                  $('#sub_org').html('<option value="">-- Select Sub Organization --</option>');
-                  $.each(result.sub_org, function (key, value) {
-                      $("#sub_org").append('<option value="' + value.sub_org
-                         + '">' + value.sub_org+ '</option>');
-                  });
-              }
-          });
-      });
-
-     
-  });
-</script> --}}
 
 @endsection
 

@@ -34,8 +34,18 @@
         <li class="nav-item">
           <a class="nav-link" href="/custom_roles">GLobal Custom roles</a>
         </li> 
-
         
+        @endrole
+
+        @role('end user')
+        @can('Project Creator')
+        <li class="nav-item">
+          <a class="nav-link" href="/projects/{{auth()->user()->id}}">Projects created by me</a>
+        </li> 
+        
+
+        @endcan
+
         @endrole
 
       </ul>

@@ -12,6 +12,25 @@
 </div>
 
 
+@role('end user')
+<div class="container">
+<h3 class="mt-4">Email: {{auth()->user()->email}}</h3>
+<h3 class="mt-4">Global roles: @foreach (auth()->user()->permissions as $per)
+                     {{ $per->name}}
+                     @unless ($loop->last), @endunless
+                      @endforeach
+</h3>
+
+@can('Project Creator')
+
+ <a href="/create_project/{{auth()->user()->id}}" class='btn btn-primary'>Create new project</a>
+@endcan
+
+
+</div>
+@endrole
+
+
 @section('scripts')
 @if(Session::has('error'))
 <script>
