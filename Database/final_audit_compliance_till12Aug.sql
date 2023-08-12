@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 11, 2023 at 08:38 AM
+-- Generation Time: Aug 12, 2023 at 03:09 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -91,19 +91,34 @@ INSERT INTO `model_has_permissions` (`permission_id`, `model_type`, `model_id`) 
 (1, 'App\\Models\\User', 25),
 (1, 'App\\Models\\User', 26),
 (1, 'App\\Models\\User', 34),
+(1, 'App\\Models\\User', 41),
+(1, 'App\\Models\\User', 45),
+(1, 'App\\Models\\User', 54),
+(1, 'App\\Models\\User', 57),
 (2, 'App\\Models\\User', 8),
 (2, 'App\\Models\\User', 22),
 (2, 'App\\Models\\User', 24),
 (2, 'App\\Models\\User', 34),
+(2, 'App\\Models\\User', 35),
+(2, 'App\\Models\\User', 36),
+(2, 'App\\Models\\User', 55),
 (3, 'App\\Models\\User', 8),
 (3, 'App\\Models\\User', 10),
 (3, 'App\\Models\\User', 13),
+(3, 'App\\Models\\User', 56),
+(4, 'App\\Models\\User', 56),
+(5, 'App\\Models\\User', 40),
 (6, 'App\\Models\\User', 13),
 (6, 'App\\Models\\User', 22),
 (6, 'App\\Models\\User', 23),
 (6, 'App\\Models\\User', 24),
 (6, 'App\\Models\\User', 26),
-(6, 'App\\Models\\User', 27);
+(6, 'App\\Models\\User', 27),
+(6, 'App\\Models\\User', 39),
+(6, 'App\\Models\\User', 44),
+(6, 'App\\Models\\User', 46),
+(6, 'App\\Models\\User', 47),
+(6, 'App\\Models\\User', 53);
 
 -- --------------------------------------------------------
 
@@ -132,6 +147,15 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (2, 'App\\Models\\User', 31),
 (2, 'App\\Models\\User', 32),
 (2, 'App\\Models\\User', 33),
+(2, 'App\\Models\\User', 37),
+(2, 'App\\Models\\User', 38),
+(2, 'App\\Models\\User', 42),
+(2, 'App\\Models\\User', 43),
+(2, 'App\\Models\\User', 48),
+(2, 'App\\Models\\User', 49),
+(2, 'App\\Models\\User', 50),
+(2, 'App\\Models\\User', 51),
+(2, 'App\\Models\\User', 52),
 (3, 'App\\Models\\User', 8),
 (3, 'App\\Models\\User', 10),
 (3, 'App\\Models\\User', 11),
@@ -152,6 +176,20 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (3, 'App\\Models\\User', 26),
 (3, 'App\\Models\\User', 27),
 (3, 'App\\Models\\User', 34),
+(3, 'App\\Models\\User', 35),
+(3, 'App\\Models\\User', 36),
+(3, 'App\\Models\\User', 39),
+(3, 'App\\Models\\User', 40),
+(3, 'App\\Models\\User', 41),
+(3, 'App\\Models\\User', 44),
+(3, 'App\\Models\\User', 45),
+(3, 'App\\Models\\User', 46),
+(3, 'App\\Models\\User', 47),
+(3, 'App\\Models\\User', 53),
+(3, 'App\\Models\\User', 54),
+(3, 'App\\Models\\User', 55),
+(3, 'App\\Models\\User', 56),
+(3, 'App\\Models\\User', 57),
 (4, 'App\\Models\\User', 5),
 (4, 'App\\Models\\User', 6),
 (4, 'App\\Models\\User', 7),
@@ -186,11 +224,8 @@ CREATE TABLE `organizations` (
 --
 
 INSERT INTO `organizations` (`org_id`, `name`, `type`, `sub_org`, `country`, `state`, `city`, `zip_code`, `address`, `record_created_by`, `record_creation_date`, `record_creation_time`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Fast', 'guest', 'CS', 'Pakistan', 'Sindh', 'karachi', 123, 'National Highway', 'shahmeer@gmail.com', '2023-07-21', '12:05:36', 'active', '2023-07-21 07:05:36', '2023-07-21 07:05:36'),
-(2, 'HostA', 'host', 'finance', 'Pakistan', 'Sindh', 'Karachi', 67, 'FB area', 'Abdullah', '2023-07-08', '12:58:30', 'active', '2023-07-08 07:58:30', '2023-07-08 07:58:30'),
-(3, 'Kelectric', 'guest', 'finance', 'Pakistan', 'Sindh', 'karachi', 55, 'Fb area', 'shahmeer@gmail.com', '2023-07-22', '08:52:32', 'active', '2023-07-22 03:52:32', '2023-07-22 03:52:32'),
-(4, 'Kelectric', 'guest', 'IT', 'Pakistan', 'Punjab', 'Lahore', 99, 'Iqbal town', 'shahmeer@gmail.com', '2023-07-21', '12:36:37', 'active', '2023-07-21 07:36:37', '2023-07-21 07:36:37'),
-(5, 'Host B', 'host', 'Computer Sciences', 'Pakistan', 'Punjab', 'karachi', 123, 'Iqbal town', 'shahmeer@gmail.com', '2023-08-11', '05:31:32', 'active', '2023-08-11 00:31:32', '2023-08-11 00:31:32');
+(9, 'Host1', 'host', 'finance', 'Pakistan', 'Sindh', 'karachi', 33, 'Azizabad', 'shahmeer@gmail.com', '2023-08-11', '12:31:13', 'active', '2023-08-11 07:31:13', '2023-08-11 07:31:13'),
+(10, 'Guest1', 'guest', 'HR', 'Pakistan', 'Punjab', 'karachi', 33, 'National Highway', 'shahmeer@gmail.com', '2023-08-11', '12:36:03', 'active', '2023-08-11 07:36:03', '2023-08-11 07:36:03');
 
 -- --------------------------------------------------------
 
@@ -226,7 +261,7 @@ CREATE TABLE `pci-dss v3.2.1 assessor company` (
 
 INSERT INTO `pci-dss v3.2.1 assessor company` (`id`, `assessment_id`, `company_name`, `company_address`, `company_website`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Company A', 'Address A', 'www.companya.com', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Company B', 'Address B', 'www.companyb.com', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Company B', 'Address B', 'www.companyb.com', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -323,7 +358,7 @@ CREATE TABLE `pci-dss v3.2.1 section1.2` (
 
 INSERT INTO `pci-dss v3.2.1 section1.2` (`id`, `assessment_id`, `date_of_report`, `start_date`, `end_date`, `describe_time_spent_onsite`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, '2023-07-15', '2023-07-01', '2023-07-10', 'Time spent onsite...', 1, '2023-07-31 12:34:56'),
-(2, NULL, '2023-07-25', '2023-07-20', '2023-07-24', 'Time spent onsite...', 2, '2023-07-31 12:34:56');
+(2, NULL, '2023-07-25', '2023-07-20', '2023-07-24', 'Time spent onsite...', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -346,7 +381,7 @@ CREATE TABLE `pci-dss v3.2.1 section1.2_dates_spent_onsite` (
 INSERT INTO `pci-dss v3.2.1 section1.2_dates_spent_onsite` (`id`, `assessment_id`, `date_spent_onsite`, `last_edited_by`, `last_edited_at`) VALUES
 (1, 1001, '2023-07-02', 1, '2023-07-31 12:34:56'),
 (2, 1001, '2023-07-03', 1, '2023-07-31 12:34:56'),
-(3, 1002, '2023-07-21', 2, '2023-07-31 12:34:56');
+(3, 1002, '2023-07-21', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -389,7 +424,7 @@ CREATE TABLE `pci-dss v3.2.1 section1.4` (
 
 INSERT INTO `pci-dss v3.2.1 section1.4` (`id`, `assessment_id`, `services_offered`, `efforts_made_to_ensure_no_conflict`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Service 1', 'Efforts made...', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Service 2', 'Efforts made...', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Service 2', 'Efforts made...', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -426,7 +461,7 @@ CREATE TABLE `pci-dss v3.2.1 section1.5` (
 
 INSERT INTO `pci-dss v3.2.1 section1.5` (`id`, `assessment_id`, `requirement1`, `requirement2`, `requirement3`, `requirement4`, `requirement5`, `requirement6`, `requirement7`, `requirement8`, `requirement9`, `requirement10`, `requirement11`, `requirement12`, `requirement13`, `appendix_A1`, `appendix_A2`, `appendix_A3`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Req 1', 'Req 2', 'Req 3', 'Req 4', 'Req 5', 'Req 6', 'Req 7', 'Req 8', 'Req 9', 'Req 10', 'Req 11', 'Req 12', 'Req 13', 'Appendix A1', 'Appendix A2', 'Appendix A3', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Req 1', 'Req 2', 'Req 3', 'Req 4', 'Req 5', 'Req 6', 'Req 7', 'Req 8', 'Req 9', 'Req 10', 'Req 11', 'Req 12', 'Req 13', 'Appendix A1', 'Appendix A2', 'Appendix A3', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Req 1', 'Req 2', 'Req 3', 'Req 4', 'Req 5', 'Req 6', 'Req 7', 'Req 8', 'Req 9', 'Req 10', 'Req 11', 'Req 12', 'Req 13', 'Appendix A1', 'Appendix A2', 'Appendix A3', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -452,7 +487,7 @@ CREATE TABLE `pci-dss v3.2.1 section2.1` (
 
 INSERT INTO `pci-dss v3.2.1 section2.1` (`id`, `assessment_id`, `nature_entity_business`, `how_entity_store_cardholder_data`, `why_entity_store_cardholder_data`, `payment_channel_types`, `other_details`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Nature of Entity 1', 'Store Method 1', 'Reason for Storage 1', 'Payment Types 1', 'Other Details 1', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Nature of Entity 2', 'Store Method 2', 'Reason for Storage 2', 'Payment Types 2', 'Other Details 2', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Nature of Entity 2', 'Store Method 2', 'Reason for Storage 2', 'Payment Types 2', 'Other Details 2', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -474,7 +509,7 @@ CREATE TABLE `pci-dss v3.2.1 section2.2` (
 
 INSERT INTO `pci-dss v3.2.1 section2.2` (`id`, `assessment_id`, `diagram`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Diagram 1', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Diagram 2', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Diagram 2', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -502,7 +537,7 @@ CREATE TABLE `pci-dss v3.2.1 section3.1` (
 
 INSERT INTO `pci-dss v3.2.1 section3.1` (`id`, `assessment_id`, `requirement1`, `requirement2`, `requirement3`, `requirement4`, `requirement5`, `requirement6`, `other_details`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Req 1', 'Req 2', 'Req 3', 'Req 4', 'Req 5', 'Req 6', 'Other Details 1', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Req 1', 'Req 2', 'Req 3', 'Req 4', 'Req 5', 'Req 6', 'Other Details 2', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Req 1', 'Req 2', 'Req 3', 'Req 4', 'Req 5', 'Req 6', 'Other Details 2', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -528,7 +563,7 @@ CREATE TABLE `pci-dss v3.2.1 section3.2` (
 
 INSERT INTO `pci-dss v3.2.1 section3.2` (`id`, `assessment_id`, `requirement1`, `requirement2`, `requirement3`, `requirement4`, `other_details`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Req 1', 'Req 2', 'Req 3', 'Req 4', 'Other Details 1', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Req 1', 'Req 2', 'Req 3', 'Req 4', 'Other Details 2', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Req 1', 'Req 2', 'Req 3', 'Req 4', 'Other Details 2', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -558,7 +593,7 @@ CREATE TABLE `pci-dss v3.2.1 section3.3` (
 
 INSERT INTO `pci-dss v3.2.1 section3.3` (`id`, `assessment_id`, `requirement1`, `segmentation_not_used`, `segmentation_used`, `segmentation_used_req1`, `segmentation_used_req2`, `segmentation_used_req3`, `segmentation_used_req4`, `segmentation_used_req5`, `requirement5`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Req 1', 'Not Used', 'Used', 'Seg Req 1', 'Seg Req 2', 'Seg Req 3', 'Seg Req 4', 'Seg Req 5', 'Req 5', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Req 1', 'Not Used', 'Used', 'Seg Req 1', 'Seg Req 2', 'Seg Req 3', 'Seg Req 4', 'Seg Req 5', 'Req 5', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Req 1', 'Not Used', 'Used', 'Seg Req 1', 'Seg Req 2', 'Seg Req 3', 'Seg Req 4', 'Seg Req 5', 'Req 5', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -581,7 +616,7 @@ CREATE TABLE `pci-dss v3.2.1 section3.4` (
 
 INSERT INTO `pci-dss v3.2.1 section3.4` (`id`, `assessment_id`, `network_type`, `purpose_of_network`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Network Type 1', 'Purpose 1', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Network Type 2', 'Purpose 2', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Network Type 2', 'Purpose 2', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -606,7 +641,7 @@ CREATE TABLE `pci-dss v3.2.1 section3.5` (
 
 INSERT INTO `pci-dss v3.2.1 section3.5` (`id`, `assessment_id`, `requirement1`, `requirement2`, `requirement3`, `requirement4`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Req 1', 'Req 2', 'Req 3', 'Req 4', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Req 1', 'Req 2', 'Req 3', 'Req 4', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Req 1', 'Req 2', 'Req 3', 'Req 4', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -631,7 +666,7 @@ CREATE TABLE `pci-dss v3.2.1 section3.6 international_entity` (
 
 INSERT INTO `pci-dss v3.2.1 section3.6 international_entity` (`id`, `assessment_id`, `entity_name`, `country`, `requirement1`, `requirement2`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Entity Name 1', 'Country 1', 'Req 1', 'Req 2', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Entity Name 2', 'Country 2', 'Req 1', 'Req 2', 2, '2023-07-31 12:34:00');
+(2, NULL, 'Entity Name 2', 'Country 2', 'Req 1', 'Req 2', NULL, '2023-07-31 12:34:00');
 
 -- --------------------------------------------------------
 
@@ -655,7 +690,7 @@ CREATE TABLE `pci-dss v3.2.1 section3.6 wholly_owned_entity` (
 
 INSERT INTO `pci-dss v3.2.1 section3.6 wholly_owned_entity` (`id`, `assessment_id`, `wholly_owned_entity`, `requirement1`, `requirement2`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Entity 1', 'Req 1', 'Req 2', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Entity 2', 'Req 1', 'Req 2', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Entity 2', 'Req 1', 'Req 2', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -679,7 +714,7 @@ CREATE TABLE `pci-dss v3.2.1 section3.7` (
 
 INSERT INTO `pci-dss v3.2.1 section3.7` (`id`, `assessment_id`, `wireless_used_or_not`, `if_no`, `if_yes`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'No', NULL, NULL, 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Yes', 'Details if Yes', NULL, 2, '2023-07-31 12:34:56');
+(2, NULL, 'Yes', 'Details if Yes', NULL, NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -704,7 +739,7 @@ CREATE TABLE `pci-dss v3.2.1 section3.8 in_scope` (
 
 INSERT INTO `pci-dss v3.2.1 section3.8 in_scope` (`id`, `assessment_id`, `wireless_technology`, `requirement1`, `requirement2`, `requirement3`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Tech 1', 'Yes', 'No', 'Yes', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Tech 2', 'Yes', 'Yes', 'No', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Tech 2', 'Yes', 'Yes', 'No', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -727,7 +762,7 @@ CREATE TABLE `pci-dss v3.2.1 section3.8 out_scope` (
 
 INSERT INTO `pci-dss v3.2.1 section3.8 out_scope` (`id`, `assessment_id`, `wireless_technology`, `description`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Tech 1', 'Description 1', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Tech 2', 'Description 2', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Tech 2', 'Description 2', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -749,7 +784,7 @@ CREATE TABLE `pci-dss v3.2.1 section4.1` (
 
 INSERT INTO `pci-dss v3.2.1 section4.1` (`id`, `assessment_id`, `network_diagrams`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Diagram 1', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Diagram 2', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Diagram 2', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -773,7 +808,7 @@ CREATE TABLE `pci-dss v3.2.1 section4.2_dataflows` (
 
 INSERT INTO `pci-dss v3.2.1 section4.2_dataflows` (`id`, `assessment_id`, `dataflows`, `types_of_chd`, `description`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Dataflows 1', 'Types of CHD 1', 'Description 1', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Dataflows 2', 'Types of CHD 2', 'Description 2', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Dataflows 2', 'Types of CHD 2', 'Description 2', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -795,7 +830,7 @@ CREATE TABLE `pci-dss v3.2.1 section4.2_diagrams` (
 
 INSERT INTO `pci-dss v3.2.1 section4.2_diagrams` (`id`, `assessment_id`, `data_flow_diagram`, `last_edited_by`, `last_edited_at`) VALUES
 (1, NULL, 'Data Flow Diagram 1', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Data Flow Diagram 2', 2, '2023-07-31 12:34:56');
+(2, NULL, 'Data Flow Diagram 2', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -1120,15 +1155,24 @@ INSERT INTO `privileges` (`id`, `privilege_name`, `created_at`, `updated_at`) VA
 CREATE TABLE `projects` (
   `project_id` int(11) NOT NULL,
   `project_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `org_id` int(11) DEFAULT NULL,
+  `created_by` bigint(20) UNSIGNED DEFAULT NULL,
   `project_creation_date` date NOT NULL,
   `project_creation_time` time NOT NULL,
   `project_type` bigint(20) UNSIGNED DEFAULT NULL,
-  `status` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Not submitted for approval',
   `project_owner` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `projects`
+--
+
+INSERT INTO `projects` (`project_id`, `project_name`, `org_id`, `created_by`, `project_creation_date`, `project_creation_time`, `project_type`, `status`, `project_owner`, `created_at`, `updated_at`) VALUES
+(1, 'Audit 1 made by h1enduser1', 9, 55, '2023-08-12', '14:47:06', 2, 'Not submitted for approval', 'Ali khan', '2023-08-12 09:47:06', '2023-08-12 11:00:53'),
+(4, 'Audit 2 made by h1enduser1', 9, 55, '2023-08-12', '16:20:06', 2, 'Not submitted for approval', 'Khawaja', '2023-08-12 11:20:06', '2023-08-12 11:20:06');
 
 -- --------------------------------------------------------
 
@@ -1163,7 +1207,8 @@ CREATE TABLE `project_types` (
 --
 
 INSERT INTO `project_types` (`id`, `type`, `created_at`, `updated_at`) VALUES
-(2, 'Pci dss 3.2.1', NULL, NULL);
+(2, 'Pci dss 3.2.1', NULL, NULL),
+(3, 'Pci dss v4.0', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1204,6 +1249,27 @@ CREATE TABLE `role_has_permissions` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `superusers`
+--
+
+CREATE TABLE `superusers` (
+  `id` int(11) NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `org_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `superusers`
+--
+
+INSERT INTO `superusers` (`id`, `user_id`, `org_id`) VALUES
+(5, 51, 9),
+(7, 51, 10),
+(9, 52, 10);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -1236,15 +1302,13 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `org_id`, `first_name`, `last_name`, `national_id`, `email`, `telephone`, `address`, `city`, `state`, `country`, `zip_code`, `password`, `2FA`, `privilege_id`, `status`, `email_verified_at`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, NULL, 'Shahmeer', 'Sheraz', NULL, 'shahmeer@gmail.com', '03332227456', 'hussainabad', 'Karachi', 'Sindh', 'Pakistan', 77, '$2y$10$vi4.BBlVe173XB8Y6y/.zehiWOrXzOwpJE8QSGoKTm8/dWsFin2iO', 'N', 4, 'active', NULL, NULL, '2023-07-08 08:03:14', '2023-07-08 03:14:31'),
-(2, 2, 'Khawaja', 'Abdullah', NULL, 'kabdullah098@gmail.com', '04384834', 'Hussainabad', 'Karachi', 'Sindh', 'Pakistan', 66, '$2y$10$znHSFOfOFFghAQGz1924ieg9xmKPaDDGYqqm8lxe0CXCW/jKI0jiO', 'N', 1, 'active', NULL, 'VxuTEIaoFzuHboJF9ri45XyI876fAwKCXFDpMTDLpodMI1VnOLKdvbg40qqC', '2023-07-08 10:31:23', '2023-07-22 05:40:56'),
-(3, 1, 'Sohaib', 'Ashraf Ali', '4210198765432', 'sohaib@gmail.com', '03334447653', '1647/2 Fb area', 'Karachi', 'Sindh', 'USA', 99, '$2y$10$MDvqEhAeuPMdPHOjGHMMaeyvA7H4KxZ8JYGRtXlUYPDmaSh6CYVj6', 'N', 1, 'active', NULL, NULL, '2023-07-23 02:54:01', '2023-08-11 01:36:20'),
-(4, 1, 'Muhammad', 'Shahzaib Ali', '42101987654376', 'shahzaib@gmail.com', '03334447653', 'Fb area', 'karachi', 'Punjab', 'Pakistan', 88, '$2y$10$GPFmjNfecXW0N0AMyR6qH.cz4nNM0.lczfjJluzFNxykIqwof77Y2', 'N', 3, 'active', NULL, NULL, '2023-07-23 02:57:17', '2023-07-24 07:58:06'),
-(5, 1, 'umer', 'khan', '4210198765432', 'umer@gmail.com', '03334447653', 'Iqbal town', 'lahore', 'Punjab', 'Pakistan', 123, '$2y$10$zEdph.iXdJuh3OnEbvLTlOb5OEiJO3bgoU7gVQNXAY5I2hWoLI9qW', 'N', 2, 'active', NULL, NULL, '2023-07-23 02:58:22', '2023-07-23 02:58:22'),
-(6, 5, 'Shoaib', 'Ali', '4210198765432', 'shoaib@gmail.com', '03337776523', 'Fb area', 'Karachi', 'Sindh', 'Pakistan', 33, '$2y$10$3NkJlL1DArQwkxKPzKFwZeL2tlnOHdLnZP7wto5EVAIhzWOulkdei', 'N', 2, 'active', NULL, NULL, '2023-07-24 06:51:54', '2023-07-24 06:51:54'),
-(31, 1, 'Muhammad', 'Khan', '42101987654211', 'khan@gmail.com', '11111111', 'Azizabad', 'Multan', 'Punjab', 'Pakistan', 2, '$2y$10$00iKRDzWSCX9TI/STqXBx.SnhasmtE62UnAJD6cPjlaYFewY6aujG', 'N', 1, 'active', NULL, NULL, '2023-08-11 00:55:30', '2023-08-11 00:55:30'),
-(32, 1, 'shoaib', 'Raza', '33333333', 'shoaib2@gmail.com', '12333', 'Fb area block2', 'karachi', 'Punjab', 'Pakistan', 12, '$2y$10$yFWJ2hIzx0m09suU4EbWtugxp0aFSPOv53jYha.puKbS6dQf8.tZa', 'N', 1, 'active', NULL, NULL, '2023-08-11 00:56:51', '2023-08-11 00:56:51'),
-(33, 5, 'Sohail', 'Khan', '33333333', 'sohail@gmail.com', '333233', 'National Highway', 'karachi', 'Punjab', 'Pakistan', 555, '$2y$10$Vb6KjG4uRXJXz1vvvZhwcuyQ4mFEh0bjanA/AHf/VHnNE1aDM/IV.', 'N', 1, 'active', NULL, NULL, '2023-08-11 00:59:17', '2023-08-11 00:59:17'),
-(34, 2, 'Muhammad', 'Ashraf Hakeem', '4210198765422', 'ashraf@gmail.com', '033344476755', 'Fb area', 'ddd', 'ddd', 'ddd', 3, '$2y$10$eoMHPmakxffuiA4P1Z9exO3kjuLvyvfpFRVGwdbxz3oWPUqdqFbEK', 'N', 5, 'active', NULL, NULL, '2023-08-11 01:23:20', '2023-08-11 01:34:37');
+(51, 9, 'Host1', 'Superuser1', '132233', 'h1superuser1@gmail.com', '1234455', 'Fb area block2', 'karachi', 'Sindh', 'Pakistan', 2, '$2y$10$GDj4Ev368FavPPdzZdYX7.802VDp8W1BW57xTKm1jBRJNAKY78eKq', 'N', 1, 'active', NULL, NULL, '2023-08-11 07:46:38', '2023-08-11 07:46:38'),
+(52, 10, 'Guest1', 'Super User1', '33444', 'g1superuser1@gmail.com', '12444', 'Fb area', 'isamabad', 'Pujab', 'Pakistan', 3, '$2y$10$xyq4g6FrWJ2byguKcSEdFu/22vzNt8vEQZxyQU9E6YSQJATdDsh5K', 'N', 1, 'active', NULL, NULL, '2023-08-11 07:47:35', '2023-08-11 08:23:20'),
+(53, 10, 'Guest1', 'enduser1', '133', 'g1enduser1@gmail.com', '123444', 'Gulshan', 'karachi', 'Sindh', 'Pakistan', 12, '$2y$10$XuEx7mzhrHvE1HVgfxUBJe2yLP1AazqR5m.KxkKT1V8ngqbtaibue', 'N', 5, 'active', NULL, NULL, '2023-08-11 07:48:48', '2023-08-11 07:48:48'),
+(54, 10, 'Guest1', 'enduser2', '4210198765422', 'g1enduser2@gmail.com', '033344476787', 'Fb area block2', 'karachi', 'Sindh', 'Pakistan', 123, '$2y$10$FTRIzXMRK/ghw5XycapC2eURzaVviYitneANu/krvTgazXgOHHSVm', 'N', 5, 'active', NULL, NULL, '2023-08-11 07:50:39', '2023-08-11 07:50:39'),
+(55, 9, 'Host1', 'Enduser1', '12333', 'h1enduser1@gmail.com', '03334447653', 'Fb area block2', 'karachi', 'Sindh', 'Pakistan', 12, '$2y$10$eEk81XNr9EnMywfB5LewMumU49/QtbzvHZsc88E5GlfCbM9XkJVqa', 'N', 5, 'active', NULL, NULL, '2023-08-11 07:52:08', '2023-08-11 07:52:08'),
+(56, 10, 'Guest1', 'Enduser 3', '344', 'g1enduser3@gmail.com', '03334447653', 'Fb area block2', 'karachi', 'Punjab', 'Pakistan', 1, '$2y$10$SIj3aRSngCc0VLTTM88HE.6NzUU51.8m1rNcH8/1wjhsr5gRVh3Pu', 'N', 5, 'active', NULL, NULL, '2023-08-11 07:56:56', '2023-08-11 07:56:56'),
+(57, 9, 'Host 1', 'enduser2', '421019876544', 'h1enduser2@gmail.com', '033344476787', 'Fb area block2', 'karachi', 'Pujab', 'Pakistan', 123, '$2y$10$uXD54n3UXkr0ZEMtsovjFux1WxCQsiNtz1ryCfF7peg/5h5njC/zS', 'N', 5, 'active', NULL, NULL, '2023-08-12 11:08:13', '2023-08-12 11:08:13');
 
 --
 -- Indexes for dumped tables
@@ -1603,8 +1667,9 @@ ALTER TABLE `privileges`
 --
 ALTER TABLE `projects`
   ADD PRIMARY KEY (`project_id`),
-  ADD KEY `user_email` (`user_email`),
-  ADD KEY `project_type` (`project_type`);
+  ADD KEY `project_type` (`project_type`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `org_id` (`org_id`);
 
 --
 -- Indexes for table `project_details`
@@ -1637,6 +1702,14 @@ ALTER TABLE `role_has_permissions`
   ADD KEY `role_has_permissions_role_id_foreign` (`role_id`);
 
 --
+-- Indexes for table `superusers`
+--
+ALTER TABLE `superusers`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`,`org_id`),
+  ADD KEY `orgidfk` (`org_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -1664,7 +1737,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `organizations`
 --
 ALTER TABLE `organizations`
-  MODIFY `org_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `org_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `pci-dss v3.2.1 assessor company`
@@ -1904,13 +1977,13 @@ ALTER TABLE `privileges`
 -- AUTO_INCREMENT for table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `project_types`
 --
 ALTER TABLE `project_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -1919,10 +1992,16 @@ ALTER TABLE `roles`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `superusers`
+--
+ALTER TABLE `superusers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- Constraints for dumped tables
@@ -2194,7 +2273,8 @@ ALTER TABLE `pci-dss v3.2.1 section5.2`
 -- Constraints for table `projects`
 --
 ALTER TABLE `projects`
-  ADD CONSTRAINT `projemail` FOREIGN KEY (`user_email`) REFERENCES `users` (`email`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `createdbyfk` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `organfkss` FOREIGN KEY (`org_id`) REFERENCES `organizations` (`org_id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `projtype` FOREIGN KEY (`project_type`) REFERENCES `project_types` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
@@ -2212,6 +2292,13 @@ ALTER TABLE `project_details`
 ALTER TABLE `role_has_permissions`
   ADD CONSTRAINT `role_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `role_has_permissions_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `superusers`
+--
+ALTER TABLE `superusers`
+  ADD CONSTRAINT `orgidfk` FOREIGN KEY (`org_id`) REFERENCES `organizations` (`org_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `useridfk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `users`
