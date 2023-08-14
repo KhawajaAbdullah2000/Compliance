@@ -127,7 +127,7 @@ $req->validate(
    $user= User::create($data);
    if($user->privilege_id==1){
     $user->assignRole('super user');
-    $check= Db::table('superusers')->where('user_id',auth()->user()->id)->where('org_id',$req->org_id)->first();
+    $check= Db::table('superusers')->where('user_id',$user->id)->where('org_id',$req->org_id)->first();
     if(!$check){
         Db::table('superusers')->insert([
             'user_id'=>$user->id,

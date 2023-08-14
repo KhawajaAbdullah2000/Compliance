@@ -42,9 +42,13 @@
         <li class="nav-item">
           <a class="nav-link" href="/projects/{{auth()->user()->id}}">Projects created by me</a>
         </li> 
-        
-
         @endcan
+
+        <li class="nav-item">
+          <a class="nav-link" href="/assigned_projects/{{auth()->user()->id}}">My assigned Projects</a>
+        </li> 
+
+
 
         @endrole
 

@@ -101,8 +101,13 @@ public function projects($user_id){
     public function submit_end_user(Request $req,$proj_id){
         $req->validate(
             [
-                'assigned_enduser'=>'required',
+                'assigned_enduser'=>['required', Rule::unique('project_details')->where(function ($query) use ($proj_id) {
+                    return $query->where('project_code', $proj_id);
+                })],
                 'project_permissions'=>'required'
+            ],
+            [
+                'assigned_enduser.unique'=>'This user is already assigned to this project'
             ]
             );
         $check=Project::where('project_id',$proj_id)->first();

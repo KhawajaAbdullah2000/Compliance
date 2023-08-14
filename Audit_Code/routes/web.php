@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\SuperUserController;
 use App\Http\Controllers\EndUserController;
+use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
@@ -88,6 +89,13 @@ route::get('edit_permissions/{proj_id}/{user_id}',[EndUserController::class,'edi
 route::put('edit_permissions/{proj_id}/{user_id}',[EndUserController::class,'edit_permissions_submit']);
 }
 );
+
+//for all end users
+Route::middleware(['auth','is_user','role:end user'])->group(function(){
+route::get('assigned_projects/{user_id}',[ProjectController::class,'assigned_projects'])->name('assigned_projects');
+}
+);
+
 
 
 
