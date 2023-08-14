@@ -43,14 +43,6 @@
             <div class="text-danger">{{ $errors->first('project_type') }}</div>
         @endif
 
-        <div class="col-md-6">
-            <label for="" class="form-label">Project owner</label>
-            <input type="text" class="form-control" name="project_owner" value="{{old('project_owner',$project->project_owner)}}">
-            @if($errors->has('project_owner'))
-            <div class="text-danger">{{ $errors->first('project_owner') }}</div>
-        @endif
-          </div>
-
         
          <div class="col-md-6">
             <label for="" class="form-label">Project Status</label>

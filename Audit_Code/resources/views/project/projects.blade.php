@@ -12,7 +12,7 @@
 <table class="table table-responsive table-hover mt-4" id="myTable">
     <thead>
         <tr>
-            <th>ID</th>
+            <th>Project ID</th>
             <th>Name</th>
             <th>Creation date</th>
             <th>Type</th>

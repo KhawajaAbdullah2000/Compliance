@@ -81,8 +81,11 @@ route::post('create_project/{id}',[EndUserController::class,'submit_create_proje
 route::get('/projects/{user_id}',[EndUserController::class,'projects'])->name('projects');
 route::get('edit_my_project/{id}',[EndUserController::class,'edit_my_project']);
 route::put('/edit_project_submit/{id}',[EndUserController::class,'edit_project_submit']);
-route::get('assigned_endusers/{id}',[EndUserController::class,'assigned_endusers']);
+route::get('assigned_endusers/{id}',[EndUserController::class,'assigned_endusers'])->name('assigned_endusers');
 route::get('/assign_end_user/{id}',[EndUserController::class,'assign_end_user']);
+route::post('assign_enduser_to_project/{id}',[EndUserController::class,'submit_end_user']);
+route::get('edit_permissions/{proj_id}/{user_id}',[EndUserController::class,'edit_permissions']);
+route::put('edit_permissions/{proj_id}/{user_id}',[EndUserController::class,'edit_permissions_submit']);
 }
 );
 

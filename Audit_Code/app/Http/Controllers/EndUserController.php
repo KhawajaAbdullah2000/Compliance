@@ -31,7 +31,6 @@ public function projects($user_id){
             $req->validate([
                 'project_name'=>'required|max:80|min:5|unique:projects',
                 'project_type'=>'required',
-                'project_owner'=>'required|min:5|max:30'
             ]);
 
             $project=new Project();
@@ -41,7 +40,7 @@ public function projects($user_id){
             $project->project_creation_date=Carbon::now()->format('Y-m-d');
            $project->project_creation_time=Carbon::now()->format('H:i:s'); 
            $project->project_type=$req->project_type;
-           $project->project_owner=$req->project_owner;
+           $project->status_last_changed_by=$user_id;
            $project->save();
            return redirect()->route('projects',['user_id'=>$user_id])->with('success','Project Created Successfully');
             
@@ -60,7 +59,6 @@ public function projects($user_id){
         $req->validate([
             'project_name' => ['required','min:5','max:80',Rule::unique('projects')->ignore($id,'project_id')],
             'project_type'=>'required',
-            'project_owner'=>'required|min:5|max:30',
             'status'=>'required',
         ]);
 
@@ -68,8 +66,8 @@ public function projects($user_id){
         if($project){
         $project->project_name=$req->project_name;
         $project->project_type=$req->project_type;
-        $project->project_owner=$req->project_owner;
         $project->status=$req->status;
+        $project->status_last_changed_by=auth()->user()->id;
         $project->save();
         return redirect()->route('projects',['user_id'=>auth()->user()->id])->with('success','Project edited successfully');
         }else{
@@ -80,8 +78,10 @@ public function projects($user_id){
     }
 
     public function assigned_endusers($id){
-  
-          return view('project.assigned_endusers',['project_id'=>$id]);
+        //$id is project id
+        $endusers=Db::table('project_details')->join('users','project_details.assigned_enduser','users.id')
+        ->where('project_details.project_code',$id)->get(['users.first_name','users.last_name','project_details.project_permissions','project_details.assigned_enduser']);
+          return view('project.assigned_endusers',['project_id'=>$id,'endusers'=>$endusers]);
            
 
     }
@@ -96,6 +96,66 @@ public function projects($user_id){
          $users=User::where('privilege_id',5)->wherein('org_id',$orgs)->get(['id','first_name','last_name']);
          $permissions=Permission::all();
          return view('project.assign_enduser_form',['users'=>$users,'project_id'=>$id,'permissions'=>$permissions]);
+
+    }
+    public function submit_end_user(Request $req,$proj_id){
+        $req->validate(
+            [
+                'assigned_enduser'=>'required',
+                'project_permissions'=>'required'
+            ]
+            );
+        $check=Project::where('project_id',$proj_id)->first();
+        if($check){
+            //project exists
+            Db::table('project_details')->insert(
+                [
+                    'project_code'=>$proj_id,
+                    'assigned_enduser'=>$req->assigned_enduser,
+                    'project_permissions'=>json_encode($req->project_permissions),
+                    'created_at'=>Carbon::now()->format('Y-m-d H:i:s'),
+                    'updated_at'=>Carbon::now()->format('Y-m-d H:i:s'),
+                ]
+                );
+                return redirect()->route('assigned_endusers',['id'=>$proj_id]);
+
+        }
+        else{
+            return redirect()->route('projects',['user_id'=>auth()->user()->id])->with('error','Couldnot find the project');
+             }
+    }
+
+    public function edit_permissions($proj_id,$user_id){
+        $user=Db::table('project_details')->where('project_code',$proj_id)->where('assigned_enduser',$user_id)->first();
+        if($user){
+            $permissions=Permission::all();
+
+            return view('project.edit_permissions',['user'=>$user,'permissions'=>$permissions]);
+        }else{
+            return redirect()->back()->with('error','Error occured');
+        }
+    }
+
+    public function edit_permissions_submit(Request $req,$proj_id,$user_id){
+        $req->validate(
+            [
+                'project_permissions'=>'required'
+            ]
+            );
+        $user=Db::table('project_details')->where('project_code',$proj_id)->where('assigned_enduser',$user_id)->first();
+        if($user){
+                Db::table('project_details')->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+                ->update([
+                    'project_permissions'=>json_encode($req->project_permissions),
+                    'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')
+                    ]
+                );
+                return redirect()->route('assigned_endusers',['id'=>$proj_id]);
+
+        }
+        else{
+            return redirect()->back()->with('error','Project not found');
+        }
 
     }
 }
