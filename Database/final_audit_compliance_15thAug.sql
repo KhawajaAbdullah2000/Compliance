@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 14, 2023 at 09:27 AM
+-- Generation Time: Aug 15, 2023 at 02:10 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -95,6 +95,7 @@ INSERT INTO `model_has_permissions` (`permission_id`, `model_type`, `model_id`) 
 (1, 'App\\Models\\User', 45),
 (1, 'App\\Models\\User', 54),
 (1, 'App\\Models\\User', 57),
+(1, 'App\\Models\\User', 62),
 (2, 'App\\Models\\User', 8),
 (2, 'App\\Models\\User', 22),
 (2, 'App\\Models\\User', 24),
@@ -159,6 +160,7 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (2, 'App\\Models\\User', 51),
 (2, 'App\\Models\\User', 52),
 (2, 'App\\Models\\User', 58),
+(2, 'App\\Models\\User', 61),
 (3, 'App\\Models\\User', 8),
 (3, 'App\\Models\\User', 10),
 (3, 'App\\Models\\User', 11),
@@ -195,6 +197,7 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (3, 'App\\Models\\User', 57),
 (3, 'App\\Models\\User', 59),
 (3, 'App\\Models\\User', 60),
+(3, 'App\\Models\\User', 62),
 (4, 'App\\Models\\User', 5),
 (4, 'App\\Models\\User', 6),
 (4, 'App\\Models\\User', 7),
@@ -295,25 +298,6 @@ INSERT INTO `pci-dss v3.2.1 assessors` (`assessor_id`, `assessment_id`, `assesso
 (2, 1001, 'Assessor 2', 'PCI-2', '987-654-3210', 'assessor2@example.com', 102, '2023-07-31 12:34:56'),
 (1, 1001, 'Assessor 1', 'PCI-1', '123-456-7890', 'assessor1@example.com', 101, '2023-07-31 12:34:56'),
 (2, 1001, 'Assessor 2', 'PCI-2', '987-654-3210', 'assessor2@example.com', 102, '2023-07-31 12:34:56');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pci-dss v3.2.1 client info`
---
-
-CREATE TABLE `pci-dss v3.2.1 client info` (
-  `assessment_id` int(10) UNSIGNED NOT NULL,
-  `project_id` int(11) DEFAULT NULL,
-  `company_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `company_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `company_url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `company_contact_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `company_contact_number` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `company_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
-  `last_edited_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1086,6 +1070,32 @@ CREATE TABLE `pci-dss v3.2.1 section5.2` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pci-dss v3_2_1 client info`
+--
+
+CREATE TABLE `pci-dss v3_2_1 client info` (
+  `assessment_id` int(10) UNSIGNED NOT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `company_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `company_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `company_url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `company_contact_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `company_contact_number` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `company_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `last_edited_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `pci-dss v3_2_1 client info`
+--
+
+INSERT INTO `pci-dss v3_2_1 client info` (`assessment_id`, `project_id`, `company_name`, `company_address`, `company_url`, `company_contact_name`, `company_contact_number`, `company_email`, `last_edited_by`, `last_edited_at`) VALUES
+(1004, 1, 'Guest Organization 1', 'Fb area block2', 'www.g1org.com', 'Shahmeer', '03332227364', 'g1org@gmail.com', 57, '2023-08-15 17:07:54');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `permissions`
 --
 
@@ -1202,7 +1212,9 @@ CREATE TABLE `project_details` (
 INSERT INTO `project_details` (`project_code`, `assigned_enduser`, `project_permissions`, `created_at`, `updated_at`) VALUES
 (1, 57, '[\"Data Inputter\",\"Data Approver\"]', '2023-08-14 06:22:32', '2023-08-14 07:23:14'),
 (1, 53, '[\"Project Approver\"]', '2023-08-14 06:33:40', '2023-08-14 06:33:40'),
-(1, 54, '[\"Project Owner\",\"Data Inputter\",\"Data Approver\"]', '2023-08-14 06:33:49', '2023-08-14 07:24:40');
+(1, 54, '[\"Project Creator\",\"Project Approver\",\"Data Inputter\",\"Data Approver\"]', '2023-08-14 06:33:49', '2023-08-14 10:57:10'),
+(1, 56, '[\"Project Owner\"]', '2023-08-14 10:57:00', '2023-08-14 10:57:00'),
+(1, 55, '[\"Project Approver\"]', '2023-08-14 11:02:17', '2023-08-14 11:02:17');
 
 -- --------------------------------------------------------
 
@@ -1281,7 +1293,8 @@ INSERT INTO `superusers` (`id`, `user_id`, `org_id`) VALUES
 (5, 51, 9),
 (7, 51, 10),
 (9, 52, 10),
-(10, 58, 11);
+(10, 58, 11),
+(11, 61, 11);
 
 -- --------------------------------------------------------
 
@@ -1327,7 +1340,9 @@ INSERT INTO `users` (`id`, `org_id`, `first_name`, `last_name`, `national_id`, `
 (57, 9, 'Host 1', 'enduser2', '421019876544', 'h1enduser2@gmail.com', '033344476787', 'Fb area block2', 'karachi', 'Pujab', 'Pakistan', 123, '$2y$10$uXD54n3UXkr0ZEMtsovjFux1WxCQsiNtz1ryCfF7peg/5h5njC/zS', 'N', 5, 'active', NULL, NULL, '2023-08-12 11:08:13', '2023-08-12 11:08:13'),
 (58, 11, 'G2', 'superuser1', '33323', 'g2superuser1@gmail.com', '033344476787', 'Fb area block2', 'karachi', 'Punjab', 'Pakistan', 1, '$2y$10$LLHyueucTBO5pjAI9GnHNe09vRA7yxMLf90.h7TXjN8Dj/ue6xEqq', 'N', 1, 'active', NULL, NULL, '2023-08-14 06:37:54', '2023-08-14 06:37:54'),
 (59, 11, 'G2', 'enduser1', '33323', 'g2enduser1@gmail.com', '033344476787', 'Fb area block2', 'karachi', 'Punjab', 'Pakistan', 23, '$2y$10$BVbTF7OYKa1NF75cpmyqcuTDAR57KXMfz3JIBFNF1QsBz9jRuW4j6', 'N', 5, 'active', NULL, NULL, '2023-08-14 06:38:57', '2023-08-14 06:38:57'),
-(60, 11, 'G2', 'enduser2', '3443', 'g2enduser2@gmail.com', '34324', 'Azizabad', 'London', 'Sindh', 'Pakistan', 123, '$2y$10$eQDQX1arLN2RxLuHq3QTMeRs.K64ytjaAqDp3yPNjaEhOqf5vj6Jy', 'N', 5, 'active', NULL, NULL, '2023-08-14 06:39:41', '2023-08-14 06:39:41');
+(60, 11, 'G2', 'enduser2', '3443', 'g2enduser2@gmail.com', '34324', 'Azizabad', 'London', 'Sindh', 'Pakistan', 123, '$2y$10$eQDQX1arLN2RxLuHq3QTMeRs.K64ytjaAqDp3yPNjaEhOqf5vj6Jy', 'N', 5, 'active', NULL, NULL, '2023-08-14 06:39:41', '2023-08-14 06:39:41'),
+(61, 11, 'G2', 'Superuser2', '444', 'g2superuser2@gmail.com', '44344', 'Fb area block2', 'Lahore', 'Punjab', 'Pakistan', 44, '$2y$10$RrMyfjxt5gsQMHimC9V3qOYn5GyO7IJ6bRiTfBIy29zbnrD8kQoCK', 'N', 1, 'active', NULL, NULL, '2023-08-14 10:51:04', '2023-08-14 10:51:04'),
+(62, 11, 'guest2', 'enduser3', '444', 'g2enduser3@gmail.com', '32333', 'Fb area block2', 'lahore', 'Punjab', 'Pakistan', 33, '$2y$10$3TQvelKrKPV60ibmU1vW6OVbjk4rwwCTjkSTmJsbUbDdnNz2uGbsO', 'N', 5, 'active', NULL, NULL, '2023-08-14 10:59:40', '2023-08-14 10:59:40');
 
 --
 -- Indexes for dumped tables
@@ -1380,14 +1395,6 @@ ALTER TABLE `pci-dss v3.2.1 assessor company`
   ADD PRIMARY KEY (`id`),
   ADD KEY `assessment_id` (`assessment_id`),
   ADD KEY `editsecassescompanyfk` (`last_edited_by`);
-
---
--- Indexes for table `pci-dss v3.2.1 client info`
---
-ALTER TABLE `pci-dss v3.2.1 client info`
-  ADD PRIMARY KEY (`assessment_id`),
-  ADD KEY `last_edited_by` (`last_edited_by`),
-  ADD KEY `project_id` (`project_id`);
 
 --
 -- Indexes for table `pci-dss v3.2.1 section1.2`
@@ -1661,6 +1668,15 @@ ALTER TABLE `pci-dss v3.2.1 section5.2`
   ADD KEY `editby5.2` (`last_edited_by`);
 
 --
+-- Indexes for table `pci-dss v3_2_1 client info`
+--
+ALTER TABLE `pci-dss v3_2_1 client info`
+  ADD PRIMARY KEY (`assessment_id`),
+  ADD UNIQUE KEY `project_id_2` (`project_id`),
+  ADD KEY `last_edited_by` (`last_edited_by`),
+  ADD KEY `project_id` (`project_id`);
+
+--
 -- Indexes for table `permissions`
 --
 ALTER TABLE `permissions`
@@ -1762,12 +1778,6 @@ ALTER TABLE `organizations`
 --
 ALTER TABLE `pci-dss v3.2.1 assessor company`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `pci-dss v3.2.1 client info`
---
-ALTER TABLE `pci-dss v3.2.1 client info`
-  MODIFY `assessment_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1003;
 
 --
 -- AUTO_INCREMENT for table `pci-dss v3.2.1 section1.2`
@@ -1974,6 +1984,12 @@ ALTER TABLE `pci-dss v3.2.1 section5.2`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `pci-dss v3_2_1 client info`
+--
+ALTER TABLE `pci-dss v3_2_1 client info`
+  MODIFY `assessment_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1005;
+
+--
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
@@ -2001,7 +2017,7 @@ ALTER TABLE `projects`
 -- AUTO_INCREMENT for table `project_types`
 --
 ALTER TABLE `project_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -2013,13 +2029,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `superusers`
 --
 ALTER TABLE `superusers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- Constraints for dumped tables
@@ -2041,21 +2057,14 @@ ALTER TABLE `model_has_roles`
 -- Constraints for table `pci-dss v3.2.1 assessor company`
 --
 ALTER TABLE `pci-dss v3.2.1 assessor company`
-  ADD CONSTRAINT `assesro_fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `assesro_fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editsecassescompanyfk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Constraints for table `pci-dss v3.2.1 client info`
---
-ALTER TABLE `pci-dss v3.2.1 client info`
-  ADD CONSTRAINT `editsec1fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `project id` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section1.2`
 --
 ALTER TABLE `pci-dss v3.2.1 section1.2`
-  ADD CONSTRAINT `date_fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `date_fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editsec1.2fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
@@ -2068,20 +2077,20 @@ ALTER TABLE `pci-dss v3.2.1 section1.2_dates_spent_onsite`
 -- Constraints for table `pci-dss v3.2.1 section1.3`
 --
 ALTER TABLE `pci-dss v3.2.1 section1.3`
-  ADD CONSTRAINT `section1.3fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `section1.3fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section1.4`
 --
 ALTER TABLE `pci-dss v3.2.1 section1.4`
   ADD CONSTRAINT `editsec1.4fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec1.4fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `sec1.4fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section1.5`
 --
 ALTER TABLE `pci-dss v3.2.1 section1.5`
-  ADD CONSTRAINT `1.5secfk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `1.5secfk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editsec1.5fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
@@ -2089,34 +2098,34 @@ ALTER TABLE `pci-dss v3.2.1 section1.5`
 --
 ALTER TABLE `pci-dss v3.2.1 section2.1`
   ADD CONSTRAINT `editsec2.1fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec2.1_fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `sec2.1_fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section2.2`
 --
 ALTER TABLE `pci-dss v3.2.1 section2.2`
   ADD CONSTRAINT `editsec2.2fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec2.2fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `sec2.2fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section3.1`
 --
 ALTER TABLE `pci-dss v3.2.1 section3.1`
   ADD CONSTRAINT `editsec3.1fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec3.1fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `sec3.1fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section3.2`
 --
 ALTER TABLE `pci-dss v3.2.1 section3.2`
   ADD CONSTRAINT `editsec3.2fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `section3.2fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `section3.2fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section3.3`
 --
 ALTER TABLE `pci-dss v3.2.1 section3.3`
-  ADD CONSTRAINT `ass_id3.3fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `ass_id3.3fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editsec3.3fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
@@ -2124,69 +2133,69 @@ ALTER TABLE `pci-dss v3.2.1 section3.3`
 --
 ALTER TABLE `pci-dss v3.2.1 section3.4`
   ADD CONSTRAINT `editsec3.4fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec3.4fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `sec3.4fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section3.5`
 --
 ALTER TABLE `pci-dss v3.2.1 section3.5`
   ADD CONSTRAINT `editsec3.5fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec3.5assfk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `sec3.5assfk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section3.6 international_entity`
 --
 ALTER TABLE `pci-dss v3.2.1 section3.6 international_entity`
   ADD CONSTRAINT `editsec3.6part2fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec3.6part2fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `sec3.6part2fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section3.6 wholly_owned_entity`
 --
 ALTER TABLE `pci-dss v3.2.1 section3.6 wholly_owned_entity`
   ADD CONSTRAINT `editsec3.6part1fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec3.6part1fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `sec3.6part1fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section3.7`
 --
 ALTER TABLE `pci-dss v3.2.1 section3.7`
   ADD CONSTRAINT `editsec3.7fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec3.7fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `sec3.7fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section3.8 in_scope`
 --
 ALTER TABLE `pci-dss v3.2.1 section3.8 in_scope`
   ADD CONSTRAINT `editsec3.8scopefk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec3.8in_scope` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `sec3.8in_scope` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section3.8 out_scope`
 --
 ALTER TABLE `pci-dss v3.2.1 section3.8 out_scope`
   ADD CONSTRAINT `editsec3.8putfk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec3.8out_scope` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `sec3.8out_scope` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section4.1`
 --
 ALTER TABLE `pci-dss v3.2.1 section4.1`
-  ADD CONSTRAINT `4.1assfk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `4.1assfk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editsec4.1fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section4.2_dataflows`
 --
 ALTER TABLE `pci-dss v3.2.1 section4.2_dataflows`
-  ADD CONSTRAINT `4.2_dataflows_fkass` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `4.2_dataflows_fkass` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editsec4.2_dataflowfk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section4.2_diagrams`
 --
 ALTER TABLE `pci-dss v3.2.1 section4.2_diagrams`
-  ADD CONSTRAINT `4.2_diagassfk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `4.2_diagassfk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editsec4.2_diagramfk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
@@ -2194,41 +2203,41 @@ ALTER TABLE `pci-dss v3.2.1 section4.2_diagrams`
 --
 ALTER TABLE `pci-dss v3.2.1 section4.3`
   ADD CONSTRAINT `editsec4.3fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec4.3fkass` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `sec4.3fkass` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section4.4`
 --
 ALTER TABLE `pci-dss v3.2.1 section4.4`
   ADD CONSTRAINT `lastedit_4.4` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec4.4idass` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `sec4.4idass` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section4.5`
 --
 ALTER TABLE `pci-dss v3.2.1 section4.5`
-  ADD CONSTRAINT `asses_sec4.5` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `asses_sec4.5` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `last_edit4.5` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section4.6`
 --
 ALTER TABLE `pci-dss v3.2.1 section4.6`
-  ADD CONSTRAINT `asses_4.6` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `asses_4.6` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editbyz_4.6` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section4.7`
 --
 ALTER TABLE `pci-dss v3.2.1 section4.7`
-  ADD CONSTRAINT `as_4.7` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `as_4.7` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editby_4.7` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section4.8`
 --
 ALTER TABLE `pci-dss v3.2.1 section4.8`
-  ADD CONSTRAINT `as_4.8` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `as_4.8` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editby_4.8` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
@@ -2236,56 +2245,63 @@ ALTER TABLE `pci-dss v3.2.1 section4.8`
 --
 ALTER TABLE `pci-dss v3.2.1 section4.9`
   ADD CONSTRAINT `ass_4.9_editby` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `asses_4.9` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `asses_4.9` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section4.10`
 --
 ALTER TABLE `pci-dss v3.2.1 section4.10`
-  ADD CONSTRAINT `ass_4.10` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `ass_4.10` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editby_4.10` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section4.11`
 --
 ALTER TABLE `pci-dss v3.2.1 section4.11`
-  ADD CONSTRAINT `ases_4.11` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `ases_4.11` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editby_4.11` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section4.12`
 --
 ALTER TABLE `pci-dss v3.2.1 section4.12`
-  ADD CONSTRAINT `ass_4.12` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `ass_4.12` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editby_4.12` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section4.13`
 --
 ALTER TABLE `pci-dss v3.2.1 section4.13`
-  ADD CONSTRAINT `asses_4.13` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `asses_4.13` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editby_4.13` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section5.1_asv_quarterly`
 --
 ALTER TABLE `pci-dss v3.2.1 section5.1_asv_quarterly`
-  ADD CONSTRAINT `ass_5.1_asv` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `ass_5.1_asv` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `edit5.1_asv` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section5.1_quarterly_results`
 --
 ALTER TABLE `pci-dss v3.2.1 section5.1_quarterly_results`
-  ADD CONSTRAINT `asses_5.1_quarterly` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `asses_5.1_quarterly` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editby5.1_quarter` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section5.2`
 --
 ALTER TABLE `pci-dss v3.2.1 section5.2`
-  ADD CONSTRAINT `asses5.2_fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3.2.1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `asses5.2_fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `editby5.2` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `pci-dss v3_2_1 client info`
+--
+ALTER TABLE `pci-dss v3_2_1 client info`
+  ADD CONSTRAINT `editsec1fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `project id` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `projects`
