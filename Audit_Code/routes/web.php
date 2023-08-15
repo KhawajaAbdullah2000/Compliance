@@ -6,6 +6,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\SuperUserController;
 use App\Http\Controllers\EndUserController;
 use App\Http\Controllers\ProjectController;
+use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
@@ -87,12 +88,18 @@ route::get('/assign_end_user/{id}',[EndUserController::class,'assign_end_user'])
 route::post('assign_enduser_to_project/{id}',[EndUserController::class,'submit_end_user']);
 route::get('edit_permissions/{proj_id}/{user_id}',[EndUserController::class,'edit_permissions']);
 route::put('edit_permissions/{proj_id}/{user_id}',[EndUserController::class,'edit_permissions_submit']);
+
 }
 );
 
 //for all end users
 Route::middleware(['auth','is_user','role:end user'])->group(function(){
 route::get('assigned_projects/{user_id}',[ProjectController::class,'assigned_projects'])->name('assigned_projects');
+route::get('v_3_2_sections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_sections'])->name('v_3_2_sections');
+route::get('v_3_2_section1/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1'])->name('v_3_2_section1');
+route::post('v3_2_s1_clientinfo/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_clientinfo']);
+route::get('edit_3_2_s1_clientinfo/{proj_id}/{user_id}',[ProjectController::class,'edit_3_2_s1_clientinfo']);
+route::put('edit_3_2_s1_clientinfo/{proj_id}/{user_id}',[ProjectController::class,'edit_3_2_s1_clientinfo_form']);
 }
 );
 
