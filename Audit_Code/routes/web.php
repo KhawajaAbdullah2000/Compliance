@@ -94,6 +94,7 @@ route::put('edit_permissions/{proj_id}/{user_id}',[EndUserController::class,'edi
 
 //for all end users
 Route::middleware(['auth','is_user','role:end user'])->group(function(){
+    //Project controller for v3_2 section 1
 route::get('assigned_projects/{user_id}',[ProjectController::class,'assigned_projects'])->name('assigned_projects');
 route::get('v_3_2_sections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_sections'])->name('v_3_2_sections');
 route::get('v_3_2_section1/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1'])->name('v_3_2_section1');
@@ -103,6 +104,9 @@ route::put('edit_3_2_s1_clientinfo/{proj_id}/{user_id}',[ProjectController::clas
 route::post('v3_2_s1_assessorcompany/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_assessorcompany']);
 route::get('edit_v_3_2_s1_assessorcomp/{proj_id}/{user_id}',[ProjectController::class,'edit_v_3_2_s1_assessorcomp']);
 route::put('edit_v3_2_assessorcompany_form/{proj_id}/{user_id}',[ProjectController::class,'edit_v3_2_assessorcompany_form']);
+route::post('v_3_2_s1_assessors/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_s1_assessors']);
+route::get('edit_v3_2_s1_assesssor/{assessment_id}/{user_id}/{proj_id}',[ProjectController::class,'edit_v3_2_s1_assesssor']);
+route::put('v3_2_s1_edit_assessors_form/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_edit_assessors_form']);
 }
 );
 

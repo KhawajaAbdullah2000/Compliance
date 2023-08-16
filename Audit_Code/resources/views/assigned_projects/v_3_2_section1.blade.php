@@ -18,7 +18,7 @@
     <ul class="nav nav-tabs" role="tablist" id="myTab">
         <li role="presentation" class="active"><a class="nav-link" href="#home" aria-controls="home" role="tab" data-toggle="tab">Client info</a></li>
         <li role="presentation"><a class="nav-link" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Assessor Company</a></li>
-        <li role="presentation"><a class="nav-link" href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
+        <li role="presentation"><a class="nav-link" href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Assessors</a></li>
         <li role="presentation"><a class="nav-link" href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
     </ul>
 
@@ -150,9 +150,7 @@
           @endif
           {{-- if isset clientinfo --}}
 
-            
-
-
+      
 
         </div>
         
@@ -254,11 +252,125 @@
           @endif
           {{-- if isset clientinfo --}}
 
-            
 
 
+        </div>
 
 
+{{-- 
+        Assessors --}}
+        <div role="tabpanel" class="tab-pane" id="messages">
+
+
+            @if(in_array('Data Inputter',$permissions))
+            <div class="col-md-12">
+  
+              @if($assessors->count()==0)
+  
+              <div class="card">
+                <div class="card-header bg-primary text-center">
+                  <h1>Add First Assessor details</h1>
+               </div>
+  
+               <div class="card-body">
+                <form method="post" action="/v_3_2_s1_assessors/{{$project_id}}/{{auth()->user()->id}}">
+                    @csrf
+                    <div class="form-group">
+                      <label for="name">Assessor name:</label>
+                      <input type="text" class="form-control" id="" name='assessor_name' value="{{old('assessor_name')}}">
+                      @if($errors->has('assessor_name'))
+                      <div class="text-danger">{{ $errors->first('assessor_name') }}</div>
+                  @endif
+                    </div>
+  
+                    <div class="form-group">
+                        <label for="name">Assessor PCI Credentials:</label>
+                        <input type="text" class="form-control" id="" name='assessor_pci_cred' value="{{old('assessor_pci_cred')}}">
+                        @if($errors->has('assessor_pci_cred'))
+                        <div class="text-danger">{{ $errors->first('assessor_pci_cred') }}</div>
+                    @endif
+                      </div>
+  
+                      <div class="form-group">
+                        <label for="name">Assessor Phone:</label>
+                        <input type="text" class="form-control" id="" name='assessor_phone' value="{{old('assessor_phone')}}">
+                        @if($errors->has('assessor_phone'))
+                        <div class="text-danger">{{ $errors->first('assessor_phone') }}</div>
+                    @endif
+                      </div>
+  
+                      <div class="form-group">
+                        <label for="name">Assessor Email:</label>
+                        <input type="text" class="form-control" id="" name='assessor_email' value="{{old('assessor_email')}}">
+                        @if($errors->has('assessor_email'))
+                        <div class="text-danger">{{ $errors->first('assessor_email') }}</div>
+                    @endif
+                      </div>
+  
+  
+                      <div class="text-center mt-2">
+                        <button type="submit" class="btn btn-primary btn-md">Submit details</a>
+                      </div>
+  
+                    
+                </form>
+  
+            </div>
+  
+              </div>
+  
+              @endif 
+              {{-- for !isset assessor --}}
+  
+            </div>
+  
+  
+  
+            @endif
+            {{-- for data inputter --}}
+  
+            @if($assessors->count()>0)
+            <table class="table table-responsive table-hover mt-4">
+              <thead>
+                  <tr>
+                    
+                      <th>Assessor Name</th>
+                      <th>Assessor PCI Credentials</th>
+                      <th>Assessor Phone</th>
+                      <th>Assessor Email</th>
+                      <th>Last edited by</th>
+                      <th>Actions</th>
+  
+                  </tr>
+              </thead>
+              <tbody>
+  @foreach ($assessors as $ass)
+
+                <tr>
+                <td>{{$ass->assessor_name}}</td>
+                <td>{{$ass->assessor_pci_cred}}</td>
+                <td>{{$ass->assessor_phone}}</td>
+                <td>{{$ass->assessor_email}}</td>
+                <td>{{$ass->first_name}} {{$ass->last_name}}</td>
+      
+                @if(in_array('Data Inputter',$permissions))
+                  <td><a href="/edit_v3_2_s1_assesssor/{{$ass->assessment_id}}/{{auth()->user()->id}}/{{$project_id}}" class='btn btn-warning btn-sm'>Edit details</a></td>
+                  @else
+                  <td>Not allowed</td>
+                @endif
+                  
+                </tr>
+                    
+  @endforeach
+               
+              </tbody>
+          
+          </table>
+  
+            @endif
+            {{-- if isset assessor --}}
+  
+        
 
         </div>
 
@@ -267,18 +379,8 @@
 
 
 
-
-
-
-
-
-
-
-
-
-        <div role="tabpanel" class="tab-pane" id="messages">Content Messages</div>
         <div role="tabpanel" class="tab-pane" id="settings">Content Settings</div>
-    </div>
+       </div>
 
 </div>
 
