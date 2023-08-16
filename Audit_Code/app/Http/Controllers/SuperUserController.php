@@ -14,8 +14,8 @@ use function PHPSTORM_META\type;
 
 class SuperUserController extends Controller
 {
-    public function add_end_user($name,$sub_org){
-        $org=Organization::select('name','sub_org','type')->where('name',$name)->where('sub_org',$sub_org)->first();
+    public function add_end_user($org_id){
+        $org=Organization::select('name','sub_org','type','org_id')->where('org_id',$org_id)->first();
        $allorgs=Organization::all();
         $permissions=Permission::all();
          if($org){
@@ -25,18 +25,17 @@ class SuperUserController extends Controller
         }
       
 }
-public function fetch_suborg(Request $req){
-    $data['sub_org'] = Organization::select('sub_org')->where('name',$req->org_name)->get();
-    return response()->json($data);
-}
+// public function fetch_suborg(Request $req){
+//     $data['sub_org'] = Organization::select('sub_org')->where('name',$req->org_name)->get();
+//     return response()->json($data);
+// }
 
 public function add_end_user_form(Request $req){
     $req->validate(
         [
             'first_name'=>'required|max:100',
             'last_name'=>'required|max:100',
-            'organization_name'=>'required',
-            'organizations_sub_org'=>'required',
+            'org_id'=>'required',
             'email'=>'required|email|unique:users',
             'telephone'=>'required|numeric',
             'address'=>'required|max:100',
@@ -47,14 +46,16 @@ public function add_end_user_form(Request $req){
             'password'=>'required|max:30',
             'status'=>'required',
             'roles'=>'required'
+        ],
+        [
+            'org_id.required'=>'Select an organization'
         ]
 
  );
         $data=$req->only(['first_name',
         'last_name',
         'email',
-        'organization_name',
-        'organizations_sub_org',
+        'org_id',
         'national_id',
         'telephone',
         'password',
@@ -74,32 +75,56 @@ public function add_end_user_form(Request $req){
        $user->assignRole('end user');
 
        $global_roles = $req->input('roles', []);
-$user->givePermissionTo($global_roles);
+        $user->givePermissionTo($global_roles);
+
+        if($req->org_id!=auth()->user()->org_id){
+            $check= Db::table('superusers')->where('user_id',auth()->user()->id)->where('org_id',$req->org_id)->first();
+            if(!$check){
+                Db::table('superusers')->insert([
+                    'user_id'=>auth()->user()->id,
+                    'org_id'=>$req->org_id
+                ]);
+            }
+
+         
+        }else{ //if guest super user is making nd user for its own organization
+            $check= Db::table('superusers')->where('user_id',auth()->user()->id)->where('org_id',$req->org_id)->first();
+            if(!$check){
+                Db::table('superusers')->insert([
+                    'user_id'=>auth()->user()->id,
+                    'org_id'=>$req->org_id
+                ]);
+            }
+
+        }
 
        return redirect()->route('end_users',
-       ['org'=>auth()->user()->organization_name,'sub_org'=>auth()->user()->organizations_sub_org]
+       ['org_id'=>auth()->user()->org_id]
         )->with('success','End user added successfully');
 }
 
 
 
-public function end_users($org,$suborg){
+public function end_users($org_id){
     
-    $organ=Organization::where('name',$org)->where('sub_org',$suborg)->first();
+    $organ=Organization::where('org_id',$org_id)->first();
 
     if($organ->type=="host"){
-         $end_users=User::where('privilege_id',5)->get();
+        $check=Db::table('superusers')->where('user_id',auth()->user()->id)->pluck('org_id');
+       $orgs=$check->toArray();
+
+         $end_users=User::join('organizations','users.org_id','organizations.org_id')
+         ->where('users.privilege_id',5)->whereIn('users.org_id',$orgs)
+         ->get();
         return view('user.end_users',['end_users'=>$end_users]);
     }
 
 
      if($organ->type=="guest"){
-         $end_users=User::where('organization_name',$org)
-          ->where('organizations_sub_org',$suborg)
+         $end_users=User::join('organizations','users.org_id','organizations.org_id')->
+         where('users.org_id',$org_id)
           ->where('privilege_id',5)->get();
           return view('user.end_users',['end_users'=>$end_users]);
-
-       
 
     }
     // dd($end_users);
@@ -116,7 +141,7 @@ public function edit_enduser($id){
 
     }else{
         return redirect()->route('end_users',
-        ['org'=>auth()->user()->organization_name,'sub_org'=>auth()->user()->organizations_sub_org]
+        ['org'=>auth()->user()->org_id]
          )->with('error','User not found');
          }
 
@@ -139,8 +164,7 @@ public function edit_enduser_form_submit(Request $req,$id){
         ]
  );
 
-    $user=User::where('id',$id)->where('organization_name',auth()->user()->organization_name)
-    ->where('organizations_sub_org',auth()->user()->organizations_sub_org)->first();
+    $user=User::where('id',$id)->first();
     if($user){
         $user->first_name=$req->first_name;
         $user->last_name=$req->last_name;
@@ -154,14 +178,12 @@ public function edit_enduser_form_submit(Request $req,$id){
         $user->status=$req->status;
         $user->save();
         $global_roles = $req->input('roles', []);
-$user->syncPermissions($global_roles);
+        $user->syncPermissions($global_roles);
+        return redirect()->route('end_users',['org_id'=>auth()->user()->org_id])->with('success','End user added successfully');
+    }
+    else{
         return redirect()->route('end_users',
-        ['org'=>auth()->user()->organization_name,'sub_org'=>auth()->user()->organizations_sub_org]
-         )->with('success','User Updated');
-
-    }else{
-        return redirect()->route('end_users',
-        ['org'=>auth()->user()->organization_name,'sub_org'=>auth()->user()->organizations_sub_org]
+        ['org_id'=>auth()->user()->org_id]
          )->with('error','User not found');
          }
     

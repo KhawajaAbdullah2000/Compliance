@@ -29,7 +29,7 @@
 
     <div class="card">
         <div class="card-header bg-primary text-center">
-           <h1>Add user in {{$org->name}} {{$org->sub_org}}</h1>
+           <h1>Add Super user in {{$org->name}} {{$org->sub_org}}</h1>
         </div>
 
         <div class="card-body">
@@ -55,8 +55,7 @@
                     <input type="text" class="form-control" id="" name='last_name' value="{{old('last_name')}}">
                   </div>
 
-                  <input type="hidden" name="organization_name" value="{{$org->name}}">
-                  <input type="hidden" name="organizations_sub_org" value="{{$org->sub_org}}">
+                  <input type="hidden" name="org_id" value="{{$org->org_id}}">
           
                 <div class="form-group">
                   <label for="dob">National ID</label>

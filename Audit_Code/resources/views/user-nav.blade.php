@@ -23,9 +23,9 @@
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" 
-            href="/add_end_user/{{auth()->user()->organization_name}}/{{auth()->user()->organizations_sub_org}}">
+            href="/add_end_user/{{auth()->user()->org_id}}">
               Add end user</a>
-            <a class="dropdown-item" href="/end_users/{{auth()->user()->organization_name}}/{{auth()->user()->organizations_sub_org}}">
+            <a class="dropdown-item" href="/end_users/{{auth()->user()->org_id}}">
               End users</a>
 
           </div>
@@ -34,8 +34,22 @@
         <li class="nav-item">
           <a class="nav-link" href="/custom_roles">GLobal Custom roles</a>
         </li> 
-
         
+        @endrole
+
+        @role('end user')
+        @can('Project Creator')
+        <li class="nav-item">
+          <a class="nav-link" href="/projects/{{auth()->user()->id}}">Projects created by me</a>
+        </li> 
+        @endcan
+
+        <li class="nav-item">
+          <a class="nav-link" href="/assigned_projects/{{auth()->user()->id}}">My assigned Projects</a>
+        </li> 
+
+
+
         @endrole
 
       </ul>

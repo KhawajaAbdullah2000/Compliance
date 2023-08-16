@@ -40,8 +40,8 @@
 
             <tr>
                 <td>{{$user->first_name}} {{$user->last_name}}</td>
-                <td>{{$user->organization_name}}</td>
-                <td>{{$user->organizations_sub_org}}</td>
+                <td>{{$user->name}}</td>
+                <td>{{$user->sub_org}}</td>
                 <td>{{$user->email}}</td>
                 @if($user->privilege_id==1)
                 <td><h5><span class="badge bg-primary rounded-pill ">{{$user->privilege_name}}</span></h5></td>

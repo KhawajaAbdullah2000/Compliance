@@ -27,8 +27,8 @@
 
         <tr>
             <td>{{$user->first_name}} {{$user->last_name}}</td>
-            <td>{{$user->organization_name}}</td>
-            <td>{{$user->organizations_sub_org}}</td>
+            <td>{{$user->name}}</td>
+            <td>{{$user->sub_org}}</td>
             <td>{{$user->email}}</td>
             <td>
             @foreach ($user->permissions as $per)

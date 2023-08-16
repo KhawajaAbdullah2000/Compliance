@@ -1,11 +1,16 @@
 <?php
 
+use App\Http\Controllers\UserController;
+
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\SuperUserController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\EndUserController;
+use App\Http\Controllers\ProjectController;
+use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+
 
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
@@ -34,7 +39,7 @@ Route::get('edit_org/{name}/{sub_org}',[OrganizationController::class,'edit_org'
 Route::put('edit_org/{name}/{sub_org}',[OrganizationController::class,'update_org']);
 Route::get('delete_org/{name}/{sub_org}',[OrganizationController::class,'delete_org']);
 Route::get('add_user',[UserController::class,'add_user'])->name('add_user');
-Route::get('add_new_user/{name}/{sub_org}',[UserController::class,'add_new_user'])->name('add_new_user');
+Route::get('add_new_user/{id}',[UserController::class,'add_new_user'])->name('add_new_user');
 Route::post('add_new_user',[UserController::class,'register_new_user']);
 Route::get('users',[UserController::class,'users'])->name('users');
 Route::get('users/edit/{id}',[UserController::class,'user_edit_view']);
@@ -55,9 +60,9 @@ Route::middleware(['auth','is_user'])->group(function(){
 //for super users roled
 Route::middleware(['auth','is_user','role:super user'])->group(function(){
 route::post('/fetch_suborg',[SuperUserController::class,'fetch_suborg'])->name('fetch_suborg');
-Route::get('/add_end_user/{name}/{sub_org}',[SuperUserController::class,'add_end_user']);
+Route::get('/add_end_user/{org_id}',[SuperUserController::class,'add_end_user']);
 Route::post('/add_new_end_user',[SuperUserController::class,'add_end_user_form']);
-Route::get('/end_users/{org}/{sub_org}',[SuperUserController::class,'end_users'])->name('end_users');
+Route::get('/end_users/{org_id}',[SuperUserController::class,'end_users'])->name('end_users');
 Route::get('/end_user/edit/{id}',[SuperUserController::class,'edit_enduser']);
 route::put('/edit_enduser/{id}',[SuperUserController::class,'edit_enduser_form_submit']);
 route::get('/custom_roles',[SuperUserController::class,'custom_roles'])->name('custom_roles');
@@ -70,6 +75,37 @@ route::put('edit_globalrole/{id}',[SuperUserController::class,'edit_globalrole']
 
 
 } );
+
+//for project creator end user
+Route::middleware(['auth','is_user','permission:Project Creator'])->group(function(){
+route::get('create_project/{id}',[EndUserController::class,'create_project']);
+route::post('create_project/{id}',[EndUserController::class,'submit_create_project']);
+route::get('/projects/{user_id}',[EndUserController::class,'projects'])->name('projects');
+route::get('edit_my_project/{id}',[EndUserController::class,'edit_my_project']);
+route::put('/edit_project_submit/{id}',[EndUserController::class,'edit_project_submit']);
+route::get('assigned_endusers/{id}',[EndUserController::class,'assigned_endusers'])->name('assigned_endusers');
+route::get('/assign_end_user/{id}',[EndUserController::class,'assign_end_user']);
+route::post('assign_enduser_to_project/{id}',[EndUserController::class,'submit_end_user']);
+route::get('edit_permissions/{proj_id}/{user_id}',[EndUserController::class,'edit_permissions']);
+route::put('edit_permissions/{proj_id}/{user_id}',[EndUserController::class,'edit_permissions_submit']);
+
+}
+);
+
+//for all end users
+Route::middleware(['auth','is_user','role:end user'])->group(function(){
+route::get('assigned_projects/{user_id}',[ProjectController::class,'assigned_projects'])->name('assigned_projects');
+route::get('v_3_2_sections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_sections'])->name('v_3_2_sections');
+route::get('v_3_2_section1/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1'])->name('v_3_2_section1');
+route::post('v3_2_s1_clientinfo/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_clientinfo']);
+route::get('edit_3_2_s1_clientinfo/{proj_id}/{user_id}',[ProjectController::class,'edit_3_2_s1_clientinfo']);
+route::put('edit_3_2_s1_clientinfo/{proj_id}/{user_id}',[ProjectController::class,'edit_3_2_s1_clientinfo_form']);
+route::post('v3_2_s1_assessorcompany/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_assessorcompany']);
+route::get('edit_v_3_2_s1_assessorcomp/{proj_id}/{user_id}',[ProjectController::class,'edit_v_3_2_s1_assessorcomp']);
+route::put('edit_v3_2_assessorcompany_form/{proj_id}/{user_id}',[ProjectController::class,'edit_v3_2_assessorcompany_form']);
+}
+);
+
 
 
 

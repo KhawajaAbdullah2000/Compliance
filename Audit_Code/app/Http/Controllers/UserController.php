@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Illuminate\Validation\Rule;
 use Excel;
-
+use Illuminate\Support\Facades\DB;
 class UserController extends Controller
 {
     public function changepass(){
@@ -76,8 +76,8 @@ public function add_user(){
     return view('root_user.add_user',['orgs'=>$orgs]);
 }
 
-public function add_new_user($name,$sub_org){
-    $org=Organization::select('name','sub_org')->where('name',$name)->where('sub_org',$sub_org)->first();
+public function add_new_user($id){
+    $org=Organization::select('org_id','name','sub_org')->where('org_id',$id)->first();
     $privileges=Privilege::where('privilege_name','!=','Root Admin')->where('privilege_name','!=','End User')->get();
     if($org){
         return view('root_user.add_new_user_form',['org'=>$org,'privilege'=>$privileges]);
@@ -105,12 +105,36 @@ $req->validate(
     ]
 
     );
-    $data=$req->all();
+    $data=$req->only( ['first_name',
+    'last_name',
+    'email',
+    'national_id',
+    'telephone',
+    'password',
+    'org_id',
+    'state',
+    'address',
+    'country',
+    'zip_code',
+    'city',
+    '2FA',
+    'status',
+    'privilege_id'
+    ]
+    );
     $data['password']=Hash::make($req->password);
 
    $user= User::create($data);
    if($user->privilege_id==1){
     $user->assignRole('super user');
+    $check= Db::table('superusers')->where('user_id',$user->id)->where('org_id',$req->org_id)->first();
+    if(!$check){
+        Db::table('superusers')->insert([
+            'user_id'=>$user->id,
+            'org_id'=>$req->org_id
+        ]);
+    }
+
    }
    if($user->privilege_id==2){
     $user->assignRole('primary contact');
@@ -126,8 +150,9 @@ $req->validate(
 
 public function users(){
     $users=User::select('users.id','users.first_name','users.last_name',
-    'users.email','users.privilege_id','privileges.privilege_name','users.organization_name',
-    'users.organizations_sub_org')
+    'users.email','users.privilege_id','privileges.privilege_name','organizations.name',
+    'organizations.sub_org')
+    ->join('organizations','users.org_id','organizations.org_id')
     ->join('privileges','users.privilege_id','privileges.id')
     ->where('users.privilege_id','!=',4)->get();
     return view('root_user.users',['users'=>$users]);
@@ -170,6 +195,7 @@ public function user_edit(Request $req,$id){
 $user=User::where('id',$id)->first();
 
 $user->roles()->detach();
+
 // if($user->privilege_id==1){
 //     $user->removeRole('super user');
 // }
@@ -180,6 +206,30 @@ $user->roles()->detach();
 // if($user->privilege_id==3){
 //     $user->removeRole('secondary contact');
 // }
+
+
+if($req->privilege_id!=1){
+    $check= Db::table('superusers')->where('user_id',$id)->get();
+    if($check){
+        Db::table('superusers')->where([
+            'user_id'=>$user->id,
+        ])->delete();
+        
+    }
+}
+
+if($req->privilege_id==1){
+    $check= Db::table('superusers')->where('user_id',$id)->get();
+    
+    if($check->count()==0){
+        Db::table('superusers')->insert([
+            'user_id'=>$user->id,
+            'org_id'=>$user->org_id
+        ]);
+      
+        
+    }
+}
 
  $user->first_name=$req->first_name;
  $user->last_name=$req->last_name;
