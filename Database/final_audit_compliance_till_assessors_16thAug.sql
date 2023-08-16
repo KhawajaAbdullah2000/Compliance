@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 16, 2023 at 11:52 AM
+-- Generation Time: Aug 16, 2023 at 03:11 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -247,33 +247,6 @@ CREATE TABLE `password_reset_tokens` (
   `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pci-dss v3.2.1 assessors`
---
-
-CREATE TABLE `pci-dss v3.2.1 assessors` (
-  `assessor_id` int(11) NOT NULL,
-  `assessment_id` int(10) UNSIGNED DEFAULT NULL,
-  `assessor_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Assessor_PCI_credentials` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone_number` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
-  `last_edited_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `pci-dss v3.2.1 assessors`
---
-
-INSERT INTO `pci-dss v3.2.1 assessors` (`assessor_id`, `assessment_id`, `assessor_name`, `Assessor_PCI_credentials`, `phone_number`, `email`, `last_edited_by`, `last_edited_at`) VALUES
-(1, 1001, 'Assessor 1', 'PCI-1', '123-456-7890', 'assessor1@example.com', 101, '2023-07-31 12:34:56'),
-(2, 1001, 'Assessor 2', 'PCI-2', '987-654-3210', 'assessor2@example.com', 102, '2023-07-31 12:34:56'),
-(1, 1001, 'Assessor 1', 'PCI-1', '123-456-7890', 'assessor1@example.com', 101, '2023-07-31 12:34:56'),
-(2, 1001, 'Assessor 2', 'PCI-2', '987-654-3210', 'assessor2@example.com', 102, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -1069,6 +1042,30 @@ INSERT INTO `pci-dss v3_2_1 assessor company` (`id`, `project_id`, `comp_name`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pci-dss v3_2_1 assessors`
+--
+
+CREATE TABLE `pci-dss v3_2_1 assessors` (
+  `assessment_id` int(11) NOT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `assessor_name` varchar(100) NOT NULL,
+  `assessor_pci_cred` varchar(200) NOT NULL,
+  `assessor_phone` varchar(25) NOT NULL,
+  `assessor_email` varchar(100) NOT NULL,
+  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `last_edited_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pci-dss v3_2_1 assessors`
+--
+
+INSERT INTO `pci-dss v3_2_1 assessors` (`assessment_id`, `project_id`, `assessor_name`, `assessor_pci_cred`, `assessor_phone`, `assessor_email`, `last_edited_by`, `last_edited_at`) VALUES
+(1, 1, 'Assessor1', 'Certified', '03984345', 'assessor1@gmail.com', 57, '2023-08-16 18:08:54');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pci-dss v3_2_1 client info`
 --
 
@@ -1668,6 +1665,14 @@ ALTER TABLE `pci-dss v3_2_1 assessor company`
   ADD KEY `project_id` (`project_id`);
 
 --
+-- Indexes for table `pci-dss v3_2_1 assessors`
+--
+ALTER TABLE `pci-dss v3_2_1 assessors`
+  ADD PRIMARY KEY (`assessment_id`),
+  ADD KEY `project_id` (`project_id`),
+  ADD KEY `last_edited_by` (`last_edited_by`);
+
+--
 -- Indexes for table `pci-dss v3_2_1 client info`
 --
 ALTER TABLE `pci-dss v3_2_1 client info`
@@ -1984,6 +1989,12 @@ ALTER TABLE `pci-dss v3_2_1 assessor company`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `pci-dss v3_2_1 assessors`
+--
+ALTER TABLE `pci-dss v3_2_1 assessors`
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `pci-dss v3_2_1 client info`
 --
 ALTER TABLE `pci-dss v3_2_1 client info`
@@ -2295,6 +2306,13 @@ ALTER TABLE `pci-dss v3.2.1 section5.2`
 ALTER TABLE `pci-dss v3_2_1 assessor company`
   ADD CONSTRAINT `editsecassescompanyfk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `proj_id_assesorcompany` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+--
+-- Constraints for table `pci-dss v3_2_1 assessors`
+--
+ALTER TABLE `pci-dss v3_2_1 assessors`
+  ADD CONSTRAINT `last_edit_assessor_fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `proj_asse_fk` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `pci-dss v3_2_1 client info`
