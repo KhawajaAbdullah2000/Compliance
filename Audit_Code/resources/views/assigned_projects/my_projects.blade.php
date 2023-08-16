@@ -33,13 +33,10 @@
            @endforeach
       </td>
       <td>
-        @php
-           $permissions=json_decode($pro->project_permissions) 
-           @endphp   
-          
-            @if(in_array('Data Inputter',$permissions))
+    
+         
             <a href="/v_3_2_sections/{{$pro->project_code}}/{{auth()->user()->id}}" class="btn btn-primary btn-sm">View Project Sections</a>
-            @endif
+           
      
         </td>
  
