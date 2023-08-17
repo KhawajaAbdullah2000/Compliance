@@ -65,7 +65,7 @@ class ProjectController extends Controller
         $permissions=json_decode($checkpermission->project_permissions);
                 if($checkpermission->type_id==2){
                         //v3.2 pci
-                       $clientinfo= Db::table('pci-dss v3_2_1 client info')->join('users','pci-dss v3_2_1 client info.last_edited_by','users.id')
+                    $clientinfo= Db::table('pci-dss v3_2_1 client info')->join('users','pci-dss v3_2_1 client info.last_edited_by','users.id')
                        ->where('pci-dss v3_2_1 client info.project_id',$proj_id)->first();
 
                     $assessorComapany=Db::table('pci-dss v3_2_1 assessor company')->join('users','pci-dss v3_2_1 assessor company.last_edited_by','users.id')
@@ -75,10 +75,15 @@ class ProjectController extends Controller
                     ->join('users','pci-dss v3_2_1 assessors.last_edited_by','users.id')
                     ->where('pci-dss v3_2_1 assessors.project_id',$proj_id)->get();
 
+                    $associate_qsas=Db::table('pci-dss v3_2_1 associate_qsa')
+                    ->join('users','pci-dss v3_2_1 associate_qsa.last_edited_by','users.id')
+                    ->where('pci-dss v3_2_1 associate_qsa.project_id',$proj_id)->get();
+
 
                        return view('assigned_projects.v_3_2_section1',
                        ['clientinfo'=>$clientinfo,
                        'assessorCompany'=>$assessorComapany,
+                       'associate_qsas'=>$associate_qsas,
                        'assessors'=>$assessors,
                        'project_id'=>$checkpermission->project_id,
                        'project_name'=>$checkpermission->project_name,
@@ -652,6 +657,163 @@ public function v3_2_s1_delete_assessor(Request $req,$assessment_id,$proj_id,$us
                 if($checkpermission->type_id==2){
 
                         Db::table('pci-dss v3_2_1 assessors')->where('assessment_id',$assessment_id)->delete();
+
+                        return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                        ->with('success','Record deleted');
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+}
+
+
+public function v3_2_s1_associate_qsa(Request $req,$proj_id,$user_id){
+    $req->validate([
+        'qsa_name'=>'required|unique:pci-dss v3_2_1 associate_qsa'
+    ]);
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                        Db::table('pci-dss v3_2_1 associate_qsa')->insert([
+                            'project_id'=>$proj_id,
+                            'qsa_name'=>$req->qsa_name,
+                            'last_edited_by'=>$user_id,
+                            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+                        ]);
+
+                        return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                        ->with('success','Associate QSA Added successfully');
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+}
+
+public function v3_2_s1_associateqsa_edit($assessment_id,$proj_id,$user_id){
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                       $ass_qsa= Db::table('pci-dss v3_2_1 associate_qsa')->where('assessment_id',$assessment_id)->first();
+                        return view('assigned_projects.v3_2s1_edit_associate_qsa',['ass_qsa'=>$ass_qsa]);
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+
+}
+
+public function v3_2_editform_associate_qsa(Request $req,$assessment_id,$proj_id,$user_id){
+
+    $req->validate([
+        'qsa_name'=>'required|unique:pci-dss v3_2_1 associate_qsa'
+    ]);
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                        Db::table('pci-dss v3_2_1 associate_qsa')->where('assessment_id',$assessment_id)
+                        ->update([
+                            'qsa_name'=>$req->qsa_name,
+                            'last_edited_by'=>$user_id,
+                            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+
+                        ]);
+
+                        return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                        ->with('success','Associate QSA edited successfully');
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+}
+
+
+public function v3_2_s1_newassociate_qsa($proj_id,$user_id){
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+                    return view('assigned_projects.add_new_qsa_assessor',['project_id'=>$checkpermission->project_id]);
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>$user_id]);
+}
+
+public function v3_2_s1_delete_associate_qsa($assessment_id,$proj_id,$user_id){
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                        Db::table('pci-dss v3_2_1 associate_qsa')->where('assessment_id',$assessment_id)->delete();
 
                         return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id])
                         ->with('success','Record deleted');

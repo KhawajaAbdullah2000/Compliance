@@ -109,6 +109,11 @@ route::get('edit_v3_2_s1_assesssor/{assessment_id}/{user_id}/{proj_id}',[Project
 route::put('v3_2_s1_edit_assessors_form/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_edit_assessors_form']);
 route::get('v3_2_s1_add_new_assessor/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_add_new_assessor']);
 route::get('v3_2_s1_delete_assessor/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_delete_assessor']);
+route::post('v3_2_s1_associate_qsa/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_associate_qsa']);
+route::get('v3_2_s1_associateqsa_edit/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_associateqsa_edit']);
+route::put('v3_2_editform_associate_qsa/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_editform_associate_qsa']);
+route::get('v3_2_s1_newassociate_qsa/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_newassociate_qsa']);
+route::get('v3_2_s1_delete_associate_qsa/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_delete_associate_qsa']);
 }
 );
 

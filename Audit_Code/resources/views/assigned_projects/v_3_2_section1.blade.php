@@ -19,7 +19,7 @@
         <li role="presentation" class="active"><a class="nav-link" href="#home" aria-controls="home" role="tab" data-toggle="tab">Client info</a></li>
         <li role="presentation"><a class="nav-link" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Assessor Company</a></li>
         <li role="presentation"><a class="nav-link" href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Assessors</a></li>
-        <li role="presentation"><a class="nav-link" href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+        <li role="presentation"><a class="nav-link" href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Associate QSAs</a></li>
     </ul>
 
     <!-- Tab panes -->
@@ -390,9 +390,111 @@
 
 
 
+{{-- Associate QSAS --}}
+        <div role="tabpanel" class="tab-pane" id="settings">
 
-        <div role="tabpanel" class="tab-pane" id="settings">Content Settings</div>
+            @if(in_array('Data Inputter',$permissions))
+            <div class="col-md-12">
+
+              @if($associate_qsas->count()==0)
+
+              <div class="card">
+                <div class="card-header bg-primary text-center">
+                  <h1>Add First Associate Qsas details</h1>
+               </div>
+
+               <div class="card-body">
+                <form method="post" action="/v3_2_s1_associate_qsa/{{$project_id}}/{{auth()->user()->id}}">
+                    @csrf
+                    <div class="form-group">
+                      <label for="name">Associate QSA name:</label>
+                      <input type="text" class="form-control" id="" name='qsa_name' value="{{old('qsa_name')}}">
+                      @if($errors->has('qsa_name'))
+                      <div class="text-danger">{{ $errors->first('qsa_name') }}</div>
+                  @endif
+                    </div>
+
+                      <div class="text-center mt-2">
+                        <button type="submit" class="btn btn-primary btn-md">Submit details</a>
+                      </div>
+
+
+                </form>
+
+            </div>
+
+              </div>
+
+              @endif
+              {{-- for !isset associate qsa --}}
+
+            </div>
+
+
+
+            @endif
+            {{-- for data inputter --}}
+
+            @if($associate_qsas->count()>0)
+            <h1 class="text-center mt-2">Associate QSAs</h1>
+            @if(in_array('Data Inputter',$permissions))
+            <a class="btn btn-success btn-md float-end mt-3" href="/v3_2_s1_newassociate_qsa/{{$project_id}}/{{auth()->user()->id}}"
+            role="button">Add new Associate QSA<i class="fas fa-plus"></i></a>
+            @endif
+            <table class="table table-responsive table-hover mt-4">
+              <thead>
+                  <tr>
+
+                      <th>Assessor QSA name</th>
+                      <th>Last edited by</th>
+                      <th>Actions</th>
+
+                  </tr>
+              </thead>
+              <tbody>
+  @foreach ($associate_qsas as $ass_qsa)
+
+                <tr>
+                <td>{{$ass_qsa->qsa_name}}</td>
+                <td>{{$ass->first_name}} {{$ass->last_name}}</td>
+
+                @if(in_array('Data Inputter',$permissions))
+                  <td><a href="/v3_2_s1_associateqsa_edit/{{$ass_qsa->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}"
+                    class='btn btn-warning btn-sm'>Edit details</a>
+
+                 <a href="/v3_2_s1_delete_associate_qsa/{{$ass_qsa->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}"
+                    class="btn btn-danger btn-md">Delete</a>
+                </td>
+                  @else
+                  <td>Not allowed</td>
+                @endif
+
+                </tr>
+
+  @endforeach
+
+              </tbody>
+
+          </table>
+
+            @endif
+            {{-- if isset assessor --}}
+
+
+
+
+
+
+
+
+        </div>
+
+
+
+
+
        </div>
+       {{-- tab content^^ --}}
 
 </div>
 
