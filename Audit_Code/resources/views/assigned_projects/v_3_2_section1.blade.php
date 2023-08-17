@@ -1,14 +1,14 @@
 @extends('master')
 
 @section('content')
-    
+
 @include('user-nav')
 
 <div class="container">
   <div>
     @php
-    $permissions=json_decode($project_permissions) 
-    @endphp   
+    $permissions=json_decode($project_permissions)
+    @endphp
 
     <h1 class="text-center">Project: {{$project_name}}</h1>
     <h2 class="text-center fw-bold">Section1</h2>
@@ -18,8 +18,8 @@
     <ul class="nav nav-tabs" role="tablist" id="myTab">
         <li role="presentation" class="active"><a class="nav-link" href="#home" aria-controls="home" role="tab" data-toggle="tab">Client info</a></li>
         <li role="presentation"><a class="nav-link" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Assessor Company</a></li>
-        <li role="presentation"><a class="nav-link" href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
-        <li role="presentation"><a class="nav-link" href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+        <li role="presentation"><a class="nav-link" href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Assessors</a></li>
+        <li role="presentation"><a class="nav-link" href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Associate QSAs</a></li>
     </ul>
 
     <!-- Tab panes -->
@@ -90,14 +90,14 @@
                       <button type="submit" class="btn btn-primary btn-md">Submit details</a>
                     </div>
 
-                  
+
               </form>
 
           </div>
 
             </div>
 
-            @endif 
+            @endif
             {{-- for !isset clientinfo --}}
 
           </div>
@@ -108,6 +108,7 @@
           {{-- for data inputter --}}
 
           @if(isset($clientinfo))
+          <h1 class="text-center mt-2">Client Info</h1>
           <table class="table table-responsive table-hover mt-4">
             <thead>
                 <tr>
@@ -140,22 +141,20 @@
                 <td>Not allowed</td>
               @endif
 
-                
+
               </tr>
-             
+
             </tbody>
-        
+
         </table>
 
           @endif
           {{-- if isset clientinfo --}}
 
-            
-
 
 
         </div>
-        
+
         <div role="tabpanel" class="tab-pane" id="profile">
 
           @if(in_array('Data Inputter',$permissions))
@@ -200,24 +199,25 @@
                       <button type="submit" class="btn btn-primary btn-md">Submit details</a>
                     </div>
 
-                  
+
               </form>
 
           </div>
 
             </div>
 
-            @endif 
+            @endif
             {{-- for !isset assessor company --}}
 
           </div>
 
 
-     
+
           @endif
           {{-- for data inputter --}}
 
           @if(isset($assessorCompany))
+          <h1 class="text-center mt-2">Assessor Company</h1>
           <table class="table table-responsive table-hover mt-4">
             <thead>
                 <tr>
@@ -244,17 +244,244 @@
                 <td>Not allowed</td>
               @endif
 
-                
+
               </tr>
-             
+
             </tbody>
-        
+
         </table>
 
           @endif
           {{-- if isset clientinfo --}}
 
-            
+
+
+        </div>
+
+
+{{--
+        Assessors --}}
+        <div role="tabpanel" class="tab-pane" id="messages">
+
+
+            @if(in_array('Data Inputter',$permissions))
+            <div class="col-md-12">
+
+              @if($assessors->count()==0)
+
+              <div class="card">
+                <div class="card-header bg-primary text-center">
+                  <h1>Add First Assessor details</h1>
+               </div>
+
+               <div class="card-body">
+                <form method="post" action="/v_3_2_s1_assessors/{{$project_id}}/{{auth()->user()->id}}">
+                    @csrf
+                    <div class="form-group">
+                      <label for="name">Assessor name:</label>
+                      <input type="text" class="form-control" id="" name='assessor_name' value="{{old('assessor_name')}}">
+                      @if($errors->has('assessor_name'))
+                      <div class="text-danger">{{ $errors->first('assessor_name') }}</div>
+                  @endif
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Assessor PCI Credentials:</label>
+                        <input type="text" class="form-control" id="" name='assessor_pci_cred' value="{{old('assessor_pci_cred')}}">
+                        @if($errors->has('assessor_pci_cred'))
+                        <div class="text-danger">{{ $errors->first('assessor_pci_cred') }}</div>
+                    @endif
+                      </div>
+
+                      <div class="form-group">
+                        <label for="name">Assessor Phone:</label>
+                        <input type="text" class="form-control" id="" name='assessor_phone' value="{{old('assessor_phone')}}">
+                        @if($errors->has('assessor_phone'))
+                        <div class="text-danger">{{ $errors->first('assessor_phone') }}</div>
+                    @endif
+                      </div>
+
+                      <div class="form-group">
+                        <label for="name">Assessor Email:</label>
+                        <input type="text" class="form-control" id="" name='assessor_email' value="{{old('assessor_email')}}">
+                        @if($errors->has('assessor_email'))
+                        <div class="text-danger">{{ $errors->first('assessor_email') }}</div>
+                    @endif
+                      </div>
+
+
+                      <div class="text-center mt-2">
+                        <button type="submit" class="btn btn-primary btn-md">Submit details</a>
+                      </div>
+
+
+                </form>
+
+            </div>
+
+              </div>
+
+              @endif
+              {{-- for !isset assessor --}}
+
+            </div>
+
+
+
+            @endif
+            {{-- for data inputter --}}
+
+            @if($assessors->count()>0)
+            <h1 class="text-center mt-2">Assessors</h1>
+            @if(in_array('Data Inputter',$permissions))
+            <a class="btn btn-success btn-md float-end mt-3" href="/v3_2_s1_add_new_assessor/{{$project_id}}/{{auth()->user()->id}}"
+            role="button">Add new Assessor <i class="fas fa-plus"></i></a>
+            @endif
+            <table class="table table-responsive table-hover mt-4">
+              <thead>
+                  <tr>
+
+                      <th>Assessor Name</th>
+                      <th>Assessor PCI Credentials</th>
+                      <th>Assessor Phone</th>
+                      <th>Assessor Email</th>
+                      <th>Last edited by</th>
+                      <th>Actions</th>
+
+                  </tr>
+              </thead>
+              <tbody>
+  @foreach ($assessors as $ass)
+
+                <tr>
+                <td>{{$ass->assessor_name}}</td>
+                <td>{{$ass->assessor_pci_cred}}</td>
+                <td>{{$ass->assessor_phone}}</td>
+                <td>{{$ass->assessor_email}}</td>
+                <td>{{$ass->first_name}} {{$ass->last_name}}</td>
+
+                @if(in_array('Data Inputter',$permissions))
+                  <td><a href="/edit_v3_2_s1_assesssor/{{$ass->assessment_id}}/{{auth()->user()->id}}/{{$project_id}}"
+                    class='btn btn-warning btn-sm'>Edit details</a>
+
+                 <a href="/v3_2_s1_delete_assessor/{{$ass->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}"
+                    class="btn btn-danger btn-md">Delete</a>
+                </td>
+                  @else
+                  <td>Not allowed</td>
+                @endif
+
+                </tr>
+
+  @endforeach
+
+              </tbody>
+
+          </table>
+
+            @endif
+            {{-- if isset assessor --}}
+
+
+
+        </div>
+
+
+
+
+
+{{-- Associate QSAS --}}
+        <div role="tabpanel" class="tab-pane" id="settings">
+
+            @if(in_array('Data Inputter',$permissions))
+            <div class="col-md-12">
+
+              @if($associate_qsas->count()==0)
+
+              <div class="card">
+                <div class="card-header bg-primary text-center">
+                  <h1>Add First Associate Qsas details</h1>
+               </div>
+
+               <div class="card-body">
+                <form method="post" action="/v3_2_s1_associate_qsa/{{$project_id}}/{{auth()->user()->id}}">
+                    @csrf
+                    <div class="form-group">
+                      <label for="name">Associate QSA name:</label>
+                      <input type="text" class="form-control" id="" name='qsa_name' value="{{old('qsa_name')}}">
+                      @if($errors->has('qsa_name'))
+                      <div class="text-danger">{{ $errors->first('qsa_name') }}</div>
+                  @endif
+                    </div>
+
+                      <div class="text-center mt-2">
+                        <button type="submit" class="btn btn-primary btn-md">Submit details</a>
+                      </div>
+
+
+                </form>
+
+            </div>
+
+              </div>
+
+              @endif
+              {{-- for !isset associate qsa --}}
+
+            </div>
+
+
+
+            @endif
+            {{-- for data inputter --}}
+
+            @if($associate_qsas->count()>0)
+            <h1 class="text-center mt-2">Associate QSAs</h1>
+            @if(in_array('Data Inputter',$permissions))
+            <a class="btn btn-success btn-md float-end mt-3" href="/v3_2_s1_newassociate_qsa/{{$project_id}}/{{auth()->user()->id}}"
+            role="button">Add new Associate QSA<i class="fas fa-plus"></i></a>
+            @endif
+            <table class="table table-responsive table-hover mt-4">
+              <thead>
+                  <tr>
+
+                      <th>Assessor QSA name</th>
+                      <th>Last edited by</th>
+                      <th>Actions</th>
+
+                  </tr>
+              </thead>
+              <tbody>
+  @foreach ($associate_qsas as $ass_qsa)
+
+                <tr>
+                <td>{{$ass_qsa->qsa_name}}</td>
+                <td>{{$ass->first_name}} {{$ass->last_name}}</td>
+
+                @if(in_array('Data Inputter',$permissions))
+                  <td><a href="/v3_2_s1_associateqsa_edit/{{$ass_qsa->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}"
+                    class='btn btn-warning btn-sm'>Edit details</a>
+
+                 <a href="/v3_2_s1_delete_associate_qsa/{{$ass_qsa->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}"
+                    class="btn btn-danger btn-md">Delete</a>
+                </td>
+                  @else
+                  <td>Not allowed</td>
+                @endif
+
+                </tr>
+
+  @endforeach
+
+              </tbody>
+
+          </table>
+
+            @endif
+            {{-- if isset assessor --}}
+
+
+
 
 
 
@@ -266,19 +493,8 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-        <div role="tabpanel" class="tab-pane" id="messages">Content Messages</div>
-        <div role="tabpanel" class="tab-pane" id="settings">Content Settings</div>
-    </div>
+       </div>
+       {{-- tab content^^ --}}
 
 </div>
 
@@ -294,7 +510,7 @@
   closeOnClickOutside: true,
   timer: 3000,
     });
-</script> 
+</script>
 @endif
 
 @if(Session::has('error'))
@@ -305,7 +521,7 @@
   closeOnClickOutside: true,
   timer: 3000,
     });
-</script> 
+</script>
 @endif
 
 <script>
@@ -327,12 +543,12 @@ let table = new DataTable('#myTable',
     },
       "ordering": false
 
-     } 
+     }
      );
 
-</script> 
+</script>
 
- @endsection 
+ @endsection
 
 
 @endsection
