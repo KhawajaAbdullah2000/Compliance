@@ -21,10 +21,10 @@ class ProjectController extends Controller
             'project_types.id as type_id',
             'projects.status',
             'project_details.project_permissions'
-            
+
         ]);
         return view('assigned_projects.my_projects',['projects'=>$projects]);
-       
+
     }
 
     public function v_3_2_sections($proj_id,$user_id){
@@ -34,7 +34,7 @@ class ProjectController extends Controller
         ->join('project_types','projects.project_type','project_types.id')
         ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
         ->first();
-   
+
 
         if($checkpermission){
             $permissions=json_decode($checkpermission->project_permissions);
@@ -42,9 +42,9 @@ class ProjectController extends Controller
                         return view('assigned_projects.v_3_2_sections',
                         ['project_id'=>$proj_id,'project_name'=>$checkpermission->project_name]);
                     }
-                      
-                
-            
+
+
+
         }else{
             return redirect()->route('assigned_projects',['user_id'=>$user_id]);
         }
@@ -59,8 +59,8 @@ class ProjectController extends Controller
         ->join('project_types','projects.project_type','project_types.id')
         ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
         ->first();
-    
-    
+
+
     if($checkpermission){
         $permissions=json_decode($checkpermission->project_permissions);
                 if($checkpermission->type_id==2){
@@ -74,7 +74,7 @@ class ProjectController extends Controller
                     $assessors=Db::table('pci-dss v3_2_1 assessors')
                     ->join('users','pci-dss v3_2_1 assessors.last_edited_by','users.id')
                     ->where('pci-dss v3_2_1 assessors.project_id',$proj_id)->get();
-    
+
 
                        return view('assigned_projects.v_3_2_section1',
                        ['clientinfo'=>$clientinfo,
@@ -85,9 +85,9 @@ class ProjectController extends Controller
                         'project_permissions'=>$checkpermission->project_permissions]);
 
                 }
-                  
-            
-        
+
+
+
     }else{
         return redirect()->route('assigned_projects',['user_id'=>$user_id]);
 
@@ -98,7 +98,7 @@ class ProjectController extends Controller
 }
 
 public function v3_2_s1_clientinfo(Request $req,$proj_id,$user_id){
-    
+
     $req->validate([
         'company_name'=>'required|max:50',
         'company_address'=>'required|max:100',
@@ -134,17 +134,17 @@ public function v3_2_s1_clientinfo(Request $req,$proj_id,$user_id){
                             'company_email'=>$req->company_email,
                             'last_edited_by'=>$user_id,
                             'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s'),
-                            
+
                         ]);
                         return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id])
                         ->with('success','Record added successfully');
                    }
-              
+
         }else{
             return redirect()->route('assigned_projects',['user_id'=>$user_id]);
 
         }
-    
+
 }else{
     return redirect()->route('assigned_projects',['user_id'=>$user_id]);
 
@@ -181,14 +181,14 @@ if($checkpermission){
                    }else{
                     return redirect()->route('assigned_projects',['user_id'=>$user_id]);
                    }
-                   
+
             }
-              
+
         }else{
             return redirect()->route('assigned_projects',['user_id'=>$user_id]);
 
         }
-    
+
 }else{
     return redirect()->route('assigned_projects',['user_id'=>$user_id]);
 
@@ -232,19 +232,19 @@ if($checkpermission){
                     'company_email'=>$req->company_email,
                     'last_edited_by'=>$user_id,
                     'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s'),
-                    
+
                  ]);
-                
+
                 return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id])
                 ->with('success','Record updated successfully');
-                   
+
             }
-              
+
         }else{
             return redirect()->route('assigned_projects',['user_id'=>$user_id]);
 
         }
-    
+
 }else{
     return redirect()->route('assigned_projects',['user_id'=>$user_id]);
 
@@ -260,9 +260,9 @@ public function v3_2_s1_assessorcompany(Request $req,$proj_id,$user_id){
         'comp_name'=>'required|max:50',
         'comp_address'=>'required|max:100',
         'comp_website'=>'required|max:50',
-       
+
     ]);
-    
+
     if($user_id==auth()->user()->id){
 
         $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
@@ -284,24 +284,24 @@ public function v3_2_s1_assessorcompany(Request $req,$proj_id,$user_id){
                             'comp_website'=>$req->comp_website,
                             'last_edited_by'=>$user_id,
                             'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s'),
-                            
+
                          ]);
-                        
+
                         return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id])
                         ->with('success','Record added successfully');
-                           
+
                     }
-                      
+
                 }else{
                     return redirect()->route('assigned_projects',['user_id'=>$user_id]);
-        
+
                 }
-            
+
         }else{
             return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
-        
+
         }
-    
+
 
 
     }else{
@@ -334,21 +334,21 @@ public function edit_v_3_2_s1_assessorcomp($proj_id,$user_id){
                        }else{
                         return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id]);
                        }
-                        
-                
-                           
+
+
+
                     }
-                      
+
                 }else{
                     return redirect()->route('assigned_projects',['user_id'=>$user_id]);
-        
+
                 }
-            
+
         }else{
             return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
-        
+
         }
-    
+
 
 
     }else{
@@ -364,7 +364,7 @@ public function edit_v3_2_assessorcompany_form(Request $req,$proj_id,$user_id){
         'comp_name'=>'required|max:50',
         'comp_address'=>'required|max:100',
         'comp_website'=>'required|max:50',
-       
+
     ]);
 
     if($user_id==auth()->user()->id){
@@ -392,27 +392,27 @@ public function edit_v3_2_assessorcompany_form(Request $req,$proj_id,$user_id){
                             'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
                             ]
                             );
-                        
+
                             return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id]);
 
                        }else{
                         return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id])
                         ->with('success','Record updated successfully');
                        }
-                        
-                           
+
+
                     }
-                      
+
                 }else{
                     return redirect()->route('assigned_projects',['user_id'=>$user_id]);
-        
+
                 }
-            
+
         }else{
             return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
-        
+
         }
-    
+
 
 
     }else{
@@ -454,28 +454,28 @@ public function v_3_2_s1_assessors(Request $req,$proj_id,$user_id){
                                 'last_edited_by'=>$user_id,
                                 'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
                             ]);
-                   
-                    
+
+
                         return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id]);
 
                        }else{
                         return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id]);
                        }
-                        
-                           
+
+
                     }else{
                         return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id]);
 
                     }
-                      
+
                 }else{
                     return redirect()->route('assigned_projects',['user_id'=>$user_id]);
-        
+
                 }
-            
+
         }else{
             return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
-        
+
         }
 
 
@@ -487,7 +487,7 @@ public function v_3_2_s1_assessors(Request $req,$proj_id,$user_id){
 public function edit_v3_2_s1_assesssor($assessment_id,$user_id,$proj_id){
     if($user_id==auth()->user()->id){
 
-        
+
         $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
         'project_details.project_permissions','projects.project_id')
        -> join('projects','project_details.project_code','projects.project_id')
@@ -552,7 +552,7 @@ public function v3_2_s1_edit_assessors_form(Request $req,$assessment_id,$proj_id
 
     ]);
 
-    
+
     if($user_id==auth()->user()->id){
 
         $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
@@ -579,27 +579,27 @@ public function v3_2_s1_edit_assessors_form(Request $req,$assessment_id,$proj_id
                             'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
                             ]
                             );
-                        
+
                             return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id])
                             ->with('success','Assessor Info completed successfully');
 
                        }else{
                         return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id]);
                        }
-                        
-                           
+
+
                     }
-                      
+
                 }else{
                     return redirect()->route('assigned_projects',['user_id'=>$user_id]);
-        
+
                 }
-            
+
         }else{
             return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
-        
+
         }
-    
+
 
 
     }else{
@@ -607,6 +607,62 @@ public function v3_2_s1_edit_assessors_form(Request $req,$assessment_id,$proj_id
 
     }
 
+
+}
+
+
+public function v3_2_s1_add_new_assessor($proj_id,$user_id){
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+                    return view('assigned_projects.add_new_assessor',['project_id'=>$checkpermission->project_id]);
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>$user_id]);
+
+}
+
+
+
+public function v3_2_s1_delete_assessor(Request $req,$assessment_id,$proj_id,$user_id){
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                        Db::table('pci-dss v3_2_1 assessors')->where('assessment_id',$assessment_id)->delete();
+
+                        return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                        ->with('success','Record deleted');
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
 
 }
 }

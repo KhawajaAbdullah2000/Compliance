@@ -107,6 +107,8 @@ route::put('edit_v3_2_assessorcompany_form/{proj_id}/{user_id}',[ProjectControll
 route::post('v_3_2_s1_assessors/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_s1_assessors']);
 route::get('edit_v3_2_s1_assesssor/{assessment_id}/{user_id}/{proj_id}',[ProjectController::class,'edit_v3_2_s1_assesssor']);
 route::put('v3_2_s1_edit_assessors_form/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_edit_assessors_form']);
+route::get('v3_2_s1_add_new_assessor/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_add_new_assessor']);
+route::get('v3_2_s1_delete_assessor/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_delete_assessor']);
 }
 );
 
@@ -128,18 +130,18 @@ Route::get('/role',[UserController::class,'make_role']);
 
 
 
-//got to reset password link 
+//got to reset password link
 Route::get('/forgot-password', function () {
     return view('forgot-password');
 })->middleware('guest')->name('password.request');
 
 Route::post('/forgot-password', function (Request $request) {
     $request->validate(['email' => 'required|email']);
- 
+
     $status = Password::sendResetLink(
         $request->only('email')
     );
- 
+
     return $status === Password::RESET_LINK_SENT
                 ? back()->with(['status' => __($status)])
                 : back()->withErrors(['email' => __($status)]);
@@ -152,27 +154,27 @@ Route::get('/reset-password/{token}', function (string $token) {
  })->middleware('guest')->name('password.reset');
 
 
- 
+
 Route::post('/reset-password', function (Request $request) {
     $request->validate([
         'token' => 'required',
         'email' => 'required|email',
         'password' => 'required|min:5|confirmed',
     ]);
- 
+
     $status = Password::reset(
         $request->only('email', 'password', 'password_confirmation', 'token'),
         function (User $user, string $password) {
             $user->forceFill([
                 'password' => Hash::make($password)
             ])->setRememberToken(Str::random(60));
- 
+
             $user->save();
- 
+
             event(new PasswordReset($user));
         }
     );
- 
+
     return $status === Password::PASSWORD_RESET
                 ? redirect()->route('home')->with('status', __($status))
                 : back()->withErrors(['status' => [__($status)]]);
