@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 16, 2023 at 03:11 PM
+-- Generation Time: Aug 17, 2023 at 02:58 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -1061,7 +1061,30 @@ CREATE TABLE `pci-dss v3_2_1 assessors` (
 --
 
 INSERT INTO `pci-dss v3_2_1 assessors` (`assessment_id`, `project_id`, `assessor_name`, `assessor_pci_cred`, `assessor_phone`, `assessor_email`, `last_edited_by`, `last_edited_at`) VALUES
-(1, 1, 'Assessor1', 'Certified', '03984345', 'assessor1@gmail.com', 57, '2023-08-16 18:08:54');
+(1, 1, 'Assessor1', 'Certified', '03984345', 'assessor1@gmail.com', 57, '2023-08-16 18:08:54'),
+(2, 1, 'Assessor2', 'Certified', '56777767', 'assessor2@gmail.com', 57, '2023-08-17 15:38:51');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pci-dss v3_2_1 associate_qsa`
+--
+
+CREATE TABLE `pci-dss v3_2_1 associate_qsa` (
+  `assessment_id` int(11) NOT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `qsa_name` varchar(100) NOT NULL,
+  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `last_edited_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pci-dss v3_2_1 associate_qsa`
+--
+
+INSERT INTO `pci-dss v3_2_1 associate_qsa` (`assessment_id`, `project_id`, `qsa_name`, `last_edited_by`, `last_edited_at`) VALUES
+(1, 1, 'Associate Qsa1', 57, '2023-08-17 17:35:36'),
+(2, 1, 'Associate Qsa2', 57, '2023-08-17 17:53:20');
 
 -- --------------------------------------------------------
 
@@ -1087,7 +1110,8 @@ CREATE TABLE `pci-dss v3_2_1 client info` (
 --
 
 INSERT INTO `pci-dss v3_2_1 client info` (`assessment_id`, `project_id`, `company_name`, `company_address`, `company_url`, `company_contact_name`, `company_contact_number`, `company_email`, `last_edited_by`, `last_edited_at`) VALUES
-(1006, 1, 'Guest Organization1', 'Fb area block2', 'www.g1org.com', 'Shahmeer', '03332227364', 'g1org@gmail.com', 57, '2023-08-16 14:49:06');
+(1006, 1, 'Guest Organization1', 'Fb area block2', 'www.g1org.com', 'Shahmeer', '03332227364', 'g1org@gmail.com', 57, '2023-08-16 14:49:06'),
+(1007, 4, 'Keelctric', 'Fb area block2', 'www.kelectric.com', 'khawaja', '75654555545', 'kelectric@gmail.com', 57, '2023-08-17 17:38:05');
 
 -- --------------------------------------------------------
 
@@ -1210,7 +1234,8 @@ INSERT INTO `project_details` (`project_code`, `assigned_enduser`, `project_perm
 (1, 53, '[\"Project Approver\"]', '2023-08-14 06:33:40', '2023-08-14 06:33:40'),
 (1, 54, '[\"Project Creator\",\"Project Approver\",\"Data Inputter\",\"Data Approver\"]', '2023-08-14 06:33:49', '2023-08-14 10:57:10'),
 (1, 56, '[\"Project Owner\"]', '2023-08-14 10:57:00', '2023-08-14 10:57:00'),
-(1, 55, '[\"Project Approver\"]', '2023-08-14 11:02:17', '2023-08-14 11:02:17');
+(1, 55, '[\"Project Approver\"]', '2023-08-14 11:02:17', '2023-08-14 11:02:17'),
+(4, 57, '[\"Project Approver\",\"Data Inputter\",\"Data Viewer\"]', '2023-08-17 12:36:24', '2023-08-17 12:37:08');
 
 -- --------------------------------------------------------
 
@@ -1673,6 +1698,12 @@ ALTER TABLE `pci-dss v3_2_1 assessors`
   ADD KEY `last_edited_by` (`last_edited_by`);
 
 --
+-- Indexes for table `pci-dss v3_2_1 associate_qsa`
+--
+ALTER TABLE `pci-dss v3_2_1 associate_qsa`
+  ADD PRIMARY KEY (`assessment_id`);
+
+--
 -- Indexes for table `pci-dss v3_2_1 client info`
 --
 ALTER TABLE `pci-dss v3_2_1 client info`
@@ -1992,13 +2023,19 @@ ALTER TABLE `pci-dss v3_2_1 assessor company`
 -- AUTO_INCREMENT for table `pci-dss v3_2_1 assessors`
 --
 ALTER TABLE `pci-dss v3_2_1 assessors`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `pci-dss v3_2_1 associate_qsa`
+--
+ALTER TABLE `pci-dss v3_2_1 associate_qsa`
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `pci-dss v3_2_1 client info`
 --
 ALTER TABLE `pci-dss v3_2_1 client info`
-  MODIFY `assessment_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1007;
+  MODIFY `assessment_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1008;
 
 --
 -- AUTO_INCREMENT for table `permissions`
