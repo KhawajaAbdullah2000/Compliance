@@ -96,6 +96,7 @@ route::put('edit_permissions/{proj_id}/{user_id}',[EndUserController::class,'edi
 Route::middleware(['auth','is_user','role:end user'])->group(function(){
     //Project controller for v3_2 section 1
 route::get('assigned_projects/{user_id}',[ProjectController::class,'assigned_projects'])->name('assigned_projects');
+route::get('v_3_2_section1_subsections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1_subsections']);
 route::get('v_3_2_sections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_sections'])->name('v_3_2_sections');
 route::get('v_3_2_section1/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1'])->name('v_3_2_section1');
 route::post('v3_2_s1_clientinfo/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_clientinfo']);
@@ -114,6 +115,11 @@ route::get('v3_2_s1_associateqsa_edit/{assessment_id}/{proj_id}/{user_id}',[Proj
 route::put('v3_2_editform_associate_qsa/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_editform_associate_qsa']);
 route::get('v3_2_s1_newassociate_qsa/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_newassociate_qsa']);
 route::get('v3_2_s1_delete_associate_qsa/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_delete_associate_qsa']);
+route::post('v3_2_s1_qa_insert/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_qa_insert']);
+route::get('v3_2_edit_qa/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_edit_qa']);
+route::put('v3_2_s1_qa_edit_form_submit/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_qa_edit_form_submit']);
+route::get('v3_2_s1_add_new_qa/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_add_new_qa']);
+route::get('v3_2_s1_delete_qa/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_delete_qa']);
 }
 );
 
