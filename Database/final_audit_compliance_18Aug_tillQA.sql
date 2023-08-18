@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 17, 2023 at 02:58 PM
+-- Generation Time: Aug 18, 2023 at 11:54 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -247,32 +247,6 @@ CREATE TABLE `password_reset_tokens` (
   `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pci-dss v3.2.1 qa`
---
-
-CREATE TABLE `pci-dss v3.2.1 qa` (
-  `qa_id` int(11) NOT NULL,
-  `assessment_id` int(10) UNSIGNED DEFAULT NULL,
-  `reviewer_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `reviewer_phone` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `reviewer_email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
-  `last_edited_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `pci-dss v3.2.1 qa`
---
-
-INSERT INTO `pci-dss v3.2.1 qa` (`qa_id`, `assessment_id`, `reviewer_name`, `reviewer_phone`, `reviewer_email`, `last_edited_by`, `last_edited_at`) VALUES
-(1, 1001, 'Reviewer 1', '111-222-3333', 'reviewer1@example.com', 1, '2023-07-31 12:34:56'),
-(2, 1002, 'Reviewer 2', '444-555-6666', 'reviewer2@example.com', 2, '2023-07-31 12:34:56'),
-(1, 1001, 'Reviewer 1', '111-222-3333', 'reviewer1@example.com', 1, '2023-07-31 12:34:56'),
-(2, 1002, 'Reviewer 2', '444-555-6666', 'reviewer2@example.com', 2, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -1116,6 +1090,30 @@ INSERT INTO `pci-dss v3_2_1 client info` (`assessment_id`, `project_id`, `compan
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pci_dss v3_2_1 qa`
+--
+
+CREATE TABLE `pci_dss v3_2_1 qa` (
+  `assessment_id` int(11) NOT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `reviewer_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `reviewer_phone` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `reviewer_email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `last_edited_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `pci_dss v3_2_1 qa`
+--
+
+INSERT INTO `pci_dss v3_2_1 qa` (`assessment_id`, `project_id`, `reviewer_name`, `reviewer_phone`, `reviewer_email`, `last_edited_by`, `last_edited_at`) VALUES
+(4, 1, 'Qa1', '44343', 'qa1@gmail.com', 57, '2023-08-18 14:37:00'),
+(5, 1, 'Qa2', '1223', 'qa2@gmail.com', 57, '2023-08-18 14:51:51');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `permissions`
 --
 
@@ -1713,6 +1711,14 @@ ALTER TABLE `pci-dss v3_2_1 client info`
   ADD KEY `project_id` (`project_id`);
 
 --
+-- Indexes for table `pci_dss v3_2_1 qa`
+--
+ALTER TABLE `pci_dss v3_2_1 qa`
+  ADD PRIMARY KEY (`assessment_id`),
+  ADD KEY `project_id` (`project_id`),
+  ADD KEY `last_edited_by` (`last_edited_by`);
+
+--
 -- Indexes for table `permissions`
 --
 ALTER TABLE `permissions`
@@ -2038,6 +2044,12 @@ ALTER TABLE `pci-dss v3_2_1 client info`
   MODIFY `assessment_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1008;
 
 --
+-- AUTO_INCREMENT for table `pci_dss v3_2_1 qa`
+--
+ALTER TABLE `pci_dss v3_2_1 qa`
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
@@ -2357,6 +2369,13 @@ ALTER TABLE `pci-dss v3_2_1 assessors`
 ALTER TABLE `pci-dss v3_2_1 client info`
   ADD CONSTRAINT `editsec1fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `project id` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+--
+-- Constraints for table `pci_dss v3_2_1 qa`
+--
+ALTER TABLE `pci_dss v3_2_1 qa`
+  ADD CONSTRAINT `editedby_qa_FK` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `project_qa_fk` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `projects`
