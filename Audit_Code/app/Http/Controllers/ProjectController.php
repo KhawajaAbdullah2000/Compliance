@@ -27,6 +27,32 @@ class ProjectController extends Controller
 
     }
 
+//go to subsections of section 1 for v3_2
+    public function v_3_2_section1_subsections($proj_id,$user_id){
+        if($user_id==auth()->user()->id){
+            $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_name')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+                    if($checkpermission->type_id==2){
+                        return view('assigned_projects.v_3_2_section1_subsections',
+                        ['project_id'=>$proj_id,'project_name'=>$checkpermission->project_name]);
+                    }
+
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+
+}
+
+//section 1.1
     public function v_3_2_sections($proj_id,$user_id){
         $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
         'project_details.project_permissions','projects.project_name')
@@ -945,6 +971,59 @@ public function v3_2_s1_qa_edit_form_submit(Request $req,$assessment_id,$proj_id
     }
     return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
 
+
+}
+
+public function v3_2_s1_add_new_qa($proj_id,$user_id){
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+                    return view('assigned_projects.add_new_qa',['project_id'=>$checkpermission->project_id]);
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>$user_id]);
+
+}
+
+//delete QA
+public function v3_2_s1_delete_qa($assessment_id,$proj_id,$user_id){
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                        Db::table('pci_dss v3_2_1 qa')->where('assessment_id',$assessment_id)->delete();
+
+                        return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                        ->with('success','Record deleted');
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
 
 }
 

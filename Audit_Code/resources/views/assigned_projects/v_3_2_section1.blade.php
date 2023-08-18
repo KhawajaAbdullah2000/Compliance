@@ -557,7 +557,7 @@
             @if($qas->count()>0)
             <h1 class="text-center mt-2">Assessor Quality Assurance (QA)</h1>
             @if(in_array('Data Inputter',$permissions))
-            <a class="btn btn-success btn-md float-end mt-3" href=""
+            <a class="btn btn-success btn-md float-end mt-3" href="/v3_2_s1_add_new_qa/{{$project_id}}/{{auth()->user()->id}}"
             role="button">Add new QA<i class="fas fa-plus"></i></a>
             @endif
             <table class="table table-responsive table-hover mt-4">
@@ -585,7 +585,7 @@
                   <td><a href="/v3_2_edit_qa/{{$qa->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}"
                     class='btn btn-warning btn-sm'>Edit details</a>
 
-                 <a href=""
+                 <a href="/v3_2_s1_delete_qa/{{$qa->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}"
                     class="btn btn-danger btn-sm">Delete</a>
                 </td>
                   @else
