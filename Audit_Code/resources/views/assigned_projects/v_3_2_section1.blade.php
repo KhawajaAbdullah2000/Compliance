@@ -20,6 +20,8 @@
         <li role="presentation"><a class="nav-link" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Assessor Company</a></li>
         <li role="presentation"><a class="nav-link" href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Assessors</a></li>
         <li role="presentation"><a class="nav-link" href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Associate QSAs</a></li>
+        <li role="presentation"><a class="nav-link" href="#qa" aria-controls="qa" role="tab" data-toggle="tab">Assessor Quality Assurance (QA) </a></li>
+
     </ul>
 
     <!-- Tab panes -->
@@ -490,6 +492,124 @@
         </div>
 
 
+        {{-- QAS --}}
+        <div role="tabpanel" class="tab-pane active" id="qa">
+
+
+            @if(in_array('Data Inputter',$permissions))
+            <div class="col-md-12">
+
+              @if($qas->count()==0)
+
+              <div class="card">
+                <div class="card-header bg-primary text-center">
+                  <h2 class="fw-bold">Add First Assessor Quality Assurance (QA) details</h2>
+               </div>
+
+               <div class="card-body">
+                <form method="post" action="/v3_2_s1_qa_insert/{{$project_id}}/{{auth()->user()->id}}">
+                    @csrf
+                    <div class="form-group">
+                      <label for="name"> QA name:</label>
+                      <input type="text" class="form-control" id="" name='reviewer_name' value="{{old('reviewer_name')}}">
+                      @if($errors->has('reviewer_name'))
+                      <div class="text-danger">{{ $errors->first('reviewer_name') }}</div>
+                  @endif
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">QA Email:</label>
+                        <input type="text" class="form-control" id="" name='reviewer_email' value="{{old('reviewer_email')}}">
+                        @if($errors->has('reviewer_email'))
+                        <div class="text-danger">{{ $errors->first('reviewer_email') }}</div>
+                    @endif
+                      </div>
+
+                      <div class="form-group">
+                        <label for="name">QA Phone:</label>
+                        <input type="text" class="form-control" id="" name='reviewer_phone' value="{{old('reviewer_phone')}}">
+                        @if($errors->has('reviewer_phone'))
+                        <div class="text-danger">{{ $errors->first('reviewer_phone') }}</div>
+                    @endif
+                      </div>
+
+                      <div class="text-center mt-2">
+                        <button type="submit" class="btn btn-primary btn-md">Submit details</a>
+                      </div>
+
+
+                </form>
+
+            </div>
+
+              </div>
+
+              @endif
+              {{-- for !isset QA --}}
+
+            </div>
+
+
+
+            @endif
+            {{-- for data inputter --}}
+
+            @if($qas->count()>0)
+            <h1 class="text-center mt-2">Assessor Quality Assurance (QA)</h1>
+            @if(in_array('Data Inputter',$permissions))
+            <a class="btn btn-success btn-md float-end mt-3" href=""
+            role="button">Add new QA<i class="fas fa-plus"></i></a>
+            @endif
+            <table class="table table-responsive table-hover mt-4">
+              <thead>
+                  <tr>
+
+                      <th> QA name</th>
+                      <th> QA email</th>
+                      <th> QA phone</th>
+                      <th>Last edited by</th>
+                      <th>Actions</th>
+
+                  </tr>
+              </thead>
+              <tbody>
+  @foreach ($qas as $qa)
+
+                <tr>
+                <td>{{$qa->reviewer_name}}</td>
+                <td>{{$qa->reviewer_email}}</td>
+                <td>{{$qa->reviewer_phone}}</td>
+                <td>{{$qa->first_name}} {{$qa->last_name}}</td>
+
+                @if(in_array('Data Inputter',$permissions))
+                  <td><a href="/v3_2_edit_qa/{{$qa->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}"
+                    class='btn btn-warning btn-sm'>Edit details</a>
+
+                 <a href=""
+                    class="btn btn-danger btn-sm">Delete</a>
+                </td>
+                  @else
+                  <td>Not allowed</td>
+                @endif
+
+                </tr>
+
+  @endforeach
+
+              </tbody>
+
+          </table>
+
+            @endif
+            {{-- if isset assessor --}}
+
+
+
+
+
+
+
+        </div>
 
 
 

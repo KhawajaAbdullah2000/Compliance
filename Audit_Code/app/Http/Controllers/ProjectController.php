@@ -79,12 +79,18 @@ class ProjectController extends Controller
                     ->join('users','pci-dss v3_2_1 associate_qsa.last_edited_by','users.id')
                     ->where('pci-dss v3_2_1 associate_qsa.project_id',$proj_id)->get();
 
+                    $qas=Db::table('pci_dss v3_2_1 qa')
+                    ->join('users','pci_dss v3_2_1 qa.last_edited_by','users.id')
+                    ->where('pci_dss v3_2_1 qa.project_id',$proj_id)->get();
+
+
 
                        return view('assigned_projects.v_3_2_section1',
                        ['clientinfo'=>$clientinfo,
                        'assessorCompany'=>$assessorComapany,
                        'associate_qsas'=>$associate_qsas,
                        'assessors'=>$assessors,
+                       'qas'=>$qas,
                        'project_id'=>$checkpermission->project_id,
                        'project_name'=>$checkpermission->project_name,
                         'project_permissions'=>$checkpermission->project_permissions]);
@@ -433,7 +439,7 @@ public function v_3_2_s1_assessors(Request $req,$proj_id,$user_id){
         'assessor_name'=>'required|max:50',
         'assessor_pci_cred'=>'required|max:100',
         'assessor_phone'=>'required|numeric',
-        'assessor_email'=>'required|max:100|unique:pci-dss v3_2_1 assessors',
+        'assessor_email'=>'required|max:100',
     ]);
 
     if($user_id==auth()->user()->id){
@@ -553,7 +559,7 @@ public function v3_2_s1_edit_assessors_form(Request $req,$assessment_id,$proj_id
         'assessor_name'=>'required|max:50',
         'assessor_pci_cred'=>'required|max:100',
         'assessor_phone'=>'required|numeric',
-        'assessor_email' => ['required','max:100',Rule::unique('pci-dss v3_2_1 assessors')->ignore($assessment_id,'assessment_id')]
+        'assessor_email' => 'required|max:100|email'
 
     ]);
 
@@ -674,7 +680,7 @@ public function v3_2_s1_delete_assessor(Request $req,$assessment_id,$proj_id,$us
 
 public function v3_2_s1_associate_qsa(Request $req,$proj_id,$user_id){
     $req->validate([
-        'qsa_name'=>'required|unique:pci-dss v3_2_1 associate_qsa'
+        'qsa_name'=>'required|max:100'
     ]);
     if($user_id==auth()->user()->id){
         $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
@@ -740,7 +746,7 @@ public function v3_2_s1_associateqsa_edit($assessment_id,$proj_id,$user_id){
 public function v3_2_editform_associate_qsa(Request $req,$assessment_id,$proj_id,$user_id){
 
     $req->validate([
-        'qsa_name'=>'required|unique:pci-dss v3_2_1 associate_qsa'
+        'qsa_name'=>'required'
     ]);
     if($user_id==auth()->user()->id){
         $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
@@ -827,4 +833,120 @@ public function v3_2_s1_delete_associate_qsa($assessment_id,$proj_id,$user_id){
     return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
 
 }
+
+
+public function v3_2_s1_qa_insert(Request $req,$proj_id,$user_id){
+
+    $req->validate([
+        'reviewer_name'=>'required|max:100',
+        'reviewer_email'=>'required|max:100|email',
+        'reviewer_phone'=>'required|numeric'
+    ]);
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                        Db::table('pci_dss v3_2_1 qa')->insert([
+                            'project_id'=>$proj_id,
+                            'reviewer_name'=>$req->reviewer_name,
+                            'reviewer_email'=>$req->reviewer_email,
+                            'reviewer_phone'=>$req->reviewer_phone,
+                            'last_edited_by'=>$user_id,
+                            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+                        ]);
+
+                        return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                        ->with('success','QA Added successfully');
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+}
+
+public function v3_2_edit_qa($assessment_id,$proj_id,$user_id){
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                       $qa= Db::table('pci_dss v3_2_1 qa')->where('assessment_id',$assessment_id)->first();
+                        return view('assigned_projects.v3_2s1_edit_qa',['qa'=>$qa]);
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+}
+public function v3_2_s1_qa_edit_form_submit(Request $req,$assessment_id,$proj_id,$user_id){
+    $req->validate([
+        'reviewer_name'=>'required|max:100',
+        'reviewer_email' =>'required|max:100|email',
+        'reviewer_phone'=>'required|numeric'
+    ]);
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                        Db::table('pci_dss v3_2_1 qa')->where('assessment_id',$assessment_id)
+                        ->update([
+                            'reviewer_name'=>$req->reviewer_name,
+                            'reviewer_email'=>$req->reviewer_email,
+                            'reviewer_phone'=>$req->reviewer_phone,
+                            'last_edited_by'=>$user_id,
+                            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+                        ]);
+
+                        return redirect()->route('v_3_2_section1',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                        ->with('success','QA edited successfully');
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+
+}
+
+
 }
