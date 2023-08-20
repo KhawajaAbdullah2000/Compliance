@@ -101,9 +101,12 @@ $permissions=json_decode($project_permissions)
 
     <h2 class="mt-3 text-center">Date and timeframe of Assessment</h2>
 
+
+    @if($date_onsite->count()==0)
     @if(in_array('Data Inputter',$permissions))
     <a class="btn btn-success btn-md float-end mb-3" href="/v3_2_s1_1_2_onsite/{{$project_id}}/{{auth()->user()->id}}"
         role="button">Add Date spent onsite <i class="fas fa-plus"></i></a>
+        @endif
         @endif
     <table class="table table-responsive table-hover table-bordered">
         <thead>
@@ -152,6 +155,8 @@ $permissions=json_decode($project_permissions)
     @if($date_onsite->count()>0)
 
     <h2 class="mt-5 text-center">Dates Spent onsite at the entity</h2>
+    <a class="btn btn-success btn-md float-end mb-3" href="/v3_2_s1_1_2_onsite/{{$project_id}}/{{auth()->user()->id}}"
+      role="button">Add Date spent onsite <i class="fas fa-plus"></i></a>
     <table class="table table-responsive table-hover table-bordered mt-4">
         <thead>
             <tr>
@@ -170,7 +175,7 @@ $permissions=json_decode($project_permissions)
             <td>{{date('F d, Y', strtotime($onsite->date_spent_onsite))}}</td>
 
           <td>{{$onsite->first_name}} {{$onsite->last_name}}</td>
-          <td>{{date('F d, Y', strtotime($onsite->last_edited_at))}}</td>
+          <td>{{date('F d, Y H:i A', strtotime($onsite->last_edited_at))}}</td>
 
 
 

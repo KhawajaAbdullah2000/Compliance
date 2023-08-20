@@ -7,8 +7,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
 use Illuminate\Http\Request;
-use PhpParser\Builder\Function_;
-use PhpParser\Node\Expr\FuncCall;
+use Illuminate\Support\Facades\Cache;
+
 
 class ProjectController extends Controller
 {
@@ -90,7 +90,7 @@ class ProjectController extends Controller
     if($checkpermission){
         $permissions=json_decode($checkpermission->project_permissions);
                 if($checkpermission->type_id==2){
-                        //v3.2 pci
+
                     $clientinfo= Db::table('pci-dss v3_2_1 client info')->join('users','pci-dss v3_2_1 client info.last_edited_by','users.id')
                        ->where('pci-dss v3_2_1 client info.project_id',$proj_id)->first();
 

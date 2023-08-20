@@ -5,7 +5,7 @@
 @include('user-nav')
 
 <div class="container">
-  <div>
+
     @php
     $permissions=json_decode($project_permissions)
     @endphp
@@ -483,17 +483,11 @@
             {{-- if isset assessor --}}
 
 
-
-
-
-
-
-
         </div>
 
 
         {{-- QAS --}}
-        <div role="tabpanel" class="tab-pane active" id="qa">
+        <div role="tabpanel" class="tab-pane" id="qa">
 
 
             @if(in_array('Data Inputter',$permissions))
@@ -613,12 +607,9 @@
 
 
 
-       </div>
-       {{-- tab content^^ --}}
-
 </div>
 
-</div>
+
 
  @section('scripts')
 
