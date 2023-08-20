@@ -120,6 +120,17 @@ route::get('v3_2_edit_qa/{assessment_id}/{proj_id}/{user_id}',[ProjectController
 route::put('v3_2_s1_qa_edit_form_submit/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_qa_edit_form_submit']);
 route::get('v3_2_s1_add_new_qa/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_add_new_qa']);
 route::get('v3_2_s1_delete_qa/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_delete_qa']);
+
+// section1.2
+route::get('v3_2_s1_1_2/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_2'])->name('section1_2');
+route::post('v3_2_s1_2_date/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_2_date']);
+route::get('v3_2_s1_1_2_edit_timeframe/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_2_edit_timeframe']);
+route::put('v3_2_s1_1_2_edit_timeframe_form/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_2_edit_timeframe_form']);
+route::get('v3_2_s1_1_2_onsite/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_2_onsite']);
+route::post('v3_2_s1_1_2_onsite_form/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_2_onsite_form']);
+route::get('v3_2_s1_edit_date_onsite/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_edit_date_onsite']);
+route::put('v3_2_s1_edit_submit_1_2_onsite/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_edit_submit_1_2_onsite']);
+route::get('v3_2_s1_1_2_deleteonsite/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_2_deleteonsite']);
 }
 );
 
