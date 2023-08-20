@@ -7,6 +7,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
 use Illuminate\Http\Request;
+use PhpParser\Builder\Function_;
+use PhpParser\Node\Expr\FuncCall;
 
 class ProjectController extends Controller
 {
@@ -68,8 +70,6 @@ class ProjectController extends Controller
                         return view('assigned_projects.v_3_2_sections',
                         ['project_id'=>$proj_id,'project_name'=>$checkpermission->project_name]);
                     }
-
-
 
         }else{
             return redirect()->route('assigned_projects',['user_id'=>$user_id]);
@@ -1028,4 +1028,355 @@ public function v3_2_s1_delete_qa($assessment_id,$proj_id,$user_id){
 }
 
 
+//section1.2
+public function v3_2_s1_1_2($proj_id,$user_id){
+
+    if($user_id==auth()->user()->id){
+
+    $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+    'project_details.project_permissions','projects.project_name')
+   -> join('projects','project_details.project_code','projects.project_id')
+    ->join('project_types','projects.project_type','project_types.id')
+    ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+    ->first();
+
+
+    if($checkpermission){
+        $permissions=json_decode($checkpermission->project_permissions);
+                if($checkpermission->type_id==2){
+
+                    $timeframe=Db::table('pci-dss v3_2_1 section1_2')->join('users','pci-dss v3_2_1 section1_2.last_edited_by','users.id')
+                    ->where('project_id',$proj_id)->first();
+
+
+                    $date_onsite=Db::table('pci-dss v3_2_1 section1_2_dates_spent_onsite')
+                    ->join('users','pci-dss v3_2_1 section1_2_dates_spent_onsite.last_edited_by','users.id')
+                    ->where('project_id',$proj_id)->get();
+
+
+                    return view('assigned_projects.v_3_2_s1_1_2',
+                    ['project_id'=>$proj_id,
+                    'project_name'=>$checkpermission->project_name,
+                    'project_permissions'=>$checkpermission->project_permissions,
+                    'timeframe'=>$timeframe,
+                    'date_onsite'=>$date_onsite
+                    ]
+                );
+                }
+
+    }else{
+        return redirect()->route('assigned_projects',['user_id'=>$user_id]);
+    }
+
+}
+return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+
+}
+
+public function v3_2_s1_2_date(Request $req,$proj_id,$user_id){
+    $req->validate([
+        'date_of_report'=>'required',
+        'start_date'=>'required',
+        'end_date'=>'required',
+        'time_onsite'=>'required|numeric',
+        'time_remote'=>'required|numeric',
+        'time_remediation'=>'required|numeric'
+    ]);
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                        Db::table('pci-dss v3_2_1 section1_2')->insert([
+                            'project_id'=>$proj_id,
+                            'date_of_report'=>$req->date_of_report,
+                            'start_date'=>$req->start_date,
+                            'end_date'=>$req->end_date,
+                            'time_onsite'=>$req->time_onsite,
+                            'time_remote'=>$req->time_remote,
+                            'time_remediation'=>$req->time_remediation,
+                            'last_edited_by'=>$user_id,
+                            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+
+                        ]);
+
+                         return redirect()->route('section1_2',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                         ->with('success','Record Added successfully');
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+
+
+}
+
+public function v3_2_s1_1_2_edit_timeframe($proj_id,$user_id){
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                $timeframe=Db::table('pci-dss v3_2_1 section1_2')->where('project_id',$proj_id)->first();
+                if($timeframe){
+                    return view('assigned_projects.v3_2_s1_1_2_edit_timeframe',['timeframe'=>$timeframe]);
+                }
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+
+
+}
+
+public function v3_2_s1_1_2_edit_timeframe_form(Request $req,$proj_id,$user_id){
+    $req->validate(
+    [
+        'date_of_report'=>'required',
+        'start_date'=>'required',
+        'end_date'=>'required',
+        'time_onsite'=>'required|numeric',
+        'time_remote'=>'required|numeric',
+        'time_remediation'=>'required|numeric'
+    ]
+    );
+
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                        Db::table('pci-dss v3_2_1 section1_2')->where('project_id',$proj_id)
+                        ->update([
+                            'date_of_report'=>$req->date_of_report,
+                            'start_date'=>$req->start_date,
+                            'end_date'=>$req->end_date,
+                            'time_onsite'=>$req->time_onsite,
+                            'time_remote'=>$req->time_remote,
+                            'time_remediation'=>$req->time_remediation,
+                            'last_edited_by'=>$user_id,
+                            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+
+                        ]);
+
+                         return redirect()->route('section1_2',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                         ->with('success','Record Edited successfully');
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+
+
+
+
+}
+
+public function v3_2_s1_1_2_onsite($proj_id,$user_id){
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+                        return view('assigned_projects.add_new_onsite_date_section1_2',[
+                            'project_id'=>$checkpermission->project_id
+                        ]);
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+}
+
+public function v3_2_s1_1_2_onsite_form(Request $req,$proj_id,$user_id){
+    $req->validate([
+        'date_spent_onsite'=>'required'
+    ]);
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                        Db::table('pci-dss v3_2_1 section1_2_dates_spent_onsite')->insert([
+                            'project_id'=>$proj_id,
+                            'date_spent_onsite'=>$req->date_spent_onsite,
+                            'last_edited_by'=>$user_id,
+                            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+
+                        ]);
+
+                         return redirect()->route('section1_2',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                         ->with('success','Record Added successfully');
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+
+}
+
+public function v3_2_s1_edit_date_onsite($assessment_id,$proj_id,$user_id){
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+                 $onsite=Db::table('pci-dss v3_2_1 section1_2_dates_spent_onsite')->where('assessment_id',$assessment_id)->first();
+                 return view('assigned_projects.v3_2_s1_1_2_edit_onsite',['onsite'=>$onsite]);
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+}
+
+public function v3_2_s1_edit_submit_1_2_onsite(Request $req,$assessment_id,$proj_id,$user_id){
+    $req->validate([
+        'date_spent_onsite'=>'required'
+    ]);
+
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                        Db::table('pci-dss v3_2_1 section1_2_dates_spent_onsite')->where('assessment_id',$assessment_id)
+                        ->update([
+                            'date_spent_onsite'=>$req->date_spent_onsite,
+                            'last_edited_by'=>$user_id,
+                            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+
+                        ]);
+
+                         return redirect()->route('section1_2',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                         ->with('success','Date Edited successfully');
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+
+}
+
+public function v3_2_s1_1_2_deleteonsite($assessment_id,$proj_id,$user_id){
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                        Db::table('pci-dss v3_2_1 section1_2_dates_spent_onsite')->where('assessment_id',$assessment_id)
+                        ->delete();
+
+                         return redirect()->route('section1_2',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                         ->with('success','Date Deleted successfully');
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+
+}
 }
