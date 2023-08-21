@@ -27,6 +27,11 @@
             <a href="/v3_2_s1_1_4/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning">Section1- 1.4: Additional services provided by QSA company</a>
            </div>
 
+           <div class="col-6 mt-3">
+            <a href="/v3_2_s1_1_5/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning">Summary of Findings</a>
+           </div>
+
+
 
 
 

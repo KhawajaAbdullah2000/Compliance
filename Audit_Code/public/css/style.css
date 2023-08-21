@@ -198,6 +198,27 @@ a:focus{
     border: 3px solid #9C3140;
 }
 
+input[type="radio"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 1px solid #000;
+    /* Add a border */
+    width: 18px;
+    /* Adjust the width and height as needed */
+    height: 18px;
+    border-radius: 0;
+    /* Remove border radius to make it square */
+}
+
+
+/* Style radio buttons as squares when checked */
+
+input[type="radio"]:checked {
+    background-color: blue;
+    /* Change the background color when checked */
+}
+
 @media only screen and (max-width: 479px) {
     .tab .nav-tabs li {
         width: 100%;
