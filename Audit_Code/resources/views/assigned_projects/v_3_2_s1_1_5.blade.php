@@ -319,7 +319,8 @@ $permissions=json_decode($project_permissions)
             </div>
             <div class="col-md-6">
                 @if(in_array('Data Inputter',$permissions))
-                <a href="" class="float-end btn btn-primary btn-lg mb-2 px-8">Edit</a>
+                <a href="/v3_2_s1_1_5_edit/{{$summary->assessment_id}}/{{$summary->project_id}}/{{auth()->user()->id}}"
+                     class="float-end btn btn-primary btn-lg mb-2 px-8">Edit</a>
                       @endif
             </div>
         </div>
