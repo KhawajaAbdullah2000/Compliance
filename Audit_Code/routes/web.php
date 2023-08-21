@@ -137,6 +137,13 @@ route::get('v3_2_s1_1_4/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_
 route::post('v3_2_s1_1_4_services/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_4_services']);
 route::get('v3_2_s1_1_4_edit/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_4_edit']);
 route::put('v3_2_s1_1_4_services_edit_form/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_4_services_edit_form']);
+
+//section 1.5
+route::get('v3_2_s1_1_5/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_5'])->name('section1_5');
+route::post('v3_2_s1_1_5_summary/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_5_summary']);
+route::get('v3_2_s1_1_5_edit/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_5_edit']);
+route::put('v3_2_s1_1_5_edit_form/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_5_edit_form']);
+
 }
 );
 

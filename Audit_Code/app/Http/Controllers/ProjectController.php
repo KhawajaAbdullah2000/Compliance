@@ -8,7 +8,7 @@ use Illuminate\Validation\Rule;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class ProjectController extends Controller
 {
@@ -1550,6 +1550,231 @@ public function v3_2_s1_1_4_services_edit_form(Request $req,$assessment_id,$proj
     }
     return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
 
+
+}
+
+
+
+//section 1.5 summary of findings
+public function v3_2_s1_1_5($proj_id,$user_id){
+    if($user_id==auth()->user()->id){
+
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_name')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+
+        if($checkpermission){
+
+                    if($checkpermission->type_id==2){
+
+                        $summary=Db::table('pci-dss v3_2_1 section1_5')
+                        ->join('users','pci-dss v3_2_1 section1_5.last_edited_by','users.id')
+                        ->where('project_id',$proj_id)->first();
+
+                        return view('assigned_projects.v_3_2_s1_1_5',
+                        ['project_id'=>$proj_id,
+                        'project_name'=>$checkpermission->project_name,
+                        'project_permissions'=>$checkpermission->project_permissions,
+                        'summary'=>$summary
+                        ]
+                    );
+                    }
+
+        }else{
+            return redirect()->route('assigned_projects',['user_id'=>$user_id]);
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+
+}
+
+public function v3_2_s1_1_5_summary(Request $req,$proj_id,$user_id){
+
+    $req->validate([
+        'requirement1'=>'required',
+        'requirement2'=>'required',
+        'requirement3'=>'required',
+        'requirement4'=>'required',
+        'requirement5'=>'required',
+        'requirement6'=>'required',
+        'requirement7'=>'required',
+        'requirement8'=>'required',
+        'requirement9'=>'required',
+        'requirement10'=>'required',
+        'requirement11'=>'required',
+        'requirement12'=>'required',
+        'appendix_A1'=>'required',
+        'appendix_A2'=>'required',
+        'appendix_A3'=>'required'
+
+    ]);
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                        Db::table('pci-dss v3_2_1 section1_5')->insert([
+                                'project_id'=>$proj_id,
+
+                                'requirement1'=>$req->requirement1,
+                                'requirement2'=>$req->requirement2,
+                                'requirement3'=>$req->requirement3,
+                                'requirement4'=>$req->requirement4,
+                                'requirement5'=>$req->requirement5,
+                                'requirement6'=>$req->requirement6,
+                                'requirement7'=>$req->requirement7,
+                                'requirement8'=>$req->requirement8,
+                                'requirement9'=>$req->requirement9,
+                                'requirement10'=>$req->requirement10,
+                                'requirement11'=>$req->requirement11,
+                                'requirement12'=>$req->requirement12,
+                                'appendix_A1'=>$req->appendix_A1,
+                                'appendix_A2'=>$req->appendix_A2,
+                                'appendix_A3'=>$req->appendix_A3,
+
+                                'last_edited_by'=>$user_id,
+                                'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+
+                        ]);
+
+
+
+                         return redirect()->route('section1_5',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                          ->with('success','Record Added successfully');
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+}
+
+public function v3_2_s1_1_5_edit($assessment_id,$proj_id,$user_id){
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id','projects.project_name')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                       $summary= Db::table('pci-dss v3_2_1 section1_5')->where('assessment_id',$assessment_id)
+                        ->where('project_id',$proj_id)->first();
+                        if($summary){
+                                return view('assigned_projects.v3_2_s1_1_5_edit',[
+                                    'summary'=>$summary,
+                                    'project_id'=>$proj_id,
+                                    'project_name'=>$checkpermission->project_name
+                                ]);
+                        }else{
+                            return redirect()->route('assigned_projects',['user_id'=>$user_id]);
+                        }
+
+
+
+
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+}
+
+public function v3_2_s1_1_5_edit_form(Request $req,$assessment_id,$proj_id,$user_id){
+    $req->validate([
+        'requirement1'=>'required',
+        'requirement2'=>'required',
+        'requirement3'=>'required',
+        'requirement4'=>'required',
+        'requirement5'=>'required',
+        'requirement6'=>'required',
+        'requirement7'=>'required',
+        'requirement8'=>'required',
+        'requirement9'=>'required',
+        'requirement10'=>'required',
+        'requirement11'=>'required',
+        'requirement12'=>'required',
+        'appendix_A1'=>'required',
+        'appendix_A2'=>'required',
+        'appendix_A3'=>'required'
+
+    ]);
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_id')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                        Db::table('pci-dss v3_2_1 section1_5')->where('assessment_id',$assessment_id)->where('project_id',$proj_id)
+                        ->update([
+
+                                'requirement1'=>$req->requirement1,
+                                'requirement2'=>$req->requirement2,
+                                'requirement3'=>$req->requirement3,
+                                'requirement4'=>$req->requirement4,
+                                'requirement5'=>$req->requirement5,
+                                'requirement6'=>$req->requirement6,
+                                'requirement7'=>$req->requirement7,
+                                'requirement8'=>$req->requirement8,
+                                'requirement9'=>$req->requirement9,
+                                'requirement10'=>$req->requirement10,
+                                'requirement11'=>$req->requirement11,
+                                'requirement12'=>$req->requirement12,
+                                'appendix_A1'=>$req->appendix_A1,
+                                'appendix_A2'=>$req->appendix_A2,
+                                'appendix_A3'=>$req->appendix_A3,
+                                'last_edited_by'=>$user_id,
+                                'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+
+                        ]);
+
+
+
+                         return redirect()->route('section1_5',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                          ->with('success','Record Edited successfully');
+
+                }
+            }
+
+        }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
 
 }
 
