@@ -131,6 +131,12 @@ route::post('v3_2_s1_1_2_onsite_form/{proj_id}/{user_id}',[ProjectController::cl
 route::get('v3_2_s1_edit_date_onsite/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_edit_date_onsite']);
 route::put('v3_2_s1_edit_submit_1_2_onsite/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_edit_submit_1_2_onsite']);
 route::get('v3_2_s1_1_2_deleteonsite/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_2_deleteonsite']);
+
+//section 1.4
+route::get('v3_2_s1_1_4/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_4'])->name('section1_4');
+route::post('v3_2_s1_1_4_services/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_4_services']);
+route::get('v3_2_s1_1_4_edit/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_4_edit']);
+route::put('v3_2_s1_1_4_services_edit_form/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_4_services_edit_form']);
 }
 );
 
