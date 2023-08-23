@@ -18,7 +18,7 @@
             {{-- <a href="/v_3_2_section1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning">Section1</a> --}}
             <div class="row mt-4">
                 <div class="col-12">
-             <a href="" class="btn btn-lg btn-warning">Section2- Summary Overview</a>
+             <a href="/v_3_2_section2_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning">Section2- Summary Overview</a>
             </div>
             </div>
 
