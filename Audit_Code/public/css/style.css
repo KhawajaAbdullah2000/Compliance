@@ -227,11 +227,19 @@ input[type="radio"]:checked {
 }
 
 .full-img-subsections {
-    background-color: aqua;
-    /* background-image: url("../pci_subsections.jpg");
-    background-position: center;
+    height: 430px;
+    background-image: url("../subsection.jpg");
+    background-position: top;
     background-repeat: no-repeat;
-    background-size: cover; */
+    background-size: cover;
+}
+
+.section2_subsections {
+    background-image: url("../subsection.jpg");
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 300px;
 }
 
 @media only screen and (max-width: 479px) {
