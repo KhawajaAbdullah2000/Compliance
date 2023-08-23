@@ -19,7 +19,7 @@
         {{-- Section2.2 --}}
         <div class="row mt-4 mb-2">
             <div class="col-12">
-                <a href="" class="btn btn-lg btn-warning">Section2- 2.2: High-level network diagram(s)</a>
+                <a href="/v3_2_s2_2_2/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning">Section2- 2.2: High-level network diagram(s)</a>
 
             </div>
         </div>

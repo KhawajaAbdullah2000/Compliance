@@ -187,5 +187,142 @@ if($checkpermission){
 }
 return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
 }
+
+
+public function v3_2_s2_2_2($proj_id,$user_id){
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+    'project_details.project_permissions','projects.project_name','projects.project_id')
+   -> join('projects','project_details.project_code','projects.project_id')
+    ->join('project_types','projects.project_type','project_types.id')
+    ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+    ->first();
+    if($checkpermission){
+
+                if($checkpermission->type_id==2){
+                   $diagrams=DB::table('pci-dss v3_2_1 section2_2')->join('users','pci-dss v3_2_1 section2_2.last_edited_by','users.id')
+                   ->where('project_id',$proj_id)->get();
+                   return view('v3_2_section2.section2_2',[
+                    'diagrams'=>$diagrams,
+                    'project_id'=>$checkpermission->project_id,
+                    'project_name'=>$checkpermission->project_name,
+                    'project_permissions'=>$checkpermission->project_permissions
+                   ]);
+                }
+
+
+    }
+
+}
+return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+
+}
+
+public function v3_2_s2_2_2_form(Request $req,$proj_id,$user_id){
+    $req->validate([
+        'diagram' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+    'project_details.project_permissions','projects.project_name','projects.project_id')
+    -> join('projects','project_details.project_code','projects.project_id')
+    ->join('project_types','projects.project_type','project_types.id')
+    ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+    ->first();
+    if($checkpermission){
+        $permissions=json_decode($checkpermission->project_permissions);
+        if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                    $imageName = time().'.'.$req->diagram->extension();
+                    $req->diagram->move(public_path('v3_2_s2_2_2'), $imageName);
+                    Db::table('pci-dss v3_2_1 section2_2')->insert([
+                        'project_id'=>$proj_id,
+                        'diagram'=>$imageName,
+                        'last_edited_by'=>$user_id,
+                        'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+                    ]);
+
+                   return redirect()->route('section2_2',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                   ->with('success','Diagram Added successfully');
+
+                }
+            }
+
+
+    }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+
+}
+
+public function v3_2_s2_2_2_add_diagram($proj_id,$user_id){
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+    'project_details.project_permissions','projects.project_name','projects.project_id')
+    -> join('projects','project_details.project_code','projects.project_id')
+    ->join('project_types','projects.project_type','project_types.id')
+    ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+    ->first();
+    if($checkpermission){
+        $permissions=json_decode($checkpermission->project_permissions);
+        if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+
+                return view('v3_2_section2.section2_2_edit',[
+                    'project_id'=>$proj_id,
+                    'project_name'=>$checkpermission->project_name
+
+                ]);
+
+                }
+            }
+
+
+    }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+}
+
+public function v3_2_s2_2_2_delete($assessment_id,$proj_id,$user_id){
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+    'project_details.project_permissions','projects.project_name','projects.project_id')
+    -> join('projects','project_details.project_code','projects.project_id')
+    ->join('project_types','projects.project_type','project_types.id')
+    ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+    ->first();
+    if($checkpermission){
+        $permissions=json_decode($checkpermission->project_permissions);
+        if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+                    $check=Db::table('pci-dss v3_2_1 section2_2')->where('assessment_id',$assessment_id)
+                    ->where('project_id',$proj_id);
+                    $image = $check->first();
+                    if($image){
+                        unlink(public_path('/v3_2_s2_2_2'.'/'.$image->diagram) );
+                        $check->delete();
+
+               return redirect()->route('section2_2',['proj_id'=>$proj_id,'user_id'=>$user_id])
+               ->with('success','Diagram Deleted successfully');
+
+                    }
+
+
+                }
+            }
+
+
+    }
+
+    }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+}
 }
 
