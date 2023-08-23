@@ -219,6 +219,21 @@ input[type="radio"]:checked {
     /* Change the background color when checked */
 }
 
+.full-img {
+    background-image: url("../pci.jpg");
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.full-img-subsections {
+    background-color: aqua;
+    /* background-image: url("../pci_subsections.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; */
+}
+
 @media only screen and (max-width: 479px) {
     .tab .nav-tabs li {
         width: 100%;

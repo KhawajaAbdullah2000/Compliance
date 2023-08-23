@@ -458,7 +458,7 @@
 
                 <tr>
                 <td>{{$ass_qsa->qsa_name}}</td>
-                <td>{{$ass->first_name}} {{$ass->last_name}}</td>
+                <td>{{$ass_qsa->first_name}} {{$ass_qsa->last_name}}</td>
 
                 @if(in_array('Data Inputter',$permissions))
                   <td><a href="/v3_2_s1_associateqsa_edit/{{$ass_qsa->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}"

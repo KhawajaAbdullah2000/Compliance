@@ -6,6 +6,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\SuperUserController;
 use App\Http\Controllers\EndUserController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\v3_2_s2_Controller;
 use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -17,6 +18,8 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Support\Str;
+
+use function Ramsey\Uuid\v3;
 
 //Excel cript
 ROute::get('excel',[UserController::class,'excel']);
@@ -144,7 +147,21 @@ route::post('v3_2_s1_1_5_summary/{proj_id}/{user_id}',[ProjectController::class,
 route::get('v3_2_s1_1_5_edit/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_5_edit']);
 route::put('v3_2_s1_1_5_edit_form/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_5_edit_form']);
 
+//section 2.1
+route::get('v_3_2_section2_subsections/{proj_id}/{user_id}',[v3_2_s2_Controller::class,'v_3_2_section2_subsections']);
+route::get('v3_2_s2_2_1/{proj_id}/{user_id}',[v3_2_s2_Controller::class,'v3_2_s2_2_1'])->name('section2_1');
+route::post('v3_2_s2_2_1_insert/{proj_id}/{user_id}',[v3_2_s2_Controller::class,'v3_2_s2_2_1_insert']);
+route::get('v3_2_s2_2_1_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s2_Controller::class,'v3_2_s2_2_1_edit']);
+route::put('v3_2_s2_2_1_edit_form/{assessment_id}/{proj_id}/{user_id}',[v3_2_s2_Controller::class,'v3_2_s2_2_1_edit_form']);
+
+//section2.2
+route::get('v3_2_s2_2_2/{proj_id}/{user_id}',[v3_2_s2_Controller::class,'v3_2_s2_2_2'])->name('section2_2');
+route::post('v3_2_s2_2_2_form/{proj_id}/{user_id}',[v3_2_s2_Controller::class,'v3_2_s2_2_2_form']);
+route::get('v3_2_s2_2_2_add_diagram/{proj_id}/{user_id}',[v3_2_s2_Controller::class,'v3_2_s2_2_2_add_diagram']);
+route::delete('v3_2_s2_2_2_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s2_Controller::class,'v3_2_s2_2_2_delete']);
 }
+
+
 );
 
 
