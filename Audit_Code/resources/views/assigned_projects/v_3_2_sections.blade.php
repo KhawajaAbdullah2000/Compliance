@@ -12,37 +12,37 @@
         <div class="row mt-2">
             <div class="col-12">
 
-         <a href="/v_3_2_section1_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning">Section1- Contact Information and Report Date</a>
+         <a href="/v_3_2_section1_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section1- Contact Information and Report Date</p></a>
         </div>
         </div>
             {{-- <a href="/v_3_2_section1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning">Section1</a> --}}
             <div class="row mt-4">
                 <div class="col-12">
-             <a href="/v_3_2_section2_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning">Section2- Summary Overview</a>
+             <a href="/v_3_2_section2_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section2- Summary Overview</p></a>
             </div>
             </div>
 
             <div class="row mt-4">
                 <div class="col-12">
-             <a href="" class="btn btn-lg btn-warning">Section3- Description of Scope of Work and Approach Taken</a>
+             <a href="/v3_2_section3_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- Description of Scope of Work and Approach Taken</p></a>
             </div>
             </div>
 
             <div class="row mt-4">
                 <div class="col-12">
-             <a href="" class="btn btn-lg btn-warning">Section4- Details about Reviewed Environment</a>
+             <a href="" class="btn btn-lg btn-warning"><p class="fw-bold">Section4- Details about Reviewed Environment</p></a>
             </div>
             </div>
 
             <div class="row mt-4">
                 <div class="col-12">
-             <a href="" class="btn btn-lg btn-warning">Section5- Quarterly Scan Results</a>
+             <a href="" class="btn btn-lg btn-warning"><p class="fw-bold">Section5- Quarterly Scan Results</p></a>
             </div>
             </div>
 
            <div class="row mt-4 mb-2">
                 <div class="col-12">
-             <a href="" class="btn btn-lg btn-warning">Section6- Findings and Observations</a>
+             <a href="" class="btn btn-lg btn-warning"><p class="fw-bold">Section6- Findings and Observations</p></a>
             </div>
             </div>
 

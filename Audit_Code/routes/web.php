@@ -7,6 +7,7 @@ use App\Http\Controllers\SuperUserController;
 use App\Http\Controllers\EndUserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\v3_2_s2_Controller;
+use App\Http\Controllers\v3_2_s3_Controller;
 use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -159,6 +160,11 @@ route::get('v3_2_s2_2_2/{proj_id}/{user_id}',[v3_2_s2_Controller::class,'v3_2_s2
 route::post('v3_2_s2_2_2_form/{proj_id}/{user_id}',[v3_2_s2_Controller::class,'v3_2_s2_2_2_form']);
 route::get('v3_2_s2_2_2_add_diagram/{proj_id}/{user_id}',[v3_2_s2_Controller::class,'v3_2_s2_2_2_add_diagram']);
 route::delete('v3_2_s2_2_2_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s2_Controller::class,'v3_2_s2_2_2_delete']);
+
+//Section 3
+route::get('v3_2_section3_subsections/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_section3_subsections']);
+route::get('v3_2_s3_3_1/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_1'])->name('section3_1');
+route::post('v3_2_s3_3_1_form/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_1_form']);
 }
 
 
