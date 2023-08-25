@@ -24,7 +24,7 @@
 
             <div class="row mt-4">
                 <div class="col-12">
-             <a href="" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- Description of Scope of Work and Approach Taken</p></a>
+             <a href="/v3_2_section3_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- Description of Scope of Work and Approach Taken</p></a>
             </div>
             </div>
 

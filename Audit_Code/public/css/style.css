@@ -242,6 +242,14 @@ input[type="radio"]:checked {
     height: 300px;
 }
 
+.section3_subsections {
+    background-image: url("../subsection.jpg");
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 600px;
+}
+
 @media only screen and (max-width: 479px) {
     .tab .nav-tabs li {
         width: 100%;
