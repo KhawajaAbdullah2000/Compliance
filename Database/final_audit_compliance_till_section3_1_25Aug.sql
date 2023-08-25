@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 23, 2023 at 12:28 PM
+-- Generation Time: Aug 25, 2023 at 02:23 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -267,34 +267,6 @@ CREATE TABLE `pci-dss v3.2.1 section1.3` (
 INSERT INTO `pci-dss v3.2.1 section1.3` (`id`, `assessment_id`, `pci_standard_version`) VALUES
 (1, NULL, 'PCI-DSS v3.2.1'),
 (2, NULL, 'PCI-DSS v3.2.1');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pci-dss v3.2.1 section3.1`
---
-
-CREATE TABLE `pci-dss v3.2.1 section3.1` (
-  `id` int(11) NOT NULL,
-  `assessment_id` int(10) UNSIGNED DEFAULT NULL,
-  `requirement1` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `requirement2` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `requirement3` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `requirement4` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `requirement5` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `requirement6` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `other_details` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
-  `last_edited_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `pci-dss v3.2.1 section3.1`
---
-
-INSERT INTO `pci-dss v3.2.1 section3.1` (`id`, `assessment_id`, `requirement1`, `requirement2`, `requirement3`, `requirement4`, `requirement5`, `requirement6`, `other_details`, `last_edited_by`, `last_edited_at`) VALUES
-(1, NULL, 'Req 1', 'Req 2', 'Req 3', 'Req 4', 'Req 5', 'Req 6', 'Other Details 1', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Req 1', 'Req 2', 'Req 3', 'Req 4', 'Req 5', 'Req 6', 'Other Details 2', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -1082,7 +1054,35 @@ CREATE TABLE `pci-dss v3_2_1 section2_2` (
 --
 
 INSERT INTO `pci-dss v3_2_1 section2_2` (`assessment_id`, `project_id`, `diagram`, `last_edited_by`, `last_edited_at`) VALUES
-(4, 1, '1692777297.jpg', 57, '2023-08-23 12:54:57');
+(4, 1, '1692777297.jpg', 57, '2023-08-23 12:54:57'),
+(9, 1, '1692794309.png', 57, '2023-08-23 17:38:29');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pci-dss v3_2_1 section3_1`
+--
+
+CREATE TABLE `pci-dss v3_2_1 section3_1` (
+  `assessment_id` int(11) NOT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `requirement1` varchar(800) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `requirement2` varchar(800) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `requirement3` varchar(800) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `requirement4` varchar(800) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `requirement5` varchar(800) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `requirement6` varchar(800) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `other_details` varchar(800) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `last_edited_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `pci-dss v3_2_1 section3_1`
+--
+
+INSERT INTO `pci-dss v3_2_1 section3_1` (`assessment_id`, `project_id`, `requirement1`, `requirement2`, `requirement3`, `requirement4`, `requirement5`, `requirement6`, `other_details`, `last_edited_by`, `last_edited_at`) VALUES
+(4, 1, 'requirement1', 'requirement2', 'requirement3', 'requirement4', 'requirement5', 'requirement6', 'others', 57, '2023-08-25 17:23:01');
 
 -- --------------------------------------------------------
 
@@ -1413,14 +1413,6 @@ ALTER TABLE `pci-dss v3.2.1 section1.3`
   ADD KEY `assessment_id` (`assessment_id`);
 
 --
--- Indexes for table `pci-dss v3.2.1 section3.1`
---
-ALTER TABLE `pci-dss v3.2.1 section3.1`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `assessment_id` (`assessment_id`),
-  ADD KEY `editsec3.1fk` (`last_edited_by`);
-
---
 -- Indexes for table `pci-dss v3.2.1 section3.2`
 --
 ALTER TABLE `pci-dss v3.2.1 section3.2`
@@ -1713,6 +1705,15 @@ ALTER TABLE `pci-dss v3_2_1 section2_2`
   ADD KEY `project_id` (`project_id`);
 
 --
+-- Indexes for table `pci-dss v3_2_1 section3_1`
+--
+ALTER TABLE `pci-dss v3_2_1 section3_1`
+  ADD PRIMARY KEY (`assessment_id`),
+  ADD UNIQUE KEY `project_id_2` (`project_id`),
+  ADD KEY `editsec3.1fk` (`last_edited_by`),
+  ADD KEY `project_id` (`project_id`);
+
+--
 -- Indexes for table `pci_dss v3_2_1 qa`
 --
 ALTER TABLE `pci_dss v3_2_1 qa`
@@ -1821,12 +1822,6 @@ ALTER TABLE `organizations`
 -- AUTO_INCREMENT for table `pci-dss v3.2.1 section1.3`
 --
 ALTER TABLE `pci-dss v3.2.1 section1.3`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `pci-dss v3.2.1 section3.1`
---
-ALTER TABLE `pci-dss v3.2.1 section3.1`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
@@ -2043,7 +2038,13 @@ ALTER TABLE `pci-dss v3_2_1 section2_1`
 -- AUTO_INCREMENT for table `pci-dss v3_2_1 section2_2`
 --
 ALTER TABLE `pci-dss v3_2_1 section2_2`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `pci-dss v3_2_1 section3_1`
+--
+ALTER TABLE `pci-dss v3_2_1 section3_1`
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `pci_dss v3_2_1 qa`
@@ -2097,7 +2098,7 @@ ALTER TABLE `superusers`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- Constraints for dumped tables
@@ -2120,13 +2121,6 @@ ALTER TABLE `model_has_roles`
 --
 ALTER TABLE `pci-dss v3.2.1 section1.3`
   ADD CONSTRAINT `section1.3fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Constraints for table `pci-dss v3.2.1 section3.1`
---
-ALTER TABLE `pci-dss v3.2.1 section3.1`
-  ADD CONSTRAINT `editsec3.1fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec3.1fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section3.2`
@@ -2372,6 +2366,13 @@ ALTER TABLE `pci-dss v3_2_1 section2_1`
 ALTER TABLE `pci-dss v3_2_1 section2_2`
   ADD CONSTRAINT `editsec2.2fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `sec2.2_projidFK` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+--
+-- Constraints for table `pci-dss v3_2_1 section3_1`
+--
+ALTER TABLE `pci-dss v3_2_1 section3_1`
+  ADD CONSTRAINT `editsec3.1fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `projid_3.1_fk` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `pci_dss v3_2_1 qa`
