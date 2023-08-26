@@ -153,7 +153,7 @@ $permissions=json_decode($project_permissions)
         <span class="badge rounded-pill bg-success fs-6">Last edited at: {{date('F d, Y H:i:A', strtotime($data->last_edited_at))}}</span>
 
         @if(in_array('Data Inputter',$permissions))
-        <a href=""
+        <a href="/v3_2_s3_3_1_edit/{{$data->assessment_id}}/{{$data->project_id}}/{{auth()->user()->id}}"
             class="float-end btn btn-primary btn-lg mb-2 px-5">Edit</a>
 
         @endif
