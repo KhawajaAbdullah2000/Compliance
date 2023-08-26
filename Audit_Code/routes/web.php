@@ -175,6 +175,10 @@ route::post('v3_2_s3_3_2_form/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v
 route::get('v3_2_s3_3_2_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_2_edit']);
 route::put('v3_2_s3_3_2_edit_form/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_2_edit_form']);
 
+//3.3
+route::get('v3_2_s3_3_3/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_3'])->name('section3_3');
+route::post('v3_2_s3_3_3_insert/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_3_insert']);
+
 }
 
 
