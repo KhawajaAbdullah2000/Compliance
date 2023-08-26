@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="wrapper d-flex align-items-stretch">
-    
+
 @include('root_nav')
 
 
@@ -12,7 +12,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-    
+
         <button type="button" id="sidebarCollapse" class="btn btn-primary">
           <i class="fa fa-bars"></i>
           <span class="sr-only">Toggle Menu</span>
@@ -25,11 +25,11 @@
     <div class="container">
 
         {{-- <h1 class="text-center">Register New organization</h1> --}}
-  
+
         <div class="card">
           <div class="card-body">
             <h3 class="card-title text-center text-bold mb-3">Edit {{$org->name}} {{$org->sub_org}}</h3>
-  
+
             <form class="row g-3" method="POST" action="/edit_org/{{$org->name}}/{{$org->sub_org}}">
               @csrf
               @method('PUT')
@@ -40,7 +40,7 @@
               @if($errors->has('name'))
               <div class="text-danger">{{ $errors->first('name') }}</div>
           @endif
-  
+
               <div class="col-md-6">
                 <label for="sub_org" class="form-label">Sub Organization</label>
                 <input type="text" class="form-control" name="sub_org" placeholder="department" value="{{old('sub_org',$org->sub_org)}}">
@@ -48,10 +48,10 @@
               @if($errors->has('sub_org'))
               <div class="text-danger">{{ $errors->first('sub_org') }}</div>
           @endif
-        
-  
-  
-  
+
+
+
+
               <div class="col-md-6">
                   <label for="type" class="form-label">Type</label>
                   <select class="boxstyling bg-primary form-select" name="type">
@@ -63,8 +63,8 @@
            @if($errors->has('type'))
               <div class="text-danger">{{ $errors->first('type') }}</div>
           @endif
-  
-  
+
+
               <div class="col-md-6">
                 <label for="country" class="form-label">Country</label>
                 <input type="text" class="form-control" placeholder="Country" name="country" value="{{old('country',$org->country)}}">
@@ -72,8 +72,8 @@
               @if($errors->has('country'))
               <div class="text-danger">{{ $errors->first('country') }}</div>
           @endif
-  
-  
+
+
               <div class="col-md-6">
                 <label for="city" class="form-label">City</label>
                 <input type="text" class="form-control" name="city" value="{{old('city',$org->city)}}">
@@ -81,8 +81,8 @@
               @if($errors->has('city'))
               <div class="text-danger">{{ $errors->first('city') }}</div>
           @endif
-  
-  
+
+
               <div class="col-md-4">
                 <label for="inputState" class="form-label">State</label>
           <input type="text" name="state" class="form-control" value="{{old('state',$org->state)}}">
@@ -90,7 +90,7 @@
               @if($errors->has('state'))
               <div class="text-danger">{{ $errors->first('state') }}</div>
           @endif
-  
+
               <div class="col-md-2">
                 <label for="inputZip" class="form-label">Zip</label>
                 <input type="text" class="form-control" name="zip_code" value="{{old('zip_code',$org->zip_code)}}">
@@ -98,7 +98,7 @@
               @if($errors->has('zip_code'))
               <div class="text-danger">{{ $errors->first('zip_code') }}</div>
           @endif
-  
+
           <div class="col-12">
               <label for="" class="form-label">Addess</label>
               <input type="text" class="form-control" name="address" value="{{old('address',$org->address)}}">
@@ -106,8 +106,8 @@
           @if($errors->has('address'))
           <div class="text-danger">{{ $errors->first('address') }}</div>
       @endif
-  
-        
+
+
           <div class="col-md-6">
               <label for="" class="form-label">Status</label>
               <select class="boxstyling bg-primary form-select" name="status">
@@ -118,25 +118,25 @@
               <div class="text-danger">{{ $errors->first('status') }}</div>
           @endif
           </div>
-  
-  
-  
-              <div class="col-12">
-                <button type="submit" class="btn btn-primary">Edit</button>
+
+
+
+              <div class="col-12 text-center">
+                <button type="submit" class="btn btn-success btn-lg">Edit</button>
               </div>
             </form>
-  
-  
-  
+
+
+
           </div>
         </div>
-              
-             
-            
-  
+
+
+
+
       </div>
-      
-    
+
+
 
 
 

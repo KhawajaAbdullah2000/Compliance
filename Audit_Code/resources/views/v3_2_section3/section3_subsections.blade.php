@@ -20,7 +20,7 @@
         {{-- Section3.2 --}}
         <div class="row mb-2">
             <div class="col-12">
-                <a href="" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- 3.2: Cardholder Data Environment (CDE) overview</p></a>
+                <a href="/v3_2_s3_3_2/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- 3.2: Cardholder Data Environment (CDE) overview</p></a>
 
             </div>
         </div>
