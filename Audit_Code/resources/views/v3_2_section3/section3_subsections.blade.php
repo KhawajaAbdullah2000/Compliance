@@ -37,7 +37,7 @@
          {{-- Section3.4 --}}
          <div class="row mb-2">
             <div class="col-12">
-                <a href="" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- 3.4: Network segment details</p></a>
+                <a href="/v3_2_s3_3_4/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- 3.4: Network segment details</p></a>
 
             </div>
         </div>

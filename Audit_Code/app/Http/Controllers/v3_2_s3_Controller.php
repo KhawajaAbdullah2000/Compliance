@@ -564,6 +564,36 @@ return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
 
 }
 
+public function v3_2_s3_3_4($proj_id,$user_id){
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+    'project_details.project_permissions','projects.project_name','projects.project_id')
+   -> join('projects','project_details.project_code','projects.project_id')
+    ->join('project_types','projects.project_type','project_types.id')
+    ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+    ->first();
+    if($checkpermission){
+
+                if($checkpermission->type_id==2){
+                   $data1=DB::table('pci-dss v3_2_1 section3_4')->join('users','pci-dss v3_2_1 section3_4.last_edited_by',
+                   'users.id')->where('network_type',1)
+                   ->where('project_id',$proj_id)->get();
+
+                   return view('v3_2_section3.section3_4',[
+                    'data1'=>$data1,
+                    'project_id'=>$checkpermission->project_id,
+                    'project_name'=>$checkpermission->project_name,
+                    'project_permissions'=>$checkpermission->project_permissions
+                   ]);
+                }
+
+    }
+
+}
+return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+}
+
 
 
 }
