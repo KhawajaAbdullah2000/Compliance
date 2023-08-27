@@ -37,9 +37,8 @@
         $('#sidebarCollapse').on('click', function () {
             $('#sidebar').toggleClass('active');
         });
+        @yield('dependent_form')
     });
-
-
 
 </script>
 
