@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 27, 2023 at 08:31 AM
+-- Generation Time: Aug 28, 2023 at 09:14 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -267,29 +267,6 @@ CREATE TABLE `pci-dss v3.2.1 section1.3` (
 INSERT INTO `pci-dss v3.2.1 section1.3` (`id`, `assessment_id`, `pci_standard_version`) VALUES
 (1, NULL, 'PCI-DSS v3.2.1'),
 (2, NULL, 'PCI-DSS v3.2.1');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pci-dss v3.2.1 section3.4`
---
-
-CREATE TABLE `pci-dss v3.2.1 section3.4` (
-  `id` int(11) NOT NULL,
-  `assessment_id` int(10) UNSIGNED DEFAULT NULL,
-  `network_type` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `purpose_of_network` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
-  `last_edited_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `pci-dss v3.2.1 section3.4`
---
-
-INSERT INTO `pci-dss v3.2.1 section3.4` (`id`, `assessment_id`, `network_type`, `purpose_of_network`, `last_edited_by`, `last_edited_at`) VALUES
-(1, NULL, 'Network Type 1', 'Purpose 1', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Network Type 2', 'Purpose 2', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -1085,6 +1062,32 @@ INSERT INTO `pci-dss v3_2_1 section3_3` (`assessment_id`, `project_id`, `require
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pci-dss v3_2_1 section3_4`
+--
+
+CREATE TABLE `pci-dss v3_2_1 section3_4` (
+  `assessment_id` int(11) NOT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `network_type` int(11) NOT NULL,
+  `network_name` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `purpose_of_network` varchar(800) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `last_edited_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `pci-dss v3_2_1 section3_4`
+--
+
+INSERT INTO `pci-dss v3_2_1 section3_4` (`assessment_id`, `project_id`, `network_type`, `network_name`, `purpose_of_network`, `last_edited_by`, `last_edited_at`) VALUES
+(3, 1, 1, 'Network1', 'to store transmit or process CHD edited', 57, '2023-08-28 10:49:04'),
+(4, 1, 2, 'Network 2 edited', 'Describe all networks that do not store, process and/or transmit CHD, but are still in scope (e.g., connected to the CDE or provide management functions to the CDE) edited', 57, '2023-08-28 10:50:34'),
+(6, 1, 3, 'Network 3', 'Out of scope', 57, '2023-08-28 10:50:53'),
+(10, 1, 3, 'Netowrk 2 of type 3', 'Out of sciope also', 57, '2023-08-28 12:13:51');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pci_dss v3_2_1 qa`
 --
 
@@ -1411,14 +1414,6 @@ ALTER TABLE `pci-dss v3.2.1 section1.3`
   ADD KEY `assessment_id` (`assessment_id`);
 
 --
--- Indexes for table `pci-dss v3.2.1 section3.4`
---
-ALTER TABLE `pci-dss v3.2.1 section3.4`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `assessment_id` (`assessment_id`),
-  ADD KEY `last_edited_by` (`last_edited_by`);
-
---
 -- Indexes for table `pci-dss v3.2.1 section3.5`
 --
 ALTER TABLE `pci-dss v3.2.1 section3.5`
@@ -1714,6 +1709,14 @@ ALTER TABLE `pci-dss v3_2_1 section3_3`
   ADD KEY `project_id` (`project_id`);
 
 --
+-- Indexes for table `pci-dss v3_2_1 section3_4`
+--
+ALTER TABLE `pci-dss v3_2_1 section3_4`
+  ADD PRIMARY KEY (`assessment_id`),
+  ADD KEY `last_edited_by` (`last_edited_by`),
+  ADD KEY `project_id` (`project_id`);
+
+--
 -- Indexes for table `pci_dss v3_2_1 qa`
 --
 ALTER TABLE `pci_dss v3_2_1 qa`
@@ -1822,12 +1825,6 @@ ALTER TABLE `organizations`
 -- AUTO_INCREMENT for table `pci-dss v3.2.1 section1.3`
 --
 ALTER TABLE `pci-dss v3.2.1 section1.3`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `pci-dss v3.2.1 section3.4`
---
-ALTER TABLE `pci-dss v3.2.1 section3.4`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
@@ -2047,6 +2044,12 @@ ALTER TABLE `pci-dss v3_2_1 section3_3`
   MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
+-- AUTO_INCREMENT for table `pci-dss v3_2_1 section3_4`
+--
+ALTER TABLE `pci-dss v3_2_1 section3_4`
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT for table `pci_dss v3_2_1 qa`
 --
 ALTER TABLE `pci_dss v3_2_1 qa`
@@ -2121,13 +2124,6 @@ ALTER TABLE `model_has_roles`
 --
 ALTER TABLE `pci-dss v3.2.1 section1.3`
   ADD CONSTRAINT `section1.3fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Constraints for table `pci-dss v3.2.1 section3.4`
---
-ALTER TABLE `pci-dss v3.2.1 section3.4`
-  ADD CONSTRAINT `editsec3.4fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec3.4fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section3.5`
@@ -2373,6 +2369,13 @@ ALTER TABLE `pci-dss v3_2_1 section3_2`
 ALTER TABLE `pci-dss v3_2_1 section3_3`
   ADD CONSTRAINT `editsec3.3fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `sec3.4_fk_projid` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+--
+-- Constraints for table `pci-dss v3_2_1 section3_4`
+--
+ALTER TABLE `pci-dss v3_2_1 section3_4`
+  ADD CONSTRAINT `editsec3.4fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `projid_3.4_fk` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `pci_dss v3_2_1 qa`

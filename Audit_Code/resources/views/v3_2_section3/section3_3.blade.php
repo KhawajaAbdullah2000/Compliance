@@ -142,19 +142,6 @@ $permissions=json_decode($project_permissions)
 
 
 
-
-
-
-
-
-                  {{-- <div class="form-group mt-2">
-                    <label for="">Other details(if any):</label>
-                        <textarea name="other_details" cols="70" rows="10" class="form-control">{{old('other_details')}}</textarea>
-                    @if($errors->has('other_details'))
-                    <div class="text-danger">{{ $errors->first('other_details') }}</div>
-                @endif
-                  </div> --}}
-
                   <div class="text-center">
                     <button type="submit" class="btn btn-primary btn-md mt-2">Submit Details</button>
                   </div>

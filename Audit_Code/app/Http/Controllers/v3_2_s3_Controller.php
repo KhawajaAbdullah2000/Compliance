@@ -564,6 +564,228 @@ return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
 
 }
 
+public function v3_2_s3_3_4($proj_id,$user_id){
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+    'project_details.project_permissions','projects.project_name','projects.project_id')
+   -> join('projects','project_details.project_code','projects.project_id')
+    ->join('project_types','projects.project_type','project_types.id')
+    ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+    ->first();
+    if($checkpermission){
 
+                if($checkpermission->type_id==2){
+                   $dataone=DB::table('pci-dss v3_2_1 section3_4')->join('users','pci-dss v3_2_1 section3_4.last_edited_by',
+                   'users.id')->where('network_type',1)
+                   ->where('project_id',$proj_id)->get();
+
+                   $datatwo=DB::table('pci-dss v3_2_1 section3_4')->join('users','pci-dss v3_2_1 section3_4.last_edited_by',
+                   'users.id')->where('network_type',2)
+                   ->where('project_id',$proj_id)->get();
+
+                   $datathree=DB::table('pci-dss v3_2_1 section3_4')->join('users','pci-dss v3_2_1 section3_4.last_edited_by',
+                   'users.id')->where('network_type',3)
+                   ->where('project_id',$proj_id)->get();
+
+
+                   return view('v3_2_section3.section3_4',[
+                    'dataone'=>$dataone,
+                    'datatwo'=>$datatwo,
+                    'datathree'=>$datathree,
+                    'project_id'=>$checkpermission->project_id,
+                    'project_name'=>$checkpermission->project_name,
+                    'project_permissions'=>$checkpermission->project_permissions
+                   ]);
+                }
+
+    }
+
+}
+return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+}
+
+public function v3_2_s3_3_4_insert(Request $req,$proj_id,$user_id){
+    $req->validate([
+        'network_name'=>'required|max:200',
+        'purpose_of_network'=>'required|max:800'
+
+    ]);
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+    'project_details.project_permissions','projects.project_name','projects.project_id')
+   ->join('projects','project_details.project_code','projects.project_id')
+    ->join('project_types','projects.project_type','project_types.id')
+    ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+    ->first();
+    if($checkpermission){
+        $permissions=json_decode($checkpermission->project_permissions);
+        if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+                   DB::table('pci-dss v3_2_1 section3_4')->insert([
+                    'project_id'=>$proj_id,
+                    'network_type'=>$req->network_type,
+                    'network_name'=>$req->network_name,
+                    'purpose_of_network'=>$req->purpose_of_network,
+                    'last_edited_by'=>$user_id,
+                    'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s'),
+
+                   ]);
+
+                   return redirect()->route('section3_4',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                   ->with('success','Record Added successfully');
+
+
+
+                }
+            }
+
+    }
+
+}
+return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+}
+
+public function v3_2_s3_3_4_edit($assessment_id,$proj_id,$user_id){
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+    'project_details.project_permissions','projects.project_name','projects.project_id')
+   ->join('projects','project_details.project_code','projects.project_id')
+    ->join('project_types','projects.project_type','project_types.id')
+    ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+    ->first();
+    if($checkpermission){
+        $permissions=json_decode($checkpermission->project_permissions);
+        if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+                    $data=DB::table('pci-dss v3_2_1 section3_4')->where('assessment_id',$assessment_id)
+                    ->where('project_id',$proj_id)->first();
+                    if($data){
+                        return view('v3_2_section3.section3_4_edit',[
+                            'data'=>$data,
+                            'project_id'=>$checkpermission->project_id,
+                            'project_name'=>$checkpermission->project_name,
+                        ]);
+                    }
+
+
+                }
+            }
+
+    }
+
+}
+return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+}
+
+public function v3_2_s3_3_4_edit_form(Request $req,$assessment_id,$proj_id,$user_id){
+
+    $req->validate([
+        'network_name'=>'required|max:200',
+        'purpose_of_network'=>'required|max:800'
+
+    ]);
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+    'project_details.project_permissions','projects.project_name','projects.project_id')
+   ->join('projects','project_details.project_code','projects.project_id')
+    ->join('project_types','projects.project_type','project_types.id')
+    ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+    ->first();
+    if($checkpermission){
+        $permissions=json_decode($checkpermission->project_permissions);
+        if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+                   DB::table('pci-dss v3_2_1 section3_4')->where('assessment_id',$assessment_id)->where('project_id',$proj_id)
+                   ->update([
+                    'network_name'=>$req->network_name,
+                    'purpose_of_network'=>$req->purpose_of_network,
+                    'last_edited_by'=>$user_id,
+                    'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s'),
+
+                   ]);
+
+                   return redirect()->route('section3_4',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                   ->with('success','Record Edited successfully');
+
+
+
+                }
+            }
+
+    }
+
+}
+return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+}
+
+public function v3_2_s3_3_4_new($network_type,$proj_id,$user_id){
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+    'project_details.project_permissions','projects.project_name','projects.project_id')
+   ->join('projects','project_details.project_code','projects.project_id')
+    ->join('project_types','projects.project_type','project_types.id')
+    ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+    ->first();
+    if($checkpermission){
+        $permissions=json_decode($checkpermission->project_permissions);
+        if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+
+            return view('v3_2_section3.add_new_network',[
+                'project_id'=>$checkpermission->project_id,
+                'project_name'=>$checkpermission->project_name,
+                'network_type'=>$network_type
+            ]);
+
+
+
+
+                }
+            }
+
+    }
+
+}
+return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+}
+
+public function v3_2_s3_3_4_delete($assessment_id,$proj_id,$user_id){
+
+    if($user_id==auth()->user()->id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+    'project_details.project_permissions','projects.project_name','projects.project_id')
+   ->join('projects','project_details.project_code','projects.project_id')
+    ->join('project_types','projects.project_type','project_types.id')
+    ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+    ->first();
+    if($checkpermission){
+        $permissions=json_decode($checkpermission->project_permissions);
+        if(in_array('Data Inputter',$permissions)){
+                if($checkpermission->type_id==2){
+                   DB::table('pci-dss v3_2_1 section3_4')->where('assessment_id',$assessment_id)->where('project_id',$proj_id)
+                   ->delete();
+
+                   return redirect()->route('section3_4',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                   ->with('success','Record Deleted successfully');
+
+
+
+                }
+            }
+
+    }
+
+}
+return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+}
 
 }
