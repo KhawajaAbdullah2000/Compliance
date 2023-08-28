@@ -84,8 +84,10 @@
                 <h2>Networks that store, process and/or transmit CHD</h2>
              </div>
 
+             @if(in_array('Data Inputter',$permissions))
             <a class="btn btn-success btn-md float-end mb-5" href="/v3_2_s3_3_4_new/1/{{$project_id}}/{{auth()->user()->id}}"
             role="button">Add new Network <i class="fas fa-plus"></i></a>
+            @endif
 
             @foreach ($dataone as $data1)
 
@@ -178,8 +180,10 @@
              </div>
 
 
+    @if(in_array('Data Inputter',$permissions))
             <a class="btn btn-success btn-md float-end mb-5" href="/v3_2_s3_3_4_new/2/{{$project_id}}/{{auth()->user()->id}}"
             role="button">Add new Network <i class="fas fa-plus"></i></a>
+            @endif
 
             @foreach ($datatwo as $data2)
 
@@ -270,8 +274,10 @@
              </div>
 
 
+             @if(in_array('Data Inputter',$permissions))
             <a class="btn btn-success btn-md float-end mb-5" href="/v3_2_s3_3_4_new/3/{{$project_id}}/{{auth()->user()->id}}"
             role="button">Add new Network<i class="fas fa-plus"></i></a>
+            @endif
 
             @foreach ($datathree as $data3)
 
@@ -321,16 +327,7 @@
 </script>
 @endif
 
-@if(Session::has('error'))
-<script>
-    swal({
-  title: "{{Session::get('error')}}",
-  icon: "error",
-  closeOnClickOutside: true,
-  timer: 3000,
-    });
-</script>
-@endif
+
 
 <script>
 $(function() {
@@ -343,16 +340,6 @@ $(function() {
         window.localStorage.removeItem("activeTab_3_4");
     }
 });
-
-// let table = new DataTable('#myTable',
-//     {
-//     language: {
-//        searchPlaceholder: "search"
-//     },
-//       "ordering": false
-
-//      }
-//      );
 
 </script>
 

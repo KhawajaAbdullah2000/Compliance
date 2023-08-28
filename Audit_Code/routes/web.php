@@ -188,6 +188,14 @@ route::get('v3_2_s3_3_4_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Contr
 route::put('v3_2_s3_3_4_edit_form/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_4_edit_form']);
 route::get('v3_2_s3_3_4_new/{network_type}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_4_new']);
 route::get('v3_2_s3_3_4_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_4_delete']);
+
+//3.5
+route::get('v3_2_s3_3_5/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_5'])->name('section3_5');
+route::post('v3_2_s3_3_5_insert/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_5_insert']);
+route::get('v3_2_s3_3_5_new/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_5_new']);
+route::get('v3_2_s3_3_5_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_5_edit']);
+route::put('v3_2_s3_3_5_editform/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_5_editform']);
+route::get('v3_2_s3_3_5_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_5_delete']);
 }
 
 

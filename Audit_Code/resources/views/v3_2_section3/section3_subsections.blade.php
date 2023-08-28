@@ -45,7 +45,7 @@
           {{-- Section3.5 --}}
           <div class="row mb-2">
             <div class="col-12">
-                <a href="" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- 3.5: Connected entities for payment processing
+                <a href="/v3_2_s3_3_5/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- 3.5: Connected entities for payment processing
                     and transmission</p></a>
 
             </div>
