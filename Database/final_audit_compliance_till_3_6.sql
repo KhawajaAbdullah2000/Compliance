@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 28, 2023 at 03:24 PM
+-- Generation Time: Aug 31, 2023 at 01:15 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -96,6 +96,9 @@ INSERT INTO `model_has_permissions` (`permission_id`, `model_type`, `model_id`) 
 (1, 'App\\Models\\User', 54),
 (1, 'App\\Models\\User', 57),
 (1, 'App\\Models\\User', 62),
+(1, 'App\\Models\\User', 65),
+(1, 'App\\Models\\User', 67),
+(1, 'App\\Models\\User', 69),
 (2, 'App\\Models\\User', 8),
 (2, 'App\\Models\\User', 22),
 (2, 'App\\Models\\User', 24),
@@ -104,12 +107,18 @@ INSERT INTO `model_has_permissions` (`permission_id`, `model_type`, `model_id`) 
 (2, 'App\\Models\\User', 36),
 (2, 'App\\Models\\User', 55),
 (2, 'App\\Models\\User', 59),
+(2, 'App\\Models\\User', 65),
+(2, 'App\\Models\\User', 69),
 (3, 'App\\Models\\User', 8),
 (3, 'App\\Models\\User', 10),
 (3, 'App\\Models\\User', 13),
 (3, 'App\\Models\\User', 56),
 (4, 'App\\Models\\User', 56),
 (4, 'App\\Models\\User', 60),
+(4, 'App\\Models\\User', 65),
+(4, 'App\\Models\\User', 66),
+(4, 'App\\Models\\User', 67),
+(4, 'App\\Models\\User', 69),
 (5, 'App\\Models\\User', 40),
 (6, 'App\\Models\\User', 13),
 (6, 'App\\Models\\User', 22),
@@ -121,7 +130,9 @@ INSERT INTO `model_has_permissions` (`permission_id`, `model_type`, `model_id`) 
 (6, 'App\\Models\\User', 44),
 (6, 'App\\Models\\User', 46),
 (6, 'App\\Models\\User', 47),
-(6, 'App\\Models\\User', 53);
+(6, 'App\\Models\\User', 53),
+(6, 'App\\Models\\User', 65),
+(6, 'App\\Models\\User', 66);
 
 -- --------------------------------------------------------
 
@@ -161,6 +172,8 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (2, 'App\\Models\\User', 52),
 (2, 'App\\Models\\User', 58),
 (2, 'App\\Models\\User', 61),
+(2, 'App\\Models\\User', 64),
+(2, 'App\\Models\\User', 68),
 (3, 'App\\Models\\User', 8),
 (3, 'App\\Models\\User', 10),
 (3, 'App\\Models\\User', 11),
@@ -198,6 +211,10 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (3, 'App\\Models\\User', 59),
 (3, 'App\\Models\\User', 60),
 (3, 'App\\Models\\User', 62),
+(3, 'App\\Models\\User', 65),
+(3, 'App\\Models\\User', 66),
+(3, 'App\\Models\\User', 67),
+(3, 'App\\Models\\User', 69),
 (4, 'App\\Models\\User', 5),
 (4, 'App\\Models\\User', 6),
 (4, 'App\\Models\\User', 7),
@@ -234,7 +251,9 @@ CREATE TABLE `organizations` (
 INSERT INTO `organizations` (`org_id`, `name`, `type`, `sub_org`, `country`, `state`, `city`, `zip_code`, `address`, `record_created_by`, `record_creation_date`, `record_creation_time`, `status`, `created_at`, `updated_at`) VALUES
 (9, 'Host1', 'host', 'finance', 'Pakistan', 'Sindh', 'karachi', 33, 'Azizabad', 'shahmeer@gmail.com', '2023-08-11', '12:31:13', 'active', '2023-08-11 07:31:13', '2023-08-11 07:31:13'),
 (10, 'Guest1', 'guest', 'HR', 'Pakistan', 'Punjab', 'karachi', 33, 'National Highway', 'shahmeer@gmail.com', '2023-08-11', '12:36:03', 'active', '2023-08-11 07:36:03', '2023-08-11 07:36:03'),
-(11, 'Guest2', 'guest', 'Trade', 'Pakistan', 'Sindh', 'karachi', 123, 'Iqbal town', 'shahmeer@gmail.com', '2023-08-14', '11:36:48', 'active', '2023-08-14 06:36:48', '2023-08-14 06:36:48');
+(11, 'Guest2', 'guest', 'Trade', 'Pakistan', 'Sindh', 'karachi', 123, 'Iqbal town', 'shahmeer@gmail.com', '2023-08-14', '11:36:48', 'active', '2023-08-14 06:36:48', '2023-08-14 06:36:48'),
+(12, 'Guest3', 'guest', 'HR', 'Pakistan', 'Punjab', 'karachi', 2, 'National Highway', 'shahmeer@gmail.com', '2023-08-29', '16:24:07', 'active', '2023-08-29 11:24:07', '2023-08-29 11:24:07'),
+(13, 'Guest4', 'guest', 'HR', 'Pakistan', 'Punjab', 'karachi', 2, 'Azizabad', 'shahmeer@gmail.com', '2023-08-31', '12:12:05', 'active', '2023-08-31 07:12:05', '2023-08-31 07:12:05');
 
 -- --------------------------------------------------------
 
@@ -267,55 +286,6 @@ CREATE TABLE `pci-dss v3.2.1 section1.3` (
 INSERT INTO `pci-dss v3.2.1 section1.3` (`id`, `assessment_id`, `pci_standard_version`) VALUES
 (1, NULL, 'PCI-DSS v3.2.1'),
 (2, NULL, 'PCI-DSS v3.2.1');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pci-dss v3.2.1 section3.6 international_entity`
---
-
-CREATE TABLE `pci-dss v3.2.1 section3.6 international_entity` (
-  `id` int(11) NOT NULL,
-  `assessment_id` int(10) UNSIGNED DEFAULT NULL,
-  `entity_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `country` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `requirement1` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `requirement2` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
-  `last_edited_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `pci-dss v3.2.1 section3.6 international_entity`
---
-
-INSERT INTO `pci-dss v3.2.1 section3.6 international_entity` (`id`, `assessment_id`, `entity_name`, `country`, `requirement1`, `requirement2`, `last_edited_by`, `last_edited_at`) VALUES
-(1, NULL, 'Entity Name 1', 'Country 1', 'Req 1', 'Req 2', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Entity Name 2', 'Country 2', 'Req 1', 'Req 2', NULL, '2023-07-31 12:34:00');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pci-dss v3.2.1 section3.6 wholly_owned_entity`
---
-
-CREATE TABLE `pci-dss v3.2.1 section3.6 wholly_owned_entity` (
-  `id` int(11) NOT NULL,
-  `assessment_id` int(10) UNSIGNED DEFAULT NULL,
-  `wholly_owned_entity` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `requirement1` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `requirement2` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
-  `last_edited_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `pci-dss v3.2.1 section3.6 wholly_owned_entity`
---
-
-INSERT INTO `pci-dss v3.2.1 section3.6 wholly_owned_entity` (`id`, `assessment_id`, `wholly_owned_entity`, `requirement1`, `requirement2`, `last_edited_by`, `last_edited_at`) VALUES
-(1, NULL, 'Entity 1', 'Req 1', 'Req 2', 1, '2023-07-31 12:34:56'),
-(2, NULL, 'Entity 2', 'Req 1', 'Req 2', NULL, '2023-07-31 12:34:56');
 
 -- --------------------------------------------------------
 
@@ -773,7 +743,8 @@ CREATE TABLE `pci-dss v3_2_1 associate_qsa` (
 INSERT INTO `pci-dss v3_2_1 associate_qsa` (`assessment_id`, `project_id`, `qsa_name`, `last_edited_by`, `last_edited_at`) VALUES
 (1, 1, 'Associate Qsa 1', 57, '2023-08-20 15:58:55'),
 (2, 1, 'Associate Qsa2', 57, '2023-08-17 17:53:20'),
-(5, 4, 'AssociateQA4', 57, '2023-08-22 11:18:44');
+(5, 4, 'AssociateQA4', 57, '2023-08-22 11:18:44'),
+(6, 7, 'Associate Qsa44', 66, '2023-08-29 16:29:26');
 
 -- --------------------------------------------------------
 
@@ -800,7 +771,8 @@ CREATE TABLE `pci-dss v3_2_1 client info` (
 
 INSERT INTO `pci-dss v3_2_1 client info` (`assessment_id`, `project_id`, `company_name`, `company_address`, `company_url`, `company_contact_name`, `company_contact_number`, `company_email`, `last_edited_by`, `last_edited_at`) VALUES
 (1006, 1, 'Guest Organization 1', 'Fb area block2', 'www.g1org.com', 'Shahmeer', '03332227364', 'g1org@gmail.com', 57, '2023-08-20 16:06:09'),
-(1007, 4, 'Keelctric', 'Fb area block2', 'www.kelectric.com', 'khawaja', '75654555545', 'kelectric@gmail.com', 57, '2023-08-17 17:38:05');
+(1007, 4, 'Keelctric', 'Fb area block2', 'www.kelectric.com', 'khawaja', '75654555545', 'kelectric@gmail.com', 57, '2023-08-17 17:38:05'),
+(1008, 7, 'Guest Organization 3', 'Fb area block2', 'www.g3org.com', 'khawaja', '03332227364', 'g3org@gmail.com', 66, '2023-08-29 16:29:48');
 
 -- --------------------------------------------------------
 
@@ -826,7 +798,8 @@ CREATE TABLE `pci-dss v3_2_1 section1_2` (
 --
 
 INSERT INTO `pci-dss v3_2_1 section1_2` (`id`, `project_id`, `date_of_report`, `start_date`, `end_date`, `time_onsite`, `time_remote`, `time_remediation`, `last_edited_by`, `last_edited_at`) VALUES
-(3, 1, '2023-08-01', '2023-08-05', '2023-09-01', 1000, 300, 450, 57, '2023-08-20 11:22:45');
+(3, 1, '2023-08-01', '2023-08-05', '2023-09-01', 1000, 300, 450, 57, '2023-08-20 11:22:45'),
+(4, 8, '2023-08-04', '2023-08-11', '2023-09-02', 66, 30, 45, 66, '2023-08-29 16:38:07');
 
 -- --------------------------------------------------------
 
@@ -1088,6 +1061,53 @@ INSERT INTO `pci-dss v3_2_1 section3_5` (`assessment_id`, `project_id`, `require
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pci-dss v3_2_1 section3_6 international`
+--
+
+CREATE TABLE `pci-dss v3_2_1 section3_6 international` (
+  `assessment_id` int(11) NOT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `entity_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `entity_country` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `requirement1` varchar(800) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `requirement2` varchar(800) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `last_edited_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `pci-dss v3_2_1 section3_6 international`
+--
+
+INSERT INTO `pci-dss v3_2_1 section3_6 international` (`assessment_id`, `project_id`, `entity_name`, `entity_country`, `requirement1`, `requirement2`, `last_edited_by`, `last_edited_at`) VALUES
+(6, 1, 'International entity 2', 'South africa', 'ds  ggg', 'f gg  g', 57, '2023-08-31 15:54:40');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pci-dss v3_2_1 section3_6 wholly_owned`
+--
+
+CREATE TABLE `pci-dss v3_2_1 section3_6 wholly_owned` (
+  `assessment_id` int(11) NOT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `wholly_owned_entity` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `requirement1` varchar(800) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `requirement2` varchar(800) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `last_edited_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `pci-dss v3_2_1 section3_6 wholly_owned`
+--
+
+INSERT INTO `pci-dss v3_2_1 section3_6 wholly_owned` (`assessment_id`, `project_id`, `wholly_owned_entity`, `requirement1`, `requirement2`, `last_edited_by`, `last_edited_at`) VALUES
+(5, 1, 'wholly entity1', 'dsdf edited', 'f ggg g', 57, '2023-08-31 15:44:30');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pci_dss v3_2_1 qa`
 --
 
@@ -1206,7 +1226,10 @@ CREATE TABLE `projects` (
 INSERT INTO `projects` (`project_id`, `project_name`, `org_id`, `created_by`, `project_creation_date`, `project_creation_time`, `project_type`, `status`, `status_last_changed_by`, `created_at`, `updated_at`) VALUES
 (1, 'Audit 1 made by h1enduser1', 9, 55, '2023-08-12', '14:47:06', 2, 'Not submitted for approval', 55, '2023-08-12 09:47:06', '2023-08-12 11:00:53'),
 (4, 'Audit 2 made by h1enduser1', 9, 55, '2023-08-12', '16:20:06', 2, 'Not submitted for approval', 55, '2023-08-12 11:20:06', '2023-08-14 05:58:32'),
-(6, 'Audit by g2enduser1', 11, 59, '2023-08-14', '11:40:10', 2, 'Not submitted for approval', 59, '2023-08-14 06:40:10', '2023-08-14 06:40:10');
+(6, 'Audit by g2enduser1', 11, 59, '2023-08-14', '11:40:10', 2, 'Not submitted for approval', 59, '2023-08-14 06:40:10', '2023-08-14 06:40:10'),
+(7, 'Project for guest3', 12, 65, '2023-08-29', '16:28:24', 2, 'Not submitted for approval', 65, '2023-08-29 11:28:24', '2023-08-29 11:28:24'),
+(8, 'Test project', 9, 55, '2023-08-29', '16:36:59', 2, 'Not submitted for approval', 55, '2023-08-29 11:36:59', '2023-08-29 11:36:59'),
+(9, 'projectbyg4', 13, 69, '2023-08-31', '12:20:10', 2, 'Not submitted for approval', 69, '2023-08-31 07:20:10', '2023-08-31 07:20:10');
 
 -- --------------------------------------------------------
 
@@ -1230,9 +1253,13 @@ INSERT INTO `project_details` (`project_code`, `assigned_enduser`, `project_perm
 (1, 57, '[\"Data Inputter\",\"Data Approver\"]', '2023-08-14 06:22:32', '2023-08-14 07:23:14'),
 (1, 53, '[\"Project Approver\"]', '2023-08-14 06:33:40', '2023-08-14 06:33:40'),
 (1, 54, '[\"Project Creator\",\"Project Approver\",\"Data Inputter\",\"Data Approver\"]', '2023-08-14 06:33:49', '2023-08-14 10:57:10'),
-(1, 56, '[\"Project Owner\"]', '2023-08-14 10:57:00', '2023-08-14 10:57:00'),
+(1, 56, '[\"Project Owner\",\"Data Inputter\"]', '2023-08-14 10:57:00', '2023-08-31 06:59:42'),
 (1, 55, '[\"Project Approver\"]', '2023-08-14 11:02:17', '2023-08-14 11:02:17'),
-(4, 57, '[\"Project Approver\",\"Data Inputter\",\"Data Viewer\"]', '2023-08-17 12:36:24', '2023-08-17 12:37:08');
+(4, 57, '[\"Project Approver\",\"Data Inputter\",\"Data Viewer\"]', '2023-08-17 12:36:24', '2023-08-17 12:37:08'),
+(7, 66, '[\"Data Inputter\"]', '2023-08-29 11:28:42', '2023-08-29 11:28:42'),
+(8, 66, '[\"Project Approver\",\"Data Inputter\",\"Data Approver\"]', '2023-08-29 11:37:18', '2023-08-29 11:37:18'),
+(9, 55, '[\"Data Inputter\"]', '2023-08-31 07:31:26', '2023-08-31 07:31:26'),
+(9, 57, '[\"Data Inputter\",\"Data Viewer\"]', '2023-08-31 07:31:47', '2023-08-31 07:31:47');
 
 -- --------------------------------------------------------
 
@@ -1310,9 +1337,13 @@ CREATE TABLE `superusers` (
 INSERT INTO `superusers` (`id`, `user_id`, `org_id`) VALUES
 (5, 51, 9),
 (7, 51, 10),
+(14, 51, 12),
+(16, 51, 13),
 (9, 52, 10),
 (10, 58, 11),
-(11, 61, 11);
+(11, 61, 11),
+(13, 64, 12),
+(15, 68, 13);
 
 -- --------------------------------------------------------
 
@@ -1360,7 +1391,13 @@ INSERT INTO `users` (`id`, `org_id`, `first_name`, `last_name`, `national_id`, `
 (59, 11, 'G2', 'enduser1', '33323', 'g2enduser1@gmail.com', '033344476787', 'Fb area block2', 'karachi', 'Punjab', 'Pakistan', 23, '$2y$10$BVbTF7OYKa1NF75cpmyqcuTDAR57KXMfz3JIBFNF1QsBz9jRuW4j6', 'N', 5, 'active', NULL, NULL, '2023-08-14 06:38:57', '2023-08-14 06:38:57'),
 (60, 11, 'G2', 'enduser2', '3443', 'g2enduser2@gmail.com', '34324', 'Azizabad', 'London', 'Sindh', 'Pakistan', 123, '$2y$10$eQDQX1arLN2RxLuHq3QTMeRs.K64ytjaAqDp3yPNjaEhOqf5vj6Jy', 'N', 5, 'active', NULL, NULL, '2023-08-14 06:39:41', '2023-08-14 06:39:41'),
 (61, 11, 'G2', 'Superuser2', '444', 'g2superuser2@gmail.com', '44344', 'Fb area block2', 'Lahore', 'Punjab', 'Pakistan', 44, '$2y$10$RrMyfjxt5gsQMHimC9V3qOYn5GyO7IJ6bRiTfBIy29zbnrD8kQoCK', 'N', 1, 'active', NULL, NULL, '2023-08-14 10:51:04', '2023-08-14 10:51:04'),
-(62, 11, 'guest2', 'enduser3', '444', 'g2enduser3@gmail.com', '32333', 'Fb area block2', 'lahore', 'Punjab', 'Pakistan', 33, '$2y$10$3TQvelKrKPV60ibmU1vW6OVbjk4rwwCTjkSTmJsbUbDdnNz2uGbsO', 'N', 5, 'active', NULL, NULL, '2023-08-14 10:59:40', '2023-08-14 10:59:40');
+(62, 11, 'guest2', 'enduser3', '444', 'g2enduser3@gmail.com', '32333', 'Fb area block2', 'lahore', 'Punjab', 'Pakistan', 33, '$2y$10$3TQvelKrKPV60ibmU1vW6OVbjk4rwwCTjkSTmJsbUbDdnNz2uGbsO', 'N', 5, 'active', NULL, NULL, '2023-08-14 10:59:40', '2023-08-14 10:59:40'),
+(64, 12, 'Muhammad', 'Shahzaib', '4210198765466', 'shahzaib@gmail.com', '033344476787', 'Fb area block2', 'London', 'Punjab', 'Pakistan', 3, '$2y$10$opROkJZc6xaH35EG0v1ulOprC1TMqgar6BDRWechksp4WvaVT/aeq', 'N', 1, 'active', NULL, NULL, '2023-08-29 11:24:42', '2023-08-29 11:24:42'),
+(65, 12, 'Sohaib', 'Ashraf', '4210198765455', 'sohaib@gmail.com', '03334447653', 'Fb area block2', 'lahore', 'Punjab', 'Pakistan', 33, '$2y$10$M3h/k.VTweySzwgndfHiYeHqRdeZfv5qSGXIOucLfe50lzdx9iQfK', 'N', 5, 'active', NULL, NULL, '2023-08-29 11:26:21', '2023-08-29 11:26:21'),
+(66, 12, 'Muhammad', 'Abdullah', '4210198765422', 'abdullah@gmail.com', '03334447653', 'Fb area block2', 'karachi', 'Sindh', 'Pakistan', 44, '$2y$10$hqTxqwwYKojR/CC1gzykeOdetIaEvFWmi1awMirIXhpbjflytUPvG', 'N', 5, 'active', NULL, NULL, '2023-08-29 11:27:24', '2023-08-29 11:27:24'),
+(67, 12, 'Guest3', 'enduser4', '3333323', 'h1enduser4@gmail.com', '033344476787', 'Fb area block2', 'karachi', 'Pujab', 'Pakist', 123, '$2y$10$Fe43kYV6Of3pk6S1KfVz9eKGaaBkkVxhqB/2taOD0tZunkBw7ivv6', 'N', 5, 'active', NULL, NULL, '2023-08-29 11:32:00', '2023-08-29 11:32:00'),
+(68, 13, 'g4', 'superuser1', '4434555b', 'g4superuser1@gmail.com', '03334447653', 'Fb area block2', 'isamabad', 'Sind', 'USA', 12, '$2y$10$dHxKEIbb4OzTgp7yd3ARYO2qFgPhloxFQQ1PXHt5Eb0qzqwx8RJ2W', 'N', 1, 'active', NULL, NULL, '2023-08-31 07:12:49', '2023-08-31 07:12:49'),
+(69, 13, 'g4enduser1', 'madeby h1enduser1', '4210198765422', 'g4enduser1@gmail.com', '3324', 'Fb area block2', 'karachi', 'Punjab', 'Indonesia', 55, '$2y$10$XIidxW4.y00..7oC2giC0OvbaR0Bqs7cvQqjTSGJiay3iFqyrCz/y', 'N', 5, 'active', NULL, NULL, '2023-08-31 07:14:52', '2023-08-31 07:14:52');
 
 --
 -- Indexes for dumped tables
@@ -1412,22 +1449,6 @@ ALTER TABLE `password_reset_tokens`
 ALTER TABLE `pci-dss v3.2.1 section1.3`
   ADD PRIMARY KEY (`id`),
   ADD KEY `assessment_id` (`assessment_id`);
-
---
--- Indexes for table `pci-dss v3.2.1 section3.6 international_entity`
---
-ALTER TABLE `pci-dss v3.2.1 section3.6 international_entity`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `assessment_id` (`assessment_id`),
-  ADD KEY `last_edited_by` (`last_edited_by`);
-
---
--- Indexes for table `pci-dss v3.2.1 section3.6 wholly_owned_entity`
---
-ALTER TABLE `pci-dss v3.2.1 section3.6 wholly_owned_entity`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `assessment_id` (`assessment_id`),
-  ADD KEY `last_edited_by` (`last_edited_by`);
 
 --
 -- Indexes for table `pci-dss v3.2.1 section3.7`
@@ -1717,6 +1738,22 @@ ALTER TABLE `pci-dss v3_2_1 section3_5`
   ADD KEY `project_id` (`project_id`);
 
 --
+-- Indexes for table `pci-dss v3_2_1 section3_6 international`
+--
+ALTER TABLE `pci-dss v3_2_1 section3_6 international`
+  ADD PRIMARY KEY (`assessment_id`),
+  ADD KEY `last_edited_by` (`last_edited_by`),
+  ADD KEY `project_id` (`project_id`);
+
+--
+-- Indexes for table `pci-dss v3_2_1 section3_6 wholly_owned`
+--
+ALTER TABLE `pci-dss v3_2_1 section3_6 wholly_owned`
+  ADD PRIMARY KEY (`assessment_id`),
+  ADD KEY `last_edited_by` (`last_edited_by`),
+  ADD KEY `project_id` (`project_id`);
+
+--
 -- Indexes for table `pci_dss v3_2_1 qa`
 --
 ALTER TABLE `pci_dss v3_2_1 qa`
@@ -1819,24 +1856,12 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `organizations`
 --
 ALTER TABLE `organizations`
-  MODIFY `org_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `org_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `pci-dss v3.2.1 section1.3`
 --
 ALTER TABLE `pci-dss v3.2.1 section1.3`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `pci-dss v3.2.1 section3.6 international_entity`
---
-ALTER TABLE `pci-dss v3.2.1 section3.6 international_entity`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `pci-dss v3.2.1 section3.6 wholly_owned_entity`
---
-ALTER TABLE `pci-dss v3.2.1 section3.6 wholly_owned_entity`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
@@ -1975,19 +2000,19 @@ ALTER TABLE `pci-dss v3_2_1 assessors`
 -- AUTO_INCREMENT for table `pci-dss v3_2_1 associate_qsa`
 --
 ALTER TABLE `pci-dss v3_2_1 associate_qsa`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `pci-dss v3_2_1 client info`
 --
 ALTER TABLE `pci-dss v3_2_1 client info`
-  MODIFY `assessment_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1008;
+  MODIFY `assessment_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1009;
 
 --
 -- AUTO_INCREMENT for table `pci-dss v3_2_1 section1_2`
 --
 ALTER TABLE `pci-dss v3_2_1 section1_2`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `pci-dss v3_2_1 section1_2_dates_spent_onsite`
@@ -2050,6 +2075,18 @@ ALTER TABLE `pci-dss v3_2_1 section3_5`
   MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT for table `pci-dss v3_2_1 section3_6 international`
+--
+ALTER TABLE `pci-dss v3_2_1 section3_6 international`
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `pci-dss v3_2_1 section3_6 wholly_owned`
+--
+ALTER TABLE `pci-dss v3_2_1 section3_6 wholly_owned`
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `pci_dss v3_2_1 qa`
 --
 ALTER TABLE `pci_dss v3_2_1 qa`
@@ -2077,7 +2114,7 @@ ALTER TABLE `privileges`
 -- AUTO_INCREMENT for table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `project_types`
@@ -2095,13 +2132,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `superusers`
 --
 ALTER TABLE `superusers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- Constraints for dumped tables
@@ -2124,20 +2161,6 @@ ALTER TABLE `model_has_roles`
 --
 ALTER TABLE `pci-dss v3.2.1 section1.3`
   ADD CONSTRAINT `section1.3fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Constraints for table `pci-dss v3.2.1 section3.6 international_entity`
---
-ALTER TABLE `pci-dss v3.2.1 section3.6 international_entity`
-  ADD CONSTRAINT `editsec3.6part2fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec3.6part2fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Constraints for table `pci-dss v3.2.1 section3.6 wholly_owned_entity`
---
-ALTER TABLE `pci-dss v3.2.1 section3.6 wholly_owned_entity`
-  ADD CONSTRAINT `editsec3.6part1fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `sec3.6part1fk` FOREIGN KEY (`assessment_id`) REFERENCES `pci-dss v3_2_1 client info` (`assessment_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pci-dss v3.2.1 section3.7`
@@ -2376,6 +2399,20 @@ ALTER TABLE `pci-dss v3_2_1 section3_4`
 ALTER TABLE `pci-dss v3_2_1 section3_5`
   ADD CONSTRAINT `editsec3.5fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `sec3.5_projidFk` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+--
+-- Constraints for table `pci-dss v3_2_1 section3_6 international`
+--
+ALTER TABLE `pci-dss v3_2_1 section3_6 international`
+  ADD CONSTRAINT `editsec3.6part2fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `projid_fk_3.6` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+--
+-- Constraints for table `pci-dss v3_2_1 section3_6 wholly_owned`
+--
+ALTER TABLE `pci-dss v3_2_1 section3_6 wholly_owned`
+  ADD CONSTRAINT `editsec3.6part1fk` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `projid_3.6_wholly` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `pci_dss v3_2_1 qa`
