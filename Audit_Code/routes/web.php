@@ -38,7 +38,7 @@ Route::middleware(['auth','is_root_user','role:root admin'])->group(function(){
 Route::get('/root_home',[UserController::class,'root_home'])->name('root_home');
 Route::get('/organizations',[OrganizationController::class,'organizations'])->name('organizations');
 Route::get('/add_new_org',[OrganizationController::class,'add_new_org'])->name('add_new_org');
-Route::post('/add_new_org',[OrganizationController::class,'register_new_org']);
+Route::post('add_new_org',[OrganizationController::class,'register_new_org']);
 Route::get('edit_org/{name}/{sub_org}',[OrganizationController::class,'edit_org']);
 Route::put('edit_org/{name}/{sub_org}',[OrganizationController::class,'update_org']);
 Route::get('delete_org/{name}/{sub_org}',[OrganizationController::class,'delete_org']);
@@ -196,10 +196,27 @@ route::get('v3_2_s3_3_5_new/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_
 route::get('v3_2_s3_3_5_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_5_edit']);
 route::put('v3_2_s3_3_5_editform/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_5_editform']);
 route::get('v3_2_s3_3_5_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_5_delete']);
+
+
+//3,6
+route::get('v3_2_s3_3_6/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_6'])->name('section3_6');
+route::post('v3_2_s3_3_6_insert/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_6_insert']);
+route::get('v3_2_s3_3_6_add_new/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_5_add_new']);
+route::get('v3_2_s3_3_6_edit_wholly/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_6_edit_wholly']);
+route::put('v3_2_s3_3_6_edit_form/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_6_edit_form']);
+route::get('v3_2_s3_3_6_delete_wholly/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_6_delete_wholly']);
+route::post('v3_2_s3_3_6_international/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_6_international']);
+route::get('v3_2_s3_3_6_inter_new/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_6_inter_new']);
+route::get('v3_2_s3_3_6_edit_inter/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_6_edit_inter']);
+route::put('v3_2_s3_3_6_inter_editform/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_6_inter_editform']);
+route::get('v3_2_s3_3_6_delete_inter/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_6_delete_inter']);
+
+
 }
 
 
 );
+
 
 
 
