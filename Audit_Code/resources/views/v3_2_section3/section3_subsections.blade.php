@@ -54,7 +54,7 @@
            {{-- Section3.6 --}}
            <div class="row mb-2">
             <div class="col-12">
-                <a href="" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- 3.6: Other business entities that require compliance with the
+                <a href="/v3_2_s3_3_6/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- 3.6: Other business entities that require compliance with the
                     PCI DSS</p></a>
 
             </div>

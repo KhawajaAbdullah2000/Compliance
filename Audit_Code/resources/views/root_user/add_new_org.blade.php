@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="wrapper d-flex align-items-stretch">
-    
+
 @include('root_nav')
 
 
@@ -12,7 +12,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-    
+
         <button type="button" id="sidebarCollapse" class="btn btn-primary">
           <i class="fa fa-bars"></i>
           <span class="sr-only">Toggle Menu</span>
@@ -46,7 +46,7 @@
             @if($errors->has('sub_org'))
             <div class="text-danger">{{ $errors->first('sub_org') }}</div>
         @endif
-      
+
 
 
 
@@ -105,7 +105,7 @@
         <div class="text-danger">{{ $errors->first('address') }}</div>
     @endif
         <input type="hidden" name="record_created_by" value="{{auth()->user()->email}}">
-        
+
         <div class="col-md-6">
             <label for="" class="form-label">Status</label>
             <select class="boxstyling bg-primary form-select" name="status">
@@ -128,12 +128,12 @@
 
         </div>
       </div>
-            
-           
-          
+
+
+
 
     </div>
-    
+
 
 
 </div>

@@ -25,7 +25,7 @@ public function projects($user_id){
     public function create_project($userid){
        $project_types=DB::table('project_types')->get();
        return view('project.create_project',['types'=>$project_types]);
-    
+
     }
     public function submit_create_project(Request $req,$user_id){
             $req->validate([
@@ -38,12 +38,12 @@ public function projects($user_id){
             $project->created_by=$user_id;
             $project->org_id=auth()->user()->org_id;
             $project->project_creation_date=Carbon::now()->format('Y-m-d');
-           $project->project_creation_time=Carbon::now()->format('H:i:s'); 
+           $project->project_creation_time=Carbon::now()->format('H:i:s');
            $project->project_type=$req->project_type;
            $project->status_last_changed_by=$user_id;
            $project->save();
            return redirect()->route('projects',['user_id'=>$user_id])->with('success','Project Created Successfully');
-            
+
     }
     public function edit_my_project($id){
         $project_types=DB::table('project_types')->get();
@@ -82,16 +82,23 @@ public function projects($user_id){
         $endusers=Db::table('project_details')->join('users','project_details.assigned_enduser','users.id')
         ->where('project_details.project_code',$id)->get(['users.first_name','users.last_name','project_details.project_permissions','project_details.assigned_enduser']);
           return view('project.assigned_endusers',['project_id'=>$id,'endusers'=>$endusers]);
-           
+
 
     }
 
     public function assign_end_user($id){
         //$id is project id
-        //find superusers of the end users organization
-       $super= Db::table('users')->where('org_id',auth()->user()->org_id)->where('privilege_id',1)->pluck('id')->toArray();
-       
-         $orgs=DB::table('superusers')->wherein('user_id',$super)->pluck('org_id')->toArray();
+
+        //find superusers
+       $super= Db::table('users')->where('privilege_id',1)->pluck('id')->toArray();
+
+       //superusers of that organization
+      $superusers_of_that_org=DB::table('superusers')->wherein('user_id',$super)
+      ->where('org_id',auth()->user()->org_id)->pluck('user_id')->toArray();
+     // dd($superusers_of_that_org);
+
+     //organziatons of those superusers
+      $orgs=Db::table('users')->wherein('id',$superusers_of_that_org)->pluck('org_id')->toArray();
 
          $users=User::where('privilege_id',5)->wherein('org_id',$orgs)->get(['id','first_name','last_name']);
          $permissions=Permission::all();
