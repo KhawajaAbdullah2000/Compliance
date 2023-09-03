@@ -210,7 +210,23 @@ route::get('v3_2_s3_3_6_inter_new/{proj_id}/{user_id}',[v3_2_s3_Controller::clas
 route::get('v3_2_s3_3_6_edit_inter/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_6_edit_inter']);
 route::put('v3_2_s3_3_6_inter_editform/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_6_inter_editform']);
 route::get('v3_2_s3_3_6_delete_inter/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_6_delete_inter']);
-
+//section 3.7
+route::get('v3_2_s3_3_7/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_7'])->name('section3_7');
+route::post('v3_2_s3_3_7_insert/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_7_insert']);
+route::get('v3_2_s3_3_7_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_7_edit']);
+route::put('v3_2_s3_3_7_editform/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_7_editform']);
+//section3.8
+route::get('v3_2_s3_3_8/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_8'])->name('section3_8');
+route::Post('v3_2_s3_3_8_inscope/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_8_inscope']);
+route::get('v3_2_s3_3_8_wireless_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_8_wireless_edit']);
+route::put('v3_2_s3_3_8_inscope_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_8_inscope_edit']);
+route::get('v3_2_s3_3_8_inscope_new/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_8_inscope_new']);
+route::post('v3_2_s3_3_8_outscope/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_8_outscope']);
+route::get('v3_2_s3_3_8_out_scope_new/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_8_out_scope_new']);
+route::get('v3_2_s3_3_8_wireless_out_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_8_wireless_out_edit']);
+route::put('v3_2_s3_3_8_outscope_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_8_outscope_edit']);
+route::get('v3_2_s3_3_8_wireless_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_8_wireless_delete']);
+route::get('v3_2_s3_3_8_wireless_out_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_8_wireless_out_delete']);
 
 }
 
