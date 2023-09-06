@@ -8,6 +8,7 @@ use App\Http\Controllers\EndUserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\v3_2_s2_Controller;
 use App\Http\Controllers\v3_2_s3_Controller;
+use App\Http\Controllers\v3_2_s4_Controller;
 use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -228,6 +229,24 @@ route::put('v3_2_s3_3_8_outscope_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2
 route::get('v3_2_s3_3_8_wireless_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_8_wireless_delete']);
 route::get('v3_2_s3_3_8_wireless_out_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s3_Controller::class,'v3_2_s3_3_8_wireless_out_delete']);
 
+//section 4
+//4.1
+route::get('v3_2_section4_subsections/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_section4_subsections']);
+route::get('v3_2_s4_4_1/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_1'])->name('section4_1');
+route::post('v3_2_s4_4_1_insert/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_1_insert']);
+route::get('v3_2_s4_4_1_new/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_1_new']);
+route::delete('v3_2_s4_4_1_del/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_1_del']);
+
+//4.2
+route::get('v3_2_s4_4_2/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_2'])->name('section4_2');
+route::post('v3_2_s4_2_2_dataflows/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_2_2_dataflows']);
+route::get('v3_2_s4_4_2_insert_dataflow/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_2_insert_dataflow']);
+route::get('v3_2_s4_4_2_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_2_edit']);
+route::put('v3_2_s4_2_2_edit_dataflows/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_2_2_edit_dataflows']);
+route::get('v3_2_s4_4_2_delete_dataflow/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_2_delete_dataflow']);
+route::post('v3_2_s4_4_2_insert_diagram/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_2_insert_diagram']);
+route::get('v3_2_s4_4_2_new_diagram/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_2_new_diagram']);
+route::delete('v3_2_s4_4_2_dia_del/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_2_dia_del']);
 }
 
 
