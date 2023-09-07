@@ -117,7 +117,7 @@ $permissions=json_decode($project_permissions)
 
 
 
-    @section('scripts')
+ @section('scripts')
 
 @if(Session::has('success'))
 <script>
