@@ -247,6 +247,14 @@ route::get('v3_2_s4_4_2_delete_dataflow/{assessment_id}/{proj_id}/{user_id}',[v3
 route::post('v3_2_s4_4_2_insert_diagram/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_2_insert_diagram']);
 route::get('v3_2_s4_4_2_new_diagram/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_2_new_diagram']);
 route::delete('v3_2_s4_4_2_dia_del/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_2_dia_del']);
+
+//4.3
+route::get('v3_2_s4_4_3/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_3'])->name('section4_3');
+route::post('v3_2_s4_4_3_insert/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_3_insert']);
+route::get('v3_2_s4_4_3_new/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_3_new']);
+route::get('v3_2_s4_4_3_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_3_edit']);
+route::put('v3_2_s4_4_3_editform/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_3_editform']);
+route::get('v3_2_s4_4_3_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_3_delete']);
 }
 
 

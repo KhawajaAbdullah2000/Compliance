@@ -17,7 +17,7 @@
         </div>
         </div>
 
-        {{-- Section3.2 --}}
+        {{-- Section4.2 --}}
         <div class="row mb-2">
             <div class="col-12">
                 <a href="/v3_2_s4_4_2/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section4- 4.2: Description of cardholder data flows</p></a>
@@ -25,10 +25,10 @@
             </div>
         </div>
 
-         {{-- Section3.3 --}}
+         {{-- Section4.3 --}}
          <div class="row mb-2">
             <div class="col-12">
-                <a href="/v3_2_s3_3_3/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- 3.3: Network segmentation</p></a>
+                <a href="/v3_2_s4_4_3/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section4- 4.3: Cardholder Data Storage</p></a>
 
             </div>
         </div>
