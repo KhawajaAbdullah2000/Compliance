@@ -34,28 +34,26 @@
         </div>
 
 
-         {{-- Section3.4 --}}
+         {{-- Section4.4 --}}
          <div class="row mb-2">
             <div class="col-12">
-                <a href="/v3_2_s3_3_4/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- 3.4: Network segment details</p></a>
+                <a href="/v3_2_s3_4_4/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section4- 4.4: Critical hardware and software in use in the cardholder data environment</p></a>
 
             </div>
         </div>
 
-          {{-- Section3.5 --}}
+          {{-- Section4.5 --}}
           <div class="row mb-2">
             <div class="col-12">
-                <a href="/v3_2_s3_3_5/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- 3.5: Connected entities for payment processing
-                    and transmission</p></a>
+                <a href="/v3_2_s4_4_5/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section- 4.5: Sampling</p></a>
 
             </div>
         </div>
 
-           {{-- Section3.6 --}}
+           {{-- Section4.6 --}}
            <div class="row mb-2">
             <div class="col-12">
-                <a href="/v3_2_s3_3_6/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- 3.6: Other business entities that require compliance with the
-                    PCI DSS</p></a>
+                <a href="/v3_2_s4_4_6/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section4- 4.6: Sample sets for reporting</p></a>
 
             </div>
         </div>
