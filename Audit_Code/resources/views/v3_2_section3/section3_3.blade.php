@@ -167,80 +167,90 @@ $permissions=json_decode($project_permissions)
     {{-- if user is data inputter --}}
 
     @if(isset($data))
-    <div class="container">
+
         <h2 class="mt-3 fw-bold text-center">Network Segmentation</h2>
 
+        <div class="row">
 
-        <p class="lead mt-4">Identify whether the assessed entity has used network segmentation to reduce
-             the scope of the assessment. (yes/no)</p>
-        <p><span class="fw-bold">Answer: </span>{{$data->requirement1}}</p>
+            <div class="card mb-5">
 
+                <div class="card-body">
+                    <label>Identify whether the assessed entity has used network segmentation to reduce
+                        the scope of the assessment. (yes/no)</label>
+                   <p><span class="fw-bold">Answer: </span>{{$data->requirement1}}</p>
 
-        @isset($data->segmentation_not_used)
-        <p class="lead mt-4">If segmentation is not used: Provide the name of the assessor who attests that the whole
-            network has been included in the scope of the assessment.</p>
-        <p><span class="fw-bold">Answer: </span>{{$data->segmentation_not_used}}</p>
-        @endisset
+                @isset($data->segmentation_not_used)
+                   <label>If segmentation is not used: Provide the name of the assessor who attests that the whole
+                    network has been included in the scope of the assessment</label>
+               <p><span class="fw-bold">Answer: </span>{{$data->segmentation_not_used}}</p>
 
-        @isset($data->segmentation_used)
-        <p class="lead mt-4">If segmentation is used: Briefly describe how the segmentation is implemented.</p>
-        <p><span class="fw-bold">Answer: </span>{{$data->segmentation_used}}</p>
-        @endisset
-
-
-        @isset($data->segmentation_used_req1)
-        <p class="lead mt-4">Identify the technologies used and any supporting processes</p>
-        <p><span class="fw-bold">Answer: </span>{{$data->segmentation_used_req1}}</p>
-        @endisset
-
-        @isset($data->segmentation_used_req2)
-        <p class="lead mt-4">Describe the methods used to validate the effectiveness of the segmentation (for example,
-             observed configurations of implemented technologies
-            , tools used, network traffic analysis, etc.).</p>
-        <p><span class="fw-bold">Answer: </span>{{$data->segmentation_used_req2}}</p>
-        @endisset
-
-        @isset($data->segmentation_used_req3)
-        <p class="lead mt-4">Describe how it was verified that the segmentation is functioning as intended</p>
-        <p><span class="fw-bold">Answer: </span>{{$data->segmentation_used_req3}}</p>
-        @endisset
-
-        @isset($data->segmentation_used_req4)
-        <p class="lead mt-4">-	Identify the security controls that are in place to ensure the integrity of the segmentation mechanisms
-            (e.g., access controls, change management, logging, monitoring, etc.).</p>
-        <p><span class="fw-bold">Answer: </span>{{$data->segmentation_used_req4}}</p>
-        @endisset
-
-        @isset($data->segmentation_used_req5)
-        <p class="lead mt-4">Describe how it was verified that the identified security controls are in place </p>
-        <p><span class="fw-bold">Answer: </span>{{$data->segmentation_used_req5}}</p>
-        @endisset
-
-        <p class="lead mt-4">Provide the name of the assessor who attests that the segmentation was verified
-            to be adequate to reduce the scope of the assessment AND that the
-            technologies/processes used to implement segmentation were included in the PCI DSS assessment. </p>
-        <p><span class="fw-bold">Answer: </span>{{$data->requirement6}}</p>
+               @endif
 
 
+               @isset($data->segmentation_used)
+               <label>If segmentation is used: Briefly describe how the segmentation is implemented</label>
+           <p><span class="fw-bold">Answer: </span>{{$data->segmentation_used}}</p>
 
-        <span class="badge rounded-pill bg-primary fs-6">Last edited by: {{$data->first_name}} {{$data->last_name}}</span>
-        <span class="badge rounded-pill bg-success fs-6">Last edited at: {{date('F d, Y H:i:A', strtotime($data->last_edited_at))}}</span>
-
-        @if(in_array('Data Inputter',$permissions))
-        <a href="/v3_2_s3_3_3_edit/{{$data->assessment_id}}/{{$data->project_id}}/{{auth()->user()->id}}"
-            class="float-end btn btn-primary btn-lg mb-2 px-5">Edit</a>
-
-        @endif
+           @endif
 
 
+                @isset($data->segmentation_used_req1)
+                <label>Identify the technologies used and any supporting processes</label>
+            <p><span class="fw-bold">Answer: </span>{{$data->segmentation_used_req1}}</p>
+            @endif
+
+                @isset($data->segmentation_used_req2)
+                <label>Describe the methods used to validate the effectiveness of the segmentation (for example,
+                    observed configurations of implemented technologies, tools used, network traffic analysis, etc.)</label>
+            <p><span class="fw-bold">Answer: </span>{{$data->segmentation_used_req2}}</p>
+
+            @endif
+
+                @isset($data->segmentation_used_req3)
+                <label>Describe how it was verified that the segmentation is functioning as intended</label>
+                <p><span class="fw-bold">Answer: </span>{{$data->segmentation_used_req3}}</p>
+                @endif
+
+                @isset($data->segmentation_used_req4)
+                <label>Identify the security controls that are in place to ensure the integrity of the segmentation mechanisms
+                    (e.g., access controls, change management, logging, monitoring, etc.)</label>
+                <p><span class="fw-bold">Answer: </span>{{$data->segmentation_used_req4}}</p>
+                @endif
+
+                @isset($data->segmentation_used_req5)
+                <label>Describe how it was verified that the identified security controls are in place</label>
+                <p><span class="fw-bold">Answer: </span>{{$data->segmentation_used_req5}}</p>
+                @endif
+
+                <label>Provide the name of the assessor who attests that the segmentation was verified
+                    to be adequate to reduce the scope of the assessment AND that the
+                    technologies/processes used to implement segmentation were included in the PCI DSS assessment</label>
+                <p><span class="fw-bold">Answer: </span>{{$data->requirement6}}</p>
+
+
+                <label for="">last edited by: </label>
+                <span class="badge text-bg-success text-black">{{$data->first_name}} {{$data->last_name}}</span>
+
+                   <br>
+
+                <label for="">last edited at: </label>
+                <span class="badge text-bg-warning">{{date('F d, Y H:i:A', strtotime($data->last_edited_at))}}</span>
+
+
+                @if(in_array('Data Inputter',$permissions))
+
+                <a href="/v3_2_s3_3_3_edit/{{$data->assessment_id}}/{{$data->project_id}}/{{auth()->user()->id}}"
+                    class="float-end btn btn-primary btn-md mx-2">Edit</a>
+
+
+                @endif
 
 
 
-    </div>
 
-
-
-
+                </div>
+            </div>
+        </div>
 
 
 

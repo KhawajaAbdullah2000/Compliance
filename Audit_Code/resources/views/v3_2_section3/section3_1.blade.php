@@ -121,53 +121,72 @@ $permissions=json_decode($project_permissions)
 
 
     @if(isset($data))
-    <div class="container">
-        <h2 class="mt-3 fw-bold text-center">Assessor's validation of defined cardholder data environment and scope accuracy</h2>
+
+    <div class="row">
+
+        <div class="card mb-5">
+
+            <div class="card-body">
+
+                <label>Describe the methods or processes (for example, the specific types of tools, observations,
+                     feedback, scans, data flow analysis) used to identify and document all
+                     existences of cardholder data (as executed by the assessed entity, assessor or a combination)</label>
+                <p><span class="fw-bold">Answer: </span>{{$data->requirement1}}</p>
 
 
-        <p class="lead mt-4">Describe the methods or processes (for example, the specific types of tools, observations, feedback, scans, data flow analysis) used to identify and document all existences of cardholder data (as executed by the assessed entity, assessor or a combination):</p>
-        <p><span class="fw-bold">Answer: </span>{{$data->requirement1}}</p>
+                <label>Describe the methods or processes (for example, the specific types of tools, observations,
+                    feedback, scans, data flow analysis) used to verify that no cardholder data
+                    exists outside of the defined CDE (as executed by the assessed entity, assessor or a combination)</label>
+               <p><span class="fw-bold">Answer: </span>{{$data->requirement2}}</p>
 
-        <p class="lead mt-4">Describe the methods or processes (for example, the specific types of tools, observations, feedback, scans, data flow analysis) used to verify that no cardholder data exists outside of the defined CDE (as executed by the assessed entity, assessor or a combination):</p>
-        <p><span class="fw-bold">Answer: </span>{{$data->requirement2}}</p>
 
-        <p class="lead mt-4">Describe how the results of the methods/processes were documented (for example, the results may be a diagram or an inventory of cardholder data locations):</p>
-        <p><span class="fw-bold">Answer: </span>{{$data->requirement3}}</p>
+               <label>Describe how the results of the methods/processes were documented
+                (for example, the results may be a diagram or an inventory of cardholder data locations)</label>
+           <p><span class="fw-bold">Answer: </span>{{$data->requirement3}}</p>
 
-        <p class="lead mt-4">Describe how the results of the methods/processes were evaluated by the assessor to verify that the PCI DSS scope of review is appropriate: </p>
-        <p><span class="fw-bold">Answer: </span>{{$data->requirement4}}</p>
 
-        <p class="lead mt-4">Describe why the methods (for example, tools, observations, feedback, scans, data flow analysis, or any environment design decisions that were made to help limit the scope of the environment) used for scope verification are considered by the assessor to be effective and accurate:</p>
+           <label>Describe how the results of the methods/processes were evaluated by the assessor
+             to verify that the PCI DSS scope of review is appropriate</label>
+       <p><span class="fw-bold">Answer: </span>{{$data->requirement4}}</p>
+
+            <label>Describe why the methods (for example, tools, observations, feedback, scans, data flow analysis,
+                or any environment design decisions that were made to help limit the scope of the environment) used
+                for scope verification are considered by the assessor to be effective and accurate</label>
         <p><span class="fw-bold">Answer: </span>{{$data->requirement5}}</p>
 
-        <p class="lead mt-4">Provide the name of the assessor who attests that the defined CDE and scope of the assessment has been verified to be accurate, to the best of the assessor's ability and with all due diligence:</p>
-        <p><span class="fw-bold">Answer: </span>{{$data->requirement6}}</p>
 
-        @if(isset($data->other_details))
+        <label>Provide the name of the assessor who attests that the defined CDE and scope of the assessment has been verified to
+             be accurate, to the best of the assessor's ability and with all due diligence</label>
+    <p><span class="fw-bold">Answer: </span>{{$data->requirement6}}</p>
 
-        <p class="lead mt-4">Other details</p>
+
+    @if(isset($data->other_details))
+            <label>Other Details</label>
         <p><span class="fw-bold">Answer: </span>{{$data->other_details}}</p>
-        @endif
+    @endif
 
-        <span class="badge rounded-pill bg-primary fs-6">Last edited by: {{$data->first_name}} {{$data->last_name}}</span>
-        <span class="badge rounded-pill bg-success fs-6">Last edited at: {{date('F d, Y H:i:A', strtotime($data->last_edited_at))}}</span>
+    <label for="">last edited by: </label>
+    <span class="badge text-bg-success text-black">{{$data->first_name}} {{$data->last_name}}</span>
 
-        @if(in_array('Data Inputter',$permissions))
-        <a href="/v3_2_s3_3_1_edit/{{$data->assessment_id}}/{{$data->project_id}}/{{auth()->user()->id}}"
-            class="float-end btn btn-primary btn-lg mb-2 px-5">Edit</a>
+       <br>
 
-        @endif
-
+    <label for="">last edited at: </label>
+    <span class="badge text-bg-warning">{{date('F d, Y H:i:A', strtotime($data->last_edited_at))}}</span>
 
 
+    @if(in_array('Data Inputter',$permissions))
+
+    <a href="/v3_2_s3_3_1_edit/{{$data->assessment_id}}/{{$data->project_id}}/{{auth()->user()->id}}"
+     class="float-end btn btn-primary btn-md mx-2">Edit</a>
+
+    @endif
 
 
+
+
+            </div>
+        </div>
     </div>
-
-
-
-
-
 
 
 

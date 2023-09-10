@@ -103,45 +103,62 @@ $permissions=json_decode($project_permissions)
 
 
     @if(isset($data))
-    <div class="container">
+
         <h2 class="mt-3 fw-bold text-center">Cardholder Data Environment (CDE) overview</h2>
 
+        <div class="row">
 
-        <p class="lead mt-4">People - such as technical support, management,
-            administrators, operations teams, cashiers, telephone operators, physical security, etc.:</p>
-        <p><span class="fw-bold">Answer: </span>{{$data->requirement1}}</p>
+            <div class="card mb-5">
 
-        <p class="lead mt-4">Processes - such as payment channels, business functions, etc.: </p>
-        <p><span class="fw-bold">Answer: </span>{{$data->requirement2}}</p>
+                <div class="card-body">
 
-        <p class="lead mt-4">Technologies - such as e-commerce systems, internal network segments, DMZ segments, processor connections, POS systems, encryption mechanisms, etc.:</p>
-        <p><span class="fw-bold">Answer: </span>{{$data->requirement3}}</p>
-
-        <p class="lead mt-4">Locations/sites/stores - such as retail outlets, data centers, corporate office locations,
-            call centers, etc.:</p>
-        <p><span class="fw-bold">Answer: </span>{{$data->requirement4}}</p>
+        <label>People - such as technical support, management, administrators, operations teams,
+            cashiers, telephone operators, physical security, etc</label>
+       <p><span class="fw-bold">Answer: </span>{{$data->requirement1}}</p>
 
 
-        @if(isset($data->other_details))
+       <label>Processes - such as payment channels, business functions, etc.</label>
+      <p><span class="fw-bold">Answer: </span>{{$data->requirement2}}</p>
 
-        <p class="lead mt-4">Other details</p>
-        <p><span class="fw-bold">Answer: </span>{{$data->other_details}}</p>
-        @endif
 
-        <span class="badge rounded-pill bg-primary fs-6">Last edited by: {{$data->first_name}} {{$data->last_name}}</span>
-        <span class="badge rounded-pill bg-success fs-6">Last edited at: {{date('F d, Y H:i:A', strtotime($data->last_edited_at))}}</span>
+      <label>Technologies - such as e-commerce systems, internal network segments,
+        DMZ segments, processor connections, POS systems, encryption mechanisms, etc</label>
+  <p><span class="fw-bold">Answer: </span>{{$data->requirement3}}</p>
+
+
+            <label> Locations/sites/stores - such as retail outlets, data centers, corporate office locations, call centers, etc</label>
+            <p><span class="fw-bold">Answer: </span>{{$data->requirement4}}</p>
+
+
+            @if(isset($data->other_details))
+            <label>Other Details</label>
+            <p><span class="fw-bold">Answer: </span>{{$data->other_details}}</p>
+            @endif
+
+            <label for="">last edited by: </label>
+            <span class="badge text-bg-success text-black">{{$data->first_name}} {{$data->last_name}}</span>
+
+               <br>
+
+            <label for="">last edited at: </label>
+            <span class="badge text-bg-warning">{{date('F d, Y H:i:A', strtotime($data->last_edited_at))}}</span>
+
+
 
         @if(in_array('Data Inputter',$permissions))
+
         <a href="/v3_2_s3_3_2_edit/{{$data->assessment_id}}/{{$data->project_id}}/{{auth()->user()->id}}"
-            class="float-end btn btn-primary btn-lg mb-2 px-5">Edit</a>
+            class="float-end btn btn-primary btn-md mx-2">Edit</a>
+
 
         @endif
 
+                </div>
+            </div>
+        </div>
 
 
 
-
-    </div>
 
 
 

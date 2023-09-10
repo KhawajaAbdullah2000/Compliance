@@ -200,8 +200,6 @@ $permissions=json_decode($project_permissions)
 
 
 
-
-
 </div>
 
 @section('scripts')

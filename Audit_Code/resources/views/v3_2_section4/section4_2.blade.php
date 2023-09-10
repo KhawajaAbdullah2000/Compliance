@@ -91,12 +91,21 @@ $permissions=json_decode($project_permissions)
             @if($data1->count()>0)
 
             <h2 class="mt-3 fw-bold text-center">Description of cardholder data flows</h2>
+
+            <div class="row">
+                <div class="col-md-12">
             @if(in_array('Data Inputter',$permissions))
-            <a class="btn btn-success btn-md float-end mb-5" href="/v3_2_s4_4_2_insert_dataflow/{{$project_id}}/{{auth()->user()->id}}"
+            <a class="btn btn-success btn-md float-end mb-3" href="/v3_2_s4_4_2_insert_dataflow/{{$project_id}}/{{auth()->user()->id}}"
             role="button">Add new cardholder dataflow <i class="fas fa-plus"></i></a>
             @endif
+                </div>
+            </div>
+
+            <div class="row">
 
             @foreach ($data1 as $dataflow)
+            <div class="card mb-5">
+                <div class="card-body">
 
             <p class="lead mt-4">Cardholder data flows</p>
             <p><span class="fw-bold">Answer: </span>{{$dataflow->dataflows}}</p>
@@ -109,6 +118,14 @@ $permissions=json_decode($project_permissions)
                  used (for example, which protocols or technologies were used in each transmission)</p>
             <p><span class="fw-bold">Answer: </span>{{$dataflow->description}}</p>
 
+            <label for="">last edited by: </label>
+            <span class="badge text-bg-success text-black">{{$dataflow->first_name}} {{$dataflow->last_name}}</span>
+               <br>
+            <label for="">last edited at: </label>
+            <span class="badge text-bg-warning">{{date('F d, Y H:i:A', strtotime($dataflow->last_edited_at))}}</span>
+
+
+
             @if(in_array('Data Inputter',$permissions))
 
             <a href="/v3_2_s4_4_2_delete_dataflow/{{$dataflow->assessment_id}}/{{$dataflow->project_id}}/{{auth()->user()->id}}"
@@ -119,9 +136,11 @@ $permissions=json_decode($project_permissions)
 
             @endif
 
-
+            </div>
+        </div>
 
             @endforeach
+            </div>
 
 
             @endif

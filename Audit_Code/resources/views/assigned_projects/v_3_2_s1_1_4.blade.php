@@ -11,7 +11,7 @@ $permissions=json_decode($project_permissions)
 
 <div class="container">
     <h2 class="text-center">
-    Section 1.4 for Project id: {{$project_id}} Project name:{{$project_name}}
+    Section 1.3 Project name:{{$project_name}}
     </h2>
 
     @if(in_array('Data Inputter',$permissions))
@@ -81,7 +81,54 @@ $permissions=json_decode($project_permissions)
 
     @if(isset($services))
 
+    <div class="row">
 
+        <div class="card mb-5">
+
+            <div class="card-body">
+
+                <label>Disclose all services offered to the assessed entity by the QSAC,
+                    including but not limited to whether the assessed entity uses any security-related devices
+                    or security-related applications that have been developed or manufactured by the QSA,
+                    or to which the QSA owns the rights or that the QSA has configured or manages</label>
+                <p><span class="fw-bold">Answer: </span>{{$services->requirement1}}</p>
+
+
+                <label>escribe efforts made to ensure no conflict of interest resulted
+                    from the above mentioned services provided by the QSAC</label>
+                <p><span class="fw-bold">Answer: </span>{{$services->requirement2}}</p>
+
+
+
+       <label for="">last edited by: </label>
+       <span class="badge text-bg-success text-black">{{$services->first_name}} {{$services->last_name}}</span>
+
+          <br>
+
+       <label for="">last edited at: </label>
+       <span class="badge text-bg-warning">{{date('F d, Y H:i:A', strtotime($services->last_edited_at))}}</span>
+
+
+       @if(in_array('Data Inputter',$permissions))
+
+       <a href="/v3_2_s1_1_4_edit/{{$services->assessment_id}}/{{$services->project_id}}/{{auth()->user()->id}}"
+        class="float-end btn btn-primary btn-md mx-2">Edit</a>
+
+       @endif
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+{{--
     <div class="row">
         <div class="col-md-6 border border-primary">
             <p>Disclose all services offered to the assessed entity by the QSAC,
@@ -94,9 +141,9 @@ $permissions=json_decode($project_permissions)
 
       <p>{{$services->requirement1}}</p>
         </div>
-    </div>
+    </div> --}}
 
-    <div class="row mt-4">
+    {{-- <div class="row mt-4">
         <div class="col-md-6 border border-primary">
             <p>Describe efforts made to ensure no conflict of interest resulted
                 from the above mentioned services provided by the QSAC</p>
@@ -105,9 +152,9 @@ $permissions=json_decode($project_permissions)
         <div class="col-md-6 border border-success bg-warning">
       <p>{{$services->requirement2}}</p>
         </div>
-    </div>
+    </div> --}}
 
-
+{{--
     <div class="row mt-4">
         <div class="col-md-6 border border-primary">
             <p>Last edited by: {{$services->first_name}} {{$services->last_name}}</p>
@@ -120,9 +167,8 @@ $permissions=json_decode($project_permissions)
         class="btn btn-primary btn-md px-5">Edit</a></p>
         </div>
         @endif
-{{--
-        if data inputter for editing --}}
-    </div>
+
+    </div> --}}
 
 
 
