@@ -59,18 +59,20 @@
         </div>
 
 
-           {{-- Section3.7 --}}
+           {{-- Section4.7 --}}
            <div class="row mb-2">
             <div class="col-12">
-                <a href="/v3_2_s3_3_7/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- 3.7: Wireless summary</p></a>
+                <a href="/v3_2_s4_4_7/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section4- 4.7: Service
+                    providers and other third parties with which the entity shares
+                    cardholder data or that could affect the security of cardholder data </p></a>
 
             </div>
         </div>
 
-        {{-- Section3.8 --}}
+        {{-- Section4.8 --}}
         <div class="row mb-2">
             <div class="col-12">
-                <a href="/v3_2_s3_3_8/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section3- 3.8: Wireless details</p></a>
+                <a href="/v3_2_s4_4_8/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section4- 4.8: Third-party payment applications/solutions </p></a>
 
             </div>
         </div>

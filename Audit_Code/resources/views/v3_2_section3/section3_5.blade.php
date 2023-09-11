@@ -108,52 +108,71 @@ $permissions=json_decode($project_permissions)
 
         <h2 class="text-center fw-bold">Connected entities for payment processing and transmission</h2>
 
+        <div class="row">
+
+            <div class="col-md-12">
+
         @if(in_array('Data Inputter',$permissions))
-        <a class="btn btn-success btn-md float-end mb-5" href="/v3_2_s3_3_5_new/{{$project_id}}/{{auth()->user()->id}}"
+        <a class="btn btn-success btn-md float-end mb-3" href="/v3_2_s3_3_5_new/{{$project_id}}/{{auth()->user()->id}}"
         role="button">Add new entity <i class="fas fa-plus"></i></a>
         @endif
+            </div>
+        </div>
+
+        <div class="row">
 
         @foreach ($data as $d)
 
-        <p class="lead mt-4">Processing and Transmitting Entity</p>
+    <div class="card mb-5">
+        <div class="card-body">
+
+        <label>Processing and Transmitting Entity</label>
         <p><span class="fw-bold">Answer: </span>{{$d->requirement1}}</p>
 
-        <p class="lead mt-4">Directly Connected?</p>
+        <label>Directly Connected?</label>
         <p><span class="fw-bold">Answer: </span>{{$d->requirement2}}</p>
 
+        <label>Reason(s) for connection</label>
 
-
-
-        <p class="lead mt-4">Reason(s) for connection</p>
         <p><span class="fw-bold">Answer: </span>
-            @php
-                $connections=json_decode($d->requirement3)
-            @endphp
+        @php
+            $connections=json_decode($d->requirement3)
+        @endphp
 
-          @foreach ($connections as $conn)
-          {{$conn}}
-          @unless ($loop->last), @endunless
+      @foreach ($connections as $conn)
+      {{$conn}}
+      @unless ($loop->last), @endunless
 
-          @endforeach
+      @endforeach</p>
 
-          <p class="lead mt-4">Description of any discussions/issues between the
-            QSA and Processing Entity on behalf of the
-            Assessed Entity for this PCI DSS Assessment(if any)</p>
-          <p><span class="fw-bold">Answer: </span>{{$d->requirement4}}</p>
+      <label>Description of any discussions/issues between the
+        QSA and Processing Entity on behalf of the
+        Assessed Entity for this PCI DSS Assessment(if any)</label>
+      <p><span class="fw-bold">Answer: </span>{{$d->requirement4}}</p>
 
-          <span class="badge rounded-pill bg-primary fs-6">Last edited by: {{$d->first_name}} {{$d->last_name}}</span>
-          <span class="badge rounded-pill bg-success fs-6">Last edited at: {{date('F d, Y H:i:A', strtotime($d->last_edited_at))}}</span>
+      <label for="">last edited by: </label>
+      <span class="badge text-bg-success text-black">{{$d->first_name}} {{$d->last_name}}</span>
 
-          @if(in_array('Data Inputter',$permissions))
+         <br>
 
-          <a href="/v3_2_s3_3_5_delete/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}" class="btn btn-danger btn-md float-end mx-2"> Delete </a>
+      <label for="">last edited at: </label>
+      <span class="badge text-bg-warning">{{date('F d, Y H:i:A', strtotime($d->last_edited_at))}}</span>
 
-          <a href="/v3_2_s3_3_5_edit/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md float-end mx-2"> Edit </a>
-          @endif
+      @if(in_array('Data Inputter',$permissions))
+
+      <a href="/v3_2_s3_3_5_delete/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}" class="btn btn-danger btn-md float-end mx-2"> Delete </a>
+
+      <a href="/v3_2_s3_3_5_edit/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md float-end mx-2"> Edit </a>
+      @endif
+
+
+        </div>
+    </div>
 
         @endforeach
         {{-- for each data --}}
 
+</div>
 
         @endif
         {{-- if data->count>0 --}}
