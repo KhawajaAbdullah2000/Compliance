@@ -277,7 +277,26 @@ route::get('v3_2_s4_4_6_new/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_
 route::get('v3_2_s4_4_6_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_6_edit']);
 route::put('v3_2_s4_4_6_editform/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_6_editform']);
 route::get('v3_2_s4_4_6_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_6_delete']);
+route::get('v3_2_s4_4_7/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_7'])->name('section4_7');
+route::post('v3_2_s4_4_7_insert/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_7_insert']);
+route::get('v3_2_s4_4_7_new/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_7_new']);
+route::get('v3_2_s4_4_7_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_7_edit']);
+route::put('v3_2_s4_4_7_editform/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_7_editform']);
+route::get('v3_2_s4_4_7_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_7_delete']);
+
+//section4.8
+route::get('v3_2_s4_4_8/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_8'])->name('section4_8');
+route::post('v3_2_s4_4_8_insert_party/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_8_insert_party']);
+route::get('v3_2_s4_4_8_new_party/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_8_new_party']);
+route::get('v3_2_s4_4_8_party_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_8_party_edit']);
+route::put('v3_2_s4_4_8_editform_party/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_8_editform_party']);
+route::get('v3_2_s4_4_8_party_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_8_party_delete']);
+route::post('v3_2_s4_4_8_asses/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_8_asses']);
+route::get('v3_2_s4_4_8_asses_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_8_asses_edit']);
+route::put('v3_2_s4_4_8_asses_editform/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_8_asses_editform']);
+route::get('v3_2_s4_4_8_asses_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_8_asses_delete']);
 }
+
 
 
 
