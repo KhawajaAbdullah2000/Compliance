@@ -8,7 +8,7 @@
 
     <h1 class="text-center">Project id: {{$project_id}} Project name: {{$project_name}} Section4 Subsections</h1>
 
-    <div class="row text-center justify-content-center section3_subsections">
+    <div class="row text-center justify-content-center section4_subsections">
 {{-- section4.1 --}}
         <div class="row mt-2 mb-2">
         <div class="col-12">
@@ -76,6 +76,31 @@
 
             </div>
         </div>
+
+        {{-- section4.9 --}}
+        <div class="row mb-2">
+            <div class="col-12">
+                <a href="/v3_2_s4_4_9/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section4- 4.9: Documentation Reviewed</p></a>
+
+            </div>
+        </div>
+
+        {{-- section4.10 --}}
+        <div class="row mb-2">
+            <div class="col-12">
+                <a href="/v3_2_s4_4_10/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section4- 4.10: Individuals interviewed</p></a>
+
+            </div>
+        </div>
+
+         {{-- section4.11 --}}
+         <div class="row mb-2">
+            <div class="col-12">
+                <a href="/v3_2_s4_4_11/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section4- 4.11: Managed service providers</p></a>
+
+            </div>
+        </div>
+
 
 
     </div>
