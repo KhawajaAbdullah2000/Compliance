@@ -326,9 +326,20 @@ route::post('v3_2_s4_4_12_insert_new/{proj_id}/{user_id}',[v3_2_s4_Controller::c
 route::get('v3_2_s4_4_12_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_12_edit']);
 route::put('v3_2_s4_4_12_editform/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_12_editform']);
 route::get('v3_2_s4_4_12_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_12_delete']);
-
 route::get('v3_2_s4_4_12_edit_yes_no/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_12_edit_yes_no']);
 route::put('v3_2_s4_4_12_yes_no_editform/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_12_yes_no_editform']);
+
+//4.13
+
+route::get('v3_2_s4_4_13/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_13'])->name('section4_13');
+route::Post('v3_2_s4_4_13_insert/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_13_insert']);
+route::get('v3_2_s4_4_13_new/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_13_new']);
+route::post('v3_2_s4_4_13_insert_new/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_13_insert_new']);
+route::get('v3_2_s4_4_13_edit/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_13_edit']);
+route::put('v3_2_s4_4_13_editform/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_13_editform']);
+route::get('v3_2_s4_4_13_delete/{assessment_id}/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_13_delete']);
+route::get('v3_2_s4_4_13_edit_yes_no/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_13_edit_yes_no']);
+route::put('v3_2_s4_4_13_yes_no_editform/{proj_id}/{user_id}',[v3_2_s4_Controller::class,'v3_2_s4_4_13_yes_no_editform']);
 
 
 }

@@ -255,7 +255,7 @@ input[type="radio"]:checked {
     background-position: right;
     background-repeat: no-repeat;
     background-size: cover;
-    height: 900px;
+    height: 990px;
 }
 
 @media only screen and (max-width: 479px) {
