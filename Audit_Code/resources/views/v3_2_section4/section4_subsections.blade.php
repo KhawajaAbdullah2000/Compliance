@@ -101,6 +101,23 @@
             </div>
         </div>
 
+        {{-- section4.12 --}}
+        <div class="row mb-2">
+            <div class="col-12">
+                <a href="/v3_2_s4_4_12/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section4- 4.12: Disclosure summary for "In Place with Compensating Control" responses</p></a>
+
+            </div>
+        </div>
+
+     {{-- section4.13 --}}
+        <div class="row mb-2">
+            <div class="col-12">
+                <a href="/v3_2_s4_4_13/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section4- 4.13: Disclosure summary for "Not Tested" responses</p></a>
+
+            </div>
+        </div>
+
+
 
 
     </div>
