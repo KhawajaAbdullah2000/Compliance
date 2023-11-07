@@ -15,7 +15,7 @@ class ProjectController extends Controller
     public function assigned_projects($user_id){
         $projects=Project::join('project_details','projects.project_id','project_details.project_code')
         ->join('project_types','projects.project_type','project_types.id')
-        ->where('project_details.assigned_enduser',$user_id)->get(
+        ->where('project_details.assigned_enduser',$user_id)->where('project_types.id',4)->get(
             [
             'project_details.project_code',
             'projects.project_name',
@@ -50,9 +50,9 @@ class ProjectController extends Controller
 
     }
     return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
-
-
 }
+
+
 
 //section 1.1
     public function v_3_2_sections($proj_id,$user_id){
@@ -76,6 +76,31 @@ class ProjectController extends Controller
         }
 
     }
+
+
+    public function iso_sections($proj_id,$user_id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_name')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+                    if($checkpermission->type_id==4){
+                        return view('iso.iso_sections',
+                        ['project_id'=>$proj_id,'project_name'=>$checkpermission->project_name]);
+                    }
+
+        }else{
+            return redirect()->route('assigned_projects',['user_id'=>$user_id]);
+        }
+
+    }
+
+
 
     public function v_3_2_section1($proj_id,$user_id){
         if($user_id==auth()->user()->id){

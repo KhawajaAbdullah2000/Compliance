@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('content')
-    
+
 @include('user-nav')
 
 <div class="container">
@@ -26,20 +26,19 @@
         <td>{{$pro->status}}</td>
       <td>
        @php
-          $permissions=json_decode($pro->project_permissions) 
-          @endphp   
+          $permissions=json_decode($pro->project_permissions)
+          @endphp
            @foreach ($permissions as $per)
            {{$per}},
            @endforeach
       </td>
       <td>
-    
-         
-            <a href="/v_3_2_sections/{{$pro->project_code}}/{{auth()->user()->id}}" class="btn btn-primary btn-sm">View Project Sections</a>
-           
-     
+
+    <a href="/iso_sections/{{$pro->project_code}}/{{auth()->user()->id}}" class="btn btn-primary btn-sm">View Project Sections</a>
+
+
         </td>
- 
+
 
       </tr>
        @endforeach
@@ -59,7 +58,7 @@
   closeOnClickOutside: true,
   timer: 3000,
     });
-</script> 
+</script>
 @endif
 
 @if(Session::has('error'))
@@ -70,7 +69,7 @@
   closeOnClickOutside: true,
   timer: 3000,
     });
-</script> 
+</script>
 @endif
 
 <script>
@@ -82,7 +81,7 @@ let table = new DataTable('#myTable',
     },
       "ordering": false
 
-     } 
+     }
      );
 
 </script>

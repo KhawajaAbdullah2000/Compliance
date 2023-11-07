@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('content')
-    
+
 @include('user-nav')
 
 {{-- <div class="mx-5">
@@ -13,7 +13,7 @@
 
 
 <div class="container">
-    
+
     <div class="card">
         <div class="card-body">
           <h3 class="card-title text-center text-bold mb-3">Edit Project {{$project->project_id}}</h3>
@@ -34,16 +34,18 @@
                 <select class="boxstyling bg-primary form-select" name="project_type">
                     <option value="">Select Project type</option>
                     @foreach ($types as $t)
+                    @if($t->id==4)
                     <option value="{{$t->id}}" {{ old('project_type',$project->project_type) == $t->id? 'selected' : '' }}>{{$t->type}}</option>
+                    @endif
                     @endforeach
-        
+
                 </select>
             </div>
          @if($errors->has('project_type'))
             <div class="text-danger">{{ $errors->first('project_type') }}</div>
         @endif
 
-        
+
          <div class="col-md-6">
             <label for="" class="form-label">Project Status</label>
             <select class="boxstyling bg-primary form-select" name="status">
@@ -55,7 +57,7 @@
             @if($errors->has('status'))
             <div class="text-danger">{{ $errors->first('status') }}</div>
         @endif
-        </div> 
+        </div>
 
 
             <div class="col-12">
@@ -67,7 +69,7 @@
 
         </div>
       </div>
-            
+
 </div>
 
 
