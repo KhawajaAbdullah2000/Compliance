@@ -7,7 +7,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+
 
 
 class ProjectController extends Controller
@@ -55,29 +55,29 @@ class ProjectController extends Controller
 
 
 //section 1.1
-    public function v_3_2_sections($proj_id,$user_id){
-        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
-        'project_details.project_permissions','projects.project_name')
-       -> join('projects','project_details.project_code','projects.project_id')
-        ->join('project_types','projects.project_type','project_types.id')
-        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
-        ->first();
+    // public function v_3_2_sections($proj_id,$user_id){
+    //     $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+    //     'project_details.project_permissions','projects.project_name')
+    //    -> join('projects','project_details.project_code','projects.project_id')
+    //     ->join('project_types','projects.project_type','project_types.id')
+    //     ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+    //     ->first();
 
 
-        if($checkpermission){
-            $permissions=json_decode($checkpermission->project_permissions);
-                    if($checkpermission->type_id==2){
-                        return view('assigned_projects.v_3_2_sections',
-                        ['project_id'=>$proj_id,'project_name'=>$checkpermission->project_name]);
-                    }
+    //     if($checkpermission){
+    //         $permissions=json_decode($checkpermission->project_permissions);
+    //                 if($checkpermission->type_id==2){
+    //                     return view('assigned_projects.v_3_2_sections',
+    //                     ['project_id'=>$proj_id,'project_name'=>$checkpermission->project_name]);
+    //                 }
 
-        }else{
-            return redirect()->route('assigned_projects',['user_id'=>$user_id]);
-        }
+    //     }else{
+    //         return redirect()->route('assigned_projects',['user_id'=>$user_id]);
+    //     }
 
-    }
+    // }
 
-
+//ISO
     public function iso_sections($proj_id,$user_id){
         $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
         'project_details.project_permissions','projects.project_name')
@@ -100,64 +100,89 @@ class ProjectController extends Controller
 
     }
 
-
-
-    public function v_3_2_section1($proj_id,$user_id){
+    public function iso_section2_4_subsections($proj_id,$user_id){
         if($user_id==auth()->user()->id){
-        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
-        'project_details.project_permissions','projects.project_name','projects.project_id')
+            $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_name')
        -> join('projects','project_details.project_code','projects.project_id')
         ->join('project_types','projects.project_type','project_types.id')
         ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
         ->first();
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+                    if($checkpermission->type_id==4){
+                        return view('iso.iso_sec2_4_subsections',
+                        ['project_id'=>$proj_id,'project_name'=>$checkpermission->project_name]);
+                    }
 
-
-    if($checkpermission){
-        $permissions=json_decode($checkpermission->project_permissions);
-                if($checkpermission->type_id==2){
-
-                    $clientinfo= Db::table('pci-dss v3_2_1 client info')->join('users','pci-dss v3_2_1 client info.last_edited_by','users.id')
-                       ->where('pci-dss v3_2_1 client info.project_id',$proj_id)->first();
-
-                    $assessorComapany=Db::table('pci-dss v3_2_1 assessor company')->join('users','pci-dss v3_2_1 assessor company.last_edited_by','users.id')
-                    ->where('pci-dss v3_2_1 assessor company.project_id',$proj_id)->first();
-
-                    $assessors=Db::table('pci-dss v3_2_1 assessors')
-                    ->join('users','pci-dss v3_2_1 assessors.last_edited_by','users.id')
-                    ->where('pci-dss v3_2_1 assessors.project_id',$proj_id)->get();
-
-                    $associate_qsas=Db::table('pci-dss v3_2_1 associate_qsa')
-                    ->join('users','pci-dss v3_2_1 associate_qsa.last_edited_by','users.id')
-                    ->where('pci-dss v3_2_1 associate_qsa.project_id',$proj_id)->get();
-
-                    $qas=Db::table('pci_dss v3_2_1 qa')
-                    ->join('users','pci_dss v3_2_1 qa.last_edited_by','users.id')
-                    ->where('pci_dss v3_2_1 qa.project_id',$proj_id)->get();
-
-
-
-                       return view('assigned_projects.v_3_2_section1',
-                       ['clientinfo'=>$clientinfo,
-                       'assessorCompany'=>$assessorComapany,
-                       'associate_qsas'=>$associate_qsas,
-                       'assessors'=>$assessors,
-                       'qas'=>$qas,
-                       'project_id'=>$checkpermission->project_id,
-                       'project_name'=>$checkpermission->project_name,
-                        'project_permissions'=>$checkpermission->project_permissions]);
-
-                }
-
-
-
-    }else{
-        return redirect()->route('assigned_projects',['user_id'=>$user_id]);
 
         }
 
     }
+    return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+    }
 
-}
+
+
+
+
+
+//     public function v_3_2_section1($proj_id,$user_id){
+//         if($user_id==auth()->user()->id){
+//         $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+//         'project_details.project_permissions','projects.project_name','projects.project_id')
+//        -> join('projects','project_details.project_code','projects.project_id')
+//         ->join('project_types','projects.project_type','project_types.id')
+//         ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+//         ->first();
+
+
+//     if($checkpermission){
+//         $permissions=json_decode($checkpermission->project_permissions);
+//                 if($checkpermission->type_id==2){
+
+//                     $clientinfo= Db::table('pci-dss v3_2_1 client info')->join('users','pci-dss v3_2_1 client info.last_edited_by','users.id')
+//                        ->where('pci-dss v3_2_1 client info.project_id',$proj_id)->first();
+
+//                     $assessorComapany=Db::table('pci-dss v3_2_1 assessor company')->join('users','pci-dss v3_2_1 assessor company.last_edited_by','users.id')
+//                     ->where('pci-dss v3_2_1 assessor company.project_id',$proj_id)->first();
+
+//                     $assessors=Db::table('pci-dss v3_2_1 assessors')
+//                     ->join('users','pci-dss v3_2_1 assessors.last_edited_by','users.id')
+//                     ->where('pci-dss v3_2_1 assessors.project_id',$proj_id)->get();
+
+//                     $associate_qsas=Db::table('pci-dss v3_2_1 associate_qsa')
+//                     ->join('users','pci-dss v3_2_1 associate_qsa.last_edited_by','users.id')
+//                     ->where('pci-dss v3_2_1 associate_qsa.project_id',$proj_id)->get();
+
+//                     $qas=Db::table('pci_dss v3_2_1 qa')
+//                     ->join('users','pci_dss v3_2_1 qa.last_edited_by','users.id')
+//                     ->where('pci_dss v3_2_1 qa.project_id',$proj_id)->get();
+
+
+
+//                        return view('assigned_projects.v_3_2_section1',
+//                        ['clientinfo'=>$clientinfo,
+//                        'assessorCompany'=>$assessorComapany,
+//                        'associate_qsas'=>$associate_qsas,
+//                        'assessors'=>$assessors,
+//                        'qas'=>$qas,
+//                        'project_id'=>$checkpermission->project_id,
+//                        'project_name'=>$checkpermission->project_name,
+//                         'project_permissions'=>$checkpermission->project_permissions]);
+
+//                 }
+
+
+
+//     }else{
+//         return redirect()->route('assigned_projects',['user_id'=>$user_id]);
+
+//         }
+
+//     }
+
+// }
 
 public function v3_2_s1_clientinfo(Request $req,$proj_id,$user_id){
 

@@ -12,7 +12,7 @@
         <div class="row mt-2">
             <div class="col-12">
 
-         <a href="/v_3_2_section1_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section1- Project Meta Data</p></a>
+         <a href="" class="btn btn-lg btn-warning"><p class="fw-bold">Section1- Project Meta Data</p></a>
         </div>
         </div>
 
@@ -37,7 +37,7 @@
 
         <div class="row mt-2 mb-2">
             <div class="col-12">
-         <a href="/v_3_2_section1_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section2.4- Statement of Applicability</p></a>
+         <a href="/iso_section2_4_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section2.4- Statement of Applicability</p></a>
         </div>
         </div>
             {{-- <a href="/v_3_2_section1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning">Section1</a> --}}
