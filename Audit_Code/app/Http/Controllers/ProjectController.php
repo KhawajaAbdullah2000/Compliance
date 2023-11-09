@@ -79,6 +79,7 @@ class ProjectController extends Controller
 
 //ISO
     public function iso_sections($proj_id,$user_id){
+
         $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
         'project_details.project_permissions','projects.project_name')
        -> join('projects','project_details.project_code','projects.project_id')

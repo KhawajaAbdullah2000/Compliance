@@ -4,13 +4,19 @@
 
 @include('user-nav')
 
+@php
+$permissions=json_decode($project_permissions);
+@endphp
+
 <div class="container">
 
     <h3 class="text-center fw-bold mb-3">Project id: {{$project_id}} Project name: {{$project_name}} Section2.4 A:5 Organizational COntrols</h3>
-
-<form action="" method="post">
+    @if($errors->has('applicability'))
+    <div class="text-danger">{{ $errors->first('applicability') }}</div>
+@endif
+<form action="/iso_sec2_4_a5_new/{{$project_id}}/{{auth()->user()->id}}" method="post">
 @csrf
-@method('PUT')
+
 
     <table class="table table-responsive table-primary table-striped">
         <thead class="thead-dark">
@@ -20,6 +26,8 @@
             <th>Description of Control</th>
             <th>Control is Applicable?</th>
             <th>Add/Edit Info</th>
+            <th>Last Edited by</th>
+            <th>Last Edited at</th>
           </tr>
         </thead>
         <tbody>
@@ -35,9 +43,70 @@
                 @endif
 
                 @endforeach
-                <td>yes/no {{$data[$i][0]}}</td>
-                <td><a href="/iso_sec2_4_a5_edit/{{$data[$i][0]}}"><i class="fas fa-edit fa-lg" style="color: #114a1d;"></i></a></td>
-                {{-- <td><i class="fas fa-eye" style="color: blue;"></td> --}}
+                {{-- <td>yes/no {{$data[$i][0]}}</td> --}}
+
+            <td style="text-align: center">
+
+         @if($results->count()>0)
+
+                @foreach ($results as $r)
+                @if($r->control_num===strval($data[$i][0]))
+                    <p>{{$r->applicability}}</p>
+                @break
+                @endif
+
+               @if($loop->remaining==0)
+               <select name="applicability[]" class="form-select">
+                <option value=""> Select--  </option>
+
+                <option value='yes+{{$data[$i][0]}}'>Yes</option>
+
+
+                <option value='no+{{$data[$i][0]}}'>No</option>
+            </select>
+               @endif
+
+                @endforeach
+
+                @else
+
+                <select name="applicability[]" class="form-select">
+                    <option value=""> Select--  </option>
+
+                    <option value='yes+{{$data[$i][0]}}'>Yes</option>
+
+
+                    <option value='no+{{$data[$i][0]}}'>No</option>
+                </select>
+                @endif
+            </td>
+
+
+
+                @if(in_array('Data Inputter',$permissions))
+                <td style="text-align: center"><a href="/iso_sec2_4_a5_edit/{{$data[$i][0]}}"><i class="fas fa-edit fa-lg" style="color: #114a1d;"></i></a></td>
+                @endif
+
+               <td>
+                @foreach ($results as $r)
+                @if($r->control_num===strval($data[$i][0]))
+          <p>{{$r->first_name}} {{$r->last_name}}</p>
+                    @break
+                    @endif
+                @endforeach
+               </td>
+
+
+               <td>
+                @foreach ($results as $r)
+                @if($r->control_num===strval($data[$i][0]))
+                <p>Last edited at: {{date('F d, Y H:i:A', strtotime($r->last_edited_at))}}</p>
+
+                    @break
+                    @endif
+                @endforeach
+               </td>
+
             </tr>
 @endfor
           <tr>
@@ -45,6 +114,11 @@
           </tr>
 
         </tbody>
+
+      <div class="float-end mb-4">
+
+        <button type="submit" class="btn btn-primary btn-lg mt-5"  id="submitForm">Save and stay on same page</button>
+      </div>
       </table>
 
     </form>
@@ -69,6 +143,22 @@
 
 </div>
 
+@section('scripts')
 
+@if(Session::has('success'))
+<script>
+    swal({
+  title: "{{Session::get('success')}}",
+  icon: "success",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script>
+@endif
+
+
+
+
+@endsection
 
 @endsection
