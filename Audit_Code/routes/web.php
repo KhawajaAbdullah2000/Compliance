@@ -110,6 +110,9 @@ route::get('iso_sections/{proj_id}/{user_id}',[ProjectController::class,'iso_sec
 route::get('iso_section2_4_subsections/{proj_id}/{user_id}',[ProjectController::class,'iso_section2_4_subsections']);
 route::get('iso_sec2_4_a5/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'iso_sec2_4_a5'])->name('iso_sec2_4_a5');
 route::Post('iso_sec2_4_a5_new/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'iso_sec2_4_a5_new']);
+route::get('iso_sec2_4_a5_edit/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'iso_sec2_4_a5_edit']);
+
+route::put('submit_edit_sec2_4_a5/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'submit_edit_sec2_4_a5']);
 
 // route::get('v_3_2_section1_subsections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1_subsections']);
 // route::get('v_3_2_sections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_sections'])->name('v_3_2_sections');

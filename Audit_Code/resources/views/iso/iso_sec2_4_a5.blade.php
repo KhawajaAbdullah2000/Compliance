@@ -51,7 +51,7 @@ $permissions=json_decode($project_permissions);
 
                 @foreach ($results as $r)
                 @if($r->control_num===strval($data[$i][0]))
-                    <p>{{$r->applicability}}</p>
+                    <p class="fw-bold">{{$r->applicability}}</p>
                 @break
                 @endif
 
@@ -84,7 +84,21 @@ $permissions=json_decode($project_permissions);
 
 
                 @if(in_array('Data Inputter',$permissions))
-                <td style="text-align: center"><a href="/iso_sec2_4_a5_edit/{{$data[$i][0]}}"><i class="fas fa-edit fa-lg" style="color: #114a1d;"></i></a></td>
+
+                @foreach ($results as $r)
+                @if($r->control_num===strval($data[$i][0]))
+                <td style="text-align:center"><a href="/iso_sec2_4_a5_edit/{{$data[$i][0]}}/{{$project_id}}/{{auth()->user()->id}}"><i class="fas fa-edit fa-lg" style="color: #114a1d;"></i></a></td>
+               @break
+                @endif
+
+                @if ($loop->last)
+                <td style="text-align:center"><i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i></td>
+
+                @endif
+
+                @endforeach
+
+
                 @endif
 
                <td>
@@ -93,6 +107,7 @@ $permissions=json_decode($project_permissions);
           <p>{{$r->first_name}} {{$r->last_name}}</p>
                     @break
                     @endif
+
                 @endforeach
                </td>
 

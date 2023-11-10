@@ -119,4 +119,120 @@ class IsoSec2_4_A5 extends Controller
             return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
         }
 
+
+
+
+        public function iso_sec2_4_a5_edit($control_num,$proj_id,$user_id){
+
+            if($user_id==auth()->user()->id){
+                $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+            'project_details.project_permissions','projects.project_name','projects.project_id')
+            -> join('projects','project_details.project_code','projects.project_id')
+            ->join('project_types','projects.project_type','project_types.id')
+            ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+            ->first();
+            if($checkpermission){
+                $permissions=json_decode($checkpermission->project_permissions);
+                if(in_array('Data Inputter',$permissions)){
+                        if($checkpermission->type_id==4){
+                            $filepath=public_path('ISO_SOA_A5.xlsx');
+                            $data = Excel::toArray([], $filepath); //with header
+                           // $rows = array_slice($data[0], 1); //without header(first row)
+                        //    dd(gettype($rows[0][0]));
+                            $filteredData = collect($data[0])->filter(function ($row) use ($control_num) {
+                                // Assuming the column with the specific value is the second column (index 1).
+                                // Adjust the column index and the value as per your Excel file structure.
+                                return strval($row[0])=== $control_num;
+                            })->values()->all();
+
+                            $result=Db::table('iso_sec2_4_a5')->where('control_num',$control_num)->where('project_id',$proj_id)->first();
+
+
+                            return view('iso.edit_sec2_4_a5',[
+                            'project_id'=>$proj_id,
+                           'project_name'=>$checkpermission->project_name,
+                           'project_permissions'=>$checkpermission->project_permissions,
+                           'data'=>$filteredData,
+                           'result'=>$result
+                            ]);
+
+                        }
+                    }
+
+
+            }
+
+            }
+            return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+        }
+
+ public function submit_edit_sec2_4_a5(Request $req,$control_num,$proj_id,$user_id){
+
+        $check=Db::table('iso_sec2_4_a5')->where('control_num',$control_num)->where('project_id',$proj_id)->first();
+
+        if($check->applicability=="no"){
+            $req->validate([
+                'justification'=>'required',
+                'ref_of_risk'=>'required'
+            ]);
+
+        }
+        if($check->applicability=="yes"){
+            $req->validate([
+                'ref_of_risk'=>'required'
+            ]);
+        }
+
+        if($user_id==auth()->user()->id){
+            $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_name','projects.project_id')
+        -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+        if($checkpermission){
+            $permissions=json_decode($checkpermission->project_permissions);
+            if(in_array('Data Inputter',$permissions)){
+                    if($checkpermission->type_id==4){
+
+                        if($check->applicability=="yes"){
+
+                          Db::table('iso_sec2_4_a5')->where('control_num',$control_num)->where('project_id',$proj_id)
+                          ->update([
+                            'ref_of_risk'=>$req->ref_of_risk,
+                            'justification'=>null
+                          ]);
+                          return redirect()->route('iso_sec2_4_a5',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                          ->with('success','Record Updated successfully');
+                        }
+
+
+                        if($check->applicability=="no"){
+
+                            Db::table('iso_sec2_4_a5')->where('control_num',$control_num)->where('project_id',$proj_id)
+                            ->update([
+                              'ref_of_risk'=>$req->ref_of_risk,
+                              'justification'=>$req->justification
+                            ]);
+
+                            return redirect()->route('iso_sec2_4_a5',['proj_id'=>$proj_id,'user_id'=>$user_id])
+                            ->with('success','Record Updated successfully');
+                          }
+
+                    }
+                }
+
+
+        }
+
+        }
+        return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
+
+
+
+
+
+        }
+
 }
