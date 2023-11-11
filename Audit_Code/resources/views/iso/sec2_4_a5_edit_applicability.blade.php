@@ -35,32 +35,22 @@ $headers=array('Control num','Title of COntrol','Descriptionof Control')
 
 
         <div class="card-header text-center">
-        <h3 class="fw-bold">Details</h3>
+        <h3 class="fw-bold">Edit Applicability</h3>
 
          </div>
          <div class="card-body">
-            <form method="post" action="/submit_edit_sec2_4_a5/{{$result->control_num}}/{{$project_id}}/{{auth()->user()->id}}">
+            <form method="post" action="/submit_edit_app_sec2_4_a5/{{$result->control_num}}/{{$project_id}}/{{auth()->user()->id}}">
                 @csrf
                 @method('PUT')
 
 
+                <div class="form-group">
+             <label for="">Applicability</label>
+                    <select name="applicability" class="form-select">
+                    <option value="yes" {{old('applicability',$result->applicability)=='yes'?'selected':''}}>Yes</option>
+                    <option value="no" {{old('applicability',$result->applicability)=='no'?'selected':''}}>No</option>
+                </select>
 
-                @if($result->applicability=="no" )
-                <div class="form-group mt-2">
-                  <label for="network_name" class="fs-5">Justification:</label>
-                  <textarea name="justification" cols="70" rows="10" class="form-control">{{old('justification',$result->justification)}}</textarea>
-                  @if($errors->has('justification'))
-                  <div class="text-danger">{{ $errors->first('justification') }}</div>
-              @endif
-                </div>
-                @endif
-
-                <div class="form-group mt-4 fs-5">
-                    <label for="network_name">Reference of Risk Assessment and Treatment:</label>
-                    <textarea name="ref_of_risk" cols="70" rows="10" class="form-control">{{old('ref_of_risk',$result->ref_of_risk)}}</textarea>
-                    @if($errors->has('ref_of_risk'))
-                    <div class="text-danger">{{ $errors->first('ref_of_risk') }}</div>
-                @endif
                   </div>
 
 

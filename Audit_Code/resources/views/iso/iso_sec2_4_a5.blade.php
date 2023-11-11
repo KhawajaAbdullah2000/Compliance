@@ -10,6 +10,9 @@ $permissions=json_decode($project_permissions);
 
 <div class="container">
 
+
+
+
     <h3 class="text-center fw-bold mb-3">Project id: {{$project_id}} Project name: {{$project_name}} Section2.4 A:5 Organizational COntrols</h3>
     @if($errors->has('applicability'))
     <div class="text-danger">{{ $errors->first('applicability') }}</div>
@@ -51,7 +54,13 @@ $permissions=json_decode($project_permissions);
 
                 @foreach ($results as $r)
                 @if($r->control_num===strval($data[$i][0]))
-                    <p class="fw-bold">{{$r->applicability}}</p>
+                    <p class="fw-bold">{{$r->applicability}} <span><a
+                    href="/edit_app_iso_sec2_4_a5/{{$data[$i][0]}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-warning btn-sm">
+                        Edit
+                    </a></span></p>
+
+
+
                 @break
                 @endif
 
@@ -115,7 +124,7 @@ $permissions=json_decode($project_permissions);
                <td>
                 @foreach ($results as $r)
                 @if($r->control_num===strval($data[$i][0]))
-                <p>Last edited at: {{date('F d, Y H:i:A', strtotime($r->last_edited_at))}}</p>
+                <p>{{date('F d, Y H:i:A', strtotime($r->last_edited_at))}}</p>
 
                     @break
                     @endif
@@ -140,21 +149,6 @@ $permissions=json_decode($project_permissions);
 
 
 
-{{--
-     @foreach ($data as $row )
-
-            @foreach ($row as $col)
-            @if(isset($col))
-                <h2> {!! nl2br($col) !!}</h2>
-            @endif
-            @endforeach
-
-
-    @endforeach
-
-@endforeach --}}
-
-
 
 </div>
 
@@ -171,9 +165,8 @@ $permissions=json_decode($project_permissions);
 </script>
 @endif
 
-
-
-
 @endsection
+
+
 
 @endsection

@@ -106,39 +106,47 @@ route::get('assigned_projects/{user_id}',[ProjectController::class,'assigned_pro
 
 //ISO Project
 route::get('iso_sections/{proj_id}/{user_id}',[ProjectController::class,'iso_sections'])->name('iso_sections');
-
 route::get('iso_section2_4_subsections/{proj_id}/{user_id}',[ProjectController::class,'iso_section2_4_subsections']);
+
+//Iso sec2.4 A5 Organzation
 route::get('iso_sec2_4_a5/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'iso_sec2_4_a5'])->name('iso_sec2_4_a5');
 route::Post('iso_sec2_4_a5_new/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'iso_sec2_4_a5_new']);
 route::get('iso_sec2_4_a5_edit/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'iso_sec2_4_a5_edit']);
-
 route::put('submit_edit_sec2_4_a5/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'submit_edit_sec2_4_a5']);
+// route for editing applicability
+route::get('edit_app_iso_sec2_4_a5/{control_num}/{project_id}/{user_id}',[IsoSec2_4_A5::class,'edit_app_iso_sec2_4_a5']);
+route::put('submit_edit_app_sec2_4_a5/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'submit_edit_app_sec2_4_a5']);
+
+
+
+
+
 
 // route::get('v_3_2_section1_subsections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1_subsections']);
 // route::get('v_3_2_sections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_sections'])->name('v_3_2_sections');
 
-route::get('v_3_2_section1/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1'])->name('v_3_2_section1');
-route::post('v3_2_s1_clientinfo/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_clientinfo']);
-route::get('edit_3_2_s1_clientinfo/{proj_id}/{user_id}',[ProjectController::class,'edit_3_2_s1_clientinfo']);
-route::put('edit_3_2_s1_clientinfo/{proj_id}/{user_id}',[ProjectController::class,'edit_3_2_s1_clientinfo_form']);
-route::post('v3_2_s1_assessorcompany/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_assessorcompany']);
-route::get('edit_v_3_2_s1_assessorcomp/{proj_id}/{user_id}',[ProjectController::class,'edit_v_3_2_s1_assessorcomp']);
-route::put('edit_v3_2_assessorcompany_form/{proj_id}/{user_id}',[ProjectController::class,'edit_v3_2_assessorcompany_form']);
-route::post('v_3_2_s1_assessors/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_s1_assessors']);
-route::get('edit_v3_2_s1_assesssor/{assessment_id}/{user_id}/{proj_id}',[ProjectController::class,'edit_v3_2_s1_assesssor']);
-route::put('v3_2_s1_edit_assessors_form/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_edit_assessors_form']);
-route::get('v3_2_s1_add_new_assessor/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_add_new_assessor']);
-route::get('v3_2_s1_delete_assessor/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_delete_assessor']);
-route::post('v3_2_s1_associate_qsa/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_associate_qsa']);
-route::get('v3_2_s1_associateqsa_edit/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_associateqsa_edit']);
-route::put('v3_2_editform_associate_qsa/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_editform_associate_qsa']);
-route::get('v3_2_s1_newassociate_qsa/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_newassociate_qsa']);
-route::get('v3_2_s1_delete_associate_qsa/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_delete_associate_qsa']);
-route::post('v3_2_s1_qa_insert/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_qa_insert']);
-route::get('v3_2_edit_qa/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_edit_qa']);
-route::put('v3_2_s1_qa_edit_form_submit/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_qa_edit_form_submit']);
-route::get('v3_2_s1_add_new_qa/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_add_new_qa']);
-route::get('v3_2_s1_delete_qa/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_delete_qa']);
+// route::get('v_3_2_section1/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1'])->name('v_3_2_section1');
+// route::post('v3_2_s1_clientinfo/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_clientinfo']);
+// route::get('edit_3_2_s1_clientinfo/{proj_id}/{user_id}',[ProjectController::class,'edit_3_2_s1_clientinfo']);
+// route::put('edit_3_2_s1_clientinfo/{proj_id}/{user_id}',[ProjectController::class,'edit_3_2_s1_clientinfo_form']);
+// route::post('v3_2_s1_assessorcompany/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_assessorcompany']);
+// route::get('edit_v_3_2_s1_assessorcomp/{proj_id}/{user_id}',[ProjectController::class,'edit_v_3_2_s1_assessorcomp']);
+// route::put('edit_v3_2_assessorcompany_form/{proj_id}/{user_id}',[ProjectController::class,'edit_v3_2_assessorcompany_form']);
+// route::post('v_3_2_s1_assessors/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_s1_assessors']);
+// route::get('edit_v3_2_s1_assesssor/{assessment_id}/{user_id}/{proj_id}',[ProjectController::class,'edit_v3_2_s1_assesssor']);
+// route::put('v3_2_s1_edit_assessors_form/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_edit_assessors_form']);
+// route::get('v3_2_s1_add_new_assessor/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_add_new_assessor']);
+// route::get('v3_2_s1_delete_assessor/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_delete_assessor']);
+// route::post('v3_2_s1_associate_qsa/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_associate_qsa']);
+// route::get('v3_2_s1_associateqsa_edit/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_associateqsa_edit']);
+// route::put('v3_2_editform_associate_qsa/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_editform_associate_qsa']);
+// route::get('v3_2_s1_newassociate_qsa/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_newassociate_qsa']);
+// route::get('v3_2_s1_delete_associate_qsa/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_delete_associate_qsa']);
+// route::post('v3_2_s1_qa_insert/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_qa_insert']);
+// route::get('v3_2_edit_qa/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_edit_qa']);
+// route::put('v3_2_s1_qa_edit_form_submit/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_qa_edit_form_submit']);
+// route::get('v3_2_s1_add_new_qa/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_add_new_qa']);
+// route::get('v3_2_s1_delete_qa/{assessment_id}/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_delete_qa']);
 
 // section1.2
 route::get('v3_2_s1_1_2/{proj_id}/{user_id}',[ProjectController::class,'v3_2_s1_1_2'])->name('section1_2');
