@@ -10,21 +10,18 @@ $permissions=json_decode($project_permissions);
 
 <div class="container">
 
-
-
-
-    <h3 class="text-center fw-bold mb-3">Project id: {{$project_id}} Project name: {{$project_name}} Section2.4 A:5 Organizational COntrols</h3>
+    <h3 class="text-center fw-bold mb-3">Project id: {{$project_id}} Project name: {{$project_name}} Section2.4 A:6 People COntrols</h3>
     @if($errors->has('applicability'))
     <div class="text-danger">{{ $errors->first('applicability') }}</div>
 @endif
-<form action="/iso_sec2_4_a5_new/{{$project_id}}/{{auth()->user()->id}}" method="post">
+<form action="/iso_sec2_4_a6_new/{{$project_id}}/{{auth()->user()->id}}" method="post">
 @csrf
 
 
     <table class="table table-responsive table-primary table-striped">
         <thead class="thead-dark">
           <tr>
-            <th >Control Number</th>
+            <th>Control Number</th>
             <th>Title Of Control</th>
             <th>Description of Control</th>
             <th>Control is Applicable?</th>
@@ -54,15 +51,10 @@ $permissions=json_decode($project_permissions);
 
                 @foreach ($results as $r)
                 @if($r->control_num===strval($data[$i][0]))
-                    <p class="fw-bold">{{$r->applicability}}
-                        @if(in_array('Data Inputter',$permissions))
-                        <span><a
-                    href="/edit_app_iso_sec2_4_a5/{{$data[$i][0]}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-warning btn-sm">
+                    <p class="fw-bold">{{$r->applicability}} <span><a
+                    href="/edit_app_iso_sec2_4_a6/{{$data[$i][0]}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-warning btn-sm">
                         Edit
-                    </a></span>
-                @endif</p>
-
-
+                    </a></span></p>
 
                 @break
                 @endif
@@ -99,7 +91,7 @@ $permissions=json_decode($project_permissions);
 
                 @foreach ($results as $r)
                 @if($r->control_num===strval($data[$i][0]))
-                <td style="text-align:center"><a href="/iso_sec2_4_a5_edit/{{$data[$i][0]}}/{{$project_id}}/{{auth()->user()->id}}"><i class="fas fa-edit fa-lg" style="color: #114a1d;"></i></a></td>
+                <td style="text-align:center"><a href="/iso_sec2_4_a6_edit/{{$data[$i][0]}}/{{$project_id}}/{{auth()->user()->id}}"><i class="fas fa-edit fa-lg" style="color: #114a1d;"></i></a></td>
                @break
                 @endif
 
@@ -110,37 +102,46 @@ $permissions=json_decode($project_permissions);
 
                 @endforeach
 
-                @else
+              @else
               <td style="text-align:center"><i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i></td>
 
                 @endif
 
+
                <td>
+                @if($results->count()>0)
                 @foreach ($results as $r)
                 @if($r->control_num===strval($data[$i][0]))
           <p>{{$r->first_name}} {{$r->last_name}}</p>
                     @break
                     @endif
 
+
                 @endforeach
+                @else
+                {{-- <p>Not yet</p> --}}
+                @endif
                </td>
 
 
                <td>
+                @if($results->count()>0)
                 @foreach ($results as $r)
                 @if($r->control_num===strval($data[$i][0]))
                 <p>{{date('F d, Y H:i:A', strtotime($r->last_edited_at))}}</p>
-
                     @break
                     @endif
+
                 @endforeach
+
+                @else
+                {{-- <p>Not yet</p> --}}
+                @endif
                </td>
 
             </tr>
 @endfor
-          <tr>
 
-          </tr>
 
         </tbody>
 

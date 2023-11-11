@@ -8,12 +8,11 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Http\Request;
 
-use function PHPSTORM_META\type;
 
 class IsoSec2_4_A5 extends Controller
 {
         //iso sec2.5 Appendix5 Organizational COntrols
-        public function iso_sec2_4_a5($proj_id,$user_id){
+ public function iso_sec2_4_a5($proj_id,$user_id){
             if($user_id==auth()->user()->id){
                 $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
             'project_details.project_permissions','projects.project_name')
@@ -49,10 +48,10 @@ class IsoSec2_4_A5 extends Controller
 
         }
         return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
-        }
+}
 
 
-        public function iso_sec2_4_a5_new(Request $req,$proj_id,$user_id){
+ public function iso_sec2_4_a5_new(Request $req,$proj_id,$user_id){
             $my_filter = array_filter($req->input('applicability'));
 
             $req->merge(['applicability' => $my_filter]);
@@ -117,7 +116,7 @@ class IsoSec2_4_A5 extends Controller
 
             }
             return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
-        }
+}
 
 
 

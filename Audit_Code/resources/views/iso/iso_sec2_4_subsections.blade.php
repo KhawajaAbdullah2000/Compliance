@@ -18,7 +18,7 @@
         {{-- Section1.2 --}}
         <div class="row">
             <div class="col-12">
-                <a href="/v3_2_s1_1_2/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Annex A:6-People Controls</p></a>
+                <a href="/iso_sec2_4_a6/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Annex A:6-People Controls</p></a>
 
             </div>
         </div>

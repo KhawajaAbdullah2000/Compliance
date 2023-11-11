@@ -6,11 +6,11 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\SuperUserController;
 use App\Http\Controllers\EndUserController;
 use App\Http\Controllers\IsoSec2_4_A5;
+use App\Http\Controllers\IsoSec2_4_A6;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\v3_2_s2_Controller;
 use App\Http\Controllers\v3_2_s3_Controller;
 use App\Http\Controllers\v3_2_s4_Controller;
-use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
@@ -116,6 +116,18 @@ route::put('submit_edit_sec2_4_a5/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_
 // route for editing applicability
 route::get('edit_app_iso_sec2_4_a5/{control_num}/{project_id}/{user_id}',[IsoSec2_4_A5::class,'edit_app_iso_sec2_4_a5']);
 route::put('submit_edit_app_sec2_4_a5/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'submit_edit_app_sec2_4_a5']);
+
+
+//Iso sec2.4 A6 People
+route::get('iso_sec2_4_a6/{proj_id}/{user_id}',[IsoSec2_4_A6::class,'iso_sec2_4_a6'])->name('iso_sec2_4_a6');
+route::post('iso_sec2_4_a6_new/{proj_id}/{user_id}',[IsoSec2_4_A6::class,'iso_sec2_4_a6_new']);
+route::get('iso_sec2_4_a6_edit/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A6::class,'iso_sec2_4_a6_edit']);
+route::put('submit_edit_sec2_4_a6/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A6::class,'submit_edit_sec2_4_a6']);
+route::get('edit_app_iso_sec2_4_a6/{control_num}/{project_id}/{user_id}',[IsoSec2_4_A6::class,'edit_app_iso_sec2_4_a6']);
+route::put('submit_edit_app_sec2_4_a6/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A6::class,'submit_edit_app_sec2_4_a6']);
+
+
+
 
 
 
