@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
+
 use Illuminate\Http\Request;
 
-class IsoSec2_4_A6 extends Controller
+class IsoSec2_4_A7 extends Controller
 {
-    public function iso_sec2_4_a6($proj_id, $user_id)
+
+    public function iso_sec2_4_a7($proj_id, $user_id)
     {
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -26,17 +28,16 @@ class IsoSec2_4_A6 extends Controller
                 $permissions = json_decode($checkpermission->project_permissions);
                 if ($checkpermission->type_id == 4) {
                     //reading excel file
-                    $filepath = public_path('ISO_SOA_A6.xlsx');
+                    $filepath = public_path('ISO_SOA_A7.xlsx');
                     $data = Excel::toArray([], $filepath); //with header
                     $rows = array_slice($data[0], 1); //without header(first row)
 
+                    //dd($rows);
 
-                    // dd($rows);
-
-                    $results = Db::table('iso_sec2_4_a6')->join('users', 'iso_sec2_4_a6.last_edited_by', 'users.id')
+                    $results = Db::table('iso_sec2_4_a7')->join('users', 'iso_sec2_4_a7.last_edited_by', 'users.id')
                         ->where('project_id', $proj_id)->get();
                     return view(
-                        'iso.iso_sec2_4_a6',
+                        'iso.iso_sec2_4_a7',
                         [
                             'project_id' => $proj_id,
                             'project_name' => $checkpermission->project_name,
@@ -51,8 +52,7 @@ class IsoSec2_4_A6 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-
-    public function iso_sec2_4_a6_new(Request $req, $proj_id, $user_id)
+    public function iso_sec2_4_a7_new(Request $req, $proj_id, $user_id)
     {
         $my_filter = array_filter($req->input('applicability'));
 
@@ -102,7 +102,7 @@ class IsoSec2_4_A6 extends Controller
 
 
                         for ($i = 0; $i < count($yesNoArray); $i++) {
-                            Db::table('iso_sec2_4_a6')->insert([
+                            Db::table('iso_sec2_4_a7')->insert([
                                 'project_id' => $proj_id,
                                 'control_num' => $numberArray[$i],
                                 'applicability' => $yesNoArray[$i],
@@ -111,7 +111,7 @@ class IsoSec2_4_A6 extends Controller
                             ]);
                         }
 
-                        return redirect()->route('iso_sec2_4_a6', ['proj_id' => $proj_id, 'user_id' => $user_id])
+                        return redirect()->route('iso_sec2_4_a7', ['proj_id' => $proj_id, 'user_id' => $user_id])
                             ->with('success', 'Record Added successfully');
                     }
                 }
@@ -120,9 +120,7 @@ class IsoSec2_4_A6 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-
-
-    public function iso_sec2_4_a6_edit($control_num, $proj_id, $user_id)
+    public function iso_sec2_4_a7_edit($control_num, $proj_id, $user_id)
     {
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -140,7 +138,7 @@ class IsoSec2_4_A6 extends Controller
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
                     if ($checkpermission->type_id == 4) {
-                        $filepath = public_path('ISO_SOA_A6.xlsx');
+                        $filepath = public_path('ISO_SOA_A7.xlsx');
                         $data = Excel::toArray([], $filepath); //with header
                         $filteredData = collect($data[0])->filter(function ($row) use ($control_num) {
                             // Assuming the column with the specific value is the second column (index 1).
@@ -148,10 +146,10 @@ class IsoSec2_4_A6 extends Controller
                             return strval($row[0]) === $control_num;
                         })->values()->all();
 
-                        $result = Db::table('iso_sec2_4_a6')->where('control_num', $control_num)->where('project_id', $proj_id)->first();
+                        $result = Db::table('iso_sec2_4_a7')->where('control_num', $control_num)->where('project_id', $proj_id)->first();
 
 
-                        return view('iso.edit_sec2_4_a6', [
+                        return view('iso.edit_sec2_4_a7', [
                             'project_id' => $proj_id,
                             'project_name' => $checkpermission->project_name,
                             'project_permissions' => $checkpermission->project_permissions,
@@ -165,9 +163,9 @@ class IsoSec2_4_A6 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-    public function submit_edit_sec2_4_a6(Request $req, $control_num, $proj_id, $user_id)
+    public function submit_edit_sec2_4_a7(Request $req, $control_num, $proj_id, $user_id)
     {
-        $check = Db::table('iso_sec2_4_a6')->where('control_num', $control_num)->where('project_id', $proj_id)->first();
+        $check = Db::table('iso_sec2_4_a7')->where('control_num', $control_num)->where('project_id', $proj_id)->first();
 
         if ($check->applicability == "no") {
             $req->validate([
@@ -200,21 +198,21 @@ class IsoSec2_4_A6 extends Controller
 
                         if ($check->applicability == "yes") {
 
-                            Db::table('iso_sec2_4_a6')->where('control_num', $control_num)->where('project_id', $proj_id)
+                            Db::table('iso_sec2_4_a7')->where('control_num', $control_num)->where('project_id', $proj_id)
                                 ->update([
                                     'ref_of_risk' => $req->ref_of_risk,
                                     'justification' => null,
                                     'last_edited_by' => $user_id,
                                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                                 ]);
-                            return redirect()->route('iso_sec2_4_a6', ['proj_id' => $proj_id, 'user_id' => $user_id])
+                            return redirect()->route('iso_sec2_4_a7', ['proj_id' => $proj_id, 'user_id' => $user_id])
                                 ->with('success', 'Record Updated successfully');
                         }
 
 
                         if ($check->applicability == "no") {
 
-                            Db::table('iso_sec2_4_a6')->where('control_num', $control_num)->where('project_id', $proj_id)
+                            Db::table('iso_sec2_4_a7')->where('control_num', $control_num)->where('project_id', $proj_id)
                                 ->update([
                                     'ref_of_risk' => $req->ref_of_risk,
                                     'justification' => $req->justification,
@@ -222,7 +220,7 @@ class IsoSec2_4_A6 extends Controller
                                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                                 ]);
 
-                            return redirect()->route('iso_sec2_4_a6', ['proj_id' => $proj_id, 'user_id' => $user_id])
+                            return redirect()->route('iso_sec2_4_a7', ['proj_id' => $proj_id, 'user_id' => $user_id])
                                 ->with('success', 'Record Updated successfully');
                         }
                     }
@@ -232,7 +230,8 @@ class IsoSec2_4_A6 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-    public function edit_app_iso_sec2_4_a6($control_num, $proj_id, $user_id)
+
+    public function edit_app_iso_sec2_4_a7($control_num, $proj_id, $user_id)
     {
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -251,7 +250,7 @@ class IsoSec2_4_A6 extends Controller
                 if (in_array('Data Inputter', $permissions)) {
                     if ($checkpermission->type_id == 4) {
 
-                        $filepath = public_path('ISO_SOA_A6.xlsx');
+                        $filepath = public_path('ISO_SOA_A7.xlsx');
                         $data = Excel::toArray([], $filepath); //with header
 
                         $filteredData = collect($data[0])->filter(function ($row) use ($control_num) {
@@ -261,9 +260,9 @@ class IsoSec2_4_A6 extends Controller
                         })->values()->all();
 
 
-                        $results = Db::table('iso_sec2_4_a6')->where('control_num', $control_num)->where('project_id', $proj_id)
+                        $results = Db::table('iso_sec2_4_a7')->where('control_num', $control_num)->where('project_id', $proj_id)
                             ->first();
-                        return view('iso.sec2_4_a6_edit_applicability', [
+                        return view('iso.sec2_4_a7_edit_applicability', [
                             'project_id' => $proj_id,
                             'project_name' => $checkpermission->project_name,
                             'project_permissions' => $checkpermission->project_permissions,
@@ -279,7 +278,7 @@ class IsoSec2_4_A6 extends Controller
     }
 
 
-    public function submit_edit_app_sec2_4_a6(Request $req, $control_num, $proj_id, $user_id)
+    public function submit_edit_app_sec2_4_a7(Request $req, $control_num, $proj_id, $user_id)
     {
         $req->validate([
             'applicability' => 'required'
@@ -302,13 +301,13 @@ class IsoSec2_4_A6 extends Controller
                 if (in_array('Data Inputter', $permissions)) {
                     if ($checkpermission->type_id == 4) {
 
-                        Db::table('iso_sec2_4_a6')->where('control_num', $control_num)->where('project_id', $proj_id)
+                        Db::table('iso_sec2_4_a7')->where('control_num', $control_num)->where('project_id', $proj_id)
                             ->update([
                                 'applicability' => $req->applicability,
                                 'last_edited_by' => $user_id,
                                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                             ]);
-                        return redirect()->route('iso_sec2_4_a6', ['proj_id' => $proj_id, 'user_id' => $user_id])
+                        return redirect()->route('iso_sec2_4_a7', ['proj_id' => $proj_id, 'user_id' => $user_id])
                             ->with('success', 'Record Added successfully');
                     }
                 }

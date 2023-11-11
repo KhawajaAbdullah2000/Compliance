@@ -26,7 +26,7 @@
 {{-- Section1.4 in documnet --}}
 <div class="row">
            <div class="col-12">
-            <a href="/v3_2_s1_1_4/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Annex A:7-Physical Controls</p></a>
+            <a href="/iso_sec2_4_a7/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Annex A:7-Physical Controls</p></a>
            </div>
         </div>
 {{--
@@ -34,7 +34,7 @@
 <div class="row mb-2">
 
            <div class="col-12">
-            <a href="/v3_2_s1_1_5/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Annex A:5-Technological Controls</p></a>
+            <a href="/iso_sec2_4_a8/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Annex A:8-Technological Controls</p></a>
            </div>
         </div>
 

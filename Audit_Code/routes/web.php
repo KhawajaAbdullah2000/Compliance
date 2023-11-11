@@ -7,6 +7,8 @@ use App\Http\Controllers\SuperUserController;
 use App\Http\Controllers\EndUserController;
 use App\Http\Controllers\IsoSec2_4_A5;
 use App\Http\Controllers\IsoSec2_4_A6;
+use App\Http\Controllers\IsoSec2_4_A7;
+use App\Http\Controllers\IsoSec2_4_A8;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\v3_2_s2_Controller;
 use App\Http\Controllers\v3_2_s3_Controller;
@@ -125,6 +127,25 @@ route::get('iso_sec2_4_a6_edit/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A6:
 route::put('submit_edit_sec2_4_a6/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A6::class,'submit_edit_sec2_4_a6']);
 route::get('edit_app_iso_sec2_4_a6/{control_num}/{project_id}/{user_id}',[IsoSec2_4_A6::class,'edit_app_iso_sec2_4_a6']);
 route::put('submit_edit_app_sec2_4_a6/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A6::class,'submit_edit_app_sec2_4_a6']);
+
+//Iso sec2.4 A7 Physical
+route::get('iso_sec2_4_a7/{proj_id}/{user_id}',[IsoSec2_4_A7::class,'iso_sec2_4_a7'])->name('iso_sec2_4_a7');
+route::post('iso_sec2_4_a7_new/{proj_id}/{user_id}',[IsoSec2_4_A7::class,'iso_sec2_4_a7_new']);
+route::get('iso_sec2_4_a7_edit/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A7::class,'iso_sec2_4_a7_edit']);
+route::put('submit_edit_sec2_4_a7/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A7::class,'submit_edit_sec2_4_a7']);
+route::get('edit_app_iso_sec2_4_a7/{control_num}/{project_id}/{user_id}',[IsoSec2_4_A7::class,'edit_app_iso_sec2_4_a7']);
+route::put('submit_edit_app_sec2_4_a7/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A7::class,'submit_edit_app_sec2_4_a7']);
+
+//Iso sec2.4 A8 Technlogical
+route::get('iso_sec2_4_a8/{proj_id}/{user_id}',[IsoSec2_4_A8::class,'iso_sec2_4_a8'])->name('iso_sec2_4_a8');
+route::post('iso_sec2_4_a8_new/{proj_id}/{user_id}',[IsoSec2_4_A8::class,'iso_sec2_4_a8_new']);
+route::get('iso_sec2_4_a8_edit/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A8::class,'iso_sec2_4_a8_edit']);
+route::put('submit_edit_sec2_4_a8/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A8::class,'submit_edit_sec2_4_a8']);
+route::get('edit_app_iso_sec2_4_a8/{control_num}/{project_id}/{user_id}',[IsoSec2_4_A8::class,'edit_app_iso_sec2_4_a8']);
+route::put('submit_edit_app_sec2_4_a8/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A8::class,'submit_edit_app_sec2_4_a8']);
+
+
+
 
 
 
