@@ -19,7 +19,7 @@
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/v_3_2_section1_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section2.1- Scope of Assets and Services</p></a>
+         <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section2.1- Scope of Assets and Services</p></a>
         </div>
         </div>
 

@@ -125,7 +125,6 @@ $permissions=json_decode($project_permissions)
         DMZ segments, processor connections, POS systems, encryption mechanisms, etc</label>
   <p><span class="fw-bold">Answer: </span>{{$data->requirement3}}</p>
 
-
             <label> Locations/sites/stores - such as retail outlets, data centers, corporate office locations, call centers, etc</label>
             <p><span class="fw-bold">Answer: </span>{{$data->requirement4}}</p>
 

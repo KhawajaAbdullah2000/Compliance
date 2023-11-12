@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\SuperUserController;
 use App\Http\Controllers\EndUserController;
+use App\Http\Controllers\IsoSec2_1;
 use App\Http\Controllers\IsoSec2_4_A5;
 use App\Http\Controllers\IsoSec2_4_A6;
 use App\Http\Controllers\IsoSec2_4_A7;
@@ -145,8 +146,14 @@ route::get('edit_app_iso_sec2_4_a8/{control_num}/{project_id}/{user_id}',[IsoSec
 route::put('submit_edit_app_sec2_4_a8/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A8::class,'submit_edit_app_sec2_4_a8']);
 
 
-
-
+//ISO sec2.1
+route::get('iso_section2_1/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_section2_1'])->name('iso_section2_1');
+route::post('new_iso_sec_2_1/{proj_id}/{user_id}',[IsoSec2_1::class,'new_iso_sec_2_1']);
+route::get('iso_sec_2_1_new/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_new']);
+route::get('/iso_sec_2_1_details/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_details']);
+route::get('iso_sec_2_1_edit/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_edit']);
+route::put('iso_sec_2_1_submit_edit/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_submit_edit']);
+route::get('iso_sec_2_1_delete/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_delete']);
 
 
 
