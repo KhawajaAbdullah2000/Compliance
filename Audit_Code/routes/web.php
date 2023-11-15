@@ -6,6 +6,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\SuperUserController;
 use App\Http\Controllers\EndUserController;
 use App\Http\Controllers\IsoSec2_1;
+use App\Http\Controllers\IsoSec2_3;
 use App\Http\Controllers\IsoSec2_4_A5;
 use App\Http\Controllers\IsoSec2_4_A6;
 use App\Http\Controllers\IsoSec2_4_A7;
@@ -156,11 +157,14 @@ route::put('iso_sec_2_1_submit_edit/{assessment_id}/{proj_id}/{user_id}',[IsoSec
 route::get('iso_sec_2_1_delete/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_delete']);
 
 
-
-
-
-
-
+//Iso Sec2.3
+route::get('iso_sec_2_3/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3'])->name('iso_sec_2_3');
+route::get('iso_sec_2_3_edit/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3_edit'])->name('iso_sec_2_3_edit');
+route::post('iso_sec_2_3_new_asset_value/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3_new_asset_value']);
+route::get('iso_sec_2_3_table_insert/{asset_id}/{control_num}/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3_table_insert']);
+route::post('iso_sec_2_3_table_submit/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3_table_submit']);
+route::get('iso_sec_2_3_edit_table/{asset_id}/{control_num}/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3_edit_table']);
+route::put('iso_sec_2_3_edit_table_submit/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3_edit_table_submit']);
 
 // route::get('v_3_2_section1_subsections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1_subsections']);
 // route::get('v_3_2_sections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_sections'])->name('v_3_2_sections');
