@@ -3,6 +3,7 @@
 @section('content')
 
 @include('user-nav')
+@include('iso_sec_nav')
 
 @php
 $permissions=json_decode($project_permissions);

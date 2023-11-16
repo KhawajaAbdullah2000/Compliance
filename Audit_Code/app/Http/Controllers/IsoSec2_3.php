@@ -56,7 +56,7 @@ class IsoSec2_3 extends Controller
                 ->first();
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
-                if (in_array('Data Inputter', $permissions)) {
+
                     if ($checkpermission->type_id == 4) {
 
                         $iso_sec_2_4_a5 = Db::table('iso_sec2_4_a5')->where('project_id', $proj_id)
@@ -107,7 +107,7 @@ class IsoSec2_3 extends Controller
                             ]);
                         }
                     }
-                }
+
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
         }
@@ -149,6 +149,43 @@ class IsoSec2_3 extends Controller
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
         }
+    }
+
+    public function iso_sec_2_3_edit_asset_value(Request $req,$asset_id,$proj_id,$user_id){
+       $req->validate([
+        'edit_asset_value'=>'required'
+       ]);
+
+       if ($user_id == auth()->user()->id) {
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+            if (in_array('Data Inputter', $permissions)) {
+                if ($checkpermission->type_id == 4) {
+                    Db::table('iso_sec_2_3')->where('asset_id',$asset_id)->where('project_id',$proj_id)
+                    ->update([
+                        'asset_value' => $req->edit_asset_value,
+                        'last_edited_by' => $user_id,
+                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                    ]);
+
+                    return redirect()->route('iso_sec_2_3_edit', ['assessment_id' => $asset_id, 'proj_id' => $proj_id, 'user_id' => $user_id])
+                        ->with('success', 'Asset value updated successfully.But now Edit the threat values for risk assessment with updated asset value');
+                }
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+    }
     }
 
     public function iso_sec_2_3_table_insert($asset_id, $control_num, $proj_id, $user_id)

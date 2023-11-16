@@ -3,6 +3,7 @@
 @section('content')
 
 @include('user-nav')
+@include('iso_sec_nav')
 
 @php
 $permissions=json_decode($project_permissions);
@@ -21,11 +22,12 @@ $permissions=json_decode($project_permissions);
     <p>Asset Owner Dept: {{$assetData->owner_dept}}</p>
     <p>Asset Physical Location: {{$assetData->physical_loc}}</p>
     <p>Asset Logical Location: {{$assetData->logical_loc}}</p>
-<p>Asset Id is Iso_sec_2_1 table: {{$assetData->assessment_id}}</p>
+<p>Asset Id is Iso Sec 2.1 table: {{$assetData->assessment_id}}</p>
 
 
 
 @if(!$assetvalue)
+@if(in_array('Data Inputter',$permissions))
     <form action="/iso_sec_2_3_new_asset_value/{{$assetData->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" method="post">
         @csrf
         <div class="flex">
@@ -41,14 +43,41 @@ $permissions=json_decode($project_permissions);
 
     </div>
 
-
     </form>
+    @else
+    <p>Asset value not uploaded yet</p>
+    @endif
 
     @else
+    @if(in_array('Data Inputter',$permissions))
+    <form action="/iso_sec_2_3_edit_asset_value/{{$assetData->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" method="post">
+        @csrf
+        @method('PUT')
+        <div class="flex">
+<label for="" class="fw-bold">Asset Value</label>
+        <select name="edit_asset_value" class="boxstyling bg-primary">
+            <option value="">Select Value</option>
+            <option value=10 {{$assetvalue==10?'selected':''}}>High</option>
+            <option value=5 {{$assetvalue==5?'selected':''}}>Medium</option>
+            <option value=1 {{$assetvalue==1?'selected':''}}>Low</option>
+        </select>
+
+        <button class="btn btn-secondary btn-sm px-5" type="submit">edit</button>
+
+    </div>
+
+
+    </form>
+    @else
     <p>Asset value: {{$assetvalue}}</p>
+    @endif
 
 
-    <div class="main">
+
+
+
+
+    <div class="main mt-5">
 
 <table class="table table-primary table-hover">
     <thead style="vertical-align: middle">
@@ -62,7 +91,12 @@ $permissions=json_decode($project_permissions);
         <td>Treatment Action</td>
         <td>Treatment Target Date</td>
         <td>Responsibiliy for Treatment</td>
+        @if(in_array('Data Inputter',$permissions))
         <td>Actions</td>
+        @else
+        <td>No Action Allowed</td>
+        @endif
+
     </thead>
 
 
@@ -85,8 +119,12 @@ $permissions=json_decode($project_permissions);
             <td>{{$tdata->treatment_action}}</td>
             <td>{{$tdata->treatment_target_date}}</td>
             <td>{{$tdata->first_name}} {{$tdata->last_name}}</td>
+            @if(in_array('Data Inputter',$permissions))
         <td><a href="/iso_sec_2_3_edit_table/{{$assetData->assessment_id}}/{{$a5->control_num}}/{{$project_id}}/{{auth()->user()->id}}"
             class="btn btn-warning btn-sm">Edit risk values</a></td>
+            @else
+            <td></td>
+            @endif
 
             @break
          @endif
@@ -100,9 +138,12 @@ $permissions=json_decode($project_permissions);
          <td></td>
          <td></td>
          <td></td>
+         @if(in_array('Data Inputter',$permissions))
          <td><a href="/iso_sec_2_3_table_insert/{{$assetData->assessment_id}}/{{$a5->control_num}}/{{$project_id}}/{{auth()->user()->id}}"
             class="btn btn-success btn-sm">Add risk values</a></td>
-
+            @else
+            <td></td>
+            @endif
 
          @endif
 
@@ -117,9 +158,12 @@ $permissions=json_decode($project_permissions);
         <td></td>
         <td></td>
         <td></td>
+        @if(in_array('Data Inputter',$permissions))
         <td><a href="/iso_sec_2_3_table_insert/{{$assetData->assessment_id}}/{{$a5->control_num}}/{{$project_id}}/{{auth()->user()->id}}"
             class="btn btn-success btn-sm">Add risk values</a></td>
-
+            @else
+            <td></td>
+@endif
 
     @endif
 
@@ -150,8 +194,12 @@ $permissions=json_decode($project_permissions);
             <td>{{$tdata->treatment_action}}</td>
             <td>{{$tdata->treatment_target_date}}</td>
             <td>{{$tdata->first_name}} {{$tdata->last_name}}</td>
+            @if(in_array('Data Inputter',$permissions))
             <td><a href="/iso_sec_2_3_edit_table/{{$assetData->assessment_id}}/{{$a6->control_num}}/{{$project_id}}/{{auth()->user()->id}}"
                 class="btn btn-warning btn-sm">Edit risk values</a></td>
+                @else
+                <td></td>
+                @endif
             @break
          @endif
          @if($loop->last)
@@ -163,9 +211,12 @@ $permissions=json_decode($project_permissions);
          <td></td>
          <td></td>
          <td></td>
+         @if(in_array('Data Inputter',$permissions))
          <td><a href="/iso_sec_2_3_table_insert/{{$assetData->assessment_id}}/{{$a6->control_num}}/{{$project_id}}/{{auth()->user()->id}}"
             class="btn btn-success btn-sm">Add risk values</a></td>
-
+@else
+<td></td>
+            @endif
 
          @endif
         @endforeach
@@ -179,9 +230,14 @@ $permissions=json_decode($project_permissions);
         <td></td>
         <td></td>
         <td></td>
+        @if(in_array('Data Inputter',$permissions))
         <td><a href="/iso_sec_2_3_table_insert/{{$assetData->assessment_id}}/{{$a6->control_num}}/{{$project_id}}/{{auth()->user()->id}}"
             class="btn btn-success btn-sm">Add risk values</a></td>
+@else
+<td></td>
+            @endif
         @endif
+
 
 
 
@@ -214,8 +270,12 @@ $permissions=json_decode($project_permissions);
             <td>{{$tdata->treatment_action}}</td>
             <td>{{$tdata->treatment_target_date}}</td>
             <td>{{$tdata->first_name}} {{$tdata->last_name}}</td>
+            @if(in_array('Data Inputter',$permissions))
             <td><a href="/iso_sec_2_3_edit_table/{{$assetData->assessment_id}}/{{$a7->control_num}}/{{$project_id}}/{{auth()->user()->id}}"
                 class="btn btn-warning btn-sm">Edit risk values</a></td>
+                @else
+                <td></td>
+                @endif
             @break
          @endif
          @if($loop->last)
@@ -227,8 +287,12 @@ $permissions=json_decode($project_permissions);
          <td></td>
          <td></td>
          <td></td>
+         @if(in_array('Data Inputter',$permissions))
          <td><a href="/iso_sec_2_3_table_insert/{{$assetData->assessment_id}}/{{$a7->control_num}}/{{$project_id}}/{{auth()->user()->id}}"
             class="btn btn-success btn-sm">Add risk values</a></td>
+            @else
+            <td></td>
+            @endif
          @endif
 
 
@@ -242,8 +306,12 @@ $permissions=json_decode($project_permissions);
         <td></td>
         <td></td>
         <td></td>
+        @if(in_array('Data Inputter',$permissions))
         <td><a href="/iso_sec_2_3_table_insert/{{$assetData->assessment_id}}/{{$a7->control_num}}/{{$project_id}}/{{auth()->user()->id}}"
             class="btn btn-success btn-sm">Add risk values</a></td>
+            @else
+            <td></td>
+            @endif
 
         @endif
 
@@ -277,8 +345,12 @@ $permissions=json_decode($project_permissions);
             <td>{{$tdata->treatment_action}}</td>
             <td>{{$tdata->treatment_target_date}}</td>
             <td>{{$tdata->first_name}} {{$tdata->last_name}}</td>
+            @if(in_array('Data Inputter',$permissions))
             <td><a href="/iso_sec_2_3_edit_table/{{$assetData->assessment_id}}/{{$a8->control_num}}/{{$project_id}}/{{auth()->user()->id}}"
                 class="btn btn-warning btn-sm">Edit risk values</a></td>
+                @else
+                <td></td>
+                @endif
             @break
          @endif
 
@@ -291,8 +363,12 @@ $permissions=json_decode($project_permissions);
          <td></td>
          <td></td>
          <td></td>
+         @if(in_array('Data Inputter',$permissions))
          <td><a href="/iso_sec_2_3_edit_table/{{$assetData->assessment_id}}/{{$a8->control_num}}/{{$project_id}}/{{auth()->user()->id}}"
             class="btn btn-success btn-sm">Add risk values</a></td>
+            @else
+            <td></td>
+            @endif
          @endif
         @endforeach
 
@@ -305,8 +381,12 @@ $permissions=json_decode($project_permissions);
         <td></td>
         <td></td>
         <td></td>
+        @if(in_array('Data Inputter',$permissions))
         <td><a href="/iso_sec_2_3_table_insert/{{$assetData->assessment_id}}/{{$a8->control_num}}/{{$project_id}}/{{auth()->user()->id}}"
             class="btn btn-success btn-sm">Add risk values</a></td>
+            @else
+            <td></td>
+            @endif
         @endif
 
 

@@ -78,7 +78,7 @@ class ProjectController extends Controller
     // }
 
 //ISO
-    public function iso_sections($proj_id,$user_id){
+    public function iso_sections(Request $req,$proj_id,$user_id){
 
         $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
         'project_details.project_permissions','projects.project_name')
@@ -91,6 +91,17 @@ class ProjectController extends Controller
         if($checkpermission){
             $permissions=json_decode($checkpermission->project_permissions);
                     if($checkpermission->type_id==4){
+                        if ($req->session()->exists('projectid'))
+                         {
+                             $req->session()->forget('projectid');
+                             $req->session()->put('projectid', $proj_id);
+
+                        }else{
+                            $req->session()->put('projectid', $proj_id);
+
+                        }
+
+
                         return view('iso.iso_sections',
                         ['project_id'=>$proj_id,'project_name'=>$checkpermission->project_name]);
                     }

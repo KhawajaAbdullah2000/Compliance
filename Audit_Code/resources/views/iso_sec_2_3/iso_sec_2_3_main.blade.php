@@ -3,6 +3,7 @@
 @section('content')
 
 @include('user-nav')
+@include('iso_sec_nav')
 
 @php
 $permissions=json_decode($project_permissions);
@@ -63,7 +64,10 @@ $permissions=json_decode($project_permissions);
                 <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
             </a>
         @else
-        <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
+        <a href="/iso_sec_2_3_edit/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">
+            <i class="fas fa-info-circle fa-lg" style="color: #035909;"></i>
+        </a>
+
 
         @endif
                 </td>
