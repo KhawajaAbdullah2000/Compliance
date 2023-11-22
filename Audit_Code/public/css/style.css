@@ -231,6 +231,8 @@ input::-webkit-inner-spin-button {
     background-size: cover;
 }
 
+
+
 .full-img-subsections {
     height: 430px;
     background-image: url("../subsection.jpg");
@@ -262,6 +264,7 @@ input::-webkit-inner-spin-button {
     background-size: cover;
     height: 990px;
 }
+
 
 @media only screen and (max-width: 479px) {
     .tab .nav-tabs li {
