@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2023 at 01:14 PM
+-- Generation Time: Nov 22, 2023 at 02:09 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -109,9 +109,10 @@ INSERT INTO `iso_sec2_4_a6` (`assessment_id`, `project_id`, `control_num`, `appl
 (4, 18, '6.5', 'yes', NULL, NULL, 57, '2023-11-11 13:10:47'),
 (5, 18, '6.6', 'no', NULL, NULL, 57, '2023-11-11 13:10:47'),
 (7, 17, '6.2', 'yes', NULL, 'Deserunt ad ea rerum', 57, '2023-11-11 15:16:49'),
-(8, 17, '6.5', 'no', 'fgfgfg', 'Quisquam dolor nemo', 57, '2023-11-11 15:16:31'),
+(8, 17, '6.5', 'yes', NULL, 'Quisquam dolor nemo', 57, '2023-11-15 12:50:56'),
 (9, 18, '6.1', 'no', 'Velit non dolor null', 'Ex commodi vel est p', 57, '2023-11-11 15:18:36'),
-(10, 18, '6.2', 'no', NULL, NULL, 57, '2023-11-11 15:18:11');
+(10, 18, '6.2', 'no', NULL, NULL, 57, '2023-11-11 15:18:11'),
+(11, 17, '6.1', 'yes', NULL, NULL, 57, '2023-11-15 12:51:03');
 
 -- --------------------------------------------------------
 
@@ -165,7 +166,143 @@ INSERT INTO `iso_sec2_4_a8` (`assessment_id`, `project_id`, `control_num`, `appl
 (2, 18, '8.2', 'no', 'Sint quaerat dolore', 'Anim sed maxime labo', 57, '2023-11-11 16:30:16'),
 (3, 18, '8.17', 'no', NULL, NULL, 57, '2023-11-11 16:25:31'),
 (4, 18, '8.33', 'yes', NULL, NULL, 57, '2023-11-11 16:25:31'),
-(5, 18, '8.7', 'no', 'jhjjjh', 'ppp[[', 57, '2023-11-11 17:12:17');
+(5, 18, '8.7', 'no', 'jhjjjh', 'ppp[[', 57, '2023-11-11 17:12:17'),
+(6, 17, '8.1', 'yes', NULL, NULL, 57, '2023-11-15 16:56:24'),
+(7, 17, '8.4', 'no', NULL, NULL, 57, '2023-11-15 16:56:24'),
+(8, 17, '8.31', 'yes', NULL, NULL, 57, '2023-11-15 16:56:24');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `iso_sec_2_1`
+--
+
+CREATE TABLE `iso_sec_2_1` (
+  `assessment_id` int(11) NOT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `g_name` varchar(300) NOT NULL,
+  `name` varchar(300) NOT NULL,
+  `c_name` varchar(300) NOT NULL,
+  `owner_dept` varchar(300) NOT NULL,
+  `physical_loc` varchar(300) NOT NULL,
+  `logical_loc` varchar(300) NOT NULL,
+  `s_name` varchar(300) NOT NULL,
+  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `last_edited_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `iso_sec_2_1`
+--
+
+INSERT INTO `iso_sec_2_1` (`assessment_id`, `project_id`, `g_name`, `name`, `c_name`, `owner_dept`, `physical_loc`, `logical_loc`, `s_name`, `last_edited_by`, `last_edited_at`) VALUES
+(1, 17, 'Distinctio Qui susc', 'Asset 1', 'rem per', 'Porro optio sed con', 'Similique nostrud ne', 'Praesentium voluptat', 'Voluptatibus volupta', 57, '2023-11-15 10:50:14'),
+(4, 17, 'Quia cum elit alias', 'Nisi non incididunt', 'Est id pariatur Al', 'Dolore aliquid nostr', 'Voluptas non qui lib', 'Similique vitae cons', 'Occaecat magni asper', 57, '2023-11-12 15:21:34'),
+(5, 17, 'Labo hehe', 'Ut quis iste duis si', 'Quasi atque lorem de', 'Id qui consequatur i', 'Exercitation aliquip', 'Do earum dolore quis', 'Servvddf', 57, '2023-11-12 15:31:46'),
+(8, 18, 'Fuga Mollit ea non', 'Deleniti natus ut no', 'Qui ullamco aperiam', 'Ex omnis dolorem sed', 'Veniam blanditiis n', 'Eos inventore ullam', 'Ullam ut elit anim', 57, '2023-11-15 12:28:50'),
+(9, 17, 'Asset 5', 'Dignissimos fuga Eu', 'Et eum voluptas et d', 'Nobis et aliqua Quo', 'Ut maiores deserunt', 'Voluptatem est nihi', 'Sint earum debitis a', 57, '2023-11-15 12:59:39'),
+(11, 17, 'Asset 7', 'Ullamco consequuntur', 'Quidem magni dolor n', 'Et odio rerum expedi', 'Omnis quam cupiditat', 'Et excepteur quae al', 'Officia maxime volup', 57, '2023-11-15 17:31:27'),
+(12, 17, 'Asset 8', 'Explicabo Nostrud q', 'Sit molestiae mollit', 'Velit placeat sint', 'Quisquam voluptatem', 'Aspernatur reiciendi', 'Aliquip autem fugiat', 57, '2023-11-16 16:51:31'),
+(13, 17, 'Asset 9', 'Qui obcaecati nemo v', 'Labore consequatur t', 'Officiis modi dolor', 'Nisi quia consequat', 'Cupiditate voluptate', 'Dolor error ut elit', 57, '2023-11-16 16:53:57');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `iso_sec_2_2`
+--
+
+CREATE TABLE `iso_sec_2_2` (
+  `assessment_id` int(11) NOT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `title_num` int(11) DEFAULT NULL,
+  `sub_req` varchar(100) DEFAULT NULL,
+  `comp_status` varchar(10) DEFAULT NULL,
+  `comments` varchar(3000) DEFAULT NULL,
+  `attachment` varchar(1000) DEFAULT NULL,
+  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `last_edited_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `iso_sec_2_2`
+--
+
+INSERT INTO `iso_sec_2_2` (`assessment_id`, `project_id`, `title_num`, `sub_req`, `comp_status`, `comments`, `attachment`, `last_edited_by`, `last_edited_at`) VALUES
+(12, 17, 4, '4.3-a', 'no', NULL, '1700656156.xlsx', 57, '2023-11-22 17:29:16'),
+(13, 17, 5, '5.1-a', 'no', NULL, NULL, 57, '2023-11-22 17:36:14'),
+(19, 17, 4, '4.2-c', 'no', 'hhg', '1700657794.jpg', 57, '2023-11-22 17:56:40');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `iso_sec_2_3`
+--
+
+CREATE TABLE `iso_sec_2_3` (
+  `sec2_3_key` int(11) NOT NULL,
+  `asset_id` int(11) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `asset_value` int(11) NOT NULL,
+  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `last_edited_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `iso_sec_2_3`
+--
+
+INSERT INTO `iso_sec_2_3` (`sec2_3_key`, `asset_id`, `project_id`, `asset_value`, `last_edited_by`, `last_edited_at`) VALUES
+(1, 1, 17, 5, 57, '2023-11-15 19:08:30'),
+(2, 5, 17, 5, 57, '2023-11-15 12:12:21'),
+(4, 8, 18, 5, 57, '2023-11-15 12:29:02'),
+(5, 4, 17, 10, 57, '2023-11-15 12:59:04'),
+(7, 9, 17, 10, 57, '2023-11-15 17:18:56'),
+(8, 11, 17, 1, 57, '2023-11-15 17:31:39'),
+(9, 12, 17, 10, 57, '2023-11-16 16:52:16'),
+(10, 13, 17, 5, 57, '2023-11-16 17:06:13');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `iso_sec_2_3_table`
+--
+
+CREATE TABLE `iso_sec_2_3_table` (
+  `assessment_id` int(11) NOT NULL,
+  `asset_id` int(11) NOT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `control_num` varchar(100) NOT NULL,
+  `control_compliance` int(11) NOT NULL,
+  `vulnerability` int(11) NOT NULL,
+  `threat` int(11) NOT NULL,
+  `risk_level` decimal(11,5) NOT NULL,
+  `residual_risk_treatment` varchar(100) NOT NULL,
+  `treatment_action` varchar(1000) NOT NULL,
+  `treatment_target_date` date NOT NULL,
+  `responsibility_for_treatment` bigint(20) UNSIGNED DEFAULT NULL,
+  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `last_edited_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `iso_sec_2_3_table`
+--
+
+INSERT INTO `iso_sec_2_3_table` (`assessment_id`, `asset_id`, `project_id`, `control_num`, `control_compliance`, `vulnerability`, `threat`, `risk_level`, `residual_risk_treatment`, `treatment_action`, `treatment_target_date`, `responsibility_for_treatment`, `last_edited_by`, `last_edited_at`) VALUES
+(1, 1, 17, '5.1', 44, 56, 58, '1.62400', 'retain and accept risk', '2', '2023-11-23', 57, 57, '2023-11-15 19:09:06'),
+(2, 1, 17, '6.5', 33, 67, 12, '0.80400', 'share risk', 'Action 2', '2023-11-24', 55, 57, '2023-11-15 18:43:41'),
+(3, 1, 17, '5.8', 99, 1, 19, '0.00950', 'share risk', 'Edited value', '2023-11-22', 55, 57, '2023-11-15 19:09:42'),
+(4, 1, 17, '6.1', 9, 91, 8, '1.00000', 'avoid risk', 'gh', '2023-11-25', 55, 57, '2023-11-15 16:55:21'),
+(5, 1, 17, '7.1', 88, 12, 7, '0.00000', 'avoid risk', '23', '2023-11-24', 57, 57, '2023-11-15 17:01:05'),
+(6, 4, 17, '5.1', 6, 94, 55, '5.00000', 'retain and accept risk', 'hjj', '2023-12-05', 57, 57, '2023-11-15 17:01:48'),
+(7, 1, 17, '8.1', 55, 45, 5, '0.00000', 'retain and accept risk', 'Action 2', '2023-10-30', 55, 57, '2023-11-15 17:02:50'),
+(11, 9, 17, '6.5', 8, 92, 7, '1.00000', 'retain and accept risk', 'Action1', '2023-11-24', 55, 57, '2023-11-15 17:20:48'),
+(12, 11, 17, '5.1', 99, 1, 8, '0.00000', 'share risk', 'hghgghggh', '2023-11-22', 55, 57, '2023-11-15 17:46:10'),
+(13, 11, 17, '7.2', 66, 34, 55, '0.00000', 'share risk', 'gh', '2023-11-30', 57, 57, '2023-11-15 17:50:32'),
+(14, 1, 17, '5.2', 77, 23, 55, '0.63250', 'share risk', 'ghg', '2023-11-29', 57, 57, '2023-11-15 19:09:32'),
+(15, 12, 17, '5.1', 44, 56, 33, '1.84800', 'share risk', 'Action hh', '2023-11-29', 55, 57, '2023-11-16 16:52:25'),
+(16, 1, 17, '5.36', 77, 23, 55, '0.63250', 'retain and accept risk', 'ghgghhggh', '2023-11-24', 57, 57, '2023-11-16 17:03:07'),
+(17, 13, 17, '5.1', 66, 34, 56, '0.95200', 'share risk', '66', '2023-11-16', 57, 57, '2023-11-16 17:06:32');
 
 -- --------------------------------------------------------
 
@@ -1790,6 +1927,44 @@ ALTER TABLE `iso_sec2_4_a8`
   ADD KEY `last_edited_by` (`last_edited_by`);
 
 --
+-- Indexes for table `iso_sec_2_1`
+--
+ALTER TABLE `iso_sec_2_1`
+  ADD PRIMARY KEY (`assessment_id`),
+  ADD KEY `project_id` (`project_id`),
+  ADD KEY `last_edited_by` (`last_edited_by`);
+
+--
+-- Indexes for table `iso_sec_2_2`
+--
+ALTER TABLE `iso_sec_2_2`
+  ADD PRIMARY KEY (`assessment_id`),
+  ADD UNIQUE KEY `project_id` (`project_id`,`sub_req`),
+  ADD KEY `project_id_2` (`project_id`),
+  ADD KEY `last_edited_by` (`last_edited_by`);
+
+--
+-- Indexes for table `iso_sec_2_3`
+--
+ALTER TABLE `iso_sec_2_3`
+  ADD PRIMARY KEY (`sec2_3_key`),
+  ADD UNIQUE KEY `asset_id` (`asset_id`,`project_id`),
+  ADD KEY `asset_id_2` (`asset_id`),
+  ADD KEY `project_id` (`project_id`),
+  ADD KEY `last_edited_by` (`last_edited_by`);
+
+--
+-- Indexes for table `iso_sec_2_3_table`
+--
+ALTER TABLE `iso_sec_2_3_table`
+  ADD PRIMARY KEY (`assessment_id`),
+  ADD UNIQUE KEY `asset_id` (`asset_id`,`project_id`,`control_num`),
+  ADD KEY `asset_id_2` (`asset_id`),
+  ADD KEY `project_id` (`project_id`),
+  ADD KEY `responsibility_for_treatment` (`responsibility_for_treatment`),
+  ADD KEY `last_edited_by` (`last_edited_by`);
+
+--
 -- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
@@ -2262,7 +2437,7 @@ ALTER TABLE `iso_sec2_4_a5`
 -- AUTO_INCREMENT for table `iso_sec2_4_a6`
 --
 ALTER TABLE `iso_sec2_4_a6`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `iso_sec2_4_a7`
@@ -2274,7 +2449,31 @@ ALTER TABLE `iso_sec2_4_a7`
 -- AUTO_INCREMENT for table `iso_sec2_4_a8`
 --
 ALTER TABLE `iso_sec2_4_a8`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `iso_sec_2_1`
+--
+ALTER TABLE `iso_sec_2_1`
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `iso_sec_2_2`
+--
+ALTER TABLE `iso_sec_2_2`
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `iso_sec_2_3`
+--
+ALTER TABLE `iso_sec_2_3`
+  MODIFY `sec2_3_key` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `iso_sec_2_3_table`
+--
+ALTER TABLE `iso_sec_2_3_table`
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -2619,6 +2818,37 @@ ALTER TABLE `iso_sec2_4_a7`
 ALTER TABLE `iso_sec2_4_a8`
   ADD CONSTRAINT `iso_sec2_4a8_edit` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `iso_sec2_4a8_proj` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `iso_sec_2_1`
+--
+ALTER TABLE `iso_sec_2_1`
+  ADD CONSTRAINT `iso_sec2_1_edit` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `iso_sec2_1_proj` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `iso_sec_2_2`
+--
+ALTER TABLE `iso_sec_2_2`
+  ADD CONSTRAINT `iso_sec2_2edit` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `iso_sec2_2projid` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `iso_sec_2_3`
+--
+ALTER TABLE `iso_sec_2_3`
+  ADD CONSTRAINT `iso_sec_2_3_assetid` FOREIGN KEY (`asset_id`) REFERENCES `iso_sec_2_1` (`assessment_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `iso_sec_2_3_lastedit` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `iso_sec_2_3_proj_id` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `iso_sec_2_3_table`
+--
+ALTER TABLE `iso_sec_2_3_table`
+  ADD CONSTRAINT `sec2_3_table_assetid` FOREIGN KEY (`asset_id`) REFERENCES `iso_sec_2_1` (`assessment_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `sec2_3_table_editby` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `sec2_3_table_projid` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `sec2_3_table_responsbe` FOREIGN KEY (`responsibility_for_treatment`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `model_has_permissions`
