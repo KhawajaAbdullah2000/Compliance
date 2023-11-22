@@ -3,6 +3,9 @@
 @section('content')
 
 @include('user-nav')
+
+
+@include('iso_sec_nav')
 @php
 $permissions=json_decode($project_permissions);
 @endphp
@@ -46,5 +49,20 @@ $permissions=json_decode($project_permissions);
     </table>
 
 </div>
+
+@section('scripts')
+
+@if(Session::has('success'))
+<script>
+    swal({
+  title: "{{Session::get('success')}}",
+  icon: "success",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script>
+@endif
+
+@endsection
 
 @endsection

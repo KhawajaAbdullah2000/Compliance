@@ -86,7 +86,7 @@ class IsoSec2_2 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-    public function iso_sec_2_2_req($main_req_num,$title,$proj_id,$user_id){
+    public function iso_sec_2_2_req(Request $req,$main_req_num,$title,$proj_id,$user_id){
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -102,6 +102,17 @@ class IsoSec2_2 extends Controller
             if ($checkpermission) {
 
                 if ($checkpermission->type_id == 4) {
+
+                    if ($req->session()->exists('main_req_num'))
+                    {
+                        $req->session()->forget('main_req_num');
+                        $req->session()->put('main_req_num', $main_req_num);
+
+                   }else{
+                       $req->session()->put('main_req_num', $main_req_num);
+
+                   }
+
                     $filepath=public_path('ISO_SEC_2_2.xlsx');
                     $data = Excel::toArray([], $filepath); //with header
                     $rows = array_slice($data[0], 1); //without header(first row)
@@ -198,8 +209,11 @@ class IsoSec2_2 extends Controller
                 if (in_array('Data Inputter', $permissions)) {
 
                     if($req->attachment!=null){
+
+                        //saving file
                         $fileName = time().'.'.$req->attachment->extension();
                         $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
+
                         Db::table('iso_sec_2_2')->insert([
                             'project_id'=>$proj_id,
                             'comp_status'=>$req->comp_status,
@@ -211,6 +225,7 @@ class IsoSec2_2 extends Controller
                             'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
                         ]);
                     }else{
+
                         Db::table('iso_sec_2_2')->insert([
                             'project_id'=>$proj_id,
                             'comp_status'=>$req->comp_status,
@@ -223,8 +238,12 @@ class IsoSec2_2 extends Controller
                         ]);
                     }
 
-         return redirect()->route('iso_sec2_2_sub_req_edit',['sub_req'=>$sub_req,'title'=>$title,'proj_id'=>$proj_id,'user_id'=>$user_id]);
-        }
+                    $mysessionreq=$req->session()->get('main_req_num');
+
+                return redirect()->route('iso_sec_2_2_req',
+                ['main_req_num'=>$mysessionreq,'title'=>$title,'proj_id'=>$proj_id,'user_id'=>$user_id])
+                ->with('success','Record Updated SUccessfully');
+                }
 
 
         }
@@ -234,5 +253,63 @@ class IsoSec2_2 extends Controller
 
 
     }
+}
+public function iso_sec_2_2_edit_form(Request $req,$sub_req,$title,$proj_id,$user_id){
+    $req->validate([
+        'comp_status'=>'required'
+      ]);
+      if ($user_id == auth()->user()->id) {
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+            if ($checkpermission->type_id == 4) {
+                if (in_array('Data Inputter', $permissions)) {
+
+                    if($req->attachment!=null){
+                        $fileName = time().'.'.$req->attachment->extension();
+                        $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
+                        Db::table('iso_sec_2_2')->where('project_id',$proj_id)->where('sub_req',$sub_req)
+                        ->update([
+                            'comp_status'=>$req->comp_status,
+                            'comments'=>$req->comments,
+                            'attachment'=>$fileName,
+                            'last_edited_by'=>$user_id,
+                            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+                        ]);
+                    }else{
+                        Db::table('iso_sec_2_2')->where('project_id',$proj_id)->where('sub_req',$sub_req)
+                        ->update([
+
+                            'comp_status'=>$req->comp_status,
+                            'comments'=>$req->comments,
+                            'last_edited_by'=>$user_id,
+                            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+
+                        ]);
+                    }
+
+                    $mysessionreq=$req->session()->get('main_req_num');
+
+                return redirect()->route('iso_sec_2_2_req',
+                ['main_req_num'=>$mysessionreq,'title'=>$title,'proj_id'=>$proj_id,'user_id'=>$user_id])
+                ->with('success','Record Updated SUccessfully');
+                }
+
+        }
+    }
+    return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+}
 }
 }

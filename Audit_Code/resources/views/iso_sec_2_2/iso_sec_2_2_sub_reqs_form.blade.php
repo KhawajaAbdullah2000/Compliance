@@ -3,6 +3,9 @@
 @section('content')
 
 @include('user-nav')
+
+
+@include('iso_sec_nav')
 @php
 $permissions=json_decode($project_permissions);
 @endphp
@@ -17,6 +20,8 @@ $permissions=json_decode($project_permissions);
 
          <p class="fw-bold">ISO 27001:2022 Mandatory Requirement: </p>
         <p>{{$filteredData[0][4]}} </p>
+
+        @if(in_array('Data Inputter',$permissions))
 
         @isset($result)
 
@@ -73,11 +78,8 @@ $permissions=json_decode($project_permissions);
 
 
 
-
-
-
                       <div class="text-center">
-                        <button type="submit" class="btn btn-primary btn-md mt-2">Submit Details</button>
+                        <button type="submit" class="btn btn-primary btn-md mt-2">Edit Details</button>
                       </div>
 
 
@@ -159,9 +161,75 @@ $permissions=json_decode($project_permissions);
 
         @endisset
 
+@else
+
+@isset($result)
+
+<div class="row">
+
+    <div class="card mb-5">
+
+        <div class="card-body">
+
+            <label>Compliance Status: </label>
+            <p><span class="fw-bold">Answer: </span>{{$result->comp_status}}</p>
+
+
+           <label>Comments: </label>
+           @isset($result->comments)
+       <p><span class="fw-bold">Answer: </span>{{$result->comments}}</p>
+       @else
+       <p></p>
+       @endisset
+
+       <label>Attachment:</label>
+       @isset($result->attachment)
+       <img src="{{asset('iso_sec_2_2/'.$result->attachment)}}" alt="Document attached" height="100" width="100">
+
+       @else
+       <p></p>
+       @endisset
+
+<br>
+<br>
+<label for="">last edited by: </label>
+<span class="badge text-bg-success text-black">{{$result->first_name}} {{$result->last_name}}</span>
+
+   <br>
+
+<label for="">last edited at: </label>
+<span class="badge text-bg-warning">{{date('F d, Y H:i:A', strtotime($result->last_edited_at))}}</span>
+
+
+
+
+
+        </div>
+    </div>
 </div>
 
 
+@endisset
+        @endif
+        {{-- if Datainputter --}}
+</div>
+
+
+
+@section('scripts')
+
+@if(Session::has('success'))
+<script>
+    swal({
+  title: "{{Session::get('success')}}",
+  icon: "success",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script>
+@endif
+
+@endsection
 
 
 @endsection

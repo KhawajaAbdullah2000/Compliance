@@ -4,6 +4,8 @@
 
 @include('user-nav')
 
+@include('iso_sec_nav')
+
 <div class="container">
 
     <h1 class="text-center">Project id: {{$project_id}} Project name: {{$project_name}} Section2.4 Statement of Applicability</h1>

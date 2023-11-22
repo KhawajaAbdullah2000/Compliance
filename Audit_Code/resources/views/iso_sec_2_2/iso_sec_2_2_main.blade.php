@@ -3,6 +3,8 @@
 @section('content')
 
 @include('user-nav')
+
+@include('iso_sec_nav')
 @php
 $permissions=json_decode($project_permissions);
 @endphp
@@ -55,7 +57,6 @@ $permissions=json_decode($project_permissions);
 
                        <td><a href="/iso_sec_2_2_req/{{$my_current_main_req_num[0]}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">View</a></td>
                     @endif
-
 
 
 
