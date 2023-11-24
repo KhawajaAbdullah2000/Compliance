@@ -22,16 +22,16 @@ $permissions=json_decode($project_permissions);
     <table class="table table-bordered table-responsive table-primary">
 
         <thead style="vertical-align: middle;text-align:center;">
-            <td class="fw-bold">Req. No</td>
-            <td class="fw-bold">Mandatory Requirement</td>
-            <td class="fw-bold">Actions</td>
+            <td class="fw-bold" style="width:10%">Req. No</td>
+            <td class="fw-bold" style="width:80%">Mandatory Requirement</td>
+            <td class="fw-bold" style="width:10%">Actions</td>
         </thead>
 
         <tbody>
 
             @foreach ($data as $d )
             <tr>
-                <td>{{$d[3]}}</td>
+                <td style="text-align:center">{{$d[3]}}</td>
                  <td>{!! nl2br($d[4]) !!}</td>
                  <td style="text-align:center">
                 <a href="/iso_sec2_2_sub_req_edit/{{$d[3]}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}">

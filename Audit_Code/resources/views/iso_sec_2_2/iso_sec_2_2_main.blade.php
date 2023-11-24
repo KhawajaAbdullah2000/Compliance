@@ -47,12 +47,12 @@ $permissions=json_decode($project_permissions);
                     @endphp
 
 
-                    @if ($my_prev_main_req_num==$my_current_main_req_num)
+                    @if ($my_prev_main_req_num[0]==$my_current_main_req_num[0])
                         @continue
 
                     @else
                     <td>
-                        <p> {!! nl2br($data[$i][2]) !!}</p>
+                        <p> {!! nl2br($data[$i][2]) !!} </p>
                        </td>
 
                        <td><a href="/iso_sec_2_2_req/{{$my_current_main_req_num[0]}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">View</a></td>
