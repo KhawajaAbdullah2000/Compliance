@@ -160,6 +160,11 @@ route::get('iso_sec_2_1_delete/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::
 
 //Iso Sec2.3
 route::get('iso_sec_2_3/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3'])->name('iso_sec_2_3');
+
+//ISosec2.3.1
+route::get('iso_sec_2_3_1/{assessment_id}/{component_name}/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3_1'])->name('iso_sec_2_3_1');
+route::post('iso_sec2_3_1_new/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec2_3_1_new']);
+
 route::get('iso_sec_2_3_edit/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3_edit'])->name('iso_sec_2_3_edit');
 route::post('iso_sec_2_3_new_asset_value/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3_new_asset_value']);
 route::put('iso_sec_2_3_edit_asset_value/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3_edit_asset_value']);

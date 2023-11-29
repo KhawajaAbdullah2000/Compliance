@@ -132,6 +132,7 @@ $permissions=json_decode($project_permissions);
             <th>Asset Physical Location</th>
             <th>Asset Logical Location</th>
             <th>Service Name for which this is an underlying asset </th>
+            <th>Risk Assessment</th>
             <th>Actions</th>
             <th>Details</th>
           </tr>
@@ -147,8 +148,13 @@ $permissions=json_decode($project_permissions);
                 <td>{{substr($d->logical_loc,0,10)}}@if(strlen($d->logical_loc)>10)... @endif </td>
                 <td>{{substr($d->s_name,0,16)}}@if(strlen($d->s_name)>16)... @endif </td>
 
+          <td>
+            <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$d->c_name}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">Risk Assessment</a>
+          </td>
+
             <td>
             @if(in_array('Data Inputter',$permissions))
+
              <a href="/iso_sec_2_1_edit/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">
                 <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
             </a>
