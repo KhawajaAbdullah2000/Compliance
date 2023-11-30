@@ -37,7 +37,7 @@ $permissions=json_decode($project_permissions);
 
 
     @foreach ($components as $c)
-    <option value="component+{{$c}}">{{$c}}</option>
+    <option value="component+{{$c->assessment_id}}">{{$c->c_name}}</option>
     @endforeach
 
 </select>

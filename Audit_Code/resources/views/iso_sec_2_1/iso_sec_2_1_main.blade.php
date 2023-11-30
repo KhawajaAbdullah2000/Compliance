@@ -133,6 +133,7 @@ $permissions=json_decode($project_permissions);
             <th>Asset Logical Location</th>
             <th>Service Name for which this is an underlying asset </th>
             <th>Risk Assessment</th>
+            <th>Risk Treatment</th>
             <th>Actions</th>
             <th>Details</th>
           </tr>
@@ -150,8 +151,11 @@ $permissions=json_decode($project_permissions);
 
           <td>
             <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">Risk Assessment</a>
-
             {{-- <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$d->c_name}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">Risk Assessment</a> --}}
+          </td>
+          <td>
+            <a href="/iso_sec_2_3_1_risk/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-secondary">Risk Treatment</a>
+
           </td>
 
             <td>

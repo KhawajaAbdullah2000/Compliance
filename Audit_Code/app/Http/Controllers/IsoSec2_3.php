@@ -272,7 +272,6 @@ return redirect()->route('iso_sec_2_3_1',['assessment_id'=>$req->assessment_id,'
 
 
 
-
     public function iso_sec_2_3_edit($assessment_id, $proj_id, $user_id)
     {
         if ($user_id == auth()->user()->id) {
