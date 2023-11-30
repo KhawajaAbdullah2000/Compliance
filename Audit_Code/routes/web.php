@@ -8,6 +8,7 @@ use App\Http\Controllers\EndUserController;
 use App\Http\Controllers\IsoSec2_1;
 use App\Http\Controllers\IsoSec2_2;
 use App\Http\Controllers\IsoSec2_3;
+use App\Http\Controllers\IsoSec2_3_1;
 use App\Http\Controllers\IsoSec2_4_A5;
 use App\Http\Controllers\IsoSec2_4_A6;
 use App\Http\Controllers\IsoSec2_4_A7;
@@ -162,7 +163,13 @@ route::get('iso_sec_2_1_delete/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::
 route::get('iso_sec_2_3/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3'])->name('iso_sec_2_3');
 
 //ISosec2.3.1
-route::get('iso_sec_2_3_1/{assessment_id}/{component_name}/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3_1'])->name('iso_sec_2_3_1');
+// route::get('iso_sec_2_3_1/{assessment_id}/{component_name}/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3_1'])->name('iso_sec_2_3_1');
+route::get('iso_sec_2_3_1/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_1'])->name('iso_sec_2_3_1');
+route::Post('iso_sec2_3_1_initial_add/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec2_3_1_initial_add']);
+
+
+
+
 route::post('iso_sec2_3_1_new/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec2_3_1_new']);
 
 route::get('iso_sec_2_3_edit/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3_edit'])->name('iso_sec_2_3_edit');

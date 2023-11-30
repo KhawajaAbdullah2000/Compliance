@@ -149,7 +149,9 @@ $permissions=json_decode($project_permissions);
                 <td>{{substr($d->s_name,0,16)}}@if(strlen($d->s_name)>16)... @endif </td>
 
           <td>
-            <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$d->c_name}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">Risk Assessment</a>
+            <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">Risk Assessment</a>
+
+            {{-- <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$d->c_name}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">Risk Assessment</a> --}}
           </td>
 
             <td>
