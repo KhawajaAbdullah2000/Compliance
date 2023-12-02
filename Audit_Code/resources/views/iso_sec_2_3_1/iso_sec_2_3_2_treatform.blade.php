@@ -29,49 +29,20 @@ $permissions=json_decode($project_permissions);
 
     <div class="col-md-6">
 
+
         <div class="card mt-2">
             <div class="card-header bg-primary text-center">
                 <h2>Information Security Risk Assessment And Treatment</h2>
               </div>
             <div class="card-body">
 
-        <form action="/iso_sec_2_3_2_treat_form_submit/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" method="post">
+        <form action="/iso_sec_2_3_2_treat_form_submit/{{$asset_id}}/{{$control_num}}/{{$asset}}/{{$project_id}}/{{auth()->user()->id}}" method="post">
             @csrf
             @method('PUT')
             <input type="hidden" name="asset_id" value="{{$asset_id}}">
             <input type="hidden" name="control_num" value="{{$control_num}}">
 
-            <div class="form-group">
-                <label for="">Control Compliance %:</label>
-                <input type="number" name="control_compliance" id="control_compliance" class="form-control"
-                 value="{{old('control_compliance',$treatmentData->control_compliance)}}">
-                @if($errors->has('control_compliance'))
-                <div class="text-danger">{{ $errors->first('control_compliance') }}</div>
-            @endif
-              </div>
 
-              <div class="form-group mt-3">
-                <label for="">Vulnerability %:</label>
-                <input type="number" name="vulnerability" id="vulnerability" class="form-control"
-                value="{{old('vulnerability',$treatmentData->vulnerability)}}"
-                readonly>
-              </div>
-
-              <div class="form-group">
-                <label for="">Threat %:</label>
-                <input type="number" name="threat" id="threat" class="form-control"
-                value="{{old('threat',$treatmentData->threat)}}">
-                @if($errors->has('threat'))
-                <div class="text-danger">{{ $errors->first('threat') }}</div>
-            @endif
-              </div>
-
-              <div class="form-group mt-3">
-                <label for=""> Risk Level</label>
-                <input type="number" name="risk_level" id="risk_level" class="form-control"
-                value="{{old('risk_level',$treatmentData->risk_level)}}"
-                readonly>
-              </div>
 
               <div class="form-group mt-4">
                 <label for="">Residual Risk Treatment</label>
@@ -143,38 +114,6 @@ $permissions=json_decode($project_permissions);
 
 @section('scripts')
 
-<script>
-     $(document).ready(function(){
-        //for vulnerabiity
-        $("#control_compliance").on("input", function(){
-            var controlComplianceValue = $(this).val();
-
-            // Calculate the new value for vulnerability
-            var newVulnerabilityValue = 100 - parseFloat(controlComplianceValue);
-
-            // Update the value of the vulnerability input box
-            $("#vulnerability").val(newVulnerabilityValue);
-
-        });
-
-//for risk level
-$("#threat").on("input", function(){
-            var threat = $(this).val();
-            var vulnerability=$('#vulnerability').val();
-
-            var asset_value={!!$assetvalue !!};
-
-            var newRiskValue = parseFloat(vulnerability)/100 * parseFloat(threat)/100 * parseFloat(asset_value);;
-
-            // Update the value of the vulnerability input box
-            $("#risk_level").val(newRiskValue);
-
-        });
-
-
-    });
-
-</script>
 
 
 @endsection

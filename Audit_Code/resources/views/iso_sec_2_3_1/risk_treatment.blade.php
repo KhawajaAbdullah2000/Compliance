@@ -87,7 +87,7 @@ $control_nums_array[] =$c->control_num;
 
                          <td>
                             @if(in_array('Data Inputter',$permissions))
-                            <a href="/iso_sec_2_3_2_risk_treat_form/{{$sec2_4_a5_rows[$i][0]}}/{{$componentDetails->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}"
+                            <a href="/iso_sec_2_3_2_risk_treat_form/{{$sec2_4_a5_rows[$i][0]}}/{{$componentDetails->assessment_id}}/{{$asset}}/{{$project_id}}/{{auth()->user()->id}}"
                                  class="btn btn-warning">Risk Treatment </a>
                             @else
                             <p>Not allowed</p>

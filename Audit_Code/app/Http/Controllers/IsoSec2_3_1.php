@@ -72,15 +72,44 @@ class IsoSec2_3_1 extends Controller
     public function iso_sec2_3_1_initial_add(Request $req, $proj_id, $user_id)
     {
         $req->validate([
-            'asset_value' => 'required',
-            'asset' => 'required',
-            'applicability' => ['required', 'array', 'min:1'],
+             'asset_value' => 'required',
+        'asset' => 'required',
+             'applicability' => ['required', 'array', 'min:1'],
+            'control_compliance'=>['required','array','min:1'],
+             'vulnerability'=>['required','array','min:1'],
+             'threat'=>['required','array','min:1'],
+             'risk_level'=>['required','array','min:1']
 
-        ]);
+         ]);
 
         $my_filter = array_filter($req->input('applicability'));
         $req->merge(['applicability' => $my_filter]);
         $applicability = $req->input('applicability');
+        $filtered_applicability = array_filter($applicability);
+
+        $control_compliance_filter = array_filter($req->input('control_compliance'));
+        $req->merge(['control_compliance' => $control_compliance_filter]);
+
+        $control_compliance = $req->input('control_compliance');
+
+
+
+        $vulnerability_filter = array_filter($req->input('vulnerability'));
+        $req->merge(['vulnerability' => $vulnerability_filter]);
+
+        $vulnerability = $req->input('control_compliance');
+        //dd($vulnerability);
+
+        $threat_filter = array_filter($req->input('threat'));
+        $req->merge(['threat' => $threat_filter]);
+
+        $threat = $req->input('threat');
+
+        $risk_level_filter = array_filter($req->input('threat'));
+        $req->merge(['threat' => $risk_level_filter]);
+        $risk_level = $req->input('risk_level');
+
+
 
 
         $filtered_applicability = array_filter($applicability);
@@ -120,6 +149,10 @@ class IsoSec2_3_1 extends Controller
                             'asset_value' => $req->asset_value,
                             'control_num' => $numberArray[$i],
                             'applicability' => $yesNoArray[$i],
+                            'control_compliance'=>$control_compliance[$i],
+                            'vulnerability'=>$vulnerability[$i],
+                            'threat'=>$threat[$i],
+                            'risk_level'=>$risk_level[$i],
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
@@ -150,6 +183,10 @@ class IsoSec2_3_1 extends Controller
                             'asset_value' => $req->asset_value,
                             'control_num' => $numberArray[$i],
                             'applicability' => $yesNoArray[$i],
+                            'control_compliance'=>$control_compliance[$i],
+                            'vulnerability'=>$vulnerability[$i],
+                            'threat'=>$threat[$i],
+                            'risk_level'=>$risk_level[$i],
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
@@ -175,6 +212,10 @@ class IsoSec2_3_1 extends Controller
                         'asset_value' => $req->asset_value,
                         'control_num' => $numberArray[$i],
                         'applicability' => $yesNoArray[$i],
+                        'control_compliance'=>$control_compliance[$i],
+                        'vulnerability'=>$vulnerability[$i],
+                        'threat'=>$threat[$i],
+                        'risk_level'=>$risk_level[$i],
                         'last_edited_by' => $user_id,
 
                         'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
@@ -251,9 +292,8 @@ class IsoSec2_3_1 extends Controller
     public function iso_sec2_3_1_find_asset_value(Request $req, $proj_id, $user_id)
     {
 
-        $req->validate([
-            'asset' => 'required',
-        ]);
+      //  dd($req->query('asset'));
+
 
 
         if ($user_id == auth()->user()->id) {
@@ -277,8 +317,7 @@ class IsoSec2_3_1 extends Controller
                     $sec2_4_a5_rows = array_slice($sec2_4_a5_data[0], 1); //without header(first row)
 
 
-                    $asset = explode('+', $req->asset);
-                    //dd($asset[1]);
+                    $asset = explode(' ', $req->query('asset'),2);
 
                     if ($asset[0] == "group") {
                     }
@@ -294,7 +333,6 @@ class IsoSec2_3_1 extends Controller
                             ->where('applicability', 'yes')->get();
 
 
-
                         if ($component) {
                             return view('iso_sec_2_3_1.risk_treatment', [
                                 'project_id' => $checkpermission->project_id,
@@ -302,7 +340,9 @@ class IsoSec2_3_1 extends Controller
                                 'project_permissions' => $checkpermission->project_permissions,
                                 'component' => $component,
                                 'componentDetails' => $componentDetails,
-                                'sec2_4_a5_rows' => $sec2_4_a5_rows
+                                'sec2_4_a5_rows' => $sec2_4_a5_rows,
+                                'asset'=>$req->query('asset'),
+                                'asset_id'=>$req->query('asset_id')
                             ]);
                         }
                     }
@@ -312,8 +352,9 @@ class IsoSec2_3_1 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-    public function iso_sec_2_3_2_risk_treat_form($control_num, $asset_id, $proj_id, $user_id)
+    public function iso_sec_2_3_2_risk_treat_form($control_num, $asset_id, $asset,$proj_id, $user_id)
     {
+        //if component selected
 
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -348,7 +389,6 @@ class IsoSec2_3_1 extends Controller
                         $users = User::where('privilege_id', 5)->wherein('org_id', $orgs)->get(['id', 'first_name', 'last_name']);
 
 
-
                         return view('iso_sec_2_3_1.iso_sec_2_3_2_treatform', [
                             'project_id' => $checkpermission->project_id,
                             'project_name' => $checkpermission->project_name,
@@ -358,6 +398,7 @@ class IsoSec2_3_1 extends Controller
                             'assetvalue' => $asset_value->asset_value,
                             'users' => $users,
                             'treatmentData'=>$asset_value,
+                            'asset'=>$asset
 
                         ]);
                     }
@@ -367,10 +408,9 @@ class IsoSec2_3_1 extends Controller
         }
     }
 
-    public function iso_sec_2_3_2_treat_form_submit(Request $req,$asset_id,$control_num,$proj_id,$user_id){
+    public function iso_sec_2_3_2_treat_form_submit(Request $req,$asset_id,$control_num,$asset,$proj_id,$user_id){
+        //is user selected component
         $req->validate([
-            'control_compliance' => 'required|numeric|min:1|max:100',
-            'threat' => 'required|numeric|min:1|max:100',
             'residual_risk_treatment' => 'required',
             'treatment_action' => 'required',
             'treatment_target_date' => 'required',
@@ -395,10 +435,6 @@ class IsoSec2_3_1 extends Controller
 
                         DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('control_num',$control_num)
                         ->where('asset_id',$asset_id)->update([
-                            'control_compliance'=>$req->control_compliance,
-                            'vulnerability'=>$req->vulnerability,
-                            'threat'=>$req->threat,
-                            'risk_level'=>$req->risk_level,
                             'residual_risk_treatment'=>$req->residual_risk_treatment,
                             'treatment_action'=>$req->treatment_action,
                             'treatment_target_date'=>$req->treatment_target_date,
@@ -407,7 +443,10 @@ class IsoSec2_3_1 extends Controller
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
 
-                        return redirect()->route('iso_section2_1',['proj_id'=>$proj_id,'user_id'=>auth()->user()->id]);
+                        return redirect("/iso_sec2_3_1_find_asset_value/{$proj_id}/{$user_id}?asset={$asset}&asset_id={$asset_id}");
+
+
+
 
                     }
                 }
