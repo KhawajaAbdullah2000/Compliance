@@ -12,38 +12,19 @@ $permissions=json_decode($project_permissions);
 <div class="container">
 
 
-    <h3 class="text-center fw-bold mb-3">Project id: {{$project_id}} Project name: {{$project_name}} Section2.3.1 Information Security Risk Assessment And Treatment</h3>
+    <h3 class="text-center fw-bold mb-3"> Project name: {{$project_name}}</h3>
 
 
-    @if($data->count()>0)
+    <h2 class="text-center">  Section2.3.1 Information Security Risk Assessment And Treatment</h2>
+
 
     <form action="/iso_sec2_3_1_new/{{$project_id}}/{{auth()->user()->id}}" method="post">
 @csrf
-
-<input type="hidden" name="assessment_id" value="{{$assessment_id}}">
-<input type="hidden" name="component_name" value="{{$component_name}}">
 
 <div class="row">
 
 <div class="col-lg-6 fw-bold">
 
-
-<label for="">Select Object of Risk Assesment</label>
-<select name="asset" id="" class="form-control">
-    <option value="">Select--</option>
-    @foreach ($groups as $g)
-    <option value="group+{{$g}}">{{$g}}</option>
-    @endforeach
-
-    @foreach ($names as $n)
-    <option value="name+{{$n}}">{{$n}}</option>
-    @endforeach
-
-    @foreach ($components as $c)
-    <option value="component+{{$c}}">{{$c}}</option>
-    @endforeach
-
-</select>
 
 </div>
 
@@ -128,13 +109,9 @@ $permissions=json_decode($project_permissions);
 
 
 
-
     </form>
 
 
-@else
-<h2>Please add Assets first in section 2.1</h2>
-    @endif
 
 
 

@@ -21,7 +21,32 @@ $permissions=json_decode($project_permissions);
     </div>
 @endif
 
-<h3 class="text-center">Section 2.3.2 Asset Id: {{$asset_id}} Control num: {{$control_num}} Risk Treatment</h3>
+<h3 class="text-center">Section 2.3.2 Risk Treatment Control num: {{$control_num}}</h3>
+
+<p class="text-center fw-bold">
+
+    Assetid: {{$assetData->assessment_id}}
+
+    @isset($assetData->g_name)
+    <br>
+    Asset Group Name: {{$assetData->g_name}}
+    @endisset
+
+    @isset($assetData->name)
+    <br>
+    Asset Name: {{$assetData->name}}
+    @endisset
+
+    @isset($assetData->c_name)
+    <br>
+    Asset Component Name: {{$assetData->c_name}}
+    @endisset
+
+
+
+
+
+</p>
 
 <p>Asset value: {{$assetvalue}}</p>
 
@@ -36,22 +61,21 @@ $permissions=json_decode($project_permissions);
               </div>
             <div class="card-body">
 
-        <form action="/iso_sec_2_3_2_treat_form_submit/{{$asset_id}}/{{$control_num}}/{{$asset}}/{{$project_id}}/{{auth()->user()->id}}" method="post">
+        <form action="/iso_sec_2_3_2_treat_form_submit/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" method="post">
             @csrf
             @method('PUT')
-            <input type="hidden" name="asset_id" value="{{$asset_id}}">
             <input type="hidden" name="control_num" value="{{$control_num}}">
-
 
 
               <div class="form-group mt-4">
                 <label for="">Residual Risk Treatment</label>
          <select name="residual_risk_treatment" class="form-control">
             <option value="">Select</option>
-            <option value="retain and accept risk">Retain and Accept Risk</option>
-            <option value="share risk">Share Risk</option>
-            <option value="avoid risk">Avoid Risk</option>
-            <option value="modify risk">Modify Risk</option>
+            <option value="retain and accept risk"  {{old('residual_risk_treatment',$treatmentData->residual_risk_treatment)=='retain and accept risk'?'selected':''}}>Retain and Accept Risk</option>
+            <option value="share risk" {{old('residual_risk_treatment',$treatmentData->residual_risk_treatment)=='share risk'?'selected':''}}>
+                Share Risk</option>
+            <option value="avoid risk" {{old('residual_risk_treatment',$treatmentData->residual_risk_treatment)=='avoid risk'?'selected':''}}>Avoid Risk</option>
+            <option value="modify risk"  {{old('residual_risk_treatment',$treatmentData->residual_risk_treatment)=='modify risk'?'selected':''}}>Modify Risk</option>
          </select>
          @if($errors->has('residual_risk_treatment'))
          <div class="text-danger">{{ $errors->first('residual_risk_treatment') }}</div>
@@ -80,7 +104,7 @@ $permissions=json_decode($project_permissions);
                 <select class="boxstyling bg-primary form-select" name="responsibility_for_treatment">
                     <option value="">Select User</option>
                      @foreach ($users as $user)
-     <option value="{{$user->id}}" {{ old('responsibility_for_treatment') == $user->id ? 'selected' : '' }}>
+     <option value="{{$user->id}}" {{ old('responsibility_for_treatment',$treatmentData->responsibility_for_treatment) == $user->id ? 'selected' : '' }}>
              {{$user->first_name}} {{$user->last_name}}</option>
                            @endforeach
                     </select>

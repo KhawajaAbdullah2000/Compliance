@@ -13,7 +13,9 @@ $permissions=json_decode($project_permissions);
 
 
 
-    <h3 class="text-center fw-bold mb-3">Project id: {{$project_id}} Project name: {{$project_name}} Section2.3.1 Information Security Risk Assessment And Treatment</h3>
+    <h3 class="text-center fw-bold mb-3">Project name: {{$project_name}} </h3>
+
+    <h2 class="text-center">      Section2.3.1 Information Security Risk Assessment And Treatment</h2>
 
     @if ($errors->any())
     <div class="alert alert-danger">
@@ -25,39 +27,41 @@ $permissions=json_decode($project_permissions);
     </div>
 @endif
 
+<p class="text-center fw-bold">
+    Risk Assessment for <br>
 
+    Assetid: {{$assetData->assessment_id}}
+
+    @isset($assetData->g_name)
+    <br>
+    Asset Group Name: {{$assetData->g_name}}
+    @endisset
+
+    @isset($assetData->name)
+    <br>
+    Asset Name: {{$assetData->name}}
+    @endisset
+
+    @isset($assetData->c_name)
+    <br>
+    Asset Component Name: {{$assetData->c_name}}
+    @endisset
+
+
+
+
+
+</p>
 
 
 </div>
 
-@if($assets->count()>0)
-
-<form action="/iso_sec2_3_1_initial_add/{{$project_id}}/{{auth()->user()->id}}" method="post" class="mx-4">
+<form action="/iso_sec2_3_1_initial_add/{{$assetData->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" method="post" class="mx-4">
     @csrf
-
-    <input type="hidden" name="asset_id" value="{{$asset_id}}">
 
 
     <div class="row">
 
-    <div class="col-lg-6 fw-bold">
-
-
-    <label for="">Select Object of Risk Assesment</label>
-    <select name="asset" class="form-control">
-        <option value="">Select--</option>
-
-        <option value="group+{{$group}}">{{$group}}</option>
-        <option value="name+{{$name}}">{{$name}}</option>
-
-
-        @foreach ($components as $c)
-        <option value="component+{{$c->assessment_id}}">{{$c->c_name}}</option>
-        @endforeach
-
-    </select>
-
-    </div>
 
     <div class="col-lg-6">
 
@@ -78,7 +82,6 @@ $permissions=json_decode($project_permissions);
     </div>
 
     </div>
-
 
 
 
@@ -168,9 +171,6 @@ $permissions=json_decode($project_permissions);
 
         </form>
 
-@else
-<h2>Please add Assets first in section 2.1</h2>
-    @endif
 
 @section('scripts')
 

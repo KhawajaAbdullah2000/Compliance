@@ -36,11 +36,11 @@
         </div>
         </div>
 
-        {{-- <div class="row mt-2">
+         {{-- <div class="row mt-2">
             <div class="col-12">
          <a href="/iso_sec_2_3_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section2.3.1- Information Security Risk Assessment And Treatment</p></a>
-        </div> --}}
         </div>
+        </div> --}}
 
         <div class="row mt-2 mb-2">
             <div class="col-12">

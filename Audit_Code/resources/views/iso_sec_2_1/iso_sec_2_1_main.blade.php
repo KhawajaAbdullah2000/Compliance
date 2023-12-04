@@ -154,7 +154,7 @@ $permissions=json_decode($project_permissions);
             {{-- <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$d->c_name}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">Risk Assessment</a> --}}
           </td>
           <td>
-            <a href="/iso_sec_2_3_1_risk/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-secondary">Risk Treatment</a>
+            <a href="/iso_sec2_3_1_risk_treat_controls/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-secondary">Risk Treatment</a>
 
           </td>
 

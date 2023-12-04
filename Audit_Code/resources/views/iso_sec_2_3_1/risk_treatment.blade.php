@@ -8,35 +8,44 @@
 @php
 $permissions=json_decode($project_permissions);
 
-$control_nums_array = [];
 
 @endphp
 
-@foreach ($component as $c)
-@php
-$control_nums_array[] =$c->control_num;
-
-@endphp
-
-@endforeach
 
 
 <div class="container">
 
-    <h3 class="text-center">Risk Treatment</h3>
 
-    @if($component->count()>0)
+    <h3 class="text-center">Risk Treatment </h3>
 
-    <h2 class="text-center">Component Name: {{$componentDetails->c_name}}</h2>
-    <h2 class="text-center">Asset value: {{$component[0]->asset_value}}</h2>
+    <p class="text-center fw-bold">
+
+        Assetid: {{$assetData->assessment_id}}
+
+        @isset($assetData->g_name)
+        <br>
+        Asset Group Name: {{$assetData->g_name}}
+        @endisset
+
+        @isset($assetData->name)
+        <br>
+        Asset Name: {{$assetData->name}}
+        @endisset
+
+        @isset($assetData->c_name)
+        <br>
+        Asset Component Name: {{$assetData->c_name}}
+        @endisset
 
 
 
-    {{-- @foreach ($component as $c)
 
-    <h3>{{$c->control_num}}</h3>
 
-    @endforeach --}}
+    </p>
+
+
+
+@if(isset($check))
 
 
     <div class="mt-4">
@@ -58,7 +67,7 @@ $control_nums_array[] =$c->control_num;
                         @foreach ($sec2_4_a5_rows[$i] as $col)
 
 
-                                                @if(in_array( strval($sec2_4_a5_rows[$i][0]) ,$control_nums_array,true ))
+                                                @if(in_array( strval($sec2_4_a5_rows[$i][0]) ,$controls,true ))
 
                                                         @if(isset($col))
                                                                 <td>
@@ -82,12 +91,12 @@ $control_nums_array[] =$c->control_num;
 
 
 
-                         @if(in_array( strval($sec2_4_a5_rows[$i][0]) ,$control_nums_array,true ))
+                         @if(in_array( strval($sec2_4_a5_rows[$i][0]) ,$controls,true ))
 
 
                          <td>
                             @if(in_array('Data Inputter',$permissions))
-                            <a href="/iso_sec_2_3_2_risk_treat_form/{{$sec2_4_a5_rows[$i][0]}}/{{$componentDetails->assessment_id}}/{{$asset}}/{{$project_id}}/{{auth()->user()->id}}"
+                            <a href="/iso_sec_2_3_2_risk_treat_form/{{$sec2_4_a5_rows[$i][0]}}/{{$assetData->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}"
                                  class="btn btn-warning">Risk Treatment </a>
                             @else
                             <p>Not allowed</p>
@@ -124,12 +133,15 @@ $control_nums_array[] =$c->control_num;
 
 
 
-@else
-            <p>Add risk Assessment in sec2.3.1 </p>
-@endif
-
 
 </div>
+
+@else
+<h2>DO Risk Assessment first for the asset</h2>
+@endif
+</div>
+
+
 
 @section('scripts')
 
