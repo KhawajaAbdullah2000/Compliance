@@ -115,13 +115,13 @@ route::get('iso_sections/{proj_id}/{user_id}',[ProjectController::class,'iso_sec
 route::get('iso_section2_4_subsections/{proj_id}/{user_id}',[ProjectController::class,'iso_section2_4_subsections']);
 
 //Iso sec2.4 A5 Organzation
-route::get('iso_sec2_4_a5/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'iso_sec2_4_a5'])->name('iso_sec2_4_a5');
-route::Post('iso_sec2_4_a5_new/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'iso_sec2_4_a5_new']);
-route::get('iso_sec2_4_a5_edit/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'iso_sec2_4_a5_edit']);
-route::put('submit_edit_sec2_4_a5/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'submit_edit_sec2_4_a5']);
-// route for editing applicability
-route::get('edit_app_iso_sec2_4_a5/{control_num}/{project_id}/{user_id}',[IsoSec2_4_A5::class,'edit_app_iso_sec2_4_a5']);
-route::put('submit_edit_app_sec2_4_a5/{control_num}/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'submit_edit_app_sec2_4_a5']);
+//assets
+route::get('iso_sec2_4_a5_assets/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'iso_sec2_4_a5_assets'])->name('iso_sec2_4_a5_assets');
+route::get('iso_sec2_4_a5/{asset_id}/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'iso_sec2_4_a5'])->name('iso_sec2_4_a5');
+//route::Post('iso_sec2_4_a5_new/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'iso_sec2_4_a5_new']);
+route::get('iso_sec2_4_a5_edit/{control_num}/{asset_id}/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'iso_sec2_4_a5_edit']);
+route::put('submit_edit_sec2_4_a5/{control_num}/{asset_id}/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'submit_edit_sec2_4_a5']);
+
 
 
 //Iso sec2.4 A6 People

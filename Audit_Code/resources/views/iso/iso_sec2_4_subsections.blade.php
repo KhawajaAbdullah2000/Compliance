@@ -13,7 +13,9 @@
     <div class="row text-center justify-content-center full-img-subsections">
         <div class="row mt-2">
         <div class="col-12">
-         <a href="/iso_sec2_4_a5/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Annex A:5-Organizational Controls</p></a>
+        <a href="/iso_sec2_4_a5_assets/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Annex A:5-Organizational Controls</p></a>
+
+         {{-- <a href="/iso_sec2_4_a5/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Annex A:5-Organizational Controls</p></a> --}}
         </div>
         </div>
 
