@@ -9,14 +9,38 @@
 $permissions=json_decode($project_permissions);
 @endphp
 
+
+
 <div class="container">
 
-    <h3 class="text-center fw-bold mb-3">Project id: {{$project_id}} Project name: {{$project_name}} Section2.4 A:7 Physical Controls</h3>
-    @if($errors->has('applicability'))
-    <div class="text-danger">{{ $errors->first('applicability') }}</div>
-@endif
-<form action="/iso_sec2_4_a7_new/{{$project_id}}/{{auth()->user()->id}}" method="post">
-@csrf
+
+    <h3 class="text-center fw-bold mb-3">Project name: {{$project_name}} Section2.4 A:7 Physical Controls</h3>
+
+    <p class="text-center fw-bold">
+
+        Assetid: {{$assetData->assessment_id}}
+
+        @isset($assetData->g_name)
+        <br>
+        Asset Group Name: {{$assetData->g_name}}
+        @endisset
+
+        @isset($assetData->name)
+        <br>
+        Asset Name: {{$assetData->name}}
+        @endisset
+
+        @isset($assetData->c_name)
+        <br>
+        Asset Component Name: {{$assetData->c_name}}
+        @endisset
+
+
+
+
+
+    </p>
+
 
 
     <table class="table table-responsive table-primary table-striped">
@@ -52,37 +76,20 @@ $permissions=json_decode($project_permissions);
 
                 @foreach ($results as $r)
                 @if($r->control_num===strval($data[$i][0]))
-                    <p class="fw-bold">{{$r->applicability}} <span><a
-                    href="/edit_app_iso_sec2_4_a7/{{$data[$i][0]}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-warning btn-sm">
-                        Edit
-                    </a></span></p>
+                    <p class="fw-bold">{{$r->applicability}} <span></p>
 
                 @break
                 @endif
 
                @if($loop->remaining==0)
-               <select name="applicability[]" class="form-select">
-                <option value=""> Select--  </option>
-
-                <option value='yes+{{$data[$i][0]}}'>Yes</option>
-
-
-                <option value='no+{{$data[$i][0]}}'>No</option>
-            </select>
+               <p>Risk assessment not done</p>
                @endif
 
                 @endforeach
 
                 @else
+                <p>Risk assessment not done</p>
 
-                <select name="applicability[]" class="form-select">
-                    <option value=""> Select--  </option>
-
-                    <option value='yes+{{$data[$i][0]}}'>Yes</option>
-
-
-                    <option value='no+{{$data[$i][0]}}'>No</option>
-                </select>
                 @endif
             </td>
 
@@ -93,7 +100,7 @@ $permissions=json_decode($project_permissions);
                 @if($results->count()>0)
                 @foreach ($results as $r)
                 @if($r->control_num===strval($data[$i][0]))
-                <td style="text-align:center"><a href="/iso_sec2_4_a7_edit/{{$data[$i][0]}}/{{$project_id}}/{{auth()->user()->id}}"><i class="fas fa-edit fa-lg" style="color: #114a1d;"></i></a></td>
+                <td style="text-align:center"><a href="/iso_sec2_4_a7_edit/{{$data[$i][0]}}/{{$assetData->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}"><i class="fas fa-edit fa-lg" style="color: #114a1d;"></i></a></td>
                @break
                 @endif
 
@@ -153,14 +160,9 @@ $permissions=json_decode($project_permissions);
 
         </tbody>
 
-        @if(in_array('Data Inputter',$permissions))
-      <div class="float-end mb-4">
-        <button type="submit" class="btn btn-primary btn-lg mt-5"  id="submitForm">Save and stay on same page</button>
-      </div>
-      @endif
       </table>
 
-    </form>
+
 
 
 

@@ -36,6 +36,18 @@ class IsoSec2_3_1 extends Controller
                     $sec2_4_a5_data = Excel::toArray([], $filepath); //with header
                     $sec2_4_a5_rows = array_slice($sec2_4_a5_data[0], 1); //without header(first row)
 
+                    $filepath2 = public_path('ISO_SOA_A6.xlsx');
+                    $sec2_4_a6_data = Excel::toArray([], $filepath2); //with header
+                    $sec2_4_a6_rows = array_slice($sec2_4_a6_data[0], 1); //without header(first row)
+
+                    $filepath3 = public_path('ISO_SOA_A7.xlsx');
+                    $sec2_4_a7_data = Excel::toArray([], $filepath3); //with header
+                    $sec2_4_a7_rows = array_slice($sec2_4_a7_data[0], 1); //without header(first row)
+
+
+                    $filepath4 = public_path('ISO_SOA_A8.xlsx');
+                    $sec2_4_a8_data = Excel::toArray([], $filepath4); //with header
+                    $sec2_4_a8_rows = array_slice($sec2_4_a8_data[0], 1); //without header(first row)
 
                     return view('iso_sec_2_3_1.iso_sec_2_3_1_main', [
 
@@ -43,7 +55,10 @@ class IsoSec2_3_1 extends Controller
                         'project_name' => $checkpermission->project_name,
                         'project_permissions' => $checkpermission->project_permissions,
                          'assetData'=>$assetData,
-                        'sec2_4_a5_rows' => $sec2_4_a5_rows
+                        'sec2_4_a5_rows' => $sec2_4_a5_rows,
+                        'sec2_4_a6_rows'=>$sec2_4_a6_rows,
+                        'sec2_4_a7_rows'=>$sec2_4_a7_rows,
+                        'sec2_4_a8_rows'=>$sec2_4_a8_rows
 
                     ]);
                 }
@@ -155,8 +170,6 @@ class IsoSec2_3_1 extends Controller
         }
 
         return redirect()->route('iso_sec_2_3_1',['asset_id'=>$asset_id,'proj_id'=>$proj_id,'user_id'=>$user_id])->with('success','Record Added');
-
-
 
 
     }
