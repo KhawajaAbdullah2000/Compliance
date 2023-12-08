@@ -357,17 +357,22 @@ $permissions=json_decode($project_permissions);
 
 <script>
      $(document).ready(function(){
-        var assetValue;
-        var newVulnerabilityValue;
+        var assetValue=null;
+        var newVulnerabilityValue=null;
+        var threat=null;
+        var newRiskValue=null;
+        var controlId=null
+        var riskLevelField=null;
 
         $('#assetSelect').change(function(){
                 // Get the selected value
                 assetValue = $(this).val();
 
+
             });
 
         $("input[name^='control_compliance']").on("input", function () {
-        var controlId = $(this).data('control-id');
+         controlId = $(this).data('control-id');
         var vulnerabilityField = $("input[name='vulnerability[]'][data-control-id='" + controlId + "']");
 
         // Calculate the new value for vulnerability
@@ -378,13 +383,11 @@ $permissions=json_decode($project_permissions);
     });
 
     $("input[name^='threat']").on("input", function () {
-        var threat = $(this).val();
+        threat = $(this).val();
         var controlId = $(this).data('control-id');
         var vulnerabilityField = $("input[name='vulnerability[]'][data-control-id='" + controlId + "']");
-        var riskLevelField = $("input[name='risk_level[]'][data-control-id='" + controlId + "']");
-
-
-        var newRiskValue = parseFloat(newVulnerabilityValue) / 100 * parseFloat(threat) / 100 * parseFloat(assetValue);
+       riskLevelField = $("input[name='risk_level[]'][data-control-id='" + controlId + "']");
+        newRiskValue = parseFloat(newVulnerabilityValue) / 100 * parseFloat(threat) / 100 * parseFloat(assetValue);
 
         // Update the values of the vulnerability and risk level input boxes
        // vulnerabilityField.val(newVulnerabilityValue);

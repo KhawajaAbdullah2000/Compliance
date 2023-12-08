@@ -21,8 +21,8 @@
 
 
           <li class="nav-item active">
-            <a class="nav-link" href="{{route('iso_sec_2_3',['proj_id'=>Session::get('projectid'),'user_id'=>Auth()->user()->id])}}">
-              Iso Section 2.3</a>
+            <a class="nav-link" href="{{route('iso_section2_1',['proj_id'=>Session::get('projectid'),'user_id'=>Auth()->user()->id])}}">
+              Iso Section 2.3.1</a>
           </li>
 
           <li class="nav-item active">
