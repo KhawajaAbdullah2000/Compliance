@@ -49,6 +49,23 @@ class IsoSec2_3_1 extends Controller
                     $sec2_4_a8_data = Excel::toArray([], $filepath4); //with header
                     $sec2_4_a8_rows = array_slice($sec2_4_a8_data[0], 1); //without header(first row)
 
+                    $a5_results=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)
+                    ->where('asset_id',$asset_id)->where('control_num','like','5%')
+                    ->get();
+
+                    $a6_results=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)
+                    ->where('asset_id',$asset_id)->where('control_num','like','6%')
+                    ->get();
+
+                    $a7_results=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)
+                    ->where('asset_id',$asset_id)->where('control_num','like','7%')
+                    ->get();
+
+                    $a8_results=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)
+                    ->where('asset_id',$asset_id)->where('control_num','like','8%')
+                    ->get();
+
+
                     return view('iso_sec_2_3_1.iso_sec_2_3_1_main', [
 
                         'project_id' => $checkpermission->project_id,
@@ -58,7 +75,11 @@ class IsoSec2_3_1 extends Controller
                         'sec2_4_a5_rows' => $sec2_4_a5_rows,
                         'sec2_4_a6_rows'=>$sec2_4_a6_rows,
                         'sec2_4_a7_rows'=>$sec2_4_a7_rows,
-                        'sec2_4_a8_rows'=>$sec2_4_a8_rows
+                        'sec2_4_a8_rows'=>$sec2_4_a8_rows,
+                        'a5_results'=>$a5_results,
+                        'a6_results'=>$a6_results,
+                        'a7_results'=>$a7_results,
+                        'a8_results'=>$a8_results
 
                     ]);
                 }
@@ -94,7 +115,7 @@ class IsoSec2_3_1 extends Controller
 
         $vulnerability_filter = array_filter($req->input('vulnerability'));
         $req->merge(['vulnerability' => $vulnerability_filter]);
-        $vulnerability = $req->input('control_compliance');
+        $vulnerability = $req->input('vulnerability');
         $filtered_vulnerability = array_filter($vulnerability);
 
 
@@ -146,6 +167,7 @@ class IsoSec2_3_1 extends Controller
             $final_risk_level[]=$irl;
         }
 
+        //dd($final_vulnerability);
 
 
         for ($i = 0; $i < count($yesNoArray); $i++) {
@@ -261,12 +283,28 @@ class IsoSec2_3_1 extends Controller
                     $sec2_4_a5_rows = array_slice($sec2_4_a5_data[0], 1); //without header(first row)
 
 
+                    $filepath2 = public_path('ISO_SOA_A6.xlsx');
+                    $sec2_4_a6_data = Excel::toArray([], $filepath2); //with header
+                    $sec2_4_a6_rows = array_slice($sec2_4_a6_data[0], 1); //without header(first row)
+
+
+                    $filepath3 = public_path('ISO_SOA_A7.xlsx');
+                    $sec2_4_a7_data = Excel::toArray([], $filepath3); //with header
+                    $sec2_4_a7_rows = array_slice($sec2_4_a7_data[0], 1); //without header(first row)
+
+
+                    $filepath4 = public_path('ISO_SOA_A8.xlsx');
+                    $sec2_4_a8_data = Excel::toArray([], $filepath4); //with header
+                    $sec2_4_a8_rows = array_slice($sec2_4_a8_data[0], 1); //without header(first row)
+
+
                    $check=DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)->where('applicability','yes')
                    ->first();
 
                             //controls wherer applicability is yes
                          $controls=DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
                                     ->where('applicability','yes')->pluck('control_num')->toArray();
+
 
                           $assetData=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
 
@@ -276,9 +314,12 @@ class IsoSec2_3_1 extends Controller
                                 'project_name' => $checkpermission->project_name,
                                 'project_permissions' => $checkpermission->project_permissions,
                                 'sec2_4_a5_rows' => $sec2_4_a5_rows,
+                                'sec2_4_a6_rows'=>$sec2_4_a6_rows,
+                                'sec2_4_a7_rows'=>$sec2_4_a7_rows,
+                                'sec2_4_a8_rows'=>$sec2_4_a8_rows,
                                 'controls'=>$controls,
                                 'assetData'=>$assetData,
-                                'check'=>$check
+                                'check'=>$check,
 
                             ]);
 

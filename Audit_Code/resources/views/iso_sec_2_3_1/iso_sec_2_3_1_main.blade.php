@@ -117,35 +117,125 @@ $permissions=json_decode($project_permissions);
                     {{-- <td>yes/no {{$data[$i][0]}}</td> --}}
 
                 <td style="text-align: center">
+                    @if($a5_results->count()>0)
+                    @foreach ($a5_results as $a5)
 
+                    @if($a5->applicability!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
-                   <select name="applicability[]" class="form-select">
-                    <option value=""> Select--  </option>
+                    <p>{{$a5->applicability}} </p>
+                        @break
+                    @endif
 
-                    <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Yes</option>
+                    @if($loop->last)
+                    <select name="applicability[]" class="form-select">
+                        <option value=""> Select--  </option>
 
-                    <option value='no+{{$sec2_4_a5_rows[$i][0]}}'>No</option>
-                </select>
+                        <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Yes</option>
+
+                        <option value='no+{{$sec2_4_a5_rows[$i][0]}}'>No</option>
+                    </select>
+                    @endif
+
+                    @endforeach
+                    @else
+                    <select name="applicability[]" class="form-select">
+                        <option value=""> Select--  </option>
+
+                        <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Yes</option>
+
+                        <option value='no+{{$sec2_4_a5_rows[$i][0]}}'>No</option>
+                    </select>
+                    @endif
 
 
                 </td>
 
                 <td style="text-align: center">
+                    @if($a5_results->count()>0)
+                    @foreach ($a5_results as $a5)
+
+                    @if($a5->control_compliance!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+
+                    <p>{{$a5->control_compliance}}%</p>
+                        @break
+                    @endif
+
+                    @if($loop->last)
                     <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
+
+                    @endif
+
+                    @endforeach
+                    @else
+                 <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
+
+                    @endif
                 </td>
 
                 <td>
-                    <input type="number" name="vulnerability[]"  class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+                    @if($a5_results->count()>0)
+                        @foreach ($a5_results as $a5)
+
+                            @if($a5->vulnerability!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+
+                                <p>{{$a5->vulnerability}}%</p>
+                                    @break
+                                @endif
+
+                                @if($loop->last)
+                            <input type="number" name="vulnerability[]"  class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+                                @endif
+
+                        @endforeach
+                    @else
+                        <input type="number" name="vulnerability[]"  class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+
+                    @endif
 
                 </td>
 
                 <td>
-                    <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}">
+                    @if($a5_results->count()>0)
+                        @foreach ($a5_results as $a5)
+
+                            @if($a5->threat!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+
+                                <p>{{$a5->threat}}%</p>
+                                    @break
+                                @endif
+
+                                @if($loop->last)
+             <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}">
+                    @endif
+
+                        @endforeach
+                    @else
+            <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}">
+
+                    @endif
 
                 </td>
 
                 <td>
-                    <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+                    @if($a5_results->count()>0)
+                    @foreach ($a5_results as $a5)
+
+                        @if($a5->risk_level!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+
+                            <p>{{$a5->risk_level}}%</p>
+                                @break
+                            @endif
+
+                            @if($loop->last)
+         <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+                    @endif
+
+                    @endforeach
+                @else
+    <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+
+                @endif
+
 
                 </td>
 
@@ -173,7 +263,16 @@ $permissions=json_decode($project_permissions);
                 {{-- <td>yes/no {{$data[$i][0]}}</td> --}}
 
             <td style="text-align: center">
+                @if($a6_results->count()>0)
+                @foreach ($a6_results as $a6)
 
+                @if($a6->applicability!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+
+                <p>{{$a6->applicability}} </p>
+                    @break
+                @endif
+
+                @if($loop->last)
 
                <select name="applicability[]" class="form-select">
                 <option value=""> Select--  </option>
@@ -182,26 +281,110 @@ $permissions=json_decode($project_permissions);
 
                 <option value='no+{{$sec2_4_a6_rows[$i][0]}}'>No</option>
             </select>
+                @endif
+
+                @endforeach
+                @else
+
+               <select name="applicability[]" class="form-select">
+                <option value=""> Select--  </option>
+
+                <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Yes</option>
+
+                <option value='no+{{$sec2_4_a6_rows[$i][0]}}'>No</option>
+            </select>
+                @endif
+
+
 
 
             </td>
 
             <td style="text-align: center">
-                <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
+                @if($a6_results->count()>0)
+                @foreach ($a6_results as $a6)
+
+                    @if($a6->control_compliance!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+
+                        <p>{{$a6->control_compliance}}%</p>
+                            @break
+                        @endif
+
+                        @if($loop->last)
+            <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
+                @endif
+
+                @endforeach
+            @else
+        <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
+
+            @endif
+            </td>
+
+
+            <td>
+                    @if($a6_results->count()>0)
+                    @foreach ($a6_results as $a6)
+
+                        @if($a6->vulnerability!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+
+                            <p>{{$a6->vulnerability}}%</p>
+                                @break
+                            @endif
+
+                            @if($loop->last)
+        <input type="number" name="vulnerability[]"  class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+                    @endif
+
+                    @endforeach
+                @else
+    <input type="number" name="vulnerability[]"  class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+
+                @endif
+
             </td>
 
             <td>
-                <input type="number" name="vulnerability[]"  class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+                @if($a6_results->count()>0)
+                @foreach ($a6_results as $a6)
+
+                    @if($a6->threat!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+
+                        <p>{{$a6->threat}}%</p>
+                            @break
+                        @endif
+
+                        @if($loop->last)
+        <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}">
+                @endif
+
+                @endforeach
+            @else
+             <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}">
+
+            @endif
 
             </td>
 
             <td>
-                <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}">
+                @if($a6_results->count()>0)
+                @foreach ($a6_results as $a6)
 
-            </td>
+                    @if($a6->risk_level!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
 
-            <td>
-                <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+                        <p>{{$a6->risk_level}} </p>
+                            @break
+                        @endif
+
+                        @if($loop->last)
+     <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+                @endif
+
+                @endforeach
+            @else
+     <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+
+            @endif
 
             </td>
 
@@ -227,35 +410,135 @@ $permissions=json_decode($project_permissions);
              {{-- <td>yes/no {{$data[$i][0]}}</td> --}}
 
          <td style="text-align: center">
+            @if($a7_results->count()>0)
+            @foreach ($a7_results as $a7)
+
+                @if($a7->applicability!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+
+                    <p>{{$a7->applicability}} </p>
+                        @break
+                    @endif
+
+                    @if($loop->last)
+                    <select name="applicability[]" class="form-select">
+                        <option value=""> Select--  </option>
+
+                        <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Yes</option>
+
+                        <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>No</option>
+                    </select>            @endif
+
+            @endforeach
+        @else
+        <select name="applicability[]" class="form-select">
+            <option value=""> Select--  </option>
+
+            <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Yes</option>
+
+            <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>No</option>
+        </select>
+        @endif
 
 
-            <select name="applicability[]" class="form-select">
-             <option value=""> Select--  </option>
-
-             <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Yes</option>
-
-             <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>No</option>
-         </select>
 
 
          </td>
 
          <td style="text-align: center">
-             <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
+            @if($a7_results->count()>0)
+            @foreach ($a7_results as $a7)
+
+                @if($a7->control_compliance!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+
+                    <p>{{$a7->control_compliance}}% </p>
+                        @break
+                    @endif
+
+                    @if($loop->last)
+        <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
+
+
+                    @endif
+
+            @endforeach
+        @else
+ <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
+
+        @endif
+
          </td>
 
          <td>
-             <input type="number" name="vulnerability[]"  class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
+            @if($a7_results->count()>0)
+            @foreach ($a7_results as $a7)
+
+                @if($a7->vulnerability!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+
+                    <p>{{$a7->vulnerability}}% </p>
+                        @break
+                    @endif
+
+                    @if($loop->last)
+        <input type="number" name="vulnerability[]"  class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
+
+
+                    @endif
+
+            @endforeach
+        @else
+     <input type="number" name="vulnerability[]"  class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
+
+        @endif
+
 
          </td>
 
          <td>
-             <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}">
+
+            @if($a7_results->count()>0)
+            @foreach ($a7_results as $a7)
+
+                @if($a7->threat!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+
+                    <p>{{$a7->threat}}% </p>
+                        @break
+                    @endif
+
+                    @if($loop->last)
+         <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}">
+
+
+                    @endif
+
+            @endforeach
+        @else
+         <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}">
+
+        @endif
 
          </td>
 
          <td>
+            @if($a7_results->count()>0)
+            @foreach ($a7_results as $a7)
+
+                @if($a7->risk_level!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+
+                    <p>{{$a7->risk_level}}% </p>
+                        @break
+                    @endif
+
+                    @if($loop->last)
+            <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
+
+
+                    @endif
+
+            @endforeach
+        @else
              <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
+
+        @endif
 
          </td>
 
@@ -281,35 +564,134 @@ $permissions=json_decode($project_permissions);
             {{-- <td>yes/no {{$data[$i][0]}}</td> --}}
 
         <td style="text-align: center">
+            @if($a8_results->count()>0)
+            @foreach ($a8_results as $a8)
 
+                @if($a8->applicability!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
 
-           <select name="applicability[]" class="form-select">
+                    <p>{{$a8->applicability}} </p>
+                        @break
+                    @endif
+
+                    @if($loop->last)
+                    <select name="applicability[]" class="form-select">
+                        <option value=""> Select--  </option>
+
+                        <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Yes</option>
+
+                        <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>No</option>
+                    </select>            @endif
+
+            @endforeach
+        @else
+        <select name="applicability[]" class="form-select">
             <option value=""> Select--  </option>
 
             <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Yes</option>
 
             <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>No</option>
         </select>
+        @endif
+
+
+           {{-- <select name="applicability[]" class="form-select">
+            <option value=""> Select--  </option>
+
+            <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Yes</option>
+
+            <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>No</option>
+        </select> --}}
 
 
         </td>
 
         <td style="text-align: center">
+            @if($a8_results->count()>0)
+            @foreach ($a8_results as $a8)
+
+                @if($a8->control_compliance!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+
+                    <p>{{$a8->control_compliance}}%</p>
+                        @break
+                    @endif
+
+                    @if($loop->last)
             <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
+
+                      @endif
+
+            @endforeach
+        @else
+     <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
+
+        @endif
         </td>
 
         <td>
-            <input type="number" name="vulnerability[]"  class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
+            @if($a8_results->count()>0)
+            @foreach ($a8_results as $a8)
+
+                @if($a8->vulnerability!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+
+                    <p>{{$a8->vulnerability}}%</p>
+                        @break
+                    @endif
+
+                    @if($loop->last)
+        <input type="number" name="vulnerability[]"  class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
+
+                      @endif
+
+            @endforeach
+        @else
+    <input type="number" name="vulnerability[]"  class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
+
+        @endif
 
         </td>
 
         <td>
-            <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}">
+            @if($a8_results->count()>0)
+            @foreach ($a8_results as $a8)
+
+                @if($a8->threat!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+
+                    <p>{{$a8->threat}}%</p>
+                        @break
+                    @endif
+
+                    @if($loop->last)
+         <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}">
+
+                      @endif
+
+            @endforeach
+        @else
+             <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}">
+        @endif
+
 
         </td>
 
         <td>
-            <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
+            @if($a8_results->count()>0)
+            @foreach ($a8_results as $a8)
+
+                @if($a8->risk_level!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+
+                    <p>{{$a8->risk_level}}%</p>
+                        @break
+                    @endif
+
+                    @if($loop->last)
+         <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
+
+                      @endif
+
+            @endforeach
+        @else
+         <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
+            @endif
 
         </td>
 
