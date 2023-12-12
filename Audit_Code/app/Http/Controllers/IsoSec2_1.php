@@ -47,16 +47,20 @@ class IsoSec2_1 extends Controller
     {
         $req->validate(
             [
-                'g_name' => 'required|string',
-                'name' => 'required|string',
-                'c_name' => 'required|string',
+               'g_name' => 'required_without_all:name,c_name',
+                'name' => 'required_without_all:g_name,c_name',
+               'c_name' => 'required_without_all:g_name,name',
+
                 'owner_dept' => 'required|string',
                 'physical_loc' => 'required|string',
                 'logical_loc' => 'required|string',
                 's_name' => 'required|string',
             ],
             [
-                '*.required' => 'This field is required'
+                '*.required' => 'This field is required',
+                'g_name.required_without_all' => 'At least one of group name, name, or component name is required',
+                'name.required_without_all' => 'At least one of group name, name, or component name is required',
+                'c_name.required_without_all' => 'At least one of group name, name, or component name is required',
             ]
         );
 
@@ -203,16 +207,20 @@ class IsoSec2_1 extends Controller
     {
         $req->validate(
             [
-                'g_name' => 'required|string',
-                'name' => 'required|string',
-                'c_name' => 'required|string',
+               'g_name' => 'required_without_all:name,c_name',
+                'name' => 'required_without_all:g_name,c_name',
+               'c_name' => 'required_without_all:g_name,name',
+
                 'owner_dept' => 'required|string',
                 'physical_loc' => 'required|string',
                 'logical_loc' => 'required|string',
                 's_name' => 'required|string',
             ],
             [
-                '*.required' => 'This field is required'
+                '*.required' => 'This field is required',
+                'g_name.required_without_all' => 'At least one of group name, name, or component name is required',
+                'name.required_without_all' => 'At least one of group name, name, or component name is required',
+                'c_name.required_without_all' => 'At least one of group name, name, or component name is required',
             ]
         );
 

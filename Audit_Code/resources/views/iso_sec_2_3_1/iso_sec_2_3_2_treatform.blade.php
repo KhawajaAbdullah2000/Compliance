@@ -85,7 +85,8 @@ $permissions=json_decode($project_permissions);
 
               <div class="form-group mt-4">
                 <label for=""> Treatment Action</label>
-                    <input type="text" name="treatment_action" value="{{old('treatment_action',$treatmentData->treatment_action)}}">
+                <textarea name="treatment_action" cols="70" rows="10" class="form-control">{{old('treatment_action',$treatmentData->treatment_action)}}</textarea>
+
                     @if($errors->has('treatment_action'))
                     <div class="text-danger">{{ $errors->first('treatment_action') }}</div>
                 @endif
@@ -98,6 +99,11 @@ $permissions=json_decode($project_permissions);
                     <div class="text-danger">{{ $errors->first('treatment_target_date') }}</div>
                 @endif
               </div>
+
+
+
+
+
 
               <div class="form-group mt-4">
                 <label for=""> Responsbility for Treatment</label>

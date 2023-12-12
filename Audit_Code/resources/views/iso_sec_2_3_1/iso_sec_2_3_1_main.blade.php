@@ -222,7 +222,7 @@ $permissions=json_decode($project_permissions);
 
                         @if($a5->risk_level!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
-                            <p>{{$a5->risk_level}}%</p>
+                            <p>{{$a5->risk_level}}</p>
                                 @break
                             @endif
 
@@ -524,7 +524,7 @@ $permissions=json_decode($project_permissions);
 
                 @if($a7->risk_level!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
 
-                    <p>{{$a7->risk_level}}% </p>
+                    <p>{{$a7->risk_level}} </p>
                         @break
                     @endif
 
@@ -679,7 +679,7 @@ $permissions=json_decode($project_permissions);
 
                 @if($a8->risk_level!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
 
-                    <p>{{$a8->risk_level}}%</p>
+                    <p>{{$a8->risk_level}}</p>
                         @break
                     @endif
 
