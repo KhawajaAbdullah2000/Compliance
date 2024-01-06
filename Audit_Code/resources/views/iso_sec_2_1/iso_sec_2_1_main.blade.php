@@ -11,9 +11,32 @@ $permissions=json_decode($project_permissions);
 @endphp
 
 <div class="container">
+    <div class="float-end">
+        <a href="{{route('download_asset_template')}}">Download Excel template to upload assets</a>
+        <br>
+        {{-- <a href="/upload_assets/{{$project_id}}/{{auth()->user()->id}}">Upload a populated excel sheet</a> --}}
+        <div class="container">
+            <form action="/upload_assets/{{$project_id}}/{{auth()->user()->id}}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="form-group">
+                    <label for="file" class="text-primary" style="cursor: pointer">Upload a populated excel sheet</label>
+                    <span id="fileName"></span>
+                    <input type="file" name="file" id="file" class="form-control" style="display:none;"
+                    onchange="displayFileName(this)">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Upload assets</button>
+                @error('file')
+                <div class="text-danger">{{ $errors->first('file') }}</div>
+
+                @enderror
+            </form>
 
 
-    <h3 class="text-center fw-bold mb-3">Project id: {{$project_id}} Project name: {{$project_name}} Section2.1 Scope of Assets and Services</h3>
+      </div>
+
+
+    <h3 class="text-center fw-bold mb-3"> Project name: {{$project_name}} Section2.1 Scope of Assets and Services</h3>
+
 
 
 
@@ -117,7 +140,6 @@ $permissions=json_decode($project_permissions);
 @if($data->count()>0)
 
 @if(in_array('Data Inputter',$permissions))
-
 <a class="btn btn-success btn-md float-end mb-2" href="/iso_sec_2_1_new/{{$project_id}}/{{auth()->user()->id}}"
     role="button">Add new Asset <i class="fas fa-plus"></i></a>
 @endif
@@ -213,6 +235,26 @@ $permissions=json_decode($project_permissions);
 </script>
 @endif
 
+@if(Session::has('error'))
+<script>
+    swal({
+  title: "{{Session::get('error')}}",
+  icon: "error",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script>
+@endif
+
+<script>
+    document.getElementById('fileLabel').addEventListener('click', function () {
+        document.getElementById('file').click();
+    });
+    function displayFileName(input) {
+            var fileNameElement = document.getElementById('fileName');
+            fileNameElement.innerHTML = input.files[0].name;
+        }
+</script>
 @endsection
 
 

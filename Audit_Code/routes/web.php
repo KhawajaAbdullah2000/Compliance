@@ -160,6 +160,10 @@ route::get('iso_sec_2_1_edit/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::cl
 route::put('iso_sec_2_1_submit_edit/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_submit_edit']);
 route::get('iso_sec_2_1_delete/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_delete']);
 
+//download exceltemplate
+route::get('/download_asset_template',[IsoSec2_1::class,'download_asset_template'])->name('download_asset_template');
+route::post('upload_assets/{proj_id}/{user_id}',[IsoSec2_1::class,'upload_assets']);
+
 
 //Iso Sec2.3
 route::get('iso_sec_2_3/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3'])->name('iso_sec_2_3');

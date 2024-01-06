@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class IsoSec2_1 extends Controller
 {
@@ -293,4 +295,135 @@ class IsoSec2_1 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
 
     }
+
+
+    public function download_asset_template(){
+        $path=public_path("assets_template.xlsx");
+        return response()->download($path);
+
+    }
+
+    public function upload_assets(Request $req,$proj_id,$user_id)  {
+        $req->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+                if (in_array('Data Inputter', $permissions)) {
+                    if ($checkpermission->type_id == 4) {
+
+                        $file = $req->file('file');
+                        $data = Excel::toArray([], $file);
+                        $rows = array_slice($data[0], 1);
+
+                        $g_name=[];
+                        $name=[];
+                        $c_name=[];
+                        $owner_dept=[];
+                        $physical_loc=[];
+                        $logical_loc=[];
+                        $s_name=[];
+                        $error=null;
+
+
+
+                        foreach($rows as $row){
+
+                            if($row[0]!=null){
+                                $g_name[]=$row[0];
+                            }else{
+                                $g_name[]=null;
+                            }
+
+                            if($row[1]!=null){
+                                $name[]=$row[1];
+                            }else{
+                                $name[]=null;
+                            }
+
+                            if($row[2]!=null){
+                                $c_name[]=$row[2];
+                            }else{
+                                $c_name[]=null;
+                            }
+
+
+                            if($row[3]!=null){
+                                $owner_dept[]=$row[3];
+                            }else{
+                                $error="Owner dept of an asset Missing";
+                            }
+
+                            if($row[4]!=null){
+                                $physical_loc[]=$row[4];
+                            }else{
+                                $error="Physical location of an asset Missing";
+                            }
+
+                            if($row[5]!=null){
+                                $logical_loc[]=$row[5];
+                            }else{
+                                $error="Logical Location of an asset Missing";
+                            }
+
+                            if($row[6]!=null){
+                                $s_name[]=$row[6];
+                            }else{
+                                $error="Service Name of an asset Missing";
+                            }
+
+                        }
+
+                        if($error!=null){
+                            return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
+                            ->with('error', $error);
+                        }
+
+
+                        for($i=0;$i<count($rows);$i++){
+                            DB::table('iso_sec_2_1')->insert([
+                                'project_id'=>$proj_id,
+                                'g_name'=>$g_name[$i],
+                                'name'=>$name[$i],
+                                'c_name'=>$c_name[$i],
+                                'owner_dept'=>$owner_dept[$i],
+                                'physical_loc'=>$physical_loc[$i],
+                                'logical_loc'=>$logical_loc[$i],
+                                's_name'=>$s_name[$i],
+                                'last_edited_by'=>$user_id,
+                                'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+                            ]);
+                        }
+
+                        return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
+                        ->with('success', 'Assets Uploaded Successfully');
+
+
+
+
+
+
+                    }
+                }
+            }
+            return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+        }
+
+    }
+
+
+
+
 }
