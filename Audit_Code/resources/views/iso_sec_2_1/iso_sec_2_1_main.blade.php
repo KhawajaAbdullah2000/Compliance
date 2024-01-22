@@ -144,16 +144,16 @@ $permissions=json_decode($project_permissions);
     role="button">Add new Asset <i class="fas fa-plus"></i></a>
 @endif
 
-    <table class="table table-responsive table-primary table-striped mt-4">
-        <thead class="thead-dark">
+    <table id="myTable2" class="table table-responsive table-primary table-striped mt-4">
+        <thead class="thead-dark table-pointer">
           <tr style="vertical-align: middle">
-            <th >Asset Group Name</th>
-            <th>Asset Name</th>
-            <th>Asset Component Name</th>
-            <th>Asset Owner Dept</th>
-            <th>Asset Physical Location</th>
-            <th>Asset Logical Location</th>
-            <th>Service Name for which this is an underlying asset </th>
+            <th onclick="sortTable(0)">Asset Group Name</th>
+            <th onclick="sortTable(1)">Asset Name</th>
+            <th onclick="sortTable(2)">Asset Component Name</th>
+            <th onclick="sortTable(3)">Asset Owner Dept</th>
+            <th onclick="sortTable(4)">Asset Physical Location</th>
+            <th onclick="sortTable(5)">Asset Logical Location</th>
+            <th onclick="sortTable(6)">Service Name for which this is an underlying asset </th>
             <th>Risk Assessment</th>
             <th>Risk Treatment</th>
             <th>Actions</th>
@@ -163,13 +163,13 @@ $permissions=json_decode($project_permissions);
         <tbody>
 @foreach ($data as $d)
             <tr>
-                <td class="fw-bold">{{substr($d->g_name,0,15)}} @if(strlen($d->g_name)>15)... @endif </td>
-                <td>{{substr($d->name,0,20)}} @if(strlen($d->name)>20)... @endif </td>
-                <td>{{substr($d->c_name,0,10)}}@if(strlen($d->c_name)>10)... @endif </td>
-                <td>{{substr($d->owner_dept,0,10)}}@if(strlen($d->owner_dept)>10)... @endif </td>
-                <td>{{substr($d->physical_loc,0,10)}}@if(strlen($d->physical_loc)>10).. @endif </td>
-                <td>{{substr($d->logical_loc,0,10)}}@if(strlen($d->logical_loc)>10)... @endif </td>
-                <td>{{substr($d->s_name,0,16)}}@if(strlen($d->s_name)>16)... @endif </td>
+                <td class="fw-bold">{{$d->g_name}}</td>
+                <td>{{$d->name}} </td>
+                <td>{{$d->c_name}}</td>
+                <td>{{$d->owner_dept}} </td>
+                <td>{{$d->physical_loc}} </td>
+                <td>{{$d->logical_loc}} </td>
+                <td>{{$d->s_name}}</td>
 
           <td>
             <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">Risk Assessment</a>
@@ -254,7 +254,69 @@ $permissions=json_decode($project_permissions);
             var fileNameElement = document.getElementById('fileName');
             fileNameElement.innerHTML = input.files[0].name;
         }
+
 </script>
+
+<script>
+    function sortTable(n) {
+      var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+      table = document.getElementById("myTable2");
+      switching = true;
+      // Set the sorting direction to ascending:
+      dir = "asc";
+      /* Make a loop that will continue until
+      no switching has been done: */
+      while (switching) {
+        // Start by saying: no switching is done:
+        switching = false;
+        rows = table.rows;
+        /* Loop through all table rows (except the
+        first, which contains table headers): */
+        for (i = 1; i < (rows.length - 1); i++) {
+          // Start by saying there should be no switching:
+          shouldSwitch = false;
+          /* Get the two elements you want to compare,
+          one from current row and one from the next: */
+          x = rows[i].getElementsByTagName("TD")[n];
+          y = rows[i + 1].getElementsByTagName("TD")[n];
+          /* Check if the two rows should switch place,
+          based on the direction, asc or desc: */
+          if (dir == "asc") {
+            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+              // If so, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+          } else if (dir == "desc") {
+            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+              // If so, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+          }
+        }
+        if (shouldSwitch) {
+          /* If a switch has been marked, make the switch
+          and mark that a switch has been done: */
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          // Each time a switch is done, increase this count by 1:
+          switchcount ++;
+        } else {
+          /* If no switching has been done AND the direction is "asc",
+          set the direction to "desc" and run the while loop again. */
+          if (switchcount == 0 && dir == "asc") {
+            dir = "desc";
+            switching = true;
+          }
+        }
+      }
+    }
+    </script>
+
+
+
+
 @endsection
 
 

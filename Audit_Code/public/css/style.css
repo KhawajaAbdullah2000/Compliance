@@ -265,6 +265,11 @@ input::-webkit-inner-spin-button {
     height: 990px;
 }
 
+thead.table-pointer {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 
 @media only screen and (max-width: 479px) {
     .tab .nav-tabs li {

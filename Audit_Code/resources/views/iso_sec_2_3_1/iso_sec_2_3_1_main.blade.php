@@ -161,13 +161,13 @@ $permissions=json_decode($project_permissions);
                     @endif
 
                     @if($loop->last)
-                    <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
+                    <input type="number" name="control_compliance[]" oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
 
                     @endif
 
                     @endforeach
                     @else
-                 <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
+                 <input type="number" name="control_compliance[]" oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
 
                     @endif
                 </td>
@@ -311,12 +311,12 @@ $permissions=json_decode($project_permissions);
                         @endif
 
                         @if($loop->last)
-            <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
+            <input type="number" name="control_compliance[]" oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
                 @endif
 
                 @endforeach
             @else
-        <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
+        <input type="number" name="control_compliance[]" oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
 
             @endif
             </td>
@@ -455,14 +455,14 @@ $permissions=json_decode($project_permissions);
                     @endif
 
                     @if($loop->last)
-        <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
+        <input type="number" name="control_compliance[]" min=0 max=100 oninput="validateInput(this)" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
 
 
                     @endif
 
             @endforeach
         @else
- <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
+ <input type="number" name="control_compliance[]" oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
 
         @endif
 
@@ -616,13 +616,13 @@ $permissions=json_decode($project_permissions);
                     @endif
 
                     @if($loop->last)
-            <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
+            <input type="number" name="control_compliance[]" oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
 
                       @endif
 
             @endforeach
         @else
-     <input type="number" name="control_compliance[]" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
+     <input type="number" name="control_compliance[]" oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
 
         @endif
         </td>
@@ -794,6 +794,16 @@ $permissions=json_decode($project_permissions);
     });
 
 </script>
+
+<script>
+    function validateInput(inputElement) {
+
+      if (inputElement.value.indexOf(".") !== -1) {
+        alert("Decimal values are not allowed.");
+        inputElement.value = Math.floor(inputElement.value);
+      }
+    }
+  </script>
 
 @endsection
 
