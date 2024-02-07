@@ -90,6 +90,7 @@ class IsoSec2_3_1 extends Controller
 
     public function iso_sec2_3_1_initial_add(Request $req,$asset_id,$proj_id,$user_id)
     {
+
         $req->validate([
              'asset_value' => 'required',
              'applicability' => ['required', 'array', 'min:1'],
@@ -106,10 +107,14 @@ class IsoSec2_3_1 extends Controller
         $applicability = $req->input('applicability');
         $filtered_applicability = array_filter($applicability);
 
+        //dd($req->input('control_compliance'));
+
         $control_compliance_filter = array_filter($req->input('control_compliance'));
         $req->merge(['control_compliance' => $control_compliance_filter]);
         $control_compliance = $req->input('control_compliance');
         $filtered_control_compliance = array_filter($control_compliance);
+
+
 
 
 
@@ -132,7 +137,6 @@ class IsoSec2_3_1 extends Controller
        $filtered_risk_level = array_filter($risk_level);
 
 
-
         $inputArray = $filtered_applicability;
         $yesNoArray = [];
         $numberArray = [];
@@ -150,6 +154,7 @@ class IsoSec2_3_1 extends Controller
         foreach($inputControlCompliance as $icc){
             $final_control_compliance[]=$icc;
         }
+
 
         $inputVulnerability=$filtered_vulnerability;
         foreach($inputVulnerability as $iv){
