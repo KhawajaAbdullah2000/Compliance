@@ -102,39 +102,78 @@ class IsoSec2_3_1 extends Controller
          ]);
 
 
+
+
         $my_filter = array_filter($req->input('applicability'));
         $req->merge(['applicability' => $my_filter]);
         $applicability = $req->input('applicability');
         $filtered_applicability = array_filter($applicability);
 
-        //dd($req->input('control_compliance'));
 
-        $control_compliance_filter = array_filter($req->input('control_compliance'));
-        $req->merge(['control_compliance' => $control_compliance_filter]);
-        $control_compliance = $req->input('control_compliance');
-        $filtered_control_compliance = array_filter($control_compliance);
+       //dd($req->input('control_compliance'));
 
+       $my_control_compliance=$req->input('control_compliance');
+       foreach ($my_control_compliance as $key => $value) {
+          if ($value === null) {
+              $my_control_compliance[$key] = 0;
+          }
+      }
 
-
-
-
-        $vulnerability_filter = array_filter($req->input('vulnerability'));
-        $req->merge(['vulnerability' => $vulnerability_filter]);
-        $vulnerability = $req->input('vulnerability');
-        $filtered_vulnerability = array_filter($vulnerability);
-
-
-        $threat_filter = array_filter($req->input('threat'));
-        $req->merge(['threat' => $threat_filter]);
-        $threat = $req->input('threat');
-        $filtered_threat = array_filter($threat);
+      //dd($my_control_compliance);
 
 
 
-        $risk_level_filter = array_filter($req->input('threat'));
-        $req->merge(['threat' => $risk_level_filter]);
-        $risk_level = $req->input('risk_level');
-       $filtered_risk_level = array_filter($risk_level);
+        // $control_compliance_filter =$my_control_compliance;
+        // $req->merge(['control_compliance' => $control_compliance_filter]);
+        // $control_compliance = $req->input('control_compliance');
+        // $filtered_control_compliance = array_filter($control_compliance);
+
+        // dd($filtered_control_compliance);
+
+
+        $my_vulnerability=$req->input('vulnerability');
+        foreach ($my_vulnerability as $key => $value) {
+           if ($value === null) {
+               $my_vulnerability[$key] = 0;
+           }
+       }
+       //dd($my_vulnerability);
+
+
+
+        // $vulnerability_filter = array_filter($req->input('vulnerability'));
+        // $req->merge(['vulnerability' => $vulnerability_filter]);
+        // $vulnerability = $req->input('vulnerability');
+        // $filtered_vulnerability = array_filter($vulnerability);
+
+        $my_threat=$req->input('threat');
+        foreach ($my_threat as $key => $value) {
+           if ($value === null) {
+               $my_threat[$key] = 0;
+           }
+       }
+
+       //dd($my_threat);
+
+        // $threat_filter = array_filter($req->input('threat'));
+        // $req->merge(['threat' => $threat_filter]);
+        // $threat = $req->input('threat');
+        // $filtered_threat = array_filter($threat);
+
+        $my_risk=$req->input('risk_level');
+        foreach ($my_risk as $key => $value) {
+           if ($value === null) {
+               $my_risk[$key] = 0;
+           }
+       }
+
+      // dd($my_risk);
+
+
+    //     $risk_level_filter = array_filter($req->input('threat'));
+    //     $req->merge(['threat' => $risk_level_filter]);
+    //     $risk_level = $req->input('risk_level');
+    //    $filtered_risk_level = array_filter($risk_level);
 
 
         $inputArray = $filtered_applicability;
@@ -150,27 +189,31 @@ class IsoSec2_3_1 extends Controller
             }
         }
 
-        $inputControlCompliance=$filtered_control_compliance;
-        foreach($inputControlCompliance as $icc){
-            $final_control_compliance[]=$icc;
-        }
+        //dd($numberArray);
 
 
-        $inputVulnerability=$filtered_vulnerability;
-        foreach($inputVulnerability as $iv){
-            $final_vulnerability[]=$iv;
-        }
+
+        // $inputControlCompliance=$filtered_control_compliance;
+        // foreach($inputControlCompliance as $icc){
+        //     $final_control_compliance[]=$icc;
+        // }
 
 
-        $inputThreat=$filtered_threat;
-        foreach($inputThreat as $it){
-            $final_threat[]=$it;
-        }
+        // $inputVulnerability=$filtered_vulnerability;
+        // foreach($inputVulnerability as $iv){
+        //     $final_vulnerability[]=$iv;
+        // }
 
-        $inputRiskLevel=$filtered_risk_level;
-        foreach($inputRiskLevel as $irl){
-            $final_risk_level[]=$irl;
-        }
+
+        // $inputThreat=$filtered_threat;
+        // foreach($inputThreat as $it){
+        //     $final_threat[]=$it;
+        // }
+
+        // $inputRiskLevel=$filtered_risk_level;
+        // foreach($inputRiskLevel as $irl){
+        //     $final_risk_level[]=$irl;
+        // }
 
         //dd($final_vulnerability);
 
@@ -179,6 +222,7 @@ class IsoSec2_3_1 extends Controller
 
             $exists = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
                 ->where('control_num', $numberArray[$i])->first();
+
             if (!$exists) {
                 DB::table('iso_sec_2_3_1')->insert([
                     'project_id' => $proj_id,
@@ -186,10 +230,10 @@ class IsoSec2_3_1 extends Controller
                     'asset_value' => $req->asset_value,
                     'control_num' => $numberArray[$i],
                     'applicability' => $yesNoArray[$i],
-                    'control_compliance'=>$final_control_compliance[$i],
-                    'vulnerability'=>$final_vulnerability[$i],
-                    'threat'=>$final_threat[$i],
-                    'risk_level'=>$final_risk_level[$i],
+                    'control_compliance'=>$my_control_compliance[$i],
+                    'vulnerability'=>$my_vulnerability[$i],
+                    'threat'=>$my_threat[$i],
+                    'risk_level'=>$my_risk[$i],
                     'last_edited_by' => $user_id,
                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                 ]);

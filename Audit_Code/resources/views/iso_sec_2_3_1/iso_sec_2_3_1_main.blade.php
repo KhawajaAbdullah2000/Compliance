@@ -122,13 +122,13 @@ $permissions=json_decode($project_permissions);
 
                     @if($a5->applicability!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
-                    <p>{{$a5->applicability}} </p>
+                    <p>{{$a5->applicability}}</p>
                         @break
                     @endif
 
                     @if($loop->last)
                     <select name="applicability[]" class="form-select">
-                        <option value=""> Select--  </option>
+                        <option value=""> Select-- </option>
 
                         <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Yes</option>
 
@@ -139,7 +139,7 @@ $permissions=json_decode($project_permissions);
                     @endforeach
                     @else
                     <select name="applicability[]" class="form-select">
-                        <option value=""> Select--  </option>
+                        <option value=""> Select-- </option>
 
                         <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Yes</option>
 
@@ -154,7 +154,7 @@ $permissions=json_decode($project_permissions);
                     @if($a5_results->count()>0)
                     @foreach ($a5_results as $a5)
 
-                    @if($a5->control_compliance!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+                    @if($a5->control_compliance>=0 && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
                     <p>{{$a5->control_compliance}}%</p>
                         @break
@@ -176,7 +176,7 @@ $permissions=json_decode($project_permissions);
                     @if($a5_results->count()>0)
                         @foreach ($a5_results as $a5)
 
-                            @if($a5->vulnerability!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+                            @if($a5->vulnerability>=0 && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
                                 <p>{{$a5->vulnerability}}%</p>
                                     @break
@@ -198,7 +198,7 @@ $permissions=json_decode($project_permissions);
                     @if($a5_results->count()>0)
                         @foreach ($a5_results as $a5)
 
-                            @if($a5->threat!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+                            @if($a5->threat>=0 && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
                                 <p>{{$a5->threat}}%</p>
                                     @break
@@ -304,7 +304,7 @@ $permissions=json_decode($project_permissions);
                 @if($a6_results->count()>0)
                 @foreach ($a6_results as $a6)
 
-                    @if($a6->control_compliance!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+                    @if($a6->control_compliance>=0 && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
 
                         <p>{{$a6->control_compliance}}%</p>
                             @break
@@ -326,7 +326,7 @@ $permissions=json_decode($project_permissions);
                     @if($a6_results->count()>0)
                     @foreach ($a6_results as $a6)
 
-                        @if($a6->vulnerability!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+                        @if($a6->vulnerability>=0 && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
 
                             <p>{{$a6->vulnerability}}%</p>
                                 @break
@@ -348,7 +348,7 @@ $permissions=json_decode($project_permissions);
                 @if($a6_results->count()>0)
                 @foreach ($a6_results as $a6)
 
-                    @if($a6->threat!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+                    @if($a6->threat>=0 && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
 
                         <p>{{$a6->threat}}%</p>
                             @break
@@ -448,7 +448,7 @@ $permissions=json_decode($project_permissions);
             @if($a7_results->count()>0)
             @foreach ($a7_results as $a7)
 
-                @if($a7->control_compliance!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+                @if($a7->control_compliance>=0 && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
 
                     <p>{{$a7->control_compliance}}% </p>
                         @break
@@ -472,7 +472,7 @@ $permissions=json_decode($project_permissions);
             @if($a7_results->count()>0)
             @foreach ($a7_results as $a7)
 
-                @if($a7->vulnerability!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+                @if($a7->vulnerability>=0 && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
 
                     <p>{{$a7->vulnerability}}% </p>
                         @break
@@ -498,7 +498,7 @@ $permissions=json_decode($project_permissions);
             @if($a7_results->count()>0)
             @foreach ($a7_results as $a7)
 
-                @if($a7->threat!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+                @if($a7->threat>=0 && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
 
                     <p>{{$a7->threat}}% </p>
                         @break
@@ -609,7 +609,7 @@ $permissions=json_decode($project_permissions);
             @if($a8_results->count()>0)
             @foreach ($a8_results as $a8)
 
-                @if($a8->control_compliance!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+                @if($a8->control_compliance>=0 && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
 
                     <p>{{$a8->control_compliance}}%</p>
                         @break
@@ -631,7 +631,7 @@ $permissions=json_decode($project_permissions);
             @if($a8_results->count()>0)
             @foreach ($a8_results as $a8)
 
-                @if($a8->vulnerability!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+                @if($a8->vulnerability>=0 && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
 
                     <p>{{$a8->vulnerability}}%</p>
                         @break
@@ -654,7 +654,7 @@ $permissions=json_decode($project_permissions);
             @if($a8_results->count()>0)
             @foreach ($a8_results as $a8)
 
-                @if($a8->threat!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+                @if($a8->threat>=0 && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
 
                     <p>{{$a8->threat}}%</p>
                         @break
