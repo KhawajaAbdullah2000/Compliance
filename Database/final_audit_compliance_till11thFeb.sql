@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 06, 2024 at 08:35 AM
+-- Generation Time: Feb 11, 2024 at 10:53 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -139,9 +139,11 @@ INSERT INTO `iso_sec_2_1` (`assessment_id`, `project_id`, `g_name`, `name`, `c_n
 (12, 17, 'Asset 8', 'Explicabo Nostrud q', 'Sit molestiae mollit', 'Velit placeat sint', 'Quisquam voluptatem', 'Aspernatur reiciendi', 'Aliquip autem fugiat', 57, '2023-11-16 16:51:31'),
 (13, 17, 'Asset 9', 'Qui obcaecati nemo v', 'Labore consequatur t', 'Officiis modi dolor', 'Nisi quia consequat', 'Cupiditate voluptate', 'Dolor error ut elit', 57, '2023-11-16 16:53:57'),
 (15, 19, 'Laborum voluptas est', 'Sit animi enim qui', 'Debitis non sint nih', 'Soluta magnam iure d', 'Quasi autem earum qu', 'Consequatur minus d', 'Est non irure verita', 55, '2023-11-24 17:55:15'),
-(16, 20, 'Asset Grp1', 'Asset1', 'Asset1c1', 'abc', 'abcd', 'abcde', 'abcdef', 55, '2023-11-24 18:36:39'),
-(18, 20, 'Asset Grp1', 'Asset2', 'Asset2c1', 'abc', 'abcd', 'abcde', 'abcdef', 55, '2023-11-24 18:36:08'),
-(19, 20, 'Asset Grp1', 'Asset1', 'Asset1c2', 'abc', 'abcd', 'abcde', 'abcdef', 55, '2023-11-24 18:37:34');
+(25, 21, 'AssetG1', 'Asset1', 'AssetC1', 'owner', 'phy', 'log', 'service1', 85, '2024-01-17 19:44:48'),
+(28, 20, 'Tapsys multinet dc', 'payment system-multinet dc', 'payment application-multinet dc', 'IT', 'Karachi', 'Multinet Karachi network', 'Tapsys PGW service-multinet karachi', 55, '2024-01-18 17:40:19'),
+(29, 20, 'Tapsys multinet dc', 'payment system-multinet dc', 'Database Application-multinet dc', 'IT', 'Karachi', 'Multinet Karachi network', 'Tapsys PGW service-multinet karachi', 55, '2024-01-18 17:40:19'),
+(30, 20, 'Tapsys jazz dc', 'payment system-jazz dc', 'payment application-jazz dc', 'IT', 'Ibd', 'jazz Ibd network', 'Tapsys PGW service-jazz Ibd', 55, '2024-01-18 17:40:19'),
+(31, 20, 'Tapsys jazz dc', 'payment system-jazz dc', 'Database Application-jazz dc', 'IT', 'Ibd', 'jazz Ibd network', 'Tapsys PGW service-jazz Ibd', 55, '2024-01-18 17:40:19');
 
 -- --------------------------------------------------------
 
@@ -204,9 +206,7 @@ INSERT INTO `iso_sec_2_3` (`sec2_3_key`, `asset_id`, `project_id`, `asset_value`
 (8, 11, 17, 1, 57, '2023-11-15 17:31:39'),
 (9, 12, 17, 10, 57, '2023-11-16 16:52:16'),
 (10, 13, 17, 5, 57, '2023-11-16 17:06:13'),
-(12, 15, 19, 1, 55, '2023-11-24 17:58:56'),
-(13, 18, 20, 1, 55, '2023-11-24 18:40:05'),
-(14, 16, 20, 10, 55, '2023-11-24 18:47:46');
+(12, 15, 19, 1, 55, '2023-11-24 17:58:56');
 
 -- --------------------------------------------------------
 
@@ -219,7 +219,7 @@ CREATE TABLE `iso_sec_2_3_1` (
   `project_id` int(11) DEFAULT NULL,
   `asset_id` int(11) DEFAULT NULL,
   `control_num` varchar(100) DEFAULT NULL,
-  `applicability` varchar(16) DEFAULT NULL,
+  `applicability` varchar(16) NOT NULL,
   `asset_value` int(11) NOT NULL,
   `control_compliance` int(11) DEFAULT NULL,
   `vulnerability` int(11) DEFAULT NULL,
@@ -238,8 +238,99 @@ CREATE TABLE `iso_sec_2_3_1` (
 --
 
 INSERT INTO `iso_sec_2_3_1` (`assessment_id`, `project_id`, `asset_id`, `control_num`, `applicability`, `asset_value`, `control_compliance`, `vulnerability`, `threat`, `risk_level`, `residual_risk_treatment`, `treatment_action`, `treatment_target_date`, `responsibility_for_treatment`, `last_edited_by`, `last_edited_at`) VALUES
-(135, 20, 16, '5.1', 'yes', 10, 50, 50, 44, '2.20000', 'retain and accept risk', 'abcdeff', '2023-12-19', 55, 55, '2023-12-19 23:47:21'),
-(136, 20, 16, '5.2', 'yes', 10, 78, 22, 99, '2.17800', NULL, NULL, NULL, NULL, 55, '2023-12-19 23:45:50');
+(139, 20, 28, '5.2', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(140, 20, 28, '5.3', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(141, 20, 28, '5.4', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(142, 20, 28, '5.5', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(143, 20, 28, '5.6', 'yes', 10, 50, 50, 100, '5.00000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(144, 20, 28, '5.7', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(145, 20, 28, '5.8', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(146, 20, 28, '5.9', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(147, 20, 28, '5.10', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(148, 20, 28, '5.11', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(149, 20, 28, '5.12', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(150, 20, 28, '5.13', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(151, 20, 28, '5.14', 'yes', 10, 50, 50, 100, '5.00000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(152, 20, 28, '5.15', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(153, 20, 28, '5.16', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(154, 20, 28, '5.17', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(155, 20, 28, '5.18', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(156, 20, 28, '5.19', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(157, 20, 28, '5.20', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(158, 20, 28, '5.21', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:30:29'),
+(159, 20, 28, '5.22', 'yes', 10, 50, 50, 100, '5.00000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:30:29'),
+(160, 20, 28, '5.23', 'yes', 10, 50, 50, 100, '5.00000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
+(161, 20, 28, '5.24', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
+(162, 20, 28, '5.25', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
+(164, 20, 28, '5.27', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
+(165, 20, 28, '5.28', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
+(166, 20, 28, '5.29', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
+(167, 20, 28, '5.30', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
+(168, 20, 28, '5.31', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
+(169, 20, 28, '5.32', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
+(170, 20, 28, '5.33', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
+(171, 20, 28, '5.34', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
+(172, 20, 28, '5.35', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
+(173, 20, 28, '5.36', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
+(174, 20, 28, '5.37', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
+(175, 20, 28, '6.1', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(176, 20, 28, '6.2', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(177, 20, 28, '6.3', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(178, 20, 28, '6.4', 'yes', 10, 50, 50, 100, '5.00000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(179, 20, 28, '6.5', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(180, 20, 28, '6.6', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(181, 20, 28, '6.7', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(182, 20, 28, '6.8', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(183, 20, 28, '7.1', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(184, 20, 28, '7.2', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(185, 20, 28, '7.3', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(186, 20, 28, '7.4', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(187, 20, 28, '7.5', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(188, 20, 28, '7.6', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(189, 20, 28, '7.7', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(190, 20, 28, '7.8', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(191, 20, 28, '7.9', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(192, 20, 28, '7.10', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(193, 20, 28, '7.11', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(194, 20, 28, '7.12', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(195, 20, 28, '7.13', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(196, 20, 28, '7.14', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
+(197, 20, 28, '8.1', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:25:28'),
+(198, 20, 28, '5.26', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:26:27'),
+(199, 20, 28, '8.2', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(200, 20, 28, '8.3', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(201, 20, 28, '8.4', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(202, 20, 28, '8.5', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(203, 20, 28, '8.6', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(204, 20, 28, '8.7', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(205, 20, 28, '8.8', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(206, 20, 28, '8.9', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(207, 20, 28, '8.10', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(208, 20, 28, '8.11', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(209, 20, 28, '8.12', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(210, 20, 28, '8.13', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(211, 20, 28, '8.14', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(212, 20, 28, '8.15', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(213, 20, 28, '8.16', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(214, 20, 28, '8.17', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(215, 20, 28, '8.18', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(216, 20, 28, '8.19', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(217, 20, 28, '8.20', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(218, 20, 28, '8.21', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(219, 20, 28, '8.22', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(220, 20, 28, '8.23', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(221, 20, 28, '8.24', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(222, 20, 28, '8.25', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(223, 20, 28, '8.26', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(224, 20, 28, '8.27', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
+(225, 20, 28, '8.28', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:31:11'),
+(226, 20, 28, '8.29', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:31:11'),
+(229, 20, 28, '8.32', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:31:11'),
+(230, 20, 28, '8.33', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:31:11'),
+(231, 20, 28, '8.34', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 14:32:08'),
+(237, 20, 28, '8.30', 'no', 10, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, 55, '2024-02-07 15:21:24'),
+(238, 20, 28, '8.31', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 15:21:24'),
+(240, 20, 28, '5.1', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, 55, '2024-02-07 15:33:11');
 
 -- --------------------------------------------------------
 
@@ -324,10 +415,15 @@ INSERT INTO `model_has_permissions` (`permission_id`, `model_type`, `model_id`) 
 (2, 'App\\Models\\User', 78),
 (2, 'App\\Models\\User', 80),
 (2, 'App\\Models\\User', 84),
+(2, 'App\\Models\\User', 85),
+(2, 'App\\Models\\User', 87),
+(2, 'App\\Models\\User', 90),
+(2, 'App\\Models\\User', 91),
 (3, 'App\\Models\\User', 8),
 (3, 'App\\Models\\User', 10),
 (3, 'App\\Models\\User', 13),
 (3, 'App\\Models\\User', 56),
+(3, 'App\\Models\\User', 90),
 (4, 'App\\Models\\User', 56),
 (4, 'App\\Models\\User', 60),
 (4, 'App\\Models\\User', 65),
@@ -340,8 +436,12 @@ INSERT INTO `model_has_permissions` (`permission_id`, `model_type`, `model_id`) 
 (4, 'App\\Models\\User', 77),
 (4, 'App\\Models\\User', 78),
 (4, 'App\\Models\\User', 81),
+(4, 'App\\Models\\User', 85),
+(4, 'App\\Models\\User', 87),
+(4, 'App\\Models\\User', 88),
 (5, 'App\\Models\\User', 40),
 (5, 'App\\Models\\User', 82),
+(5, 'App\\Models\\User', 91),
 (6, 'App\\Models\\User', 13),
 (6, 'App\\Models\\User', 22),
 (6, 'App\\Models\\User', 23),
@@ -404,6 +504,8 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (2, 'App\\Models\\User', 76),
 (2, 'App\\Models\\User', 79),
 (2, 'App\\Models\\User', 83),
+(2, 'App\\Models\\User', 86),
+(2, 'App\\Models\\User', 89),
 (3, 'App\\Models\\User', 8),
 (3, 'App\\Models\\User', 10),
 (3, 'App\\Models\\User', 11),
@@ -455,6 +557,11 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (3, 'App\\Models\\User', 81),
 (3, 'App\\Models\\User', 82),
 (3, 'App\\Models\\User', 84),
+(3, 'App\\Models\\User', 85),
+(3, 'App\\Models\\User', 87),
+(3, 'App\\Models\\User', 88),
+(3, 'App\\Models\\User', 90),
+(3, 'App\\Models\\User', 91),
 (4, 'App\\Models\\User', 5),
 (4, 'App\\Models\\User', 6),
 (4, 'App\\Models\\User', 7),
@@ -498,7 +605,9 @@ INSERT INTO `organizations` (`org_id`, `name`, `type`, `sub_org`, `country`, `st
 (15, 'Guest6', 'guest', 'HR', 'Pakistan', 'Sindh', 'karachi', 123, 'National Highway', 'shahmeer@gmail.com', '2023-09-09', '16:26:30', 'active', '2023-09-09 11:26:30', '2023-09-09 11:26:30'),
 (16, 'Guest7', 'guest', 'finance', 'USA', 'Punjab', 'lahore', 123, 'Iqbal town', 'shahmeer@gmail.com', '2023-09-09', '16:31:09', 'active', '2023-09-09 11:31:09', '2023-09-09 11:31:09'),
 (17, 'Guest8', 'guest', 'finance', 'Pakisatn', 'Punjab', 'Karachi', 123, '12324 gg', 'shahmeer@gmail.com', '2023-09-15', '15:00:12', 'active', '2023-09-15 10:00:12', '2023-09-15 10:00:12'),
-(18, 'g10', 'guest', 'HR', 'Pakistan', 'Punjab', 'karachi', 123, 'Iqbal town', 'shahmeer@gmail.com', '2023-09-15', '15:44:32', 'active', '2023-09-15 10:44:32', '2023-09-15 10:44:32');
+(18, 'g10', 'guest', 'HR', 'Pakistan', 'Punjab', 'karachi', 123, 'Iqbal town', 'shahmeer@gmail.com', '2023-09-15', '15:44:32', 'active', '2023-09-15 10:44:32', '2023-09-15 10:44:32'),
+(19, 'Guest20', 'guest', 'Finance', 'Pakistan', 'Punjab', 'karachi', 123, 'National Highway', 'shahmeer@gmail.com', '2024-01-18', '11:07:50', 'active', '2024-01-18 06:07:50', '2024-01-18 06:07:50'),
+(20, 'Host2', 'host', 'HR', 'Pakistan', 'Punjab', 'karachi', 123, 'Iqbal town', 'shahmeer@gmail.com', '2024-01-18', '11:22:50', 'active', '2024-01-18 06:22:50', '2024-01-18 06:22:50');
 
 -- --------------------------------------------------------
 
@@ -1615,7 +1724,10 @@ INSERT INTO `projects` (`project_id`, `project_name`, `org_id`, `created_by`, `p
 (17, 'ISO Test', 9, 55, '2023-11-07', '19:25:12', 4, 'Not submitted for approval', 55, '2023-11-07 14:25:12', '2023-11-07 14:25:12'),
 (18, 'ISO test2', 9, 55, '2023-11-09', '19:04:24', 4, 'Not submitted for approval', 55, '2023-11-09 14:04:24', '2023-11-09 14:04:24'),
 (19, 'ISO Project Testing', 9, 55, '2023-11-23', '18:43:33', 4, 'Not submitted for approval', 55, '2023-11-23 13:43:33', '2023-11-23 13:43:33'),
-(20, 'Iso New Project', 9, 55, '2023-11-24', '18:29:00', 4, 'Not submitted for approval', 55, '2023-11-24 13:29:00', '2023-11-24 13:29:00');
+(20, 'Iso New Project', 9, 55, '2023-11-24', '18:29:00', 4, 'Not submitted for approval', 55, '2023-11-24 13:29:00', '2023-11-24 13:29:00'),
+(21, 'ProjUmer', 10, 85, '2024-01-17', '19:33:01', 4, 'Not submitted for approval', 85, '2024-01-17 14:33:01', '2024-01-17 14:33:01'),
+(22, 'G20 New project for only G20 users', 19, 87, '2024-01-18', '11:21:35', 4, 'Not submitted for approval', 87, '2024-01-18 06:21:35', '2024-01-18 06:21:35'),
+(23, 'H2project', 20, 90, '2024-01-18', '11:26:21', 4, 'Not submitted for approval', 90, '2024-01-18 06:26:21', '2024-01-18 06:26:21');
 
 -- --------------------------------------------------------
 
@@ -1657,7 +1769,11 @@ INSERT INTO `project_details` (`project_code`, `assigned_enduser`, `project_perm
 (17, 55, '[\"Project Owner\",\"Project Creator\"]', '2023-11-11 08:12:09', '2023-11-11 08:12:09'),
 (19, 57, '[\"Project Creator\",\"Project Approver\",\"Data Inputter\",\"Data Viewer\"]', '2023-11-23 13:43:51', '2023-11-23 13:43:51'),
 (19, 55, '[\"Data Inputter\",\"Data Approver\"]', '2023-11-23 13:44:05', '2023-11-24 12:54:57'),
-(20, 55, '[\"Project Owner\",\"Project Creator\",\"Project Approver\",\"Data Inputter\"]', '2023-11-24 13:29:28', '2023-11-24 13:29:28');
+(20, 55, '[\"Project Owner\",\"Project Creator\",\"Project Approver\",\"Data Inputter\"]', '2023-11-24 13:29:28', '2023-11-24 13:29:28'),
+(21, 54, '[\"Data Inputter\"]', '2024-01-17 14:33:36', '2024-01-17 14:33:36'),
+(21, 85, '[\"Data Inputter\"]', '2024-01-17 14:33:55', '2024-01-17 14:33:55'),
+(22, 87, '[\"Data Inputter\"]', '2024-01-18 06:25:46', '2024-01-18 06:25:46'),
+(22, 90, '[\"Data Inputter\"]', '2024-01-18 06:41:43', '2024-01-18 06:41:43');
 
 -- --------------------------------------------------------
 
@@ -1750,7 +1866,10 @@ INSERT INTO `superusers` (`id`, `user_id`, `org_id`) VALUES
 (19, 73, 15),
 (20, 76, 16),
 (22, 79, 17),
-(24, 83, 18);
+(24, 83, 18),
+(25, 86, 19),
+(27, 89, 19),
+(26, 89, 20);
 
 -- --------------------------------------------------------
 
@@ -1819,7 +1938,14 @@ INSERT INTO `users` (`id`, `org_id`, `first_name`, `last_name`, `national_id`, `
 (81, 17, 'g8', 'enduser2', '54546', 'g8enduser2@gmail.com', '43343', 'National Highway', 'karachi', 'Punjab', 'Pakistan', 44, '$2y$10$.WfQNI.Y2q.Cjp7JsquHiO7Q/ZqYrTf2Iyd2GpFcn4FOBtnYCiPji', 'N', 5, 'active', NULL, NULL, '2023-09-15 10:02:26', '2023-09-15 10:02:26'),
 (82, 17, 'g8', 'enduser3', '435455', 'g8enduser3@gmail.com', '323333244', 'Fb area block2', 'karachi', 'Punjab', 'Pakist', 4, '$2y$10$jYc7ZMVLyyeE8s8KYKD5DOQ2uvzhYdwpaU4AwwelLfjMWsd65Tbgm', 'N', 5, 'active', NULL, NULL, '2023-09-15 10:04:41', '2023-09-15 10:04:41'),
 (83, 18, 'g10', 'superuser1', '444', 'g10superuser1@gmail.com', '43545', 'Azizabad', 'isamabad', 'Punjab', 'Pakistan', 123, '$2y$10$V7eFc81zREcqA94mFT0ksebhxd7n9Xi1ZNJCqOD1JSROoqTOxWjQe', 'N', 1, 'active', NULL, NULL, '2023-09-15 10:45:19', '2023-09-15 10:45:19'),
-(84, 18, 'g10', 'enduser1', '55545', 'g10enduser1@gmail.com', '03334447653', 'Fb area block2', 'karachi', 'Punjab', 'Pakistan', 4, '$2y$10$MF6xK1UZAQjE01Un5vvY2e5JEj6xeP5QmWYfYkGoduMLsekRbSkT2', 'N', 5, 'active', NULL, NULL, '2023-09-15 10:46:17', '2023-09-15 10:46:17');
+(84, 18, 'g10', 'enduser1', '55545', 'g10enduser1@gmail.com', '03334447653', 'Fb area block2', 'karachi', 'Punjab', 'Pakistan', 4, '$2y$10$MF6xK1UZAQjE01Un5vvY2e5JEj6xeP5QmWYfYkGoduMLsekRbSkT2', 'N', 5, 'active', NULL, NULL, '2023-09-15 10:46:17', '2023-09-15 10:46:17'),
+(85, 10, 'Umar', 'Bilal', '42101986764445', 'umer@gmail.com', '033344476787', 'ggffg', 'karachi', 'sindh', 'Pakistan', 44, '$2y$10$DSwWJpRHZd4wk3dZjeBx5uqDYYMXSFLKMcjq1/ZPcHH6Pgbw17Qda', 'N', 5, 'active', NULL, NULL, '2024-01-17 14:32:06', '2024-01-17 14:32:06'),
+(86, 19, 'g20super', 'user1', '4210198765422', 'g20superuser1@gmail.com', '033344476787', 'Fb area', 'karachi', 'Punjab', 'Pakistan', 12, '$2y$10$HTbR/fWg2V85P8QOCPpcy.noXNoVhICYFbuQ5JfQ2EGq32S7p1T4y', 'N', 1, 'active', NULL, NULL, '2024-01-18 06:08:46', '2024-01-18 06:08:46'),
+(87, 19, 'g20end', 'user1', '4210198765422', 'g20enduser1@gmail.com', '033344476787', 'Gulshan', 'karachi', 'Punjab', 'Pakistan', 44, '$2y$10$xor4iPgJ8g.bq40/uFMwU.lfRE74dJJ/arulZceVOOPSeJ3PMND2y', 'N', 5, 'active', NULL, NULL, '2024-01-18 06:10:07', '2024-01-18 06:10:07'),
+(88, 19, 'g20end', 'user2', '4210198765422', 'g20enduser2@gmail.com', '03334447653', 'Gulshan', 'karachi', 'Punjab', 'Pakistan', 123, '$2y$10$Y7fjVyVsln/fHPzkZLQgQ.sy0a2tsejBiQHTJVxmK3pnCgjkMInte', 'N', 5, 'active', NULL, NULL, '2024-01-18 06:11:23', '2024-01-18 06:11:23'),
+(89, 20, 'host2super', 'user1', '4210198765422', 'h2superuser1@gmail.com', '03337776543', 'Azizabad', 'karachi', 'Punjab', 'Pakistan', 44, '$2y$10$7osU8aS0U1iD5/VY0iQ0uegrW47zVNo5BDgrp/CENMaCENHj.JcmK', 'N', 1, 'active', NULL, NULL, '2024-01-18 06:23:29', '2024-01-18 06:23:29'),
+(90, 20, 'h2end', 'user1', '4210198765422', 'h2enduser1@gmail.com', '03337776523', 'Fb area block2', 'karachi', 'Sindh', 'Pakistan', 3, '$2y$10$LF9fNivKJkGbnJ3uGpKhA.MocggJLxqbMElZOBuPoApiavLMKtZBi', 'N', 5, 'active', NULL, NULL, '2024-01-18 06:24:51', '2024-01-18 06:24:51'),
+(91, 19, 'g20end', 'user3', '4210198765422', 'g20enduser3@gmail.com', '03337776543', 'Iqbal town', 'karachi', 'Punjab', 'Pakistan', 3, '$2y$10$XHv1aWhRiBSnykkL55VK/eZK.PelZr72N/M6VyaCtPMBcq0EgiS..', 'N', 5, 'active', NULL, NULL, '2024-01-18 06:28:05', '2024-01-18 06:28:05');
 
 --
 -- Indexes for dumped tables
@@ -2399,7 +2525,7 @@ ALTER TABLE `iso_sec2_4_a8`
 -- AUTO_INCREMENT for table `iso_sec_2_1`
 --
 ALTER TABLE `iso_sec_2_1`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `iso_sec_2_2`
@@ -2417,7 +2543,7 @@ ALTER TABLE `iso_sec_2_3`
 -- AUTO_INCREMENT for table `iso_sec_2_3_1`
 --
 ALTER TABLE `iso_sec_2_3_1`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=241;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -2429,7 +2555,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `organizations`
 --
 ALTER TABLE `organizations`
-  MODIFY `org_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `org_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `pci-dss v3.2.1 section1.3`
@@ -2705,7 +2831,7 @@ ALTER TABLE `privileges`
 -- AUTO_INCREMENT for table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `project_types`
@@ -2723,13 +2849,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `superusers`
 --
 ALTER TABLE `superusers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- Constraints for dumped tables
