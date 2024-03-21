@@ -8,7 +8,7 @@
 
 <div class="container">
 
-    <h1 class="text-center">Project id: {{$project_id}} Project name: {{$project_name}} Section2.4 Statement of Applicability</h1>
+    <h3 class="text-center mt-5">Project name: {{$project_name}} Section2.4 Statement of Applicability</h3>
 
     <div class="row text-center justify-content-center full-img-subsections">
         <div class="row mt-2">

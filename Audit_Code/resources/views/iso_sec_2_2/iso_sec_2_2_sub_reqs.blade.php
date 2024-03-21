@@ -12,7 +12,7 @@ $permissions=json_decode($project_permissions);
 
 <div class="container">
 
-    <h1 class="text-center">Project id {{$project_id}} {{$project_name}} </h1>
+    <h1 class="text-center">{{$project_name}} </h1>
 
       <h2 class="text-center fw-bold mt-4 mb-4">
    {{$data[0][2]}}

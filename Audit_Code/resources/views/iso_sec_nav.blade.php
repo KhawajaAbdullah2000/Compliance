@@ -1,4 +1,21 @@
- @if(Session::has('projectid'))
+ {{-- @if(Session::has('projectid'))
+
+ <div class="">
+    <div class="row float-end">
+      <div class="col-md-2 mr-2">
+        <a href="{{route('iso_section2_1',['proj_id'=>Session::get('projectid'),'user_id'=>Auth()->user()->id])}}" class="navigation-box">2.1</a>
+      </div>
+      <div class="col-md-2 mx-2">
+        <a href="{{route('iso_sec_2_2_subsections',['proj_id'=>Session::get('projectid'),'user_id'=>Auth()->user()->id])}}" class="navigation-box">2.2</a>
+      </div>
+      <div class="col-md-2 mx-2">
+        <a href="/iso_section2_3/{{$project_id}}/{{auth()->user()->id}}" class="navigation-box">2.3</a>
+      </div>
+      <div class="col-md-2 mx-2">
+        <a href="{{url('iso_section2_4_subsections',['proj_id'=>Session::get('projectid'),'user_id'=>Auth()->user()->id])}}" class="navigation-box">2.4</a>
+      </div>
+    </div>
+  </div>
 
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -39,4 +56,4 @@
   </nav>
   @endif
 
-
+ --}}

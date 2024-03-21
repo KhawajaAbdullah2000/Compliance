@@ -101,8 +101,34 @@ a[data-toggle="collapse"] {
         display: none;
     }
 }
+.navigation-box {
+    height: 50px; /* Fixed height */
+    width: 50px; /* Fixed width */
+    background-color:#408000; /* Bootstrap primary color */
+    color: #fff;
+    text-align: center;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center;
+    text-decoration: none;
 
 
+  }
+  .navigation-box:hover {
+    background-color:#1fbb1f ; /* Darker shade of primary color on hover */
+  }
+
+  .navbar{
+    max-height: 100px;
+  }
+
+  .navigation-box a {
+    color: inherit;
+    text-decoration: none;
+  }
 .my_bg_color{
     background-color: #408000;
 }

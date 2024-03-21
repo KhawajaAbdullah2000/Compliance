@@ -11,7 +11,7 @@ $headers=array('Control num','Title of COntrol','Descriptionof Control')
 
 <div class="container">
 
- <h3 class="text-center fw-bold mb-3">Project id: {{$project_id}} Project name: {{$project_name}} Section2.4 A:8 Technological Controls</h3>
+ <h3 class="text-center fw-bold mb-3"> Project name: {{$project_name}} Section2.4 A:8 Technological Controls</h3>
 
                 @foreach ($data[0] as $row)
                             @if(isset($row))

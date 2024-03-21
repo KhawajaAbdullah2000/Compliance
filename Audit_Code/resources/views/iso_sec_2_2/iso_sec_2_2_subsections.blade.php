@@ -9,7 +9,7 @@
 <div class="container">
 
 
-    <h1 class="text-center">Project id {{$project_id}} {{$project_name}} Sections</h1>
+    <h1 class="text-center">{{$project_name}} Sections</h1>
 
     <div class="row text-center justify-content-center full-img h-100 w-100 d-inline-block">
         <div class="row mt-2">

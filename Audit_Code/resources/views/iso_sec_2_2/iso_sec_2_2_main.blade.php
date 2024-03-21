@@ -12,7 +12,7 @@ $permissions=json_decode($project_permissions);
 <div class="container">
 
 
-    <h1 class="text-center">Project id {{$project_id}} {{$project_name}} </h1>
+    <h1 class="text-center"> {{$project_name}} </h1>
 
       <h2 class="text-center fw-bold mt-4 mb-4">
         {{$title}}- Context Of The Organization
@@ -34,7 +34,7 @@ $permissions=json_decode($project_permissions);
                 <td>
                 <p>{!! nl2br($data[0][2]) !!}</p>
                 </td>
-                <td><a href="/iso_sec_2_2_req/{{$my_main_req_num[0]}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">View</a></td>
+                <td><a href="/iso_sec_2_2_req/{{$my_main_req_num[0]}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white">View</a></td>
 
             </tr>
 
@@ -55,7 +55,7 @@ $permissions=json_decode($project_permissions);
                         <p> {!! nl2br($data[$i][2]) !!} </p>
                        </td>
 
-                       <td><a href="/iso_sec_2_2_req/{{$my_current_main_req_num[0]}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">View</a></td>
+                       <td><a href="/iso_sec_2_2_req/{{$my_current_main_req_num[0]}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white">View</a></td>
                     @endif
 
 

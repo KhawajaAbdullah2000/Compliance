@@ -25,8 +25,6 @@ $permissions=json_decode($project_permissions);
 
 <p class="text-center fw-bold">
 
-    Assetid: {{$assetData->assessment_id}}
-
     @isset($assetData->g_name)
     <br>
     Asset Group Name: {{$assetData->g_name}}
@@ -100,6 +98,13 @@ $permissions=json_decode($project_permissions);
                 @endif
               </div>
 
+              <div class="form-group mt-4">
+                <label for=""> Treatment Completion Date</label>
+                <input type="date" name="treatment_comp_date" value="{{old('treatment_comp_date',$treatmentData->treatment_comp_date)}}">
+                    @if($errors->has('treatment_comp_date'))
+                    <div class="text-danger">{{ $errors->first('treatment_comp_date') }}</div>
+                @endif
+              </div>
 
 
 
@@ -123,7 +128,7 @@ $permissions=json_decode($project_permissions);
 
 
               <div class="text-center">
-                <button type="submit" class="btn my_bg_color text-white btn-md mt-3">Submit</button>
+                <button type="submit" class="btn my_bg_color text-white btn-md mt-3">Save</button>
               </div>
 
 

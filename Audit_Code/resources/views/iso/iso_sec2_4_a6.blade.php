@@ -18,8 +18,6 @@ $permissions=json_decode($project_permissions);
 
     <p class="text-center fw-bold">
 
-        Assetid: {{$assetData->assessment_id}}
-
         @isset($assetData->g_name)
         <br>
         Asset Group Name: {{$assetData->g_name}}

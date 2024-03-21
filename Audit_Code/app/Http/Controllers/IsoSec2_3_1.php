@@ -402,6 +402,7 @@ class IsoSec2_3_1 extends Controller
             'residual_risk_treatment' => 'required',
             'treatment_action' => 'required',
             'treatment_target_date' => 'required',
+            'treatment_comp_date' => 'required',
             'responsibility_for_treatment' => 'required',
         ]);
         if ($user_id == auth()->user()->id) {
@@ -426,6 +427,7 @@ class IsoSec2_3_1 extends Controller
                             'residual_risk_treatment'=>$req->residual_risk_treatment,
                             'treatment_action'=>$req->treatment_action,
                             'treatment_target_date'=>$req->treatment_target_date,
+                            'treatment_comp_date'=>$req->treatment_comp_date,
                             'responsibility_for_treatment'=>$req->responsibility_for_treatment,
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
@@ -434,9 +436,6 @@ class IsoSec2_3_1 extends Controller
                         return redirect()->route('iso_sec2_3_1_risk_treat_controls',[
                             'asset_id'=>$asset_id,'proj_id'=>$proj_id,'user_id'=>$user_id
                         ])->with('success','Risk Treatment completed');
-
-
-
 
                     }
                 }

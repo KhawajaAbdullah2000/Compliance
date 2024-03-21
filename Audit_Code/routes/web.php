@@ -157,6 +157,7 @@ route::put('submit_edit_sec2_4_a8/{control_num}/{asset_id}/{proj_id}/{user_id}',
 
 //ISO sec2.1
 route::get('iso_section2_1/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_section2_1'])->name('iso_section2_1');
+route::get('iso_section2_3/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_section2_3'])->name('iso_section2_3');
 route::post('new_iso_sec_2_1/{proj_id}/{user_id}',[IsoSec2_1::class,'new_iso_sec_2_1']);
 route::get('iso_sec_2_1_new/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_new']);
 route::get('/iso_sec_2_1_details/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_details']);

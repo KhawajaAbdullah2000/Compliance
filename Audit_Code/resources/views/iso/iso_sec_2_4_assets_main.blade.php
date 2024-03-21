@@ -13,7 +13,7 @@ $permissions=json_decode($project_permissions);
 <div class="container">
 
 
-    <h3 class="text-center fw-bold mb-3">Project id: {{$project_id}} Project name: {{$project_name}} Section2.1 Scope of Assets and Services</h3>
+    <h3 class="text-center fw-bold mb-3">Project name: {{$project_name}} Section2.1 Scope of Assets and Services</h3>
 
 
 

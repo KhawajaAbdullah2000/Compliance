@@ -11,7 +11,7 @@ $permissions=json_decode($project_permissions);
 @endphp
 
 <div class="container">
-    <h1 class="text-center">Project id {{$project_id}} {{$project_name}} </h1>
+    <h1 class="text-center">{{$project_name}} </h1>
 
 
     <h2 class="text-center fw-bold mt-4 mb-4">
@@ -25,12 +25,12 @@ $permissions=json_decode($project_permissions);
 
         @isset($result)
 
-        <div class="row">
+        <div class="row justify-content-center">
 
-            <div class="col-md-12">
+            <div class="col-md-6">
 
                 <div class="card mt-2">
-                    <div class="card-header bg-primary text-center">
+                    <div class="card-header my_bg_color text-white text-center">
                         <h2>Mandatory Requirement</h2>
                       </div>
                     <div class="card-body">
@@ -40,7 +40,7 @@ $permissions=json_decode($project_permissions);
                     @method('PUT')
                     <div class="form-group">
                         <label for=""> Compliance Status</label>
-                        <select class="boxstyling bg-primary form-select" name="comp_status">
+                        <select class="boxstyling form-select" name="comp_status">
 
 
              <option value="yes" {{ old('comp_status',$result->comp_status) == 'yes' ? 'selected' : '' }}>Yes</option>
@@ -79,7 +79,7 @@ $permissions=json_decode($project_permissions);
 
 
                       <div class="text-center">
-                        <button type="submit" class="btn btn-primary btn-md mt-2">Edit Details</button>
+                        <button type="submit" class="btn my_bg_color text-white btn-md mt-2">Save</button>
                       </div>
 
 
