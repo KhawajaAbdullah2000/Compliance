@@ -48,7 +48,7 @@ $permissions=json_decode($project_permissions);
 
 </p>
 
-<p>Asset value: {{$assetvalue}}</p>
+{{-- <p>Asset value: {{$assetvalue}}</p> --}}
 
 <div class="row d-flex justify-content-center">
 
@@ -56,8 +56,8 @@ $permissions=json_decode($project_permissions);
 
 
         <div class="card mt-2">
-            <div class="card-header bg-primary text-center">
-                <h2>Information Security Risk Assessment And Treatment</h2>
+            <div class="card-header my_bg_color text-white text-center">
+                <h3>Information Security Risk Treatment</h3>
               </div>
             <div class="card-body">
 
@@ -107,7 +107,7 @@ $permissions=json_decode($project_permissions);
 
               <div class="form-group mt-4">
                 <label for=""> Responsbility for Treatment</label>
-                <select class="boxstyling bg-primary form-select" name="responsibility_for_treatment">
+                <select class="boxstyling form-select" name="responsibility_for_treatment">
                     <option value="">Select User</option>
                      @foreach ($users as $user)
      <option value="{{$user->id}}" {{ old('responsibility_for_treatment',$treatmentData->responsibility_for_treatment) == $user->id ? 'selected' : '' }}>
@@ -123,7 +123,7 @@ $permissions=json_decode($project_permissions);
 
 
               <div class="text-center">
-                <button type="submit" class="btn btn-primary btn-md mt-2">Submit Details</button>
+                <button type="submit" class="btn my_bg_color text-white btn-md mt-3">Submit</button>
               </div>
 
 

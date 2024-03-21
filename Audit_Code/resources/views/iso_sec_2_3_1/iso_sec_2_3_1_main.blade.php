@@ -15,7 +15,7 @@ $permissions=json_decode($project_permissions);
 
     <h3 class="text-center fw-bold mb-3">Project name: {{$project_name}} </h3>
 
-    <h2 class="text-center">      Section2.3.1 Information Security Risk Assessment And Treatment</h2>
+    <h2 class="text-center">   Section2.3 Information Security Risk Assessment</h2>
 
     @if ($errors->any())
     <div class="alert alert-danger">
@@ -710,7 +710,7 @@ $permissions=json_decode($project_permissions);
 
             @if(in_array('Data Inputter',$permissions))
           <div class="float-end mb-4">
-            <button type="submit" class="btn btn-primary btn-lg mt-5"  id="submitForm">Save and stay on same page</button>
+            <button type="submit" class="btn my_bg_color text-white btn-lg mt-5"  id="submitForm">Save and stay on same page</button>
           </div>
           @endif
           </table>

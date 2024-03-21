@@ -62,7 +62,7 @@ $headers=array('Control num','Title of COntrol','Descriptionof Control')
 
 
                   <div class="text-center mt-3">
-                    <button type="submit" class="btn btn-primary btn-md">Submit details</a>
+                    <button type="submit" class="btn my_bg_color text-white btn-md">Submit</a>
                   </div>
 
 

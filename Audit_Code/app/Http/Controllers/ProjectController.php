@@ -112,6 +112,20 @@ class ProjectController extends Controller
 
     }
 
+
+    public function metaData($proj_id,$user_id){
+        $org_data=Db::table('projects')->join('organizations','projects.org_id','organizations.org_id')
+        ->where('project_id',$proj_id)
+        ->first();
+       // dd($org_data);
+
+        $endusers=Db::table('project_details')->join('users','project_details.assigned_enduser','users.id')
+        ->where('project_details.project_code',$proj_id)->get(['users.first_name','users.last_name','project_details.project_permissions','project_details.assigned_enduser']);
+          return view('assigned_projects.metadata',['org_data'=>$org_data,'endusers'=>$endusers]);
+    }
+
+
+
     public function iso_section2_4_subsections($proj_id,$user_id){
         if($user_id==auth()->user()->id){
             $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',

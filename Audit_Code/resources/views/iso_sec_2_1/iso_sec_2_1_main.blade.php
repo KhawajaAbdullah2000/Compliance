@@ -15,16 +15,17 @@ $permissions=json_decode($project_permissions);
         <a href="{{route('download_asset_template')}}">Download Excel template to upload assets</a>
         <br>
         {{-- <a href="/upload_assets/{{$project_id}}/{{auth()->user()->id}}">Upload a populated excel sheet</a> --}}
-        <div class="container">
+        <div class="">
             <form action="/upload_assets/{{$project_id}}/{{auth()->user()->id}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
-                    <label for="file" class="text-primary" style="cursor: pointer">Upload a populated excel sheet</label>
+                    <label for="file" class="text-primary"
+                    style="cursor: pointer;text-decoration: underline;">Upload a populated excel sheet</label>
                     <span id="fileName"></span>
                     <input type="file" name="file" id="file" class="form-control" style="display:none;"
                     onchange="displayFileName(this)">
                 </div>
-                <button type="submit" class="btn btn-primary btn-sm">Upload assets</button>
+                <button type="submit" class="btn my_bg_color text-white btn-sm mt-2">Upload</button>
                 @error('file')
                 <div class="text-danger">{{ $errors->first('file') }}</div>
 
@@ -35,113 +36,16 @@ $permissions=json_decode($project_permissions);
       </div>
 
 
-    <h3 class="text-center fw-bold mb-3"> Project name: {{$project_name}} Section2.1 Scope of Assets and Services</h3>
+    <h3 class="text-center fw-bold mb-3 mt-5"> Project name: {{$project_name}}</h3>
+    <h4 class="text-center fw-bold mb-3">  Section2.1 Scope of Assets and Services</h4>
 
 
 
 
-@if($data->count()==0)
-
-@if(in_array('Data Inputter',$permissions))
-
-<div class="row">
-
-    <div class="col-md-12">
-
-        <div class="card mt-2">
-            <div class="card-header bg-primary text-center">
-                <h2>Add your first Asset of this project</h2>
-              </div>
-            <div class="card-body">
-
-
-        <form action="/new_iso_sec_2_1/{{$project_id}}/{{auth()->user()->id}}" method="post">
-            @csrf
-            <div class="form-group">
-                <label for="">Asset Group Name:</label>
-                    <textarea name="g_name" cols="70" rows="10" class="form-control">{{old('g_name')}}</textarea>
-                @if($errors->has('g_name'))
-                <div class="text-danger">{{ $errors->first('g_name') }}</div>
-            @endif
-              </div>
-
-                <div class="form-group mt-4">
-                <label for="">Asset Name:</label>
-                    <textarea name="name" cols="70" rows="10" class="form-control">{{old('name')}}</textarea>
-                @if($errors->has('name'))
-                <div class="text-danger">{{ $errors->first('name') }}</div>
-            @endif
-              </div>
-
-              <div class="form-group mt-4">
-                <label for="">Asset Component Name:</label>
-                    <textarea name="c_name" cols="70" rows="10" class="form-control">{{old('c_name')}}</textarea>
-                @if($errors->has('c_name'))
-                <div class="text-danger">{{ $errors->first('c_name') }}</div>
-            @endif
-              </div>
-
-              <div class="form-group mt-4">
-                <label for="">Asset Owner Dept.:</label>
-                    <textarea name="owner_dept" cols="70" rows="10" class="form-control">{{old('owner_dept')}}</textarea>
-                @if($errors->has('owner_dept'))
-                <div class="text-danger">{{ $errors->first('owner_dept') }}</div>
-            @endif
-              </div>
-
-              <div class="form-group mt-4">
-                <label for="">Asset Physical Location:</label>
-                    <textarea name="physical_loc" cols="70" rows="10" class="form-control">{{old('physical_loc')}}</textarea>
-                @if($errors->has('physical_loc'))
-                <div class="text-danger">{{ $errors->first('physical_loc') }}</div>
-            @endif
-              </div>
-
-
-              <div class="form-group mt-4">
-                <label for="">Asset Logical Location:</label>
-                    <textarea name="logical_loc" cols="70" rows="10" class="form-control">{{old('logical_loc')}}</textarea>
-                @if($errors->has('logical_loc'))
-                <div class="text-danger">{{ $errors->first('logical_loc') }}</div>
-            @endif
-              </div>
-
-              <div class="form-group mt-4">
-                <label for="">Service Name for which this is an underlying asset:</label>
-                    <textarea name="s_name" cols="70" rows="10" class="form-control">{{old('s_name')}}</textarea>
-                @if($errors->has('s_name'))
-                <div class="text-danger">{{ $errors->first('s_name') }}</div>
-            @endif
-              </div>
-
-
-              <div class="text-center">
-                <button type="submit" class="btn btn-primary btn-md mt-2">Submit Details</button>
-              </div>
-
-
-        </form>
-
-    </div>
-</div>
-
-
-    </div>
-</div>
-
-@endif
-{{-- if data inputter --}}
-
-
-@endif
-{{-- if !issset $data --}}
-
-
-@if($data->count()>0)
 
 @if(in_array('Data Inputter',$permissions))
 <a class="btn btn-success btn-md float-end mb-2" href="/iso_sec_2_1_new/{{$project_id}}/{{auth()->user()->id}}"
-    role="button">Add new Asset <i class="fas fa-plus"></i></a>
+    role="button">Add new Asset manually <i class="fas fa-plus"></i></a>
 @endif
 
     <table id="myTable2" class="table table-responsive table-primary table-striped mt-4">
@@ -172,11 +76,11 @@ $permissions=json_decode($project_permissions);
                 <td>{{$d->s_name}}</td>
 
           <td>
-            <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">Risk Assessment</a>
+            <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white">Risk Assessment</a>
             {{-- <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$d->c_name}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">Risk Assessment</a> --}}
           </td>
           <td>
-            <a href="/iso_sec2_3_1_risk_treat_controls/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-secondary">Risk Treatment</a>
+            <a href="/iso_sec2_3_1_risk_treat_controls/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm text-white my_bg_color2">Risk Treatment</a>
 
           </td>
 
@@ -207,8 +111,6 @@ $permissions=json_decode($project_permissions);
 
 
 
-
-
             </tr>
      @endforeach
 
@@ -216,8 +118,7 @@ $permissions=json_decode($project_permissions);
         </tbody>
 
       </table>
-      @endif
-      {{-- if issset $data --}}
+
 
 
 </div>

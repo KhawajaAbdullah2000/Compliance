@@ -59,7 +59,7 @@ $permissions=json_decode($project_permissions);
 
 
                 <td>
- <a href="/iso_sec2_4_a6/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning"><p class="fw-bold">
+ <a href="/iso_sec2_4_a6/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white"><p class="fw-bold">
 People Controls</p></a>
 
                 </td>

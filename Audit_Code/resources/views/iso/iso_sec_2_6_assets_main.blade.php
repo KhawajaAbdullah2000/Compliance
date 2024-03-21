@@ -28,7 +28,7 @@ $permissions=json_decode($project_permissions);
 
 @if($data->count()>0)
 
-    <h3 class="text-center">Sec2.4 A6: Organizational Controls</h3>
+    <h3 class="text-center">Sec2.4 A7: Physical Controls</h3>
 
     <table class="table table-responsive table-primary table-striped mt-4">
         <thead class="thead-dark">
@@ -59,7 +59,7 @@ $permissions=json_decode($project_permissions);
 
 
                 <td>
- <a href="/iso_sec2_4_a7/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning"><p class="fw-bold">
+ <a href="/iso_sec2_4_a7/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white"><p class="fw-bold">
 Physical Controls</p></a>
 
                 </td>

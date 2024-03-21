@@ -109,10 +109,14 @@ Route::middleware(['auth','is_user','role:end user'])->group(function(){
     //Project controller for v3_2 section 1
 route::get('assigned_projects/{user_id}',[ProjectController::class,'assigned_projects'])->name('assigned_projects');
 
-
 //ISO Project
 route::get('iso_sections/{proj_id}/{user_id}',[ProjectController::class,'iso_sections'])->name('iso_sections');
+route::get("/meta_data/{proj_id}/{user_id}",[ProjectController::class,'metaData'])->name('meta_data');
+
+
 route::get('iso_section2_4_subsections/{proj_id}/{user_id}',[ProjectController::class,'iso_section2_4_subsections']);
+
+
 
 //Iso sec2.4 A5 Organzation
 //assets

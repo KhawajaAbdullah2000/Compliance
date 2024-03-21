@@ -15,7 +15,8 @@
             <th>Project type</th>
             <th>Project status</th>
             <th>Project Permissions</th>
-            <th>Actions</th>
+            <th>Edit Project</th>
+            <th>View Project Users</th>
         </tr>
     </thead>
     <tbody>
@@ -34,9 +35,17 @@
       </td>
       <td>
 
-    <a href="/iso_sections/{{$pro->project_code}}/{{auth()->user()->id}}" class="btn btn-primary btn-sm">View Project Sections</a>
+        <a href="/iso_sections/{{$pro->project_code}}/{{auth()->user()->id}}"
+            data-toggle="tooltip" data-placement="top" title="Edit Project details">
+        <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
+        </a>
+        </td>
 
-
+        <td>
+            <a href="/meta_data/{{$pro->project_code}}/{{auth()->user()->id}}"
+                data-toggle="tooltip" data-placement="top" title="View Project Users">
+            <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
+            </a>
         </td>
 
 

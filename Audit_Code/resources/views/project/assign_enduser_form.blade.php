@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('content')
-    
+
 @include('user-nav')
 
 
@@ -19,7 +19,7 @@
 
             <div class="form-group">
                 <label for="" class="form-label">End user</label>
-                   <select class="boxstyling bg-primary form-select" name="assigned_enduser">
+                   <select class="boxstyling bg-info form-select" name="assigned_enduser">
                    <option value="">Select User</option>
                     @foreach ($users as $user)
     <option value="{{$user->id}}" {{ old('assigned_enduser') == $user->id ? 'selected' : '' }}>
@@ -37,8 +37,8 @@
                 @foreach ($permissions as $p)
                    {{ $p->name}} <input type="checkbox" name="project_permissions[]" value="{{$p->name}}">
                 @endforeach
-  
-              </div> 
+
+              </div>
 
               <div class="text-center">
                 <button class="btn btn-primary btn-md">Create user</button>
@@ -52,7 +52,7 @@
       </div>
     </div>
     </div>
-            
+
 </div>
 
 

@@ -102,6 +102,23 @@ a[data-toggle="collapse"] {
     }
 }
 
+
+.my_bg_color{
+    background-color: #408000;
+}
+
+.my_bg_color2{
+    background-color:#1fbb1f;
+}
+
+.my_bg_color:hover {
+    background-color:#1fbb1f;
+}
+
+.my_bg_color2:hover {
+    background-color: #408000;
+}
+
 #content {
     width: 100%;
     padding: 0;
@@ -112,9 +129,9 @@ a[data-toggle="collapse"] {
 }
 
 .boxstyling {
-    border: none;
-    font-size: 20px;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+    border: 1px solid black;
+    font-size: 18px;
+    box-shadow: 0 5px 25px rgba(47, 2, 105, 0.2);
 }
 
 .users {
@@ -215,7 +232,7 @@ input[type="radio"] {
 /* Style radio buttons as squares when checked */
 
 input[type="radio"]:checked {
-    background-color: blue;
+    background-color: #009900;
     /* Change the background color when checked */
 }
 

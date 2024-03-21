@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('content')
-    
+
 @include('user-nav')
 
 <div class="container">
@@ -35,7 +35,7 @@
                 <a href="/edit_my_project/{{$pro->project_id}}" class="btn btn-warning btn-sm">Edit</a>
                 <a href="/assigned_endusers/{{$pro->project_id}}" class="btn btn-warning btn-dark">End users Assigned</a>
             </td>
-    
+
 
         </tr>
         @endforeach
@@ -72,7 +72,7 @@
   closeOnClickOutside: true,
   timer: 3000,
     });
-</script> 
+</script>
 @endif
 
 @if(Session::has('error'))
@@ -83,7 +83,7 @@
   closeOnClickOutside: true,
   timer: 3000,
     });
-</script> 
+</script>
 @endif
 
 <script>
@@ -100,7 +100,7 @@ let table = new DataTable('#myTable',
 
 
 
-     } 
+     }
      );
 
 </script>
