@@ -112,6 +112,10 @@ route::get('assigned_projects/{user_id}',[ProjectController::class,'assigned_pro
 //ISO Project
 route::get('iso_sections/{proj_id}/{user_id}',[ProjectController::class,'iso_sections'])->name('iso_sections');
 route::get("/meta_data/{proj_id}/{user_id}",[ProjectController::class,'metaData'])->name('meta_data');
+route::get("/reports/{proj_id}/{user_id}",[ProjectController::class,'reports'])->name('reports');
+route::get("/assets_in_scope/{proj_id}/{user_id}",[ProjectController::class,'assets_in_scope'])->name('assets_in_scope');
+
+
 
 
 route::get('iso_section2_4_subsections/{proj_id}/{user_id}',[ProjectController::class,'iso_section2_4_subsections']);

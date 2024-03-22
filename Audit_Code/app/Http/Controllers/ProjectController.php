@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
-use Illuminate\Validation\Rule;
 
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 
@@ -51,6 +51,7 @@ class ProjectController extends Controller
     }
     return redirect()->route('assigned_projects',['user_id'=>auth()->user()->id]);
 }
+
 
 
 
@@ -122,6 +123,66 @@ class ProjectController extends Controller
         $endusers=Db::table('project_details')->join('users','project_details.assigned_enduser','users.id')
         ->where('project_details.project_code',$proj_id)->get(['users.first_name','users.last_name','project_details.project_permissions','project_details.assigned_enduser']);
           return view('assigned_projects.metadata',['org_data'=>$org_data,'endusers'=>$endusers]);
+    }
+
+    public function reports($proj_id,$user_id){
+
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_name')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+
+        if($checkpermission){
+
+            return view('assigned_projects.reports_list',['proj_id'=>$proj_id,'project_name'=>$checkpermission->project_name]);
+
+
+        }else{
+            return redirect()->route('assigned_projects',['user_id'=>$user_id]);
+        }
+
+    }
+
+    public function assets_in_scope($proj_id,$user_id){
+        $checkpermission=Db::table('project_details')->select('project_types.id as type_id','project_details.project_code',
+        'project_details.project_permissions','projects.project_name')
+       -> join('projects','project_details.project_code','projects.project_id')
+        ->join('project_types','projects.project_type','project_types.id')
+        ->where('project_code',$proj_id)->where('assigned_enduser',$user_id)
+        ->first();
+
+
+        if($checkpermission){
+
+            $project_name=Db::table('projects')->where('project_id',$proj_id)->first('project_name');
+           $projectName=$project_name->project_name;
+
+          $report_data=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->get(['g_name','name','c_name','owner_dept','physical_loc',
+        'logical_loc','s_name']);
+          if ($report_data->count()>0){
+           // dd($report_data);
+
+           $transformedData = $report_data->map(function ($item) use ($projectName) {
+            $rowData = collect($item)->toArray();
+            array_unshift($rowData, $projectName); // Add project name as first column
+            return $rowData;
+        });
+
+        dd($transformedData);
+
+          }else{
+            dd("No assets found");
+          }
+
+
+        }else{
+            return redirect()->route('assigned_projects',['user_id'=>$user_id]);
+        }
+
+
     }
 
 

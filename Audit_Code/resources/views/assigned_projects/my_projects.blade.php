@@ -17,6 +17,7 @@
             <th>Project Permissions</th>
             <th>Edit Project</th>
             <th>View Project Users</th>
+            <th>Reports</th>
         </tr>
     </thead>
     <tbody>
@@ -45,6 +46,13 @@
             <a href="/meta_data/{{$pro->project_code}}/{{auth()->user()->id}}"
                 data-toggle="tooltip" data-placement="top" title="View Project Users">
             <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
+            </a>
+        </td>
+
+        <td>
+            <a href="/reports/{{$pro->project_code}}/{{auth()->user()->id}}"
+                data-toggle="tooltip" data-placement="top" title="Project Report">
+            <i class="fas fa-copy fa-lg" style="color: #124903;"></i>
             </a>
         </td>
 
