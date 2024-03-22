@@ -114,6 +114,8 @@ route::get('iso_sections/{proj_id}/{user_id}',[ProjectController::class,'iso_sec
 route::get("/meta_data/{proj_id}/{user_id}",[ProjectController::class,'metaData'])->name('meta_data');
 route::get("/reports/{proj_id}/{user_id}",[ProjectController::class,'reports'])->name('reports');
 route::get("/assets_in_scope/{proj_id}/{user_id}",[ProjectController::class,'assets_in_scope'])->name('assets_in_scope');
+route::get("/risk_assessment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_assessment_report']);
+
 
 
 
