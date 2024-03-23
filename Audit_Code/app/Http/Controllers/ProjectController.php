@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 
 use App\Exports\ReportDataExport;
 use App\Exports\RiskAssessmentExport;
+use App\Exports\RiskTreatmentReport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -247,6 +248,58 @@ class ProjectController extends Controller
         } else {
             return redirect()->route('assigned_projects', ['user_id' => $user_id]);
         }
+    }
+
+    public function risk_treatment($proj_id,$user_id){
+
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+            if($checkpermission){
+                $projectName=Db::table('projects')->where('project_id', $proj_id)->first('project_name')->project_name;
+                $report_data = Db::table('iso_sec_2_1')->join('iso_sec_2_3_1','iso_sec_2_1.assessment_id','iso_sec_2_3_1.asset_id')
+                ->where('iso_sec_2_1.project_id', $proj_id)->orderBy('asset_id','asc')->orderBy('control_num','asc')
+                ->get(
+                    [
+                        'g_name', 'name', 'c_name', 'owner_dept', 'physical_loc',
+                        'logical_loc', 's_name','control_num','applicability','asset_value','residual_risk_treatment',
+                        'treatment_action','treatment_target_date','treatment_comp_date','responsibility_for_treatment'
+                    ]
+                );
+
+                if ($report_data->count()>0){
+                    $safeProjectName = Str::slug($projectName, '_'); // Example: converting "Project Name!" to "Project_Name"
+
+                    //Append the project name to the report filename
+                    $filename = 'RiskTreatmentReport_' . $safeProjectName . '.xlsx';
+
+                    $export = new RiskTreatmentReport($proj_id);
+                    return Excel::download($export, $filename);
+
+
+
+                }else{
+                    return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+                }
+
+
+
+            }else{
+                return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+            }
+
+
+
     }
 
 

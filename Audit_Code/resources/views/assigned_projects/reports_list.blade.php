@@ -26,7 +26,7 @@
         <div class="row mt-2">
             <div class="col-12">
 
-         <a href="/v_3_2_section1_subsections/{{$proj_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Risk Treatment by Asset/Service</p></a>
+         <a href="/risk_treatment/{{$proj_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Risk Treatment by Asset/Service</p></a>
         </div>
         </div>
 

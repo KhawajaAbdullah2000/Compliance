@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('content')
-    
+
 @include('user-nav')
 
 
@@ -12,7 +12,7 @@
 
             @php
             $perm=json_decode($user->project_permissions);
-   
+
             @endphp
 
     <div class="card">
@@ -25,8 +25,8 @@
 
               <div class="form-group mt-4">
                 <label for=""><h3>Project Permissions</h3></label>
-                <br>
                 @foreach ($permissions as $p)
+                <br>
                    {{ $p->name}} <input type="checkbox" name="project_permissions[]" value="{{$p->name}}"
                    {{in_array($p->name,$perm) ? 'checked':''}}
                    >
@@ -34,9 +34,9 @@
                 @if($errors->has('project_permissions'))
                 <div class="text-danger">{{ $errors->first('project_permissions','Choose atleast 1 permission ') }}</div>
             @endif
-    
-  
-              </div> 
+
+
+              </div>
 
 
               <div class="text-center">
@@ -51,7 +51,7 @@
       </div>
     </div>
     </div>
-            
+
 </div>
 
 
