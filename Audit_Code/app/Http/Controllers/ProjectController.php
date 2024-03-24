@@ -228,6 +228,7 @@ class ProjectController extends Controller
                     'vulnerability','threat','risk_level'
                 ]
             );
+           //dd($report_data);
 
 
           //  dd($report_data);
@@ -266,14 +267,17 @@ class ProjectController extends Controller
             if($checkpermission){
                 $projectName=Db::table('projects')->where('project_id', $proj_id)->first('project_name')->project_name;
                 $report_data = Db::table('iso_sec_2_1')->join('iso_sec_2_3_1','iso_sec_2_1.assessment_id','iso_sec_2_3_1.asset_id')
+                ->join('users','iso_sec_2_3_1.responsibility_for_treatment','users.id')
                 ->where('iso_sec_2_1.project_id', $proj_id)->orderBy('asset_id','asc')->orderBy('control_num','asc')
                 ->get(
                     [
                         'g_name', 'name', 'c_name', 'owner_dept', 'physical_loc',
                         'logical_loc', 's_name','control_num','applicability','asset_value','residual_risk_treatment',
-                        'treatment_action','treatment_target_date','treatment_comp_date','responsibility_for_treatment'
+                        'treatment_action','treatment_target_date','treatment_comp_date','responsibility_for_treatment',
+                        'first_name','last_name'
                     ]
                 );
+             //   dd($report_data);
 
                 if ($report_data->count()>0){
                     $safeProjectName = Str::slug($projectName, '_'); // Example: converting "Project Name!" to "Project_Name"

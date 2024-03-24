@@ -102,6 +102,9 @@ class IsoSec2_3_1 extends Controller
          ]);
 
 
+
+
+
         $my_filter = array_filter($req->input('applicability'));
         $req->merge(['applicability' => $my_filter]);
         $applicability = $req->input('applicability');
@@ -180,19 +183,40 @@ class IsoSec2_3_1 extends Controller
             $exists = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
                 ->where('control_num', $numberArray[$i])->first();
             if (!$exists) {
-                DB::table('iso_sec_2_3_1')->insert([
-                    'project_id' => $proj_id,
-                    'asset_id' => $asset_id,
-                    'asset_value' => $req->asset_value,
-                    'control_num' => $numberArray[$i],
-                    'applicability' => $yesNoArray[$i],
-                    'control_compliance'=>$final_control_compliance[$i],
-                    'vulnerability'=>$final_vulnerability[$i],
-                    'threat'=>$final_threat[$i],
-                    'risk_level'=>$final_risk_level[$i],
-                    'last_edited_by' => $user_id,
-                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                ]);
+
+                if ($yesNoArray[$i]=='yes'){
+                    DB::table('iso_sec_2_3_1')->insert([
+                        'project_id' => $proj_id,
+                        'asset_id' => $asset_id,
+                        'asset_value' => $req->asset_value,
+                        'control_num' => $numberArray[$i],
+                        'applicability' => $yesNoArray[$i],
+                        'control_compliance'=>$final_control_compliance[$i],
+                        'vulnerability'=>$final_vulnerability[$i],
+                        'threat'=>$final_threat[$i],
+                        'risk_level'=>$final_risk_level[$i],
+                        'last_edited_by' => $user_id,
+                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                    ]);
+                }
+
+                if ($yesNoArray[$i]=='no'){
+                    DB::table('iso_sec_2_3_1')->insert([
+                        'project_id' => $proj_id,
+                        'asset_id' => $asset_id,
+                        'asset_value' => $req->asset_value,
+                        'control_num' => $numberArray[$i],
+                        'applicability' => $yesNoArray[$i],
+                        'control_compliance'=>0,
+                        'vulnerability'=>0,
+                        'threat'=>0,
+                        'risk_level'=>0,
+                        'last_edited_by' => $user_id,
+                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                    ]);
+                }
+
+              
             }
         }
 
@@ -264,9 +288,6 @@ class IsoSec2_3_1 extends Controller
     public function iso_sec2_3_1_risk_treat_controls(Request $req,$asset_id, $proj_id, $user_id)
     {
 
-
-
-
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -287,6 +308,7 @@ class IsoSec2_3_1 extends Controller
                     $sec2_4_a5_data = Excel::toArray([], $filepath); //with header
                     $sec2_4_a5_rows = array_slice($sec2_4_a5_data[0], 1); //without header(first row)
 
+                    //dd($sec2_4_a5_rows);
 
                     $filepath2 = public_path('ISO_SOA_A6.xlsx');
                     $sec2_4_a6_data = Excel::toArray([], $filepath2); //with header
@@ -296,6 +318,7 @@ class IsoSec2_3_1 extends Controller
                     $filepath3 = public_path('ISO_SOA_A7.xlsx');
                     $sec2_4_a7_data = Excel::toArray([], $filepath3); //with header
                     $sec2_4_a7_rows = array_slice($sec2_4_a7_data[0], 1); //without header(first row)
+
 
 
                     $filepath4 = public_path('ISO_SOA_A8.xlsx');
@@ -309,7 +332,8 @@ class IsoSec2_3_1 extends Controller
                             //controls wherer applicability is yes
                          $controls=DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
                                     ->where('applicability','yes')->pluck('control_num')->toArray();
-
+                                    
+                                //    dd($controls);
 
                           $assetData=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
 

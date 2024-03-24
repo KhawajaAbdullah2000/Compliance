@@ -28,8 +28,10 @@ class RiskAssessmentExport implements FromCollection, WithHeadings
             ]
         );
 
-        // Prepending the project name to each row
         $transformedData = $reportData->map(function ($item) use ($projectName) {
+            // Prepend a single quote to control_num to ensure it's treated as text
+            $item->control_num = "'".$item->control_num."'";
+            
             $rowData = collect($item)->toArray();
             array_unshift($rowData, $projectName); // Add project name as first column
             return $rowData;
