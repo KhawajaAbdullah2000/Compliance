@@ -11,9 +11,6 @@
                 <a class="nav-link" href="{{route('user_home')}}">Home <span class="sr-only">(current)</span></a>
               </li>
 
-              {{-- <li class="nav-item">
-                <a class="nav-link" href="#">Projects</a>
-              </li> --}}
 
 
 
@@ -46,9 +43,16 @@
               @endcan
 
               <li class="nav-item">
-                <a class="nav-link" href="/assigned_projects/{{auth()->user()->id}}">Projects Assigned to me</a>
+                <a class="nav-link" href="/assigned_projects/{{auth()->user()->id}}">My Projects</a>
               </li>
 
+              <li class="nav-item">
+                <a class="nav-link" href="">Activity Logs</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="">Reports</a>
+              </li>
               @endrole
 
 
@@ -56,7 +60,7 @@
 
         </ul>
 
-        @if(Session::has('projectid'))
+        {{-- @if(Session::has('projectid'))
 
         <div class="">
            <div class="row float-end">
@@ -76,7 +80,7 @@
          </div>
 
 
-         @endif
+         @endif --}}
 
 
 
