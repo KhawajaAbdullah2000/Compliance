@@ -21,6 +21,12 @@ public function projects($user_id){
     return view('project.projects',['projects'=>$projects]);
 }
 
+public function editProject($id){
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$id)->first();
+    $project_types=DB::table('project_types')->get();
+    return view('project.editProject',['project'=>$project,'types'=>$project_types]);
+}
 
     public function create_project($userid){
        $project_types=DB::table('project_types')->get();
@@ -62,6 +68,8 @@ public function projects($user_id){
             'status'=>'required',
         ]);
 
+
+
         $project=Project::where('project_id',$id)->where('created_by',auth()->user()->id)->first();
         if($project){
         $project->project_name=$req->project_name;
@@ -77,12 +85,19 @@ public function projects($user_id){
 
     }
 
+    public function deleteUser($proj_id,$user_id){
+        $user_deleted=Db::table('project_details')->where('project_code',$proj_id)->where('assigned_enduser',$user_id)->delete();
+       return redirect()->route('assigned_endusers',['id'=>$proj_id])->with('success',"User Deleted");
+    }
+
     public function assigned_endusers($id){
         //$id is project id
+        $project=Project::join('project_types','projects.project_type','project_types.id')
+        ->where('projects.project_id',$id)->first();
+
         $endusers=Db::table('project_details')->join('users','project_details.assigned_enduser','users.id')
         ->where('project_details.project_code',$id)->get(['users.first_name','users.last_name','project_details.project_permissions','project_details.assigned_enduser']);
-          return view('project.assigned_endusers',['project_id'=>$id,'endusers'=>$endusers]);
-
+          return view('project.assigned_endusers',['project_id'=>$id,'endusers'=>$endusers,'project'=>$project]);
 
     }
 
@@ -140,9 +155,14 @@ public function projects($user_id){
     public function edit_permissions($proj_id,$user_id){
         $user=Db::table('project_details')->where('project_code',$proj_id)->where('assigned_enduser',$user_id)->first();
         if($user){
+            $project=Project::join('project_types','projects.project_type','project_types.id')
+            ->where('projects.project_id',$proj_id)->first();
             $permissions=Permission::all();
 
-            return view('project.edit_permissions',['user'=>$user,'permissions'=>$permissions]);
+            $userDetails=Db::table('users')->where('id',$user_id)->first();
+
+            return view('project.edit_permissions',['user'=>$user,'permissions'=>$permissions,'project'=>$project,
+        'userDetails'=>$userDetails]);
         }else{
             return redirect()->back()->with('error','Error occured');
         }
@@ -162,7 +182,7 @@ public function projects($user_id){
                     'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')
                     ]
                 );
-                return redirect()->route('assigned_endusers',['id'=>$proj_id]);
+                return redirect()->route('assigned_endusers',['id'=>$proj_id])->with('success','Permissions Updated');
 
         }
         else{

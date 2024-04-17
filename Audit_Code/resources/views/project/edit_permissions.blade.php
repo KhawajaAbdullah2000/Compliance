@@ -12,12 +12,31 @@
 
             @php
             $perm=json_decode($user->project_permissions);
-
             @endphp
+
+<div class="row mt-5">
+    <div class="col-lg-6 d-flex flex-column align-items-start">
+        <p><span class="fw-bold">Project Name: </span>{{$project->project_name}}</p>
+        <p><span class="fw-bold">Project Type: </span>{{$project->type}}</p>
+        <p><span class="fw-bold">Project Status: </span>{{$project->status}}</p>
+
+    </div>
+
+    <div class="col-lg-6 d-flex flex-column align-items-start">
+        <p>Your Email: {{auth()->user()->email}}</p>
+        <p>Organization Name: {{auth()->user()->organization->name}}</p>
+        <p>Sub-Organization: {{auth()->user()->organization->sub_org}}</p>
+
+    </div>
+ </div>
+
+ <p> <span class="fw-bold">User Name: </span>{{$userDetails->first_name}} {{$userDetails->last_name}}</p>
+ <p> <span class="fw-bold">User ID: </span>{{$userDetails->email}}</p>
+
 
     <div class="card">
         <div class="card-body">
-          <h3 class="card-title text-center text-bold mb-3">Edit Permissions of {{$user->assigned_enduser}} for Project {{$user->project_code}}</h3>
+          <h3 class="card-title text-center text-bold mb-3">Assign End User Permissions</h3>
 
           <form action="/edit_permissions/{{$user->project_code}}/{{$user->assigned_enduser}}" method="post">
             @csrf
@@ -40,7 +59,7 @@
 
 
               <div class="text-center">
-                <button class="btn btn-primary btn-md">Edit permissions</button>
+                <button class="btn btn-primary btn-md">Save Changes</button>
               </div>
 
 
@@ -55,6 +74,32 @@
 </div>
 
 
+@section('scripts')
+
+@if(Session::has('success'))
+<script>
+    swal({
+  title: "{{Session::get('success')}}",
+  icon: "success",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script>
+@endif
+
+@if(Session::has('error'))
+<script>
+    swal({
+  title: "{{Session::get('error')}}",
+  icon: "success",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script>
+@endif
+
+
+@endsection
 
 
 @endsection

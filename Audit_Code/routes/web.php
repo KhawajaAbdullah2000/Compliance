@@ -93,6 +93,12 @@ Route::middleware(['auth','is_user','permission:Project Creator'])->group(functi
 route::get('create_project/{id}',[EndUserController::class,'create_project']);
 route::post('create_project/{id}',[EndUserController::class,'submit_create_project']);
 route::get('/projects/{user_id}',[EndUserController::class,'projects'])->name('projects');
+
+route::get("/edit_project/{id}",[EndUserController::class,'editProject'])->name('edit_project');
+route::get("/delete_user/{proj_id}/{user_id}",[EndUserController::class,'deleteUser'])->name('delete_user');
+
+
+
 route::get('edit_my_project/{id}',[EndUserController::class,'edit_my_project']);
 route::put('/edit_project_submit/{id}',[EndUserController::class,'edit_project_submit']);
 route::get('assigned_endusers/{id}',[EndUserController::class,'assigned_endusers'])->name('assigned_endusers');
