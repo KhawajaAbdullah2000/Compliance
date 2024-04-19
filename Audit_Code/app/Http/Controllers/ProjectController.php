@@ -104,6 +104,8 @@ class ProjectController extends Controller
             ->first();
 
 
+
+
         if ($checkpermission) {
             $permissions = json_decode($checkpermission->project_permissions);
             if ($checkpermission->type_id == 4) {
@@ -114,10 +116,12 @@ class ProjectController extends Controller
                     $req->session()->put('projectid', $proj_id);
                 }
 
+                $project=Project::join('project_types','projects.project_type','project_types.id')
+                ->where('projects.project_id',$proj_id)->first();
 
                 return view(
                     'iso.iso_sections',
-                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name]
+                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name,'project'=>$project]
                 );
             }
         } else {

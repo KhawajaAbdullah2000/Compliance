@@ -11,42 +11,40 @@ $permissions=json_decode($project_permissions);
 @endphp
 
 <div class="container">
-    <div class="float-end">
-        <a href="{{route('download_asset_template')}}">Download Excel template to upload assets</a>
-        <br>
-        {{-- <a href="/upload_assets/{{$project_id}}/{{auth()->user()->id}}">Upload a populated excel sheet</a> --}}
-        <div class="">
-            <form action="/upload_assets/{{$project_id}}/{{auth()->user()->id}}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="form-group">
-                    <label for="file" class="text-primary"
-                    style="cursor: pointer;text-decoration: underline;">Upload a populated excel sheet</label>
-                    <span id="fileName"></span>
-                    <input type="file" name="file" id="file" class="form-control" style="display:none;"
-                    onchange="displayFileName(this)">
-                </div>
-                <button type="submit" class="btn my_bg_color text-white btn-sm mt-2">Upload</button>
-                @error('file')
-                <div class="text-danger">{{ $errors->first('file') }}</div>
-
-                @enderror
-            </form>
-
-
-      </div>
-
-
-    <h3 class="text-center fw-bold mb-3 mt-5"> Project name: {{$project_name}}</h3>
-    <h4 class="text-center fw-bold mb-3">  Section2.1 Scope of Assets and Services</h4>
-
-
-
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="fw-bold">Project Name:</td>
+                        <td> <a href="/iso_sections/{{$project->project_id}}/{{auth()->user()->id}}"> {{$project->project_name}}
+                        </a>
+                        </td>
+                        <td class="fw-bold">Your Email:</td>
+                        <td>{{auth()->user()->email}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Type:</td>
+                        <td>{{$project->type}}</td>
+                        <td class="fw-bold">Organization Name:</td>
+                        <td>{{auth()->user()->organization->name}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Status:</td>
+                        <td>{{$project->status}}</td>
+                        <td class="fw-bold">Sub-Organization:</td>
+                        <td>{{auth()->user()->organization->sub_org}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 
-@if(in_array('Data Inputter',$permissions))
-<a class="btn btn-success btn-md float-end mb-2" href="/iso_sec_2_1_new/{{$project_id}}/{{auth()->user()->id}}"
-    role="button">Add new Asset manually <i class="fas fa-plus"></i></a>
-@endif
+
+    <h4 class="text-center fw-bold mb-3 mt-4">Upload or Enter Services and/or Assets in the scope of this Project</h4>
+
+
 
     <table id="myTable2" class="table table-responsive table-primary table-striped mt-4">
         <thead class="thead-dark table-pointer">
@@ -59,7 +57,7 @@ $permissions=json_decode($project_permissions);
             <th onclick="sortTable(5)">Asset Logical Location</th>
             <th onclick="sortTable(6)">Service Name for which this is an underlying asset </th>
             <th>Risk Assessment</th>
-            <th>Risk Treatment</th>
+            {{-- <th>Risk Treatment</th> --}}
             <th>Actions</th>
             <th>Details</th>
           </tr>
@@ -79,10 +77,10 @@ $permissions=json_decode($project_permissions);
             <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white">Risk Assessment</a>
             {{-- <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$d->c_name}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">Risk Assessment</a> --}}
           </td>
-          <td>
+          {{-- <td>
             <a href="/iso_sec2_3_1_risk_treat_controls/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm text-white my_bg_color2">Risk Treatment</a>
 
-          </td>
+          </td> --}}
 
             <td>
             @if(in_array('Data Inputter',$permissions))
@@ -119,7 +117,35 @@ $permissions=json_decode($project_permissions);
 
       </table>
 
+      @if(in_array('Data Inputter',$permissions))
+<a class="btn btn-success btn-md float-end mb-2" href="/iso_sec_2_1_new/{{$project_id}}/{{auth()->user()->id}}"
+    role="button">Enter Service or Asset <i class="fas fa-plus"></i></a>
+@endif
 
+
+      <div class="float-start">
+        <a href="{{route('download_asset_template')}}">Download Excel template to upload assets</a>
+        <br>
+        {{-- <a href="/upload_assets/{{$project_id}}/{{auth()->user()->id}}">Upload a populated excel sheet</a> --}}
+        <div class="">
+            <form action="/upload_assets/{{$project_id}}/{{auth()->user()->id}}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="form-group">
+                    <label for="file" class="text-primary"
+                    style="cursor: pointer;text-decoration: underline;">Upload a populated excel sheet</label>
+                    <span id="fileName"></span>
+                    <input type="file" name="file" id="file" class="form-control" style="display:none;"
+                    onchange="displayFileName(this)">
+                </div>
+                <button type="submit" class="btn my_bg_color text-white btn-sm mt-2">Upload</button>
+                @error('file')
+                <div class="text-danger">{{ $errors->first('file') }}</div>
+
+                @enderror
+            </form>
+
+
+      </div>
 
 </div>
 

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Project;
 
 
 class IsoSec2_1 extends Controller
@@ -33,11 +34,18 @@ class IsoSec2_1 extends Controller
                         'users.id'
                     )
                         ->where('project_id', $proj_id)->get();
+
+                 $project=Project::join('project_types','projects.project_type','project_types.id')
+                        ->where('projects.project_id',$proj_id)->first();
+
+
+
                     return view('iso_sec_2_1.iso_sec_2_1_main', [
                         'data' => $data,
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
-                        'project_permissions' => $checkpermission->project_permissions
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project'=>$project
                     ]);
                 }
             }
@@ -160,10 +168,15 @@ class IsoSec2_1 extends Controller
                 if (in_array('Data Inputter', $permissions)) {
                     if ($checkpermission->type_id == 4) {
 
+                        $project=Project::join('project_types','projects.project_type','project_types.id')
+                        ->where('projects.project_id',$proj_id)->first();
+
+
                         return view('iso_sec_2_1.iso_sec_2_1_new', [
                             'project_id' => $checkpermission->project_id,
                             'project_name' => $checkpermission->project_name,
-                            'project_permissions' => $checkpermission->project_permissions
+                            'project_permissions' => $checkpermission->project_permissions,
+                            'project'=>$project
                         ]);
                     }
                 }

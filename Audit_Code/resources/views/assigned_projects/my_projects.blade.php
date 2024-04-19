@@ -8,6 +8,9 @@
 
     <h1 class="text-center">My Assigned Projects</h1>
 
+
+
+
 <table class="table table-responsive table-hover mt-4" id="myTable">
     <thead>
         <tr>
@@ -23,7 +26,7 @@
     <tbody>
       @foreach($projects as $pro)
       <tr>
-        <td>{{$pro->project_name}}</td>
+        <td> <a href="/iso_sections/{{$pro->project_code}}/{{auth()->user()->id}}"> {{$pro->project_name}}</a> </td>
         <td>{{$pro->type}}</td>
         <td>{{$pro->status}}</td>
       <td>

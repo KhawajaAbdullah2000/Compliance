@@ -7,13 +7,40 @@
 <div class="container">
 
 
-    <h2 class="text-center mb-5 fw-bold"> {{$project_name}} Sections</h2>
+    <h2 class="text-center mb-5 fw-bold"> {{$project_name}}</h2>
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="fw-bold">Project Name:</td>
+                        <td>  {{$project->project_name}}
+                        </td>
+                        <td class="fw-bold">Your Email:</td>
+                        <td>{{auth()->user()->email}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Type:</td>
+                        <td>{{$project->type}}</td>
+                        <td class="fw-bold">Organization Name:</td>
+                        <td>{{auth()->user()->organization->name}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Status:</td>
+                        <td>{{$project->status}}</td>
+                        <td class="fw-bold">Sub-Organization:</td>
+                        <td>{{auth()->user()->organization->sub_org}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <div class="row text-center justify-content-center full-img h-100 w-100 d-inline-block">
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section 2.1- Services and/or Assets in Scope</p></a>
+         <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Upload or Enter Services and/or Assets in the scope of this project</p></a>
         </div>
         </div>
 
