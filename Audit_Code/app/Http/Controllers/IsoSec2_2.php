@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Models\Project;
 class IsoSec2_2 extends Controller
 {
     public function iso_sec_2_2_subsections($proj_id, $user_id)
@@ -26,15 +26,13 @@ class IsoSec2_2 extends Controller
             if ($checkpermission) {
 
                 if ($checkpermission->type_id == 4) {
-                    // $data = DB::table('iso_sec_2_2')->join(
-                    //     'users',
-                    //     'iso_sec_2_1.last_edited_by',
-                    //     'users.id'
-                    // )
-                    //     ->where('project_id', $proj_id)->get();
+                    $project=Project::join('project_types','projects.project_type','project_types.id')
+                    ->where('projects.project_id',$proj_id)->first();
+
                     return view('iso_sec_2_2.iso_sec_2_2_subsections', [
                         'project_id' => $checkpermission->project_id,
-                        'project_name' => $checkpermission->project_name
+                        'project_name' => $checkpermission->project_name,
+                        'project'=>$project
                     ]);
                 }
             }
@@ -66,6 +64,9 @@ class IsoSec2_2 extends Controller
                     $rows = array_slice($data[0], 1); //without header(first row)
                    //dd($rows);
 
+                   $project=Project::join('project_types','projects.project_type','project_types.id')
+                   ->where('projects.project_id',$proj_id)->first();
+
                    $filteredData = collect($data[0])->filter(function ($row) use ($title_num) {
                     return strval($row[0])=== $title_num;
                 })->values()->all();
@@ -78,7 +79,8 @@ class IsoSec2_2 extends Controller
                    'project_name' => $checkpermission->project_name,
                    'project_permissions'=>$checkpermission->project_permissions,
                    'data'=>$filteredData,
-                   'title'=>$title_num
+                   'title'=>$title_num,
+                   'project'=>$project
                      ]);
                 }
             }
@@ -128,6 +130,8 @@ class IsoSec2_2 extends Controller
 
                 //dd($filteredData);
 
+                $project=Project::join('project_types','projects.project_type','project_types.id')
+                ->where('projects.project_id',$proj_id)->first();
                     return view('iso_sec_2_2.iso_sec_2_2_sub_reqs', [
                     'project_id' => $checkpermission->project_id,
                    'project_name' => $checkpermission->project_name,
@@ -135,6 +139,7 @@ class IsoSec2_2 extends Controller
                    'data'=>$filteredData,
                    'main_req_num'=>$main_req_num,
                    'title'=>$title,
+                   'project'=>$project
                      ]);
                 }
             }
@@ -171,6 +176,9 @@ class IsoSec2_2 extends Controller
                 return strval($row[3])=== $sub_req;
             })->values()->all();
 
+            $project=Project::join('project_types','projects.project_type','project_types.id')
+                ->where('projects.project_id',$proj_id)->first();
+
                 return view('iso_sec_2_2.iso_sec_2_2_sub_reqs_form', [
                     'project_id' => $checkpermission->project_id,
                    'project_name' => $checkpermission->project_name,
@@ -178,7 +186,8 @@ class IsoSec2_2 extends Controller
                    'title'=>$title,
                    'sub_req'=>$sub_req,
                    'result'=>$result,
-                   'filteredData'=>$filteredData
+                   'filteredData'=>$filteredData,
+                   'project'=>$project
                      ]);
 
             }

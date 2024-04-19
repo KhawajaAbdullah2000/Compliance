@@ -7,7 +7,8 @@
 <div class="container">
 
 
-    <h2 class="text-center mb-5 fw-bold"> {{$project_name}}</h2>
+
+
     <div class="row mt-5">
         <div class="col-lg-12">
             <table class="table table-bordered">
@@ -46,7 +47,7 @@
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/iso_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section 2.2- Mandatory Requirements</p></a>
+         <a href="/iso_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Upload or enter evidence against the mandatory requirements of ISO:27001:2022</p></a>
         </div>
         </div>
 
