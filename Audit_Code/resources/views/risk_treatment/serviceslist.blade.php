@@ -40,7 +40,7 @@ $permissions=json_decode($project_permissions);
             </table>
         </div>
     </div>
-    <h4 class="text-center fw-bold mb-3 mt-4">Undertake and information security risk assessment on the Services and/or Assets</h4>
+    <h4 class="text-center fw-bold mb-3 mt-4">Undertake and information security risk Treatment on the Services and/or Assets</h4>
 
 
 
@@ -61,8 +61,8 @@ $permissions=json_decode($project_permissions);
             <th onclick="sortTable(4)">Asset Physical Location</th>
             <th onclick="sortTable(5)">Asset Logical Location</th>
             <th onclick="sortTable(6)">Service Name for which this is an underlying asset </th>
-            <th>Risk Assessment</th>
-            {{-- <th>Risk Treatment</th> --}}
+            {{-- <th>Risk Assessment</th> --}}
+            <th>Risk Treatment</th>
             <th>Services/Assets</th>
 
           </tr>
@@ -86,13 +86,13 @@ $permissions=json_decode($project_permissions);
                 <td>{{$d->logical_loc}} </td>
                 <td>{{$d->s_name}}</td>
 
-          <td>
-            <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white">Initiate or Edit</a>
-          </td>
           {{-- <td>
+            <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white">Initiate or Edit</a>
+          </td> --}}
+          <td>
             <a href="/iso_sec2_3_1_risk_treat_controls/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm text-white my_bg_color2">Risk Treatment</a>
 
-          </td> --}}
+          </td>
 
             <td>
             @if(in_array('Data Inputter',$permissions))

@@ -14,10 +14,42 @@
 
     <div class="container">
 
+        <div class="row mt-5">
+            <div class="col-lg-12">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold">Project Name:</td>
+                            <td> <a href="/iso_sections/{{$project->project_id}}/{{auth()->user()->id}}"> {{$project->project_name}}
+                            </a>
+                            </td>
+                            <td class="fw-bold">Your Email:</td>
+                            <td>{{auth()->user()->email}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Project Type:</td>
+                            <td>{{$project->type}}</td>
+                            <td class="fw-bold">Organization Name:</td>
+                            <td>{{auth()->user()->organization->name}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Project Status:</td>
+                            <td>{{$project->status}}</td>
+                            <td class="fw-bold">Sub-Organization:</td>
+                            <td>{{auth()->user()->organization->sub_org}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-        <h3 class="text-center">Risk Treatment </h3>
 
-        <p class="text-center fw-bold">
+        <h3 class="fw-bold">Information Security Risk Treatment </h3>
+
+        <p >
+
+            Asset Service Name: {{$assetData->s_name}}
+            <br>
 
             @isset($assetData->g_name)
                 Asset Group Name: {{ $assetData->g_name }}
@@ -32,6 +64,8 @@
                 <br>
                 Asset Component Name: {{ $assetData->c_name }}
             @endisset
+
+
 
 
         </p>
@@ -195,7 +229,7 @@
 
             </div>
         @else
-            <h2>DO Risk Assessment first for the asset</h2>
+            <h2>Please conduct a risk assessment before a risk treatment can be initiated</h2>
         @endif
     </div>
 

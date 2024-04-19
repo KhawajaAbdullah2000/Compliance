@@ -11,11 +11,38 @@ $permissions=json_decode($project_permissions);
 
 <div class="container">
 
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="fw-bold">Project Name:</td>
+                        <td> <a href="/iso_sections/{{$project->project_id}}/{{auth()->user()->id}}"> {{$project->project_name}}
+                        </a>
+                        </td>
+                        <td class="fw-bold">Your Email:</td>
+                        <td>{{auth()->user()->email}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Type:</td>
+                        <td>{{$project->type}}</td>
+                        <td class="fw-bold">Organization Name:</td>
+                        <td>{{auth()->user()->organization->name}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Status:</td>
+                        <td>{{$project->status}}</td>
+                        <td class="fw-bold">Sub-Organization:</td>
+                        <td>{{auth()->user()->organization->sub_org}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 
-    <h3 class="text-center fw-bold mb-3">Project name: {{$project_name}} </h3>
 
-    <h2 class="text-center">   Section2.3 Information Security Risk Assessment</h2>
+    <h2 class="text-center fw-bold">Information Security Risk Assessment</h2>
 
     @if ($errors->any())
     <div class="alert alert-danger">
@@ -27,8 +54,9 @@ $permissions=json_decode($project_permissions);
     </div>
 @endif
 
-<p class="text-center fw-bold">
-    Risk Assessment for <br>
+<p class="fw-bold">
+
+   Service Name: {{$assetData->s_name}}
 
     @isset($assetData->g_name)
     <br>
@@ -47,14 +75,12 @@ $permissions=json_decode($project_permissions);
 
 
 
-
-
 </p>
 
 
 </div>
 
-<form action="/iso_sec2_3_1_initial_add/{{$assetData->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" method="post" class="mx-4">
+<form action="/iso_sec2_3_1_initial_add/{{$assetData->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" method="post" class="mx-4 mt-4">
     @csrf
 
 
@@ -96,6 +122,7 @@ $permissions=json_decode($project_permissions);
                 <th>Vulnerability%</th>
                 <th>Threat%</th>
                 <th>Risk Level</th>
+                <th>Edit</th>
 
               </tr>
             </thead>
@@ -152,7 +179,7 @@ $permissions=json_decode($project_permissions);
                     @if($a5_results->count()>0)
                     @foreach ($a5_results as $a5)
 
-                    @if($a5->control_compliance!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+                    @if($a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
                     <p>{{$a5->control_compliance}}%</p>
                         @break
@@ -174,9 +201,10 @@ $permissions=json_decode($project_permissions);
                     @if($a5_results->count()>0)
                         @foreach ($a5_results as $a5)
 
-                            @if($a5->vulnerability!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+                            @if( $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
                                 <p>{{$a5->vulnerability}}%</p>
+
                                     @break
                                 @endif
 
@@ -196,7 +224,7 @@ $permissions=json_decode($project_permissions);
                     @if($a5_results->count()>0)
                         @foreach ($a5_results as $a5)
 
-                            @if($a5->threat!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+                            @if($a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
                                 <p>{{$a5->threat}}%</p>
                                     @break
@@ -236,6 +264,42 @@ $permissions=json_decode($project_permissions);
 
 
                 </td>
+
+                <td>
+                @if($a5_results->count()>0)
+                    @foreach ($a5_results as $a5)
+
+                        @if($a5->risk_level!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+                        @if(in_array('Data Inputter',$permissions) )
+                        <a href="">
+                            <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
+                        </a>
+
+                        @else
+                        <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
+                        @endif
+
+
+                                @break
+                            @endif
+
+                            @if($loop->last)
+                            <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
+                          @endif
+
+                    @endforeach
+                @else
+                <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
+
+                @endif
+
+
+                </td>
+
+
+                {{-- @if(in_array('Data Inputter',$permissions))
+              <p>Edit</p>
+                @endif --}}
 
 
 

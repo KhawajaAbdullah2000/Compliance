@@ -7,7 +7,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Models\Project;
 
 class IsoSec2_3_1 extends Controller
 {
@@ -65,6 +65,9 @@ class IsoSec2_3_1 extends Controller
                     ->where('asset_id',$asset_id)->where('control_num','like','8%')
                     ->get();
 
+                    $project=Project::join('project_types','projects.project_type','project_types.id')
+                    ->where('projects.project_id',$proj_id)->first();
+
 
                     return view('iso_sec_2_3_1.iso_sec_2_3_1_main', [
 
@@ -79,7 +82,8 @@ class IsoSec2_3_1 extends Controller
                         'a5_results'=>$a5_results,
                         'a6_results'=>$a6_results,
                         'a7_results'=>$a7_results,
-                        'a8_results'=>$a8_results
+                        'a8_results'=>$a8_results,
+                        'project'=>$project
 
                     ]);
                 }
@@ -103,19 +107,21 @@ class IsoSec2_3_1 extends Controller
 
 
 
-
-
         $my_filter = array_filter($req->input('applicability'));
         $req->merge(['applicability' => $my_filter]);
         $applicability = $req->input('applicability');
         $filtered_applicability = array_filter($applicability);
 
-        //dd($req->input('control_compliance'));
+
 
         $control_compliance_filter = array_filter($req->input('control_compliance'));
+
         $req->merge(['control_compliance' => $control_compliance_filter]);
         $control_compliance = $req->input('control_compliance');
         $filtered_control_compliance = array_filter($control_compliance);
+
+
+      //  dd($filtered_control_compliance);
 
 
 
@@ -126,6 +132,7 @@ class IsoSec2_3_1 extends Controller
         $vulnerability = $req->input('vulnerability');
         $filtered_vulnerability = array_filter($vulnerability);
 
+       // dd($filtered_vulnerability);
 
         $threat_filter = array_filter($req->input('threat'));
         $req->merge(['threat' => $threat_filter]);
@@ -175,7 +182,6 @@ class IsoSec2_3_1 extends Controller
             $final_risk_level[]=$irl;
         }
 
-        //dd($final_vulnerability);
 
 
         for ($i = 0; $i < count($yesNoArray); $i++) {
@@ -191,10 +197,10 @@ class IsoSec2_3_1 extends Controller
                         'asset_value' => $req->asset_value,
                         'control_num' => $numberArray[$i],
                         'applicability' => $yesNoArray[$i],
-                        'control_compliance'=>$final_control_compliance[$i],
-                        'vulnerability'=>$final_vulnerability[$i],
-                        'threat'=>$final_threat[$i],
-                        'risk_level'=>$final_risk_level[$i],
+                        'control_compliance'=>$filtered_control_compliance[$i],
+                        'vulnerability'=>$filtered_vulnerability[$i],
+                        'threat'=>$filtered_threat[$i],
+                        'risk_level'=>$filtered_risk_level[$i],
                         'last_edited_by' => $user_id,
                         'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
@@ -216,7 +222,7 @@ class IsoSec2_3_1 extends Controller
                     ]);
                 }
 
-              
+
             }
         }
 
@@ -332,11 +338,13 @@ class IsoSec2_3_1 extends Controller
                             //controls wherer applicability is yes
                          $controls=DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
                                     ->where('applicability','yes')->pluck('control_num')->toArray();
-                                    
+
                                 //    dd($controls);
 
                           $assetData=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
 
+                          $project=Project::join('project_types','projects.project_type','project_types.id')
+                          ->where('projects.project_id',$proj_id)->first();
 
                             return view('iso_sec_2_3_1.risk_treatment', [
                                 'project_id' => $checkpermission->project_id,
@@ -349,6 +357,7 @@ class IsoSec2_3_1 extends Controller
                                 'controls'=>$controls,
                                 'assetData'=>$assetData,
                                 'check'=>$check,
+                                'project'=>$project
 
                             ]);
 

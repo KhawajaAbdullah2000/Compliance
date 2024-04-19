@@ -53,7 +53,13 @@
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/iso_section2_3/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Section 2.3- Information Security Risk Assessment and Treatment</p></a>
+         <a href="/iso_section2_3/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Undertake and information security risk assessment on the Services and/or Assets</p></a>
+        </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-12">
+         <a href="/risk_treatment/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Undertake and information security risk treatment on the Services and/or Assets</p></a>
         </div>
         </div>
 
