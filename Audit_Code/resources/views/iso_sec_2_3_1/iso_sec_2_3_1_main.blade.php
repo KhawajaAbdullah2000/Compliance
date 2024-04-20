@@ -271,7 +271,7 @@ $permissions=json_decode($project_permissions);
 
                         @if($a5->risk_level!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
                         @if(in_array('Data Inputter',$permissions) )
-                        <a href="">
+                        <a href="/edit_risk_assessment/{{$project->project_id}}/{{auth()->user()->id}}/{{$assetData->assessment_id}}/{{$a5->control_num}}">
                             <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
                         </a>
 
@@ -296,10 +296,6 @@ $permissions=json_decode($project_permissions);
 
                 </td>
 
-
-                {{-- @if(in_array('Data Inputter',$permissions))
-              <p>Edit</p>
-                @endif --}}
 
 
 

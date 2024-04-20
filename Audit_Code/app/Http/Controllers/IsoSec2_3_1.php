@@ -232,6 +232,111 @@ class IsoSec2_3_1 extends Controller
     }
 
 
+    //editing risk assessment
+    public function edit_risk_assessment($proj_id,$user_id,$asset_id,$control_num){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+
+                if ($checkpermission->type_id == 4) {
+
+                 $project=Project::join('project_types','projects.project_type','project_types.id')
+                 ->where('projects.project_id',$proj_id)->first();
+
+                 $assetData=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
+                 ->where('control_num',$control_num)->first();
+                 return view('iso_sec_2_3_1.iso_sec_2_3_1_edit',[
+                    'project'=>$project,
+                    'assetData'=>$assetData
+                 ]);
+
+                }
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+    }
+
+
+    public function edit_risk_assessment_update(Request $req,$proj_id,$user_id,$asset_id,$control_num){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+
+                if ($checkpermission->type_id == 4) {
+
+
+                    $req->validate([
+                        'asset_value' => 'required',
+                        'applicability' => 'required',
+                        'control_compliance' => 'required_if:applicability,yes',
+                        'vulnerability' => 'required_if:applicability,yes',
+                        'threat' => 'required_if:applicability,yes',
+                        'risk_level' => 'required_if:applicability,yes'
+                    ]);
+
+                    if($req->applicability=="yes"){
+                        Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
+                        ->where('control_num',$control_num)->update(
+                           [
+                            'asset_value'=>$req->asset_value,
+                            'applicability'=>$req->applicability,
+                            'control_compliance'=>$req->control_compliance,
+                            'vulnerability'=>$req->vulnerability,
+                            'threat'=>$req->threat,
+                            'risk_level'=>$req->risk_level
+                            ]
+                           );
+                    }
+
+                    if($req->applicability=="no"){
+                        Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
+                        ->where('control_num',$control_num)->update(
+                           [
+                            'asset_value'=>$req->asset_value,
+                            'applicability'=>$req->applicability,
+                            'control_compliance'=>0,
+                            'vulnerability'=>0,
+                            'threat'=>0,
+                            'risk_level'=>$req->risk_level
+                            ]
+                           );
+                    }
+
+                    return redirect()->route('iso_sec_2_3_1',[
+                        'asset_id'=>$asset_id,
+                        'proj_id'=>$proj_id,
+                        'user_id'=>auth()->user()->id
+                    ]);
+
+                }
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+    }
+
+
     public function iso_sec_2_3_1_risk($asset_id, $proj_id, $user_id)
     {
         if ($user_id == auth()->user()->id) {
