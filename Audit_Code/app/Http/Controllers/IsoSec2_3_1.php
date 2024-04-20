@@ -544,7 +544,9 @@ class IsoSec2_3_1 extends Controller
                     if ($checkpermission->type_id == 4) {
 
                         $asset_risk_assess = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
-                            ->where('control_num', $control_num)->first();
+                         ->where('control_num', $control_num)->first();
+
+                        // dd($asset_risk_assess);
 
                         $super = Db::table('users')->where('privilege_id', 1)->pluck('id')->toArray();
 
@@ -560,6 +562,9 @@ class IsoSec2_3_1 extends Controller
 
                         $assetData=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
 
+                        $project=Project::join('project_types','projects.project_type','project_types.id')
+                        ->where('projects.project_id',$proj_id)->first();
+
 
                         return view('iso_sec_2_3_1.iso_sec_2_3_2_treatform', [
                             'project_id' => $checkpermission->project_id,
@@ -570,7 +575,8 @@ class IsoSec2_3_1 extends Controller
                             'assetvalue' => $asset_risk_assess->asset_value,
                             'users' => $users,
                             'treatmentData'=>$asset_risk_assess,
-                            'assetData'=>$assetData
+                            'assetData'=>$assetData,
+                            'project'=>$project
 
 
                         ]);

@@ -71,6 +71,7 @@
         </p>
 
 
+        <h2 class="text-center fw-bold">Risk Level before Risk Treatment</h2>
 
         @if (isset($check))
             <div class="mt-4">
@@ -81,6 +82,10 @@
                             <th>Title Of Control</th>
                             <th>Description of Control</th>
                             <th>Control is Applicable</th>
+                            <th>Control Compliance</th>
+                            <th>Vulnerability</th>
+                            <th>threat</th>
+                            <th>Risk Level</th>
                             <th>Risk Treatment</th>
 
 
@@ -107,11 +112,17 @@
                                 @foreach ($assetDataForFive as $a5)
                                     @if($a5->control_num===strval($sec2_4_a5_rows[$i][0]))
                                     <td>{{$a5->applicability}}</td>
+                                    <td>{{$a5->control_compliance}}%</td>
+                                    <td>{{$a5->vulnerability}}%</td>
+                                    <td>{{$a5->threat}}%</td>
+                                    <td>{{$a5->risk_level}}</td>
+
                                     @break
                                     @endif
 
 
                                 @endforeach
+
 
 
 
@@ -150,6 +161,10 @@
                                 @foreach ($assetDataForFive as $a5)
                                 @if($a5->control_num===strval($sec2_4_a6_rows[$i][0]))
                                 <td>{{$a5->applicability}}</td>
+                                <td>{{$a5->control_compliance}}%</td>
+                                <td>{{$a5->vulnerability}}%</td>
+                                <td>{{$a5->threat}}%</td>
+                                <td>{{$a5->risk_level}}</td>
                                 @break
                                 @endif
 
@@ -192,6 +207,10 @@
                                 @foreach ($assetDataForFive as $a5)
                                 @if($a5->control_num===strval($sec2_4_a7_rows[$i][0]))
                                 <td>{{$a5->applicability}}</td>
+                                <td>{{$a5->control_compliance}}%</td>
+                                <td>{{$a5->vulnerability}}%</td>
+                                <td>{{$a5->threat}}%</td>
+                                <td>{{$a5->risk_level}}</td>
                                 @break
                                 @endif
 
@@ -233,6 +252,10 @@
                                 @foreach ($assetDataForFive as $a5)
                                 @if($a5->control_num===strval($sec2_4_a8_rows[$i][0]))
                                 <td>{{$a5->applicability}}</td>
+                                <td>{{$a5->control_compliance}}%</td>
+                                <td>{{$a5->vulnerability}}%</td>
+                                <td>{{$a5->threat}}%</td>
+                                <td>{{$a5->risk_level}}</td>
                                 @break
                                 @endif
 
