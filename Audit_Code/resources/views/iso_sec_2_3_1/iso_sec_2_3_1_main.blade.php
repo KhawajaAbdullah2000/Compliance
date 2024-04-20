@@ -447,6 +447,37 @@ $permissions=json_decode($project_permissions);
             </td>
 
 
+            <td>
+                @if($a6_results->count()>0)
+                    @foreach ($a6_results as $a6)
+
+                        @if($a6->risk_level!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+                        @if(in_array('Data Inputter',$permissions) )
+                        <a href="/edit_risk_assessment/{{$project->project_id}}/{{auth()->user()->id}}/{{$assetData->assessment_id}}/{{$a6->control_num}}">
+                            <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
+                        </a>
+
+                        @else
+                        <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
+                        @endif
+
+
+                                @break
+                            @endif
+
+                            @if($loop->last)
+                            <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
+                          @endif
+
+                    @endforeach
+                @else
+                <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
+
+                @endif
+
+
+                </td>
+
 
 
             </tr>
@@ -600,7 +631,36 @@ $permissions=json_decode($project_permissions);
 
          </td>
 
+         <td>
+            @if($a7_results->count()>0)
+                @foreach ($a7_results as $a7)
 
+                    @if($a7->risk_level!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+                    @if(in_array('Data Inputter',$permissions) )
+                    <a href="/edit_risk_assessment/{{$project->project_id}}/{{auth()->user()->id}}/{{$assetData->assessment_id}}/{{$a7->control_num}}">
+                        <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
+                    </a>
+
+                    @else
+                    <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
+                    @endif
+
+
+                            @break
+                        @endif
+
+                        @if($loop->last)
+                        <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
+                      @endif
+
+                @endforeach
+            @else
+            <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
+
+            @endif
+
+
+            </td>
 
 
          </tr>
@@ -754,6 +814,36 @@ $permissions=json_decode($project_permissions);
         </td>
 
 
+        <td>
+            @if($a8_results->count()>0)
+                @foreach ($a8_results as $a8)
+
+                    @if($a8->risk_level!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+                    @if(in_array('Data Inputter',$permissions) )
+                    <a href="/edit_risk_assessment/{{$project->project_id}}/{{auth()->user()->id}}/{{$assetData->assessment_id}}/{{$a8->control_num}}">
+                        <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
+                    </a>
+
+                    @else
+                    <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
+                    @endif
+
+
+                            @break
+                        @endif
+
+                        @if($loop->last)
+                        <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
+                      @endif
+
+                @endforeach
+            @else
+            <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
+
+            @endif
+
+
+            </td>
 
 
         </tr>

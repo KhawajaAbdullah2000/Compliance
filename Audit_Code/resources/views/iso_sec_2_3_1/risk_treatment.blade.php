@@ -7,7 +7,7 @@
 
     @php
         $permissions = json_decode($project_permissions);
-
+        $setRiskData=0
     @endphp
 
 
@@ -80,7 +80,9 @@
                             <th>Control Number</th>
                             <th>Title Of Control</th>
                             <th>Description of Control</th>
+                            <th>Control is Applicable</th>
                             <th>Risk Treatment</th>
+
 
                         </tr>
                     </thead>
@@ -93,11 +95,25 @@
                                     @if (in_array(strval($sec2_4_a5_rows[$i][0]), $controls, true))
                                         @if (isset($col))
                                             <td>
+
                                                 <p>{!! nl2br($col) !!}</p>
                                             </td>
                                         @endif
                                     @endif
+
                                 @endforeach
+
+
+                                @foreach ($assetDataForFive as $a5)
+                                    @if($a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+                                    <td>{{$a5->applicability}}</td>
+                                    @break
+                                    @endif
+
+
+                                @endforeach
+
+
 
 
 
@@ -131,6 +147,14 @@
                                     @endif
                                 @endforeach
 
+                                @foreach ($assetDataForFive as $a5)
+                                @if($a5->control_num===strval($sec2_4_a6_rows[$i][0]))
+                                <td>{{$a5->applicability}}</td>
+                                @break
+                                @endif
+
+
+                            @endforeach
 
 
 
@@ -165,6 +189,14 @@
                                     @endif
                                 @endforeach
 
+                                @foreach ($assetDataForFive as $a5)
+                                @if($a5->control_num===strval($sec2_4_a7_rows[$i][0]))
+                                <td>{{$a5->applicability}}</td>
+                                @break
+                                @endif
+
+
+                            @endforeach
 
 
 
@@ -198,6 +230,14 @@
                                     @endif
                                 @endforeach
 
+                                @foreach ($assetDataForFive as $a5)
+                                @if($a5->control_num===strval($sec2_4_a8_rows[$i][0]))
+                                <td>{{$a5->applicability}}</td>
+                                @break
+                                @endif
+
+
+                            @endforeach
 
 
 
