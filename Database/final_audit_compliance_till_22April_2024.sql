@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2024 at 06:17 AM
+-- Generation Time: Apr 22, 2024 at 04:21 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -53,6 +53,13 @@ CREATE TABLE `iso_sec2_4_a5` (
   `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
   `last_edited_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `iso_sec2_4_a5`
+--
+
+INSERT INTO `iso_sec2_4_a5` (`assessment_id`, `project_id`, `asset_id`, `control_num`, `justification`, `ref_of_risk`, `last_edited_by`, `last_edited_at`) VALUES
+(43, 26, 41, '5.1', NULL, 'Referenc 1', 55, '2024-04-22 19:02:24');
 
 -- --------------------------------------------------------
 
@@ -137,7 +144,9 @@ INSERT INTO `iso_sec_2_1` (`assessment_id`, `project_id`, `g_name`, `name`, `c_n
 (32, 19, 'grpq', NULL, 'asa', 'sdd', 'dssd', 'dssdd', 'dsd', 55, '2024-03-21 15:25:24'),
 (35, 19, 'excel_g1', 'excel_name1', 'excel_c1', 'excel_owner1', 'excel_pl1', 'excel_ll1', 'excel_s1', 55, '2024-03-21 15:19:34'),
 (36, 19, 'excel_g2', 'excel_name2', NULL, 'excel_owner2', 'excel_pl2', 'excel_ll2', 'excel_s2', 55, '2024-03-21 15:19:52'),
-(37, 24, 'asset_g1', 'asset1', 'asset_c1', 'asset_owner1', 'asset_physical1', 'asset_logical1', 'asset_service1', 55, '2024-03-22 19:24:51');
+(37, 24, 'asset_g1', 'asset1', 'asset_c1', 'asset_owner1', 'asset_physical1', 'asset_logical1', 'asset_service1', 55, '2024-03-22 19:24:51'),
+(39, 25, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetPhy1', 'AssetLog1', 'AssetSer1', 55, '2024-04-19 17:15:25'),
+(41, 26, 'AssetG1', 'Asset1', 'Asset-C1', 'AssetO1', 'AssetPhy1', 'AssetLog1', 'AssetS1', 55, '2024-04-19 19:41:38');
 
 -- --------------------------------------------------------
 
@@ -229,7 +238,7 @@ INSERT INTO `iso_sec_2_3_1` (`assessment_id`, `project_id`, `asset_id`, `control
 (147, 20, 28, '5.10', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
 (148, 20, 28, '5.11', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
 (149, 20, 28, '5.12', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(150, 20, 28, '5.13', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
+(150, 20, 28, '5.13', 'yes', 10, 95, 5, 100, '0.50000', 'share risk', 'treatment13', '2024-03-21', '2024-03-15', 57, 55, '2024-03-23 16:19:15'),
 (151, 20, 28, '5.14', 'yes', 10, 50, 50, 100, '5.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
 (152, 20, 28, '5.15', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
 (153, 20, 28, '5.16', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
@@ -314,7 +323,44 @@ INSERT INTO `iso_sec_2_3_1` (`assessment_id`, `project_id`, `asset_id`, `control
 (241, 19, 32, '5.1', 'yes', 5, 56, 44, 11, '0.24200', NULL, NULL, NULL, NULL, NULL, 55, '2024-03-21 15:30:04'),
 (242, 24, 37, '5.1', 'yes', 5, 50, 50, 90, '2.25000', NULL, NULL, NULL, NULL, NULL, 55, '2024-03-22 19:25:26'),
 (243, 24, 37, '5.10', 'yes', 5, 80, 20, 55, '0.55000', NULL, NULL, NULL, NULL, NULL, 55, '2024-03-22 19:25:52'),
-(244, 20, 29, '5.1', 'yes', 10, 77, 23, 66, '1.51800', NULL, NULL, NULL, NULL, NULL, 55, '2024-03-23 10:03:55');
+(244, 20, 29, '5.1', 'yes', 10, 77, 23, 66, '1.51800', NULL, NULL, NULL, NULL, NULL, 55, '2024-03-23 10:03:55'),
+(245, 25, 39, '5.1', 'yes', 5, 20, 80, 55, '2.20000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:28:03'),
+(246, 25, 39, '5.2', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:28:03'),
+(247, 25, 39, '5.3', 'yes', 5, 79, 21, 77, '1.15500', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:28:45'),
+(248, 25, 39, '5.4', 'yes', 5, 55, 45, 44, '0.63250', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:29:14'),
+(249, 25, 39, '5.5', 'yes', 5, 77, 23, 66, '0.75900', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:51:35'),
+(250, 25, 39, '5.6', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:51:35'),
+(251, 25, 39, '5.7', 'no', 1, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:52:13'),
+(252, 25, 39, '5.8', 'no', 10, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:52:28'),
+(253, 25, 39, '5.9', 'yes', 1, 77, 23, 66, '0.15180', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:54:05'),
+(254, 25, 39, '5.10', 'no', 1, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:54:05'),
+(255, 25, 39, '5.11', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:54:22'),
+(256, 25, 39, '5.12', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 18:39:23'),
+(257, 25, 39, '5.13', 'yes', 5, 77, 23, 66, '0.75900', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 18:40:09'),
+(258, 25, 39, '5.14', 'no', 10, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 18:40:17'),
+(259, 25, 39, '5.15', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:05:36'),
+(260, 25, 39, '5.16', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:05:54'),
+(261, 25, 39, '5.17', 'yes', 5, 88, 12, 99, '0.59400', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:05:54'),
+(262, 25, 39, '5.18', 'no', 10, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:06:59'),
+(263, 25, 39, '5.19', 'yes', 10, 88, 12, 77, '0.92400', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:06:59'),
+(264, 25, 39, '5.20', 'yes', 10, 99, 1, 88, '0.08800', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:06:59'),
+(265, 25, 39, '5.21', 'no', 10, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:06:59'),
+(266, 25, 39, '5.22', 'no', 10, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:06:59'),
+(267, 25, 39, '5.23', 'yes', 10, 77, 23, 66, '1.51800', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:06:59'),
+(268, 25, 39, '5.24', 'no', 10, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:07:50'),
+(269, 25, 39, '5.25', 'yes', 5, 88, 12, 2, '0.01200', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:08:16'),
+(270, 25, 39, '5.27', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:08:16'),
+(271, 26, 41, '5.1', 'yes', 10, 98, 2, 77, '0.15400', 'modify risk', 'Treatment action 1', '2024-04-25', '2024-04-24', 55, 55, '2024-04-22 18:47:24'),
+(272, 26, 41, '5.2', 'no', 5, 99, 1, 66, '0.03300', 'modify risk', NULL, NULL, NULL, NULL, 55, '2024-04-22 18:32:04'),
+(273, 26, 41, '5.3', 'yes', 10, 66, 34, 66, '2.24400', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-20 14:49:40'),
+(274, 26, 41, '5.4', 'yes', 10, 55, 45, 44, '1.98000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-20 14:50:06'),
+(275, 26, 41, '5.5', 'yes', 5, 88, 12, 77, '0.46200', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-20 14:50:27'),
+(276, 26, 41, '5.6', 'yes', 5, 79, 21, 66, '0.69300', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-20 15:07:19'),
+(277, 26, 41, '5.7', 'yes', 10, 90, 10, 44, '0.44000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-20 15:12:16'),
+(278, 26, 41, '6.1', 'yes', 10, 88, 12, 66, '0.79200', 'avoid risk', 'Treatment action2', '2024-04-19', '2024-04-26', 55, 55, '2024-04-22 18:49:40'),
+(279, 26, 41, '5.8', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-20 15:13:57'),
+(280, 26, 41, '5.9', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-20 15:18:34'),
+(281, 26, 41, '6.8', 'no', 5, 0, 0, 0, '0.00000', 'retain and accept risk', NULL, NULL, NULL, NULL, 55, '2024-04-22 18:34:23');
 
 -- --------------------------------------------------------
 
@@ -490,6 +536,7 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (2, 'App\\Models\\User', 83),
 (2, 'App\\Models\\User', 86),
 (2, 'App\\Models\\User', 89),
+(2, 'App\\Models\\User', 92),
 (3, 'App\\Models\\User', 8),
 (3, 'App\\Models\\User', 10),
 (3, 'App\\Models\\User', 11),
@@ -604,6 +651,13 @@ CREATE TABLE `password_reset_tokens` (
   `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `password_reset_tokens`
+--
+
+INSERT INTO `password_reset_tokens` (`email`, `token`, `created_at`) VALUES
+('kabdullah098@gmail.com', '$2y$10$77s6taFtibexbxFsAm1EoOahTt4BtKSRJnglijqTWjz4Inwfewi82', '2024-04-19 10:27:55');
 
 -- --------------------------------------------------------
 
@@ -1696,7 +1750,7 @@ INSERT INTO `projects` (`project_id`, `project_name`, `org_id`, `created_by`, `p
 (4, 'Audit 2 made by h1enduser1', 9, 55, '2023-08-12', '16:20:06', 2, 'Not submitted for approval', 55, '2023-08-12 11:20:06', '2023-08-14 05:58:32'),
 (6, 'Audit by g2enduser1', 11, 59, '2023-08-14', '11:40:10', 2, 'Not submitted for approval', 59, '2023-08-14 06:40:10', '2023-08-14 06:40:10'),
 (7, 'Project for guest3', 12, 65, '2023-08-29', '16:28:24', 2, 'Not submitted for approval', 65, '2023-08-29 11:28:24', '2023-08-29 11:28:24'),
-(8, 'Test project', 9, 55, '2023-08-29', '16:36:59', 2, 'Not submitted for approval', 55, '2023-08-29 11:36:59', '2023-08-29 11:36:59'),
+(8, 'Test project 23', 9, 55, '2023-08-29', '16:36:59', 4, 'Pending Approval', 55, '2023-08-29 11:36:59', '2024-04-17 08:48:28'),
 (9, 'projectbyg4', 13, 69, '2023-08-31', '12:20:10', 2, 'Not submitted for approval', 69, '2023-08-31 07:20:10', '2023-08-31 07:20:10'),
 (10, 'Project by G5enduser1', 14, 71, '2023-09-03', '16:43:22', 2, 'Not submitted for approval', 71, '2023-09-03 11:43:22', '2023-09-03 11:43:22'),
 (11, 'prohect by g5enduser2', 14, 72, '2023-09-03', '16:44:10', 2, 'Not submitted for approval', 72, '2023-09-03 11:44:10', '2023-09-03 11:44:10'),
@@ -1712,7 +1766,9 @@ INSERT INTO `projects` (`project_id`, `project_name`, `org_id`, `created_by`, `p
 (21, 'ProjUmer', 10, 85, '2024-01-17', '19:33:01', 4, 'Not submitted for approval', 85, '2024-01-17 14:33:01', '2024-01-17 14:33:01'),
 (22, 'G20 New project for only G20 users', 19, 87, '2024-01-18', '11:21:35', 4, 'Not submitted for approval', 87, '2024-01-18 06:21:35', '2024-01-18 06:21:35'),
 (23, 'H2project', 20, 90, '2024-01-18', '11:26:21', 4, 'Not submitted for approval', 90, '2024-01-18 06:26:21', '2024-01-18 06:26:21'),
-(24, 'Test final', 9, 55, '2024-03-21', '19:51:49', 4, 'Not submitted for approval', 55, '2024-03-21 14:51:49', '2024-03-21 14:51:49');
+(24, 'Test final', 9, 55, '2024-03-21', '19:51:49', 4, 'Not submitted for approval', 55, '2024-03-21 14:51:49', '2024-03-21 14:51:49'),
+(25, 'New Project For Files', 9, 55, '2024-04-19', '17:01:18', 4, 'Not submitted for approval', 55, '2024-04-19 12:01:18', '2024-04-19 12:01:18'),
+(26, 'TestRisk Treatment', 9, 55, '2024-04-19', '19:40:29', 4, 'Not submitted for approval', 55, '2024-04-19 14:40:29', '2024-04-19 14:40:29');
 
 -- --------------------------------------------------------
 
@@ -1740,7 +1796,6 @@ INSERT INTO `project_details` (`project_code`, `assigned_enduser`, `project_perm
 (1, 55, '[\"Project Approver\"]', '2023-08-14 11:02:17', '2023-08-14 11:02:17'),
 (4, 57, '[\"Data Inputter\",\"Data Viewer\"]', '2023-08-17 12:36:24', '2024-03-23 05:15:47'),
 (7, 66, '[\"Data Inputter\"]', '2023-08-29 11:28:42', '2023-08-29 11:28:42'),
-(8, 66, '[\"Project Approver\",\"Data Inputter\",\"Data Approver\"]', '2023-08-29 11:37:18', '2023-08-29 11:37:18'),
 (9, 55, '[\"Data Inputter\"]', '2023-08-31 07:31:26', '2023-08-31 07:31:26'),
 (9, 57, '[\"Data Inputter\",\"Data Viewer\"]', '2023-08-31 07:31:47', '2023-08-31 07:31:47'),
 (10, 55, '[\"Project Owner\"]', '2023-09-03 11:43:36', '2023-09-03 11:43:36'),
@@ -1760,7 +1815,11 @@ INSERT INTO `project_details` (`project_code`, `assigned_enduser`, `project_perm
 (22, 87, '[\"Data Inputter\"]', '2024-01-18 06:25:46', '2024-01-18 06:25:46'),
 (22, 90, '[\"Data Inputter\"]', '2024-01-18 06:41:43', '2024-01-18 06:41:43'),
 (24, 55, '[\"Data Inputter\"]', '2024-03-21 14:52:10', '2024-03-21 14:52:23'),
-(4, 55, '[\"Project Owner\",\"Project Creator\",\"Project Approver\",\"Data Inputter\",\"Data Approver\",\"Data Viewer\"]', '2024-03-23 05:15:14', '2024-03-23 05:15:43');
+(4, 55, '[\"Project Owner\",\"Project Creator\",\"Project Approver\",\"Data Inputter\",\"Data Approver\",\"Data Viewer\"]', '2024-03-23 05:15:14', '2024-03-23 05:15:43'),
+(8, 55, '[\"Project Owner\",\"Project Creator\",\"Project Approver\"]', '2024-04-17 08:52:44', '2024-04-17 10:49:57'),
+(8, 57, '[\"Project Creator\",\"Project Approver\",\"Data Inputter\",\"Data Approver\"]', '2024-04-17 10:51:24', '2024-04-17 10:51:56'),
+(25, 55, '[\"Project Creator\",\"Project Approver\",\"Data Inputter\",\"Data Approver\",\"Data Viewer\"]', '2024-04-19 12:01:42', '2024-04-19 12:01:42'),
+(26, 55, '[\"Data Inputter\",\"Data Approver\"]', '2024-04-19 14:40:43', '2024-04-19 14:40:43');
 
 -- --------------------------------------------------------
 
@@ -1856,7 +1915,8 @@ INSERT INTO `superusers` (`id`, `user_id`, `org_id`) VALUES
 (24, 83, 18),
 (25, 86, 19),
 (27, 89, 19),
-(26, 89, 20);
+(26, 89, 20),
+(28, 92, 18);
 
 -- --------------------------------------------------------
 
@@ -1932,7 +1992,8 @@ INSERT INTO `users` (`id`, `org_id`, `first_name`, `last_name`, `national_id`, `
 (88, 19, 'g20end', 'user2', '4210198765422', 'g20enduser2@gmail.com', '03334447653', 'Gulshan', 'karachi', 'Punjab', 'Pakistan', 123, '$2y$10$Y7fjVyVsln/fHPzkZLQgQ.sy0a2tsejBiQHTJVxmK3pnCgjkMInte', 'N', 5, 'active', NULL, NULL, '2024-01-18 06:11:23', '2024-01-18 06:11:23'),
 (89, 20, 'host2super', 'user1', '4210198765422', 'h2superuser1@gmail.com', '03337776543', 'Azizabad', 'karachi', 'Punjab', 'Pakistan', 44, '$2y$10$7osU8aS0U1iD5/VY0iQ0uegrW47zVNo5BDgrp/CENMaCENHj.JcmK', 'N', 1, 'active', NULL, NULL, '2024-01-18 06:23:29', '2024-01-18 06:23:29'),
 (90, 20, 'h2end', 'user1', '4210198765422', 'h2enduser1@gmail.com', '03337776523', 'Fb area block2', 'karachi', 'Sindh', 'Pakistan', 3, '$2y$10$LF9fNivKJkGbnJ3uGpKhA.MocggJLxqbMElZOBuPoApiavLMKtZBi', 'N', 5, 'active', NULL, NULL, '2024-01-18 06:24:51', '2024-01-18 06:24:51'),
-(91, 19, 'g20end', 'user3', '4210198765422', 'g20enduser3@gmail.com', '03337776543', 'Iqbal town', 'karachi', 'Punjab', 'Pakistan', 3, '$2y$10$XHv1aWhRiBSnykkL55VK/eZK.PelZr72N/M6VyaCtPMBcq0EgiS..', 'N', 5, 'active', NULL, NULL, '2024-01-18 06:28:05', '2024-01-18 06:28:05');
+(91, 19, 'g20end', 'user3', '4210198765422', 'g20enduser3@gmail.com', '03337776543', 'Iqbal town', 'karachi', 'Punjab', 'Pakistan', 3, '$2y$10$XHv1aWhRiBSnykkL55VK/eZK.PelZr72N/M6VyaCtPMBcq0EgiS..', 'N', 5, 'active', NULL, NULL, '2024-01-18 06:28:05', '2024-01-18 06:28:05'),
+(92, 18, 'khawaja', 'Abdullah', '4210198765422', 'kabdullah098@gmail.com', '03334447653', 'Iqbal town', 'karachi', 'jjkk', 'Pakistan', 123, '$2y$10$pEQ1tyRMqQzrVvyUz/D20OsY2srnrsuOnHQPVaQNkAlhq8kvVqrDm', 'N', 1, 'active', NULL, NULL, '2024-04-19 10:18:00', '2024-04-19 10:18:00');
 
 --
 -- Indexes for dumped tables
@@ -2488,7 +2549,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `iso_sec2_4_a5`
 --
 ALTER TABLE `iso_sec2_4_a5`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `iso_sec2_4_a6`
@@ -2512,7 +2573,7 @@ ALTER TABLE `iso_sec2_4_a8`
 -- AUTO_INCREMENT for table `iso_sec_2_1`
 --
 ALTER TABLE `iso_sec_2_1`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `iso_sec_2_2`
@@ -2530,7 +2591,7 @@ ALTER TABLE `iso_sec_2_3`
 -- AUTO_INCREMENT for table `iso_sec_2_3_1`
 --
 ALTER TABLE `iso_sec_2_3_1`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=245;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=282;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -2818,7 +2879,7 @@ ALTER TABLE `privileges`
 -- AUTO_INCREMENT for table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `project_types`
@@ -2836,13 +2897,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `superusers`
 --
 ALTER TABLE `superusers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
 
 --
 -- Constraints for dumped tables
