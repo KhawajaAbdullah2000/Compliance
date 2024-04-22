@@ -590,7 +590,6 @@ class IsoSec2_3_1 extends Controller
     public function iso_sec_2_3_2_treat_form_submit(Request $req,$asset_id,$control_num,$proj_id,$user_id){
         //is user selected component
         $req->validate([
-            'residual_risk_treatment' => 'required',
             'treatment_action' => 'required',
             'treatment_target_date' => 'required',
             'treatment_comp_date' => 'required',
@@ -615,7 +614,6 @@ class IsoSec2_3_1 extends Controller
 
                         DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('control_num',$control_num)
                         ->where('asset_id',$asset_id)->update([
-                            'residual_risk_treatment'=>$req->residual_risk_treatment,
                             'treatment_action'=>$req->treatment_action,
                             'treatment_target_date'=>$req->treatment_target_date,
                             'treatment_comp_date'=>$req->treatment_comp_date,
@@ -623,6 +621,78 @@ class IsoSec2_3_1 extends Controller
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
+
+                        return redirect()->route('iso_sec_2_3_2_risk_treat_form',[
+                           'control_num'=>$control_num, 'asset_id'=>$asset_id,'proj_id'=>$proj_id,'user_id'=>$user_id
+                        ])->with('success','Risk Treatment completed');
+
+                    }
+                }
+            }
+            return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+        }
+
+    }
+
+
+    public function iso_sec_2_3_2_treat_form1_submit(Request $req,$asset_id,$control_num,$proj_id,$user_id){
+        $req->validate([
+            'residual_risk_treatment'=>"required|string",
+            'applicability' => 'required',
+            'control_compliance' => 'required_if:applicability,yes',
+            'vulnerability' => 'required_if:applicability,yes',
+            'threat' => 'required_if:applicability,yes',
+            'risk_level' => 'required_if:applicability,yes'
+        ]);
+
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+                if (in_array('Data Inputter', $permissions)) {
+                    if ($checkpermission->type_id == 4) {
+
+
+                        if($req->applicability=="yes"){
+                            DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('control_num',$control_num)
+                            ->where('asset_id',$asset_id)->update([
+                                'residual_risk_treatment'=>$req->residual_risk_treatment,
+                                'applicability'=>$req->applicability,
+                                'control_compliance'=>$req->control_compliance,
+                                'vulnerability'=>$req->vulnerability,
+                                'threat'=>$req->threat,
+                                'risk_level'=>$req->risk_level,
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                            ]);
+
+                        }
+
+                        if($req->applicability=="no"){
+                            DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('control_num',$control_num)
+                            ->where('asset_id',$asset_id)->update([
+                                'residual_risk_treatment'=>$req->residual_risk_treatment,
+                                'applicability'=>$req->applicability,
+                                'control_compliance'=>0,
+                                'vulnerability'=>0,
+                                'threat'=>0,
+                                'risk_level'=>0,
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                            ]);
+                        }
+
+
 
                         return redirect()->route('iso_sec2_3_1_risk_treat_controls',[
                             'asset_id'=>$asset_id,'proj_id'=>$proj_id,'user_id'=>$user_id
@@ -634,5 +704,69 @@ class IsoSec2_3_1 extends Controller
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
         }
 
+
+
+    }
+
+    public function risk_treatment_edit_action_plan_form($asset_id,$control_num,$proj_id, $user_id){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+                if (in_array('Data Inputter', $permissions)) {
+                    if ($checkpermission->type_id == 4) {
+
+                        $asset_risk_assess = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                         ->where('control_num', $control_num)->first();
+
+                        // dd($asset_risk_assess);
+
+                        $super = Db::table('users')->where('privilege_id', 1)->pluck('id')->toArray();
+
+                        //superusers of that organization
+                        $superusers_of_that_org = DB::table('superusers')->wherein('user_id', $super)
+                            ->where('org_id', auth()->user()->org_id)->pluck('user_id')->toArray();
+                        // dd($superusers_of_that_org);
+
+                        //organziatons of those superusers
+                        $orgs = Db::table('users')->wherein('id', $superusers_of_that_org)->pluck('org_id')->toArray();
+
+                        $users = User::where('privilege_id', 5)->wherein('org_id', $orgs)->get(['id', 'first_name', 'last_name']);
+
+                        $assetData=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
+
+                        $project=Project::join('project_types','projects.project_type','project_types.id')
+                        ->where('projects.project_id',$proj_id)->first();
+
+
+                        return view('iso_sec_2_3_1.iso_sec_2_3_2_actionplanform', [
+                            'project_id' => $checkpermission->project_id,
+                            'project_name' => $checkpermission->project_name,
+                            'project_permissions' => $checkpermission->project_permissions,
+                            'asset_id' => $asset_id,
+                            'control_num' => $control_num,
+                            'assetvalue' => $asset_risk_assess->asset_value,
+                            'users' => $users,
+                            'treatmentData'=>$asset_risk_assess,
+                            'assetData'=>$assetData,
+                            'project'=>$project
+
+
+                        ]);
+                    }
+                }
+            }
+            return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+        }
     }
 }

@@ -328,9 +328,14 @@ class ProjectController extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if ($checkpermission->type_id == 4) {
+
+                    $project=Project::join('project_types','projects.project_type','project_types.id')
+                    ->where('projects.project_id',$proj_id)->first();
+
                     return view(
                         'iso.iso_sec2_4_subsections',
-                        ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name]
+                        ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name,
+                        'project'=>$project]
                     );
                 }
             }

@@ -158,9 +158,6 @@ $permissions=json_decode($project_permissions);
 </div>
 </div>
 
-@if($treatmentData->applicability=="yes")
-<a href="/risk_treatment_edit_action_plan_form/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" class="btn my_bg_color text-white fw-bold float-end">Create or edit Action plan</a>
-@endif
 <h4 class="mt-4 mb-4 fw-bold text-center">Target Information Security Risk After Proposed Risk Treatment</h4>
 
 {{-- <p>Asset value: {{$assetvalue}}</p> --}}
@@ -179,55 +176,12 @@ $permissions=json_decode($project_permissions);
 
             <div class="card-body">
         {{-- <form action="/iso_sec_2_3_2_treat_form_submit/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" method="post"> --}}
-     <form action="/iso_sec_2_3_2_treat_form1_submit/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" method="post">
+     <form action="/iso_sec_2_3_2_treat_form_submit/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" method="post">
             @csrf
             @method('PUT')
             <input type="hidden" name="control_num" value="{{$control_num}}">
 
 
-              <div class="form-group mt-4">
-                <label for="">Residual Risk Treatment</label>
-         <select name="residual_risk_treatment" class="form-control" id="residual_risk_treatment">
-            <option value="">Select</option>
-            <option value="retain and accept risk" {{old('residual_risk_treatment',$treatmentData->residual_risk_treatment)=='retain and accept risk'?'selected':''}}>Retain and Accept Risk</option>
-            <option value="share risk" {{old('residual_risk_treatment',$treatmentData->residual_risk_treatment)=='share risk'?'selected':''}}>
-                Share Risk</option>
-            <option value="avoid risk" {{old('residual_risk_treatment',$treatmentData->residual_risk_treatment)=='avoid risk'?'selected':''}}>Avoid Risk</option>
-            <option value="modify risk"  {{old('residual_risk_treatment',$treatmentData->residual_risk_treatment)=='modify risk'?'selected':''}}>Modify Risk</option>
-         </select>
-         @if($errors->has('residual_risk_treatment'))
-         <div class="text-danger">{{ $errors->first('residual_risk_treatment') }}</div>
-     @endif
-              </div>
-
-
-        <div class="form-group mt-4" id="additional-fields" style="{{ $treatmentData->residual_risk_treatment === 'modify risk' ? 'display: block;' : 'display: none;' }}">
-             <label for="">Applicability</label>
-             <select name="applicability" class="form-select">
-                <option value='yes' {{ old('applicability',$treatmentData->applicability) == "yes"? 'selected' : '' }}>Yes</option>
-                <option value='no' {{ old('applicability',$treatmentData->applicability) == "no"? 'selected' : '' }}>No</option>
-            </select>
-
-            <label for="">Control Compliance</label>
-            <input type="number" name="control_compliance" oninput="validateInput(this)" class="form-control" min=0 max=100 data-control-id="{{$treatmentData->control_num}}" value="{{old('control_compliance',$treatmentData->control_compliance)}}">
-
-            <label for="">Vulnerability</label>
-            <input type="number" name="vulnerability" class="form-control" data-control-id="{{$treatmentData->control_num}}" readonly value="{{old('vulnerability',$treatmentData->vulnerability)}}">
-
-            <label for="">Threat</label>
-            <input type="number" name="threat" class="form-control" min=0 max=100 data-control-id="{{$treatmentData->control_num}}" value="{{old('threat',$treatmentData->threat)}}">
-
-            <label for="">Risk Level</label>
-            <input type="number" name="risk_level" class="form-control" data-control-id="{{$treatmentData->control_num}}" value="{{old('risk_level',$treatmentData->risk_level)}}" readonly>
-
-
-              </div>
-
-
-
-
-
-{{--
 
               <div class="form-group mt-4">
                 <label for=""> Treatment Action</label>
@@ -236,28 +190,28 @@ $permissions=json_decode($project_permissions);
                     @if($errors->has('treatment_action'))
                     <div class="text-danger">{{ $errors->first('treatment_action') }}</div>
                 @endif
-              </div> --}}
-{{--
+              </div>
+
               <div class="form-group mt-4">
                 <label for=""> Treatment Target Date</label>
                 <input type="date" name="treatment_target_date" value="{{old('treatment_target_date',$treatmentData->treatment_target_date)}}">
                     @if($errors->has('treatment_target_date'))
                     <div class="text-danger">{{ $errors->first('treatment_target_date') }}</div>
                 @endif
-              </div> --}}
+              </div>
 
-              {{-- <div class="form-group mt-4">
+               <div class="form-group mt-4">
                 <label for=""> Treatment Completion Date</label>
                 <input type="date" name="treatment_comp_date" value="{{old('treatment_comp_date',$treatmentData->treatment_comp_date)}}">
                     @if($errors->has('treatment_comp_date'))
                     <div class="text-danger">{{ $errors->first('treatment_comp_date') }}</div>
                 @endif
-              </div> --}}
+              </div>
 
 
 
 
-              {{-- <div class="form-group mt-4">
+               <div class="form-group mt-4">
                 <label for=""> Responsbility for Treatment</label>
                 <select class="boxstyling form-select" name="responsibility_for_treatment">
                     <option value="">Select User</option>
@@ -269,12 +223,12 @@ $permissions=json_decode($project_permissions);
                     @if($errors->has('responsibility_for_treatment'))
                     <div class="text-danger">{{ $errors->first('responsibility_for_treatment') }}</div>
                 @endif
-              </div> --}}
+              </div>
 
 
 
               <div class="text-center">
-                <button type="submit" class="btn my_bg_color text-white btn-md mt-3">Save</button>
+                <button type="submit" class="btn my_bg_color text-white btn-md mt-3">Save Changes</button>
               </div>
 
 
@@ -292,78 +246,6 @@ $permissions=json_decode($project_permissions);
 
 
 </div>
-
-@section('scripts')
-
-<script>
-    $(document).ready(function() {
-        $('#residual_risk_treatment').change(function() {
-            if ($(this).val() === 'modify risk') {
-                $('#additional-fields').show();
-            } else {
-                $('#additional-fields').hide();
-            }
-        });
-
-        // Set the correct display state based on the dropdown's initial value
-        if ($('#residual_risk_treatment').val() === 'modify risk') {
-            $('#additional-fields').show();
-        } else {
-            $('#additional-fields').hide();
-        }
-    });
-</script>
-
-<script>
-    $(document).ready(function(){
-        // Initialize values from the form's current state
-        var assetValue = {{ $assetvalue }};
-
-        var vulnerabilityValue = parseFloat($('input[name="vulnerability"]').val()) || null;
-        var threatValue = parseFloat($('input[name="threat"]').val()) || null;
-
-        // Update function to calculate the risk level
-        function updateRiskLevel() {
-
-            if (!isNaN(assetValue) && !isNaN(vulnerabilityValue) && !isNaN(threatValue)) {
-                var riskLevel = (vulnerabilityValue / 100) * (threatValue / 100) * assetValue;
-                $('input[name="risk_level"]').val(riskLevel.toFixed(4));
-            } else {
-                $('input[name="risk_level"]').val('');  // Clear the field if any values are not ready
-            }
-        }
-
-
-
-        $('input[name="control_compliance"]').on("input", function () {
-            vulnerabilityValue = 100 - parseFloat($(this).val());
-            $('input[name="vulnerability"]').val(vulnerabilityValue);
-            updateRiskLevel();
-        });
-
-        $('input[name="threat"]').on("input", function () {
-            threatValue = parseFloat($(this).val());
-            updateRiskLevel();
-        });
-
-        // Initial call to set everything up with current values
-        updateRiskLevel();
-    });
-</script>
-
-
-
- <script>
-     function validateInput(inputElement) {
-
-       if (inputElement.value.indexOf(".") !== -1) {
-         alert("Decimal values are not allowed.");
-         inputElement.value = Math.floor(inputElement.value);
-       }
-     }
-   </script>
-
-@endsection
 
 
 

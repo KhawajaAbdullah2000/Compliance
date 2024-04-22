@@ -7,6 +7,7 @@ use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
+use App\Models\Project;
 class IsoSec2_4_A6 extends Controller
 {
     public function iso_sec2_4_a6_assets($proj_id, $user_id)
@@ -33,11 +34,14 @@ class IsoSec2_4_A6 extends Controller
                         'users.id'
                     )
                         ->where('project_id', $proj_id)->get();
+                        $project=Project::join('project_types','projects.project_type','project_types.id')
+                        ->where('projects.project_id',$proj_id)->first();
                     return view('iso.iso_sec_2_5_assets_main', [
                         'data' => $data,
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
-                        'project_permissions' => $checkpermission->project_permissions
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project'=>$project
                     ]);
                 }
             }
@@ -76,6 +80,9 @@ class IsoSec2_4_A6 extends Controller
                     //    $results=Db::table('iso_sec2_4_a5')->join('users','iso_sec2_4_a5.last_edited_by','users.id')
                     //    ->where('project_id',$proj_id)->get();
 
+
+                 $project=Project::join('project_types','projects.project_type','project_types.id')
+                 ->where('projects.project_id',$proj_id)->first();
                     return view(
                         'iso.iso_sec2_4_a6',
                         [
@@ -85,7 +92,8 @@ class IsoSec2_4_A6 extends Controller
                             'results' => $results,
                             'data' => $rows,
                             'results' => $results,
-                            'assetData' => $assetData
+                            'assetData' => $assetData,
+                            'project'=>$project
                         ]
                     );
                 }
