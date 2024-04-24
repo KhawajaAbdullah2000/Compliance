@@ -64,16 +64,20 @@
             @method('PUT')
 
             <div class="fw-bold mb-3">
-                <label for="">Select Asset value</label>
-                <select name="asset_value" class="form-control" id="assetSelect">Asset value
+                <label for="">Asset Value:
+                    @if ($assetData->asset_value==10)
+                    High
+                    @endif
 
-                    <option value="">Select --</option>
-                    <option value=10 {{ old('asset_value',$assetData->asset_value) == 10? 'selected' : '' }}>High</option>
-                    <option value=5 {{ old('asset_value',$assetData->asset_value) == 5? 'selected' : '' }}>Medium</option>
-                    <option value=1 {{ old('asset_value',$assetData->asset_value) == 1? 'selected' : '' }}>Low</option>
+                    @if ($assetData->asset_value==5)
+                    Medium
+                    @endif
 
+                    @if ($assetData->asset_value==1)
+                    Low
+                    @endif
+                </label>
 
-                </select>
             </div>
 
             <div class="form-group">
@@ -137,7 +141,7 @@
 <script>
     $(document).ready(function(){
         // Initialize values from the form's current state
-        var assetValue = parseFloat($('#assetSelect').val()) || null;
+        var assetValue = {{$assetData->asset_value}};
         var vulnerabilityValue = parseFloat($('input[name="vulnerability"]').val()) || null;
         var threatValue = parseFloat($('input[name="threat"]').val()) || null;
 

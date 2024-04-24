@@ -67,7 +67,7 @@ $permissions=json_decode($project_permissions);
                     @method('PUT')
                     <div class="form-group">
                         <label for=""> Compliance Status</label>
-                        <select class="boxstyling form-select" name="comp_status">
+                        <select class=" form-select" name="comp_status">
 
 
              <option value="yes" {{ old('comp_status',$result->comp_status) == 'yes' ? 'selected' : '' }}>Yes</option>
@@ -128,7 +128,7 @@ $permissions=json_decode($project_permissions);
     <div class="col-md-12">
 
         <div class="card mt-2">
-            <div class="card-header bg-primary text-center">
+            <div class="card-header my_bg_color text-white text-center">
                 <h2>Mandatory Requirement</h2>
               </div>
             <div class="card-body">
@@ -138,7 +138,7 @@ $permissions=json_decode($project_permissions);
 
             <div class="form-group">
                 <label for=""> Compliance Status</label>
-                <select class="boxstyling bg-primary form-select" name="comp_status">
+                <select class="boxstyling form-select" name="comp_status">
                     <option value="">Select --</option>
 
      <option value="yes" {{ old('comp_status') == 'yes' ? 'selected' : '' }}>Yes</option>

@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Project;
 
 
+
 class IsoSec2_1 extends Controller
 {
     public function iso_section2_1($proj_id, $user_id)
@@ -303,6 +304,7 @@ class IsoSec2_1 extends Controller
 
     public function iso_sec_2_1_submit_edit(Request $req, $assessment_id, $proj_id, $user_id)
     {
+
         $req->validate(
             [
                'g_name' => 'required_without_all:name,c_name',
@@ -487,21 +489,27 @@ class IsoSec2_1 extends Controller
                             ->with('error', $error);
                         }
 
+                        try {
+                            for($i=0;$i<count($rows);$i++){
+                                DB::table('iso_sec_2_1')->insert([
+                                    'project_id'=>$proj_id,
+                                    'g_name'=>$g_name[$i],
+                                    'name'=>$name[$i],
+                                    'c_name'=>$c_name[$i],
+                                    'owner_dept'=>$owner_dept[$i],
+                                    'physical_loc'=>$physical_loc[$i],
+                                    'logical_loc'=>$logical_loc[$i],
+                                    's_name'=>$s_name[$i],
+                                    'last_edited_by'=>$user_id,
+                                    'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+                                ]);
+                            }
 
-                        for($i=0;$i<count($rows);$i++){
-                            DB::table('iso_sec_2_1')->insert([
-                                'project_id'=>$proj_id,
-                                'g_name'=>$g_name[$i],
-                                'name'=>$name[$i],
-                                'c_name'=>$c_name[$i],
-                                'owner_dept'=>$owner_dept[$i],
-                                'physical_loc'=>$physical_loc[$i],
-                                'logical_loc'=>$logical_loc[$i],
-                                's_name'=>$s_name[$i],
-                                'last_edited_by'=>$user_id,
-                                'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
-                            ]);
+                        } catch (\Exception $e) {
+                            return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
+                        ->with('error', $e->getMessage());
                         }
+
 
                         return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                         ->with('success', 'Assets Uploaded Successfully');

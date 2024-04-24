@@ -41,7 +41,7 @@ $permissions=json_decode($project_permissions);
 
                 <div class="form-group mt-4">
                 <label for="">Asset Name:</label>
-                <input type="text" class="form-control" value="{{old('name',$data->name)}}"></input>
+                <input type="text" name="name" class="form-control" value="{{old('name',$data->name)}}"></input>
                 @if($errors->has('name'))
                 <div class="text-danger">{{ $errors->first('name') }}</div>
             @endif

@@ -33,13 +33,14 @@ $permissions=json_decode($project_permissions);
 
 
 <div class="fw-bold">
+    <p>Hello</p>
     <label for="">Select Asset value</label>
     <select name="asset_value" class="form-control">Asset value
 
-        <option value="">Select --</option>
-        <option value=10>High</option>
-        <option value=5>Medium</option>
-        <option value=1>Low</option>
+        <option value="" >Select --</option>
+        <option value=10 {{old('asset_value',$req->asset_value)==$global_asset_value?'selected':''}}>High</option>
+        <option value=5 {{old('asset_value',$req->asset_value)==$global_asset_value?'selected':''}}>Medium</option>
+        <option value=1 {{old('asset_value',$req->asset_value)==$global_asset_value?'selected':''}}>Low</option>
 
 
     </select>

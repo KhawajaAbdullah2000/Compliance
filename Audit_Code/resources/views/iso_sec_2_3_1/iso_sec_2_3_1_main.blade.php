@@ -93,12 +93,12 @@ $permissions=json_decode($project_permissions);
 
     <div class="fw-bold">
         <label for="">Select Asset value</label>
-        <select name="asset_value" class="form-control" id="assetSelect">Asset value
-
+        {{-- <p>{{$global_asset_value}}</p> --}}
+        <select name="asset_value" class="form-control boxstyling" id="assetSelect">
             <option value="">Select --</option>
-            <option value=10>High</option>
-            <option value=5>Medium</option>
-            <option value=1>Low</option>
+            <option value=10 {{old('asset_value',$global_asset_value)==10?'selected':''}}>High</option>
+            <option value=5 {{old('asset_value',$global_asset_value)==5?'selected':''}}>Medium</option>
+            <option value=1 {{old('asset_value',$global_asset_value)==1?'selected':''}}>Low</option>
 
 
         </select>
@@ -883,11 +883,22 @@ $permissions=json_decode($project_permissions);
 </script>
 @endif
 
+@if(Session::has('error'))
+<script>
+    swal({
+  title: "{{Session::get('error')}}",
+  icon: "error",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script>
+@endif
+
 
 
 <script>
    $(document).ready(function(){
-    var assetValue = null;
+    var assetValue = parseFloat($('#assetSelect').val()) || null;
     var newVulnerabilityValue = null;
     var threat = null;
     var newRiskValue = null;
