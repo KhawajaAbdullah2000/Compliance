@@ -115,7 +115,7 @@ $permissions=json_decode($project_permissions);
 
 </div>
 
-<h4 class="mt-4 mb-4 fw-bold">Current Information Security Risk Assessment</h4>
+<h4 class="mt-4 mb-4 fw-bold">Target Information Security Risk After Proposed Risk Treatment</h4>
 
 
 
@@ -158,7 +158,7 @@ $permissions=json_decode($project_permissions);
 </div>
 </div>
 
-<h4 class="mt-4 mb-4 fw-bold text-center">Target Information Security Risk After Proposed Risk Treatment</h4>
+
 
 {{-- <p>Asset value: {{$assetvalue}}</p> --}}
 
@@ -171,7 +171,7 @@ $permissions=json_decode($project_permissions);
 
         <div class="card mt-2">
             <div class="card-header my_bg_color text-white text-center">
-                <h3>Information Security Risk Treatment</h3>
+                <h3>Treatment Action Plan</h3>
               </div>
 
             <div class="card-body">

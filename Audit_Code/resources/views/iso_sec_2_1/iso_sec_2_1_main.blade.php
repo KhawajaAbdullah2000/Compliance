@@ -58,8 +58,7 @@ $permissions=json_decode($project_permissions);
             <th onclick="sortTable(6)">Service Name for which this is an underlying asset </th>
             <th>Risk Assessment</th>
             {{-- <th>Risk Treatment</th> --}}
-            <th>Actions</th>
-            <th>Details</th>
+            <th>Services/Assets</th>
           </tr>
         </thead>
         <tbody>
@@ -74,7 +73,7 @@ $permissions=json_decode($project_permissions);
                 <td>{{$d->s_name}}</td>
 
           <td>
-            <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white">Risk Assessment</a>
+            <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white">Initiate or Edit</a>
             {{-- <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$d->c_name}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">Risk Assessment</a> --}}
           </td>
           {{-- <td>
@@ -82,7 +81,7 @@ $permissions=json_decode($project_permissions);
 
           </td> --}}
 
-            <td>
+          <td>
             @if(in_array('Data Inputter',$permissions))
 
              <a href="/iso_sec_2_1_edit/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">
@@ -96,13 +95,12 @@ $permissions=json_decode($project_permissions);
         <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
 
         @endif
-                </td>
 
-                <td>
-                <a href="/iso_sec_2_1_details/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">
-                    <i class="fas fa-eye fa-lg" style="color: #00d123;"></i>
-                </a>
-            </td>
+            <a href="/iso_sec_2_1_details/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">
+                <i class="fas fa-eye fa-lg" style="color: #00d123;"></i>
+            </a>
+
+                </td>
 
 
 
@@ -168,7 +166,7 @@ $permissions=json_decode($project_permissions);
   title: "{{Session::get('error')}}",
   icon: "error",
   closeOnClickOutside: true,
-  timer: 3000,
+  timer: 6000,
     });
 </script>
 @endif

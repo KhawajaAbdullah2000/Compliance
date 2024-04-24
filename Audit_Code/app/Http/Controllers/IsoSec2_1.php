@@ -457,32 +457,44 @@ class IsoSec2_1 extends Controller
                                 $c_name[]=null;
                             }
 
+                            if($row[0]==null && $row[1]==null && $row[2]==null){
+                                $error="Atleast one from Component Name, Asset Name,And group Name must be available for each row";
+                                break;
+                            }
 
                             if($row[3]!=null){
                                 $owner_dept[]=$row[3];
                             }else{
                                 $error="Owner dept of an asset Missing";
+                                break;
                             }
 
                             if($row[4]!=null){
                                 $physical_loc[]=$row[4];
                             }else{
                                 $error="Physical location of an asset Missing";
+                                break;
                             }
 
                             if($row[5]!=null){
                                 $logical_loc[]=$row[5];
                             }else{
                                 $error="Logical Location of an asset Missing";
+                                break;
                             }
 
                             if($row[6]!=null){
                                 $s_name[]=$row[6];
                             }else{
                                 $error="Service Name of an asset Missing";
+                                break;
                             }
 
+
                         }
+
+
+
 
                         if($error!=null){
                             return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
@@ -506,8 +518,16 @@ class IsoSec2_1 extends Controller
                             }
 
                         } catch (\Exception $e) {
+
+                            if($e->getCode()==23000){
+                                $error="Each row must contain a unique combination of Asset Group Name,Name, and Component Name.All 3 cannot be same for multiple rows";
+                            }else{
+                                $error=$e->getCode();
+                            }
+
+
                             return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
-                        ->with('error', $e->getMessage());
+                        ->with('error', $error);
                         }
 
 

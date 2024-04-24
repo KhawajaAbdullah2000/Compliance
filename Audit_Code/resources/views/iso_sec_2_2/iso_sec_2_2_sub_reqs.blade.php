@@ -61,7 +61,7 @@ $permissions=json_decode($project_permissions);
                  <td>{!! nl2br($d[4]) !!}</td>
                  <td style="text-align:center">
                 <a href="/iso_sec2_2_sub_req_edit/{{$d[3]}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}">
-                    <i class="fas fa-eye fa-lg" style="color: #114a1d;"></i>
+                    <i class="fas fa-edit fa-lg" style="color: #114a1d;"></i>
                 </a>
             </td>
 
