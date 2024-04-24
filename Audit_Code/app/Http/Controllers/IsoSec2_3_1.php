@@ -68,7 +68,7 @@ class IsoSec2_3_1 extends Controller
                     $project=Project::join('project_types','projects.project_type','project_types.id')
                     ->where('projects.project_id',$proj_id)->first();
 
-        $global_asset_value=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)->first();
+ $global_asset_value=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)->first();
 
 
                     return view('iso_sec_2_3_1.iso_sec_2_3_1_main', [
@@ -86,7 +86,7 @@ class IsoSec2_3_1 extends Controller
                         'a7_results'=>$a7_results,
                         'a8_results'=>$a8_results,
                         'project'=>$project,
-                        'global_asset_value'=>$global_asset_value->asset_value
+                        'global_asset_value'=>$global_asset_value
                     ]);
                 }
             }
@@ -96,6 +96,7 @@ class IsoSec2_3_1 extends Controller
 
     public function iso_sec2_3_1_initial_add(Request $req,$asset_id,$proj_id,$user_id)
     {
+
 
         $req->validate([
              'asset_value' => 'required',
@@ -108,8 +109,9 @@ class IsoSec2_3_1 extends Controller
          ]);
 
 
+
   $global_asset_value=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)->first();
-  if ($global_asset_value->asset_value!=$req->asset_value){
+  if ( $global_asset_value!=null and $global_asset_value->asset_value!=$req->asset_value){
     $old_risk=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)->get();
 
     foreach($old_risk as $old){

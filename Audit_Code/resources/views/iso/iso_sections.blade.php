@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <div class="row text-center justify-content-center full-img h-100 w-100 d-inline-block">
+    <div class="row mt-4 justify-content-center full-img h-100 w-100">
 
         <div class="row mt-2">
             <div class="col-12">

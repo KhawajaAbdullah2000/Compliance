@@ -96,10 +96,16 @@ $permissions=json_decode($project_permissions);
         {{-- <p>{{$global_asset_value}}</p> --}}
         <select name="asset_value" class="form-control boxstyling" id="assetSelect">
             <option value="">Select --</option>
-            <option value=10 {{old('asset_value',$global_asset_value)==10?'selected':''}}>High</option>
-            <option value=5 {{old('asset_value',$global_asset_value)==5?'selected':''}}>Medium</option>
-            <option value=1 {{old('asset_value',$global_asset_value)==1?'selected':''}}>Low</option>
+            @if($global_asset_value!=null)
+                <option value=10 {{old('asset_value',$global_asset_value->asset_value)==10?'selected':''}}>High</option>
+                <option value=5 {{old('asset_value',$global_asset_value->asset_value)==5?'selected':''}}>Medium</option>
+                <option value=1 {{old('asset_value',$global_asset_value->asset_value)==1?'selected':''}}>Low</option>
+            @else
+            <option value=10 {{old('asset_value')==10?'selected':''}}>High</option>
+            <option value=5 {{old('asset_value')==5?'selected':''}}>Medium</option>
+            <option value=1 {{old('asset_value')==1?'selected':''}}>Low</option>
 
+            @endif
 
         </select>
     </div>
