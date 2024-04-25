@@ -140,6 +140,10 @@ class IsoSec2_4_A6 extends Controller
                             ->where('control_num', $control_num)->where('project_id', $proj_id)->first();
 
 
+                            $project=Project::join('project_types','projects.project_type','project_types.id')
+                            ->where('projects.project_id',$proj_id)->first();
+
+
 
                         return view('iso.edit_sec2_4_a6', [
                             'project_id' => $proj_id,
@@ -148,7 +152,8 @@ class IsoSec2_4_A6 extends Controller
                             'data' => $filteredData,
                             'result' => $result,
                             'asset_id' => $asset_id,
-                            'control_data' => $control_data
+                            'control_data' => $control_data,
+                            'project'=>$project
                         ]);
                     }
                 }

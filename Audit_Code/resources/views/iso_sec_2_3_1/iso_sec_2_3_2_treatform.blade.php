@@ -45,16 +45,6 @@ $permissions=json_decode($project_permissions);
 
 
 
-    @if ($errors->any())
-    <div >
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
 
 <div class="row">
 
@@ -117,14 +107,16 @@ $permissions=json_decode($project_permissions);
 
 <h4 class="mt-4 mb-4 fw-bold">Current Information Security Risk Assessment</h4>
 
-
-
 <div class="row">
 
 <div class="col-lg-6">
 
 <table style="width: 50%;" class="table table-bordered table-primary">
     <tbody>
+        <tr>
+            <td class="fw-bold" >Control Number</td>
+            <td>  {{$treatmentData->control_num}}</td>
+        </tr>
         <tr>
             <td class="fw-bold" >Control is Applicable?</td>
             <td>  {{$treatmentData->applicability}}</td>
@@ -150,31 +142,118 @@ $permissions=json_decode($project_permissions);
             <td>  {{$treatmentData->risk_level}}</td>
         </tr>
 
+        <tr>
+            <td class="fw-bold" >Asset Value</td>
+            <td>
+@if($treatmentData->asset_value==10)
+High
+@endif
+
+@if($treatmentData->asset_value==5)
+Medium
+@endif
+
+@if($treatmentData->asset_value==1)
+Low
+@endif
+
+
+            </td>
+        </tr>
 
 
     </tbody>
 </table>
 
+
+<h2>After Risk Treatment</h2>
+<table style="width: 50%;" class="table table-bordered table-secondary">
+    <tbody>
+        <tr>
+            <td class="fw-bold" >Control Number</td>
+            <td>  {{$after_risk_treatment->control_num}}</td>
+        </tr>
+        <tr>
+            <td class="fw-bold" >Control is Applicable?</td>
+            <td>  {{$after_risk_treatment->applicability}}</td>
+        </tr>
+
+        <tr>
+            <td class="fw-bold" >Control Compliance</td>
+            <td>  {{$after_risk_treatment->control_compliance}}%</td>
+        </tr>
+
+        <tr>
+            <td class="fw-bold" >Vulnerability</td>
+            <td>  {{$after_risk_treatment->vulnerability}}%</td>
+        </tr>
+
+        <tr>
+            <td class="fw-bold" >Threat</td>
+            <td>  {{$after_risk_treatment->threat}}%</td>
+        </tr>
+
+        <tr>
+            <td class="fw-bold" >Risk Level</td>
+            <td>  {{$after_risk_treatment->risk_level}}</td>
+        </tr>
+
+        <tr>
+            <td class="fw-bold" >Asset Value</td>
+            <td>
+@if($after_risk_treatment->asset_value==10)
+High
+@endif
+
+@if($after_risk_treatment->asset_value==5)
+Medium
+@endif
+
+@if($after_risk_treatment->asset_value==1)
+Low
+@endif
+
+
+
+            </td>
+        </tr>
+
+
+
+
+    </tbody>
+</table>
+
+
 </div>
 </div>
 
-@if($treatmentData->applicability=="yes")
-<a href="/risk_treatment_edit_action_plan_form/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" class="btn my_bg_color text-white fw-bold float-end">Create or edit Action plan</a>
-@endif
-<h4 class="mt-4 mb-4 fw-bold text-center">Target Information Security Risk After Proposed Risk Treatment</h4>
+
 
 {{-- <p>Asset value: {{$assetvalue}}</p> --}}
 
 
+<div class="row">
 
-<div class="row d-flex justify-content-center">
+
+
 
     <div class="col-md-6">
 
-
         <div class="card mt-2">
+
+        {{-- @if ($errors->any())
+        <div >
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif --}}
+
             <div class="card-header my_bg_color text-white text-center">
-                <h3>Information Security Risk Treatment</h3>
+                <h3>View or Edit</h3>
               </div>
 
             <div class="card-body">
@@ -189,40 +268,103 @@ $permissions=json_decode($project_permissions);
                 <label for="">Residual Risk Treatment</label>
          <select name="residual_risk_treatment" class="form-control" id="residual_risk_treatment">
             <option value="">Select</option>
-            <option value="retain and accept risk" {{old('residual_risk_treatment',$treatmentData->residual_risk_treatment)=='retain and accept risk'?'selected':''}}>Retain and Accept Risk</option>
-            <option value="share risk" {{old('residual_risk_treatment',$treatmentData->residual_risk_treatment)=='share risk'?'selected':''}}>
+            <option value="retain and accept risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment)=='retain and accept risk'?'selected':''}}>Retain and Accept Risk</option>
+            <option value="share risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment)=='share risk'?'selected':''}}>
                 Share Risk</option>
-            <option value="avoid risk" {{old('residual_risk_treatment',$treatmentData->residual_risk_treatment)=='avoid risk'?'selected':''}}>Avoid Risk</option>
-            <option value="modify risk"  {{old('residual_risk_treatment',$treatmentData->residual_risk_treatment)=='modify risk'?'selected':''}}>Modify Risk</option>
+            <option value="avoid risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment)=='avoid risk'?'selected':''}}>Avoid Risk</option>
+            <option value="modify risk"  {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment)=='modify risk'?'selected':''}}>Modify Risk</option>
          </select>
          @if($errors->has('residual_risk_treatment'))
          <div class="text-danger">{{ $errors->first('residual_risk_treatment') }}</div>
      @endif
               </div>
 
+{{--
+        <div class="form-group mt-4" id="additional-fields" style="{{ $after_risk_treatment->residual_risk_treatment === 'modify risk'|| $after_risk_treatment->residual_risk_treatment==="avoid risk" || $after_risk_treatment->residual_risk_treatment==="share risk" ? 'display: block;' : 'display: none;' }}"> --}}
+            <div class="form-group mt-4" id="additional-fields" style="{{ in_array($after_risk_treatment->residual_risk_treatment, ['modify risk', 'avoid risk', 'share risk']) ? 'display: block;' : 'display: none;' }}">
 
-        <div class="form-group mt-4" id="additional-fields" style="{{ $treatmentData->residual_risk_treatment === 'modify risk' ? 'display: block;' : 'display: none;' }}">
              <label for="">Applicability</label>
              <select name="applicability" class="form-select">
-                <option value='yes' {{ old('applicability',$treatmentData->applicability) == "yes"? 'selected' : '' }}>Yes</option>
-                <option value='no' {{ old('applicability',$treatmentData->applicability) == "no"? 'selected' : '' }}>No</option>
+                <option value='yes' {{ old('applicability',$after_risk_treatment->applicability) == "yes"? 'selected' : '' }}>Yes</option>
+                <option value='no' {{ old('applicability',$after_risk_treatment->applicability) == "no"? 'selected' : '' }}>No</option>
             </select>
 
             <label for="">Control Compliance</label>
-            <input type="number" name="control_compliance" oninput="validateInput(this)" class="form-control" min=0 max=100 data-control-id="{{$treatmentData->control_num}}" value="{{old('control_compliance',$treatmentData->control_compliance)}}">
+            <input type="number" name="control_compliance" oninput="validateInput(this)" class="form-control" min=0 max=100 data-control-id="{{$after_risk_treatment->control_num}}" value="{{old('control_compliance',$after_risk_treatment->control_compliance)}}">
 
             <label for="">Vulnerability</label>
-            <input type="number" name="vulnerability" class="form-control" data-control-id="{{$treatmentData->control_num}}" readonly value="{{old('vulnerability',$treatmentData->vulnerability)}}">
+            <input type="number" name="vulnerability" class="form-control" data-control-id="{{$after_risk_treatment->control_num}}" readonly value="{{old('vulnerability',$after_risk_treatment->vulnerability)}}">
 
             <label for="">Threat</label>
-            <input type="number" name="threat" class="form-control" min=0 max=100 data-control-id="{{$treatmentData->control_num}}" value="{{old('threat',$treatmentData->threat)}}">
+            <input type="number" name="threat" class="form-control" min=0 max=100 data-control-id="{{$after_risk_treatment->control_num}}" value="{{old('threat',$after_risk_treatment->threat)}}">
 
             <label for="">Risk Level</label>
-            <input type="number" name="risk_level" class="form-control" data-control-id="{{$treatmentData->control_num}}" value="{{old('risk_level',$treatmentData->risk_level)}}" readonly>
+            <input type="number" name="risk_level" class="form-control" data-control-id="{{$after_risk_treatment->control_num}}" value="{{old('risk_level',$after_risk_treatment->risk_level)}}" readonly>
 
 
               </div>
 
+              <div class="form-group mt-4" id="additional-fields2"
+              style="{{$after_risk_treatment->residual_risk_treatment=="retain and accept risk" ? 'display: block;' : 'display: none;' }}">
+
+              <label for="">Justification for Risk Acceptance</label>
+            <input type="text" name="acceptance_justification" class="form-control"  value="{{old('acceptance_justification',$after_risk_treatment->acceptance_justification)}}">
+            @if($errors->has('acceptance_justification'))
+            <div class="text-danger">{{ $errors->first('acceptance_justification') }}</div>
+        @endif
+
+
+            <div class="form-group mt-4">
+             <label for=""> Acceptance Target Date</label>
+                <input type="date" name="acceptance_target_date" value="{{old('acceptance_target_date',$after_risk_treatment->acceptance_target_date)}}">
+                    @if($errors->has('acceptance_target_date'))
+                    <div class="text-danger">{{ $errors->first('acceptance_target_date') }}</div>
+                @endif
+            </div>
+
+            <div class="form-group mt-4">
+                <label for="">Actual Acceptance Date</label>
+                   <input type="date" name="acceptance_actual_date" value="{{old('acceptance_actual_date',$after_risk_treatment->acceptance_actual_date)}}">
+                       @if($errors->has('acceptance_actual_date'))
+                       <div class="text-danger">{{ $errors->first('acceptance_actual_date') }}</div>
+                   @endif
+               </div>
+
+
+               <div class="form-group mt-4">
+                <label for=""> Proposed Responsibility for Acceptance</label>
+                <select class="boxstyling form-select" name="acceptance_proposed_responsibility">
+                    <option value="">Select User</option>
+                     @foreach ($users as $user)
+     <option value="{{$user->id}}" {{ old('acceptance_proposed_responsibility',$after_risk_treatment->acceptance_proposed_responsibility) == $user->id ? 'selected' : '' }}>
+             {{$user->first_name}} {{$user->last_name}}</option>
+                           @endforeach
+                    </select>
+                    @if($errors->has('acceptance_proposed_responsibility'))
+                    <div class="text-danger">{{ $errors->first('acceptance_proposed_responsibility') }}</div>
+                @endif
+              </div>
+
+              <div class="form-group mt-4">
+                <label for=""> Accepted By</label>
+                <select class="boxstyling form-select" name="accepted_by">
+                    <option value="">Select User</option>
+                     @foreach ($users as $user)
+     <option value="{{$user->id}}" {{ old('accepted_by',$after_risk_treatment->accepted_by) == $user->id ? 'selected' : '' }}>
+             {{$user->first_name}} {{$user->last_name}}</option>
+                           @endforeach
+                    </select>
+                    @if($errors->has('accepted_by'))
+                    <div class="text-danger">{{ $errors->first('accepted_by') }}</div>
+                @endif
+              </div>
+
+
+
+
+
+
+            </div>
 
 
 
@@ -248,11 +390,7 @@ $permissions=json_decode($project_permissions);
 
               {{-- <div class="form-group mt-4">
                 <label for=""> Treatment Completion Date</label>
-                <input type="date" name="treatment_comp_date" value="{{old('treatment_comp_date',$treatmentData->treatment_comp_date)}}">
-                    @if($errors->has('treatment_comp_date'))
-                    <div class="text-danger">{{ $errors->first('treatment_comp_date') }}</div>
-                @endif
-              </div> --}}
+                <input type="date" name="treatment_comp_date" value="{{old('treatment_comp_date',
 
 
 
@@ -285,6 +423,12 @@ $permissions=json_decode($project_permissions);
 
 
     </div>
+    <div class="col-md-6">
+        @if($after_risk_treatment->applicability=="yes")
+<a href="/risk_treatment_edit_action_plan_form/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" class="btn my_bg_color text-white fw-bold">Create or edit Action plan</a>
+@endif
+
+      </div>
 </div>
 
 
@@ -298,7 +442,7 @@ $permissions=json_decode($project_permissions);
 <script>
     $(document).ready(function() {
         $('#residual_risk_treatment').change(function() {
-            if ($(this).val() === 'modify risk') {
+            if ($(this).val() == 'modify risk' ||$(this).val() == 'avoid risk' ||$(this).val() == 'share risk' ) {
                 $('#additional-fields').show();
             } else {
                 $('#additional-fields').hide();
@@ -306,12 +450,29 @@ $permissions=json_decode($project_permissions);
         });
 
         // Set the correct display state based on the dropdown's initial value
-        if ($('#residual_risk_treatment').val() === 'modify risk') {
+        if ($('#residual_risk_treatment').val() == 'modify risk' ||$('#residual_risk_treatment').val() == 'avoid risk' ||$('#residual_risk_treatment').val()== 'share risk' ) {
             $('#additional-fields').show();
         } else {
             $('#additional-fields').hide();
         }
+        $('#residual_risk_treatment').change(function() {
+            if ($(this).val() == 'retain and accept risk' ) {
+                $('#additional-fields2').show();
+            } else {
+                $('#additional-fields2').hide();
+            }
+        });
+
+        // Set the correct display state based on the dropdown's initial value
+        if ($('#residual_risk_treatment').val() == 'retain and accept risk'  ) {
+            $('#additional-fields2').show();
+        } else {
+            $('#additional-fields2').hide();
+        }
     });
+
+
+
 </script>
 
 <script>

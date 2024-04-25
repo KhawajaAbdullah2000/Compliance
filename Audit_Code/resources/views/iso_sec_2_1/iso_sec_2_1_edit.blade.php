@@ -10,8 +10,36 @@ $permissions=json_decode($project_permissions);
 
 <div class="container">
 
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="fw-bold">Project Name:</td>
+                        <td> <a href="/iso_sections/{{$project->project_id}}/{{auth()->user()->id}}"> {{$project->project_name}}
+                        </a>
+                        </td>
+                        <td class="fw-bold">Your Email:</td>
+                        <td>{{auth()->user()->email}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Type:</td>
+                        <td>{{$project->type}}</td>
+                        <td class="fw-bold">Organization Name:</td>
+                        <td>{{auth()->user()->organization->name}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Status:</td>
+                        <td>{{$project->status}}</td>
+                        <td class="fw-bold">Sub-Organization:</td>
+                        <td>{{auth()->user()->organization->sub_org}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <h3 class="text-center fw-bold mb-3">Project name: {{$project_name}} Section2.1 Scope of Assets and Services</h3>
+
     @if($errors->has('applicability'))
     <div class="text-danger">{{ $errors->first('applicability') }}</div>
 @endif
@@ -24,14 +52,23 @@ $permissions=json_decode($project_permissions);
 
         <div class="card mt-2">
             <div class="card-header my_bg_color text-white text-center">
-                <h3>Edit Asset {{$data->name}}</h3>
+                <h3>View/Edit Service or Asset</h3>
               </div>
             <div class="card-body">
 
         <form action="/iso_sec_2_1_submit_edit/{{$data->assessment_id}}/{{$data->project_id}}/{{auth()->user()->id}}" method="post">
             @csrf
             @method('PUT')
-            <div class="form-group">
+
+            <div class="form-group mt-4">
+                <label for="">Service Name</label>
+                <input type="text" name="s_name" class="form-control" value="{{old('s_name',$data->s_name)}}"></input>
+                @if($errors->has('s_name'))
+                <div class="text-danger">{{ $errors->first('s_name') }}</div>
+            @endif
+              </div>
+
+            <div class="form-group mt-4">
                 <label for="">Asset Group Name:</label>
                     <input type="text" name="g_name" class="form-control" value="{{old('g_name',$data->g_name)}}"></input>
                 @if($errors->has('g_name'))
@@ -81,17 +118,11 @@ $permissions=json_decode($project_permissions);
             @endif
               </div>
 
-              <div class="form-group mt-4">
-                <label for="">Service Name for which this is an underlying asset:</label>
-                <input type="text" name="s_name" class="form-control" value="{{old('s_name',$data->s_name)}}"></input>
-                @if($errors->has('s_name'))
-                <div class="text-danger">{{ $errors->first('s_name') }}</div>
-            @endif
-              </div>
+
 
 
               <div class="text-center">
-                <button type="submit" class="btn my_bg_color text-white btn-md mt-2">Submit</button>
+                <button type="submit" class="btn my_bg_color text-white btn-md mt-2">Save Changes</button>
               </div>
 
 

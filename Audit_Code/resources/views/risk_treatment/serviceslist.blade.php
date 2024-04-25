@@ -40,7 +40,7 @@ $permissions=json_decode($project_permissions);
             </table>
         </div>
     </div>
-    <h4 class="text-center fw-bold mb-3 mt-4">Undertake and information security risk Treatment on the Services and/or Assets</h4>
+    <h4 class="text-center fw-bold mb-3 mt-4">Undertake information security risk treatment on the Services and/or Assets</h4>
 
 
 
@@ -63,7 +63,7 @@ $permissions=json_decode($project_permissions);
             <th onclick="sortTable(6)">Service Name for which this is an underlying asset </th>
             {{-- <th>Risk Assessment</th> --}}
             <th>Risk Treatment</th>
-            <th>Services/Assets</th>
+
 
           </tr>
         </thead>
@@ -94,26 +94,7 @@ $permissions=json_decode($project_permissions);
 
           </td>
 
-            <td>
-            @if(in_array('Data Inputter',$permissions))
 
-             <a href="/iso_sec_2_1_edit/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">
-                <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
-            </a>
-
-            <a href="/iso_sec_2_1_delete/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">
-                <i class="fas fa-trash-alt fa-lg" style="color: #e60000;"></i>
-            </a>
-        @else
-        <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
-
-        @endif
-
-            <a href="/iso_sec_2_1_details/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">
-                <i class="fas fa-eye fa-lg" style="color: #00d123;"></i>
-            </a>
-
-                </td>
 
 
 

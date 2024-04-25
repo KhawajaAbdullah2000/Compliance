@@ -289,11 +289,15 @@ class IsoSec2_1 extends Controller
                     if ($checkpermission->type_id == 4) {
                         $data = Db::table('iso_sec_2_1')->where('assessment_id', $assessment_id)->where('project_id', $proj_id)->first();
 
+                        $project=Project::join('project_types','projects.project_type','project_types.id')
+                        ->where('projects.project_id',$proj_id)->first();
+
                         return view('iso_sec_2_1.iso_sec_2_1_edit', [
                             'data' => $data,
                             'project_id' => $checkpermission->project_id,
                             'project_name' => $checkpermission->project_name,
-                            'project_permissions' => $checkpermission->project_permissions
+                            'project_permissions' => $checkpermission->project_permissions,
+                            'project'=>$project
                         ]);
                     }
                 }

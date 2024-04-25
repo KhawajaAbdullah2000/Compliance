@@ -40,7 +40,7 @@ $permissions=json_decode($project_permissions);
             </table>
         </div>
     </div>
-    <h4 class="text-center fw-bold mb-3 mt-4">Undertake and information security risk assessment on the Services and/or Assets</h4>
+    <h4 class="text-center fw-bold mb-3 mt-4">Undertake information security risk assessment on the Services and/or Assets</h4>
 
 
 {{--

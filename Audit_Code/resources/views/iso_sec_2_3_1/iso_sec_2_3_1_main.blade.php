@@ -84,12 +84,17 @@ $permissions=json_decode($project_permissions);
     @csrf
 
 
+    @if(in_array('Data Inputter',$permissions))
+    <div class="float-end mb-4">
+      <button type="submit" class="btn my_bg_color text-white btn-lg mt-5"  id="submitForm">Save Changes</button>
+    </div>
+    @endif
+    </table>
+
     <div class="row">
 
 
     <div class="col-lg-6">
-
-
 
     <div class="fw-bold">
         <label for="">Select Asset value</label>
@@ -861,13 +866,13 @@ $permissions=json_decode($project_permissions);
 
 
             </tbody>
-
+{{--
             @if(in_array('Data Inputter',$permissions))
           <div class="float-end mb-4">
             <button type="submit" class="btn my_bg_color text-white btn-lg mt-5"  id="submitForm">Save and stay on same page</button>
           </div>
           @endif
-          </table>
+          </table> --}}
 
     </div>
 

@@ -44,31 +44,53 @@
         </div>
 
 
-        <h3 class="fw-bold">Information Security Risk Treatment </h3>
 
-        <p >
+        <div class="row">
 
-            Asset Service Name: {{$assetData->s_name}}
-            <br>
+            <div class="col-lg-6">
 
-            @isset($assetData->g_name)
-                Asset Group Name: {{ $assetData->g_name }}
-            @endisset
 
-            @isset($assetData->name)
-                <br>
-                Asset Name: {{ $assetData->name }}
-            @endisset
+        <table style="width: 50%;" class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td class="fw-bold" >Service Name:</td>
+                    <td>  {{$assetData->s_name}}</td>
+                </tr>
 
-            @isset($assetData->c_name)
-                <br>
-                Asset Component Name: {{ $assetData->c_name }}
-            @endisset
-
+                @isset($assetData->g_name)
+                <tr>
+                <td class="fw-bold">Asset Group Name:</td>
+                <td>  {{$assetData->g_name}}</td>
+                 </tr>
+                @endisset
 
 
 
-        </p>
+                <tr>
+                @isset($assetData->name)
+                <td class="fw-bold">Asset Name:</td>
+                <td>  {{$assetData->name}}</td>
+                </tr>
+                @endisset
+
+
+                @isset($assetData->c_name)
+                <tr>
+                <td class="fw-bold">Asset Component Name:</td>
+                <td>  {{$assetData->c_name}}</td>
+                 </tr>
+                @endisset
+
+
+
+
+
+            </tbody>
+        </table>
+
+        </div>
+
+        </div>
 
 
         <h2 class="text-center fw-bold">Risk Level before Risk Treatment</h2>
