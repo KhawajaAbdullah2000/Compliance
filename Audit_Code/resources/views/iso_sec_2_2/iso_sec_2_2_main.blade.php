@@ -10,12 +10,52 @@ $permissions=json_decode($project_permissions);
 @endphp
 
 <div class="container">
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="fw-bold">Project Name:</td>
+                        <td> <a href="/iso_sections/{{$project->project_id}}/{{auth()->user()->id}}"> {{$project->project_name}}
+                        </a>
+                        </td>
+                        <td class="fw-bold">Your Email:</td>
+                        <td>{{auth()->user()->email}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Type:</td>
+                        <td>{{$project->type}}</td>
+                        <td class="fw-bold">Organization Name:</td>
+                        <td>{{auth()->user()->organization->name}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Status:</td>
+                        <td>{{$project->status}}</td>
+                        <td class="fw-bold">Sub-Organization:</td>
+                        <td>{{auth()->user()->organization->sub_org}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-
-    <h1 class="text-center"> {{$project_name}} </h1>
 
       <h2 class="text-center fw-bold mt-4 mb-4">
-        {{$title}}- Context Of The Organization
+        @if($title==4)
+        Context Of the Organization
+        @elseif ($title==5)
+        Leadership
+        @elseif ($title==6)
+        Planning
+        @elseif ($title==7)
+        Support
+        @elseif ($title==8)
+        Operation
+        @elseif ($title==9)
+       Performance Evaluation
+       @elseif ($title==10)
+     Improvement
+        @endif
     </h2>
 
 

@@ -35,7 +35,7 @@ class User extends Authenticatable implements CanResetPassword
         '2FA',
         'status',
         'privilege_id',
-        
+
 
 
     ];
@@ -59,4 +59,9 @@ class User extends Authenticatable implements CanResetPassword
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class, 'org_id', 'org_id');
+    }
 }

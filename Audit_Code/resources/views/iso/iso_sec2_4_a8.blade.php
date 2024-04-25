@@ -14,7 +14,7 @@ $permissions=json_decode($project_permissions);
 <div class="container">
 
 
-    <h3 class="text-center fw-bold mb-3">Project name: {{$project_name}} Section2.4 A:8 Technological Controls</h3>
+    <h3 class="text-center fw-bold mb-3"> A:8 Technological Controls</h3>
 
     <p class="text-center fw-bold">
 
@@ -32,8 +32,6 @@ $permissions=json_decode($project_permissions);
         <br>
         Asset Component Name: {{$assetData->c_name}}
         @endisset
-
-
 
 
 

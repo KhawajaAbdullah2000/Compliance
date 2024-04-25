@@ -36,11 +36,15 @@ class IsoSec2_4_A5 extends Controller
                         'users.id'
                     )
                         ->where('project_id', $proj_id)->get();
+
+                $project=Project::join('project_types','projects.project_type','project_types.id')
+                        ->where('projects.project_id',$proj_id)->first();
                     return view('iso.iso_sec_2_4_assets_main', [
                         'data' => $data,
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
-                        'project_permissions' => $checkpermission->project_permissions
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project'=>$project
                     ]);
                 }
             }
@@ -80,6 +84,8 @@ class IsoSec2_4_A5 extends Controller
                         //    $results=Db::table('iso_sec2_4_a5')->join('users','iso_sec2_4_a5.last_edited_by','users.id')
                         //    ->where('project_id',$proj_id)->get();
 
+                        $project=Project::join('project_types','projects.project_type','project_types.id')
+                        ->where('projects.project_id',$proj_id)->first();
                            return view('iso.iso_sec2_4_a5',
                            ['project_id'=>$proj_id,
                            'project_name'=>$checkpermission->project_name,
@@ -87,7 +93,8 @@ class IsoSec2_4_A5 extends Controller
                            'results'=>$results,
                            'data'=>$rows,
                            'results'=>$results,
-                           'assetData'=>$assetData
+                           'assetData'=>$assetData,
+                           'project'=>$project
                            ]
                         );
 

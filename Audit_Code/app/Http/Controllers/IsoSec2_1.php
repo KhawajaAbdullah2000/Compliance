@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Project;
+
 
 
 class IsoSec2_1 extends Controller
@@ -33,11 +35,18 @@ class IsoSec2_1 extends Controller
                         'users.id'
                     )
                         ->where('project_id', $proj_id)->get();
+
+                 $project=Project::join('project_types','projects.project_type','project_types.id')
+                        ->where('projects.project_id',$proj_id)->first();
+
+
+
                     return view('iso_sec_2_1.iso_sec_2_1_main', [
                         'data' => $data,
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
-                        'project_permissions' => $checkpermission->project_permissions
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project'=>$project
                     ]);
                 }
             }
@@ -68,11 +77,59 @@ class IsoSec2_1 extends Controller
                         'users.id'
                     )
                         ->where('project_id', $proj_id)->get();
+
+
+                 $project=Project::join('project_types','projects.project_type','project_types.id')
+                 ->where('projects.project_id',$proj_id)->first();
+
                     return view('iso_sec_2_1.iso_sec_2_3_main', [
                         'data' => $data,
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
-                        'project_permissions' => $checkpermission->project_permissions
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project'=>$project
+                    ]);
+                }
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+    }
+
+
+    public function risk_treatment($proj_id, $user_id)
+    {
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+
+                if ($checkpermission->type_id == 4) {
+                    $data = DB::table('iso_sec_2_1')->join(
+                        'users',
+                        'iso_sec_2_1.last_edited_by',
+                        'users.id'
+                    )
+                        ->where('project_id', $proj_id)->get();
+
+
+                 $project=Project::join('project_types','projects.project_type','project_types.id')
+                 ->where('projects.project_id',$proj_id)->first();
+
+                    return view('risk_treatment.serviceslist', [
+                        'data' => $data,
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project'=>$project
                     ]);
                 }
             }
@@ -160,10 +217,15 @@ class IsoSec2_1 extends Controller
                 if (in_array('Data Inputter', $permissions)) {
                     if ($checkpermission->type_id == 4) {
 
+                        $project=Project::join('project_types','projects.project_type','project_types.id')
+                        ->where('projects.project_id',$proj_id)->first();
+
+
                         return view('iso_sec_2_1.iso_sec_2_1_new', [
                             'project_id' => $checkpermission->project_id,
                             'project_name' => $checkpermission->project_name,
-                            'project_permissions' => $checkpermission->project_permissions
+                            'project_permissions' => $checkpermission->project_permissions,
+                            'project'=>$project
                         ]);
                     }
                 }
@@ -242,6 +304,7 @@ class IsoSec2_1 extends Controller
 
     public function iso_sec_2_1_submit_edit(Request $req, $assessment_id, $proj_id, $user_id)
     {
+
         $req->validate(
             [
                'g_name' => 'required_without_all:name,c_name',
@@ -394,53 +457,79 @@ class IsoSec2_1 extends Controller
                                 $c_name[]=null;
                             }
 
+                            if($row[0]==null && $row[1]==null && $row[2]==null){
+                                $error="Atleast one from Component Name, Asset Name,And group Name must be available for each row";
+                                break;
+                            }
 
                             if($row[3]!=null){
                                 $owner_dept[]=$row[3];
                             }else{
                                 $error="Owner dept of an asset Missing";
+                                break;
                             }
 
                             if($row[4]!=null){
                                 $physical_loc[]=$row[4];
                             }else{
                                 $error="Physical location of an asset Missing";
+                                break;
                             }
 
                             if($row[5]!=null){
                                 $logical_loc[]=$row[5];
                             }else{
                                 $error="Logical Location of an asset Missing";
+                                break;
                             }
 
                             if($row[6]!=null){
                                 $s_name[]=$row[6];
                             }else{
                                 $error="Service Name of an asset Missing";
+                                break;
                             }
 
+
                         }
+
+
+
 
                         if($error!=null){
                             return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                             ->with('error', $error);
                         }
 
+                        try {
+                            for($i=0;$i<count($rows);$i++){
+                                DB::table('iso_sec_2_1')->insert([
+                                    'project_id'=>$proj_id,
+                                    'g_name'=>$g_name[$i],
+                                    'name'=>$name[$i],
+                                    'c_name'=>$c_name[$i],
+                                    'owner_dept'=>$owner_dept[$i],
+                                    'physical_loc'=>$physical_loc[$i],
+                                    'logical_loc'=>$logical_loc[$i],
+                                    's_name'=>$s_name[$i],
+                                    'last_edited_by'=>$user_id,
+                                    'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+                                ]);
+                            }
 
-                        for($i=0;$i<count($rows);$i++){
-                            DB::table('iso_sec_2_1')->insert([
-                                'project_id'=>$proj_id,
-                                'g_name'=>$g_name[$i],
-                                'name'=>$name[$i],
-                                'c_name'=>$c_name[$i],
-                                'owner_dept'=>$owner_dept[$i],
-                                'physical_loc'=>$physical_loc[$i],
-                                'logical_loc'=>$logical_loc[$i],
-                                's_name'=>$s_name[$i],
-                                'last_edited_by'=>$user_id,
-                                'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
-                            ]);
+                        } catch (\Exception $e) {
+
+                            if($e->getCode()==23000){
+                                $error="Each row must contain a unique combination of Asset Group Name,Name, and Component Name.All 3 cannot be same for multiple rows";
+                            }else{
+                                $error=$e->getCode();
+                            }
+
+
+                            return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
+                        ->with('error', $error);
                         }
+
 
                         return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                         ->with('success', 'Assets Uploaded Successfully');

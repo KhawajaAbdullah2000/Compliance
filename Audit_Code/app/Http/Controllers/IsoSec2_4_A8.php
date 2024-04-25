@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class IsoSec2_4_A8 extends Controller
@@ -33,11 +33,16 @@ class IsoSec2_4_A8 extends Controller
                         'users.id'
                     )
                         ->where('project_id', $proj_id)->get();
+
+
+                    $project=Project::join('project_types','projects.project_type','project_types.id')
+                    ->where('projects.project_id',$proj_id)->first();
                     return view('iso.iso_sec_2_7_assets_main', [
                         'data' => $data,
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
-                        'project_permissions' => $checkpermission->project_permissions
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project'=>$project
                     ]);
                 }
             }
@@ -74,7 +79,8 @@ class IsoSec2_4_A8 extends Controller
 
                     $assetData = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
 
-
+                    $project=Project::join('project_types','projects.project_type','project_types.id')
+                    ->where('projects.project_id',$proj_id)->first();
 
                     return view(
                         'iso.iso_sec2_4_a8',
@@ -85,7 +91,8 @@ class IsoSec2_4_A8 extends Controller
                             'results' => $results,
                             'data' => $rows,
                             'results' => $results,
-                            'assetData' => $assetData
+                            'assetData' => $assetData,
+                            'project'=>$project
                         ]
                     );
                 }

@@ -93,6 +93,12 @@ Route::middleware(['auth','is_user','permission:Project Creator'])->group(functi
 route::get('create_project/{id}',[EndUserController::class,'create_project']);
 route::post('create_project/{id}',[EndUserController::class,'submit_create_project']);
 route::get('/projects/{user_id}',[EndUserController::class,'projects'])->name('projects');
+
+route::get("/edit_project/{id}",[EndUserController::class,'editProject'])->name('edit_project');
+route::get("/delete_user/{proj_id}/{user_id}",[EndUserController::class,'deleteUser'])->name('delete_user');
+
+
+
 route::get('edit_my_project/{id}',[EndUserController::class,'edit_my_project']);
 route::put('/edit_project_submit/{id}',[EndUserController::class,'edit_project_submit']);
 route::get('assigned_endusers/{id}',[EndUserController::class,'assigned_endusers'])->name('assigned_endusers');
@@ -168,6 +174,8 @@ route::put('submit_edit_sec2_4_a8/{control_num}/{asset_id}/{proj_id}/{user_id}',
 //ISO sec2.1
 route::get('iso_section2_1/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_section2_1'])->name('iso_section2_1');
 route::get('iso_section2_3/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_section2_3'])->name('iso_section2_3');
+route::get('risk_treatment/{proj_id}/{user_id}',[IsoSec2_1::class,'risk_treatment'])->name('risk_treatment');
+
 route::post('new_iso_sec_2_1/{proj_id}/{user_id}',[IsoSec2_1::class,'new_iso_sec_2_1']);
 route::get('iso_sec_2_1_new/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_new']);
 route::get('/iso_sec_2_1_details/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_details']);
@@ -186,13 +194,20 @@ route::get('iso_sec_2_3/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3'])->
 //ISosec2.3.1
 route::get('iso_sec_2_3_1/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_1'])->name('iso_sec_2_3_1');
 route::Post('iso_sec2_3_1_initial_add/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec2_3_1_initial_add']);
+
+//editing risk assesment view
+route::get("edit_risk_assessment/{proj_id}/{user_id}/{asset_id}/{control_num}",[IsoSec2_3_1::class,'edit_risk_assessment']);
+route::put("edit_risk_assessment/{proj_id}/{user_id}/{asset_id}/{control_num}",[IsoSec2_3_1::class,'edit_risk_assessment_update']);
+
 //route::get('iso_sec_2_3_1_risk/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_1_risk'])->name('iso_sec_2_3_1_risk');
 route::get('iso_sec2_3_1_risk_treat_controls/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec2_3_1_risk_treat_controls'])->name('iso_sec2_3_1_risk_treat_controls');
 //for compoenet select only
-route::get('iso_sec_2_3_2_risk_treat_form/{control_num}/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_2_risk_treat_form']);
+
+
+route::get('iso_sec_2_3_2_risk_treat_form/{control_num}/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_2_risk_treat_form'])->name('iso_sec_2_3_2_risk_treat_form');
 route::put('iso_sec_2_3_2_treat_form_submit/{asset_id}/{control_num}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_2_treat_form_submit']);
-
-
+route::put('iso_sec_2_3_2_treat_form1_submit/{asset_id}/{control_num}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_2_treat_form1_submit']);
+route::get('risk_treatment_edit_action_plan_form/{asset_id}/{control_num}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'risk_treatment_edit_action_plan_form'])->name('risk_treatment_edit_action_plan_form');
 
 route::post('iso_sec2_3_1_new/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec2_3_1_new']);
 

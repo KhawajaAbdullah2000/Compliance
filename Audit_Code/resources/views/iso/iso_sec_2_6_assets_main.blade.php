@@ -13,13 +13,39 @@ $permissions=json_decode($project_permissions);
 <div class="container">
 
 
-    <h3 class="text-center fw-bold mb-3">Project name: {{$project_name}} Scope of Assets and Services</h3>
-
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="fw-bold">Project Name:</td>
+                        <td> <a href="/iso_sections/{{$project->project_id}}/{{auth()->user()->id}}"> {{$project->project_name}}
+                        </a>
+                        </td>
+                        <td class="fw-bold">Your Email:</td>
+                        <td>{{auth()->user()->email}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Type:</td>
+                        <td>{{$project->type}}</td>
+                        <td class="fw-bold">Organization Name:</td>
+                        <td>{{auth()->user()->organization->name}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Status:</td>
+                        <td>{{$project->status}}</td>
+                        <td class="fw-bold">Sub-Organization:</td>
+                        <td>{{auth()->user()->organization->sub_org}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 
 @if($data->count()==0)
 
-<h1>Add assets first in section2.1</h1>
+<h1>Please Add an Asset first</h1>
 
 
 @endif
@@ -28,7 +54,7 @@ $permissions=json_decode($project_permissions);
 
 @if($data->count()>0)
 
-    <h3 class="text-center">Sec2.4 A7: Physical Controls</h3>
+    <h3 class="text-center"> A7: Physical Controls</h3>
 
     <table class="table table-responsive table-primary table-striped mt-4">
         <thead class="thead-dark">
@@ -42,7 +68,6 @@ $permissions=json_decode($project_permissions);
             <th>Service Name for which this is an underlying asset </th>
 <th>Organizational Controls</th>
 
-            <th>Actions</th>
             <th>Details</th>
           </tr>
         </thead>
@@ -65,21 +90,7 @@ Physical Controls</p></a>
                 </td>
 
 
-            <td>
-            @if(in_array('Data Inputter',$permissions))
 
-             <a href="/iso_sec_2_1_edit/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">
-                <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
-            </a>
-
-            <a href="/iso_sec_2_1_delete/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">
-                <i class="fas fa-trash-alt fa-lg" style="color: #e60000;"></i>
-            </a>
-        @else
-        <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
-
-        @endif
-                </td>
 
                 <td>
                 <a href="/iso_sec_2_1_details/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">
