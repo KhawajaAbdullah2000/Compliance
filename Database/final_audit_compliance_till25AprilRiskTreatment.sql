@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 24, 2024 at 05:11 PM
+-- Generation Time: Apr 25, 2024 at 04:28 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -36,6 +36,47 @@ CREATE TABLE `failed_jobs` (
   `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `iso_risk_treatment`
+--
+
+CREATE TABLE `iso_risk_treatment` (
+  `assessment_id` int(11) NOT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `asset_id` int(11) DEFAULT NULL,
+  `control_num` varchar(100) DEFAULT NULL,
+  `applicability` varchar(16) NOT NULL,
+  `asset_value` int(11) NOT NULL,
+  `control_compliance` int(11) DEFAULT NULL,
+  `vulnerability` int(11) DEFAULT NULL,
+  `threat` int(11) DEFAULT NULL,
+  `risk_level` decimal(11,5) DEFAULT NULL,
+  `residual_risk_treatment` varchar(100) DEFAULT NULL,
+  `treatment_action` varchar(1000) DEFAULT NULL,
+  `treatment_target_date` date DEFAULT NULL,
+  `treatment_comp_date` date DEFAULT NULL,
+  `responsibility_for_treatment` bigint(20) UNSIGNED DEFAULT NULL,
+  `acceptance_justification` varchar(300) DEFAULT NULL,
+  `acceptance_target_date` date DEFAULT NULL,
+  `acceptance_actual_date` date DEFAULT NULL,
+  `acceptance_proposed_responsibility` bigint(20) UNSIGNED DEFAULT NULL,
+  `accepted_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `last_edited_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `iso_risk_treatment`
+--
+
+INSERT INTO `iso_risk_treatment` (`assessment_id`, `project_id`, `asset_id`, `control_num`, `applicability`, `asset_value`, `control_compliance`, `vulnerability`, `threat`, `risk_level`, `residual_risk_treatment`, `treatment_action`, `treatment_target_date`, `treatment_comp_date`, `responsibility_for_treatment`, `acceptance_justification`, `acceptance_target_date`, `acceptance_actual_date`, `acceptance_proposed_responsibility`, `accepted_by`, `last_edited_by`, `last_edited_at`) VALUES
+(1, 27, 69, '5.1', 'yes', 1, 90, 10, 33, '0.03300', 'retain and accept risk', NULL, NULL, NULL, NULL, 'justificaiton1', '2024-04-27', '2024-04-26', 94, 95, 94, '2024-04-25 18:41:12'),
+(2, 27, 69, '5.2', 'yes', 1, 66, 34, 88, '0.29920', 'avoid risk', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 18:44:36'),
+(3, 27, 58, '5.3', 'yes', 10, 95, 5, 55, '0.27500', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 18:50:45'),
+(4, 27, 58, '6.2', 'yes', 10, 55, 45, 66, '2.97000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 19:25:43');
 
 -- --------------------------------------------------------
 
@@ -147,12 +188,14 @@ INSERT INTO `iso_sec_2_1` (`assessment_id`, `project_id`, `g_name`, `name`, `c_n
 (37, 24, 'asset_g1', 'asset1', 'asset_c1', 'asset_owner1', 'asset_physical1', 'asset_logical1', 'asset_service1', 55, '2024-03-22 19:24:51'),
 (39, 25, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetPhy1', 'AssetLog1', 'AssetSer1', 55, '2024-04-19 17:15:25'),
 (41, 26, 'AssetG1', 'Asset1', 'Asset-C1', 'AssetO1', 'AssetPhy1', 'AssetLog1', 'AssetS1', 55, '2024-04-19 19:41:38'),
-(58, 27, 'AssetG1', 'Asset1', 'AssetC1', 'Owner1', 'Physical1', 'Logical1', 'Service1', 95, '2024-04-24 19:29:07'),
+(58, 27, 'AssetG1', 'Asset1', 'AssetC1', 'Owner1', 'Physical1', 'Logical1', 'Service1', 94, '2024-04-25 18:48:56'),
 (59, 27, 'AssetG1', 'Asset1', 'AssetC3', 'Owner3', 'Physical3', 'Logical3', 'Service3', 95, '2024-04-24 19:29:07'),
 (60, 27, 'AssetG1', 'Asset1', 'AssetC2', 'Owner4', 'physical4', 'Logical4', 'Service4', 95, '2024-04-24 19:29:07'),
 (65, 28, 'AssetG1', 'Asset1', 'AssetC1', 'Owner1', 'Physical', 'Logical1', 'Service1', 94, '2024-04-24 19:42:29'),
 (66, 27, 'AssetG1', 'Asset1', 'AssetC4', 'Owner1', 'Physical', 'Logical1', 'Service1', 94, '2024-04-24 19:43:07'),
-(67, 27, 'AssetG1', 'Asset 6', 'AssetC1', 'asset_owner1', 'AssetPhy1', 'AssetLog1', 'Service1', 94, '2024-04-24 20:08:07');
+(67, 27, 'AssetG1', 'Asset 6', 'AssetC1', 'asset_owner1', 'AssetPhy1', 'AssetLog1', 'Service1', 94, '2024-04-24 20:08:07'),
+(68, 27, 'AssetG1', 'Asset7', 'AssetC1', 'AssetO1', 'AssetPhy1', 'AssetLog1', 'Service1', 94, '2024-04-25 16:09:53'),
+(69, 27, 'AssetG2', 'Asset1', 'AssetC1', 'AssetO1', 'AssetPhy1', 'AssetLog1', 'AssetS1', 94, '2024-04-25 16:54:17');
 
 -- --------------------------------------------------------
 
@@ -188,7 +231,8 @@ INSERT INTO `iso_sec_2_2` (`assessment_id`, `project_id`, `title_num`, `sub_req`
 (25, 20, 5, '5.1-a', 'yes', 'fdfddfdd', NULL, 55, '2023-12-13 16:44:12'),
 (26, 27, 5, '5.1-a', 'yes', NULL, NULL, 94, '2024-04-23 18:59:56'),
 (27, 27, 8, '8.1-a', 'no', 'comment1', '1713882401.pdf', 94, '2024-04-23 19:26:41'),
-(28, 27, 8, '8.1-c', 'yes', 'comment2', '1713882429.xlsx', 94, '2024-04-23 19:29:11');
+(28, 27, 8, '8.1-c', 'yes', 'comment2', '1713882429.xlsx', 94, '2024-04-23 19:29:11'),
+(29, 27, 4, '4.1-a', 'yes', 'comment3 comment 4', '1714040011.xlsx', 94, '2024-04-25 16:24:17');
 
 -- --------------------------------------------------------
 
@@ -377,7 +421,13 @@ INSERT INTO `iso_sec_2_3_1` (`assessment_id`, `project_id`, `asset_id`, `control
 (303, 27, 60, '5.3', 'yes', 1, 99, 1, 77, '0.00770', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-24 20:06:37'),
 (304, 27, 66, '5.1', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-24 20:07:30'),
 (305, 27, 67, '5.3', 'yes', 5, 66, 34, 66, '1.12200', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-24 20:08:22'),
-(306, 27, 67, '5.5', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-24 20:08:42');
+(306, 27, 67, '5.5', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-24 20:08:42'),
+(307, 27, 58, '5.1', 'no', 10, 0, 0, 0, '0.00000', 'share risk', NULL, NULL, NULL, NULL, 94, '2024-04-25 15:16:23'),
+(308, 27, 58, '5.2', 'yes', 10, 95, 5, 55, '0.27500', 'modify risk', 'Action 1', '2024-04-11', '2024-04-04', 94, 94, '2024-04-25 16:35:22'),
+(309, 27, 69, '5.1', 'yes', 1, 98, 2, 33, '0.00660', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 16:54:36'),
+(310, 27, 69, '5.2', 'no', 1, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 16:54:36'),
+(311, 27, 58, '5.3', 'yes', 10, 95, 5, 55, '0.27500', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 18:50:45'),
+(312, 27, 58, '6.2', 'yes', 10, 55, 45, 66, '2.97000', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 19:25:43');
 
 -- --------------------------------------------------------
 
@@ -2039,6 +2089,18 @@ ALTER TABLE `failed_jobs`
   ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
 
 --
+-- Indexes for table `iso_risk_treatment`
+--
+ALTER TABLE `iso_risk_treatment`
+  ADD PRIMARY KEY (`assessment_id`),
+  ADD UNIQUE KEY `asset_id_2` (`asset_id`,`control_num`),
+  ADD KEY `asset_id` (`asset_id`),
+  ADD KEY `last_edited_by` (`last_edited_by`),
+  ADD KEY `projid_sec2_3_1` (`project_id`),
+  ADD KEY `accepted_by` (`accepted_by`),
+  ADD KEY `acceptance_proposed_responsibility` (`acceptance_proposed_responsibility`);
+
+--
 -- Indexes for table `iso_sec2_4_a5`
 --
 ALTER TABLE `iso_sec2_4_a5`
@@ -2578,6 +2640,12 @@ ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `iso_risk_treatment`
+--
+ALTER TABLE `iso_risk_treatment`
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `iso_sec2_4_a5`
 --
 ALTER TABLE `iso_sec2_4_a5`
@@ -2605,13 +2673,13 @@ ALTER TABLE `iso_sec2_4_a8`
 -- AUTO_INCREMENT for table `iso_sec_2_1`
 --
 ALTER TABLE `iso_sec_2_1`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `iso_sec_2_2`
 --
 ALTER TABLE `iso_sec_2_2`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `iso_sec_2_3`
@@ -2623,7 +2691,7 @@ ALTER TABLE `iso_sec_2_3`
 -- AUTO_INCREMENT for table `iso_sec_2_3_1`
 --
 ALTER TABLE `iso_sec_2_3_1`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=307;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=313;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -2940,6 +3008,14 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `iso_risk_treatment`
+--
+ALTER TABLE `iso_risk_treatment`
+  ADD CONSTRAINT `acceptace_flk1` FOREIGN KEY (`acceptance_proposed_responsibility`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `acceptace_flk2` FOREIGN KEY (`accepted_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `acceptace_flk3` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `iso_sec2_4_a5`
