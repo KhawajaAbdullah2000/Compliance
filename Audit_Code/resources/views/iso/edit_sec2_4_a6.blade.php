@@ -6,7 +6,7 @@
 
 @php
 $permissions=json_decode($project_permissions);
-$headers=array('Control num','Title of COntrol','Descriptionof Control')
+$headers=array('Control num','Title of Control','Descriptionof Control')
 @endphp
 
 <div class="container">
