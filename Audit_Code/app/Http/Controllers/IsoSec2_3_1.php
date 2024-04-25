@@ -683,56 +683,57 @@ class IsoSec2_3_1 extends Controller
         }
     }
 
-    // public function iso_sec_2_3_2_treat_form_submit(Request $req,$asset_id,$control_num,$proj_id,$user_id){
-    //     //action plan
-    //     //is user selected component
-    //     $req->validate([
-    //         'treatment_action' => 'required',
-    //         'treatment_target_date' => 'required',
-    //         'treatment_comp_date' => 'required',
-    //         'responsibility_for_treatment' => 'required',
-    //     ]);
-    //     if ($user_id == auth()->user()->id) {
-    //         $checkpermission = Db::table('project_details')->select(
-    //             'project_types.id as type_id',
-    //             'project_details.project_code',
-    //             'project_details.project_permissions',
-    //             'projects.project_name',
-    //             'projects.project_id'
-    //         )
-    //             ->join('projects', 'project_details.project_code', 'projects.project_id')
-    //             ->join('project_types', 'projects.project_type', 'project_types.id')
-    //             ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-    //             ->first();
-    //         if ($checkpermission) {
-    //             $permissions = json_decode($checkpermission->project_permissions);
-    //             if (in_array('Data Inputter', $permissions)) {
-    //                 if ($checkpermission->type_id == 4) {
+    public function iso_sec_2_3_2_treat_form_submit(Request $req,$asset_id,$control_num,$proj_id,$user_id){
+        //action plan
+        //is user selected component
+        $req->validate([
+            'treatment_action' => 'required',
+            'treatment_target_date' => 'required',
+            'treatment_comp_date' => 'required',
+            'responsibility_for_treatment' => 'required',
+        ]);
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+                if (in_array('Data Inputter', $permissions)) {
+                    if ($checkpermission->type_id == 4) {
 
-    //                     DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('control_num',$control_num)
-    //                     ->where('asset_id',$asset_id)->update([
-    //                         'treatment_action'=>$req->treatment_action,
-    //                         'treatment_target_date'=>$req->treatment_target_date,
-    //                         'treatment_comp_date'=>$req->treatment_comp_date,
-    //                         'responsibility_for_treatment'=>$req->responsibility_for_treatment,
-    //                         'last_edited_by' => $user_id,
-    //                         'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-    //                     ]);
+                        DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('control_num',$control_num)
+                        ->where('asset_id',$asset_id)->update([
+                            'treatment_action'=>$req->treatment_action,
+                            'treatment_target_date'=>$req->treatment_target_date,
+                            'treatment_comp_date'=>$req->treatment_comp_date,
+                            'responsibility_for_treatment'=>$req->responsibility_for_treatment,
+                            'last_edited_by' => $user_id,
+                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                        ]);
 
-    //                     return redirect()->route('iso_sec_2_3_2_risk_treat_form',[
-    //                        'control_num'=>$control_num, 'asset_id'=>$asset_id,'proj_id'=>$proj_id,'user_id'=>$user_id
-    //                     ])->with('success','Treatment Action Plan Updated');
+                        return redirect()->route('iso_sec_2_3_2_risk_treat_form',[
+                           'control_num'=>$control_num, 'asset_id'=>$asset_id,'proj_id'=>$proj_id,'user_id'=>$user_id
+                        ])->with('success','Treatment Action Plan Updated');
 
-    //                 }
-    //             }
-    //         }
-    //         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
-    //     }
+                    }
+                }
+            }
+            return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+        }
 
-    // }
+    }
 
 
     public function iso_sec_2_3_2_treat_form1_submit(Request $req,$asset_id,$control_num,$proj_id,$user_id){
+
 
         $req->validate([
             'residual_risk_treatment'=>"required|string",
@@ -796,7 +797,12 @@ class IsoSec2_3_1 extends Controller
                                 'threat'=>0,
                                 'risk_level'=>0,
                                 'last_edited_by' => $user_id,
-                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                                'acceptance_justification'=>$req->acceptance_justification,
+                                'acceptance_target_date'=>$req->acceptance_target_date,
+                                'acceptance_actual_date'=>$req->acceptance_actual_date,
+                                'acceptance_proposed_responsibility'=>$req->acceptance_proposed_responsibility,
+                                'accepted_by'=>$req->accepted_by
                             ]);
                         }
 
@@ -834,8 +840,11 @@ class IsoSec2_3_1 extends Controller
                 if (in_array('Data Inputter', $permissions)) {
                     if ($checkpermission->type_id == 4) {
 
-                        $asset_risk_assess = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                        $asset_risk_assess = Db::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)
                          ->where('control_num', $control_num)->first();
+
+                        // dd($asset_risk_assess);
+
 
                         // dd($asset_risk_assess);
 

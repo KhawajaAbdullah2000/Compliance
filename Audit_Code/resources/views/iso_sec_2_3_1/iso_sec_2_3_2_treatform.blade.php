@@ -166,7 +166,7 @@ Low
 </table>
 
 
-<h2>After Risk Treatment</h2>
+<h4 class="fw-bold">Target Information Security Risk After Proposed Risk Treatment</h4>
 <table style="width: 50%;" class="table table-bordered table-secondary">
     <tbody>
         <tr>
@@ -412,7 +412,7 @@ Low
 
 
               <div class="text-center">
-                <button type="submit" class="btn my_bg_color text-white btn-md mt-3">Save</button>
+                <button type="submit" class="btn my_bg_color text-white btn-md mt-3">Save Changes</button>
               </div>
 
 

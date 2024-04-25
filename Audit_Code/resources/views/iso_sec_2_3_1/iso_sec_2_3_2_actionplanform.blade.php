@@ -45,17 +45,6 @@ $permissions=json_decode($project_permissions);
 
 
 
-    @if ($errors->any())
-    <div >
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
-
 <div class="row">
 
     <div class="col-lg-6">
@@ -123,7 +112,7 @@ $permissions=json_decode($project_permissions);
 
 <div class="col-lg-6">
 
-<table style="width: 50%;" class="table table-bordered table-primary">
+<table style="width: 50%;" class="table table-bordered table-secondary">
     <tbody>
         <tr>
             <td class="fw-bold" >Control is Applicable?</td>
@@ -148,6 +137,10 @@ $permissions=json_decode($project_permissions);
         <tr>
             <td class="fw-bold" >Risk Level</td>
             <td>  {{$treatmentData->risk_level}}</td>
+        </tr>
+        <tr>
+            <td class="fw-bold" >Residual Risk Treatment</td>
+            <td>  {{$treatmentData->residual_risk_treatment}}</td>
         </tr>
 
 
