@@ -619,6 +619,7 @@ class IsoSec2_3_1 extends Controller
     }
 
     public function iso_sec_2_3_2_treat_form_submit(Request $req,$asset_id,$control_num,$proj_id,$user_id){
+        //action plan
         //is user selected component
         $req->validate([
             'treatment_action' => 'required',
@@ -655,7 +656,7 @@ class IsoSec2_3_1 extends Controller
 
                         return redirect()->route('iso_sec_2_3_2_risk_treat_form',[
                            'control_num'=>$control_num, 'asset_id'=>$asset_id,'proj_id'=>$proj_id,'user_id'=>$user_id
-                        ])->with('success','Risk Treatment completed');
+                        ])->with('success','Treatment Action Plan Updated');
 
                     }
                 }
@@ -725,8 +726,8 @@ class IsoSec2_3_1 extends Controller
 
 
 
-                        return redirect()->route('iso_sec2_3_1_risk_treat_controls',[
-                            'asset_id'=>$asset_id,'proj_id'=>$proj_id,'user_id'=>$user_id
+                        return redirect()->route('iso_sec_2_3_2_risk_treat_form',[
+                           'control_num'=>$control_num, 'asset_id'=>$asset_id,'proj_id'=>$proj_id,'user_id'=>$user_id
                         ])->with('success','Risk Treatment completed');
 
                     }

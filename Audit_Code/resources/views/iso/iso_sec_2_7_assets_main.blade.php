@@ -68,7 +68,6 @@ $permissions=json_decode($project_permissions);
             <th>Service Name for which this is an underlying asset </th>
 <th>Organizational Controls</th>
 
-            <th>Actions</th>
             <th>Details</th>
           </tr>
         </thead>
@@ -91,21 +90,7 @@ Technological Controls</p></a>
                 </td>
 
 
-            <td>
-            @if(in_array('Data Inputter',$permissions))
 
-             <a href="/iso_sec_2_1_edit/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">
-                <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
-            </a>
-
-            <a href="/iso_sec_2_1_delete/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">
-                <i class="fas fa-trash-alt fa-lg" style="color: #e60000;"></i>
-            </a>
-        @else
-        <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
-
-        @endif
-                </td>
 
                 <td>
                 <a href="/iso_sec_2_1_details/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">

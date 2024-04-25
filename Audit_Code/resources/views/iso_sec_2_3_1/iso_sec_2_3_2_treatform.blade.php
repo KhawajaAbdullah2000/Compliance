@@ -351,7 +351,16 @@ $permissions=json_decode($project_permissions);
     });
 </script>
 
-
+@if(Session::has('success'))
+<script>
+    swal({
+  title: "{{Session::get('success')}}",
+  icon: "success",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script>
+@endif
 
  <script>
      function validateInput(inputElement) {
