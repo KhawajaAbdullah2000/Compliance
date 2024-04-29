@@ -452,59 +452,57 @@ class IsoSec2_1 extends Controller
                         foreach($rows as $row){
 
                             if($row[0]!=null){
-                                $g_name[]=$row[0];
-                            }else{
-                                $error="Group Name of an asset Missing";
-                                break;
-                            }
-
-                            if($row[1]!=null){
-                                $name[]=$row[1];
-                            }else{
-                                $error="Asset Name of an asset Missing";
-                                break;
-                            }
-
-                            if($row[2]!=null){
-                                $c_name[]=$row[2];
-                            }else{
-                                $error="Asset component of an asset Missing";
-                                break;
-                            }
-
-
-                            if($row[3]!=null){
-                                $owner_dept[]=$row[3];
-                            }else{
-                                $error="Owner dept of an asset Missing";
-                                break;
-                            }
-
-                            if($row[4]!=null){
-                                $physical_loc[]=$row[4];
-                            }else{
-                                $error="Physical location of an asset Missing";
-                                break;
-                            }
-
-                            if($row[5]!=null){
-                                $logical_loc[]=$row[5];
-                            }else{
-                                $error="Logical Location of an asset Missing";
-                                break;
-                            }
-
-                            if($row[6]!=null){
-                                $s_name[]=$row[6];
+                                $s_name[]=$row[0];
                             }else{
                                 $error="Service Name of an asset Missing";
                                 break;
                             }
 
+                            if($row[1]!=null){
+                                $g_name[]=$row[1];
+                            }else{
+                                $error="Asset Group Name of an asset Missing";
+                                break;
+                            }
+
+                            if($row[2]!=null){
+                                $name[]=$row[2];
+                            }else{
+                                $error="Asset Name of an asset Missing";
+                                break;
+                            }
+
+
+                            if($row[3]!=null){
+                                $c_name[]=$row[3];
+                            }else{
+                                $error="Asset component name of an asset Missing";
+                                break;
+                            }
+
+                            if($row[4]!=null){
+                                $owner_dept[]=$row[4];
+                            }else{
+                                $error="Owner dept of an asset Missing";
+                                break;
+                            }
+
+                            if($row[5]!=null){
+                                $physical_loc[]=$row[5];
+                            }else{
+                                $error="Physical Location of an asset Missing";
+                                break;
+                            }
+
+                            if($row[6]!=null){
+                                $logical_loc[]=$row[6];
+                            }else{
+                                $error="Logical location of an asset Missing";
+                                break;
+                            }
+
 
                         }
-
-
 
 
                         if($error!=null){
@@ -720,7 +718,7 @@ class IsoSec2_1 extends Controller
                     return redirect()->route('iso_section2_1',[
                         'proj_id'=>$proj_id,
                         'user_id'=>$user_id
-                    ]);
+                    ])->with('success','Record Added successfully');
 
 
 
