@@ -40,13 +40,17 @@ class IsoSec2_1 extends Controller
                         ->where('projects.project_id',$proj_id)->first();
 
 
+                    $org_projects=Db::table('projects')->where('org_id',auth()->user()->org_id)
+                    ->where('project_id','!=',$proj_id)->get();
+
 
                     return view('iso_sec_2_1.iso_sec_2_1_main', [
                         'data' => $data,
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
                         'project_permissions' => $checkpermission->project_permissions,
-                        'project'=>$project
+                        'project'=>$project,
+                        'org_projects'=>$org_projects
                     ]);
                 }
             }
@@ -141,20 +145,16 @@ class IsoSec2_1 extends Controller
     {
         $req->validate(
             [
-               'g_name' => 'required_without_all:name,c_name',
-                'name' => 'required_without_all:g_name,c_name',
-               'c_name' => 'required_without_all:g_name,name',
-
+               'g_name' => 'required',
+                'name' => 'required',
+               'c_name' => 'required',
                 'owner_dept' => 'required|string',
                 'physical_loc' => 'required|string',
                 'logical_loc' => 'required|string',
                 's_name' => 'required|string',
             ],
             [
-                '*.required' => 'This field is required',
-                'g_name.required_without_all' => 'At least one of group name, name, or component name is required',
-                'name.required_without_all' => 'At least one of group name, name, or component name is required',
-                'c_name.required_without_all' => 'At least one of group name, name, or component name is required',
+                '*.required' => 'This field is required'
             ]
         );
 
@@ -175,18 +175,29 @@ class IsoSec2_1 extends Controller
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
                     if ($checkpermission->type_id == 4) {
-                        Db::table('iso_sec_2_1')->insert([
-                            'project_id' => $proj_id,
-                            'g_name' => $req->g_name,
-                            'name' => $req->name,
-                            'c_name' => $req->c_name,
-                            'owner_dept' => $req->owner_dept,
-                            'physical_loc' => $req->physical_loc,
-                            'logical_loc' => $req->logical_loc,
-                            's_name' => $req->s_name,
-                            'last_edited_by' => $user_id,
-                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                        ]);
+                        try {
+                            Db::table('iso_sec_2_1')->insert([
+                                'project_id' => $proj_id,
+                                'g_name' => $req->g_name,
+                                'name' => $req->name,
+                                'c_name' => $req->c_name,
+                                'owner_dept' => $req->owner_dept,
+                                'physical_loc' => $req->physical_loc,
+                                'logical_loc' => $req->logical_loc,
+                                's_name' => $req->s_name,
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                            ]);
+                        } catch (\Exception $e) {
+                            $error=$e->getMessage();
+                            if($e->getCode()==23000){
+                 $error="Service,AssetGroup,Asset and COmponent name must be unique in a project";
+                            }
+                            return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
+                            ->with('error', $error);
+
+                        }
+
 
                         return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                             ->with('success', 'Record Added successfully');
@@ -311,10 +322,9 @@ class IsoSec2_1 extends Controller
 
         $req->validate(
             [
-               'g_name' => 'required_without_all:name,c_name',
-                'name' => 'required_without_all:g_name,c_name',
-               'c_name' => 'required_without_all:g_name,name',
-
+               'g_name' => 'required',
+                'name' => 'required',
+               'c_name' => 'required',
                 'owner_dept' => 'required|string',
                 'physical_loc' => 'required|string',
                 'logical_loc' => 'required|string',
@@ -322,9 +332,7 @@ class IsoSec2_1 extends Controller
             ],
             [
                 '*.required' => 'This field is required',
-                'g_name.required_without_all' => 'At least one of group name, name, or component name is required',
-                'name.required_without_all' => 'At least one of group name, name, or component name is required',
-                'c_name.required_without_all' => 'At least one of group name, name, or component name is required',
+
             ]
         );
 
@@ -446,25 +454,24 @@ class IsoSec2_1 extends Controller
                             if($row[0]!=null){
                                 $g_name[]=$row[0];
                             }else{
-                                $g_name[]=null;
+                                $error="Group Name of an asset Missing";
+                                break;
                             }
 
                             if($row[1]!=null){
                                 $name[]=$row[1];
                             }else{
-                                $name[]=null;
+                                $error="Asset Name of an asset Missing";
+                                break;
                             }
 
                             if($row[2]!=null){
                                 $c_name[]=$row[2];
                             }else{
-                                $c_name[]=null;
-                            }
-
-                            if($row[0]==null && $row[1]==null && $row[2]==null){
-                                $error="Atleast one from Component Name, Asset Name,And group Name must be available for each row";
+                                $error="Asset component of an asset Missing";
                                 break;
                             }
+
 
                             if($row[3]!=null){
                                 $owner_dept[]=$row[3];
@@ -551,6 +558,178 @@ class IsoSec2_1 extends Controller
 
     }
 
+
+    public function ShowServices(Request $req,$proj_id,$user_id){
+
+
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+                if (in_array('Data Inputter', $permissions)) {
+                    if ($checkpermission->type_id == 4) {
+
+                        $project=Project::join('project_types','projects.project_type','project_types.id')
+                        ->where('projects.project_id',$proj_id)->first();
+
+                        $services = DB::table('iso_sec_2_1')
+              ->where('project_id', $req->query('project_to_copy'))
+              ->select('s_name')
+              ->groupBy('s_name')
+              ->get();
+
+                        $project_to_copy=Project::where('project_id',$req->query('project_to_copy'))->first();
+
+
+                        return view('iso_sec_2_1.services_to_copy',[
+                            'services'=>$services,
+                            'project'=>$project,
+                            'project_to_copy'=>$project_to_copy
+
+                        ]);
+
+
+                    }
+                }
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+    }
+
+    public function ShowGroups($proj_id,$user_id,$proj_to_copy,$servicename){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+                if (in_array('Data Inputter', $permissions)) {
+                    if ($checkpermission->type_id == 4) {
+
+                        $project=Project::join('project_types','projects.project_type','project_types.id')
+                        ->where('projects.project_id',$proj_id)->first();
+
+                        $groups=Db::table('iso_sec_2_1')->where('project_id',$proj_to_copy)
+                        ->where('s_name',$servicename)
+                        ->distinct('g_name')->get();
+
+
+                        $groups = DB::table('iso_sec_2_1')
+              ->where('project_id', $proj_to_copy)
+            ->select('g_name')
+              ->groupBy('g_name')
+              ->get();
+
+                        $project_to_copy=Project::where('project_id',$proj_to_copy)->first();
+
+
+
+                        return view('iso_sec_2_1.groups_to_copy',[
+                            'groups'=>$groups,
+                            'project'=>$project,
+                            'project_to_copy'=>$project_to_copy,
+                            'servicename'=>$servicename
+
+                        ]);
+
+
+                    }
+                }
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+    }
+
+    public function CopyGroups(Request $req,$proj_id,$user_id,$proj_to_copy,$servicename){
+        $req->validate([
+            'group_to_copy'=>'required'
+        ],[
+            'required'=>"Please select atleast one group"
+        ]);
+
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+                if (in_array('Data Inputter', $permissions)) {
+                    if ($checkpermission->type_id == 4) {
+
+                    $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_to_copy)->where('s_name',$servicename)
+                    ->whereIn('g_name',$req->group_to_copy)->get();
+
+                    try {
+                        foreach($assets as $ass){
+
+
+                        Db::table('iso_sec_2_1')->insert([
+                            'project_id' => $proj_id,
+                            'g_name' => $ass->g_name,
+                            'name' => $ass->name,
+                            'c_name' => $ass->c_name,
+                            'owner_dept' => $ass->owner_dept,
+                            'physical_loc' => $ass->physical_loc,
+                            'logical_loc' => $ass->logical_loc,
+                            's_name' => $ass->s_name,
+                            'last_edited_by' => $user_id,
+                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                        ]);
+
+                        }
+
+                    } catch (\Exception $e) {
+                        if($e->getCode()==23000){
+                            $error="Each row must contain a unique combination of Service Name,Asset Group Name,Name, and Component Name.All 4 cannot be same in a project";
+                        }else{
+                            $error=$e->getCode();
+                        }
+
+                        return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
+                    ->with('error', $error);
+                    }
+
+                    return redirect()->route('iso_section2_1',[
+                        'proj_id'=>$proj_id,
+                        'user_id'=>$user_id
+                    ]);
+
+
+
+                    }
+                }
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+    }
 
 
 

@@ -45,6 +45,40 @@ $permissions=json_decode($project_permissions);
     <h4 class="text-center fw-bold mb-3 mt-4">Upload or Enter Services and/or Assets in the scope of this Project</h4>
 
 
+    @if($org_projects->count()>0)
+
+    @if(in_array('Data Inputter',$permissions))
+<form action="/copy_assets/{{$project_id}}/{{auth()->user()->id}}" class="float-end mb-4 d-inline-block" method="get">
+
+
+<div class="row">
+
+    <div class="form-group">
+        <label for="">Copy Service or Asset</label>
+        <select class=" bg-info form-select" name="project_to_copy">
+
+                @foreach ($org_projects as $proj)
+    <option value="{{$proj->project_id}}" {{ old('project_to_copy') == $proj->project_id ? 'selected' : '' }}>
+        {{$proj->project_name}}
+    </option>
+                   @endforeach
+            </select>
+           </div>
+           @if($errors->has('project_to_copy'))
+           <div class="text-danger">{{ $errors->first('project_to_copy') }}</div>
+       @endif
+
+       <button type="submit" class="btn btn-success btn-sm">Copy</button>
+
+</div>
+
+
+
+
+</form>
+
+@endif
+@endif
 
     <table id="myTable2" class="table table-responsive table-primary table-striped mt-4">
         <thead class="thead-dark table-pointer">
