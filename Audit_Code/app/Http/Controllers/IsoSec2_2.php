@@ -72,7 +72,7 @@ class IsoSec2_2 extends Controller
                 })->values()->all();
 
 
-                //dd($filteredData);
+             //   dd($filteredData);
 
                     return view('iso_sec_2_2.iso_sec_2_2_main', [
                     'project_id' => $checkpermission->project_id,
@@ -132,6 +132,7 @@ class IsoSec2_2 extends Controller
 
                 $project=Project::join('project_types','projects.project_type','project_types.id')
                 ->where('projects.project_id',$proj_id)->first();
+
                     return view('iso_sec_2_2.iso_sec_2_2_sub_reqs', [
                     'project_id' => $checkpermission->project_id,
                    'project_name' => $checkpermission->project_name,
