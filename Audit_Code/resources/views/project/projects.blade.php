@@ -18,7 +18,7 @@
             <th style="text-align:center;">Type</th>
             <th style="text-align:center;">Status</th>
             <th style="text-align:center;">My Permissions</th>
-            <th style="text-align:center;">Project Name,Type,Status</th>
+            <th style="text-align:center;">Edit Project Name,Type,Status</th>
         </tr>
     </thead>
     <tbody>
@@ -26,7 +26,8 @@
 
         <tr style="text-align:center;">
             <td>{{$pro->project_id}}</td>
-            <td>{{$pro->project_name}}</td>
+            <td><a href="/edit_project/{{$pro->project_id}}">{{$pro->project_name}}</a></td>
+
             <td>{{$pro->project_creation_date}}</td>
             <td>{{$pro->type}}</td>
             <td>{{$pro->status}}</td>

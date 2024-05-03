@@ -43,16 +43,16 @@
               @endcan
 
               <li class="nav-item">
-                <a class="nav-link" href="/assigned_projects/{{auth()->user()->id}}">My Projects</a>
+                <a class="nav-link" href="/assigned_projects/{{auth()->user()->id}}">Projects where roles are assigned to me</a>
               </li>
 
-              <li class="nav-item">
+              {{-- <li class="nav-item">
                 <a class="nav-link" href="">Activity Logs</a>
               </li>
 
               <li class="nav-item">
                 <a class="nav-link" href="">Reports</a>
-              </li>
+              </li> --}}
               @endrole
 
 

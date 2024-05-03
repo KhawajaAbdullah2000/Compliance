@@ -19,7 +19,7 @@
             <th>Project status</th>
             <th>Project Permissions</th>
             <th>Edit Project</th>
-            <th>View Project Users</th>
+            <th>Dashboard</th>
             <th>Reports</th>
         </tr>
     </thead>
@@ -46,10 +46,15 @@
         </td>
 
         <td>
-            <a href="/meta_data/{{$pro->project_code}}/{{auth()->user()->id}}"
+            <a href="/dashboard/{{$pro->project_code}}/{{auth()->user()->id}}"
+                data-toggle="tooltip" data-placement="top" title="View Project Dashboard">
+            <i class="fas fa-tachometer-alt fa-lg" style="color: #124903;"></i>
+
+            </a>
+            {{-- <a href="/meta_data/{{$pro->project_code}}/{{auth()->user()->id}}"
                 data-toggle="tooltip" data-placement="top" title="View Project Users">
             <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
-            </a>
+            </a> --}}
         </td>
 
         <td>

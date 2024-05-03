@@ -130,17 +130,68 @@ class ProjectController extends Controller
     }
 
 
-    public function metaData($proj_id, $user_id)
-    {
-        $org_data = Db::table('projects')->join('organizations', 'projects.org_id', 'organizations.org_id')
-            ->where('project_id', $proj_id)
-            ->first();
-        // dd($org_data);
+    // public function metaData($proj_id, $user_id)
+    // {
+    //     $org_data = Db::table('projects')->join('organizations', 'projects.org_id', 'organizations.org_id')
+    //         ->where('project_id', $proj_id)
+    //         ->first();
+    //     // dd($org_data);
 
-        $endusers = Db::table('project_details')->join('users', 'project_details.assigned_enduser', 'users.id')
-            ->where('project_details.project_code', $proj_id)->get(['users.first_name', 'users.last_name', 'project_details.project_permissions', 'project_details.assigned_enduser']);
-        return view('assigned_projects.metadata', ['org_data' => $org_data, 'endusers' => $endusers]);
+    //     $endusers = Db::table('project_details')->join('users', 'project_details.assigned_enduser', 'users.id')
+    //         ->where('project_details.project_code', $proj_id)->get(['users.first_name', 'users.last_name', 'project_details.project_permissions', 'project_details.assigned_enduser']);
+    //     return view('assigned_projects.metadata', ['org_data' => $org_data, 'endusers' => $endusers]);
+    // }
+
+    public function dashBoard($proj_id,$user_id){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+
+        if ($checkpermission) {
+
+            $project=Project::join('project_types','projects.project_type','project_types.id')
+            ->where('projects.project_id',$proj_id)->first();
+
+            $groupsPerService = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
+            ->select('s_name', DB::raw('count(distinct g_name) as unique_groups_count'))
+            ->groupBy('s_name')
+            ->get();
+
+
+$componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
+               ->select('g_name', DB::raw('count(distinct c_name) as unique_components_count'))
+               ->groupBy('g_name')
+               ->get();
+
+               $mandatory_requirements_submitted=DB::table('iso_sec_2_2')->where('project_id',$proj_id)->get()->count();
+               $mandatory_requirements_left=120-$mandatory_requirements_submitted;
+
+
+            return view('dashboard.main',[
+               'project'=>$project,
+               'groupsPerService'=>$groupsPerService,
+               'componentsPerGroup'=>$componentsPerGroup,
+               'mandatory_requirements_submitted'=>$mandatory_requirements_submitted,
+               'mandatory_requirements_left'=>$mandatory_requirements_left
+            ]);
+
+        } else {
+            return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+        }
+
     }
+
+
+
+
 
     public function reports($proj_id, $user_id)
     {

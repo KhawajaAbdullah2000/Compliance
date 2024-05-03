@@ -117,11 +117,12 @@ route::get('assigned_projects/{user_id}',[ProjectController::class,'assigned_pro
 
 //ISO Project
 route::get('iso_sections/{proj_id}/{user_id}',[ProjectController::class,'iso_sections'])->name('iso_sections');
-route::get("/meta_data/{proj_id}/{user_id}",[ProjectController::class,'metaData'])->name('meta_data');
+// route::get("/meta_data/{proj_id}/{user_id}",[ProjectController::class,'metaData'])->name('meta_data');
 route::get("/reports/{proj_id}/{user_id}",[ProjectController::class,'reports'])->name('reports');
 route::get("/assets_in_scope/{proj_id}/{user_id}",[ProjectController::class,'assets_in_scope'])->name('assets_in_scope');
 route::get("/risk_assessment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_assessment_report']);
 route::get("/risk_treatment/{proj_id}/{user_id}",[ProjectController::class,'risk_treatment']);
+route::get("/dashboard/{proj_id}/{user_id}",[ProjectController::class,'dashBoard'])->name('dashboard');
 
 
 
