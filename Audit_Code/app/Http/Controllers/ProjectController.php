@@ -21,7 +21,7 @@ class ProjectController extends Controller
     {
         $projects = Project::join('project_details', 'projects.project_id', 'project_details.project_code')
             ->join('project_types', 'projects.project_type', 'project_types.id')
-            ->where('project_details.assigned_enduser', $user_id)->where('project_types.id', 4)->get(
+            ->where('project_details.assigned_enduser', $user_id)->get(
                 [
                     'project_details.project_code',
                     'projects.project_name',
@@ -109,12 +109,6 @@ class ProjectController extends Controller
         if ($checkpermission) {
             $permissions = json_decode($checkpermission->project_permissions);
             if ($checkpermission->type_id == 4) {
-                if ($req->session()->exists('projectid')) {
-                    $req->session()->forget('projectid');
-                    $req->session()->put('projectid', $proj_id);
-                } else {
-                    $req->session()->put('projectid', $proj_id);
-                }
 
                 $project=Project::join('project_types','projects.project_type','project_types.id')
                 ->where('projects.project_id',$proj_id)->first();
@@ -124,6 +118,18 @@ class ProjectController extends Controller
                     ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name,'project'=>$project]
                 );
             }
+
+            //pci single sheet
+            elseif ($checkpermission->type_id == 1){
+                $project=Project::join('project_types','projects.project_type','project_types.id')
+                ->where('projects.project_id',$proj_id)->first();
+
+                return view(
+                    '.pci_single_sheet.main_sections',
+                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name,'project'=>$project]
+                );
+            }
+
         } else {
             return redirect()->route('assigned_projects', ['user_id' => $user_id]);
         }

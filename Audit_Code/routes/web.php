@@ -13,6 +13,7 @@ use App\Http\Controllers\IsoSec2_4_A5;
 use App\Http\Controllers\IsoSec2_4_A6;
 use App\Http\Controllers\IsoSec2_4_A7;
 use App\Http\Controllers\IsoSec2_4_A8;
+use App\Http\Controllers\PCI_Single_Sheet;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\v3_2_s2_Controller;
 use App\Http\Controllers\v3_2_s3_Controller;
@@ -233,6 +234,11 @@ route::get('iso_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}',[IsoSec2
 route::get('iso_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec2_2_sub_req_edit'])->name('iso_sec2_2_sub_req_edit');
 route::post('iso_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec_2_2_form']);
 route::put('iso_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec_2_2_edit_form']);
+
+
+
+//PCI single sheet
+route::get("pci_single_sheet_subsections/{proj_id}/{user_id}",[PCI_Single_Sheet::class,'pci_single_sheet_subsections'])->name('pci_single_sheet_subsections');
 
 // route::get('v_3_2_section1_subsections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1_subsections']);
 // route::get('v_3_2_sections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_sections'])->name('v_3_2_sections');

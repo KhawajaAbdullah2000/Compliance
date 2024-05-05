@@ -28,7 +28,6 @@ class IsoSec2_1 extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 4) {
                     $data = DB::table('iso_sec_2_1')->join(
                         'users',
                         'iso_sec_2_1.last_edited_by',
@@ -38,6 +37,8 @@ class IsoSec2_1 extends Controller
 
                  $project=Project::join('project_types','projects.project_type','project_types.id')
                         ->where('projects.project_id',$proj_id)->first();
+
+
 
 
                     $org_projects=Db::table('projects')->where('org_id',auth()->user()->org_id)
@@ -52,7 +53,7 @@ class IsoSec2_1 extends Controller
                         'project'=>$project,
                         'org_projects'=>$org_projects
                     ]);
-                }
+
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
@@ -575,7 +576,7 @@ class IsoSec2_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
+
 
                         $project=Project::join('project_types','projects.project_type','project_types.id')
                         ->where('projects.project_id',$proj_id)->first();
@@ -597,7 +598,7 @@ class IsoSec2_1 extends Controller
                         ]);
 
 
-                    }
+
                 }
             }
         }
@@ -621,7 +622,7 @@ class IsoSec2_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
+
 
                         $project=Project::join('project_types','projects.project_type','project_types.id')
                         ->where('projects.project_id',$proj_id)->first();
@@ -652,7 +653,7 @@ class IsoSec2_1 extends Controller
                         ]);
 
 
-                    }
+
                 }
             }
         }
@@ -682,7 +683,7 @@ class IsoSec2_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
+
 
                     $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_to_copy)->where('s_name',$servicename)
                     ->whereIn('g_name',$req->group_to_copy)->get();
@@ -724,7 +725,7 @@ class IsoSec2_1 extends Controller
 
 
 
-                    }
+
                 }
             }
         }

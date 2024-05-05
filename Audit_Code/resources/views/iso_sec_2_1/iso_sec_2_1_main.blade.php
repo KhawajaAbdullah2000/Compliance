@@ -91,7 +91,10 @@ $permissions=json_decode($project_permissions);
             <th onclick="sortTable(5)">Asset Physical Location</th>
             <th onclick="sortTable(6)">Asset Logical Location</th>
 
+@if($project->project_type==4)
+
             <th>Risk Assessment</th>
+            @endif
             {{-- <th>Risk Treatment</th> --}}
             <th>Services/Assets</th>
           </tr>
@@ -108,10 +111,12 @@ $permissions=json_decode($project_permissions);
                 <td>{{$d->logical_loc}} </td>
 
 
+                @if($project->project_type==4)
           <td>
             <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white">Initiate or Edit</a>
             {{-- <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$d->c_name}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">Risk Assessment</a> --}}
           </td>
+          @endif
           {{-- <td>
             <a href="/iso_sec2_3_1_risk_treat_controls/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm text-white my_bg_color2">Risk Treatment</a>
 

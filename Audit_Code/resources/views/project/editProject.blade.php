@@ -31,9 +31,9 @@
                     <select class="boxstyling  form-select" name="project_type">
                         <option value="">Select Project type</option>
                         @foreach ($types as $t)
-                        @if($t->id==4)
+
                         <option value="{{$t->id}}" {{ old('project_type',$project->project_type) == $t->id? 'selected' : '' }}>{{$t->type}}</option>
-                        @endif
+
                         @endforeach
 
                     </select>
