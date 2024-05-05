@@ -43,19 +43,30 @@ $permissions=json_decode($project_permissions);
       <h2 class="text-center fw-bold mt-4 mb-4">
         @if($title==1)
         PCI-DSS v4.0 Requirement 1: Install and Maintain Network Security Controls
+        @elseif ($title==2)
+        PCI-DSS v4.0 Requirement 2: Apply Secure Configurations to All System Components
+        @elseif ($title==3)
+        PCI-DSS v4.0 Requirement 3: Protect Stored Account Data
+        @elseif ($title==4)
+        PCI-DSS v4.0 Requirement 4: Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks
         @elseif ($title==5)
-        Leadership
+        PCI-DSS v4.0 Requirement 5: Protect All Systems and Networks from Malicious Software
         @elseif ($title==6)
-        Planning
-        @elseif ($title==7)
-        Support
-        @elseif ($title==8)
-        Operation
-        @elseif ($title==9)
-       Performance Evaluation
+        PCI-DSS v4.0 Requirement 6: Develop and Maintain Secure Systems and Software
+       @elseif ($title==7)
+       PCI-DSS v4.0 Requirement 7: Restrict Access to System Components and Cardholder Data by Business Need to Know
+       @elseif ($title==8)
+       PCI-DSS v4.0 Requirement 8: Identify Users and Authenticate Access to System Components
+       @elseif ($title==9)
+       PCI-DSS v4.0 Requirement 9: Restrict Physical Access to Cardholder Data
        @elseif ($title==10)
-     Improvement
-        @endif
+       PCI-DSS v4.0 Requirement 10: Log and Monitor All Access to System Components and Cardholder Data
+       @elseif ($title==11)
+       PCI-DSS v4.0 Requirement 11: Test Security of Systems and Networks Regularly
+       @elseif ($title==12)
+       PCI-DSS v4.0 Requirement 12: Support Information Security with Organizational Policies and Programs
+       @elseif ($title=='A2')
+       Appendix A2: Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections        @endif
     </h2>
 
 

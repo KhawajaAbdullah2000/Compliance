@@ -239,8 +239,12 @@ route::put('iso_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[IsoSec
 //PCI single sheet
 route::get("pci_single_sheet_subsections/{proj_id}/{user_id}",[PCI_Single_Sheet::class,'pci_single_sheet_subsections'])->name('pci_single_sheet_subsections');
 route::get("pci_section_2_2/{title_num}/{proj_id}/{user_id}",[PCI_Single_Sheet::class,'pci_section_2_2'])->name('pci_section_2_2_main');
-
 route::get("pci_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[PCI_Single_Sheet::class,'pci_sec_2_2_req'])->name('pci_sec_2_2_req');
+route::get('pci_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Single_Sheet::class,'pci_sec2_2_sub_req_edit'])->name('pci_sec2_2_sub_req_edit');
+route::post('pci_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Single_Sheet::class,'pci_sec_2_2_form']);
+route::put('pci_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Single_Sheet::class,'pci_sec_2_2_edit_form']);
+
+
 
 // route::get('v_3_2_section1_subsections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1_subsections']);
 // route::get('v_3_2_sections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_sections'])->name('v_3_2_sections');
