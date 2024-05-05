@@ -626,15 +626,17 @@ class IsoSec2_1 extends Controller
                         $project=Project::join('project_types','projects.project_type','project_types.id')
                         ->where('projects.project_id',$proj_id)->first();
 
-                        $groups=Db::table('iso_sec_2_1')->where('project_id',$proj_to_copy)
-                        ->where('s_name',$servicename)
-                        ->distinct('g_name')->get();
+                        // $groups=Db::table('iso_sec_2_1')->where('project_id',$proj_to_copy)
+                        // ->where('s_name',$servicename)
+                        // ->distinct('g_name')->get();
 
 
-                        $groups = DB::table('iso_sec_2_1')
-              ->where('project_id', $proj_to_copy)
+
+
+                       $groups = DB::table('iso_sec_2_1')
+           ->where('project_id', $proj_to_copy)->where('s_name',$servicename)
             ->select('g_name')
-              ->groupBy('g_name')
+             ->groupBy('g_name')
               ->get();
 
                         $project_to_copy=Project::where('project_id',$proj_to_copy)->first();
