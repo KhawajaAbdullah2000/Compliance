@@ -41,7 +41,7 @@
         <div class="row mt-2" >
             <div class="col-12">
 
-         <a href="/iso_section2_2/{{4}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">PCI-DSS v4.0 Requirement 1: Install and Maintain Network Security Controls</p></a>
+         <a href="/pci_section_2_2/{{1}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">PCI-DSS v4.0 Requirement 1: Install and Maintain Network Security Controls</p></a>
         </div>
         </div>
 
