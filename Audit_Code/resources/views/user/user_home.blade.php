@@ -31,6 +31,9 @@
 
                 {{-- <a href="/create_project/{{auth()->user()->id}}" class='btn btn-primary'>Create new project</a> --}}
                 @endcan
+                <br>
+ <a  type="button" href="/my_personal_dashboard/{{auth()->user()->id}}" class="btn text-light my_bg_color btn-rounded mt-4" >Visual and AI dashboard</a>
+
 
                 @endrole
                 </div>

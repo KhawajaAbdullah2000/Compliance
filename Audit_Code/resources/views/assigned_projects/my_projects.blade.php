@@ -6,7 +6,7 @@
 
 <div class="container">
 
-    <h1 class="text-center">My Assigned Projects</h1>
+    <h1 class="text-center mb-4">Projects where roles are assigned to me</h1>
 
 
 

@@ -218,6 +218,32 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
 
     }
 
+    public function my_personal_dashboard($user_id){
+
+
+            // $project=Project::join('project_types','projects.project_type','project_types.id')
+            // ->where('projects.project_id',$proj_id)->first();
+
+            $projectsCreatedCount = DB::table('projects')
+            ->join('project_types', 'projects.project_type', '=', 'project_types.id')
+            ->where('created_by', $user_id)
+            ->select('project_types.type', DB::raw('count(*) as total'))
+            ->groupBy('project_types.type')
+            ->get();
+
+           // dd($projectsCreatedCount);
+
+
+            return view('dashboard.my_personal_dashboard',[
+              'projectsCreatedCount'=>$projectsCreatedCount
+
+            ]);
+
+        }
+
+
+
+
 
 
 

@@ -127,6 +127,8 @@ route::get("/risk_assessment_report/{proj_id}/{user_id}",[ProjectController::cla
 route::get("/risk_treatment/{proj_id}/{user_id}",[ProjectController::class,'risk_treatment']);
 route::get("/dashboard/{proj_id}/{user_id}",[ProjectController::class,'dashBoard'])->name('dashboard');
 
+//perosnal dashooard on home
+route::get("/my_personal_dashboard/{user_id}",[ProjectController::class,'my_personal_dashboard'])->name('my_personal_dashboard');
 
 
 
