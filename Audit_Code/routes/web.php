@@ -126,13 +126,12 @@ route::get("/assets_in_scope/{proj_id}/{user_id}",[ProjectController::class,'ass
 route::get("/risk_assessment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_assessment_report']);
 route::get("/risk_treatment/{proj_id}/{user_id}",[ProjectController::class,'risk_treatment']);
 route::get("/dashboard/{proj_id}/{user_id}",[ProjectController::class,'dashBoard'])->name('dashboard');
-
+route::get('delete_my_project/{proj_id}/{user_id}',[ProjectController::class,'delete_my_project']);
 //perosnal dashooard on home
 route::get("/my_personal_dashboard/{user_id}",[ProjectController::class,'my_personal_dashboard'])->name('my_personal_dashboard');
 
-
-
-
+//ai wizard
+route::get("ai_wizard/{proj_id}/{user_id}",[ProjectController::class,'ai_wizard'])->name('ai_wizard');
 
 
 

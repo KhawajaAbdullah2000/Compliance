@@ -32,9 +32,11 @@
         </div>
     </div>
 
-    <h2 class="text-center fw-bold mb-4">Dashboard</h2>
+    <a href="/ai_wizard/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-success text-white btn-md">Go to AI wizard for this project</a>
 
-    <div class="row">
+
+
+    <div class="row mt-4">
         <div class="col-lg-6 text-center">
             <h3 class="mb-3">Asset Groups</h3>
             <canvas id="serviceChart" width="300" height="200"></canvas>

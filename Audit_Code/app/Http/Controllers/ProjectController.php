@@ -172,19 +172,6 @@ class ProjectController extends Controller
     // }
 
     public function dashBoard($proj_id,$user_id){
-        $checkpermission = Db::table('project_details')->select(
-            'project_types.id as type_id',
-            'project_details.project_code',
-            'project_details.project_permissions',
-            'projects.project_name'
-        )
-            ->join('projects', 'project_details.project_code', 'projects.project_id')
-            ->join('project_types', 'projects.project_type', 'project_types.id')
-            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-            ->first();
-
-
-        if ($checkpermission) {
 
             $project=Project::join('project_types','projects.project_type','project_types.id')
             ->where('projects.project_id',$proj_id)->first();
@@ -212,9 +199,7 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
                'mandatory_requirements_left'=>$mandatory_requirements_left
             ]);
 
-        } else {
-            return redirect()->route('assigned_projects', ['user_id' => $user_id]);
-        }
+
 
     }
 
@@ -243,32 +228,42 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
 
 
 
+        public function ai_wizard($proj_id,$user_id){
+            if($user_id==auth()->user()->id){
+                $project=Project::join('project_types','projects.project_type','project_types.id')
+                ->where('projects.project_id',$proj_id)->first();
+
+                $results = DB::table('iso_sec_2_1')
+                ->join('iso_sec_2_3_1', 'iso_sec_2_1.assessment_id', '=', 'iso_sec_2_3_1.asset_id')
+                ->where('iso_sec_2_1.project_id',$proj_id)
+                ->select('iso_sec_2_1.s_name', 'iso_sec_2_1.c_name',
+                         DB::raw('MAX(iso_sec_2_3_1.risk_level) as max_risk_level'),
+                         DB::raw('MIN(iso_sec_2_3_1.risk_level) as min_risk_level'),
+                         DB::raw('((MAX(iso_sec_2_3_1.risk_level) + MIN(iso_sec_2_3_1.risk_level)) / 2) as average_risk_level'))
+                ->groupBy('iso_sec_2_1.s_name', 'iso_sec_2_1.c_name')
+                ->get();
 
 
 
 
+
+                return view('dashboard.ai_wizard',[
+                    'project'=>$project,
+                    'results'=>$results
+                ]);
+
+            }else{
+                return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+            }
+        }
 
     public function reports($proj_id, $user_id)
     {
 
-        $checkpermission = Db::table('project_details')->select(
-            'project_types.id as type_id',
-            'project_details.project_code',
-            'project_details.project_permissions',
-            'projects.project_name'
-        )
-            ->join('projects', 'project_details.project_code', 'projects.project_id')
-            ->join('project_types', 'projects.project_type', 'project_types.id')
-            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-            ->first();
+        $project=Db::table('projects')->where('project_id',$proj_id)->first();
 
+            return view('assigned_projects.reports_list', ['proj_id' => $proj_id, 'project_name' => $project->project_name]);
 
-        if ($checkpermission) {
-
-            return view('assigned_projects.reports_list', ['proj_id' => $proj_id, 'project_name' => $checkpermission->project_name]);
-        } else {
-            return redirect()->route('assigned_projects', ['user_id' => $user_id]);
-        }
     }
 
     public function assets_in_scope($proj_id, $user_id)
@@ -450,6 +445,26 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
     }
 
 
+    public function delete_my_project($proj_id,$user_id){
+        if($user_id==auth()->user()->id){
+
+            $check=Db::table('projects')->where('project_id',$proj_id)->where('created_by',$user_id)->first();
+            if($check){
+
+                Db::table('projects')->where('project_id',$proj_id)->where('created_by',$user_id)->delete();
+                return redirect()->route('projects', ['user_id' => $user_id])->with('success','Project Deleted');
+
+
+            }else{
+                return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+            }
+
+        }else{
+            return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+        }
+    }
 
 
 

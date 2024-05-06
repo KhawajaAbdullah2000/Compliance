@@ -19,6 +19,10 @@
             <th style="text-align:center;">Status</th>
             <th style="text-align:center;">My Permissions</th>
             <th style="text-align:center;">Edit Project Name,Type,Status</th>
+            <th style="text-align:center;">Dashboard</th>
+            <th style="text-align:center;">Reports</th>
+            <th style="text-align:center;">Delete</th>
+
         </tr>
     </thead>
     <tbody>
@@ -41,6 +45,27 @@
                 {{-- <a href="/edit_my_project/{{$pro->project_id}}" class="btn btn-warning btn-sm">Edit</a> --}}
                 {{-- <a href="/assigned_endusers/{{$pro->project_id}}" class="btn btn-warning btn-dark">End users Assigned</a> --}}
             </td>
+            <td>
+                <a href="/dashboard/{{$pro->project_id}}/{{auth()->user()->id}}"
+                    data-toggle="tooltip" data-placement="top" title="View Project Dashboard">
+                <i class="fas fa-tachometer-alt fa-lg" style="color: #124903;"></i>
+
+                </a>
+            </td>
+
+            <td>
+                <a href="/reports/{{$pro->project_id}}/{{auth()->user()->id}}"
+                    data-toggle="tooltip" data-placement="top" title="Project Report">
+                <i class="fas fa-copy fa-lg" style="color: #124903;"></i>
+                </a>
+            </td>
+
+          <td>
+            <a href="/delete_my_project/{{$pro->project_id}}/{{auth()->user()->id}}"
+                data-toggle="tooltip" data-placement="top" title="Delete Project">
+            <i class="fas fa-trash fa-lg" style="color:red;"></i>
+            </a>
+          </td>
 
 
         </tr>
