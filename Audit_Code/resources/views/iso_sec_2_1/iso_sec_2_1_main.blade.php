@@ -54,7 +54,7 @@ $permissions=json_decode($project_permissions);
 <div class="row">
 
     <div class="form-group">
-        <label for="">Copy Service or Asset</label>
+        <label for="">Copy Service or Asset from</label>
         <select class=" bg-info form-select" name="project_to_copy">
 
                 @foreach ($org_projects as $proj)
@@ -68,7 +68,10 @@ $permissions=json_decode($project_permissions);
            <div class="text-danger">{{ $errors->first('project_to_copy') }}</div>
        @endif
 
-       <button type="submit" class="btn btn-success btn-sm">Copy</button>
+       <div>
+        <button type="submit" class="btn btn-success btn-sm mt-2">Copy</button>
+
+       </div>
 
 </div>
 

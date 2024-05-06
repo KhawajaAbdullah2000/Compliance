@@ -130,6 +130,29 @@ class ProjectController extends Controller
                 );
             }
 
+            elseif ($checkpermission->type_id == 2){
+                $project=Project::join('project_types','projects.project_type','project_types.id')
+                ->where('projects.project_id',$proj_id)->first();
+
+                return view(
+                    '.pci_multi_sheet.main_sections',
+                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name,'project'=>$project]
+                );
+            }
+
+            elseif ($checkpermission->type_id == 3){
+                $project=Project::join('project_types','projects.project_type','project_types.id')
+                ->where('projects.project_id',$proj_id)->first();
+
+                return view(
+                    '.pci_merchant_sheet.main_sections',
+                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name,'project'=>$project]
+                );
+            }
+
+
+
+
         } else {
             return redirect()->route('assigned_projects', ['user_id' => $user_id]);
         }
