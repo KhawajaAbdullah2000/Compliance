@@ -17,8 +17,15 @@
             </div>
         </div>
 
+        <div class="col-lg-6 text-center">
+            <h3 class="mb-3">Projects where roles are assigned to me (by type)</h3>
+            <div style="width: 400px; height: 400px; margin: auto;">
+            <canvas id="projectsPieChart2"></canvas>
+            </div>
+        </div>
 
 
+    </div>
 </div>
 
 @section('scripts')
@@ -56,6 +63,40 @@
             }
         }
     });
+
+    var ctx = document.getElementById('projectsPieChart2').getContext('2d');
+    var projectsPieChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: {!! json_encode($permissionsInaProjectCount->pluck('type')) !!},
+        datasets: [{
+            label: 'Projects Count',
+            data: {!! json_encode($permissionsInaProjectCount->pluck('total')) !!},
+            backgroundColor: [
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(51, 153, 255, 0.5)',
+                'rgba(0, 102, 204, 0.5)',
+                'rgba(0, 51, 102, 0.5)'
+            ],
+            borderColor: [
+                'rgba(54, 162, 235, 1)',
+                'rgba(51, 153, 255, 1)',
+                'rgba(0, 102, 204, 1)',
+                'rgba(0, 51, 102, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            }
+        }
+    }
+});
+
 </script>
 
 @endsection

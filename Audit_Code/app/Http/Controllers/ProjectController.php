@@ -231,11 +231,20 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
             ->groupBy('project_types.type')
             ->get();
 
+            $permissionsInaProjectCount = DB::table('projects')
+            ->join('project_types', 'projects.project_type', '=', 'project_types.id')
+            ->join('project_details', 'projects.project_id', '=', 'project_details.project_code')
+            ->where('created_by', $user_id)
+            ->select('project_details.assigned_enduser','project_types.type', DB::raw('count(*) as total'))
+            ->groupBy('project_types.type','project_details.assigned_enduser')
+            ->get();
+           // dd($permissionsInaProjectCount);
            // dd($projectsCreatedCount);
 
 
             return view('dashboard.my_personal_dashboard',[
-              'projectsCreatedCount'=>$projectsCreatedCount
+              'projectsCreatedCount'=>$projectsCreatedCount,
+              'permissionsInaProjectCount' => $permissionsInaProjectCount,
 
             ]);
 
