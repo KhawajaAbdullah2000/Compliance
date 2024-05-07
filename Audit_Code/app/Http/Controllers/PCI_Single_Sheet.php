@@ -113,7 +113,7 @@ class PCI_Single_Sheet extends Controller
                     $filepath=public_path('PCI_DSS_4_Single_TSP.xlsx');
                     $data = Excel::toArray([], $filepath); //with header
                     $rows = array_slice($data[0], 1); //without header(first row)
-                 //  dd($rows);
+                 // dd($rows);
 
                  //  dd($data);
                    $filteredData = collect($rows)->filter(function ($row) use ($main_req_num) {

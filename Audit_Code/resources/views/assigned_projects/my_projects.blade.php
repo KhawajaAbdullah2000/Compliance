@@ -13,19 +13,19 @@
 
 <table class="table table-responsive table-hover mt-4" id="myTable">
     <thead>
-        <tr>
-            <th>Project Name</th>
-            <th>Project type</th>
-            <th>Project status</th>
-            <th>Project Permissions</th>
-            <th>Edit Project</th>
-            <th>Dashboard</th>
-            <th>Reports</th>
+        <tr >
+            <th style="text-align: center">Project Name</th>
+            <th style="text-align: center">Project type</th>
+            <th style="text-align: center">Project status</th>
+            <th style="text-align: center">Project Permissions</th>
+            <th style="text-align: center">Edit Project</th>
+            <th style="text-align: center">Dashboard</th>
+            <th style="text-align: center">Reports</th>
         </tr>
     </thead>
     <tbody>
       @foreach($projects as $pro)
-      <tr>
+      <tr style="text-align: center;vertical-align:middle">
         <td> <a href="/iso_sections/{{$pro->project_code}}/{{auth()->user()->id}}"> {{$pro->project_name}}</a> </td>
         <td>{{$pro->type}}</td>
         <td>{{$pro->status}}</td>

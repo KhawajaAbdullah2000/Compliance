@@ -31,48 +31,39 @@
             </table>
         </div>
     </div>
-    <h2 class="fw-bold">Risk Levels Before Risk Treatment</h2>
 
+    @if($project->project_type==4)
 
+    @if($results->count() > 0)
 
-@if($results->count()>0)
+        @foreach ($results as $service_name => $components)
+            <h2 class="fw-bold mt-5">Risk Levels for {{ $service_name }}</h2>
+            <table class="table table-primary table-responsive">
+                <thead>
+                    <tr>
+                        <th>Asset Component Name</th>
+                        <th>Highest Risk level</th>
+                        <th>Lowest Risk level</th>
+                        <th>Mean Risk Level (Calculated)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($components as $res)
+                        <tr>
+                            <td>{{$res->c_name}}</td>
+                            <td>{{$res->max_risk_level}}</td>
+                            <td>{{$res->min_risk_level}}</td>
+                            <td>{{ number_format($res->average_risk_level, 4) }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endforeach
+    @else
+        <h2 class="fw-bold">No risk assessment done yet</h2>
+    @endif
 
-<table class="table table-primary table-responsive mt-4">
-
-    <tr>
-        <th>Service Name</th>
-        <th>Asset Component Name</th>
-        <th>Highest Risk level</th>
-        <th>Lowest risk level</th>
-        <th>Mean Risk Level (Calculated)</th>
-    </tr>
-
-    @foreach ($results as $res )
-
-    <tr>
-        <td>{{$res->s_name}}</td>
-        <td>{{$res->c_name}}</td>
-        <td>{{$res->max_risk_level}}</td>
-        <td>{{$res->min_risk_level}}</td>
-        <td>{{ number_format($res->average_risk_level, 4) }}</td>
-    </tr>
-
-    @endforeach
-
-</table>
-
-
-@else
-
-<h2 class="fw-bold">No risk Assessment done yet</h2>
-
-@endif
-
+    @endif
 </div>
-
-
-@section('scripts')
-
-@endsection
 
 @endsection

@@ -17,7 +17,7 @@ class EndUserController extends Controller
 
 public function projects($user_id){
     $projects=Project::join('project_types','projects.project_type','project_types.id')
-   ->where('projects.created_by',$user_id)->get();
+   ->where('projects.created_by',$user_id)->latest('project_creation_date')->get();
     return view('project.projects',['projects'=>$projects]);
 }
 

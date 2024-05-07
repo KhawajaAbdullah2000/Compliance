@@ -49,12 +49,30 @@
     </div>
 
     <div class="row mt-4">
-        <div class="col-lg-6 text-center">
+        {{-- <div class="col-lg-6 text-center">
             <h3 class="mb-3">Mandatory Requirements</h3>
-            <div style="width: 500px; height: 500px; margin: auto;">
+            <div style="width: 300px; height: 300px; margin: auto;">
                 <canvas id="requirementsChart"></canvas>
             </div>
+        </div> --}}
+
+        <div class="col-lg-6 text-center">
+            <h4 class="mb-3">Compliance Status Against Mandatory Controls</h4>
+            <div style="width: 300px; height: 300px; margin: auto;">
+                <canvas id="statusPieChart"></canvas>
+            </div>
         </div>
+
+        @if($project->project_type==4)
+        <div class="col-lg-6 text-center">
+            <h4 class="mb-3">Statement of Applicability of Controls</h4>
+            <div style="width: 300px; height: 300px; margin: auto;">
+                <canvas id="applicabilityPieChart"></canvas>
+            </div>
+        </div>
+
+
+        @endif
     </div>
 </div>
 
@@ -104,35 +122,80 @@
         }
     });
 
-    var ctxRequirement = document.getElementById('requirementsChart').getContext('2d');
-    var requirementsChart = new Chart(ctxRequirement, {
-        type: 'pie',
-        data: {
-            labels: ['Mandatory Requirements Submitted', 'Mandatory Requirements Left'],
-            datasets: [{
-                data: [@json($mandatory_requirements_submitted), @json($mandatory_requirements_left)],
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.7)',
-                    'rgba(255, 99, 132, 0.7)'
-                ],
-                borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255, 99, 132, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            aspectRatio: 1,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
+
+    var ctx = document.getElementById('statusPieChart').getContext('2d');
+        var statusPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Yes', 'No', 'Partial'],
+                datasets: [{
+                    label: 'Compliance Status',
+                    data: [
+                        @foreach ($mandatory_controls as $status)
+                            {{ $status->total }},
+                        @endforeach
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(96, 40, 145, 0.8)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(96, 40, 145, 0.8)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
             }
-        }
-    });
+        });
+
+        @if($project->project_type==4)
+
+        var ctxapplicability = document.getElementById('applicabilityPieChart').getContext('2d');
+        var statusPieChart = new Chart(ctxapplicability, {
+            type: 'pie',
+            data: {
+                labels: ['Yes', 'No'],
+                datasets: [{
+                    label: 'Applicability',
+                    data: [
+                        @foreach ($applicability as $status)
+                            {{ $status->total }},
+                        @endforeach
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(96, 40, 145, 0.8)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(96, 40, 145, 0.8)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+
+    @endif
 </script>
 @endsection
 

@@ -187,17 +187,48 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
                ->groupBy('g_name')
                ->get();
 
-               $mandatory_requirements_submitted=DB::table('iso_sec_2_2')->where('project_id',$proj_id)->get()->count();
-               $mandatory_requirements_left=120-$mandatory_requirements_submitted;
+            //    $mandatory_requirements_submitted=DB::table('iso_sec_2_2')->where('project_id',$proj_id)->get()->count();
+            //    $mandatory_requirements_left=120-$mandatory_requirements_submitted;
 
 
-            return view('dashboard.main',[
-               'project'=>$project,
-               'groupsPerService'=>$groupsPerService,
-               'componentsPerGroup'=>$componentsPerGroup,
-               'mandatory_requirements_submitted'=>$mandatory_requirements_submitted,
-               'mandatory_requirements_left'=>$mandatory_requirements_left
-            ]);
+               $mandatory_controls = DB::table('iso_sec_2_2')->where('project_id',$proj_id)
+               ->select('comp_status', DB::raw('count(*) as total'))
+               ->whereIn('comp_status', ['yes', 'no', 'partial'])
+               ->groupBy('comp_status')
+               ->get();
+
+
+               if ($project->project_type==4){
+
+                $applicability=DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)
+                ->select('applicability', DB::raw('count(*) as total'))
+                ->whereIn('applicability', ['yes', 'no'])
+                ->groupBy('applicability')
+                ->get();
+
+
+
+
+                return view('dashboard.main',[
+                    'project'=>$project,
+                    'groupsPerService'=>$groupsPerService,
+                    'componentsPerGroup'=>$componentsPerGroup,
+                    'mandatory_controls'=>$mandatory_controls,
+                    'applicability'=>$applicability
+                 ]);
+
+
+               }else{
+                return view('dashboard.main',[
+                    'project'=>$project,
+                    'groupsPerService'=>$groupsPerService,
+                    'componentsPerGroup'=>$componentsPerGroup,
+                    'mandatory_controls'=>$mandatory_controls
+                 ]);
+
+               }
+
+
 
 
 
@@ -233,24 +264,37 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
                 $project=Project::join('project_types','projects.project_type','project_types.id')
                 ->where('projects.project_id',$proj_id)->first();
 
+              if($project->project_type==4){
+
+
                 $results = DB::table('iso_sec_2_1')
                 ->join('iso_sec_2_3_1', 'iso_sec_2_1.assessment_id', '=', 'iso_sec_2_3_1.asset_id')
-                ->where('iso_sec_2_1.project_id',$proj_id)
-                ->select('iso_sec_2_1.s_name', 'iso_sec_2_1.c_name',
-                         DB::raw('MAX(iso_sec_2_3_1.risk_level) as max_risk_level'),
-                         DB::raw('MIN(iso_sec_2_3_1.risk_level) as min_risk_level'),
-                         DB::raw('((MAX(iso_sec_2_3_1.risk_level) + MIN(iso_sec_2_3_1.risk_level)) / 2) as average_risk_level'))
+                ->select(
+                    'iso_sec_2_1.s_name',
+                    'iso_sec_2_1.c_name',
+                    DB::raw('MAX(iso_sec_2_3_1.risk_level) as max_risk_level'),
+                    DB::raw('MIN(iso_sec_2_3_1.risk_level) as min_risk_level'),
+                    DB::raw('((MAX(iso_sec_2_3_1.risk_level) + MIN(iso_sec_2_3_1.risk_level)) / 2) as average_risk_level')
+                    )
+
+                ->where('iso_sec_2_1.project_id', $proj_id)
                 ->groupBy('iso_sec_2_1.s_name', 'iso_sec_2_1.c_name')
-                ->get();
-
-
-
+                ->get()
+                ->groupBy('s_name');
 
 
                 return view('dashboard.ai_wizard',[
                     'project'=>$project,
                     'results'=>$results
                 ]);
+
+            }else{
+                return view('dashboard.ai_wizard',[
+                    'project'=>$project
+
+                ]);
+
+            }
 
             }else{
                 return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
