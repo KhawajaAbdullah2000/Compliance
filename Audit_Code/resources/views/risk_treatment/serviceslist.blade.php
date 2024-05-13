@@ -54,13 +54,14 @@ $permissions=json_decode($project_permissions);
     <table id="myTable2" class="table table-responsive table-primary table-striped mt-4">
         <thead class="thead-dark table-pointer">
           <tr style="vertical-align: middle">
-            <th onclick="sortTable(0)">Asset Group Name</th>
-            <th onclick="sortTable(1)">Asset Name</th>
-            <th onclick="sortTable(2)">Asset Component Name</th>
-            <th onclick="sortTable(3)">Asset Owner Dept</th>
-            <th onclick="sortTable(4)">Asset Physical Location</th>
-            <th onclick="sortTable(5)">Asset Logical Location</th>
-            <th onclick="sortTable(6)">Service Name for which this is an underlying asset </th>
+            <th onclick="sortTable(0)">Service Name for which this is an underlying asset </th>
+            <th onclick="sortTable(1)">Asset Group Name</th>
+            <th onclick="sortTable(2)">Asset Name</th>
+            <th onclick="sortTable(3)">Asset Component Name</th>
+            <th onclick="sortTable(4)">Asset Owner Dept</th>
+            <th onclick="sortTable(5)">Asset Physical Location</th>
+            <th onclick="sortTable(6)">Asset Logical Location</th>
+
             {{-- <th>Risk Assessment</th> --}}
             <th>Risk Treatment</th>
 
@@ -78,13 +79,14 @@ $permissions=json_decode($project_permissions);
 @endif
 @foreach ($data as $d)
             <tr>
+                <td class="fw-bold">{{$d->s_name}}</td>
                 <td class="fw-bold">{{$d->g_name}}</td>
                 <td>{{$d->name}} </td>
                 <td>{{$d->c_name}}</td>
                 <td>{{$d->owner_dept}} </td>
                 <td>{{$d->physical_loc}} </td>
                 <td>{{$d->logical_loc}} </td>
-                <td>{{$d->s_name}}</td>
+
 
           {{-- <td>
             <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white">Initiate or Edit</a>
