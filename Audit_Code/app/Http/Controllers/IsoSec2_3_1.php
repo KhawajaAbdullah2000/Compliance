@@ -97,7 +97,6 @@ class IsoSec2_3_1 extends Controller
     public function iso_sec2_3_1_initial_add(Request $req,$asset_id,$proj_id,$user_id)
     {
 
-
         $req->validate([
              'asset_value' => 'required',
              'applicability' => ['required', 'array', 'min:1'],
@@ -125,6 +124,7 @@ class IsoSec2_3_1 extends Controller
         );
     }
 
+    //risk treatment tale also initially contains risk assessment data
     foreach($old_risk as $old){
         Db::table('iso_risk_treatment')->where('project_id',$proj_id)->where('asset_id',$asset_id)
         ->where('control_num',$old->control_num)

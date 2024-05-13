@@ -128,7 +128,11 @@ $permissions=json_decode($project_permissions);
                 <th>Control Number</th>
                 <th>Title Of Control</th>
                 <th>Description of Control</th>
-                <th>Control is Applicable?</th>
+                <th>Control is Applicable?
+                     Select yes
+
+                    <input type="checkbox" id="selectAllApplicability" />
+                </th>
                 <th>Control Compliance%</th>
                 <th>Vulnerability%</th>
                 <th>Threat%</th>
@@ -955,6 +959,21 @@ $permissions=json_decode($project_permissions);
         // Update the value of the risk level input box
         riskLevelField.val(newRiskValue);
     });
+
+    $('#selectAllApplicability').change(function(){
+            if ($(this).is(':checked')) {
+                // Iterate over all applicability select elements and set the value to "yes+control_num"
+                $("select[name^='applicability']").each(function () {
+                    var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
+                    $(this).val('yes+' + controlId);
+                });
+            } else {
+                // If the checkbox is unchecked, reset all applicability select elements to the default (empty) value
+                $("select[name^='applicability']").each(function () {
+                    $(this).val('');
+                });
+            }
+        });
 });
 
 
