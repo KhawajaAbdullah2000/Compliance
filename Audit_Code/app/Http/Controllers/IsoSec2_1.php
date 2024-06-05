@@ -246,40 +246,7 @@ class IsoSec2_1 extends Controller
         }
     }
 
-    public function iso_sec_2_1_details($assessment_id, $proj_id, $user_id)
-    {
-        if ($user_id == auth()->user()->id) {
-            $checkpermission = Db::table('project_details')->select(
-                'project_types.id as type_id',
-                'project_details.project_code',
-                'project_details.project_permissions',
-                'projects.project_name',
-                'projects.project_id'
-            )
-                ->join('projects', 'project_details.project_code', 'projects.project_id')
-                ->join('project_types', 'projects.project_type', 'project_types.id')
-                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-                ->first();
-            if ($checkpermission) {
 
-                if ($checkpermission->type_id == 4) {
-                    $data = DB::table('iso_sec_2_1')->join('users', 'iso_sec_2_1.last_edited_by', 'users.id')
-                        ->where('assessment_id', $assessment_id)
-                        ->where('project_id', $proj_id)->first();
-
-                    if ($data) {
-                        return view('iso_sec_2_1.iso_sec_2_1_details', [
-                            'data' => $data,
-                            'project_id' => $checkpermission->project_id,
-                            'project_name' => $checkpermission->project_name,
-                            'project_permissions' => $checkpermission->project_permissions
-                        ]);
-                    }
-                }
-            }
-        }
-        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
-    }
 
     public function iso_sec_2_1_edit($assessment_id, $proj_id, $user_id)
     {

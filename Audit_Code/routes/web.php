@@ -183,7 +183,6 @@ route::get('risk_treatment/{proj_id}/{user_id}',[IsoSec2_1::class,'risk_treatmen
 
 route::post('new_iso_sec_2_1/{proj_id}/{user_id}',[IsoSec2_1::class,'new_iso_sec_2_1']);
 route::get('iso_sec_2_1_new/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_new']);
-route::get('/iso_sec_2_1_details/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_details']);
 route::get('iso_sec_2_1_edit/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_edit']);
 route::put('iso_sec_2_1_submit_edit/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_submit_edit']);
 route::get('iso_sec_2_1_delete/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_delete']);

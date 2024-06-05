@@ -29,7 +29,7 @@ class IsoSec2_3_1 extends Controller
 
                 if ($checkpermission->type_id == 4) {
 
-                    $assetData=Db::table('iso_sec_2_1')->where('assessment_id',$asset_id)->first();
+                    $assetData = Db::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
 
 
                     $filepath = public_path('ISO_SOA_A5.xlsx');
@@ -49,26 +49,26 @@ class IsoSec2_3_1 extends Controller
                     $sec2_4_a8_data = Excel::toArray([], $filepath4); //with header
                     $sec2_4_a8_rows = array_slice($sec2_4_a8_data[0], 1); //without header(first row)
 
-                    $a5_results=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)
-                    ->where('asset_id',$asset_id)->where('control_num','like','5%')
-                    ->get();
+                    $a5_results = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)
+                        ->where('asset_id', $asset_id)->where('control_num', 'like', '5%')
+                        ->get();
 
-                    $a6_results=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)
-                    ->where('asset_id',$asset_id)->where('control_num','like','6%')
-                    ->get();
+                    $a6_results = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)
+                        ->where('asset_id', $asset_id)->where('control_num', 'like', '6%')
+                        ->get();
 
-                    $a7_results=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)
-                    ->where('asset_id',$asset_id)->where('control_num','like','7%')
-                    ->get();
+                    $a7_results = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)
+                        ->where('asset_id', $asset_id)->where('control_num', 'like', '7%')
+                        ->get();
 
-                    $a8_results=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)
-                    ->where('asset_id',$asset_id)->where('control_num','like','8%')
-                    ->get();
+                    $a8_results = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)
+                        ->where('asset_id', $asset_id)->where('control_num', 'like', '8%')
+                        ->get();
 
-                    $project=Project::join('project_types','projects.project_type','project_types.id')
-                    ->where('projects.project_id',$proj_id)->first();
+                    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                        ->where('projects.project_id', $proj_id)->first();
 
- $global_asset_value=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)->first();
+                    $global_asset_value = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->first();
 
 
                     return view('iso_sec_2_3_1.iso_sec_2_3_1_main', [
@@ -76,17 +76,17 @@ class IsoSec2_3_1 extends Controller
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
                         'project_permissions' => $checkpermission->project_permissions,
-                         'assetData'=>$assetData,
+                        'assetData' => $assetData,
                         'sec2_4_a5_rows' => $sec2_4_a5_rows,
-                        'sec2_4_a6_rows'=>$sec2_4_a6_rows,
-                        'sec2_4_a7_rows'=>$sec2_4_a7_rows,
-                        'sec2_4_a8_rows'=>$sec2_4_a8_rows,
-                        'a5_results'=>$a5_results,
-                        'a6_results'=>$a6_results,
-                        'a7_results'=>$a7_results,
-                        'a8_results'=>$a8_results,
-                        'project'=>$project,
-                        'global_asset_value'=>$global_asset_value
+                        'sec2_4_a6_rows' => $sec2_4_a6_rows,
+                        'sec2_4_a7_rows' => $sec2_4_a7_rows,
+                        'sec2_4_a8_rows' => $sec2_4_a8_rows,
+                        'a5_results' => $a5_results,
+                        'a6_results' => $a6_results,
+                        'a7_results' => $a7_results,
+                        'a8_results' => $a8_results,
+                        'project' => $project,
+                        'global_asset_value' => $global_asset_value
                     ]);
                 }
             }
@@ -94,50 +94,50 @@ class IsoSec2_3_1 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-    public function iso_sec2_3_1_initial_add(Request $req,$asset_id,$proj_id,$user_id)
+    public function iso_sec2_3_1_initial_add(Request $req, $asset_id, $proj_id, $user_id)
     {
 
+
+
         $req->validate([
-             'asset_value' => 'required',
-             'applicability' => ['required', 'array', 'min:1'],
-            'control_compliance'=>['required','array','min:1'],
-             'vulnerability'=>['required','array','min:1'],
-             'threat'=>['required','array','min:1'],
-             'risk_level'=>['required','array','min:1']
+            'asset_value' => 'required',
+            'applicability' => ['required', 'array', 'min:1'],
+            'control_compliance' => ['required', 'array', 'min:1'],
+            'vulnerability' => ['required', 'array', 'min:1'],
+            'threat' => ['required', 'array', 'min:1'],
+            'risk_level' => ['required', 'array', 'min:1']
 
-         ]);
-
-
-
-  $global_asset_value=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)->first();
-  if ( $global_asset_value!=null and $global_asset_value->asset_value!=$req->asset_value){
-    $old_risk=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)->get();
-
-    foreach($old_risk as $old){
-        Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
-        ->where('control_num',$old->control_num)
-        ->update(
-          [
-            'asset_value'=>$req->asset_value,
-            'risk_level'=>($old->vulnerability/100.0)* ($old->threat/100.0) * $req->asset_value
-          ]
-        );
-    }
-
-    //risk treatment tale also initially contains risk assessment data
-    foreach($old_risk as $old){
-        Db::table('iso_risk_treatment')->where('project_id',$proj_id)->where('asset_id',$asset_id)
-        ->where('control_num',$old->control_num)
-        ->update(
-          [
-            'asset_value'=>$req->asset_value,
-            'risk_level'=>($old->vulnerability/100.0)* ($old->threat/100.0) * $req->asset_value
-          ]
-        );
-    }
+        ]);
 
 
-  }
+
+        $global_asset_value = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->first();
+        if ($global_asset_value != null and $global_asset_value->asset_value != $req->asset_value) {
+            $old_risk = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->get();
+
+            foreach ($old_risk as $old) {
+                Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                    ->where('control_num', $old->control_num)
+                    ->update(
+                        [
+                            'asset_value' => $req->asset_value,
+                            'risk_level' => ($old->vulnerability / 100.0) * ($old->threat / 100.0) * $req->asset_value
+                        ]
+                    );
+            }
+
+            //risk treatment tale also initially contains risk assessment data
+            foreach ($old_risk as $old) {
+                Db::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                    ->where('control_num', $old->control_num)
+                    ->update(
+                        [
+                            'asset_value' => $req->asset_value,
+                            'risk_level' => ($old->vulnerability / 100.0) * ($old->threat / 100.0) * $req->asset_value
+                        ]
+                    );
+            }
+        }
 
 
 
@@ -149,12 +149,13 @@ class IsoSec2_3_1 extends Controller
 
 
 
+
+
         $control_compliance_filter = array_filter($req->input('control_compliance'));
-
-
         $req->merge(['control_compliance' => $control_compliance_filter]);
         $control_compliance = $req->input('control_compliance');
         $filtered_control_compliance = array_filter($control_compliance);
+
 
 
 
@@ -165,7 +166,7 @@ class IsoSec2_3_1 extends Controller
         $vulnerability = $req->input('vulnerability');
         $filtered_vulnerability = array_filter($vulnerability);
 
-       // dd($filtered_vulnerability);
+
 
         $threat_filter = array_filter($req->input('threat'));
         $req->merge(['threat' => $threat_filter]);
@@ -177,14 +178,14 @@ class IsoSec2_3_1 extends Controller
         $risk_level_filter = array_filter($req->input('threat'));
         $req->merge(['threat' => $risk_level_filter]);
         $risk_level = $req->input('risk_level');
-       $filtered_risk_level = array_filter($risk_level);
+        $filtered_risk_level = array_filter($risk_level);
 
 
         $inputArray = $filtered_applicability;
         $yesNoArray = [];
         $numberArray = [];
 
-        foreach ($inputArray as $key=>$value) {
+        foreach ($inputArray as $key => $value) {
             $parts = explode('+', $value);
 
             if (count($parts) === 2) {
@@ -194,49 +195,35 @@ class IsoSec2_3_1 extends Controller
         }
 
 
-       //dd($filtered_control_compliance,$filtered_vulnerability,$filtered_threat,$filtered_risk_level,$yesNoArray,$numberArray);
 
 
-        $inputControlCompliance=$filtered_control_compliance;
-        foreach($inputControlCompliance as $icc){
-            $final_control_compliance[]=$icc;
-        }
+
+        // try {
+        foreach ($yesNoArray as $key => $value) {
+
+            if ($value == "yes") {
 
 
-        $inputVulnerability=$filtered_vulnerability;
-        foreach($inputVulnerability as $iv){
-            $final_vulnerability[]=$iv;
-        }
+                if (
+                    isset($filtered_control_compliance[$key]) && isset($filtered_vulnerability[$key])
+                    && isset($filtered_threat[$key]) && isset($filtered_risk_level[$key])
+                ) {
 
-
-        $inputThreat=$filtered_threat;
-        foreach($inputThreat as $it){
-            $final_threat[]=$it;
-        }
-
-        $inputRiskLevel=$filtered_risk_level;
-        foreach($inputRiskLevel as $irl){
-            $final_risk_level[]=$irl;
-        }
-
-
-        try {
-            foreach($yesNoArray as $key=>$value){
-
-                if($value=="yes"){
                     DB::table('iso_sec_2_3_1')->insert([
                         'project_id' => $proj_id,
                         'asset_id' => $asset_id,
                         'asset_value' => $req->asset_value,
                         'control_num' => $numberArray[$key],
                         'applicability' => "yes",
-                        'control_compliance'=>$filtered_control_compliance[$key],
-                        'vulnerability'=>$filtered_vulnerability[$key],
-                        'threat'=>$filtered_threat[$key],
-                        'risk_level'=>$filtered_risk_level[$key],
+                        'control_compliance' => $filtered_control_compliance[$key],
+                        'vulnerability' => $filtered_vulnerability[$key],
+                        'threat' => $filtered_threat[$key],
+                        'risk_level' => $filtered_risk_level[$key],
                         'last_edited_by' => $user_id,
                         'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
+
+
 
                     DB::table('iso_risk_treatment')->insert([
                         'project_id' => $proj_id,
@@ -244,103 +231,188 @@ class IsoSec2_3_1 extends Controller
                         'asset_value' => $req->asset_value,
                         'control_num' => $numberArray[$key],
                         'applicability' => "yes",
-                        'control_compliance'=>$filtered_control_compliance[$key],
-                        'vulnerability'=>$filtered_vulnerability[$key],
-                        'threat'=>$filtered_threat[$key],
-                        'risk_level'=>$filtered_risk_level[$key],
+                        'control_compliance' => $filtered_control_compliance[$key],
+                        'vulnerability' => $filtered_vulnerability[$key],
+                        'threat' => $filtered_threat[$key],
+                        'risk_level' => $filtered_risk_level[$key],
                         'last_edited_by' => $user_id,
                         'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
                 }
-                if($value=="no"){
-                    DB::table('iso_sec_2_3_1')->insert([
-                        'project_id' => $proj_id,
-                        'asset_id' => $asset_id,
-                        'asset_value' => $req->asset_value,
-                        'control_num' => $numberArray[$key],
-                        'applicability' => "no",
-                        'control_compliance'=>0,
-                        'vulnerability'=>0,
-                        'threat'=>0,
-                        'risk_level'=>0,
-                        'last_edited_by' => $user_id,
-                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                    ]);
-
-                    DB::table('iso_risk_treatment')->insert([
-                        'project_id' => $proj_id,
-                        'asset_id' => $asset_id,
-                        'asset_value' => $req->asset_value,
-                        'control_num' => $numberArray[$key],
-                        'applicability' => "no",
-                        'control_compliance'=>0,
-                        'vulnerability'=>0,
-                        'threat'=>0,
-                        'risk_level'=>0,
-                        'last_edited_by' => $user_id,
-                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                    ]);
-                }
-
             }
+            if ($value == "no") {
 
+                DB::table('iso_sec_2_3_1')->insert([
+                    'project_id' => $proj_id,
+                    'asset_id' => $asset_id,
+                    'asset_value' => $req->asset_value,
+                    'control_num' => $numberArray[$key],
+                    'applicability' => "no",
+                    'control_compliance' => 0,
+                    'vulnerability' => 0,
+                    'threat' => 0,
+                    'risk_level' => 0,
+                    'last_edited_by' => $user_id,
+                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                ]);
 
-        } catch (\Throwable $th) {
-            return redirect()->route('iso_sec_2_3_1',['asset_id'=>$asset_id,'proj_id'=>$proj_id,'user_id'=>$user_id])->with('error','Please insert values when selecting yes');
-
+                DB::table('iso_risk_treatment')->insert([
+                    'project_id' => $proj_id,
+                    'asset_id' => $asset_id,
+                    'asset_value' => $req->asset_value,
+                    'control_num' => $numberArray[$key],
+                    'applicability' => "no",
+                    'control_compliance' => 0,
+                    'vulnerability' => 0,
+                    'threat' => 0,
+                    'risk_level' => 0,
+                    'last_edited_by' => $user_id,
+                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                ]);
+            }
         }
 
 
-
-
-
-
-        // for ($i = 0; $i < count($yesNoArray); $i++) {
-
-        //         if ($yesNoArray[$i]=='yes'){
-        //             DB::table('iso_sec_2_3_1')->insert([
-        //                 'project_id' => $proj_id,
-        //                 'asset_id' => $asset_id,
-        //                 'asset_value' => $req->asset_value,
-        //                 'control_num' => $numberArray[$i],
-        //                 'applicability' => $yesNoArray[$i],
-        //                 'control_compliance'=>$filtered_control_compliance[$i],
-        //                 'vulnerability'=>$filtered_vulnerability[$i],
-        //                 'threat'=>$filtered_threat[$i],
-        //                 'risk_level'=>$filtered_risk_level[$i],
-        //                 'last_edited_by' => $user_id,
-        //                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-        //             ]);
-        //         }
-
-        //         if ($yesNoArray[$i]=='no'){
-        //             DB::table('iso_sec_2_3_1')->insert([
-        //                 'project_id' => $proj_id,
-        //                 'asset_id' => $asset_id,
-        //                 'asset_value' => $req->asset_value,
-        //                 'control_num' => $numberArray[$i],
-        //                 'applicability' => $yesNoArray[$i],
-        //                 'control_compliance'=>0,
-        //                 'vulnerability'=>0,
-        //                 'threat'=>0,
-        //                 'risk_level'=>0,
-        //                 'last_edited_by' => $user_id,
-        //                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-        //             ]);
-        //         }
-
-
+        // } catch (\Throwable $th) {
+        //     return redirect()->route('iso_sec_2_3_1',['asset_id'=>$asset_id,'proj_id'=>$proj_id,'user_id'=>$user_id])
+        //     ->with('error','Please insert values when selecting yes');
 
         // }
 
-        return redirect()->route('iso_sec_2_3_1',['asset_id'=>$asset_id,'proj_id'=>$proj_id,'user_id'=>$user_id])->with('success','Record Added');
 
 
+
+        return redirect()->route('iso_sec_2_3_1', ['asset_id' => $asset_id, 'proj_id' => $proj_id, 'user_id' => $user_id])->with('success', 'Record Added');
     }
 
+    // public function iso_sec2_3_1_initial_add(Request $req, $asset_id, $proj_id, $user_id){
+    //     $req->validate([
+    //         'asset_value' => 'required',
+    //         'applicability' => ['required', 'array', 'min:1'],
+    //         'control_compliance'=>['required','array','min:1'],
+    //         'vulnerability'=>['required','array','min:1'],
+    //         'threat'=>['required','array','min:1'],
+    //         'risk_level'=>['required','array','min:1']
+    //     ]);
+
+    //     // Update asset value if changed
+    //     $global_asset_value = DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->first();
+    //     if ($global_asset_value != null && $global_asset_value->asset_value != $req->asset_value) {
+    //         $old_risk = DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->get();
+
+    //         foreach ($old_risk as $old) {
+    //             DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->where('control_num', $old->control_num)
+    //                 ->update([
+    //                     'asset_value' => $req->asset_value,
+    //                     'risk_level' => ($old->vulnerability / 100.0) * ($old->threat / 100.0) * $req->asset_value
+    //                 ]);
+    //             DB::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)->where('control_num', $old->control_num)
+    //                 ->update([
+    //                     'asset_value' => $req->asset_value,
+    //                     'risk_level' => ($old->vulnerability / 100.0) * ($old->threat / 100.0) * $req->asset_value
+    //                 ]);
+    //         }
+    //     }
+
+    //     // Retrieve inputs and filter out empty values
+    //     $applicability = array_filter($req->input('applicability'));
+    //     $control_compliance = array_filter($req->input('control_compliance'));
+    //     $vulnerability = array_filter($req->input('vulnerability'));
+    //     $threat = array_filter($req->input('threat'));
+    //     $risk_level = array_filter($req->input('risk_level'));
+
+    //     $inputArray = $applicability;
+    //     $yesNoArray = [];
+    //     $numberArray = [];
+
+    //     foreach ($inputArray as $key => $value) {
+    //         $parts = explode('+', $value);
+    //         if (count($parts) === 2) {
+    //             $yesNoArray[$key] = $parts[0]; // "yes" or "no" part
+    //             $numberArray[$key] = $parts[1]; // "5.1" or "5.2" part
+    //         }
+    //     }
+
+    //     try {
+    //         foreach ($yesNoArray as $key => $value) {
+    //             if ($value == "yes") {
+    //                 if (
+    //                     isset($control_compliance[$key]) && !empty($control_compliance[$key]) &&
+    //                     isset($vulnerability[$key]) && !empty($vulnerability[$key]) &&
+    //                     isset($threat[$key]) && !empty($threat[$key]) &&
+    //                     isset($risk_level[$key]) && !empty($risk_level[$key])
+    //                 ) {
+    //                     DB::table('iso_sec_2_3_1')->insert([
+    //                         'project_id' => $proj_id,
+    //                         'asset_id' => $asset_id,
+    //                         'asset_value' => $req->asset_value,
+    //                         'control_num' => $numberArray[$key],
+    //                         'applicability' => "yes",
+    //                         'control_compliance' => $control_compliance[$key],
+    //                         'vulnerability' => $vulnerability[$key],
+    //                         'threat' => $threat[$key],
+    //                         'risk_level' => $risk_level[$key],
+    //                         'last_edited_by' => $user_id,
+    //                         'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+    //                     ]);
+
+    //                     DB::table('iso_risk_treatment')->insert([
+    //                         'project_id' => $proj_id,
+    //                         'asset_id' => $asset_id,
+    //                         'asset_value' => $req->asset_value,
+    //                         'control_num' => $numberArray[$key],
+    //                         'applicability' => "yes",
+    //                         'control_compliance' => $control_compliance[$key],
+    //                         'vulnerability' => $vulnerability[$key],
+    //                         'threat' => $threat[$key],
+    //                         'risk_level' => $risk_level[$key],
+    //                         'last_edited_by' => $user_id,
+    //                         'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+    //                     ]);
+    //                 }
+    //             } elseif ($value == "no") {
+    //                 DB::table('iso_sec_2_3_1')->insert([
+    //                     'project_id' => $proj_id,
+    //                     'asset_id' => $asset_id,
+    //                     'asset_value' => $req->asset_value,
+    //                     'control_num' => $numberArray[$key],
+    //                     'applicability' => "no",
+    //                     'control_compliance' => 0,
+    //                     'vulnerability' => 0,
+    //                     'threat' => 0,
+    //                     'risk_level' => 0,
+    //                     'last_edited_by' => $user_id,
+    //                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+    //                 ]);
+
+    //                 DB::table('iso_risk_treatment')->insert([
+    //                     'project_id' => $proj_id,
+    //                     'asset_id' => $asset_id,
+    //                     'asset_value' => $req->asset_value,
+    //                     'control_num' => $numberArray[$key],
+    //                     'applicability' => "no",
+    //                     'control_compliance' => 0,
+    //                     'vulnerability' => 0,
+    //                     'threat' => 0,
+    //                     'risk_level' => 0,
+    //                     'last_edited_by' => $user_id,
+    //                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+    //                 ]);
+    //             }
+    //         }
+
+    //         return redirect()->route('iso_sec_2_3_1', ['asset_id' => $asset_id, 'proj_id' => $proj_id, 'user_id' => $user_id])
+    //             ->with('success', 'Record Added');
+    //     } catch (\Throwable $th) {
+
+    //         return redirect()->route('iso_sec_2_3_1', ['asset_id' => $asset_id, 'proj_id' => $proj_id, 'user_id' => $user_id])
+    //             ->with('error', $th->getMessage());
+    //     }
+    // }
 
     //editing risk assessment
-    public function edit_risk_assessment($proj_id,$user_id,$asset_id,$control_num){
+    public function edit_risk_assessment($proj_id, $user_id, $asset_id, $control_num)
+    {
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -357,25 +429,24 @@ class IsoSec2_3_1 extends Controller
 
                 if ($checkpermission->type_id == 4) {
 
-                 $project=Project::join('project_types','projects.project_type','project_types.id')
-                 ->where('projects.project_id',$proj_id)->first();
+                    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                        ->where('projects.project_id', $proj_id)->first();
 
-                 $assetData=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
-                 ->where('control_num',$control_num)->first();
-                 return view('iso_sec_2_3_1.iso_sec_2_3_1_edit',[
-                    'project'=>$project,
-                    'assetData'=>$assetData
-                 ]);
-
+                    $assetData = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                        ->where('control_num', $control_num)->first();
+                    return view('iso_sec_2_3_1.iso_sec_2_3_1_edit', [
+                        'project' => $project,
+                        'assetData' => $assetData
+                    ]);
                 }
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
-
     }
 
 
-    public function edit_risk_assessment_update(Request $req,$proj_id,$user_id,$asset_id,$control_num){
+    public function edit_risk_assessment_update(Request $req, $proj_id, $user_id, $asset_id, $control_num)
+    {
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -401,69 +472,67 @@ class IsoSec2_3_1 extends Controller
                         'risk_level' => 'required_if:applicability,yes'
                     ]);
 
-                    if($req->applicability=="yes"){
-                        Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
-                        ->where('control_num',$control_num)->update(
-                           [
+                    if ($req->applicability == "yes") {
+                        Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                            ->where('control_num', $control_num)->update(
+                                [
 
-                            'applicability'=>$req->applicability,
-                            'control_compliance'=>$req->control_compliance,
-                            'vulnerability'=>$req->vulnerability,
-                            'threat'=>$req->threat,
-                            'risk_level'=>$req->risk_level
-                            ]
-                           );
+                                    'applicability' => $req->applicability,
+                                    'control_compliance' => $req->control_compliance,
+                                    'vulnerability' => $req->vulnerability,
+                                    'threat' => $req->threat,
+                                    'risk_level' => $req->risk_level
+                                ]
+                            );
 
-                           Db::table('iso_risk_treatment')->where('project_id',$proj_id)->where('asset_id',$asset_id)
-                           ->where('control_num',$control_num)->update(
-                              [
+                        Db::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                            ->where('control_num', $control_num)->update(
+                                [
 
-                               'applicability'=>$req->applicability,
-                               'control_compliance'=>$req->control_compliance,
-                               'vulnerability'=>$req->vulnerability,
-                               'threat'=>$req->threat,
-                               'risk_level'=>$req->risk_level
-                               ]
-                              );
+                                    'applicability' => $req->applicability,
+                                    'control_compliance' => $req->control_compliance,
+                                    'vulnerability' => $req->vulnerability,
+                                    'threat' => $req->threat,
+                                    'risk_level' => $req->risk_level
+                                ]
+                            );
                     }
 
-                    if($req->applicability=="no"){
-                        Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
-                        ->where('control_num',$control_num)->update(
-                           [
-                            'asset_value'=>$req->asset_value,
-                            'applicability'=>$req->applicability,
-                            'control_compliance'=>0,
-                            'vulnerability'=>0,
-                            'threat'=>0,
-                            'risk_level'=>$req->risk_level
-                            ]
-                           );
+                    if ($req->applicability == "no") {
+                        Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                            ->where('control_num', $control_num)->update(
+                                [
+                                    'asset_value' => $req->asset_value,
+                                    'applicability' => $req->applicability,
+                                    'control_compliance' => 0,
+                                    'vulnerability' => 0,
+                                    'threat' => 0,
+                                    'risk_level' => $req->risk_level
+                                ]
+                            );
 
-                           Db::table('iso_risk_treatment')->where('project_id',$proj_id)->where('asset_id',$asset_id)
-                           ->where('control_num',$control_num)->update(
-                              [
-                               'asset_value'=>$req->asset_value,
-                               'applicability'=>$req->applicability,
-                               'control_compliance'=>0,
-                               'vulnerability'=>0,
-                               'threat'=>0,
-                               'risk_level'=>$req->risk_level
-                               ]
-                              );
+                        Db::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                            ->where('control_num', $control_num)->update(
+                                [
+                                    'asset_value' => $req->asset_value,
+                                    'applicability' => $req->applicability,
+                                    'control_compliance' => 0,
+                                    'vulnerability' => 0,
+                                    'threat' => 0,
+                                    'risk_level' => $req->risk_level
+                                ]
+                            );
                     }
 
-                    return redirect()->route('iso_sec_2_3_1',[
-                        'asset_id'=>$asset_id,
-                        'proj_id'=>$proj_id,
-                        'user_id'=>auth()->user()->id
-                    ])->with('success','Record Updated');
-
+                    return redirect()->route('iso_sec_2_3_1', [
+                        'asset_id' => $asset_id,
+                        'proj_id' => $proj_id,
+                        'user_id' => auth()->user()->id
+                    ])->with('success', 'Record Updated');
                 }
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
-
     }
 
 
@@ -526,7 +595,7 @@ class IsoSec2_3_1 extends Controller
     }
 
 
-    public function iso_sec2_3_1_risk_treat_controls(Request $req,$asset_id, $proj_id, $user_id)
+    public function iso_sec2_3_1_risk_treat_controls(Request $req, $asset_id, $proj_id, $user_id)
     {
 
         if ($user_id == auth()->user()->id) {
@@ -567,53 +636,49 @@ class IsoSec2_3_1 extends Controller
                     $sec2_4_a8_rows = array_slice($sec2_4_a8_data[0], 1); //without header(first row)
 
 
-                   $check=DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)->where('applicability','yes')
-                   ->first();
+                    $check = DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->where('applicability', 'yes')
+                        ->first();
 
-                            //controls wherer applicability is yes
-                         $controls=DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
-                                    ->pluck('control_num')->toArray();
-
-
-                        $assetData=Db::table('iso_sec_2_1')
-                        ->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
+                    //controls wherer applicability is yes
+                    $controls = DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                        ->pluck('control_num')->toArray();
 
 
-                        $assetDataForFive=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)
-                        ->where('asset_id',$asset_id)->get();
+                    $assetData = Db::table('iso_sec_2_1')
+                        ->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
 
 
-
-
-                          $project=Project::join('project_types','projects.project_type','project_types.id')
-                          ->where('projects.project_id',$proj_id)->first();
-
-                            return view('iso_sec_2_3_1.risk_treatment', [
-                                'project_id' => $checkpermission->project_id,
-                                'project_name' => $checkpermission->project_name,
-                                'project_permissions' => $checkpermission->project_permissions,
-                                'sec2_4_a5_rows' => $sec2_4_a5_rows,
-                                'sec2_4_a6_rows'=>$sec2_4_a6_rows,
-                                'sec2_4_a7_rows'=>$sec2_4_a7_rows,
-                                'sec2_4_a8_rows'=>$sec2_4_a8_rows,
-                                'controls'=>$controls,
-                                'assetData'=>$assetData,
-                                'check'=>$check,
-                                'project'=>$project,
-                                'assetDataForFive'=>$assetDataForFive
-
-                            ]);
+                    $assetDataForFive = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)
+                        ->where('asset_id', $asset_id)->get();
 
 
 
 
+                    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                        ->where('projects.project_id', $proj_id)->first();
+
+                    return view('iso_sec_2_3_1.risk_treatment', [
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'sec2_4_a5_rows' => $sec2_4_a5_rows,
+                        'sec2_4_a6_rows' => $sec2_4_a6_rows,
+                        'sec2_4_a7_rows' => $sec2_4_a7_rows,
+                        'sec2_4_a8_rows' => $sec2_4_a8_rows,
+                        'controls' => $controls,
+                        'assetData' => $assetData,
+                        'check' => $check,
+                        'project' => $project,
+                        'assetDataForFive' => $assetDataForFive
+
+                    ]);
                 }
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-    public function iso_sec_2_3_2_risk_treat_form($control_num, $asset_id,$proj_id, $user_id)
+    public function iso_sec_2_3_2_risk_treat_form($control_num, $asset_id, $proj_id, $user_id)
     {
         //if component selected
 
@@ -635,10 +700,10 @@ class IsoSec2_3_1 extends Controller
                     if ($checkpermission->type_id == 4) {
 
                         $asset_risk_assess = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
-                         ->where('control_num', $control_num)->first();
+                            ->where('control_num', $control_num)->first();
 
-                         $after_risk_treatment=Db::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)
-                         ->where('control_num', $control_num)->first();
+                        $after_risk_treatment = Db::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                            ->where('control_num', $control_num)->first();
 
                         // dd($asset_risk_assess);
 
@@ -654,10 +719,10 @@ class IsoSec2_3_1 extends Controller
 
                         $users = User::where('privilege_id', 5)->wherein('org_id', $orgs)->get(['id', 'first_name', 'last_name']);
 
-                        $assetData=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
+                        $assetData = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
 
-                        $project=Project::join('project_types','projects.project_type','project_types.id')
-                        ->where('projects.project_id',$proj_id)->first();
+                        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                            ->where('projects.project_id', $proj_id)->first();
 
 
 
@@ -669,10 +734,10 @@ class IsoSec2_3_1 extends Controller
                             'control_num' => $control_num,
                             'assetvalue' => $asset_risk_assess->asset_value,
                             'users' => $users,
-                            'treatmentData'=>$asset_risk_assess,
-                            'assetData'=>$assetData,
-                            'project'=>$project,
-                            'after_risk_treatment'=>$after_risk_treatment
+                            'treatmentData' => $asset_risk_assess,
+                            'assetData' => $assetData,
+                            'project' => $project,
+                            'after_risk_treatment' => $after_risk_treatment
 
 
                         ]);
@@ -683,7 +748,8 @@ class IsoSec2_3_1 extends Controller
         }
     }
 
-    public function iso_sec_2_3_2_treat_form_submit(Request $req,$asset_id,$control_num,$proj_id,$user_id){
+    public function iso_sec_2_3_2_treat_form_submit(Request $req, $asset_id, $control_num, $proj_id, $user_id)
+    {
         //action plan
         //is user selected component
         $req->validate([
@@ -709,44 +775,43 @@ class IsoSec2_3_1 extends Controller
                 if (in_array('Data Inputter', $permissions)) {
                     if ($checkpermission->type_id == 4) {
 
-                        DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('control_num',$control_num)
-                        ->where('asset_id',$asset_id)->update([
-                            'treatment_action'=>$req->treatment_action,
-                            'treatment_target_date'=>$req->treatment_target_date,
-                            'treatment_comp_date'=>$req->treatment_comp_date,
-                            'responsibility_for_treatment'=>$req->responsibility_for_treatment,
-                            'last_edited_by' => $user_id,
-                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                        ]);
+                        DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('control_num', $control_num)
+                            ->where('asset_id', $asset_id)->update([
+                                'treatment_action' => $req->treatment_action,
+                                'treatment_target_date' => $req->treatment_target_date,
+                                'treatment_comp_date' => $req->treatment_comp_date,
+                                'responsibility_for_treatment' => $req->responsibility_for_treatment,
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                            ]);
 
-                        return redirect()->route('iso_sec_2_3_2_risk_treat_form',[
-                           'control_num'=>$control_num, 'asset_id'=>$asset_id,'proj_id'=>$proj_id,'user_id'=>$user_id
-                        ])->with('success','Treatment Action Plan Updated');
-
+                        return redirect()->route('iso_sec_2_3_2_risk_treat_form', [
+                            'control_num' => $control_num, 'asset_id' => $asset_id, 'proj_id' => $proj_id, 'user_id' => $user_id
+                        ])->with('success', 'Treatment Action Plan Updated');
                     }
                 }
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
         }
-
     }
 
 
-    public function iso_sec_2_3_2_treat_form1_submit(Request $req,$asset_id,$control_num,$proj_id,$user_id){
+    public function iso_sec_2_3_2_treat_form1_submit(Request $req, $asset_id, $control_num, $proj_id, $user_id)
+    {
 
 
         $req->validate([
-            'residual_risk_treatment'=>"required|string",
+            'residual_risk_treatment' => "required|string",
             'applicability' => 'required',
             'control_compliance' => 'required_if:applicability,yes',
             'vulnerability' => 'required_if:applicability,yes',
             'threat' => 'required_if:applicability,yes',
             'risk_level' => 'required_if:applicability,yes',
-            'acceptance_justification'=>'required_if:residual_risk_treatment,retain and accept risk',
-            'acceptance_target_date'=>'required_if:residual_risk_treatment,retain and accept risk',
-            'acceptance_actual_date'=>'required_if:residual_risk_treatment,retain and accept risk',
-            'acceptance_proposed_responsibility'=>'required_if:residual_risk_treatment,retain and accept risk',
-            'accepted_by'=>'required_if:residual_risk_treatment,retain and accept risk'
+            'acceptance_justification' => 'required_if:residual_risk_treatment,retain and accept risk',
+            'acceptance_target_date' => 'required_if:residual_risk_treatment,retain and accept risk',
+            'acceptance_actual_date' => 'required_if:residual_risk_treatment,retain and accept risk',
+            'acceptance_proposed_responsibility' => 'required_if:residual_risk_treatment,retain and accept risk',
+            'accepted_by' => 'required_if:residual_risk_treatment,retain and accept risk'
         ]);
 
         if ($user_id == auth()->user()->id) {
@@ -767,62 +832,58 @@ class IsoSec2_3_1 extends Controller
                     if ($checkpermission->type_id == 4) {
 
 
-                        if($req->applicability=="yes"){
-                            DB::table('iso_risk_treatment')->where('project_id',$proj_id)->where('control_num',$control_num)
-                            ->where('asset_id',$asset_id)->update([
-                                'residual_risk_treatment'=>$req->residual_risk_treatment,
-                                'applicability'=>$req->applicability,
-                                'control_compliance'=>$req->control_compliance,
-                                'vulnerability'=>$req->vulnerability,
-                                'threat'=>$req->threat,
-                                'risk_level'=>$req->risk_level,
-                                'last_edited_by' => $user_id,
-                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                                'acceptance_justification'=>$req->acceptance_justification,
-                                'acceptance_target_date'=>$req->acceptance_target_date,
-                                'acceptance_actual_date'=>$req->acceptance_actual_date,
-                                'acceptance_proposed_responsibility'=>$req->acceptance_proposed_responsibility,
-                                'accepted_by'=>$req->accepted_by
-                            ]);
-
+                        if ($req->applicability == "yes") {
+                            DB::table('iso_risk_treatment')->where('project_id', $proj_id)->where('control_num', $control_num)
+                                ->where('asset_id', $asset_id)->update([
+                                    'residual_risk_treatment' => $req->residual_risk_treatment,
+                                    'applicability' => $req->applicability,
+                                    'control_compliance' => $req->control_compliance,
+                                    'vulnerability' => $req->vulnerability,
+                                    'threat' => $req->threat,
+                                    'risk_level' => $req->risk_level,
+                                    'last_edited_by' => $user_id,
+                                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                                    'acceptance_justification' => $req->acceptance_justification,
+                                    'acceptance_target_date' => $req->acceptance_target_date,
+                                    'acceptance_actual_date' => $req->acceptance_actual_date,
+                                    'acceptance_proposed_responsibility' => $req->acceptance_proposed_responsibility,
+                                    'accepted_by' => $req->accepted_by
+                                ]);
                         }
 
-                        if($req->applicability=="no"){
-                            DB::table('iso_risk_treatment')->where('project_id',$proj_id)->where('control_num',$control_num)
-                            ->where('asset_id',$asset_id)->update([
-                                'residual_risk_treatment'=>$req->residual_risk_treatment,
-                                'applicability'=>$req->applicability,
-                                'control_compliance'=>0,
-                                'vulnerability'=>0,
-                                'threat'=>0,
-                                'risk_level'=>0,
-                                'last_edited_by' => $user_id,
-                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                                'acceptance_justification'=>$req->acceptance_justification,
-                                'acceptance_target_date'=>$req->acceptance_target_date,
-                                'acceptance_actual_date'=>$req->acceptance_actual_date,
-                                'acceptance_proposed_responsibility'=>$req->acceptance_proposed_responsibility,
-                                'accepted_by'=>$req->accepted_by
-                            ]);
+                        if ($req->applicability == "no") {
+                            DB::table('iso_risk_treatment')->where('project_id', $proj_id)->where('control_num', $control_num)
+                                ->where('asset_id', $asset_id)->update([
+                                    'residual_risk_treatment' => $req->residual_risk_treatment,
+                                    'applicability' => $req->applicability,
+                                    'control_compliance' => 0,
+                                    'vulnerability' => 0,
+                                    'threat' => 0,
+                                    'risk_level' => 0,
+                                    'last_edited_by' => $user_id,
+                                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                                    'acceptance_justification' => $req->acceptance_justification,
+                                    'acceptance_target_date' => $req->acceptance_target_date,
+                                    'acceptance_actual_date' => $req->acceptance_actual_date,
+                                    'acceptance_proposed_responsibility' => $req->acceptance_proposed_responsibility,
+                                    'accepted_by' => $req->accepted_by
+                                ]);
                         }
 
 
 
-                        return redirect()->route('iso_sec_2_3_2_risk_treat_form',[
-                           'control_num'=>$control_num, 'asset_id'=>$asset_id,'proj_id'=>$proj_id,'user_id'=>$user_id
-                        ])->with('success','Risk Treatment completed');
-
+                        return redirect()->route('iso_sec_2_3_2_risk_treat_form', [
+                            'control_num' => $control_num, 'asset_id' => $asset_id, 'proj_id' => $proj_id, 'user_id' => $user_id
+                        ])->with('success', 'Risk Treatment completed');
                     }
                 }
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
         }
-
-
-
     }
 
-    public function risk_treatment_edit_action_plan_form($asset_id,$control_num,$proj_id, $user_id){
+    public function risk_treatment_edit_action_plan_form($asset_id, $control_num, $proj_id, $user_id)
+    {
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -841,7 +902,7 @@ class IsoSec2_3_1 extends Controller
                     if ($checkpermission->type_id == 4) {
 
                         $asset_risk_assess = Db::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)
-                         ->where('control_num', $control_num)->first();
+                            ->where('control_num', $control_num)->first();
 
                         // dd($asset_risk_assess);
 
@@ -860,10 +921,10 @@ class IsoSec2_3_1 extends Controller
 
                         $users = User::where('privilege_id', 5)->wherein('org_id', $orgs)->get(['id', 'first_name', 'last_name']);
 
-                        $assetData=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
+                        $assetData = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
 
-                        $project=Project::join('project_types','projects.project_type','project_types.id')
-                        ->where('projects.project_id',$proj_id)->first();
+                        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                            ->where('projects.project_id', $proj_id)->first();
 
 
                         return view('iso_sec_2_3_1.iso_sec_2_3_2_actionplanform', [
@@ -874,9 +935,9 @@ class IsoSec2_3_1 extends Controller
                             'control_num' => $control_num,
                             'assetvalue' => $asset_risk_assess->asset_value,
                             'users' => $users,
-                            'treatmentData'=>$asset_risk_assess,
-                            'assetData'=>$assetData,
-                            'project'=>$project
+                            'treatmentData' => $asset_risk_assess,
+                            'assetData' => $assetData,
+                            'project' => $project
 
 
                         ]);

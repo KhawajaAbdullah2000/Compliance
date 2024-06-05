@@ -52,7 +52,8 @@ $permissions=json_decode($project_permissions);
 
         <div class="card mt-2">
             <div class="card-header my_bg_color text-white text-center">
-                <h3>View/Edit Service or Asset</h3>
+                <h3>Edit Service and/or Asset Data</h3>
+                <p><i class="fas fa-exclamation-triangle" style="color: red"></i> Editing this will over ride the previous values</p>
               </div>
             <div class="card-body">
 

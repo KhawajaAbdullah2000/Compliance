@@ -54,23 +54,23 @@ $permissions=json_decode($project_permissions);
     </div>
 @endif
 
-<p class="fw-bold">
+<p class="">
 
-   Service Name: {{$assetData->s_name}}
+ <span class="fw-bold">  Service Name: </span> {{$assetData->s_name}}
 
     @isset($assetData->g_name)
     <br>
-    Asset Group Name: {{$assetData->g_name}}
+    <span class="fw-bold">  Asset Group Name: </span> {{$assetData->g_name}}
     @endisset
 
     @isset($assetData->name)
     <br>
-    Asset Name: {{$assetData->name}}
+    <span class="fw-bold"> Asset Name: </span> {{$assetData->name}}
     @endisset
 
     @isset($assetData->c_name)
     <br>
-    Asset Component Name: {{$assetData->c_name}}
+    <span class="fw-bold">  Asset Component Name: </span>{{$assetData->c_name}}
     @endisset
 
 
@@ -100,7 +100,7 @@ $permissions=json_decode($project_permissions);
         <label for="">Select Asset value</label>
         {{-- <p>{{$global_asset_value}}</p> --}}
         <select name="asset_value" class="form-control boxstyling" id="assetSelect">
-            <option value="">Select --</option>
+
             @if($global_asset_value!=null)
                 <option value=10 {{old('asset_value',$global_asset_value->asset_value)==10?'selected':''}}>High</option>
                 <option value=5 {{old('asset_value',$global_asset_value->asset_value)==5?'selected':''}}>Medium</option>
@@ -129,7 +129,7 @@ $permissions=json_decode($project_permissions);
                 <th>Title Of Control</th>
                 <th>Description of Control</th>
                 <th>Control is Applicable?
-                     Select yes
+                     Select All No
 
                     <input type="checkbox" id="selectAllApplicability" />
                 </th>
@@ -168,7 +168,7 @@ $permissions=json_decode($project_permissions);
 
                     @if($loop->last)
                     <select name="applicability[]" class="form-select">
-                        <option value=""> Select--  </option>
+
 
                         <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Yes</option>
 
@@ -179,7 +179,6 @@ $permissions=json_decode($project_permissions);
                     @endforeach
                     @else
                     <select name="applicability[]" class="form-select">
-                        <option value=""> Select--  </option>
 
                         <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Yes</option>
 
@@ -348,7 +347,7 @@ $permissions=json_decode($project_permissions);
                 @if($loop->last)
 
                <select name="applicability[]" class="form-select">
-                <option value=""> Select--  </option>
+
 
                 <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Yes</option>
 
@@ -360,7 +359,7 @@ $permissions=json_decode($project_permissions);
                 @else
 
                <select name="applicability[]" class="form-select">
-                <option value=""> Select--  </option>
+
 
                 <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Yes</option>
 
@@ -525,7 +524,7 @@ $permissions=json_decode($project_permissions);
 
                     @if($loop->last)
                     <select name="applicability[]" class="form-select">
-                        <option value=""> Select--  </option>
+
 
                         <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Yes</option>
 
@@ -535,7 +534,7 @@ $permissions=json_decode($project_permissions);
             @endforeach
         @else
         <select name="applicability[]" class="form-select">
-            <option value=""> Select--  </option>
+
 
             <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Yes</option>
 
@@ -708,7 +707,7 @@ $permissions=json_decode($project_permissions);
 
                     @if($loop->last)
                     <select name="applicability[]" class="form-select">
-                        <option value=""> Select--  </option>
+
 
                         <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Yes</option>
 
@@ -718,7 +717,6 @@ $permissions=json_decode($project_permissions);
             @endforeach
         @else
         <select name="applicability[]" class="form-select">
-            <option value=""> Select--  </option>
 
             <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Yes</option>
 
@@ -726,14 +724,6 @@ $permissions=json_decode($project_permissions);
         </select>
         @endif
 
-
-           {{-- <select name="applicability[]" class="form-select">
-            <option value=""> Select--  </option>
-
-            <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Yes</option>
-
-            <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>No</option>
-        </select> --}}
 
 
         </td>
@@ -913,7 +903,7 @@ $permissions=json_decode($project_permissions);
 
 <script>
    $(document).ready(function(){
-    var assetValue = parseFloat($('#assetSelect').val()) || null;
+    var assetValue = parseFloat($('#assetSelect').val()) || 10;
     var newVulnerabilityValue = null;
     var threat = null;
     var newRiskValue = null;
@@ -965,12 +955,13 @@ $permissions=json_decode($project_permissions);
                 // Iterate over all applicability select elements and set the value to "yes+control_num"
                 $("select[name^='applicability']").each(function () {
                     var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
-                    $(this).val('yes+' + controlId);
+                    $(this).val('no+' + controlId);
                 });
             } else {
                 // If the checkbox is unchecked, reset all applicability select elements to the default (empty) value
                 $("select[name^='applicability']").each(function () {
-                    $(this).val('');
+                    var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
+                    $(this).val('yes+' + controlId);
                 });
             }
         });

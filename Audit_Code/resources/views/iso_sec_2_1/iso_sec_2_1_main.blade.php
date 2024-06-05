@@ -42,7 +42,7 @@ $permissions=json_decode($project_permissions);
 
 
 
-    <h4 class="text-center fw-bold mb-3 mt-4">Upload or Enter Services and/or Assets in the scope of this Project</h4>
+    <h4 class="text-center fw-bold mb-3 mt-4">Upload or Enter Services and Assets in scope</h4>
 
 
     @if($org_projects->count()>0)
@@ -105,13 +105,13 @@ $permissions=json_decode($project_permissions);
         <tbody>
 @foreach ($data as $d)
             <tr>
-                <td class="fw-bold">{{$d->s_name}}</td>
-                <td >{{$d->g_name}}</td>
-                <td>{{$d->name}} </td>
-                <td>{{$d->c_name}}</td>
-                <td>{{$d->owner_dept}} </td>
-                <td>{{$d->physical_loc}} </td>
-                <td>{{$d->logical_loc}} </td>
+                <td class="fw-bold">{{ strlen($d->s_name) > 12 ? substr($d->s_name, 0, 12) . '...' : $d->s_name }}</td>
+                <td >{{ strlen($d->g_name) > 12 ? substr($d->g_name, 0, 12) . '...' : $d->g_name }}</td>
+                <td>{{ strlen($d->name) > 12 ? substr($d->name, 0, 12) . '...' : $d->name }}</td>
+                <td>{{ strlen($d->c_name) > 12 ? substr($d->c_name, 0, 12) . '...' : $d->c_name }}</td>
+                <td>{{ strlen($d->owner_dept) > 12 ? substr($d->owner_dept, 0, 12) . '...' : $d->owner_dept }} </td>
+                <td>{{ strlen($d->physical_loc) > 12 ? substr($d->physical_loc, 0, 12) . '...' : $d->physical_loc }} </td>
+                <td> {{ strlen($d->logical_loc) > 12 ? substr($d->logical_loc, 0, 12) . '...' : $d->logical_loc }} </td>
 
 
                 @if($project->project_type==4)
@@ -125,7 +125,7 @@ $permissions=json_decode($project_permissions);
 
           </td> --}}
 
-          <td>
+          <td style="text-align:center">
             @if(in_array('Data Inputter',$permissions))
 
              <a href="/iso_sec_2_1_edit/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">
@@ -140,9 +140,7 @@ $permissions=json_decode($project_permissions);
 
         @endif
 
-            <a href="/iso_sec_2_1_details/{{$d->assessment_id}}/{{$d->project_id}}/{{auth()->user()->id}}">
-                <i class="fas fa-eye fa-lg" style="color: #00d123;"></i>
-            </a>
+
 
                 </td>
 

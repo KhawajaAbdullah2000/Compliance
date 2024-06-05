@@ -51,13 +51,23 @@ $permissions=json_decode($project_permissions);
 
         <div class="card mt-2">
             <div class="card-header my_bg_color text-white text-center">
-                <h2>Add New Asset</h2>
+                <h2>Add Service and/or Asset Data</h2>
               </div>
             <div class="card-body">
 
         <form action="/new_iso_sec_2_1/{{$project_id}}/{{auth()->user()->id}}" method="post">
             @csrf
+
             <div class="form-group">
+                <label for="">Service Name for which this is an underlying asset:</label>
+                <input type="text" name="s_name" class="form-control" value="{{old('s_name')}}"></input>
+                @if($errors->has('s_name'))
+                <div class="text-danger">{{ $errors->first('s_name') }}</div>
+            @endif
+              </div>
+
+
+            <div class="form-group mt-4">
                 <label for="">Asset Group Name:</label>
                  <input type="text" name="g_name" class="form-control" value="{{old('g_name')}}"></input>
                 @if($errors->has('g_name'))
@@ -106,13 +116,7 @@ $permissions=json_decode($project_permissions);
             @endif
               </div>
 
-              <div class="form-group mt-4">
-                <label for="">Service Name for which this is an underlying asset:</label>
-                <input type="text" name="s_name" class="form-control" value="{{old('s_name')}}"></input>
-                @if($errors->has('s_name'))
-                <div class="text-danger">{{ $errors->first('s_name') }}</div>
-            @endif
-              </div>
+
 
 
               <div class="text-center mt-3 fw-bold">
