@@ -38,6 +38,7 @@
 
 
 
+    <h2 class="fw-bold mt-4 text-center">Create or edit Statement of Applicability (SOA)</h2>
 
     <div class="row text-center justify-content-center full-img-subsections">
         <div class="row mt-2">

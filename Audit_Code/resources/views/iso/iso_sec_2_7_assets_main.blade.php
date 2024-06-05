@@ -54,18 +54,19 @@ $permissions=json_decode($project_permissions);
 
 @if($data->count()>0)
 
-    <h3 class="text-center">A8: Technological Controls</h3>
+    <h3 class="text-center">SOA for Annex A8: Technological Controls</h3>
 
     <table class="table table-responsive table-primary table-striped mt-4">
         <thead class="thead-dark">
           <tr style="vertical-align: middle">
+            <th>Service Name</th>
             <th >Asset Group Name</th>
             <th>Asset Name</th>
             <th>Asset Component Name</th>
             <th>Asset Owner Dept</th>
             <th>Asset Physical Location</th>
             <th>Asset Logical Location</th>
-            <th>Service Name for which this is an underlying asset </th>
+
 <th>Organizational Controls</th>
 
             <th>Details</th>
@@ -74,13 +75,14 @@ $permissions=json_decode($project_permissions);
         <tbody>
 @foreach ($data as $d)
             <tr>
-                <td class="fw-bold">{{substr($d->g_name,0,15)}} @if(strlen($d->g_name)>15)... @endif </td>
+                <td>{{substr($d->s_name,0,16)}}@if(strlen($d->s_name)>16)... @endif </td>
+                <td>{{substr($d->g_name,0,15)}} @if(strlen($d->g_name)>15)... @endif </td>
                 <td>{{substr($d->name,0,20)}} @if(strlen($d->name)>20)... @endif </td>
                 <td>{{substr($d->c_name,0,10)}}@if(strlen($d->c_name)>10)... @endif </td>
                 <td>{{substr($d->owner_dept,0,10)}}@if(strlen($d->owner_dept)>10)... @endif </td>
                 <td>{{substr($d->physical_loc,0,10)}}@if(strlen($d->physical_loc)>10).. @endif </td>
                 <td>{{substr($d->logical_loc,0,10)}}@if(strlen($d->logical_loc)>10)... @endif </td>
-                <td>{{substr($d->s_name,0,16)}}@if(strlen($d->s_name)>16)... @endif </td>
+
 
 
                 <td>

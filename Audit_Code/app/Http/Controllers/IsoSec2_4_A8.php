@@ -165,8 +165,8 @@ class IsoSec2_4_A8 extends Controller
 
         if ($check->applicability == "no") {
             $req->validate([
-                'justification' => 'required',
-                'ref_of_risk' => 'required'
+                'justification' => 'required'
+
             ]);
         }
         if ($check->applicability == "yes") {

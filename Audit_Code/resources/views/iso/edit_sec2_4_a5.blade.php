@@ -58,7 +58,7 @@ $headers=array('Control num','Title of Control','Descriptionof Control')
 
 
         <div class="card-header text-center">
-        <h3 class="fw-bold">Details</h3>
+
 
          </div>
          <div class="card-body">
@@ -69,7 +69,7 @@ $headers=array('Control num','Title of Control','Descriptionof Control')
 
                 @if($result->applicability=="no" )
                 <div class="form-group mt-2">
-                  <label for="network_name" class="fs-5">Justification:</label>
+                  <label for="network_name" class="fs-5">* Justification for Excluding this control for this asset component:</label>
                   <textarea name="justification" cols="70" rows="10" class="form-control">@if(isset($control_data)){{old('justification',$control_data->justification)}}@endif</textarea>
                   @if($errors->has('justification'))
                   <div class="text-danger">{{ $errors->first('justification') }}</div>
@@ -78,7 +78,7 @@ $headers=array('Control num','Title of Control','Descriptionof Control')
                 @endif
 
                 <div class="form-group mt-4 fs-5">
-                    <label for="network_name">Reference of Risk Assessment and Treatment:</label>
+                    <label for="network_name">Notes:</label>
                     <textarea name="ref_of_risk" cols="70" rows="10" class="form-control">@if(isset($control_data)){{old('ref_of_risk',$control_data->ref_of_risk)}}@endif</textarea>
                     @if($errors->has('ref_of_risk'))
                     <div class="text-danger">{{ $errors->first('ref_of_risk') }}</div>

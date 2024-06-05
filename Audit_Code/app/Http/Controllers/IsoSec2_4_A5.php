@@ -240,8 +240,8 @@ class IsoSec2_4_A5 extends Controller
 
         if($check->applicability=="no"){
             $req->validate([
-                'justification'=>'required',
-                'ref_of_risk'=>'required'
+                'justification'=>'required'
+
             ]);
 
         }
