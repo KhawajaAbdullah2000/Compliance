@@ -643,6 +643,10 @@ class IsoSec2_3_1 extends Controller
                     $controls = DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
                         ->pluck('control_num')->toArray();
 
+                    $asset_value=DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                    ->first()->asset_value;
+
+
 
                     $assetData = Db::table('iso_sec_2_1')
                         ->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
@@ -650,6 +654,7 @@ class IsoSec2_3_1 extends Controller
 
                     $assetDataForFive = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)
                         ->where('asset_id', $asset_id)->get();
+
 
 
 
@@ -669,7 +674,8 @@ class IsoSec2_3_1 extends Controller
                         'assetData' => $assetData,
                         'check' => $check,
                         'project' => $project,
-                        'assetDataForFive' => $assetDataForFive
+                        'assetDataForFive' => $assetDataForFive,
+                        'asset_value'=>$asset_value
 
                     ]);
                 }
@@ -750,14 +756,15 @@ class IsoSec2_3_1 extends Controller
 
     public function iso_sec_2_3_2_treat_form_submit(Request $req, $asset_id, $control_num, $proj_id, $user_id)
     {
-        //action plan
-        //is user selected component
+
         $req->validate([
-            'treatment_action' => 'required',
-            'treatment_target_date' => 'required',
-            'treatment_comp_date' => 'required',
-            'responsibility_for_treatment' => 'required',
+            'treatment_action' => '',
+            'treatment_target_date' => '',
+            'treatment_comp_date' => '',
+            'responsibility_for_treatment' => '',
         ]);
+
+
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -775,7 +782,7 @@ class IsoSec2_3_1 extends Controller
                 if (in_array('Data Inputter', $permissions)) {
                     if ($checkpermission->type_id == 4) {
 
-                        DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('control_num', $control_num)
+                        DB::table('iso_risk_treatment')->where('project_id', $proj_id)->where('control_num', $control_num)
                             ->where('asset_id', $asset_id)->update([
                                 'treatment_action' => $req->treatment_action,
                                 'treatment_target_date' => $req->treatment_target_date,
@@ -799,19 +806,18 @@ class IsoSec2_3_1 extends Controller
     public function iso_sec_2_3_2_treat_form1_submit(Request $req, $asset_id, $control_num, $proj_id, $user_id)
     {
 
-
         $req->validate([
+            'applicability'=>'required',
             'residual_risk_treatment' => "required|string",
-            'applicability' => 'required',
             'control_compliance' => 'required_if:applicability,yes',
             'vulnerability' => 'required_if:applicability,yes',
             'threat' => 'required_if:applicability,yes',
-            'risk_level' => 'required_if:applicability,yes',
-            'acceptance_justification' => 'required_if:residual_risk_treatment,retain and accept risk',
-            'acceptance_target_date' => 'required_if:residual_risk_treatment,retain and accept risk',
-            'acceptance_actual_date' => 'required_if:residual_risk_treatment,retain and accept risk',
-            'acceptance_proposed_responsibility' => 'required_if:residual_risk_treatment,retain and accept risk',
-            'accepted_by' => 'required_if:residual_risk_treatment,retain and accept risk'
+            'risk_level' => 'required_if:applicability,yes'
+            // 'acceptance_justification' => 'required_if:residual_risk_treatment,retain and accept risk'
+            // 'acceptance_target_date' => 'required_if:residual_risk_treatment,retain and accept risk',
+            // 'acceptance_actual_date' => 'required_if:residual_risk_treatment,retain and accept risk',
+            // 'acceptance_proposed_responsibility' => 'required_if:residual_risk_treatment,retain and accept risk',
+            // 'accepted_by' => 'required_if:residual_risk_treatment,retain and accept risk'
         ]);
 
         if ($user_id == auth()->user()->id) {
@@ -833,21 +839,21 @@ class IsoSec2_3_1 extends Controller
 
 
                         if ($req->applicability == "yes") {
+
                             DB::table('iso_risk_treatment')->where('project_id', $proj_id)->where('control_num', $control_num)
                                 ->where('asset_id', $asset_id)->update([
                                     'residual_risk_treatment' => $req->residual_risk_treatment,
-                                    'applicability' => $req->applicability,
                                     'control_compliance' => $req->control_compliance,
                                     'vulnerability' => $req->vulnerability,
                                     'threat' => $req->threat,
                                     'risk_level' => $req->risk_level,
                                     'last_edited_by' => $user_id,
                                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                                    'acceptance_justification' => $req->acceptance_justification,
-                                    'acceptance_target_date' => $req->acceptance_target_date,
-                                    'acceptance_actual_date' => $req->acceptance_actual_date,
-                                    'acceptance_proposed_responsibility' => $req->acceptance_proposed_responsibility,
-                                    'accepted_by' => $req->accepted_by
+                                    // 'acceptance_justification' => $req->acceptance_justification,
+                                    // 'acceptance_target_date' => $req->acceptance_target_date,
+                                    // 'acceptance_actual_date' => $req->acceptance_actual_date,
+                                    // 'acceptance_proposed_responsibility' => $req->acceptance_proposed_responsibility,
+                                    // 'accepted_by' => $req->accepted_by
                                 ]);
                         }
 
@@ -855,18 +861,13 @@ class IsoSec2_3_1 extends Controller
                             DB::table('iso_risk_treatment')->where('project_id', $proj_id)->where('control_num', $control_num)
                                 ->where('asset_id', $asset_id)->update([
                                     'residual_risk_treatment' => $req->residual_risk_treatment,
-                                    'applicability' => $req->applicability,
                                     'control_compliance' => 0,
                                     'vulnerability' => 0,
                                     'threat' => 0,
                                     'risk_level' => 0,
                                     'last_edited_by' => $user_id,
                                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                                    'acceptance_justification' => $req->acceptance_justification,
-                                    'acceptance_target_date' => $req->acceptance_target_date,
-                                    'acceptance_actual_date' => $req->acceptance_actual_date,
-                                    'acceptance_proposed_responsibility' => $req->acceptance_proposed_responsibility,
-                                    'accepted_by' => $req->accepted_by
+
                                 ]);
                         }
 
@@ -881,6 +882,58 @@ class IsoSec2_3_1 extends Controller
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
         }
     }
+
+
+    public function iso_sec_2_3_2_justification_form_submit(Request $req, $asset_id, $control_num, $proj_id, $user_id){
+        $req->validate([
+             'acceptance_justification' => '',
+            'acceptance_target_date' => '',
+             'acceptance_actual_date' => '',
+             'acceptance_proposed_responsibility' => '',
+            'accepted_by' => ''
+        ]);
+
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+                if (in_array('Data Inputter', $permissions)) {
+                    if ($checkpermission->type_id == 4) {
+
+                        DB::table('iso_risk_treatment')->where('project_id', $proj_id)->where('control_num', $control_num)
+                            ->where('asset_id', $asset_id)->update([
+                                'acceptance_justification' => $req->acceptance_justification,
+                                'acceptance_target_date' => $req->acceptance_target_date,
+                                'acceptance_actual_date' => $req->acceptance_actual_date,
+                                'acceptance_proposed_responsibility' => $req->acceptance_proposed_responsibility,
+                                'accepted_by'=>$req->accepted_by,
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                            ]);
+
+                        return redirect()->route('iso_sec_2_3_2_risk_treat_form', [
+                            'control_num' => $control_num, 'asset_id' => $asset_id, 'proj_id' => $proj_id, 'user_id' => $user_id
+                        ])->with('success', 'Justification Updated');
+                    }
+                }
+            }
+            return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+        }
+
+
+    }
+
+
 
     public function risk_treatment_edit_action_plan_form($asset_id, $control_num, $proj_id, $user_id)
     {
@@ -939,6 +992,70 @@ class IsoSec2_3_1 extends Controller
                             'assetData' => $assetData,
                             'project' => $project
 
+
+                        ]);
+                    }
+                }
+            }
+            return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+        }
+    }
+
+    public function risk_treatment_justification($asset_id, $control_num, $proj_id, $user_id){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+                if (in_array('Data Inputter', $permissions)) {
+                    if ($checkpermission->type_id == 4) {
+
+                        $asset_risk_assess = Db::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                            ->where('control_num', $control_num)->first();
+
+
+
+                        $super = Db::table('users')->where('privilege_id', 1)->pluck('id')->toArray();
+
+                        //superusers of that organization
+                        $superusers_of_that_org = DB::table('superusers')->wherein('user_id', $super)
+                            ->where('org_id', auth()->user()->org_id)->pluck('user_id')->toArray();
+                        // dd($superusers_of_that_org);
+
+                        //organziatons of those superusers
+                        $orgs = Db::table('users')->wherein('id', $superusers_of_that_org)->pluck('org_id')->toArray();
+
+                        $users = User::where('privilege_id', 5)->wherein('org_id', $orgs)->get(['id', 'first_name', 'last_name']);
+
+                        $assetData = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
+
+                        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                            ->where('projects.project_id', $proj_id)->first();
+
+                     $after_risk_treatment = Db::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                            ->where('control_num', $control_num)->first();
+
+                        return view('iso_sec_2_3_1.iso_sec_2_3_2_justification', [
+                            'project_id' => $checkpermission->project_id,
+                            'project_name' => $checkpermission->project_name,
+                            'project_permissions' => $checkpermission->project_permissions,
+                            'asset_id' => $asset_id,
+                            'control_num' => $control_num,
+                            'assetvalue' => $asset_risk_assess->asset_value,
+                            'users' => $users,
+                            'treatmentData' => $asset_risk_assess,
+                            'assetData' => $assetData,
+                            'project' => $project,
+                            'after_risk_treatment'=>$after_risk_treatment
 
                         ]);
                     }
