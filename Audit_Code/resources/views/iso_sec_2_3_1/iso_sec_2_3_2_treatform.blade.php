@@ -101,7 +101,7 @@ $permissions=json_decode($project_permissions);
     </div>
 @endif
 
-<div class="row">
+{{-- <div class="row">
     <div class="col-lg-6">
         <a href="/risk_treatment_edit_action_plan_form/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" class="btn my_bg_color text-white fw-bold">Create or edit Action plan</a>
     </div>
@@ -111,7 +111,7 @@ $permissions=json_decode($project_permissions);
         <a href="/risk_treatment_justification/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" class="btn my_bg_color text-white fw-bold">Create Justification</a>
     </div>
     @endif
-</div>
+</div> --}}
 
     <div class="row">
 
@@ -120,18 +120,18 @@ $permissions=json_decode($project_permissions);
 
             <div class="row">
 
-            <div class="col-lg-6">
+            <div class="col-lg-12">
 
                 <form action="/iso_sec_2_3_2_treat_form1_submit/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" method="post">
 
                     @csrf
                     @method('PUT')
 
-                    <div class="float-right mb-4">
+                    <div class="mb-4">
 
                         <div class="form-group mt-4">
-                            <label for="">Residual Risk Treatment</label>
-                     <select name="residual_risk_treatment" class="form-control" id="residual_risk_treatment">
+                            <label for="" class="fs-5">Residual Risk Treatment</label>
+                     <select name="residual_risk_treatment" class="boxstyling2" id="residual_risk_treatment">
                         <option value="">Select</option>
                         <option value="retain and accept risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment)=='retain and accept risk'?'selected':''}}>Retain and Accept Risk</option>
                         <option value="share risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment)=='share risk'?'selected':''}}>
@@ -144,7 +144,7 @@ $permissions=json_decode($project_permissions);
                  @endif
                           </div>
 
-                          <div class="mt-2">
+                          <div class="mb-4 ">
                             <button type="submit" class="btn btn-success btn-sm">Save Changes</button>
                           </div>
 
@@ -159,29 +159,27 @@ $permissions=json_decode($project_permissions);
                     <tr>
                         <td></td>
                         <td>Current Risk Assessment</td>
-                        <td>Future Risk</td>
-                        <td>Test</td>
+                        <td>Set Control Compliance% & Threat% target values to set a target risk level for future</td>
+
 
                     </tr>
                     <tr>
                         <td class="fw-bold" >Control Number</td>
                         <td>  {{$treatmentData->control_num}}</td>
                         <td> {{$after_risk_treatment->control_num}}</td>
-                        <td> {{$after_risk_treatment->control_num}}</td>
                     </tr>
                     <tr>
                         <td class="fw-bold" >Control is Applicable?</td>
                         <td>  {{$treatmentData->applicability}}</td>
-                        <td> {{$after_risk_treatment->applicability}}</td>
                         <td> {{$after_risk_treatment->applicability}}</td>
                     </tr>
 
                     <tr>
                         <td class="fw-bold" >Control Compliance</td>
                         <td>  {{$treatmentData->control_compliance}}%</td>
-                        <td> {{$after_risk_treatment->control_compliance}}%</td>
+
                         <td>
-     <input type="number" name="control_compliance" oninput="validateInput(this)" class="make-readonly"
+     <input type="number" name="control_compliance" oninput="validateInput(this)" class="form-control make-readonly"
     min=0 max=100 data-control-id="{{$after_risk_treatment->control_num}}" value="{{old('control_compliance',$after_risk_treatment->control_compliance)}}">
 
                         </td>
@@ -190,7 +188,7 @@ $permissions=json_decode($project_permissions);
                     <tr>
                         <td class="fw-bold" >Vulnerability</td>
                         <td>  {{$treatmentData->vulnerability}}%</td>
-                        <td> {{$after_risk_treatment->vulnerability}}%</td>
+
                         <td>
                             <input type="number" name="vulnerability" class="form-control" data-control-id="{{$after_risk_treatment->control_num}}" readonly value="{{old('vulnerability',$after_risk_treatment->vulnerability)}}">
 
@@ -200,7 +198,7 @@ $permissions=json_decode($project_permissions);
                     <tr>
                         <td class="fw-bold" >Threat</td>
                         <td>  {{$treatmentData->threat}}%</td>
-                        <td> {{$after_risk_treatment->threat}}%</td>
+
                         <td>
                             <input type="number" name="threat" class="form-control make-readonly" min=0 max=100 data-control-id="{{$after_risk_treatment->control_num}}" value="{{old('threat',$after_risk_treatment->threat)}}">
 
@@ -211,7 +209,7 @@ $permissions=json_decode($project_permissions);
                     <tr>
                         <td class="fw-bold" >Risk Level</td>
                         <td>  {{$treatmentData->risk_level}}</td>
-                        <td>{{$after_risk_treatment->risk_level}}</td>
+
                         <td>
                             <input type="number" name="risk_level" class="form-control" data-control-id="{{$after_risk_treatment->control_num}}" value="{{old('risk_level',$after_risk_treatment->risk_level)}}" readonly>
 
@@ -236,19 +234,7 @@ $permissions=json_decode($project_permissions);
 
 
                         </td>
-                        <td>
-                            @if($after_risk_treatment->asset_value==10)
-            High
-            @endif
 
-            @if($after_risk_treatment->asset_value==5)
-            Medium
-            @endif
-
-            @if($after_risk_treatment->asset_value==1)
-            Low
-            @endif
-                        </td>
 
                  <td>
                             @if($after_risk_treatment->asset_value==10)
@@ -282,6 +268,18 @@ $permissions=json_decode($project_permissions);
 
 
 </div>
+
+<div class="col-lg-6 mt-4" >
+    <a href="/risk_treatment_edit_action_plan_form/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" class="btn my_bg_color text-white fw-bold">Create or edit Action plan</a>
+
+    @if($after_risk_treatment->residual_risk_treatment=="retain and accept risk")
+    <a href="/risk_treatment_justification/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" class="btn my_bg_color text-white fw-bold">Create Justification</a>
+
+    @endif
+
+</div>
+
+
 
     </div>
 

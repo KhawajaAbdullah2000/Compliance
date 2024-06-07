@@ -160,6 +160,13 @@ a[data-toggle="collapse"] {
     box-shadow: 0 5px 25px rgba(47, 2, 105, 0.2);
 }
 
+.boxstyling2 {
+    border: 1px solid black;
+    font-size: 18px;
+    box-shadow: 0 5px 25px rgba(47, 2, 105, 0.2);
+    height: 35px;
+}
+
 .users {
     font-weight: bolder;
 }
