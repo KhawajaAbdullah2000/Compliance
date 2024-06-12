@@ -177,6 +177,8 @@ class IsoSec2_2 extends Controller
                 return strval($row[3])=== $sub_req;
             })->values()->all();
 
+
+
             $project=Project::join('project_types','projects.project_type','project_types.id')
                 ->where('projects.project_id',$proj_id)->first();
 

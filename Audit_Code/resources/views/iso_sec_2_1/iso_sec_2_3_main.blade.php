@@ -52,13 +52,14 @@ $permissions=json_decode($project_permissions);
     <table id="myTable2" class="table table-responsive table-primary table-striped mt-4">
         <thead class="thead-dark table-pointer">
           <tr style="vertical-align: middle">
-            <th onclick="sortTable(0)">Asset Group Name</th>
-            <th onclick="sortTable(1)">Asset Name</th>
-            <th onclick="sortTable(2)">Asset Component Name</th>
-            <th onclick="sortTable(3)">Asset Owner Dept</th>
-            <th onclick="sortTable(4)">Asset Physical Location</th>
-            <th onclick="sortTable(5)">Asset Logical Location</th>
-            <th onclick="sortTable(6)">Service Name for which this is an underlying asset </th>
+            <th onclick="sortTable(0)">Service Name for which this is an underlying asset </th>
+            <th onclick="sortTable(1)">Asset Group Name</th>
+            <th onclick="sortTable(2)">Asset Name</th>
+            <th onclick="sortTable(3)">Asset Component Name</th>
+            <th onclick="sortTable(4)">Asset Owner Dept</th>
+            <th onclick="sortTable(5)">Asset Physical Location</th>
+            <th onclick="sortTable(6)">Asset Logical Location</th>
+
             <th>Risk Assessment</th>
             {{-- <th>Risk Treatment</th> --}}
 
@@ -75,13 +76,15 @@ $permissions=json_decode($project_permissions);
 @endif
 @foreach ($data as $d)
             <tr>
-                <td class="fw-bold">{{$d->g_name}}</td>
-                <td>{{$d->name}} </td>
-                <td>{{$d->c_name}}</td>
-                <td>{{$d->owner_dept}} </td>
-                <td>{{$d->physical_loc}} </td>
-                <td>{{$d->logical_loc}} </td>
-                <td>{{$d->s_name}}</td>
+                <td class="fw-bold">{{ strlen($d->s_name) > 12 ? substr($d->s_name, 0, 12) . '...' : $d->s_name }}</td>
+                <td >{{ strlen($d->g_name) > 12 ? substr($d->g_name, 0, 12) . '...' : $d->g_name }}</td>
+                <td>{{ strlen($d->name) > 12 ? substr($d->name, 0, 12) . '...' : $d->name }}</td>
+                <td>{{ strlen($d->c_name) > 12 ? substr($d->c_name, 0, 12) . '...' : $d->c_name }}</td>
+                <td>{{ strlen($d->owner_dept) > 12 ? substr($d->owner_dept, 0, 12) . '...' : $d->owner_dept }} </td>
+                <td>{{ strlen($d->physical_loc) > 12 ? substr($d->physical_loc, 0, 12) . '...' : $d->physical_loc }} </td>
+                <td> {{ strlen($d->logical_loc) > 12 ? substr($d->logical_loc, 0, 12) . '...' : $d->logical_loc }} </td>
+
+
 
           <td>
             <a href="/iso_sec_2_3_1/{{$d->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white">Initiate or Edit</a>

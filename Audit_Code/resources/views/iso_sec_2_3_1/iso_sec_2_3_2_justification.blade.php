@@ -50,55 +50,34 @@ $permissions=json_decode($project_permissions);
     <div class="col-lg-6">
 
 
-<table style="width: 50%;" class="table table-bordered">
-    <tbody>
-        <tr>
-            <td class="fw-bold" >Service Name:</td>
-            <td>  {{$assetData->s_name}}</td>
-        </tr>
-
-        @isset($assetData->g_name)
-        <tr>
-        <td class="fw-bold">Asset Group Name:</td>
-        <td>  {{$assetData->g_name}}</td>
-         </tr>
-        @endisset
-
-
-
-        <tr>
-        @isset($assetData->name)
-        <td class="fw-bold">Asset Name:</td>
-        <td>  {{$assetData->name}}</td>
-        </tr>
-        @endisset
-
-
-        @isset($assetData->c_name)
-        <tr>
-        <td class="fw-bold">Asset Component Name:</td>
-        <td>  {{$assetData->c_name}}</td>
-         </tr>
-        @endisset
-
-        <tr>
-            <td class="fw-bold">Asset Value:</td>
-            <td>
-                @if($assetvalue==10)
-                High
-                @elseif($assetvalue==5)
-                Medium
-                @elseif($assetvalue==1)
-                Low
-                @endif
-            </td>
-
-        </tr>
-
-
-
-    </tbody>
-</table>
+        <table class="table table-bordered table-warning">
+            <thead>
+                <tr>
+                    <th>Service Name</th>
+                    <th>Asset Group Name</th>
+                    <th>Asset Name</th>
+                    <th>Asset Component Name</th>
+                    <th>Asset Component Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{$assetData->s_name}}</td>
+                    <td>@isset($assetData->g_name){{$assetData->g_name}}@endisset</td>
+                    <td>@isset($assetData->name){{$assetData->name}}@endisset</td>
+                    <td>@isset($assetData->c_name){{$assetData->c_name}}@endisset</td>
+                    <td>
+                        @if($assetvalue == 10)
+                        High
+                        @elseif($assetvalue == 5)
+                        Medium
+                        @elseif($assetvalue == 1)
+                        Low
+                        @endif
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
 </div>
 
@@ -107,7 +86,6 @@ $permissions=json_decode($project_permissions);
 
 </div>
 
-<h4 class="mt-4 mb-4 fw-bold">Target Information Security Risk After Proposed Risk Treatment</h4>
 
 
 
@@ -117,6 +95,10 @@ $permissions=json_decode($project_permissions);
 
 <table style="width: 50%;" class="table table-bordered table-secondary">
     <tbody>
+        <tr>
+            <td></td>
+            <td>Current Risk Assessment</td>
+        </tr>
         <tr>
             <td class="fw-bold" >Control is Applicable?</td>
             <td>  {{$treatmentData->applicability}}</td>
@@ -141,10 +123,7 @@ $permissions=json_decode($project_permissions);
             <td class="fw-bold" >Risk Level</td>
             <td>  {{$treatmentData->risk_level}}</td>
         </tr>
-        <tr>
-            <td class="fw-bold" >Residual Risk Treatment</td>
-            <td>  {{$treatmentData->residual_risk_treatment}}</td>
-        </tr>
+
 
 
 
@@ -160,7 +139,7 @@ $permissions=json_decode($project_permissions);
 
 
 
-<div class="row d-flex justify-content-center">
+<div class="row d-flex">
 
     <div class="col-md-6">
 

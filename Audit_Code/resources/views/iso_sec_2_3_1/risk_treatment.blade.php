@@ -50,57 +50,34 @@
             <div class="col-lg-6">
 
 
-        <table style="width: 50%;" class="table table-bordered">
-            <tbody>
-
-                <tr>
-                    <td class="fw-bold" >Asset Value:</td>
-                    <td>
-                        @if($asset_value==10)
-                        High
-                        @elseif ($asset_value==5)
-                        Medium
-                        @else
-                        Low
-                        @endif
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="fw-bold" >Service Name:</td>
-                    <td>  {{$assetData->s_name}}</td>
-                </tr>
-
-                @isset($assetData->g_name)
-                <tr>
-                <td class="fw-bold">Asset Group Name:</td>
-                <td>  {{$assetData->g_name}}</td>
-                 </tr>
-                @endisset
-
-
-
-                <tr>
-                @isset($assetData->name)
-                <td class="fw-bold">Asset Name:</td>
-                <td>  {{$assetData->name}}</td>
-                </tr>
-                @endisset
-
-
-                @isset($assetData->c_name)
-                <tr>
-                <td class="fw-bold">Asset Component Name:</td>
-                <td>  {{$assetData->c_name}}</td>
-                 </tr>
-                @endisset
-
-
-
-
-
-            </tbody>
-        </table>
+                <table class="table table-bordered table-warning" >
+                    <thead>
+                        <tr>
+                            <th>Asset Component Value</th>
+                            <th>Service Name</th>
+                            <th>Asset Group Name</th>
+                            <th>Asset Name</th>
+                            <th>Asset Component Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                @if($asset_value==10)
+                                High
+                                @elseif ($asset_value==5)
+                                Medium
+                                @else
+                                Low
+                                @endif
+                            </td>
+                            <td>{{$assetData->s_name}}</td>
+                            <td>@isset($assetData->g_name){{$assetData->g_name}}@endisset</td>
+                            <td>@isset($assetData->name){{$assetData->name}}@endisset</td>
+                            <td>@isset($assetData->c_name){{$assetData->c_name}}@endisset</td>
+                        </tr>
+                    </tbody>
+                </table>
 
         </div>
 

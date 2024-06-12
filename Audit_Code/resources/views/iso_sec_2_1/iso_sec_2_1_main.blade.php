@@ -99,7 +99,7 @@ $permissions=json_decode($project_permissions);
             <th>Risk Assessment</th>
             @endif
             {{-- <th>Risk Treatment</th> --}}
-            <th>Services/Assets</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>

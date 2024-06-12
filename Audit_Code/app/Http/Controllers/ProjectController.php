@@ -21,7 +21,8 @@ class ProjectController extends Controller
     {
         $projects = Project::join('project_details', 'projects.project_id', 'project_details.project_code')
             ->join('project_types', 'projects.project_type', 'project_types.id')
-            ->where('project_details.assigned_enduser', $user_id)->get(
+            ->where('project_details.assigned_enduser', $user_id)->latest('projects.project_creation_date')
+            ->get(
                 [
                     'project_details.project_code',
                     'projects.project_name',
@@ -269,7 +270,7 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
            ->select('projects.status', DB::raw('count(*) as total'))
            ->groupBy('projects.status')
            ->get();
-           
+
             return view('dashboard.my_personal_dashboard',[
               'projectsCreatedCount'=>$projectsCreatedCount,
               'permissionsInaProjectCount' => $permissionsInaProjectCount,
@@ -351,8 +352,8 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
             $project = Db::table('projects')->where('project_id', $proj_id)->first('project_name');
 
             $report_data = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->get([
-                'g_name', 'name', 'c_name', 'owner_dept', 'physical_loc',
-                'logical_loc', 's_name'
+                's_name', 'g_name', 'name', 'c_name', 'owner_dept', 'physical_loc',
+                'logical_loc'
             ]);
             if ($report_data->count() > 0) {
 
@@ -424,6 +425,7 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
 
     public function risk_treatment($proj_id,$user_id){
 
+
         $checkpermission = Db::table('project_details')->select(
             'project_types.id as type_id',
             'project_details.project_code',
@@ -436,19 +438,11 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
             ->first();
 
             if($checkpermission){
-                $projectName=Db::table('projects')->where('project_id', $proj_id)->first('project_name')->project_name;
-                $report_data = Db::table('iso_sec_2_1')->join('iso_sec_2_3_1','iso_sec_2_1.assessment_id','iso_sec_2_3_1.asset_id')
-                ->join('users','iso_sec_2_3_1.responsibility_for_treatment','users.id')
-                ->where('iso_sec_2_1.project_id', $proj_id)->orderBy('asset_id','asc')->orderBy('control_num','asc')
-                ->get(
-                    [
-                        'g_name', 'name', 'c_name', 'owner_dept', 'physical_loc',
-                        'logical_loc', 's_name','control_num','applicability','asset_value','residual_risk_treatment',
-                        'treatment_action','treatment_target_date','treatment_comp_date','responsibility_for_treatment',
-                        'first_name','last_name'
-                    ]
-                );
-             //   dd($report_data);
+
+            $projectName=Db::table('projects')->where('project_id', $proj_id)->first('project_name')->project_name;
+         $report_data = Db::table('iso_sec_2_1')->join('iso_risk_treatment','iso_sec_2_1.assessment_id',
+         'iso_risk_treatment.asset_id')->get();
+
 
                 if ($report_data->count()>0){
                     $safeProjectName = Str::slug($projectName, '_'); // Example: converting "Project Name!" to "Project_Name"

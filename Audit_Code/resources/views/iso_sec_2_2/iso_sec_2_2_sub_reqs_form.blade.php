@@ -42,6 +42,8 @@ $permissions=json_decode($project_permissions);
 
 
     <h2 class="text-center fw-bold mt-4 mb-4">
+        {{$filteredData[0][2]}}
+        <br>
     Req No {{$filteredData[0][3]}}
          </h2>
 
@@ -131,9 +133,7 @@ $permissions=json_decode($project_permissions);
     <div class="col-md-12">
 
         <div class="card mt-2">
-            <div class="card-header my_bg_color text-white text-center">
-                <h2>Mandatory Requirement</h2>
-              </div>
+
             <div class="card-body">
 
         <form action="/iso_sec_2_2_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}" method="post" enctype="multipart/form-data">

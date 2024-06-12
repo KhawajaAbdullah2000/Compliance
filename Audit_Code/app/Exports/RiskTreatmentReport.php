@@ -18,8 +18,8 @@ class RiskTreatmentReport implements FromCollection, WithHeadings
     {
         $projectName = DB::table('projects')->where('project_id', $this->proj_id)->first()->project_name;
 
-        $reportData= Db::table('iso_sec_2_1')->join('iso_sec_2_3_1','iso_sec_2_1.assessment_id','iso_sec_2_3_1.asset_id')
-        ->leftjoin('users','iso_sec_2_3_1.responsibility_for_treatment','users.id')
+        $reportData= Db::table('iso_sec_2_1')->join('iso_risk_treatment','iso_sec_2_1.assessment_id','iso_risk_treatment.asset_id')
+        ->leftjoin('users','iso_risk_treatment.responsibility_for_treatment','users.id')
         ->where('iso_sec_2_1.project_id', $this->proj_id)->orderBy('asset_id','asc')->orderBy('control_num','asc')
         ->get([
             'g_name', 'name', 'c_name', 'owner_dept', 'physical_loc',
@@ -27,7 +27,7 @@ class RiskTreatmentReport implements FromCollection, WithHeadings
             'treatment_action', 'treatment_target_date', 'treatment_comp_date',
             DB::raw("CONCAT(users.first_name, ' ', users.last_name) as responsibility_for_treatment")
         ]);
-        
+
 
 
         // Prepending the project name to each row

@@ -149,36 +149,73 @@ class IsoSec2_3_1 extends Controller
 
 
 
-
-
-        $control_compliance_filter = array_filter($req->input('control_compliance'));
-        $req->merge(['control_compliance' => $control_compliance_filter]);
+        $my_filter = array_filter($req->input('control_compliance'), function($value) {
+            return $value !== null;
+        });
+        $req->merge(['control_compliance' => $my_filter]);
         $control_compliance = $req->input('control_compliance');
-        $filtered_control_compliance = array_filter($control_compliance);
+        $filtered_control_compliance = array_filter($control_compliance, function($value) {
+            return $value !== null;
+        });
+
+
+        // $control_compliance_filter = array_filter($req->input('control_compliance'));
+        // $req->merge(['control_compliance' => $control_compliance_filter]);
+        // $control_compliance = $req->input('control_compliance');
+        // $filtered_control_compliance = array_filter($control_compliance);
 
 
 
+        // $vulnerability_filter = array_filter($req->input('vulnerability'));
+        // $req->merge(['vulnerability' => $vulnerability_filter]);
+        // $vulnerability = $req->input('vulnerability');
+        // $filtered_vulnerability = array_filter($vulnerability);
 
-
-
-        $vulnerability_filter = array_filter($req->input('vulnerability'));
-        $req->merge(['vulnerability' => $vulnerability_filter]);
+        $my_filter = array_filter($req->input('vulnerability'), function($value) {
+            return $value !== null;
+        });
+        $req->merge(['vulnerability' => $my_filter]);
         $vulnerability = $req->input('vulnerability');
-        $filtered_vulnerability = array_filter($vulnerability);
+        $filtered_vulnerability= array_filter($vulnerability, function($value) {
+            return $value !== null;
+        });
 
 
 
-        $threat_filter = array_filter($req->input('threat'));
-        $req->merge(['threat' => $threat_filter]);
+
+
+        // $threat_filter = array_filter($req->input('threat'));
+        // $req->merge(['threat' => $threat_filter]);
+        // $threat = $req->input('threat');
+        // $filtered_threat = array_filter($threat);
+
+        $my_filter = array_filter($req->input('threat'), function($value) {
+            return $value !== null;
+        });
+        $req->merge(['threat' => $my_filter]);
         $threat = $req->input('threat');
-        $filtered_threat = array_filter($threat);
+        $filtered_threat= array_filter($threat, function($value) {
+            return $value !== null;
+        });
 
 
 
-        $risk_level_filter = array_filter($req->input('threat'));
-        $req->merge(['threat' => $risk_level_filter]);
+
+        // $risk_level_filter = array_filter($req->input('threat'));
+        // $req->merge(['threat' => $risk_level_filter]);
+        // $risk_level = $req->input('risk_level');
+        // $filtered_risk_level = array_filter($risk_level);
+
+         $my_filter = array_filter($req->input('risk_level'), function($value) {
+            return $value !== null;
+        });
+        $req->merge(['risk_level' => $my_filter]);
         $risk_level = $req->input('risk_level');
-        $filtered_risk_level = array_filter($risk_level);
+        $filtered_risk_level= array_filter($risk_level, function($value) {
+            return $value !== null;
+        });
+
+
 
 
         $inputArray = $filtered_applicability;
@@ -203,9 +240,8 @@ class IsoSec2_3_1 extends Controller
 
             if ($value == "yes") {
 
-
                 if (
-                    isset($filtered_control_compliance[$key]) && isset($filtered_vulnerability[$key])
+                isset($filtered_control_compliance[$key]) && isset($filtered_vulnerability[$key])
                     && isset($filtered_threat[$key]) && isset($filtered_risk_level[$key])
                 ) {
 
@@ -639,6 +675,10 @@ class IsoSec2_3_1 extends Controller
                     $check = DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->where('applicability', 'yes')
                         ->first();
 
+                       if($check==null){
+                        return redirect()->route('risk_treatment',['proj_id'=>$proj_id,'user_id'=>$user_id])->with('error',"No Risk Assessment Done Yet");
+                       }
+
                     //controls wherer applicability is yes
                     $controls = DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
                         ->pluck('control_num')->toArray();
@@ -806,6 +846,7 @@ class IsoSec2_3_1 extends Controller
     public function iso_sec_2_3_2_treat_form1_submit(Request $req, $asset_id, $control_num, $proj_id, $user_id)
     {
 
+
         $req->validate([
             'applicability'=>'required',
             'residual_risk_treatment' => "required|string",
@@ -813,11 +854,7 @@ class IsoSec2_3_1 extends Controller
             'vulnerability' => 'required_if:applicability,yes',
             'threat' => 'required_if:applicability,yes',
             'risk_level' => 'required_if:applicability,yes'
-            // 'acceptance_justification' => 'required_if:residual_risk_treatment,retain and accept risk'
-            // 'acceptance_target_date' => 'required_if:residual_risk_treatment,retain and accept risk',
-            // 'acceptance_actual_date' => 'required_if:residual_risk_treatment,retain and accept risk',
-            // 'acceptance_proposed_responsibility' => 'required_if:residual_risk_treatment,retain and accept risk',
-            // 'accepted_by' => 'required_if:residual_risk_treatment,retain and accept risk'
+
         ]);
 
         if ($user_id == auth()->user()->id) {
@@ -840,6 +877,28 @@ class IsoSec2_3_1 extends Controller
 
                         if ($req->applicability == "yes") {
 
+                            if($req->residual_risk_treatment=="retain and accept risk"){
+                            $risk_assessment=DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('control_num', $control_num)
+                            ->where('asset_id', $asset_id)->first();
+
+                            DB::table('iso_risk_treatment')->where('project_id', $proj_id)->where('control_num', $control_num)
+                            ->where('asset_id', $asset_id)->update([
+                                'residual_risk_treatment' => $req->residual_risk_treatment,
+                                'control_compliance' => $risk_assessment->control_compliance,
+                                'vulnerability' => $risk_assessment->vulnerability,
+                                'threat' => $risk_assessment->threat,
+                                'risk_level' => $risk_assessment->risk_level,
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
+
+                            ]);
+
+
+
+
+                            }else{
+
+
                             DB::table('iso_risk_treatment')->where('project_id', $proj_id)->where('control_num', $control_num)
                                 ->where('asset_id', $asset_id)->update([
                                     'residual_risk_treatment' => $req->residual_risk_treatment,
@@ -855,6 +914,8 @@ class IsoSec2_3_1 extends Controller
                                     // 'acceptance_proposed_responsibility' => $req->acceptance_proposed_responsibility,
                                     // 'accepted_by' => $req->accepted_by
                                 ]);
+
+                            }
                         }
 
                         if ($req->applicability == "no") {
@@ -954,13 +1015,15 @@ class IsoSec2_3_1 extends Controller
                 if (in_array('Data Inputter', $permissions)) {
                     if ($checkpermission->type_id == 4) {
 
-                        $asset_risk_assess = Db::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)
-                            ->where('control_num', $control_num)->first();
+                $risk_assessment= Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)
+                ->where('asset_id', $asset_id)
+                    ->where('control_num', $control_num)->first();
 
-                        // dd($asset_risk_assess);
+                 $asset_risk_assess = Db::table('iso_risk_treatment')->where('project_id', $proj_id)
+                 ->where('asset_id', $asset_id)
+                     ->where('control_num', $control_num)->first();
 
 
-                        // dd($asset_risk_assess);
 
                         $super = Db::table('users')->where('privilege_id', 1)->pluck('id')->toArray();
 
@@ -980,6 +1043,7 @@ class IsoSec2_3_1 extends Controller
                             ->where('projects.project_id', $proj_id)->first();
 
 
+
                         return view('iso_sec_2_3_1.iso_sec_2_3_2_actionplanform', [
                             'project_id' => $checkpermission->project_id,
                             'project_name' => $checkpermission->project_name,
@@ -989,6 +1053,7 @@ class IsoSec2_3_1 extends Controller
                             'assetvalue' => $asset_risk_assess->asset_value,
                             'users' => $users,
                             'treatmentData' => $asset_risk_assess,
+                            'risk_assessment'=>$risk_assessment,
                             'assetData' => $assetData,
                             'project' => $project
 
@@ -1019,7 +1084,7 @@ class IsoSec2_3_1 extends Controller
                 if (in_array('Data Inputter', $permissions)) {
                     if ($checkpermission->type_id == 4) {
 
-                        $asset_risk_assess = Db::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                        $asset_risk_assess = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
                             ->where('control_num', $control_num)->first();
 
 

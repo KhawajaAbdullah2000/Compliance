@@ -36,36 +36,22 @@ $permissions = json_decode($project_permissions);
         </div>
     </div>
 
-    <table style="width: 50%;" class="table table-bordered">
+    <table class="table table-bordered table-warning" style="width:50%;">
+        <thead>
+            <tr>
+                <th>Service Name</th>
+                <th>Asset Group Name</th>
+                <th>Asset Name</th>
+                <th>Asset Component Name</th>
+                <th>Asset Component Value</th>
+            </tr>
+        </thead>
         <tbody>
             <tr>
-                <td class="fw-bold">Service Name:</td>
                 <td>{{$assetData->s_name}}</td>
-            </tr>
-
-            @isset($assetData->g_name)
-            <tr>
-                <td class="fw-bold">Asset Group Name:</td>
-                <td>{{$assetData->g_name}}</td>
-            </tr>
-            @endisset
-
-            @isset($assetData->name)
-            <tr>
-                <td class="fw-bold">Asset Name:</td>
-                <td>{{$assetData->name}}</td>
-            </tr>
-            @endisset
-
-            @isset($assetData->c_name)
-            <tr>
-                <td class="fw-bold">Asset Component Name:</td>
-                <td>{{$assetData->c_name}}</td>
-            </tr>
-            @endisset
-
-            <tr>
-                <td class="fw-bold">Asset Value:</td>
+                <td>@isset($assetData->g_name){{$assetData->g_name}}@endisset</td>
+                <td>@isset($assetData->name){{$assetData->name}}@endisset</td>
+                <td>@isset($assetData->c_name){{$assetData->c_name}}@endisset</td>
                 <td>
                     @if($assetvalue == 10)
                     High
@@ -78,6 +64,7 @@ $permissions = json_decode($project_permissions);
             </tr>
         </tbody>
     </table>
+
 
     @if ($errors->any())
     <div class="alert alert-danger">
@@ -110,7 +97,7 @@ $permissions = json_decode($project_permissions);
                                         <option value="modify risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment) == 'modify risk' ? 'selected' : ''}}>Modify Risk</option>
                                     </select>
 
-                                <button type="submit" class="btn btn-success btn-sm">Save Changes</button>
+                                <button type="submit" class="btn my_bg_color fw-bold text-white btn-sm">Save Changes</button>
 
                                 </div>
                                 @if($errors->has('residual_risk_treatment'))
@@ -172,7 +159,7 @@ $permissions = json_decode($project_permissions);
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-bold">Asset Value</td>
+                                    <td class="fw-bold">Asset Component Value</td>
                                     <td>
                                         @if($treatmentData->asset_value == 10)
                                         High

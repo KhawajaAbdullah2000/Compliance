@@ -133,9 +133,18 @@ $permissions=json_decode($project_permissions);
 
                     <input type="checkbox" id="selectAllApplicability" />
                 </th>
-                <th>Control Compliance%</th>
+                <th>Control Compliance%
+                    Set all to 0
+                    <input type="checkbox" id="selectAllControlCompliance" />
+                </th>
                 <th>Vulnerability%</th>
-                <th>Threat%</th>
+                <th>Threat%
+
+                    Set all to 0
+                    <input type="checkbox" id="selectAllThreat" />
+
+
+                </th>
                 <th>Risk Level</th>
                 <th>Edit</th>
 
@@ -200,13 +209,13 @@ $permissions=json_decode($project_permissions);
                     @endif
 
                     @if($loop->last)
-                    <input type="number" name="control_compliance[]" oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
+                    <input type="number" name="control_compliance[]" value=100 oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
 
                     @endif
 
                     @endforeach
                     @else
-                 <input type="number" name="control_compliance[]" oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
+                 <input type="number" name="control_compliance[]" value=100 oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
 
                     @endif
                 </td>
@@ -245,12 +254,12 @@ $permissions=json_decode($project_permissions);
                                 @endif
 
                                 @if($loop->last)
-             <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}">
+             <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}">
                     @endif
 
                         @endforeach
                     @else
-            <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}">
+            <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}">
 
                     @endif
 
@@ -383,12 +392,12 @@ $permissions=json_decode($project_permissions);
                         @endif
 
                         @if($loop->last)
-            <input type="number" name="control_compliance[]" oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
+            <input type="number" name="control_compliance[]" value=100 oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
                 @endif
 
                 @endforeach
             @else
-        <input type="number" name="control_compliance[]" oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
+        <input type="number" name="control_compliance[]" value=100 oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
 
             @endif
             </td>
@@ -427,12 +436,12 @@ $permissions=json_decode($project_permissions);
                         @endif
 
                         @if($loop->last)
-        <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}">
+        <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}">
                 @endif
 
                 @endforeach
             @else
-             <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}">
+             <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}">
 
             @endif
 
@@ -558,14 +567,14 @@ $permissions=json_decode($project_permissions);
                     @endif
 
                     @if($loop->last)
-        <input type="number" name="control_compliance[]" min=0 max=100 oninput="validateInput(this)" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
+        <input type="number" name="control_compliance[]" value=100 min=0 max=100 oninput="validateInput(this)" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
 
 
                     @endif
 
             @endforeach
         @else
- <input type="number" name="control_compliance[]" oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
+ <input type="number" name="control_compliance[]" value=100 oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
 
         @endif
 
@@ -608,14 +617,14 @@ $permissions=json_decode($project_permissions);
                     @endif
 
                     @if($loop->last)
-         <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}">
+         <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}">
 
 
                     @endif
 
             @endforeach
         @else
-         <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}">
+         <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}">
 
         @endif
 
@@ -739,13 +748,13 @@ $permissions=json_decode($project_permissions);
                     @endif
 
                     @if($loop->last)
-            <input type="number" name="control_compliance[]" oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
+            <input type="number" name="control_compliance[]" value=100 oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
 
                       @endif
 
             @endforeach
         @else
-     <input type="number" name="control_compliance[]" oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
+     <input type="number" name="control_compliance[]" value=100 oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
 
         @endif
         </td>
@@ -784,13 +793,13 @@ $permissions=json_decode($project_permissions);
                     @endif
 
                     @if($loop->last)
-         <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}">
+         <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}">
 
                       @endif
 
             @endforeach
         @else
-             <input type="number" name="threat[]" class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}">
+             <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}">
         @endif
 
 
@@ -901,7 +910,7 @@ $permissions=json_decode($project_permissions);
 
 
 
-<script>
+{{-- <script>
    $(document).ready(function(){
     var assetValue = parseFloat($('#assetSelect').val()) || 10;
     var newVulnerabilityValue = null;
@@ -968,7 +977,134 @@ $permissions=json_decode($project_permissions);
 });
 
 
+</script> --}}
+
+<script>
+    $(document).ready(function(){
+        var assetValue = parseFloat($('#assetSelect').val()) || 10;
+        var newVulnerabilityValue = null;
+        var threat = null;
+        var newRiskValue = null;
+        var controlId = null;
+        var riskLevelField = null;
+
+        function initializeValues() {
+            $("input[name^='control_compliance']").each(function () {
+                controlId = $(this).data('control-id');
+                var controlCompliance = parseFloat($(this).val()) || 100;
+                var threatValue = parseFloat($("input[name='threat[]'][data-control-id='" + controlId + "']").val()) || 100;
+
+                // Calculate vulnerability
+                newVulnerabilityValue = 100 - controlCompliance;
+                $("input[name='vulnerability[]'][data-control-id='" + controlId + "']").val(newVulnerabilityValue);
+
+                // Calculate risk level
+                newRiskValue = (newVulnerabilityValue / 100) * (threatValue / 100) * assetValue;
+                $("input[name='risk_level[]'][data-control-id='" + controlId + "']").val(newRiskValue);
+            });
+        }
+
+        $('#assetSelect').change(function(){
+            // Get the selected value
+            assetValue = parseFloat($(this).val());
+
+            // Update all risk values based on the new assetValue
+            $("input[name^='control_compliance']").each(function () {
+                controlId = $(this).data('control-id');
+                var threat = $("input[name='threat[]'][data-control-id='" + controlId + "']").val();
+                var vulnerability = 100 - parseFloat($(this).val());
+                var newRiskValue = (vulnerability / 100) * (threat / 100) * assetValue;
+
+                // Update the risk level field
+                $("input[name='risk_level[]'][data-control-id='" + controlId + "']").val(newRiskValue);
+            });
+        });
+
+        $("input[name^='control_compliance']").on("input", function () {
+            controlId = $(this).data('control-id');
+            var vulnerabilityField = $("input[name='vulnerability[]'][data-control-id='" + controlId + "']");
+
+            // Calculate the new value for vulnerability
+            newVulnerabilityValue = 100 - parseFloat($(this).val());
+
+            // Update the value of the vulnerability input box
+            vulnerabilityField.val(newVulnerabilityValue);
+
+            // Trigger the input event for threat to recalculate risk level
+            $("input[name='threat[]'][data-control-id='" + controlId + "']").trigger("input");
+        });
+
+        $("input[name^='threat']").on("input", function () {
+            threat = $(this).val();
+            controlId = $(this).data('control-id');
+            riskLevelField = $("input[name='risk_level[]'][data-control-id='" + controlId + "']");
+            newRiskValue = parseFloat(newVulnerabilityValue) / 100 * parseFloat(threat) / 100 * assetValue;
+
+            // Update the value of the risk level input box
+            riskLevelField.val(newRiskValue);
+        });
+
+        $('#selectAllApplicability').change(function(){
+            if ($(this).is(':checked')) {
+                // Iterate over all applicability select elements and set the value to "yes+control_num"
+                $("select[name^='applicability']").each(function () {
+                    var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
+                    $(this).val('no+' + controlId);
+                });
+            } else {
+                // If the checkbox is unchecked, reset all applicability select elements to the default (empty) value
+                $("select[name^='applicability']").each(function () {
+                    var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
+                    $(this).val('yes+' + controlId);
+                });
+            }
+        });
+
+        $('#selectAllControlCompliance').change(function(){
+            if ($(this).is(':checked')) {
+                $("input[name^='control_compliance']").each(function () {
+                    // Only change the value if the user has not entered a value (default is empty)
+                        $(this).val(0).trigger("input");
+
+
+
+
+                });
+            } else {
+
+                 $("input[name^='control_compliance']").each(function () {
+                 if ($(this).val() == 0) {
+                        $(this).val(100).trigger("input");
+                    }
+                 });
+            }
+        });
+
+
+        $('#selectAllThreat').change(function(){
+            if ($(this).is(':checked')) {
+                $("input[name^='threat']").each(function () {
+                    if ($(this).val() == 100) {
+                        $(this).val(0).trigger("input");
+                    }
+
+                });
+            } else {
+
+                 $("input[name^='threat']").each(function () {
+                 if ($(this).val() == 0) {
+                        $(this).val(100).trigger("input");
+                    }
+                 });
+            }
+        });
+
+
+        // Initialize values on page load
+        initializeValues();
+    });
 </script>
+
 
 <script>
     function validateInput(inputElement) {
