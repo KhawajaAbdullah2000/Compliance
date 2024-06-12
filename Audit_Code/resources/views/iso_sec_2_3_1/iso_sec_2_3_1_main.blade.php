@@ -9,7 +9,7 @@
 $permissions=json_decode($project_permissions);
 @endphp
 
-<div class="container">
+<div class="container-fluid">
 
     <div class="row mt-5">
         <div class="col-lg-12">
@@ -123,14 +123,26 @@ $permissions=json_decode($project_permissions);
 
     <div class="mt-4">
         <table class="table table-responsive table-primary table-striped">
-            <thead class="thead-dark">
+            <colgroup>
+                <col style="width: 100px;">
+                <col style="width: 300px;">
+                <col style="width: 500px;">
+                <col style="width: 100px;">
+                <col style="width: 100px;">
+                <col style="width: 100px;">
+                <col style="width: 100px;">
+                <col style="width: 200px;">
+                <col style="width: 100px;">
+
+            </colgroup>
+
+            <thead class="thead-dark" style="vertical-align: middle">
               <tr>
                 <th>Control Number</th>
                 <th>Title Of Control</th>
                 <th>Description of Control</th>
                 <th>Control is Applicable?
                      Select All No
-
                     <input type="checkbox" id="selectAllApplicability" />
                 </th>
                 <th>Control Compliance%
