@@ -40,6 +40,31 @@ $headers=array('Control num','Title of Control','Descriptionof Control')
             </table>
         </div>
     </div>
+
+    <table class="table table-responsive table-secondary table-striped mt-4">
+        <thead class="thead-dark">
+          <tr style="vertical-align: middle">
+            <th>Service Name</th>
+            <th >Asset Group Name</th>
+            <th>Asset Name</th>
+            <th>Asset Component Name</th>
+            <th>Asset Owner Dept</th>
+            <th>Asset Physical Location</th>
+            <th>Asset Logical Location</th>
+
+          </tr>
+
+          <tr>
+            <td>{{$assetData->s_name}}</td>
+            <td>{{$assetData->g_name}}</td>
+            <td>{{$assetData->name}}</td>
+            <td>{{$assetData->c_name}}</td>
+            <td>{{$assetData->owner_dept}}</td>
+            <td>{{$assetData->physical_loc}}</td>
+            <td>{{$assetData->logical_loc}}</td>
+          </tr>
+
+          </table>
                 @foreach ($data[0] as $row)
                             @if(isset($row))
                                 <p>

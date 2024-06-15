@@ -140,6 +140,8 @@ class IsoSec2_4_A8 extends Controller
                             $project=Project::join('project_types','projects.project_type','project_types.id')
                             ->where('projects.project_id',$proj_id)->first();
 
+                    $assetData=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
+
                         return view('iso.edit_sec2_4_a8', [
                             'project_id' => $proj_id,
                             'project_name' => $checkpermission->project_name,
@@ -148,7 +150,8 @@ class IsoSec2_4_A8 extends Controller
                             'result' => $result,
                             'asset_id' => $asset_id,
                             'control_data' => $control_data,
-                            'project'=>$project
+                            'project'=>$project,
+                            'assetData'=>$assetData
                         ]);
                     }
                 }
