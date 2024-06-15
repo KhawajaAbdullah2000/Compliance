@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 29, 2024 at 09:45 AM
+-- Generation Time: Jun 15, 2024 at 04:57 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -68,21 +68,6 @@ CREATE TABLE `iso_risk_treatment` (
   `last_edited_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `iso_risk_treatment`
---
-
-INSERT INTO `iso_risk_treatment` (`assessment_id`, `project_id`, `asset_id`, `control_num`, `applicability`, `asset_value`, `control_compliance`, `vulnerability`, `threat`, `risk_level`, `residual_risk_treatment`, `treatment_action`, `treatment_target_date`, `treatment_comp_date`, `responsibility_for_treatment`, `acceptance_justification`, `acceptance_target_date`, `acceptance_actual_date`, `acceptance_proposed_responsibility`, `accepted_by`, `last_edited_by`, `last_edited_at`) VALUES
-(1, 27, 69, '5.1', 'yes', 1, 90, 10, 33, '0.03300', 'retain and accept risk', NULL, NULL, NULL, NULL, 'justificaiton1', '2024-04-27', '2024-04-26', 94, 95, 94, '2024-04-25 18:41:12'),
-(2, 27, 69, '5.2', 'yes', 1, 66, 34, 88, '0.29920', 'avoid risk', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 18:44:36'),
-(3, 27, 58, '5.3', 'yes', 10, 95, 5, 55, '0.27500', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 18:50:45'),
-(4, 27, 58, '6.2', 'yes', 10, 55, 45, 66, '2.97000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 19:25:43'),
-(5, 29, 70, '5.1', 'yes', 5, 95, 5, 66, '0.16500', 'share risk', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 22:30:08'),
-(6, 29, 70, '5.2', 'no', 5, 0, 0, 0, '0.00000', 'retain and accept risk', NULL, NULL, NULL, NULL, 'justificaiton1', '2024-04-12', '2024-04-24', 94, 95, 94, '2024-04-25 21:00:18'),
-(7, 29, 70, '5.3', 'yes', 5, 66, 34, 99, '1.68300', 'modify risk', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 22:56:34'),
-(8, 29, 71, '5.1', 'yes', 5, 98, 2, 100, '0.10000', 'share risk', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 23:06:47'),
-(9, 29, 71, '5.2', 'yes', 5, 99, 1, 66, '0.03300', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 23:00:31');
-
 -- --------------------------------------------------------
 
 --
@@ -105,7 +90,9 @@ CREATE TABLE `iso_sec2_4_a5` (
 --
 
 INSERT INTO `iso_sec2_4_a5` (`assessment_id`, `project_id`, `asset_id`, `control_num`, `justification`, `ref_of_risk`, `last_edited_by`, `last_edited_at`) VALUES
-(43, 26, 41, '5.1', NULL, 'Referenc 1', 55, '2024-04-22 19:02:24');
+(43, 26, 41, '5.1', NULL, 'Referenc 1', 55, '2024-04-22 19:02:24'),
+(44, NULL, 117, '5.1', NULL, ',klklkl', 97, '2024-06-05 11:32:14'),
+(45, NULL, 117, '5.2', 'ghggg', NULL, 97, '2024-06-05 11:31:59');
 
 -- --------------------------------------------------------
 
@@ -200,15 +187,42 @@ INSERT INTO `iso_sec_2_1` (`assessment_id`, `project_id`, `g_name`, `name`, `c_n
 (70, NULL, 'AssetG1', 'Asset1', 'AssetC1', 'Owner1', 'Physical', 'Logical1', 'Service1', 94, '2024-04-25 20:49:33'),
 (71, NULL, 'AssetG1', 'Asset1', 'AssetC2', 'Owner1', 'Physical', 'Logical1', 'Logical1', 94, '2024-04-25 20:49:33'),
 (72, 30, 'AssetG1', 'Asset1', 'AssetC1', 'Owner1', 'Physical1', 'Logical1', 'Service1', 95, '2024-04-29 10:11:04'),
-(73, 31, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-04-29 10:28:52'),
-(74, 31, 'AssetG1', 'Asset1', 'AssetC2', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-04-29 10:31:54'),
-(75, 31, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service2', 97, '2024-04-29 10:38:57'),
-(76, 32, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-04-29 10:40:59'),
-(77, 32, 'AssetG1', 'Asset1', 'AssetC2', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-04-29 10:40:59'),
-(78, 32, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service2', 97, '2024-04-29 10:41:51'),
-(79, 31, 'AssetG2', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service2', 97, '2024-04-29 10:43:47'),
-(80, 32, 'AssetG2', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service2', 97, '2024-04-29 10:44:01'),
-(81, 32, 'AssetG1', 'Asset1', 'AssetC1', 'Owner1', 'Phy1', 'log1', 'Service3', 97, '2024-04-29 12:40:19');
+(73, NULL, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-04-29 10:28:52'),
+(74, NULL, 'AssetG1', 'Asset1', 'AssetC2', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-04-29 10:31:54'),
+(75, NULL, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service2', 97, '2024-04-29 10:38:57'),
+(79, NULL, 'AssetG2', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service2', 97, '2024-04-29 10:43:47'),
+(82, NULL, 'AssetG1', 'Asset1', 'AssetC1', 'Owner1', 'Phy1', 'log1', 'Service3', 97, '2024-05-05 14:12:42'),
+(83, NULL, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service2', 97, '2024-05-05 14:16:21'),
+(84, NULL, 'AssetG2', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service2', 97, '2024-05-05 14:16:21'),
+(100, NULL, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-05-05 17:17:55'),
+(101, NULL, 'AssetG1', 'Asset1', 'AssetC2', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-05-05 17:17:55'),
+(102, NULL, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-05-06 08:53:38'),
+(103, NULL, 'AssetG1', 'Asset1', 'AssetC2', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-05-06 08:53:38'),
+(104, 36, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-05-06 09:38:17'),
+(105, 36, 'AssetG1', 'Asset1', 'AssetC2', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-05-06 09:38:17'),
+(106, NULL, 'AssetG2', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service2', 97, '2024-05-06 09:42:57'),
+(107, 37, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-05-06 18:17:00'),
+(108, 37, 'AssetG1', 'Asset1', 'AssetC2', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-05-06 18:17:00'),
+(109, NULL, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-05-06 19:50:52'),
+(110, NULL, 'AssetG1', 'Asset1', 'AssetC2', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-05-06 19:50:52'),
+(111, 38, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-05-07 11:25:12'),
+(112, 38, 'AssetG1', 'Asset1', 'AssetC2', 'AssetO1', 'AssetP1', 'AssetL1', 'Service1', 97, '2024-05-07 11:25:12'),
+(113, NULL, 'AssetG1', 'Asset1', 'AssetC1', 'AssetO1', 'AssetP1', 'AssetL1', 'Service2', 97, '2024-05-07 11:57:42'),
+(114, 40, 'Group1', 'Name1', 'Component1', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-05-08 08:49:15'),
+(115, 40, 'Group1', 'Name1', 'Component2', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-05-08 08:49:15'),
+(116, 40, 'Group2', 'Name1', 'Component1', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-05-08 08:49:15'),
+(117, NULL, 'Group1', 'Name1', 'Component1', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-06-04 16:42:40'),
+(118, NULL, 'Group1', 'Name1', 'Component2', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-05-08 08:50:20'),
+(119, NULL, 'Group2', 'Name1', 'Component1', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-05-08 08:50:20'),
+(120, NULL, 'Group1', 'Name1', 'Component1', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-05-10 14:44:52'),
+(121, NULL, 'Group1', 'Name1', 'Component2', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-05-10 14:44:52'),
+(122, 44, 'Group1', 'Name1', 'Component1', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-05-10 15:50:18'),
+(123, 44, 'Group1', 'Name1', 'Component2', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-05-10 15:50:18'),
+(124, 44, 'Group2', 'Name1', 'Component1', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-05-10 15:50:18'),
+(127, NULL, 'Group1', 'Name1', 'Component3', 'asset_owner1', 'AssetPhy1', 'AssetLog1', 'Service1', 97, '2024-06-05 09:35:05'),
+(128, 45, 'Group1', 'Name1', 'Component1', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-06-11 10:55:23'),
+(129, 45, 'Group1', 'Name1', 'Component2', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-06-11 10:55:23'),
+(130, 45, 'Group2', 'Name1', 'Component1', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-06-11 10:55:23');
 
 -- --------------------------------------------------------
 
@@ -246,7 +260,25 @@ INSERT INTO `iso_sec_2_2` (`assessment_id`, `project_id`, `title_num`, `sub_req`
 (27, 27, 8, '8.1-a', 'no', 'comment1', '1713882401.pdf', 94, '2024-04-23 19:26:41'),
 (28, 27, 8, '8.1-c', 'yes', 'comment2', '1713882429.xlsx', 94, '2024-04-23 19:29:11'),
 (29, 27, 4, '4.1-a', 'yes', 'comment3 comment 4', '1714040011.xlsx', 94, '2024-04-25 16:24:17'),
-(30, NULL, 4, '4.1-a', 'yes', NULL, '1714060228.xlsx', 94, '2024-04-25 20:50:28');
+(30, NULL, 4, '4.1-a', 'yes', NULL, '1714060228.xlsx', 94, '2024-04-25 20:50:28'),
+(31, NULL, 4, '4.2-a', 'no', NULL, NULL, 97, '2024-04-29 18:16:19'),
+(32, NULL, 5, '5.1-a', 'yes', 'gghhg', NULL, 97, '2024-05-05 14:37:59'),
+(33, NULL, 5, '5.1-b', 'no', 'hghhjh', NULL, 97, '2024-05-05 14:38:08'),
+(34, NULL, 1, '1.1.1', 'no', 'fgyyuuy edited', NULL, 97, '2024-05-05 21:11:16'),
+(35, NULL, 2, '2.1.1 ', 'yes', 'hyjhjhj', '1714925631.png', 97, '2024-05-05 21:13:51'),
+(36, NULL, 2, '2.1.2 ', 'no', 'ghgh', '1714925709.docx', 97, '2024-05-05 21:15:31'),
+(37, NULL, 9, '9.5.1.3 ', 'yes', 'hyghj', '1714967451.xlsx', 97, '2024-05-06 08:50:51'),
+(38, NULL, 1, '1.1.1', 'yes', 'hrghhghg', '1714967921.docx', 97, '2024-05-06 08:58:41'),
+(39, NULL, 11, '11.2.2 ', 'yes', NULL, NULL, 97, '2024-05-06 09:00:11'),
+(40, 36, 1, '1.1.2', 'yes', 'gghgh', '1714970399.xlsx', 97, '2024-05-06 09:39:59'),
+(41, NULL, 12, '12.10.7', 'yes', NULL, NULL, 97, '2024-05-06 09:41:31'),
+(42, 37, 3, '3.3.2', 'partial', 'comment', '1715001619.docx', 97, '2024-05-06 18:20:19'),
+(43, NULL, 6, '6.1.1-a', 'partial', NULL, NULL, 97, '2024-05-07 11:52:27'),
+(44, NULL, 6, '6.1.1-b', 'yes', NULL, NULL, 97, '2024-05-07 11:52:33'),
+(45, NULL, 6, '6.1.1-c', 'no', NULL, NULL, 97, '2024-05-07 11:52:39'),
+(46, NULL, 6, '6.1.1-e-1', 'partial', NULL, NULL, 97, '2024-05-07 11:52:46'),
+(47, NULL, 8, '8.1-a', 'no', NULL, NULL, 97, '2024-05-10 15:42:06'),
+(48, 44, 8, '8.2.1 ', 'partial', NULL, NULL, 97, '2024-05-10 15:51:02');
 
 -- --------------------------------------------------------
 
@@ -288,155 +320,6 @@ CREATE TABLE `iso_sec_2_3_1` (
   `last_edited_by` bigint(20) UNSIGNED DEFAULT NULL,
   `last_edited_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `iso_sec_2_3_1`
---
-
-INSERT INTO `iso_sec_2_3_1` (`assessment_id`, `project_id`, `asset_id`, `control_num`, `applicability`, `asset_value`, `control_compliance`, `vulnerability`, `threat`, `risk_level`, `residual_risk_treatment`, `treatment_action`, `treatment_target_date`, `treatment_comp_date`, `responsibility_for_treatment`, `last_edited_by`, `last_edited_at`) VALUES
-(139, 20, 28, '5.2', 'yes', 10, 95, 5, 100, '0.50000', 'avoid risk', 'action dds', '2024-03-13', '2024-03-28', 57, 55, '2024-03-23 09:52:06'),
-(140, 20, 28, '5.3', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(141, 20, 28, '5.4', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(142, 20, 28, '5.5', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(143, 20, 28, '5.6', 'yes', 10, 50, 50, 100, '5.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(144, 20, 28, '5.7', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(145, 20, 28, '5.8', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(146, 20, 28, '5.9', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(147, 20, 28, '5.10', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(148, 20, 28, '5.11', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(149, 20, 28, '5.12', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(150, 20, 28, '5.13', 'yes', 10, 95, 5, 100, '0.50000', 'share risk', 'treatment13', '2024-03-21', '2024-03-15', 57, 55, '2024-03-23 16:19:15'),
-(151, 20, 28, '5.14', 'yes', 10, 50, 50, 100, '5.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(152, 20, 28, '5.15', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(153, 20, 28, '5.16', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(154, 20, 28, '5.17', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(155, 20, 28, '5.18', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(156, 20, 28, '5.19', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(157, 20, 28, '5.20', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:21:27'),
-(158, 20, 28, '5.21', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:30:29'),
-(159, 20, 28, '5.22', 'yes', 10, 50, 50, 100, '5.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:30:29'),
-(160, 20, 28, '5.23', 'yes', 10, 50, 50, 100, '5.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
-(161, 20, 28, '5.24', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
-(162, 20, 28, '5.25', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
-(164, 20, 28, '5.27', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
-(165, 20, 28, '5.28', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
-(166, 20, 28, '5.29', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
-(167, 20, 28, '5.30', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
-(168, 20, 28, '5.31', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
-(169, 20, 28, '5.32', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
-(170, 20, 28, '5.33', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
-(171, 20, 28, '5.34', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
-(172, 20, 28, '5.35', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
-(173, 20, 28, '5.36', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
-(174, 20, 28, '5.37', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:40:19'),
-(175, 20, 28, '6.1', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(176, 20, 28, '6.2', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(177, 20, 28, '6.3', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(178, 20, 28, '6.4', 'yes', 10, 50, 50, 100, '5.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(179, 20, 28, '6.5', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(180, 20, 28, '6.6', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(181, 20, 28, '6.7', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(182, 20, 28, '6.8', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(183, 20, 28, '7.1', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(184, 20, 28, '7.2', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(185, 20, 28, '7.3', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(186, 20, 28, '7.4', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(187, 20, 28, '7.5', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(188, 20, 28, '7.6', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(189, 20, 28, '7.7', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(190, 20, 28, '7.8', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(191, 20, 28, '7.9', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(192, 20, 28, '7.10', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(193, 20, 28, '7.11', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(194, 20, 28, '7.12', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(195, 20, 28, '7.13', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(196, 20, 28, '7.14', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-01-19 18:43:06'),
-(197, 20, 28, '8.1', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:25:28'),
-(198, 20, 28, '5.26', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:26:27'),
-(199, 20, 28, '8.2', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(200, 20, 28, '8.3', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(201, 20, 28, '8.4', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(202, 20, 28, '8.5', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(203, 20, 28, '8.6', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(204, 20, 28, '8.7', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(205, 20, 28, '8.8', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(206, 20, 28, '8.9', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(207, 20, 28, '8.10', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(208, 20, 28, '8.11', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(209, 20, 28, '8.12', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(210, 20, 28, '8.13', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(211, 20, 28, '8.14', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(212, 20, 28, '8.15', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(213, 20, 28, '8.16', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(214, 20, 28, '8.17', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(215, 20, 28, '8.18', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(216, 20, 28, '8.19', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(217, 20, 28, '8.20', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(218, 20, 28, '8.21', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(219, 20, 28, '8.22', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(220, 20, 28, '8.23', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(221, 20, 28, '8.24', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(222, 20, 28, '8.25', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(223, 20, 28, '8.26', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(224, 20, 28, '8.27', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:30:07'),
-(225, 20, 28, '8.28', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:31:11'),
-(226, 20, 28, '8.29', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:31:11'),
-(229, 20, 28, '8.32', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:31:11'),
-(230, 20, 28, '8.33', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:31:11'),
-(231, 20, 28, '8.34', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 14:32:08'),
-(237, 20, 28, '8.30', 'no', 10, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 15:21:24'),
-(238, 20, 28, '8.31', 'yes', 10, 95, 5, 100, '0.50000', NULL, NULL, NULL, NULL, NULL, 55, '2024-02-07 15:21:24'),
-(240, 20, 28, '5.1', 'yes', 10, 95, 5, 100, '0.50000', 'retain and accept risk', 'abcdes', '2024-03-22', '2024-03-15', 55, 55, '2024-03-23 09:51:46'),
-(241, 19, 32, '5.1', 'yes', 5, 56, 44, 11, '0.24200', NULL, NULL, NULL, NULL, NULL, 55, '2024-03-21 15:30:04'),
-(242, 24, 37, '5.1', 'yes', 5, 50, 50, 90, '2.25000', NULL, NULL, NULL, NULL, NULL, 55, '2024-03-22 19:25:26'),
-(243, 24, 37, '5.10', 'yes', 5, 80, 20, 55, '0.55000', NULL, NULL, NULL, NULL, NULL, 55, '2024-03-22 19:25:52'),
-(244, 20, 29, '5.1', 'yes', 10, 77, 23, 66, '1.51800', NULL, NULL, NULL, NULL, NULL, 55, '2024-03-23 10:03:55'),
-(245, 25, 39, '5.1', 'yes', 5, 20, 80, 55, '2.20000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:28:03'),
-(246, 25, 39, '5.2', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:28:03'),
-(247, 25, 39, '5.3', 'yes', 5, 79, 21, 77, '1.15500', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:28:45'),
-(248, 25, 39, '5.4', 'yes', 5, 55, 45, 44, '0.63250', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:29:14'),
-(249, 25, 39, '5.5', 'yes', 5, 77, 23, 66, '0.75900', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:51:35'),
-(250, 25, 39, '5.6', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:51:35'),
-(251, 25, 39, '5.7', 'no', 1, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:52:13'),
-(252, 25, 39, '5.8', 'no', 10, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:52:28'),
-(253, 25, 39, '5.9', 'yes', 1, 77, 23, 66, '0.15180', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:54:05'),
-(254, 25, 39, '5.10', 'no', 1, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:54:05'),
-(255, 25, 39, '5.11', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 17:54:22'),
-(256, 25, 39, '5.12', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 18:39:23'),
-(257, 25, 39, '5.13', 'yes', 5, 77, 23, 66, '0.75900', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 18:40:09'),
-(258, 25, 39, '5.14', 'no', 10, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 18:40:17'),
-(259, 25, 39, '5.15', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:05:36'),
-(260, 25, 39, '5.16', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:05:54'),
-(261, 25, 39, '5.17', 'yes', 5, 88, 12, 99, '0.59400', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:05:54'),
-(262, 25, 39, '5.18', 'no', 10, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:06:59'),
-(263, 25, 39, '5.19', 'yes', 10, 88, 12, 77, '0.92400', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:06:59'),
-(264, 25, 39, '5.20', 'yes', 10, 99, 1, 88, '0.08800', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:06:59'),
-(265, 25, 39, '5.21', 'no', 10, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:06:59'),
-(266, 25, 39, '5.22', 'no', 10, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:06:59'),
-(267, 25, 39, '5.23', 'yes', 10, 77, 23, 66, '1.51800', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:06:59'),
-(268, 25, 39, '5.24', 'no', 10, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:07:50'),
-(269, 25, 39, '5.25', 'yes', 5, 88, 12, 2, '0.01200', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:08:16'),
-(270, 25, 39, '5.27', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-19 19:08:16'),
-(271, 26, 41, '5.1', 'yes', 10, 98, 2, 77, '0.15400', 'modify risk', 'Treatment action 1', '2024-04-25', '2024-04-24', 55, 55, '2024-04-22 18:47:24'),
-(272, 26, 41, '5.2', 'no', 5, 99, 1, 66, '0.03300', 'modify risk', NULL, NULL, NULL, NULL, 55, '2024-04-22 18:32:04'),
-(273, 26, 41, '5.3', 'yes', 10, 66, 34, 66, '2.24400', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-20 14:49:40'),
-(274, 26, 41, '5.4', 'yes', 10, 55, 45, 44, '1.98000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-20 14:50:06'),
-(275, 26, 41, '5.5', 'yes', 5, 88, 12, 77, '0.46200', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-20 14:50:27'),
-(276, 26, 41, '5.6', 'yes', 5, 79, 21, 66, '0.69300', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-20 15:07:19'),
-(277, 26, 41, '5.7', 'yes', 10, 90, 10, 44, '0.44000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-20 15:12:16'),
-(278, 26, 41, '6.1', 'yes', 10, 88, 12, 66, '0.79200', 'avoid risk', 'Treatment action2', '2024-04-19', '2024-04-26', 55, 55, '2024-04-22 18:49:40'),
-(279, 26, 41, '5.8', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-20 15:13:57'),
-(280, 26, 41, '5.9', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 55, '2024-04-20 15:18:34'),
-(281, 26, 41, '6.8', 'no', 5, 0, 0, 0, '0.00000', 'retain and accept risk', NULL, NULL, NULL, NULL, 55, '2024-04-22 18:34:23'),
-(299, 27, 59, '5.1', 'yes', 5, 66, 34, 77, '1.30900', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-24 20:02:27'),
-(300, 27, 59, '5.3', 'no', 5, 0, 0, 0, '0.00000', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-24 20:02:27'),
-(301, 27, 60, '5.1', 'yes', 1, 76, 24, 88, '0.21120', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-24 20:05:40'),
-(302, 27, 60, '5.2', 'yes', 1, 77, 23, 66, '0.15180', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-24 20:05:59'),
-(303, 27, 60, '5.3', 'yes', 1, 99, 1, 77, '0.00770', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-24 20:06:37'),
-(307, 27, 58, '5.1', 'no', 10, 0, 0, 0, '0.00000', 'share risk', NULL, NULL, NULL, NULL, 94, '2024-04-25 15:16:23'),
-(308, 27, 58, '5.2', 'yes', 10, 95, 5, 55, '0.27500', 'modify risk', 'Action 1', '2024-04-11', '2024-04-04', 94, 94, '2024-04-25 16:35:22'),
-(311, 27, 58, '5.3', 'yes', 10, 95, 5, 55, '0.27500', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 18:50:45'),
-(312, 27, 58, '6.2', 'yes', 10, 55, 45, 66, '2.97000', NULL, NULL, NULL, NULL, NULL, 94, '2024-04-25 19:25:43');
 
 -- --------------------------------------------------------
 
@@ -1833,19 +1716,19 @@ CREATE TABLE `projects` (
 --
 
 INSERT INTO `projects` (`project_id`, `project_name`, `org_id`, `created_by`, `project_creation_date`, `project_creation_time`, `project_type`, `status`, `status_last_changed_by`, `created_at`, `updated_at`) VALUES
-(1, 'Audit 1 made by h1enduser1', 9, 55, '2023-08-12', '14:47:06', 2, 'Not submitted for approval', 55, '2023-08-12 09:47:06', '2023-08-12 11:00:53'),
-(4, 'Audit 2 made by h1enduser1', 9, 55, '2023-08-12', '16:20:06', 2, 'Not submitted for approval', 55, '2023-08-12 11:20:06', '2023-08-14 05:58:32'),
-(6, 'Audit by g2enduser1', 11, 59, '2023-08-14', '11:40:10', 2, 'Not submitted for approval', 59, '2023-08-14 06:40:10', '2023-08-14 06:40:10'),
-(7, 'Project for guest3', 12, 65, '2023-08-29', '16:28:24', 2, 'Not submitted for approval', 65, '2023-08-29 11:28:24', '2023-08-29 11:28:24'),
+(1, 'Audit 1 made by h1enduser1', 9, 55, '2023-08-12', '14:47:06', NULL, 'Not submitted for approval', 55, '2023-08-12 09:47:06', '2023-08-12 11:00:53'),
+(4, 'Audit 2 made by h1enduser1', 9, 55, '2023-08-12', '16:20:06', NULL, 'Not submitted for approval', 55, '2023-08-12 11:20:06', '2023-08-14 05:58:32'),
+(6, 'Audit by g2enduser1', 11, 59, '2023-08-14', '11:40:10', NULL, 'Not submitted for approval', 59, '2023-08-14 06:40:10', '2023-08-14 06:40:10'),
+(7, 'Project for guest3', 12, 65, '2023-08-29', '16:28:24', NULL, 'Not submitted for approval', 65, '2023-08-29 11:28:24', '2023-08-29 11:28:24'),
 (8, 'Test project 23', 9, 55, '2023-08-29', '16:36:59', 4, 'Pending Approval', 55, '2023-08-29 11:36:59', '2024-04-17 08:48:28'),
-(9, 'projectbyg4', 13, 69, '2023-08-31', '12:20:10', 2, 'Not submitted for approval', 69, '2023-08-31 07:20:10', '2023-08-31 07:20:10'),
-(10, 'Project by G5enduser1', 14, 71, '2023-09-03', '16:43:22', 2, 'Not submitted for approval', 71, '2023-09-03 11:43:22', '2023-09-03 11:43:22'),
-(11, 'prohect by g5enduser2', 14, 72, '2023-09-03', '16:44:10', 2, 'Not submitted for approval', 72, '2023-09-03 11:44:10', '2023-09-03 11:44:10'),
-(12, 'Guest6 Project (own)', 15, 74, '2023-09-09', '16:29:53', 2, 'Not submitted for approval', 74, '2023-09-09 11:29:53', '2023-09-09 11:29:53'),
-(13, 'project for g7 by host', 9, 55, '2023-09-09', '16:35:17', 2, 'Not submitted for approval', 55, '2023-09-09 11:35:17', '2023-09-09 11:35:17'),
-(14, 'project for g7 by g7enduser', 16, 77, '2023-09-09', '16:36:06', 2, 'Not submitted for approval', 77, '2023-09-09 11:36:06', '2023-09-09 11:36:06'),
-(15, 'project for guest8', 17, 80, '2023-09-15', '15:03:26', 2, 'Not submitted for approval', 80, '2023-09-15 10:03:26', '2023-09-15 10:03:39'),
-(16, 'project for G10', 18, 84, '2023-09-15', '15:47:00', 2, 'Not submitted for approval', 84, '2023-09-15 10:47:00', '2023-09-15 10:47:00'),
+(9, 'projectbyg4', 13, 69, '2023-08-31', '12:20:10', NULL, 'Not submitted for approval', 69, '2023-08-31 07:20:10', '2023-08-31 07:20:10'),
+(10, 'Project by G5enduser1', 14, 71, '2023-09-03', '16:43:22', NULL, 'Not submitted for approval', 71, '2023-09-03 11:43:22', '2023-09-03 11:43:22'),
+(11, 'prohect by g5enduser2', 14, 72, '2023-09-03', '16:44:10', NULL, 'Not submitted for approval', 72, '2023-09-03 11:44:10', '2023-09-03 11:44:10'),
+(12, 'Guest6 Project (own)', 15, 74, '2023-09-09', '16:29:53', NULL, 'Not submitted for approval', 74, '2023-09-09 11:29:53', '2023-09-09 11:29:53'),
+(13, 'project for g7 by host', 9, 55, '2023-09-09', '16:35:17', NULL, 'Not submitted for approval', 55, '2023-09-09 11:35:17', '2023-09-09 11:35:17'),
+(14, 'project for g7 by g7enduser', 16, 77, '2023-09-09', '16:36:06', NULL, 'Not submitted for approval', 77, '2023-09-09 11:36:06', '2023-09-09 11:36:06'),
+(15, 'project for guest8', 17, 80, '2023-09-15', '15:03:26', NULL, 'Not submitted for approval', 80, '2023-09-15 10:03:26', '2023-09-15 10:03:39'),
+(16, 'project for G10', 18, 84, '2023-09-15', '15:47:00', NULL, 'Not submitted for approval', 84, '2023-09-15 10:47:00', '2023-09-15 10:47:00'),
 (17, 'ISO Test', 9, 55, '2023-11-07', '19:25:12', 4, 'Not submitted for approval', 55, '2023-11-07 14:25:12', '2023-11-07 14:25:12'),
 (18, 'ISO test2', 9, 55, '2023-11-09', '19:04:24', 4, 'Not submitted for approval', 55, '2023-11-09 14:04:24', '2023-11-09 14:04:24'),
 (19, 'ISO Project Testing', 9, 55, '2023-11-23', '18:43:33', 4, 'Not submitted for approval', 55, '2023-11-23 13:43:33', '2023-11-23 13:43:33'),
@@ -1859,8 +1742,13 @@ INSERT INTO `projects` (`project_id`, `project_name`, `org_id`, `created_by`, `p
 (27, 'GRC Project1', 21, 94, '2024-04-23', '18:33:42', 4, 'Not submitted for approval', 94, '2024-04-23 13:33:42', '2024-04-23 13:33:42'),
 (28, 'Grc Project2', 21, 94, '2024-04-24', '19:41:56', 4, 'Not submitted for approval', 94, '2024-04-24 14:41:56', '2024-04-24 14:41:56'),
 (30, 'Grc Project3', 21, 94, '2024-04-27', '18:54:38', 4, 'Not submitted for approval', 94, '2024-04-27 13:54:38', '2024-04-27 13:54:38'),
-(31, 'Master Assets', 22, 97, '2024-04-29', '10:15:01', 4, 'Not submitted for approval', 97, '2024-04-29 05:15:01', '2024-04-29 05:15:01'),
-(32, 'Securiti Project', 22, 97, '2024-04-29', '10:32:19', 4, 'Not submitted for approval', 97, '2024-04-29 05:32:19', '2024-04-29 05:32:19');
+(36, 'PCI Merchant1', 22, 97, '2024-05-06', '09:13:52', 3, 'Approved', 97, '2024-05-06 04:13:52', '2024-05-06 04:13:52'),
+(37, 'PCI single sheet', 22, 97, '2024-05-06', '18:16:28', 1, 'Pending Approval', 97, '2024-05-06 13:16:28', '2024-05-06 13:16:28'),
+(38, 'PCI MUlti stp', 22, 97, '2024-05-07', '11:20:48', 2, 'Not submitted for approval', 97, '2024-05-07 06:20:48', '2024-05-07 06:20:48'),
+(40, 'Master', 22, 97, '2024-05-08', '08:46:43', 4, 'Not submitted for approval', 97, '2024-05-08 03:46:43', '2024-05-08 03:46:43'),
+(43, 'Test Project3', 22, 97, '2024-05-10', '15:34:42', 4, 'Not submitted for approval', 97, '2024-05-10 10:34:42', '2024-05-10 10:34:42'),
+(44, 'PCI project', 22, 97, '2024-05-10', '15:49:24', 1, 'Not submitted for approval', 97, '2024-05-10 10:49:24', '2024-05-10 10:49:24'),
+(45, 'ISO Test 2', 22, 97, '2024-06-11', '10:54:42', 4, 'Not submitted for approval', 97, '2024-06-11 05:54:42', '2024-06-11 05:54:42');
 
 -- --------------------------------------------------------
 
@@ -1917,8 +1805,19 @@ INSERT INTO `project_details` (`project_code`, `assigned_enduser`, `project_perm
 (28, 94, '[\"Data Inputter\",\"Data Approver\",\"Data Viewer\"]', '2024-04-24 14:42:19', '2024-04-24 14:42:19'),
 (NULL, 94, '[\"Data Inputter\",\"Data Approver\",\"Data Viewer\"]', '2024-04-25 15:48:33', '2024-04-25 15:48:33'),
 (30, 95, '[\"Data Inputter\",\"Data Approver\"]', '2024-04-27 13:54:59', '2024-04-27 13:54:59'),
-(31, 97, '[\"Data Inputter\",\"Data Approver\"]', '2024-04-29 05:15:15', '2024-04-29 05:15:15'),
-(32, 97, '[\"Data Inputter\",\"Data Approver\"]', '2024-04-29 05:32:28', '2024-04-29 05:32:28');
+(NULL, 97, '[\"Data Inputter\",\"Data Approver\"]', '2024-04-29 05:15:15', '2024-04-29 05:15:15'),
+(NULL, 97, '[\"Data Inputter\",\"Data Approver\"]', '2024-04-29 05:32:28', '2024-04-29 05:32:28'),
+(NULL, 97, '[\"Data Inputter\"]', '2024-05-05 09:12:30', '2024-05-05 09:12:30'),
+(NULL, 97, '[\"Data Inputter\"]', '2024-05-05 12:10:06', '2024-05-05 12:10:06'),
+(NULL, 97, '[\"Data Inputter\"]', '2024-05-06 03:51:55', '2024-05-06 03:51:55'),
+(36, 97, '[\"Data Inputter\"]', '2024-05-06 04:14:07', '2024-05-06 04:14:07'),
+(37, 97, '[\"Data Inputter\"]', '2024-05-06 13:16:42', '2024-05-06 13:16:42'),
+(38, 97, '[\"Data Inputter\"]', '2024-05-07 06:20:59', '2024-05-07 06:20:59'),
+(40, 97, '[\"Data Inputter\"]', '2024-05-08 03:46:57', '2024-05-08 03:46:57'),
+(NULL, 97, '[\"Data Inputter\"]', '2024-05-08 03:49:59', '2024-05-08 03:49:59'),
+(NULL, 97, '[\"Data Inputter\"]', '2024-05-10 09:44:36', '2024-05-10 09:44:36'),
+(44, 97, '[\"Data Inputter\"]', '2024-05-10 10:49:57', '2024-05-10 10:49:57'),
+(45, 97, '[\"Data Inputter\",\"Data Approver\",\"Data Viewer\"]', '2024-06-11 05:54:56', '2024-06-11 05:54:56');
 
 -- --------------------------------------------------------
 
@@ -1938,9 +1837,10 @@ CREATE TABLE `project_types` (
 --
 
 INSERT INTO `project_types` (`id`, `type`, `created_at`, `updated_at`) VALUES
-(2, 'Pci dss 3.2.1', NULL, NULL),
-(3, 'Pci dss v4.0', NULL, NULL),
-(4, 'ISO', NULL, NULL);
+(1, 'PCI-DSS v4-Single-Tenant Service Provider (stSP)', NULL, NULL),
+(2, 'PCI-DSS v4-Multi-Tenant Service Provider (mtSP)', NULL, NULL),
+(3, 'PCI-DSS v4-Merchant', NULL, NULL),
+(4, 'ISO 27001:2022', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2667,13 +2567,13 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `iso_risk_treatment`
 --
 ALTER TABLE `iso_risk_treatment`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `iso_sec2_4_a5`
 --
 ALTER TABLE `iso_sec2_4_a5`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `iso_sec2_4_a6`
@@ -2697,13 +2597,13 @@ ALTER TABLE `iso_sec2_4_a8`
 -- AUTO_INCREMENT for table `iso_sec_2_1`
 --
 ALTER TABLE `iso_sec_2_1`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
 
 --
 -- AUTO_INCREMENT for table `iso_sec_2_2`
 --
 ALTER TABLE `iso_sec_2_2`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `iso_sec_2_3`
@@ -2715,7 +2615,7 @@ ALTER TABLE `iso_sec_2_3`
 -- AUTO_INCREMENT for table `iso_sec_2_3_1`
 --
 ALTER TABLE `iso_sec_2_3_1`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=318;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -3003,7 +2903,7 @@ ALTER TABLE `privileges`
 -- AUTO_INCREMENT for table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `project_types`
