@@ -77,7 +77,7 @@ $permissions = json_decode($project_permissions);
     @endif
 
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <div class="row">
                 <div class="col-lg-12">
                     <form action="/iso_sec_2_3_2_treat_form1_submit/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" method="post">
@@ -87,19 +87,21 @@ $permissions = json_decode($project_permissions);
                         <div class="mb-4">
                             <div class="form-group mt-4">
 
-                                <div class="d-flex justify-content-between">
-                                    <label for="residual_risk_treatment" class="fs-5">Residual Risk Treatment</label>
-                                    <select name="residual_risk_treatment" class="boxstyling2" id="residual_risk_treatment">
-                                        <option value="">Select</option>
+                                <div class="d-flex justify-content-end align-items-center">
+                                    <label for="residual_risk_treatment" class="fs-5 mr-3">Residual Risk Treatment</label>
+                                    <select name="residual_risk_treatment" class="boxstyling2 mr-2" id="residual_risk_treatment">
+                                        <option value="modify risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment) == 'modify risk' ? 'selected' : ''}}>Modify Risk</option>
                                         <option value="retain and accept risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment) == 'retain and accept risk' ? 'selected' : ''}}>Retain and Accept Risk</option>
                                         <option value="share risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment) == 'share risk' ? 'selected' : ''}}>Share Risk</option>
                                         <option value="avoid risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment) == 'avoid risk' ? 'selected' : ''}}>Avoid Risk</option>
-                                        <option value="modify risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment) == 'modify risk' ? 'selected' : ''}}>Modify Risk</option>
                                     </select>
+                                    <button type="submit" class="btn fs-6 mr-lg-2 my_bg_color fw-bold text-white btn-sm">Save Changes and go to Action Plan</button>
 
-                                <button type="submit" class="btn my_bg_color fw-bold text-white btn-sm">Save Changes</button>
-
+                                    @if($after_risk_treatment->residual_risk_treatment == "retain and accept risk")
+                                    <a href="/risk_treatment_justification/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" class="btn my_bg_color text-white fw-bold ml-lg-2">Create Justification</a>
+                                    @endif
                                 </div>
+
                                 @if($errors->has('residual_risk_treatment'))
                                 <div class="text-danger">{{ $errors->first('residual_risk_treatment') }}</div>
                                 @endif
@@ -190,12 +192,11 @@ $permissions = json_decode($project_permissions);
             </div>
         </div>
 
-        <div class="col-lg-6 mt-4">
-            <a href="/risk_treatment_edit_action_plan_form/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" class="btn my_bg_color text-white fw-bold">Create or edit Action plan</a>
+        {{-- <div class="col-lg-6 mt-4">
             @if($after_risk_treatment->residual_risk_treatment == "retain and accept risk")
             <a href="/risk_treatment_justification/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" class="btn my_bg_color text-white fw-bold">Create Justification</a>
             @endif
-        </div>
+        </div> --}}
     </div>
 </div>
 

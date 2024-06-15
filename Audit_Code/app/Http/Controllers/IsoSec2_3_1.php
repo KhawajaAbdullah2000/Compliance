@@ -111,6 +111,8 @@ class IsoSec2_3_1 extends Controller
 
 
 
+
+
         $global_asset_value = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->first();
         if ($global_asset_value != null and $global_asset_value->asset_value != $req->asset_value) {
             $old_risk = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->get();
@@ -159,17 +161,6 @@ class IsoSec2_3_1 extends Controller
         });
 
 
-        // $control_compliance_filter = array_filter($req->input('control_compliance'));
-        // $req->merge(['control_compliance' => $control_compliance_filter]);
-        // $control_compliance = $req->input('control_compliance');
-        // $filtered_control_compliance = array_filter($control_compliance);
-
-
-
-        // $vulnerability_filter = array_filter($req->input('vulnerability'));
-        // $req->merge(['vulnerability' => $vulnerability_filter]);
-        // $vulnerability = $req->input('vulnerability');
-        // $filtered_vulnerability = array_filter($vulnerability);
 
         $my_filter = array_filter($req->input('vulnerability'), function($value) {
             return $value !== null;
@@ -182,13 +173,6 @@ class IsoSec2_3_1 extends Controller
 
 
 
-
-
-        // $threat_filter = array_filter($req->input('threat'));
-        // $req->merge(['threat' => $threat_filter]);
-        // $threat = $req->input('threat');
-        // $filtered_threat = array_filter($threat);
-
         $my_filter = array_filter($req->input('threat'), function($value) {
             return $value !== null;
         });
@@ -199,12 +183,6 @@ class IsoSec2_3_1 extends Controller
         });
 
 
-
-
-        // $risk_level_filter = array_filter($req->input('threat'));
-        // $req->merge(['threat' => $risk_level_filter]);
-        // $risk_level = $req->input('risk_level');
-        // $filtered_risk_level = array_filter($risk_level);
 
          $my_filter = array_filter($req->input('risk_level'), function($value) {
             return $value !== null;
@@ -244,6 +222,8 @@ class IsoSec2_3_1 extends Controller
                 isset($filtered_control_compliance[$key]) && isset($filtered_vulnerability[$key])
                     && isset($filtered_threat[$key]) && isset($filtered_risk_level[$key])
                 ) {
+
+
 
                     DB::table('iso_sec_2_3_1')->insert([
                         'project_id' => $proj_id,
@@ -908,11 +888,7 @@ class IsoSec2_3_1 extends Controller
                                     'risk_level' => $req->risk_level,
                                     'last_edited_by' => $user_id,
                                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                                    // 'acceptance_justification' => $req->acceptance_justification,
-                                    // 'acceptance_target_date' => $req->acceptance_target_date,
-                                    // 'acceptance_actual_date' => $req->acceptance_actual_date,
-                                    // 'acceptance_proposed_responsibility' => $req->acceptance_proposed_responsibility,
-                                    // 'accepted_by' => $req->accepted_by
+
                                 ]);
 
                             }
@@ -933,10 +909,15 @@ class IsoSec2_3_1 extends Controller
                         }
 
 
+                            return redirect()->route('risk_treatment_edit_action_plan_form', [
+                                'asset_id' => $asset_id,  'control_num' => $control_num,
+                                 'proj_id' => $proj_id, 'user_id' => $user_id
+                            ])->with('success', 'Risk Treatment completed');
 
-                        return redirect()->route('iso_sec_2_3_2_risk_treat_form', [
-                            'control_num' => $control_num, 'asset_id' => $asset_id, 'proj_id' => $proj_id, 'user_id' => $user_id
-                        ])->with('success', 'Risk Treatment completed');
+
+
+
+
                     }
                 }
             }

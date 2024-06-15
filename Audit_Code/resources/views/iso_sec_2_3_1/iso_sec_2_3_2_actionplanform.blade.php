@@ -103,37 +103,37 @@ $permissions=json_decode($project_permissions);
 
         <tr>
             <td class="fw-bold" >Control is Applicable?</td>
-            <td>  {{$treatmentData->applicability}}</td>
             <td>  {{$risk_assessment->applicability}}</td>
+            <td>  {{$treatmentData->applicability}}</td>
         </tr>
 
         <tr>
             <td class="fw-bold" >Control Compliance</td>
-            <td>  {{$treatmentData->control_compliance}}%</td>
             <td>  {{$risk_assessment->control_compliance}}%</td>
+            <td>  {{$treatmentData->control_compliance}}%</td>
         </tr>
 
         <tr>
             <td class="fw-bold" >Vulnerability</td>
-            <td>  {{$treatmentData->vulnerability}}%</td>
             <td>  {{$risk_assessment->vulnerability}}%</td>
+            <td>  {{$treatmentData->vulnerability}}%</td>
         </tr>
 
         <tr>
             <td class="fw-bold" >Threat</td>
-            <td>  {{$treatmentData->threat}}%</td>
             <td>  {{$risk_assessment->threat}}%</td>
+            <td>  {{$treatmentData->threat}}%</td>
         </tr>
 
         <tr>
             <td class="fw-bold" >Risk Level</td>
-            <td>  {{$treatmentData->risk_level}}</td>
             <td>  {{$risk_assessment->risk_level}}</td>
+            <td>  {{$treatmentData->risk_level}}</td>
         </tr>
         <tr>
             <td class="fw-bold" >Residual Risk Treatment</td>
-            <td>  {{$treatmentData->residual_risk_treatment}}</td>
             <td> - </td>
+            <td>  {{$treatmentData->residual_risk_treatment}}</td>
 
         </tr>
 
@@ -232,6 +232,20 @@ $permissions=json_decode($project_permissions);
 
 </div>
 
+@section('scripts')
+
+@if(Session::has('success'))
+<script>
+    swal({
+  title: "{{Session::get('success')}}",
+  icon: "success",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script>
+@endif
+
+@endsection
 
 
 @endsection
