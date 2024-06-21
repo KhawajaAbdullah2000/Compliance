@@ -183,7 +183,13 @@ $permissions=json_decode($project_permissions);
 
                     @if($a5->applicability!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
-                    <p>{{$a5->applicability}} </p>
+                 <select name="applicability[]" class="form-select">
+
+                        <option value='yes+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability=="yes"?'selected':''}}>Yes</option>
+
+                        <option value='no+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability=="no"?'selected':''}}>No</option>
+                    </select>
+                     {{-- <p>{{$a5->applicability}} </p> --}}
                         @break
                     @endif
 
@@ -216,7 +222,9 @@ $permissions=json_decode($project_permissions);
 
                     @if($a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
-                    <p>{{$a5->control_compliance}}%</p>
+            <input type="number" name="control_compliance[]" value={{$a5->control_compliance}} oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
+
+                    {{-- <p>{{$a5->control_compliance}}%</p> --}}
                         @break
                     @endif
 
@@ -238,7 +246,9 @@ $permissions=json_decode($project_permissions);
 
                             @if( $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
-                                <p>{{$a5->vulnerability}}%</p>
+       <input type="number" name="vulnerability[]" class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+
+                                 {{-- <p>{{$a5->vulnerability}}%</p> --}}
 
                                     @break
                                 @endif
@@ -260,8 +270,9 @@ $permissions=json_decode($project_permissions);
                         @foreach ($a5_results as $a5)
 
                             @if($a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+             <input type="number" name="threat[]" value={{$a5->threat}} class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}">
 
-                                <p>{{$a5->threat}}%</p>
+                                {{-- <p>{{$a5->threat}}%</p> --}}
                                     @break
                                 @endif
 
@@ -282,8 +293,9 @@ $permissions=json_decode($project_permissions);
                     @foreach ($a5_results as $a5)
 
                         @if($a5->risk_level!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+            <input type="number" name="risk_level[]" value={{$a5->risk_level}} class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
 
-                            <p>{{$a5->risk_level}}</p>
+                             {{-- <p>{{$a5->risk_level}}</p> --}}
                                 @break
                             @endif
 
@@ -360,8 +372,13 @@ $permissions=json_decode($project_permissions);
                 @foreach ($a6_results as $a6)
 
                 @if($a6->applicability!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+                <select name="applicability[]" class="form-select">
 
-                <p>{{$a6->applicability}} </p>
+                    <option value='yes+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability=="yes"?'selected':''}}>Yes</option>
+
+                    <option value='no+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability=="no"?'selected':''}}>No</option>
+                </select>
+
                     @break
                 @endif
 
@@ -398,8 +415,8 @@ $permissions=json_decode($project_permissions);
                 @foreach ($a6_results as $a6)
 
                     @if($a6->control_compliance!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+                    <input type="number" name="control_compliance[]" value={{$a6->control_compliance}} oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
 
-                        <p>{{$a6->control_compliance}}%</p>
                             @break
                         @endif
 
@@ -421,7 +438,9 @@ $permissions=json_decode($project_permissions);
 
                         @if($a6->control_num===strval($sec2_4_a6_rows[$i][0]))
 
-                            <p>{{$a6->vulnerability}}%</p>
+              <input type="number" name="vulnerability[]" class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+
+                            {{-- <p>{{$a6->vulnerability}}%</p> --}}
                                 @break
                             @endif
 
@@ -442,8 +461,9 @@ $permissions=json_decode($project_permissions);
                 @foreach ($a6_results as $a6)
 
                     @if($a6->threat!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+                    <input type="number" name="threat[]" value={{$a6->threat}} class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}">
 
-                        <p>{{$a6->threat}}%</p>
+                        {{-- <p>{{$a6->threat}}%</p> --}}
                             @break
                         @endif
 
@@ -539,7 +559,12 @@ $permissions=json_decode($project_permissions);
 
                 @if($a7->applicability!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
 
-                    <p>{{$a7->applicability}} </p>
+                <select name="applicability[]" class="form-select">
+
+                    <option value='yes+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability=="yes"?'selected':''}}>Yes</option>
+
+                    <option value='no+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability=="no"?'selected':''}}>No</option>
+                </select>
                         @break
                     @endif
 
@@ -574,7 +599,8 @@ $permissions=json_decode($project_permissions);
 
                 @if($a7->control_compliance!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
 
-                    <p>{{$a7->control_compliance}}% </p>
+                <input type="number" name="control_compliance[]" value={{$a7->control_compliance}} oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
+
                         @break
                     @endif
 
@@ -597,8 +623,9 @@ $permissions=json_decode($project_permissions);
             @foreach ($a7_results as $a7)
 
                 @if( $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+                <input type="number" name="vulnerability[]" class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
 
-                    <p>{{$a7->vulnerability}}% </p>
+                    {{-- <p>{{$a7->vulnerability}}% </p> --}}
                         @break
                     @endif
 
@@ -623,8 +650,9 @@ $permissions=json_decode($project_permissions);
             @foreach ($a7_results as $a7)
 
                 @if($a7->threat!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+                <input type="number" name="threat[]" value={{$a7->threat}} class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}">
 
-                    <p>{{$a7->threat}}% </p>
+                    {{-- <p>{{$a7->threat}}% </p> --}}
                         @break
                     @endif
 
@@ -722,7 +750,12 @@ $permissions=json_decode($project_permissions);
 
                 @if($a8->applicability!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
 
-                    <p>{{$a8->applicability}} </p>
+                <select name="applicability[]" class="form-select">
+
+                    <option value='yes+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability=="yes"?'selected':''}}>Yes</option>
+
+                    <option value='no+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability=="no"?'selected':''}}>No</option>
+                </select>
                         @break
                     @endif
 
@@ -755,7 +788,8 @@ $permissions=json_decode($project_permissions);
 
                 @if($a8->control_compliance!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
 
-                    <p>{{$a8->control_compliance}}%</p>
+                <input type="number" name="control_compliance[]" value={{$a8->control_compliance}} oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
+
                         @break
                     @endif
 
@@ -776,8 +810,9 @@ $permissions=json_decode($project_permissions);
             @foreach ($a8_results as $a8)
 
                 @if($a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+                <input type="number" name="vulnerability[]" class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
 
-                    <p>{{$a8->vulnerability}}%</p>
+                    {{-- <p>{{$a8->vulnerability}}%</p> --}}
                         @break
                     @endif
 
@@ -799,8 +834,9 @@ $permissions=json_decode($project_permissions);
             @foreach ($a8_results as $a8)
 
                 @if($a8->threat!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+                <input type="number" name="threat[]" value={{$a8->threat}} class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}">
 
-                    <p>{{$a8->threat}}%</p>
+                    {{-- <p>{{$a8->threat}}%</p> --}}
                         @break
                     @endif
 
@@ -922,74 +958,6 @@ $permissions=json_decode($project_permissions);
 
 
 
-{{-- <script>
-   $(document).ready(function(){
-    var assetValue = parseFloat($('#assetSelect').val()) || 10;
-    var newVulnerabilityValue = null;
-    var threat = null;
-    var newRiskValue = null;
-    var controlId = null;
-    var riskLevelField = null;
-
-    $('#assetSelect').change(function(){
-        // Get the selected value
-        assetValue = parseFloat($(this).val());
-
-        // Update all risk values based on the new assetValue
-        $("input[name^='control_compliance']").each(function () {
-            controlId = $(this).data('control-id');
-            var threat = $("input[name='threat[]'][data-control-id='" + controlId + "']").val();
-            var vulnerability = 100 - parseFloat($(this).val());
-            var newRiskValue = (vulnerability / 100) * (threat / 100) * assetValue;
-
-            // Update the risk level field
-            $("input[name='risk_level[]'][data-control-id='" + controlId + "']").val(newRiskValue);
-        });
-    });
-
-    $("input[name^='control_compliance']").on("input", function () {
-        controlId = $(this).data('control-id');
-        var vulnerabilityField = $("input[name='vulnerability[]'][data-control-id='" + controlId + "']");
-
-        // Calculate the new value for vulnerability
-        newVulnerabilityValue = 100 - parseFloat($(this).val());
-
-        // Update the value of the vulnerability input box
-        vulnerabilityField.val(newVulnerabilityValue);
-
-        // Trigger the input event for threat to recalculate risk level
-        $("input[name='threat[]'][data-control-id='" + controlId + "']").trigger("input");
-    });
-
-    $("input[name^='threat']").on("input", function () {
-        threat = $(this).val();
-        controlId = $(this).data('control-id');
-        riskLevelField = $("input[name='risk_level[]'][data-control-id='" + controlId + "']");
-        newRiskValue = parseFloat(newVulnerabilityValue) / 100 * parseFloat(threat) / 100 * assetValue;
-
-        // Update the value of the risk level input box
-        riskLevelField.val(newRiskValue);
-    });
-
-    $('#selectAllApplicability').change(function(){
-            if ($(this).is(':checked')) {
-                // Iterate over all applicability select elements and set the value to "yes+control_num"
-                $("select[name^='applicability']").each(function () {
-                    var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
-                    $(this).val('no+' + controlId);
-                });
-            } else {
-                // If the checkbox is unchecked, reset all applicability select elements to the default (empty) value
-                $("select[name^='applicability']").each(function () {
-                    var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
-                    $(this).val('yes+' + controlId);
-                });
-            }
-        });
-});
-
-
-</script> --}}
 
 <script>
     $(document).ready(function(){
@@ -1004,11 +972,14 @@ $permissions=json_decode($project_permissions);
             $("input[name^='control_compliance']").each(function () {
                 controlId = $(this).data('control-id');
                 var controlCompliance = parseFloat($(this).val()) || 100;
+
                 var threatValue = parseFloat($("input[name='threat[]'][data-control-id='" + controlId + "']").val()) || 100;
 
                 // Calculate vulnerability
                 newVulnerabilityValue = 100 - controlCompliance;
+
                 $("input[name='vulnerability[]'][data-control-id='" + controlId + "']").val(newVulnerabilityValue);
+
 
                 // Calculate risk level
                 newRiskValue = (newVulnerabilityValue / 100) * (threatValue / 100) * assetValue;
@@ -1035,9 +1006,10 @@ $permissions=json_decode($project_permissions);
         $("input[name^='control_compliance']").on("input", function () {
             controlId = $(this).data('control-id');
             var vulnerabilityField = $("input[name='vulnerability[]'][data-control-id='" + controlId + "']");
-
             // Calculate the new value for vulnerability
             newVulnerabilityValue = 100 - parseFloat($(this).val());
+
+
 
             // Update the value of the vulnerability input box
             vulnerabilityField.val(newVulnerabilityValue);
