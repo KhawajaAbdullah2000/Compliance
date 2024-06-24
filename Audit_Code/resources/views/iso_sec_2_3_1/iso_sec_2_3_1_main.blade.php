@@ -484,8 +484,9 @@ $permissions=json_decode($project_permissions);
                 @foreach ($a6_results as $a6)
 
                     @if($a6->risk_level!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+                    <input type="number" name="risk_level[]" value={{$a6->risk_level}} class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
 
-                        <p>{{$a6->risk_level}} </p>
+                        {{-- <p>{{$a6->risk_level}} </p> --}}
                             @break
                         @endif
 
@@ -675,8 +676,9 @@ $permissions=json_decode($project_permissions);
             @foreach ($a7_results as $a7)
 
                 @if($a7->risk_level!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+                <input type="number" name="risk_level[]" value={{$a7->risk_level}} class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
 
-                    <p>{{$a7->risk_level}} </p>
+                    {{-- <p>{{$a7->risk_level}} </p> --}}
                         @break
                     @endif
 
@@ -858,8 +860,9 @@ $permissions=json_decode($project_permissions);
             @foreach ($a8_results as $a8)
 
                 @if($a8->risk_level!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+                <input type="number" name="risk_level[]" value={{$a8->risk_level}} class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
 
-                    <p>{{$a8->risk_level}}</p>
+                    {{-- <p>{{$a8->risk_level}}</p> --}}
                         @break
                     @endif
 

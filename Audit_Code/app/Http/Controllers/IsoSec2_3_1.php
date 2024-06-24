@@ -224,6 +224,36 @@ class IsoSec2_3_1 extends Controller
                 ) {
 
 
+                    $check=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
+                    ->where('control_num', $numberArray[$key])->first();
+
+                    if($check){
+                        DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
+                        ->where('control_num', $numberArray[$key])
+                        ->update([
+                            'asset_value' => $req->asset_value,
+                            'applicability' => "yes",
+                            'control_compliance' => $filtered_control_compliance[$key],
+                            'vulnerability' => $filtered_vulnerability[$key],
+                            'threat' => $filtered_threat[$key],
+                            'risk_level' => $filtered_risk_level[$key],
+                            'last_edited_by' => $user_id,
+                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                        ]);
+
+                        DB::table('iso_risk_treatment')->where('project_id',$proj_id)->where('asset_id',$asset_id)
+                        ->where('control_num', $numberArray[$key])->update([
+                            'asset_value' => $req->asset_value,
+                            'applicability' => "yes",
+                            'control_compliance' => $filtered_control_compliance[$key],
+                            'vulnerability' => $filtered_vulnerability[$key],
+                            'threat' => $filtered_threat[$key],
+                            'risk_level' => $filtered_risk_level[$key],
+                            'last_edited_by' => $user_id,
+                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                        ]);
+
+                    }else{
 
                     DB::table('iso_sec_2_3_1')->insert([
                         'project_id' => $proj_id,
@@ -239,8 +269,6 @@ class IsoSec2_3_1 extends Controller
                         'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
 
-
-
                     DB::table('iso_risk_treatment')->insert([
                         'project_id' => $proj_id,
                         'asset_id' => $asset_id,
@@ -254,9 +282,48 @@ class IsoSec2_3_1 extends Controller
                         'last_edited_by' => $user_id,
                         'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
+
+                }
+
+
+
+
                 }
             }
             if ($value == "no") {
+
+
+                $check=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
+                ->where('control_num', $numberArray[$key])->first();
+
+                if($check){
+
+                    DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
+                    ->where('control_num', $numberArray[$key])->update([
+                        'asset_value' => $req->asset_value,
+                        'applicability' => "no",
+                        'control_compliance' => 0,
+                        'vulnerability' => 0,
+                        'threat' => 0,
+                        'risk_level' => 0,
+                        'last_edited_by' => $user_id,
+                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                    ]);
+
+                    DB::table('iso_risk_treatment')->where('project_id',$proj_id)->where('asset_id',$asset_id)
+                    ->where('control_num', $numberArray[$key])->update([
+                        'asset_value' => $req->asset_value,
+                        'applicability' => "no",
+                        'control_compliance' => 0,
+                        'vulnerability' => 0,
+                        'threat' => 0,
+                        'risk_level' => 0,
+                        'last_edited_by' => $user_id,
+                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                    ]);
+
+
+                }else{
 
                 DB::table('iso_sec_2_3_1')->insert([
                     'project_id' => $proj_id,
@@ -285,6 +352,8 @@ class IsoSec2_3_1 extends Controller
                     'last_edited_by' => $user_id,
                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                 ]);
+
+            }
             }
         }
 
