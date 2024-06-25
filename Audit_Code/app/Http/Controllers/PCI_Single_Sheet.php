@@ -190,6 +190,7 @@ class PCI_Single_Sheet extends Controller
     }
 
     public function pci_sec_2_2_form(Request $req,$sub_req,$title,$proj_id,$user_id){
+
         $req->validate([
             'comp_status'=>'required'
           ]);
@@ -213,7 +214,7 @@ class PCI_Single_Sheet extends Controller
                         if($req->attachment!=null){
 
                             //saving file
-                            $fileName = time().'.'.$req->attachment->extension();
+                            $fileName = time().'.'.$req->attachment->getClientOriginalExtension();
                             $req->attachment->move(public_path('pci_sec_2_2'), $fileName);
 
                             Db::table('iso_sec_2_2')->insert([
@@ -227,6 +228,8 @@ class PCI_Single_Sheet extends Controller
                                 'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
                             ]);
                         }else{
+
+
 
                             Db::table('iso_sec_2_2')->insert([
                                 'project_id'=>$proj_id,
@@ -261,6 +264,7 @@ class PCI_Single_Sheet extends Controller
     }
 
     public function pci_sec_2_2_edit_form(Request $req,$sub_req,$title,$proj_id,$user_id){
+
         $req->validate([
             'comp_status'=>'required'
           ]);
@@ -281,9 +285,22 @@ class PCI_Single_Sheet extends Controller
                 if ($checkpermission->type_id == 1) {
                     if (in_array('Data Inputter', $permissions)) {
 
+
                         if($req->attachment!=null){
-                            $fileName = time().'.'.$req->attachment->extension();
-                            $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
+
+                         $existing = Db::table('iso_sec_2_2')->where('project_id', $proj_id)->where('sub_req', $sub_req)->first();
+
+    // Ensure there is an existing attachment and it's not empty
+                            if (!empty($existing) && !empty($existing->attachment)) {
+                                $existingPath = public_path('pci_sec_2_2/' . $existing->attachment);
+                                // Check if it's a file before trying to unlink
+                                if (file_exists($existingPath) && is_file($existingPath)) {
+                                    unlink($existingPath);
+                                }
+                            }
+
+                            $fileName = time().'.'.$req->attachment->getClientOriginalExtension();
+                            $req->attachment->move(public_path('pci_sec_2_2'), $fileName);
                             Db::table('iso_sec_2_2')->where('project_id',$proj_id)->where('sub_req',$sub_req)
                             ->update([
                                 'comp_status'=>$req->comp_status,
@@ -292,7 +309,9 @@ class PCI_Single_Sheet extends Controller
                                 'last_edited_by'=>$user_id,
                                 'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
                             ]);
-                        }else{
+                        }
+
+                        else{
                             Db::table('iso_sec_2_2')->where('project_id',$proj_id)->where('sub_req',$sub_req)
                             ->update([
 

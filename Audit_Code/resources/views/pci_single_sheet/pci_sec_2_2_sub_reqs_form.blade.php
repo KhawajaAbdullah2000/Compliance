@@ -97,13 +97,13 @@ $permissions=json_decode($project_permissions);
                       </div>
 
                       @isset($result->attachment)
-                      <p>  Current Attachment:</p>
-                      <a href="{{asset('pci_sec_2_2/'.$result->attachment)}}" download>
-                        {{$result->attachment}}
+                      <p>Current Attachment:</p>
+                      {{-- Debug output --}}
+                      <p>URL: {{ asset('pci_sec_2_2/' . $result->attachment) }}</p>
+                      <a href="{{ asset('pci_sec_2_2/' . $result->attachment) }}" download>
+                          {{ $result->attachment }}
                       </a>
-
-                      {{-- <img src="{{asset('iso_sec_2_2/'.$result->attachment)}}" alt="Document attached" height="200" width="200"> --}}
-                      @endisset
+                  @endisset
 
 
 

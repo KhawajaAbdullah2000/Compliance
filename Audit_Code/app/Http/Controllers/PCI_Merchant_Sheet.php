@@ -214,7 +214,7 @@ class PCI_Merchant_Sheet extends Controller
                         if($req->attachment!=null){
 
                             //saving file
-                            $fileName = time().'.'.$req->attachment->extension();
+                            $fileName = time().'.'.$req->attachment->getClientOriginalExtension();
                             $req->attachment->move(public_path('pci_sec_2_2'), $fileName);
 
                             Db::table('iso_sec_2_2')->insert([
@@ -283,8 +283,8 @@ class PCI_Merchant_Sheet extends Controller
                     if (in_array('Data Inputter', $permissions)) {
 
                         if($req->attachment!=null){
-                            $fileName = time().'.'.$req->attachment->extension();
-                            $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
+                            $fileName = time().'.'.$req->attachment->getClientOriginalExtension();
+                            $req->attachment->move(public_path('pci_sec_2_2'), $fileName);
                             Db::table('iso_sec_2_2')->where('project_id',$proj_id)->where('sub_req',$sub_req)
                             ->update([
                                 'comp_status'=>$req->comp_status,

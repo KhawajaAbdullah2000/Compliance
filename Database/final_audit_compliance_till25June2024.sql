@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 15, 2024 at 04:57 PM
+-- Generation Time: Jun 25, 2024 at 02:58 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -220,7 +220,6 @@ INSERT INTO `iso_sec_2_1` (`assessment_id`, `project_id`, `g_name`, `name`, `c_n
 (123, 44, 'Group1', 'Name1', 'Component2', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-05-10 15:50:18'),
 (124, 44, 'Group2', 'Name1', 'Component1', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-05-10 15:50:18'),
 (127, NULL, 'Group1', 'Name1', 'Component3', 'asset_owner1', 'AssetPhy1', 'AssetLog1', 'Service1', 97, '2024-06-05 09:35:05'),
-(128, 45, 'Group1', 'Name1', 'Component1', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-06-11 10:55:23'),
 (129, 45, 'Group1', 'Name1', 'Component2', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-06-11 10:55:23'),
 (130, 45, 'Group2', 'Name1', 'Component1', 'Owner', 'Physical', 'Logical', 'Service1', 97, '2024-06-11 10:55:23');
 
@@ -275,10 +274,7 @@ INSERT INTO `iso_sec_2_2` (`assessment_id`, `project_id`, `title_num`, `sub_req`
 (42, 37, 3, '3.3.2', 'partial', 'comment', '1715001619.docx', 97, '2024-05-06 18:20:19'),
 (43, NULL, 6, '6.1.1-a', 'partial', NULL, NULL, 97, '2024-05-07 11:52:27'),
 (44, NULL, 6, '6.1.1-b', 'yes', NULL, NULL, 97, '2024-05-07 11:52:33'),
-(45, NULL, 6, '6.1.1-c', 'no', NULL, NULL, 97, '2024-05-07 11:52:39'),
-(46, NULL, 6, '6.1.1-e-1', 'partial', NULL, NULL, 97, '2024-05-07 11:52:46'),
-(47, NULL, 8, '8.1-a', 'no', NULL, NULL, 97, '2024-05-10 15:42:06'),
-(48, 44, 8, '8.2.1 ', 'partial', NULL, NULL, 97, '2024-05-10 15:51:02');
+(45, NULL, 6, '6.1.1-c', 'no', NULL, NULL, 97, '2024-05-07 11:52:39');
 
 -- --------------------------------------------------------
 
@@ -2567,7 +2563,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `iso_risk_treatment`
 --
 ALTER TABLE `iso_risk_treatment`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `iso_sec2_4_a5`
@@ -2603,7 +2599,7 @@ ALTER TABLE `iso_sec_2_1`
 -- AUTO_INCREMENT for table `iso_sec_2_2`
 --
 ALTER TABLE `iso_sec_2_2`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `iso_sec_2_3`
@@ -2615,7 +2611,7 @@ ALTER TABLE `iso_sec_2_3`
 -- AUTO_INCREMENT for table `iso_sec_2_3_1`
 --
 ALTER TABLE `iso_sec_2_3_1`
-  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `assessment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -2939,7 +2935,8 @@ ALTER TABLE `users`
 ALTER TABLE `iso_risk_treatment`
   ADD CONSTRAINT `acceptace_flk1` FOREIGN KEY (`acceptance_proposed_responsibility`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `acceptace_flk2` FOREIGN KEY (`accepted_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `acceptace_flk3` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+  ADD CONSTRAINT `acceptace_flk3` FOREIGN KEY (`last_edited_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `assetid` FOREIGN KEY (`asset_id`) REFERENCES `iso_sec_2_1` (`assessment_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `iso_sec2_4_a5`
