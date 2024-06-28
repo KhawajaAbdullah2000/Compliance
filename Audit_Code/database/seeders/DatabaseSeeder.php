@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\ProjectType;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,7 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RootAdminSeeder::class);
         $this->call(PrivilegeSeeder::class);
         $this->call(RolesTableSeeder::class);
-        $this->call(ProjectType::class);
+        $this->call(ProjectTypes::class);
 
     }
 }

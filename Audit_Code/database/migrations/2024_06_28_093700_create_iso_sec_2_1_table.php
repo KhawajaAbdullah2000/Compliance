@@ -16,13 +16,14 @@ return new class extends Migration
         Schema::create('iso_sec_2_1', function (Blueprint $table) {
             $table->integer('assessment_id', true);
             $table->integer('project_id')->nullable()->index('project_id');
-            $table->string('g_name', 300)->nullable();
-            $table->string('name', 300)->nullable();
-            $table->string('c_name', 300)->nullable();
+            $table->string('g_name', 100);
+            $table->string('name', 100);
+            $table->string('c_name', 100);
+            $table->string('s_name', 100);
             $table->string('owner_dept', 300);
             $table->string('physical_loc', 300);
             $table->string('logical_loc', 300);
-            $table->string('s_name', 300);
+            
             $table->unsignedBigInteger('last_edited_by')->nullable()->index('last_edited_by');
             $table->dateTime('last_edited_at');
 
