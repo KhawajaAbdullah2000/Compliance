@@ -36,6 +36,7 @@
                 @foreach ($permissions as $p)
                 <br>
                    {{ $p->name}} <input type="checkbox" name="project_permissions[]" value="{{$p->name}}">
+
                 @endforeach
 
               </div>

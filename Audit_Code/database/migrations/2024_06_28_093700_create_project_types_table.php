@@ -8,20 +8,24 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('project_types', function (Blueprint $table) {
-            $table->id();
-            $table->string('type',100);
+            $table->bigIncrements('id');
+            $table->string('type', 100);
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('project_types');
     }

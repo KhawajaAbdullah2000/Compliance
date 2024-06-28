@@ -18,7 +18,7 @@ class RootAdminSeeder extends Seeder
             [
                 'first_name'=>'shahmeer',
                 'last_name'=>'sheraz',
-                'email'=>'shahmeer2@gmail.com',
+                'email'=>'shahmeer@gmail.com',
                 'telephone'=>'04448887643',
                 'address'=>'Gulshan',
                 'city'=>'karachi',
