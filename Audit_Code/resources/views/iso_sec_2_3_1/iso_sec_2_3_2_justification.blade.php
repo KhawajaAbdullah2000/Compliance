@@ -93,42 +93,29 @@ $permissions=json_decode($project_permissions);
 
 <div class="col-lg-6">
 
-<table style="width: 50%;" class="table table-bordered table-secondary">
-    <tbody>
-        <tr>
-            <td></td>
-            <td>Current Risk Assessment</td>
-        </tr>
-        <tr>
-            <td class="fw-bold" >Control is Applicable?</td>
-            <td>  {{$treatmentData->applicability}}</td>
-        </tr>
+    <table style="width: 100%;" class="table table-bordered table-secondary">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Control is Applicable?</th>
+                <th>Control Compliance</th>
+                <th>Vulnerability</th>
+                <th>Threat</th>
+                <th>Risk Level</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="fw-bold">Current Risk Assessment</td>
+                <td>{{$treatmentData->applicability}}</td>
+                <td>{{$treatmentData->control_compliance}}%</td>
+                <td>{{$treatmentData->vulnerability}}%</td>
+                <td>{{$treatmentData->threat}}%</td>
+                <td>{{$treatmentData->risk_level}}</td>
+            </tr>
+        </tbody>
+    </table>
 
-        <tr>
-            <td class="fw-bold" >Control Compliance</td>
-            <td>  {{$treatmentData->control_compliance}}%</td>
-        </tr>
-
-        <tr>
-            <td class="fw-bold" >Vulnerability</td>
-            <td>  {{$treatmentData->vulnerability}}%</td>
-        </tr>
-
-        <tr>
-            <td class="fw-bold" >Threat</td>
-            <td>  {{$treatmentData->threat}}%</td>
-        </tr>
-
-        <tr>
-            <td class="fw-bold" >Risk Level</td>
-            <td>  {{$treatmentData->risk_level}}</td>
-        </tr>
-
-
-
-
-    </tbody>
-</table>
 
 </div>
 </div>
