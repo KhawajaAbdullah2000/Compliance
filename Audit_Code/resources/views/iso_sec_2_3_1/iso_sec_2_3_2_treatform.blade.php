@@ -87,18 +87,18 @@ $permissions = json_decode($project_permissions);
                         <div class="mb-4">
                             <div class="form-group mt-4">
 
-                                <div class="d-flex justify-content-end align-items-center">
-                                    <label for="residual_risk_treatment" class="fs-5 mr-3">Residual Risk Treatment</label>
-                                    <select name="residual_risk_treatment" class="boxstyling2 mr-2" id="residual_risk_treatment">
+                                <div class="d-flex justify-content-end">
+                                    <label for="residual_risk_treatment" class="fs-5">Residual Risk Treatment</label>
+                                    <select name="residual_risk_treatment" class="boxstyling2 mx-2" id="residual_risk_treatment">
                                         <option value="modify risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment) == 'modify risk' ? 'selected' : ''}}>Modify Risk</option>
                                         <option value="retain and accept risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment) == 'retain and accept risk' ? 'selected' : ''}}>Retain and Accept Risk</option>
                                         <option value="share risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment) == 'share risk' ? 'selected' : ''}}>Share Risk</option>
                                         <option value="avoid risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment) == 'avoid risk' ? 'selected' : ''}}>Avoid Risk</option>
                                     </select>
-                                    <button type="submit" class="btn fs-6 mr-lg-2 my_bg_color fw-bold text-white btn-sm">Save Changes and go to Action Plan</button>
+                                    <button type="submit" class="btn fs-6 my_bg_color fw-bold text-white btn-sm">Save Changes and go to Action Plan</button>
 
                                     @if($after_risk_treatment->residual_risk_treatment == "retain and accept risk")
-                                    <a href="/risk_treatment_justification/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" class="btn my_bg_color text-white fw-bold ml-lg-2">Create Justification</a>
+                                    <a href="/risk_treatment_justification/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" class="btn my_bg_color text-white fw-bold mx-1">Create Justification</a>
                                     @endif
                                 </div>
 
