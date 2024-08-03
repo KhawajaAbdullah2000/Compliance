@@ -164,7 +164,7 @@
         var statusPieChart = new Chart(ctxapplicability, {
             type: 'pie',
             data: {
-                labels: ['Yes', 'No'],
+                labels: ['No', 'Yes'],
                 datasets: [{
                     label: 'Applicability',
                     data: [

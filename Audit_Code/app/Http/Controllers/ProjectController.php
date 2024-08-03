@@ -207,6 +207,8 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
                 ->groupBy('applicability')
                 ->get();
 
+               
+
 
 
 
