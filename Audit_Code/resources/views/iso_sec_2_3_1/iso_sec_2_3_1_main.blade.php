@@ -127,6 +127,7 @@ $permissions=json_decode($project_permissions);
                 <col style="width: 100px;">
                 <col style="width: 300px;">
                 <col style="width: 500px;">
+                <col style="width: 200px;">
                 <col style="width: 100px;">
                 <col style="width: 100px;">
                 <col style="width: 100px;">
@@ -141,7 +142,8 @@ $permissions=json_decode($project_permissions);
                 <th>Control Number</th>
                 <th>Title Of Control</th>
                 <th>Description of Control</th>
-                <th>Control is Applicable?
+                <th>Control is Applicable to All components</th>
+                <th>Control Applicable only to this asset component?
                      Select All No
                     <input type="checkbox" id="selectAllApplicability" />
                 </th>
@@ -176,6 +178,47 @@ $permissions=json_decode($project_permissions);
 
                     @endforeach
                     {{-- <td>yes/no {{$data[$i][0]}}</td> --}}
+
+
+                    <td style="text-align: center">
+                        @if($a5_results->count()>0)
+                        @foreach ($a5_results as $a5)
+    
+                        @if($a5->applicability_all!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+    
+                     <select name="applicability_all[]" class="form-select">
+                        <option value='no+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability_all=="no"?'selected':''}}>No</option>
+                        <option value='yes+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability_all=="yes"?'selected':''}}>Yes</option>
+    
+                        </select>
+                         {{-- <p>{{$a5->applicability}} </p> --}}
+                            @break
+                        @endif
+    
+                        @if($loop->last)
+                        <select name="applicability_all[]" class="form-select">
+    
+                            <option value='no+{{$sec2_4_a5_rows[$i][0]}}'>No</option>
+                            <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Yes</option>
+
+                           
+                        </select>
+                        @endif
+    
+                        @endforeach
+                        @else
+                        <select name="applicability_all[]" class="form-select">
+                            <option value='no+{{$sec2_4_a5_rows[$i][0]}}'>No</option>
+                            <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Yes</option>
+                        </select>
+                        @endif
+    
+    
+                    </td>
+
+
+
+
 
                 <td style="text-align: center">
                     @if($a5_results->count()>0)
@@ -367,6 +410,50 @@ $permissions=json_decode($project_permissions);
                 @endforeach
                 {{-- <td>yes/no {{$data[$i][0]}}</td> --}}
 
+                <td style="text-align: center">
+                    @if($a6_results->count()>0)
+                    @foreach ($a6_results as $a6)
+    
+                    @if($a6->applicability_all!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+                    <select name="applicability_all[]" class="form-select">
+                        <option value='no+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability_all=="no"?'selected':''}}>No</option>
+                        <option value='yes+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability_all=="yes"?'selected':''}}>Yes</option>
+    
+                    </select>
+    
+                        @break
+                    @endif
+    
+                    @if($loop->last)
+    
+                   <select name="applicability_all[]" class="form-select"> 
+                    <option value='no+{{$sec2_4_a6_rows[$i][0]}}'>No</option>
+                    <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Yes</option>
+    
+                </select>
+                    @endif
+    
+                    @endforeach
+                    @else
+    
+                   <select name="applicability_all[]" class="form-select">
+    
+                    <option value='no+{{$sec2_4_a6_rows[$i][0]}}'>No</option>
+                    <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Yes</option>
+    
+                    
+                </select>
+                    @endif
+    
+    
+    
+    
+                </td>
+
+
+
+
+
             <td style="text-align: center">
                 @if($a6_results->count()>0)
                 @foreach ($a6_results as $a6)
@@ -554,6 +641,57 @@ $permissions=json_decode($project_permissions);
              @endforeach
              {{-- <td>yes/no {{$data[$i][0]}}</td> --}}
 
+             <td style="text-align: center">
+                @if($a7_results->count()>0)
+                @foreach ($a7_results as $a7)
+    
+                    @if($a7->applicability_all!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+    
+                    <select name="applicability_all[]" class="form-select">
+                        <option value='no+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability_all=="no"?'selected':''}}>No</option>
+                        <option value='yes+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability_all=="yes"?'selected':''}}>Yes</option>
+    
+                    </select>
+                            @break
+                        @endif
+    
+                        @if($loop->last)
+                        <select name="applicability_all[]" class="form-select">
+    
+                            <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>No</option>
+                            <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Yes</option>
+    
+                         
+                        </select>            @endif
+    
+                @endforeach
+            @else
+            <select name="applicability_all[]" class="form-select">
+    
+                <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>No</option>
+                <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Yes</option>
+    
+               
+            </select>
+            @endif
+    
+    
+    
+    
+             </td>
+
+
+
+
+
+
+
+
+
+
+
+
+
          <td style="text-align: center">
             @if($a7_results->count()>0)
             @foreach ($a7_results as $a7)
@@ -588,9 +726,6 @@ $permissions=json_decode($project_permissions);
             <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>No</option>
         </select>
         @endif
-
-
-
 
          </td>
 
@@ -745,6 +880,56 @@ $permissions=json_decode($project_permissions);
 
             @endforeach
             {{-- <td>yes/no {{$data[$i][0]}}</td> --}}
+
+            <td style="text-align: center">
+                @if($a8_results->count()>0)
+                @foreach ($a8_results as $a8)
+    
+                    @if($a8->applicability_all!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+    
+                    <select name="applicability_all[]" class="form-select">
+                        <option value='no+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability_all=="no"?'selected':''}}>No</option>
+                        <option value='yes+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability_all=="yes"?'selected':''}}>Yes</option>
+    
+                    </select>
+                            @break
+                        @endif
+    
+                        @if($loop->last)
+                        <select name="applicability_all[]" class="form-select">
+    
+                            <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>No</option>
+                            <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Yes</option>
+    
+                           
+                        </select>          
+                          @endif
+    
+                @endforeach
+            @else
+            <select name="applicability_all[]" class="form-select">
+
+                <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>No</option>
+                <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Yes</option>
+    
+               
+            </select>
+            @endif
+    
+    
+    
+            </td>
+
+
+
+
+
+
+
+
+
+
+
 
         <td style="text-align: center">
             @if($a8_results->count()>0)

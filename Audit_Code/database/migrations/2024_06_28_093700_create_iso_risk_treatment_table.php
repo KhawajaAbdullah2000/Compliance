@@ -17,8 +17,9 @@ return new class extends Migration
             $table->integer('assessment_id', true);
             $table->integer('project_id')->nullable()->index('projid_sec2_3_1');
             $table->integer('asset_id')->nullable()->index('asset_id');
-            $table->string('control_num', 100)->nullable();
+            $table->string('control_num', 100);
             $table->string('applicability', 16);
+            $table->string('applicability_all', 16);
             $table->integer('asset_value');
             $table->integer('control_compliance')->nullable();
             $table->integer('vulnerability')->nullable();

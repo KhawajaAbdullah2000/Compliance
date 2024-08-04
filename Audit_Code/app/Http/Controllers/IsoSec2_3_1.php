@@ -98,10 +98,10 @@ class IsoSec2_3_1 extends Controller
     {
 
 
-
         $req->validate([
             'asset_value' => 'required',
             'applicability' => ['required', 'array', 'min:1'],
+            'applicability_all' => ['required', 'array', 'min:1'],
             'control_compliance' => ['required', 'array', 'min:1'],
             'vulnerability' => ['required', 'array', 'min:1'],
             'threat' => ['required', 'array', 'min:1'],
@@ -110,9 +110,7 @@ class IsoSec2_3_1 extends Controller
         ]);
 
 
-
-
-
+//same asset component logic is asset value changes
         $global_asset_value = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->first();
         if ($global_asset_value != null and $global_asset_value->asset_value != $req->asset_value) {
             $old_risk = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->get();
@@ -141,7 +139,13 @@ class IsoSec2_3_1 extends Controller
             }
         }
 
+        //same asset component logic is asset value changes finished logic above
 
+        $my_filter = array_filter($req->input('applicability_all'));
+        $req->merge(['applicability_all' => $my_filter]);
+        $applicability_all = $req->input('applicability_all');
+        $filtered_applicability_all = array_filter($applicability_all);
+      
 
 
         $my_filter = array_filter($req->input('applicability'));
@@ -209,153 +213,350 @@ class IsoSec2_3_1 extends Controller
             }
         }
 
+        $inputArray_all = $filtered_applicability_all;
+        $yesNoArray_all = [];
+        $numberArray_all = [];
 
+        foreach ($inputArray_all as $key => $value) {
+            $parts = explode('+', $value);
 
-
-
-        // try {
-        foreach ($yesNoArray as $key => $value) {
-
-            if ($value == "yes") {
-
-                if (
-                isset($filtered_control_compliance[$key]) && isset($filtered_vulnerability[$key])
-                    && isset($filtered_threat[$key]) && isset($filtered_risk_level[$key])
-                ) {
-
-
-                    $check=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
-                    ->where('control_num', $numberArray[$key])->first();
-
-                    if($check){
-                        DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
-                        ->where('control_num', $numberArray[$key])
-                        ->update([
-                            'asset_value' => $req->asset_value,
-                            'applicability' => "yes",
-                            'control_compliance' => $filtered_control_compliance[$key],
-                            'vulnerability' => $filtered_vulnerability[$key],
-                            'threat' => $filtered_threat[$key],
-                            'risk_level' => $filtered_risk_level[$key],
-                            'last_edited_by' => $user_id,
-                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                        ]);
-
-                        DB::table('iso_risk_treatment')->where('project_id',$proj_id)->where('asset_id',$asset_id)
-                        ->where('control_num', $numberArray[$key])->update([
-                            'asset_value' => $req->asset_value,
-                            'applicability' => "yes",
-                            'control_compliance' => $filtered_control_compliance[$key],
-                            'vulnerability' => $filtered_vulnerability[$key],
-                            'threat' => $filtered_threat[$key],
-                            'risk_level' => $filtered_risk_level[$key],
-                            'last_edited_by' => $user_id,
-                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                        ]);
-
-                    }else{
-
-                    DB::table('iso_sec_2_3_1')->insert([
-                        'project_id' => $proj_id,
-                        'asset_id' => $asset_id,
-                        'asset_value' => $req->asset_value,
-                        'control_num' => $numberArray[$key],
-                        'applicability' => "yes",
-                        'control_compliance' => $filtered_control_compliance[$key],
-                        'vulnerability' => $filtered_vulnerability[$key],
-                        'threat' => $filtered_threat[$key],
-                        'risk_level' => $filtered_risk_level[$key],
-                        'last_edited_by' => $user_id,
-                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                    ]);
-
-                    DB::table('iso_risk_treatment')->insert([
-                        'project_id' => $proj_id,
-                        'asset_id' => $asset_id,
-                        'asset_value' => $req->asset_value,
-                        'control_num' => $numberArray[$key],
-                        'applicability' => "yes",
-                        'control_compliance' => $filtered_control_compliance[$key],
-                        'vulnerability' => $filtered_vulnerability[$key],
-                        'threat' => $filtered_threat[$key],
-                        'risk_level' => $filtered_risk_level[$key],
-                        'last_edited_by' => $user_id,
-                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                    ]);
-
-                }
-
-
-
-
-                }
-            }
-            if ($value == "no") {
-
-
-                $check=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
-                ->where('control_num', $numberArray[$key])->first();
-
-                if($check){
-
-                    DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
-                    ->where('control_num', $numberArray[$key])->update([
-                        'asset_value' => $req->asset_value,
-                        'applicability' => "no",
-                        'control_compliance' => 0,
-                        'vulnerability' => 0,
-                        'threat' => 0,
-                        'risk_level' => 0,
-                        'last_edited_by' => $user_id,
-                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                    ]);
-
-                    DB::table('iso_risk_treatment')->where('project_id',$proj_id)->where('asset_id',$asset_id)
-                    ->where('control_num', $numberArray[$key])->update([
-                        'asset_value' => $req->asset_value,
-                        'applicability' => "no",
-                        'control_compliance' => 0,
-                        'vulnerability' => 0,
-                        'threat' => 0,
-                        'risk_level' => 0,
-                        'last_edited_by' => $user_id,
-                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                    ]);
-
-
-                }else{
-
-                DB::table('iso_sec_2_3_1')->insert([
-                    'project_id' => $proj_id,
-                    'asset_id' => $asset_id,
-                    'asset_value' => $req->asset_value,
-                    'control_num' => $numberArray[$key],
-                    'applicability' => "no",
-                    'control_compliance' => 0,
-                    'vulnerability' => 0,
-                    'threat' => 0,
-                    'risk_level' => 0,
-                    'last_edited_by' => $user_id,
-                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                ]);
-
-                DB::table('iso_risk_treatment')->insert([
-                    'project_id' => $proj_id,
-                    'asset_id' => $asset_id,
-                    'asset_value' => $req->asset_value,
-                    'control_num' => $numberArray[$key],
-                    'applicability' => "no",
-                    'control_compliance' => 0,
-                    'vulnerability' => 0,
-                    'threat' => 0,
-                    'risk_level' => 0,
-                    'last_edited_by' => $user_id,
-                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                ]);
-
-            }
+            if (count($parts) === 2) {
+                $yesNoArray_all[$key] = $parts[0]; // "yes" or "no" part
+                $numberArray_all[$key] = $parts[1]; // "5.1" or "5.2" part
             }
         }
+
+        $updates = [];
+        $inserts = [];
+        $no_updates = [];
+        $no_inserts = [];
+        
+        $batchSize = 10; // Adjust the batch size according to your needs
+        
+        foreach($yesNoArray_all as $key => $value) {
+            if($value == 'no') {
+                foreach($yesNoArray as $key2 => $value2) {
+                    if($value2 == 'yes') {
+                        if (isset($filtered_control_compliance[$key2]) && isset($filtered_vulnerability[$key2])
+                            && isset($filtered_threat[$key2]) && isset($filtered_risk_level[$key2])) {
+        
+                            $data = [
+                                'project_id' => $proj_id,
+                                'asset_id' => $asset_id,
+                                'control_num' => $numberArray[$key2],
+                                'asset_value' => $req->asset_value,
+                                'applicability' => "yes",
+                                'control_compliance' => $filtered_control_compliance[$key2],
+                                'vulnerability' => $filtered_vulnerability[$key2],
+                                'threat' => $filtered_threat[$key2],
+                                'risk_level' => $filtered_risk_level[$key2],
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                            ];
+        
+                            $existing = DB::table('iso_sec_2_3_1')
+                                ->where('project_id', $proj_id)
+                                ->where('asset_id', $asset_id)
+                                ->where('control_num', $numberArray[$key2])
+                                ->exists();
+        
+                            if ($existing) {
+                                $updates[] = $data;
+                            } else {
+                                $inserts[] = $data;
+                            }
+                        }
+                    }
+        
+                    if ($value2 == "no") {
+                        $no_data = [
+                            'project_id' => $proj_id,
+                            'asset_id' => $asset_id,
+                            'control_num' => $numberArray[$key2],
+                            'asset_value' => $req->asset_value,
+                            'applicability' => "no",
+                            'control_compliance' => 0,
+                            'vulnerability' => 0,
+                            'threat' => 0,
+                            'risk_level' => 0,
+                            'last_edited_by' => $user_id,
+                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                        ];
+        
+                        $existing_no = DB::table('iso_sec_2_3_1')
+                            ->where('project_id', $proj_id)
+                            ->where('asset_id', $asset_id)
+                            ->where('control_num', $numberArray[$key2])
+                            ->exists();
+        
+                        if ($existing_no) {
+                            $no_updates[] = $no_data;
+                        } else {
+                            $no_inserts[] = $no_data;
+                        }
+                    }
+                }
+            }
+            if($value=='yes'){
+                $otherAssets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)
+                ->Pluck('assessment_id')->toArray();
+                foreach ($otherAssets as $index => $assetId) {
+
+                    foreach($yesNoArray as $key3 => $value3) {
+                        if($value3 == 'yes') {
+                            if (isset($filtered_control_compliance[$key3]) && isset($filtered_vulnerability[$key3])
+                                && isset($filtered_threat[$key3]) && isset($filtered_risk_level[$key3])) {
+            
+                                $data = [
+                                    'project_id' => $proj_id,
+                                    'asset_id' => $assetId,
+                                    'control_num' => $numberArray[$key3],
+                                    'asset_value' => $req->asset_value,
+                                    'applicability' => "yes",
+                                    "applicability_all"=>"yes",
+                                    'control_compliance' => $filtered_control_compliance[$key3],
+                                    'vulnerability' => $filtered_vulnerability[$key3],
+                                    'threat' => $filtered_threat[$key3],
+                                    'risk_level' => $filtered_risk_level[$key3],
+                                    'last_edited_by' => $user_id,
+                                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                                ];
+            
+                                $existing = DB::table('iso_sec_2_3_1')
+                                    ->where('project_id', $proj_id)
+                                    ->where('asset_id', $assetId)
+                                    ->where('control_num', $numberArray[$key3])
+                                    ->exists();
+            
+                                if ($existing) {
+                                    $updates[] = $data;
+                                } else {
+                                    $inserts[] = $data;
+                                }
+                            }
+                        }
+            
+                        if ($value3 == "no") {
+                            $no_data = [
+                                'project_id' => $proj_id,
+                                'asset_id' => $assetId,
+                                'control_num' => $numberArray[$key3],
+                                'asset_value' => $req->asset_value,
+                                'applicability' => "no",
+                                "applicability_all"=>"yes",
+                                'control_compliance' => 0,
+                                'vulnerability' => 0,
+                                'threat' => 0,
+                                'risk_level' => 0,
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                            ];
+            
+                            $existing_no = DB::table('iso_sec_2_3_1')
+                                ->where('project_id', $proj_id)
+                                ->where('asset_id', $assetId)
+                                ->where('control_num', $numberArray[$key3])
+                                ->exists();
+            
+                            if ($existing_no) {
+                                $no_updates[] = $no_data;
+                            } else {
+                                $no_inserts[] = $no_data;
+                            }
+                        }
+                    }
+
+            
+            }
+        }
+        
+        // Function to process updates in batches
+        function processBatchUpdates($table, $data, $batchSize) {
+            foreach (array_chunk($data, $batchSize) as $batch) {
+                foreach ($batch as $update) {
+                    DB::table($table)
+                        ->where('project_id', $update['project_id'])
+                        ->where('asset_id', $update['asset_id'])
+                        ->where('control_num', $update['control_num'])
+                        ->update($update);
+                }
+            }
+        }
+        
+        // Function to process inserts in batches
+        function processBatchInserts($table, $data, $batchSize) {
+            foreach (array_chunk($data, $batchSize) as $batch) {
+                foreach ($batch as $insert) {
+                    DB::table($table)
+                        ->updateOrInsert(
+                            [
+                                'project_id' => $insert['project_id'],
+                                'asset_id' => $insert['asset_id'],
+                                'control_num' => $insert['control_num']
+                            ],
+                            $insert
+                        );
+                }
+            }
+        }
+        
+        // Perform updates in bulk
+        processBatchUpdates('iso_sec_2_3_1', $updates, $batchSize);
+        processBatchUpdates('iso_risk_treatment', $updates, $batchSize);
+        
+        processBatchUpdates('iso_sec_2_3_1', $no_updates, $batchSize);
+        processBatchUpdates('iso_risk_treatment', $no_updates, $batchSize);
+        
+        // Perform inserts in bulk
+        processBatchInserts('iso_sec_2_3_1', $inserts, $batchSize);
+        processBatchInserts('iso_risk_treatment', $inserts, $batchSize);
+        
+        processBatchInserts('iso_sec_2_3_1', $no_inserts, $batchSize);
+        processBatchInserts('iso_risk_treatment', $no_inserts, $batchSize);
+
+        // try {
+        // foreach ($yesNoArray as $key => $value) {
+
+        //     if ($value == "yes") {
+
+        //         if (
+        //         isset($filtered_control_compliance[$key]) && isset($filtered_vulnerability[$key])
+        //             && isset($filtered_threat[$key]) && isset($filtered_risk_level[$key])
+        //         ) {
+
+
+        //             $check=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
+        //             ->where('control_num', $numberArray[$key])->first();
+
+        //             if($check){
+        //                 DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
+        //                 ->where('control_num', $numberArray[$key])
+        //                 ->update([
+        //                     'asset_value' => $req->asset_value,
+        //                     'applicability' => "yes",
+        //                     'control_compliance' => $filtered_control_compliance[$key],
+        //                     'vulnerability' => $filtered_vulnerability[$key],
+        //                     'threat' => $filtered_threat[$key],
+        //                     'risk_level' => $filtered_risk_level[$key],
+        //                     'last_edited_by' => $user_id,
+        //                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+        //                 ]);
+
+        //                 DB::table('iso_risk_treatment')->where('project_id',$proj_id)->where('asset_id',$asset_id)
+        //                 ->where('control_num', $numberArray[$key])->update([
+        //                     'asset_value' => $req->asset_value,
+        //                     'applicability' => "yes",
+        //                     'control_compliance' => $filtered_control_compliance[$key],
+        //                     'vulnerability' => $filtered_vulnerability[$key],
+        //                     'threat' => $filtered_threat[$key],
+        //                     'risk_level' => $filtered_risk_level[$key],
+        //                     'last_edited_by' => $user_id,
+        //                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+        //                 ]);
+
+        //             }else{
+
+        //             DB::table('iso_sec_2_3_1')->insert([
+        //                 'project_id' => $proj_id,
+        //                 'asset_id' => $asset_id,
+        //                 'asset_value' => $req->asset_value,
+        //                 'control_num' => $numberArray[$key],
+        //                 'applicability' => "yes",
+        //                 'control_compliance' => $filtered_control_compliance[$key],
+        //                 'vulnerability' => $filtered_vulnerability[$key],
+        //                 'threat' => $filtered_threat[$key],
+        //                 'risk_level' => $filtered_risk_level[$key],
+        //                 'last_edited_by' => $user_id,
+        //                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+        //             ]);
+
+        //             DB::table('iso_risk_treatment')->insert([
+        //                 'project_id' => $proj_id,
+        //                 'asset_id' => $asset_id,
+        //                 'asset_value' => $req->asset_value,
+        //                 'control_num' => $numberArray[$key],
+        //                 'applicability' => "yes",
+        //                 'control_compliance' => $filtered_control_compliance[$key],
+        //                 'vulnerability' => $filtered_vulnerability[$key],
+        //                 'threat' => $filtered_threat[$key],
+        //                 'risk_level' => $filtered_risk_level[$key],
+        //                 'last_edited_by' => $user_id,
+        //                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+        //             ]);
+
+        //         }
+
+
+
+
+        //         }
+        //     }
+        //     if ($value == "no") {
+
+
+        //         $check=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
+        //         ->where('control_num', $numberArray[$key])->first();
+
+        //         if($check){
+
+        //             DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
+        //             ->where('control_num', $numberArray[$key])->update([
+        //                 'asset_value' => $req->asset_value,
+        //                 'applicability' => "no",
+        //                 'control_compliance' => 0,
+        //                 'vulnerability' => 0,
+        //                 'threat' => 0,
+        //                 'risk_level' => 0,
+        //                 'last_edited_by' => $user_id,
+        //                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+        //             ]);
+
+        //             DB::table('iso_risk_treatment')->where('project_id',$proj_id)->where('asset_id',$asset_id)
+        //             ->where('control_num', $numberArray[$key])->update([
+        //                 'asset_value' => $req->asset_value,
+        //                 'applicability' => "no",
+        //                 'control_compliance' => 0,
+        //                 'vulnerability' => 0,
+        //                 'threat' => 0,
+        //                 'risk_level' => 0,
+        //                 'last_edited_by' => $user_id,
+        //                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+        //             ]);
+
+
+        //         }else{
+
+        //         DB::table('iso_sec_2_3_1')->insert([
+        //             'project_id' => $proj_id,
+        //             'asset_id' => $asset_id,
+        //             'asset_value' => $req->asset_value,
+        //             'control_num' => $numberArray[$key],
+        //             'applicability' => "no",
+        //             'control_compliance' => 0,
+        //             'vulnerability' => 0,
+        //             'threat' => 0,
+        //             'risk_level' => 0,
+        //             'last_edited_by' => $user_id,
+        //             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+        //         ]);
+
+        //         DB::table('iso_risk_treatment')->insert([
+        //             'project_id' => $proj_id,
+        //             'asset_id' => $asset_id,
+        //             'asset_value' => $req->asset_value,
+        //             'control_num' => $numberArray[$key],
+        //             'applicability' => "no",
+        //             'control_compliance' => 0,
+        //             'vulnerability' => 0,
+        //             'threat' => 0,
+        //             'risk_level' => 0,
+        //             'last_edited_by' => $user_id,
+        //             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+        //         ]);
+
+        //     }
+        //     }
+        // }
 
 
         // } catch (\Throwable $th) {
@@ -369,6 +570,7 @@ class IsoSec2_3_1 extends Controller
 
         return redirect()->route('iso_sec_2_3_1', ['asset_id' => $asset_id, 'proj_id' => $proj_id, 'user_id' => $user_id])->with('success', 'Record Added');
     }
+}
 
 
 

@@ -86,10 +86,10 @@ $permissions=json_decode($project_permissions);
     <table id="myTable2" class="table table-responsive table-primary table-striped mt-4">
         <thead class="thead-dark table-pointer">
           <tr style="vertical-align: middle">
-            <th onclick="sortTable(0)">Service Name for which this is an underlying asset </th>
-            <th onclick="sortTable(1)">Asset Group Name</th>
-            <th onclick="sortTable(2)">Asset Name</th>
-            <th onclick="sortTable(3)">Asset Component Name</th>
+            <th onclick="sortTable(0)">Service</th>
+            <th onclick="sortTable(1)">Asset Group</th>
+            <th onclick="sortTable(2)">Asset</th>
+            <th onclick="sortTable(3)">Asset Component</th>
             <th onclick="sortTable(4)">Asset Owner Dept</th>
             <th onclick="sortTable(5)">Asset Physical Location</th>
             <th onclick="sortTable(6)">Asset Logical Location</th>
@@ -163,6 +163,7 @@ $permissions=json_decode($project_permissions);
 @endif
 
 
+@if(in_array('Data Inputter',$permissions))
       <div class="float-start">
         <a href="{{route('download_asset_template')}}">Download Excel template to upload assets</a>
         <br>
@@ -188,6 +189,7 @@ $permissions=json_decode($project_permissions);
       </div>
 
 </div>
+@endif
 
 @section('scripts')
 
