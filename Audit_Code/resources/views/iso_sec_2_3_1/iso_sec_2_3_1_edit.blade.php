@@ -51,7 +51,7 @@
 
 <div class="row justify-content-center">
 
-    <div class="col-md-6">
+    <div class="col-md-12">
 
         <div class="card mt-2">
             <div class="card-header my_bg_color text-white text-center">
@@ -98,11 +98,73 @@
                 <input type="number" name="control_compliance" oninput="validateInput(this)" class="form-control" min=0 max=100 data-control-id="{{$assetData->control_num}}" value="{{old('control_compliance',$assetData->control_compliance)}}">
             </div>
 
+            <div class="form-group mt-4">
+                <label for="">Description of Vulnerability</label>
+                <br>
+                <input class="form-check-input" type="radio" name="desc_vulnerability" value="Description of control is fully met"
+                    {{ old('desc_vulnerability', $assetData->desc_vulnerability) == 'Description of control is fully met' ? 'checked' : '' }}>
+                <label for="">Description of control is fully met</label><br>
+
+                <input class="form-check-input" type="radio" name="desc_vulnerability" value="Description of control is partially met or not met"
+                    {{ old('desc_vulnerability', $assetData->desc_vulnerability) == 'Description of control is partially met or not met' ? 'checked' : '' }}>
+                <label for="">Description of control is partially met or not met</label><br>
+
+                <input class="form-check-input" type="radio" name="desc_vulnerability" value="Other"
+                    {{ old('desc_vulnerability', $assetData->desc_vulnerability) == 'Other' ? 'checked' : '' }}>
+                <label for="">Other</label><br>
+
+                <input type="text" name="desc_vulnerability_other" class="form-control"
+                    value="{{ old('desc_vulnerability_other', $assetData->desc_vulnerability_other) }}">
+            </div>
 
             <div class="form-group mt-4">
                 <label for="">Vulnerability %</label>
+
                 <input type="number" name="vulnerability" class="form-control" data-control-id="{{$assetData->control_num}}" readonly value="{{old('vulnerability',$assetData->vulnerability)}}">
             </div>
+
+
+            <div class=" mt-4">
+                <label for="">Description of Threat</label>
+                <br>
+                <input class="form-check-input" type="radio" name="desc_threat" value="Asset component is directly publicly exposed and there are one or more unmet conditions in the Description of Control"
+                {{ old('desc_threat', $assetData->desc_threat) == 'Asset component is directly publicly exposed and there are one or more unmet conditions in the Description of Control' ? 'checked' : '' }}>
+                <label for="">Asset component is directly publicly exposed and there are one or more unmet conditions in the Description of Control</label>
+
+                <br>
+
+
+                <input class="form-check-input" type="radio" name="desc_threat" value="Asset component is directly publicly exposed but all conditions in the Description of Control are met"
+                    {{ old('desc_threat', $assetData->desc_threat) == 'Asset component is directly publicly exposed but all conditions in the Description of Control are met' ? 'checked' : '' }}>
+                <label for="">Asset component is directly publicly exposed but all conditions in the Description of Control are met</label>
+
+                <br>
+
+                <input class="form-check-input" type="radio" name="desc_threat" value="Asset component is NOT directly publicly exposed but there are one or more unmet conditions in the Description of Control"
+                    {{ old('desc_threat', $assetData->desc_threat) == 'Asset component is NOT directly publicly exposed but there are one or more unmet conditions in the Description of Control' ? 'checked' : '' }}>
+                <label for="">Asset component is NOT directly publicly exposed but there are one or more unmet conditions in the Description of Control</label>
+
+                <br>
+
+
+                <input class="form-check-input" type="radio" name="desc_threat" value="Asset component is NOT directly publicly exposed and all conditions in the Description of Control are met"
+                    {{ old('desc_threat', $assetData->desc_threat) == 'Asset component is NOT directly publicly exposed and all conditions in the Description of Control are met' ? 'checked' : '' }}>
+                <label for="">Asset component is NOT directly publicly exposed and all conditions in the Description of Control are met</label><br>
+
+
+
+                <input class="form-check-input" type="radio" name="desc_threat" value="Other"
+                    {{ old('desc_threat', $assetData->desc_threat) == 'Other' ? 'checked' : '' }}>
+                <label for="">Other</label>
+
+                <input type="text" name="desc_threat_other" class="form-control"
+                    value="{{ old('desc_threat_other', $assetData->desc_threat_other) }}">
+            </div>
+
+
+
+
+
 
             <div class="form-group mt-4">
                 <label for="">Threat %</label>
@@ -112,6 +174,34 @@
             <div class="form-group mt-4">
                 <label for="">Risk Level</label>
                 <input type="number" name="risk_level" class="form-control" data-control-id="{{$assetData->control_num}}" value="{{old('risk_level',$assetData->risk_level)}}" readonly>
+            </div>
+
+
+            <div class="form-group mt-4">
+                <label for="">Types of Risk</label>
+                <br>
+                @php
+                    $selectedRisks = json_decode(old('desc_risk', $assetData->desc_risk), true);
+                @endphp
+
+                <input type="checkbox" name="desc_risk[]" value="Breach of data confidentiality"
+                    {{ is_array($selectedRisks) && in_array('Breach of data confidentiality', $selectedRisks) ? 'checked' : '' }}>
+                <label for="">Breach of data confidentiality</label><br>
+
+                <input type="checkbox" name="desc_risk[]" value="Breach of data integrity"
+                    {{ is_array($selectedRisks) && in_array('Breach of data integrity', $selectedRisks) ? 'checked' : '' }}>
+                <label for="">Breach of data integrity</label><br>
+
+                <input type="checkbox" name="desc_risk[]" value="Denial of IT service or denial of data access to an authorized entity"
+                    {{ is_array($selectedRisks) && in_array('Denial of IT service or denial of data access to an authorized entity', $selectedRisks) ? 'checked' : '' }}>
+                <label for="">Denial of IT service or denial of data access to an authorized entity</label><br>
+
+                <input type="checkbox" name="desc_risk[]" value="Other"
+                    {{ is_array($selectedRisks) && in_array('Other', $selectedRisks) ? 'checked' : '' }}>
+                <label for="">Other</label><br>
+
+                <input type="text" name="desc_risk_other" class="form-control"
+                    value="{{ old('desc_risk_other', $assetData->desc_risk_other) }}">
             </div>
 
 
