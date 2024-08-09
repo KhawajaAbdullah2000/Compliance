@@ -533,18 +533,9 @@ class IsoSec2_3_1 extends Controller
                         'desc_vulnerability' => 'required',
                      'desc_vulnerability_other' => 'required_if:desc_vulnerability,Other',
                      'desc_threat' => 'required', // Ensure the radio button is selected
-    'desc_threat_other' => 'required_if:desc_threat,Other',
 
-    'desc_risk' => 'required|array|min:1', // Ensure at least one option is selected
-    'desc_risk.*' => 'in:Breach of data confidentiality,Breach of data integrity,Denial of IT service or denial of data access to an authorized entity,Other',
-    'desc_risk_other' => [
-        'nullable',
-        function ($attribute, $value, $fail) use ($req) {
-            if (in_array('Other', $req->desc_risk) && !$value) {
-                $fail('The ' . $attribute . ' field is required when "Other" is selected.');
-            }
-        }
-    ],
+                 'desc_risk' => 'required|array|min:1',
+
                     ]);
 
     $desc_risk = $req->desc_risk;

@@ -183,9 +183,9 @@
                     {{ is_array($selectedRisks) && in_array('Breach of data integrity', $selectedRisks) ? 'checked' : '' }}>
                 <label for="">Breach of data integrity</label><br>
 
-                <input type="checkbox" name="desc_risk[]" value="Denial of IT service or denial of data access to an authorized entity"
-                    {{ is_array($selectedRisks) && in_array('Denial of IT service or denial of data access to an authorized entity', $selectedRisks) ? 'checked' : '' }}>
-                <label for="">Denial of IT service or denial of data access to an authorized entity</label><br>
+                <input type="checkbox" name="desc_risk[]" value="Information or Service Denial"
+                    {{ is_array($selectedRisks) && in_array('Information or Service Denial', $selectedRisks) ? 'checked' : '' }}>
+                <label for="">Information or Service Denial</label><br>
 
                 <input type="checkbox" name="desc_risk[]" value="Other"
                     {{ is_array($selectedRisks) && in_array('Other', $selectedRisks) ? 'checked' : '' }}>
