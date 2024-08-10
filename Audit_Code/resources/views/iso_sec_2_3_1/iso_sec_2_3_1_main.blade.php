@@ -142,7 +142,11 @@ $permissions=json_decode($project_permissions);
                 <th>Control Number</th>
                 <th>Title Of Control</th>
                 <th>Description of Control</th>
-                <th>Control is Applicable to All components</th>
+                <th>Control is Applicable to All components
+                    Select All Yes
+                    <input type="checkbox" id="selectAllApplicability_All" />
+
+                </th>
                 <th>Control Applicable only to this asset component
                      Select All No
                     <input type="checkbox" id="selectAllApplicability" />
@@ -1228,6 +1232,21 @@ $permissions=json_decode($project_permissions);
                 $("select[name^='applicability']").each(function () {
                     var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
                     $(this).val('yes+' + controlId);
+                });
+            }
+        });
+
+
+        $('#selectAllApplicability_All').change(function(){
+            if ($(this).is(':checked')) {
+                $("select[name^='applicability_all']").each(function () {
+                    var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
+                    $(this).val('yes+' + controlId);
+                });
+            } else {
+                $("select[name^='applicability_all']").each(function () {
+                    var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
+                    $(this).val('no+' + controlId);
                 });
             }
         });

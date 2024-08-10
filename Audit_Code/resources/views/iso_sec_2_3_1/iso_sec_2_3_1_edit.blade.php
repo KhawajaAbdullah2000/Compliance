@@ -127,29 +127,19 @@
             <div class=" mt-4">
                 <label for="">Description of Threat</label>
                 <br>
-                <input class="form-check-input" type="radio" name="desc_threat" value="Asset component is directly publicly exposed and there are one or more unmet conditions in the Description of Control"
-                {{ old('desc_threat', $assetData->desc_threat) == 'Asset component is directly publicly exposed and there are one or more unmet conditions in the Description of Control' ? 'checked' : '' }}>
-                <label for="">Asset component is directly publicly exposed and there are one or more unmet conditions in the Description of Control</label>
+                <input class="form-check-input" type="radio" name="desc_threat" value="Asset component is directly publicly exposed"
+                {{ old('desc_threat', $assetData->desc_threat) == 'Asset component is directly publicly exposed' ? 'checked' : '' }}>
+                <label for="">Asset component is directly publicly exposed</label>
 
                 <br>
 
 
-                <input class="form-check-input" type="radio" name="desc_threat" value="Asset component is directly publicly exposed but all conditions in the Description of Control are met"
-                    {{ old('desc_threat', $assetData->desc_threat) == 'Asset component is directly publicly exposed but all conditions in the Description of Control are met' ? 'checked' : '' }}>
-                <label for="">Asset component is directly publicly exposed but all conditions in the Description of Control are met</label>
+
+                <input class="form-check-input" type="radio" name="desc_threat" value="Asset component is NOT directly publicly exposed"
+                    {{ old('desc_threat', $assetData->desc_threat) == 'Asset component is NOT directly publicly exposed ' ? 'checked' : '' }}>
+                <label for="">Asset component is NOT directly publicly exposed</label>
 
                 <br>
-
-                <input class="form-check-input" type="radio" name="desc_threat" value="Asset component is NOT directly publicly exposed but there are one or more unmet conditions in the Description of Control"
-                    {{ old('desc_threat', $assetData->desc_threat) == 'Asset component is NOT directly publicly exposed but there are one or more unmet conditions in the Description of Control' ? 'checked' : '' }}>
-                <label for="">Asset component is NOT directly publicly exposed but there are one or more unmet conditions in the Description of Control</label>
-
-                <br>
-
-
-                <input class="form-check-input" type="radio" name="desc_threat" value="Asset component is NOT directly publicly exposed and all conditions in the Description of Control are met"
-                    {{ old('desc_threat', $assetData->desc_threat) == 'Asset component is NOT directly publicly exposed and all conditions in the Description of Control are met' ? 'checked' : '' }}>
-                <label for="">Asset component is NOT directly publicly exposed and all conditions in the Description of Control are met</label><br>
 
 
 
@@ -181,8 +171,9 @@
                 <label for="">Types of Risk</label>
                 <br>
                 @php
-                    $selectedRisks = json_decode(old('desc_risk', $assetData->desc_risk), true);
-                @endphp
+                $descRisk = old('desc_risk', $assetData->desc_risk);
+                $selectedRisks = is_string($descRisk) ? json_decode($descRisk, true) : $descRisk;
+            @endphp
 
                 <input type="checkbox" name="desc_risk[]" value="Breach of data confidentiality"
                     {{ is_array($selectedRisks) && in_array('Breach of data confidentiality', $selectedRisks) ? 'checked' : '' }}>
