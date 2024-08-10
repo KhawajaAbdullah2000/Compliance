@@ -144,7 +144,7 @@ $permissions=json_decode($project_permissions);
                 <th>Description of Control</th>
                 <th>Control is Applicable to All components
                     Select All Yes
-                    <input type="checkbox" id="selectAllApplicability_All" />
+                    <input type="checkbox" id="selectApplicability_All" />
 
                 </th>
                 <th>Control Applicable only to this asset component
@@ -1153,6 +1153,7 @@ $permissions=json_decode($project_permissions);
 
 <script>
     $(document).ready(function(){
+        
         var assetValue = parseFloat($('#assetSelect').val()) || 10;
         var newVulnerabilityValue = null;
         var threat = null;
@@ -1223,13 +1224,13 @@ $permissions=json_decode($project_permissions);
         $('#selectAllApplicability').change(function(){
             if ($(this).is(':checked')) {
                 // Iterate over all applicability select elements and set the value to "yes+control_num"
-                $("select[name^='applicability']").each(function () {
+                $("select[name^='applicability[]']").each(function () {
                     var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
                     $(this).val('no+' + controlId);
                 });
             } else {
                 // If the checkbox is unchecked, reset all applicability select elements to the default (empty) value
-                $("select[name^='applicability']").each(function () {
+                $("select[name^='applicability[]']").each(function () {
                     var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
                     $(this).val('yes+' + controlId);
                 });
@@ -1237,14 +1238,14 @@ $permissions=json_decode($project_permissions);
         });
 
 
-        $('#selectAllApplicability_All').change(function(){
+        $('#selectApplicability_All').change(function(){
             if ($(this).is(':checked')) {
-                $("select[name^='applicability_all']").each(function () {
+                $("select[name^='applicability_all[]']").each(function () {
                     var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
                     $(this).val('yes+' + controlId);
                 });
             } else {
-                $("select[name^='applicability_all']").each(function () {
+                $("select[name^='applicability_all[]']").each(function () {
                     var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
                     $(this).val('no+' + controlId);
                 });
