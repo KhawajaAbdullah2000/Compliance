@@ -188,11 +188,11 @@ $permissions=json_decode($project_permissions);
                         @if($a5_results->count()>0)
                         @foreach ($a5_results as $a5)
 
-                        @if($a5->applicability_all!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+                        @if($a5->applies_to_all!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
-                     <select name="applicability_all[]" class="form-select">
-                        <option value='no+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability_all=="no"?'selected':''}}>No</option>
-                        <option value='yes+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability_all=="yes"?'selected':''}}>Yes</option>
+                     <select name="applies_to_all[]" class="form-select">
+                        <option value='no+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applies_to_all=="no"?'selected':''}}>No</option>
+                        <option value='yes+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applies_to_all=="yes"?'selected':''}}>Yes</option>
 
                         </select>
                          {{-- <p>{{$a5->applicability}} </p> --}}
@@ -200,7 +200,7 @@ $permissions=json_decode($project_permissions);
                         @endif
 
                         @if($loop->last)
-                        <select name="applicability_all[]" class="form-select">
+                        <select name="applies_to_all[]" class="form-select">
 
                             <option value='no+{{$sec2_4_a5_rows[$i][0]}}'>No</option>
                             <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Yes</option>
@@ -211,7 +211,7 @@ $permissions=json_decode($project_permissions);
 
                         @endforeach
                         @else
-                        <select name="applicability_all[]" class="form-select">
+                        <select name="applies_to_all[]" class="form-select">
                             <option value='no+{{$sec2_4_a5_rows[$i][0]}}'>No</option>
                             <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Yes</option>
                         </select>
@@ -418,10 +418,10 @@ $permissions=json_decode($project_permissions);
                     @if($a6_results->count()>0)
                     @foreach ($a6_results as $a6)
 
-                    @if($a6->applicability_all!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
-                    <select name="applicability_all[]" class="form-select">
-                        <option value='no+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability_all=="no"?'selected':''}}>No</option>
-                        <option value='yes+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability_all=="yes"?'selected':''}}>Yes</option>
+                    @if($a6->applies_to_all!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+                    <select name="applies_to_all[]" class="form-select">
+                        <option value='no+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applies_to_all=="no"?'selected':''}}>No</option>
+                        <option value='yes+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applies_to_all=="yes"?'selected':''}}>Yes</option>
 
                     </select>
 
@@ -430,7 +430,7 @@ $permissions=json_decode($project_permissions);
 
                     @if($loop->last)
 
-                   <select name="applicability_all[]" class="form-select">
+                   <select name="applies_to_all[]" class="form-select">
                     <option value='no+{{$sec2_4_a6_rows[$i][0]}}'>No</option>
                     <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Yes</option>
 
@@ -440,7 +440,7 @@ $permissions=json_decode($project_permissions);
                     @endforeach
                     @else
 
-                   <select name="applicability_all[]" class="form-select">
+                   <select name="applies_to_all[]" class="form-select">
 
                     <option value='no+{{$sec2_4_a6_rows[$i][0]}}'>No</option>
                     <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Yes</option>
@@ -649,18 +649,18 @@ $permissions=json_decode($project_permissions);
                 @if($a7_results->count()>0)
                 @foreach ($a7_results as $a7)
 
-                    @if($a7->applicability_all!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+                    @if($a7->applies_to_all!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
 
-                    <select name="applicability_all[]" class="form-select">
-                        <option value='no+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability_all=="no"?'selected':''}}>No</option>
-                        <option value='yes+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability_all=="yes"?'selected':''}}>Yes</option>
+                    <select name="applies_to_all[]" class="form-select">
+                        <option value='no+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applies_to_all=="no"?'selected':''}}>No</option>
+                        <option value='yes+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applies_to_all=="yes"?'selected':''}}>Yes</option>
 
                     </select>
                             @break
                         @endif
 
                         @if($loop->last)
-                        <select name="applicability_all[]" class="form-select">
+                        <select name="applies_to_all[]" class="form-select">
 
                             <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>No</option>
                             <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Yes</option>
@@ -670,7 +670,7 @@ $permissions=json_decode($project_permissions);
 
                 @endforeach
             @else
-            <select name="applicability_all[]" class="form-select">
+            <select name="applies_to_all[]" class="form-select">
 
                 <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>No</option>
                 <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Yes</option>
@@ -889,18 +889,18 @@ $permissions=json_decode($project_permissions);
                 @if($a8_results->count()>0)
                 @foreach ($a8_results as $a8)
 
-                    @if($a8->applicability_all!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+                    @if($a8->applies_to_all!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
 
-                    <select name="applicability_all[]" class="form-select">
-                        <option value='no+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability_all=="no"?'selected':''}}>No</option>
-                        <option value='yes+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability_all=="yes"?'selected':''}}>Yes</option>
+                    <select name="applies_to_all[]" class="form-select">
+                        <option value='no+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applies_to_all=="no"?'selected':''}}>No</option>
+                        <option value='yes+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applies_to_all=="yes"?'selected':''}}>Yes</option>
 
                     </select>
                             @break
                         @endif
 
                         @if($loop->last)
-                        <select name="applicability_all[]" class="form-select">
+                        <select name="applies_to_all[]" class="form-select">
 
                             <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>No</option>
                             <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Yes</option>
@@ -911,7 +911,7 @@ $permissions=json_decode($project_permissions);
 
                 @endforeach
             @else
-            <select name="applicability_all[]" class="form-select">
+            <select name="applies_to_all[]" class="form-select">
 
                 <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>No</option>
                 <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Yes</option>
@@ -1210,6 +1210,9 @@ $permissions=json_decode($project_permissions);
             $("input[name='threat[]'][data-control-id='" + controlId + "']").trigger("input");
         });
 
+
+
+
         $("input[name^='threat']").on("input", function () {
             threat = $(this).val();
             controlId = $(this).data('control-id');
@@ -1219,6 +1222,62 @@ $permissions=json_decode($project_permissions);
             // Update the value of the risk level input box
             riskLevelField.val(newRiskValue);
         });
+
+
+        $("select[name^='applies_to_all']").change(function() {
+        var controlId = $(this).val().split('+')[1];
+        var applicabilitySelect = $("select[name^='applicability']").filter(function() {
+            return $(this).val().split('+')[1] == controlId;
+        });
+
+        if ($(this).val().startsWith('yes')) {
+             applicabilitySelect.val('yes+' + controlId).prop('disabled', true);
+        } else {
+            applicabilitySelect.prop('disabled', false);
+        }
+    });
+
+      // Reapply the rule on page load in case of pre-selected values
+      $("select[name^='applies_to_all']").each(function() {
+        var controlId = $(this).val().split('+')[1];
+        var applicabilitySelect = $("select[name^='applicability']").filter(function() {
+            return $(this).val().split('+')[1] == controlId;
+        });
+
+        if ($(this).val().startsWith('yes')) {
+            applicabilitySelect.val('yes+' + controlId).prop('disabled', true);
+        }
+
+    });
+
+
+
+    $("select[name^='applies_to_all']").change(function() {
+        var controlId = $(this).val().split('+')[1];
+        var applicabilitySelect = $("select[name^='applicability']").filter(function() {
+            return $(this).val().split('+')[1] == controlId;
+        });
+
+        if ($(this).val().startsWith('no')) {
+             applicabilitySelect.val('no+' + controlId).prop('disabled', true);
+        } else {
+            applicabilitySelect.prop('disabled', false);
+        }
+    });
+
+      // Reapply the rule on page load in case of pre-selected values
+      $("select[name^='applies_to_all']").each(function() {
+        var controlId = $(this).val().split('+')[1];
+        var applicabilitySelect = $("select[name^='applicability']").filter(function() {
+            return $(this).val().split('+')[1] == controlId;
+        });
+
+        if ($(this).val().startsWith('no')) {
+            applicabilitySelect.val('no+' + controlId).prop('disabled', true);
+        }
+    });
+
+
 
         $('#selectAllApplicability').change(function(){
             if ($(this).is(':checked')) {
@@ -1237,18 +1296,27 @@ $permissions=json_decode($project_permissions);
         });
 
 
+
         $('#selectAllApplicability_All').change(function(){
             if ($(this).is(':checked')) {
-                $("select[name^='applicability_all']").each(function () {
-                    var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
-                    $(this).val('yes+' + controlId);
-                });
-            } else {
-                $("select[name^='applicability_all']").each(function () {
-                    var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
-                    $(this).val('no+' + controlId);
-                });
-            }
+            $("select[name^='applies_to_all']").each(function () {
+                var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
+                $(this).val('yes+' + controlId).trigger('change'); // Set value and trigger change event
+
+         var applicabilitySelect = $("select[name^='applicability']").filter(function() {
+            return $(this).val().split('+')[1] == controlId;
+        });
+
+        if ($(this).val().startsWith('yes')) {
+            applicabilitySelect.val('yes+' + controlId).prop('disabled', true);
+        }
+            });
+        } else {
+            $("select[name^='applies_to_all']").each(function () {
+                var controlId = $(this).find('option:eq(1)').val().split('+')[1]; // Get control num from second option value
+                $(this).val('no+' + controlId).trigger('change'); // Set value and trigger change event
+            });
+        }
         });
 
         $('#selectAllControlCompliance').change(function(){
