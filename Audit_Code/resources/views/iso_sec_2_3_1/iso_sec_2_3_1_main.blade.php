@@ -126,8 +126,8 @@ $permissions=json_decode($project_permissions);
             <colgroup>
                 <col style="width: 100px;">
                 <col style="width: 300px;">
-                <col style="width: 500px;">
-                <col style="width: 100px;">
+                <col style="width: 300px;">
+                <col style="width: 300px;">
                 <col style="width: 100px;">
                 <col style="width: 100px;">
                 <col style="width: 100px;">
@@ -185,9 +185,13 @@ $permissions=json_decode($project_permissions);
 
                  <select name="applicability[]" class="form-select">
 
-                        <option value='yes+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability=="yes"?'selected':''}}>Yes</option>
+            <option value='yes+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability=="yes"?'selected':''}}>Only to this asset       component</option>
 
-                        <option value='no+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability=="no"?'selected':''}}>No</option>
+            <option value='yes_to_all+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability=="yes_to_all"?'selected':''}}>To all asset components in this project</option>
+
+            
+
+                    <option value='no+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability=="no"?'selected':''}}>Not to this asset component</option>
                     </select>
                      {{-- <p>{{$a5->applicability}} </p> --}}
                         @break
@@ -197,9 +201,10 @@ $permissions=json_decode($project_permissions);
                     <select name="applicability[]" class="form-select">
 
 
-                        <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Yes</option>
+                        <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Only to this Asset Component</option>
+                        <option value='yes_to_all+{{$sec2_4_a5_rows[$i][0]}}'>To all asset components in this project</option>
 
-                        <option value='no+{{$sec2_4_a5_rows[$i][0]}}'>No</option>
+                        <option value='no+{{$sec2_4_a5_rows[$i][0]}}'>Not to this asset component</option>
                     </select>
                     @endif
 
@@ -207,9 +212,9 @@ $permissions=json_decode($project_permissions);
                     @else
                     <select name="applicability[]" class="form-select">
 
-                        <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Yes</option>
-
-                        <option value='no+{{$sec2_4_a5_rows[$i][0]}}'>No</option>
+                        <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Only to this Asset Component</option>
+                        <option value='yes_to_all+{{$sec2_4_a5_rows[$i][0]}}'>To all asset components in this project</option>
+                        <option value='no+{{$sec2_4_a5_rows[$i][0]}}'>Not to this asset component</option>
                     </select>
                     @endif
 
@@ -246,7 +251,7 @@ $permissions=json_decode($project_permissions);
 
                             @if( $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
-       <input type="number" name="vulnerability[]" class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+       <input type="number" name="vulnerability[]" class="form-control" value={{$a5->vulnerability}}  data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
 
                                  {{-- <p>{{$a5->vulnerability}}%</p> --}}
 
@@ -374,9 +379,11 @@ $permissions=json_decode($project_permissions);
                 @if($a6->applicability!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
                 <select name="applicability[]" class="form-select">
 
-                    <option value='yes+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability=="yes"?'selected':''}}>Yes</option>
+                    <option value='yes+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability=="yes"?'selected':''}}>Only to this asset component</option>
 
-                    <option value='no+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability=="no"?'selected':''}}>No</option>
+                    <option value='yes_to_all+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability=="yes_to_all"?'selected':''}}>To all asset components in this project</option>
+
+                    <option value='no+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability=="no"?'selected':''}}>Not to this asset component</option>
                 </select>
 
                     @break
@@ -387,9 +394,9 @@ $permissions=json_decode($project_permissions);
                <select name="applicability[]" class="form-select">
 
 
-                <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Yes</option>
-
-                <option value='no+{{$sec2_4_a6_rows[$i][0]}}'>No</option>
+                <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Only to this asset component</option>
+                <option value='yes_to_all+{{$sec2_4_a6_rows[$i][0]}}'>To all asset components in this project</option>
+                <option value='no+{{$sec2_4_a6_rows[$i][0]}}'>Not to this asset component</option>
             </select>
                 @endif
 
@@ -399,9 +406,9 @@ $permissions=json_decode($project_permissions);
                <select name="applicability[]" class="form-select">
 
 
-                <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Yes</option>
-
-                <option value='no+{{$sec2_4_a6_rows[$i][0]}}'>No</option>
+                <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Only to this asset component</option>
+                <option value='yes_to_all+{{$sec2_4_a6_rows[$i][0]}}'>To all asset components in this project</option>
+                <option value='no+{{$sec2_4_a6_rows[$i][0]}}'>Not to this asset component</option>
             </select>
                 @endif
 
@@ -438,14 +445,14 @@ $permissions=json_decode($project_permissions);
 
                         @if($a6->control_num===strval($sec2_4_a6_rows[$i][0]))
 
-              <input type="number" name="vulnerability[]" class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+              <input type="number" name="vulnerability[]" class="form-control" value={{$a6->vulnerability}} data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
 
-                            {{-- <p>{{$a6->vulnerability}}%</p> --}}
+        
                                 @break
                             @endif
 
                             @if($loop->last)
-        <input type="number" name="vulnerability[]"  class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+        <input type="number" name="vulnerability[]"   class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
                     @endif
 
                     @endforeach
@@ -562,9 +569,11 @@ $permissions=json_decode($project_permissions);
 
                 <select name="applicability[]" class="form-select">
 
-                    <option value='yes+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability=="yes"?'selected':''}}>Yes</option>
+                    <option value='yes+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability=="yes"?'selected':''}}>Only to this asset component</option>
 
-                    <option value='no+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability=="no"?'selected':''}}>No</option>
+                    <option value='yes_to_all+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability=="yes_to_all"?'selected':''}}>To all asset components in this project</option>
+
+                    <option value='no+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability=="no"?'selected':''}}>Not to this asset component</option>
                 </select>
                         @break
                     @endif
@@ -573,19 +582,18 @@ $permissions=json_decode($project_permissions);
                     <select name="applicability[]" class="form-select">
 
 
-                        <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Yes</option>
+                        <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Only to this asset component</option>
+                        <option value='yes_to_all+{{$sec2_4_a7_rows[$i][0]}}'>To all asset components in this project</option>
 
-                        <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>No</option>
+                        <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>Not to this asset component</option>
                     </select>            @endif
 
             @endforeach
         @else
         <select name="applicability[]" class="form-select">
-
-
-            <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Yes</option>
-
-            <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>No</option>
+            <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Only to this asset component</option>
+            <option value='yes_to_all+{{$sec2_4_a7_rows[$i][0]}}'>To all asset components in this project</option>
+            <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>Not to this asset component</option>
         </select>
         @endif
 
@@ -624,7 +632,7 @@ $permissions=json_decode($project_permissions);
             @foreach ($a7_results as $a7)
 
                 @if( $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
-                <input type="number" name="vulnerability[]" class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
+                <input type="number" name="vulnerability[]" value={{$a7->vulnerability}} class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
 
                     {{-- <p>{{$a7->vulnerability}}% </p> --}}
                         @break
@@ -754,9 +762,10 @@ $permissions=json_decode($project_permissions);
 
                 <select name="applicability[]" class="form-select">
 
-                    <option value='yes+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability=="yes"?'selected':''}}>Yes</option>
+                    <option value='yes+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability=="yes"?'selected':''}}>Only to this asset component</option>
+                    <option value='yes_to_all+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability=="yes_to_all"?'selected':''}}>To all asset components in this project</option>
 
-                    <option value='no+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability=="no"?'selected':''}}>No</option>
+                    <option value='no+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability=="no"?'selected':''}}>Not to this asset component</option>
                 </select>
                         @break
                     @endif
@@ -764,19 +773,17 @@ $permissions=json_decode($project_permissions);
                     @if($loop->last)
                     <select name="applicability[]" class="form-select">
 
-
-                        <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Yes</option>
-
-                        <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>No</option>
+                        <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Only to this asset component</option>
+                        <option value='yes_to_all+{{$sec2_4_a8_rows[$i][0]}}'>To all asset components in this project</option>
+                        <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>Not to this asset component</option>
                     </select>            @endif
 
             @endforeach
         @else
         <select name="applicability[]" class="form-select">
-
-            <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Yes</option>
-
-            <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>No</option>
+            <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Only to this asset component</option>
+            <option value='yes_to_all+{{$sec2_4_a8_rows[$i][0]}}'>To all asset components in this project</option>
+            <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>Not to this asset component</option>
         </select>
         @endif
 
@@ -812,7 +819,7 @@ $permissions=json_decode($project_permissions);
             @foreach ($a8_results as $a8)
 
                 @if($a8->control_num===strval($sec2_4_a8_rows[$i][0]))
-                <input type="number" name="vulnerability[]" class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
+                <input type="number" name="vulnerability[]" value={{$a8->vulnerability}} class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
 
                     {{-- <p>{{$a8->vulnerability}}%</p> --}}
                         @break
@@ -962,7 +969,7 @@ $permissions=json_decode($project_permissions);
 
 
 
-<script>
+{{-- <script>
     $(document).ready(function(){
         var assetValue = parseFloat($('#assetSelect').val()) || 10;
         var newVulnerabilityValue = null;
@@ -1090,7 +1097,7 @@ $permissions=json_decode($project_permissions);
         // Initialize values on page load
         initializeValues();
     });
-</script>
+</script> --}}
 
 
 <script>
