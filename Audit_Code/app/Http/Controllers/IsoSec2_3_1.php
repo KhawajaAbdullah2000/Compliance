@@ -587,64 +587,33 @@ class IsoSec2_3_1 extends Controller
 
 
                     $req->validate([
-                        'applicability' => 'required',
-                        'control_compliance' => 'required_if:applicability,yes',
-                        'vulnerability' => 'required_if:applicability,yes',
-                        'threat' => 'required_if:applicability,yes',
-                        'risk_level' => 'required_if:applicability,yes'
+
+                        'desc_vulnerability' => 'required',
+
+                         'desc_threat' => 'required', // Ensure the radio button is selected
+
+                       'desc_risk' => 'required|array|min:1',
+
                     ]);
 
-                    if ($req->applicability == "yes") {
-                        Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                     $desc_risk = $req->desc_risk;
+                    $desc_risk_json = json_encode($desc_risk);
+
+
+                     Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
                             ->where('control_num', $control_num)->update(
                                 [
+                                    'desc_vulnerability'=>$req->desc_vulnerability,
+                                    'desc_vulnerability_other'=>$req->desc_vulnerability_other,
+                                    'desc_threat'=>$req->desc_threat,
+                                    'desc_threat_other'=>$req->desc_threat_other,
+                                    'desc_risk' => $desc_risk_json, // Save as JSON
+                                    'desc_risk_other' => $req->desc_risk_other,
 
-                                    'applicability' => $req->applicability,
-                                    'control_compliance' => $req->control_compliance,
-                                    'vulnerability' => $req->vulnerability,
-                                    'threat' => $req->threat,
-                                    'risk_level' => $req->risk_level
                                 ]
                             );
 
-                        Db::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)
-                            ->where('control_num', $control_num)->update(
-                                [
 
-                                    'applicability' => $req->applicability,
-                                    'control_compliance' => $req->control_compliance,
-                                    'vulnerability' => $req->vulnerability,
-                                    'threat' => $req->threat,
-                                    'risk_level' => $req->risk_level
-                                ]
-                            );
-                    }
-
-                    if ($req->applicability == "no") {
-                        Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
-                            ->where('control_num', $control_num)->update(
-                                [
-                                    'asset_value' => $req->asset_value,
-                                    'applicability' => $req->applicability,
-                                    'control_compliance' => 0,
-                                    'vulnerability' => 0,
-                                    'threat' => 0,
-                                    'risk_level' => $req->risk_level
-                                ]
-                            );
-
-                        Db::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)
-                            ->where('control_num', $control_num)->update(
-                                [
-                                    'asset_value' => $req->asset_value,
-                                    'applicability' => $req->applicability,
-                                    'control_compliance' => 0,
-                                    'vulnerability' => 0,
-                                    'threat' => 0,
-                                    'risk_level' => $req->risk_level
-                                ]
-                            );
-                    }
 
                     return redirect()->route('iso_sec_2_3_1', [
                         'asset_id' => $asset_id,
@@ -661,7 +630,7 @@ class IsoSec2_3_1 extends Controller
     public function iso_sec_2_3_1_risk($asset_id, $proj_id, $user_id)
     {
 
-        dd("hello");
+
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',

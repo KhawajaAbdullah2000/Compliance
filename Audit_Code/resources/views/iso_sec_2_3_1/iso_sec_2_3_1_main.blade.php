@@ -130,9 +130,9 @@ $permissions=json_decode($project_permissions);
                 <col style="width: 300px;">
                 <col style="width: 100px;">
                 <col style="width: 100px;">
+                <col style="width: 100px;">
                 <col style="width: 200px;">
-                <col style="width: 200px;">
-
+                <col style="width: 100px;">
             </colgroup>
 
             <thead class="thead-dark" style="vertical-align: middle">
@@ -154,7 +154,7 @@ $permissions=json_decode($project_permissions);
                     <input type="checkbox" id="selectAllThreat" /> --}}
                 </th>
                 <th>Risk Level</th>
-                {{-- <th>Edit</th> --}}
+               <th>Edit</th>
 
               </tr>
             </thead>
@@ -313,7 +313,7 @@ $permissions=json_decode($project_permissions);
 
                 </td>
 
-                {{-- <td>
+                 <td>
                 @if($a5_results->count()>0)
                     @foreach ($a5_results as $a5)
 
@@ -342,7 +342,7 @@ $permissions=json_decode($project_permissions);
                 @endif
 
 
-                </td> --}}
+                </td>
 
 
 
@@ -506,7 +506,7 @@ $permissions=json_decode($project_permissions);
             </td>
 
 
-            {{-- <td>
+             <td>
                 @if($a6_results->count()>0)
                     @foreach ($a6_results as $a6)
 
@@ -535,7 +535,7 @@ $permissions=json_decode($project_permissions);
                 @endif
 
 
-                </td> --}}
+                </td>
 
 
 
@@ -700,7 +700,7 @@ $permissions=json_decode($project_permissions);
 
          </td>
 
-         {{-- <td>
+          <td>
             @if($a7_results->count()>0)
                 @foreach ($a7_results as $a7)
 
@@ -729,7 +729,7 @@ $permissions=json_decode($project_permissions);
             @endif
 
 
-            </td> --}}
+            </td>
 
 
          </tr>
@@ -882,7 +882,7 @@ $permissions=json_decode($project_permissions);
         </td>
 
 
-        {{-- <td>
+         <td>
             @if($a8_results->count()>0)
                 @foreach ($a8_results as $a8)
 
@@ -911,7 +911,7 @@ $permissions=json_decode($project_permissions);
             @endif
 
 
-            </td> --}}
+            </td>
 
 
         </tr>
