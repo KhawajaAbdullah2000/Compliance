@@ -123,7 +123,21 @@
 
                                 @foreach ($assetDataForFive as $a5)
                                     @if($a5->control_num===strval($sec2_4_a5_rows[$i][0]))
-                                    <td>{{$a5->applicability}}</td>
+                                    <td>
+                                        @if($a5->applicability=='yes')
+                                        Only to this asset component
+                                        @endif
+
+                                        @if($a5->applicability=='yes_to_all')
+                                        To all asset components in this project
+                                        @endif
+
+                                        @if($a5->applicability=='no')
+                                        Not to this asset component
+                                        @endif
+
+                                    </td>
+
                                     <td>{{$a5->control_compliance}}%</td>
                                     <td>{{$a5->vulnerability}}%</td>
                                     <td>{{$a5->threat}}%</td>
@@ -172,7 +186,18 @@
 
                                 @foreach ($assetDataForFive as $a5)
                                 @if($a5->control_num===strval($sec2_4_a6_rows[$i][0]))
-                                <td>{{$a5->applicability}}</td>
+                                <td>  @if($a5->applicability=='yes')
+                                    Only to this asset component
+                                    @endif
+
+                                    @if($a5->applicability=='yes_to_all')
+                                    To all asset components in this project
+                                    @endif
+
+                                    @if($a5->applicability=='no')
+                                    Not to this asset component
+                                    @endif
+</td>
                                 <td>{{$a5->control_compliance}}%</td>
                                 <td>{{$a5->vulnerability}}%</td>
                                 <td>{{$a5->threat}}%</td>
@@ -218,7 +243,18 @@
 
                                 @foreach ($assetDataForFive as $a5)
                                 @if($a5->control_num===strval($sec2_4_a7_rows[$i][0]))
-                                <td>{{$a5->applicability}}</td>
+                                <td>  @if($a5->applicability=='yes')
+                                    Only to this asset component
+                                    @endif
+
+                                    @if($a5->applicability=='yes_to_all')
+                                    To all asset components in this project
+                                    @endif
+
+                                    @if($a5->applicability=='no')
+                                    Not to this asset component
+                                    @endif
+</td>
                                 <td>{{$a5->control_compliance}}%</td>
                                 <td>{{$a5->vulnerability}}%</td>
                                 <td>{{$a5->threat}}%</td>
@@ -263,7 +299,18 @@
 
                                 @foreach ($assetDataForFive as $a5)
                                 @if($a5->control_num===strval($sec2_4_a8_rows[$i][0]))
-                                <td>{{$a5->applicability}}</td>
+                                <td>  @if($a5->applicability=='yes')
+                                    Only to this asset component
+                                    @endif
+
+                                    @if($a5->applicability=='yes_to_all')
+                                    To all asset components in this project
+                                    @endif
+
+                                    @if($a5->applicability=='no')
+                                    Not to this asset component
+                                    @endif
+</td>
                                 <td>{{$a5->control_compliance}}%</td>
                                 <td>{{$a5->vulnerability}}%</td>
                                 <td>{{$a5->threat}}%</td>

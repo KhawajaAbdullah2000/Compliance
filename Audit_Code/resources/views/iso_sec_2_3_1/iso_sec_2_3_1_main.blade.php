@@ -130,9 +130,8 @@ $permissions=json_decode($project_permissions);
                 <col style="width: 300px;">
                 <col style="width: 100px;">
                 <col style="width: 100px;">
-                <col style="width: 100px;">
                 <col style="width: 200px;">
-                <col style="width: 100px;">
+                <col style="width: 200px;">
 
             </colgroup>
 
@@ -142,23 +141,20 @@ $permissions=json_decode($project_permissions);
                 <th>Title Of Control</th>
                 <th>Description of Control</th>
                 <th>Control is Applicable?
-                     Select All No
-                    <input type="checkbox" id="selectAllApplicability" />
+                     {{-- Select All No
+                    <input type="checkbox" id="selectAllApplicability" /> --}}
                 </th>
                 <th>Control Compliance%
-                    Set all to 0
-                    <input type="checkbox" id="selectAllControlCompliance" />
+                    {{-- Set all to 0
+                    <input type="checkbox" id="selectAllControlCompliance" /> --}}
                 </th>
                 <th>Vulnerability%</th>
                 <th>Threat%
-
-                    Set all to 0
-                    <input type="checkbox" id="selectAllThreat" />
-
-
+                    {{-- Set all to 0
+                    <input type="checkbox" id="selectAllThreat" /> --}}
                 </th>
                 <th>Risk Level</th>
-                <th>Edit</th>
+                {{-- <th>Edit</th> --}}
 
               </tr>
             </thead>
@@ -189,7 +185,7 @@ $permissions=json_decode($project_permissions);
 
             <option value='yes_to_all+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability=="yes_to_all"?'selected':''}}>To all asset components in this project</option>
 
-            
+
 
                     <option value='no+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability=="no"?'selected':''}}>Not to this asset component</option>
                     </select>
@@ -317,7 +313,7 @@ $permissions=json_decode($project_permissions);
 
                 </td>
 
-                <td>
+                {{-- <td>
                 @if($a5_results->count()>0)
                     @foreach ($a5_results as $a5)
 
@@ -346,7 +342,7 @@ $permissions=json_decode($project_permissions);
                 @endif
 
 
-                </td>
+                </td> --}}
 
 
 
@@ -447,7 +443,7 @@ $permissions=json_decode($project_permissions);
 
               <input type="number" name="vulnerability[]" class="form-control" value={{$a6->vulnerability}} data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
 
-        
+
                                 @break
                             @endif
 
@@ -510,7 +506,7 @@ $permissions=json_decode($project_permissions);
             </td>
 
 
-            <td>
+            {{-- <td>
                 @if($a6_results->count()>0)
                     @foreach ($a6_results as $a6)
 
@@ -539,7 +535,7 @@ $permissions=json_decode($project_permissions);
                 @endif
 
 
-                </td>
+                </td> --}}
 
 
 
@@ -704,7 +700,7 @@ $permissions=json_decode($project_permissions);
 
          </td>
 
-         <td>
+         {{-- <td>
             @if($a7_results->count()>0)
                 @foreach ($a7_results as $a7)
 
@@ -733,7 +729,7 @@ $permissions=json_decode($project_permissions);
             @endif
 
 
-            </td>
+            </td> --}}
 
 
          </tr>
@@ -886,7 +882,7 @@ $permissions=json_decode($project_permissions);
         </td>
 
 
-        <td>
+        {{-- <td>
             @if($a8_results->count()>0)
                 @foreach ($a8_results as $a8)
 
@@ -915,7 +911,7 @@ $permissions=json_decode($project_permissions);
             @endif
 
 
-            </td>
+            </td> --}}
 
 
         </tr>

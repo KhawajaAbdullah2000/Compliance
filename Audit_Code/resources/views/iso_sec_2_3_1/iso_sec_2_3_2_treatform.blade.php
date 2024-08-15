@@ -129,8 +129,29 @@ $permissions = json_decode($project_permissions);
                                 </tr>
                                 <tr>
                                     <td class="fw-bold">Control is Applicable?</td>
-                                    <td>{{$treatmentData->applicability}}</td>
-                                    <td>{{$after_risk_treatment->applicability}}</td>
+                                    <td>  @if($treatmentData->applicability=='yes')
+                                        Only to this asset component
+                                        @endif
+
+                                        @if($treatmentData->applicability=='yes_to_all')
+                                        To all asset components in this project
+                                        @endif
+
+                                        @if($treatmentData->applicability=='no')
+                                        Not to this asset component
+                                        @endif
+</td>
+                                    <td>@if($after_risk_treatment->applicability=='yes')
+                                        Only to this asset component
+                                        @endif
+
+                                        @if($after_risk_treatment->applicability=='yes_to_all')
+                                        To all asset components in this project
+                                        @endif
+
+                                        @if($after_risk_treatment->applicability=='no')
+                                        Not to this asset component
+                                        @endif</td>
                                 </tr>
                                 <tr>
                                     <td class="fw-bold">Control Compliance</td>
