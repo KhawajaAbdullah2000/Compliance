@@ -44,6 +44,8 @@ $permissions=json_decode($project_permissions);
 
     <h2 class="text-center fw-bold">Information Security Risk Assessment</h2>
 
+    <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md float-end">Assets in this Project</a>
+
     @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
