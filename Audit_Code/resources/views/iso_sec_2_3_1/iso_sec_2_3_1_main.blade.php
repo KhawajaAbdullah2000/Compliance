@@ -181,7 +181,7 @@ $permissions=json_decode($project_permissions);
 
                     @if($a5->applicability!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
-                 <select name="applicability[]" class="form-select">
+                 <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
             <option value='yes+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability=="yes"?'selected':''}}>Only to this asset       component</option>
 
@@ -193,10 +193,12 @@ $permissions=json_decode($project_permissions);
                     </select>
                      {{-- <p>{{$a5->applicability}} </p> --}}
                         @break
+
+
                     @endif
 
                     @if($loop->last)
-                    <select name="applicability[]" class="form-select">
+                    <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
 
                         <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Only to this Asset Component</option>
@@ -208,7 +210,7 @@ $permissions=json_decode($project_permissions);
 
                     @endforeach
                     @else
-                    <select name="applicability[]" class="form-select">
+                    <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
                         <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Only to this Asset Component</option>
                         <option value='yes_to_all+{{$sec2_4_a5_rows[$i][0]}}'>To all asset components in this project</option>
@@ -375,7 +377,7 @@ $permissions=json_decode($project_permissions);
                 @foreach ($a6_results as $a6)
 
                 @if($a6->applicability!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
-                <select name="applicability[]" class="form-select">
+                <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
                     <option value='yes+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability=="yes"?'selected':''}}>Only to this asset component</option>
 
@@ -389,7 +391,7 @@ $permissions=json_decode($project_permissions);
 
                 @if($loop->last)
 
-               <select name="applicability[]" class="form-select">
+               <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
 
                 <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Only to this asset component</option>
@@ -401,7 +403,7 @@ $permissions=json_decode($project_permissions);
                 @endforeach
                 @else
 
-               <select name="applicability[]" class="form-select">
+               <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
 
                 <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Only to this asset component</option>
@@ -565,7 +567,7 @@ $permissions=json_decode($project_permissions);
 
                 @if($a7->applicability!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
 
-                <select name="applicability[]" class="form-select">
+                <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
                     <option value='yes+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability=="yes"?'selected':''}}>Only to this asset component</option>
 
@@ -577,7 +579,7 @@ $permissions=json_decode($project_permissions);
                     @endif
 
                     @if($loop->last)
-                    <select name="applicability[]" class="form-select">
+                    <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
 
                         <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Only to this asset component</option>
@@ -588,7 +590,7 @@ $permissions=json_decode($project_permissions);
 
             @endforeach
         @else
-        <select name="applicability[]" class="form-select">
+        <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
             <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Only to this asset component</option>
             <option value='yes_to_all+{{$sec2_4_a7_rows[$i][0]}}'>To all asset components in this project</option>
             <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>Not to this asset component</option>
@@ -758,7 +760,7 @@ $permissions=json_decode($project_permissions);
 
                 @if($a8->applicability!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
 
-                <select name="applicability[]" class="form-select">
+                <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
                     <option value='yes+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability=="yes"?'selected':''}}>Only to this asset component</option>
                     <option value='yes_to_all+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability=="yes_to_all"?'selected':''}}>To all asset components in this project</option>
@@ -769,7 +771,7 @@ $permissions=json_decode($project_permissions);
                     @endif
 
                     @if($loop->last)
-                    <select name="applicability[]" class="form-select">
+                    <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
                         <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Only to this asset component</option>
                         <option value='yes_to_all+{{$sec2_4_a8_rows[$i][0]}}'>To all asset components in this project</option>
@@ -778,7 +780,7 @@ $permissions=json_decode($project_permissions);
 
             @endforeach
         @else
-        <select name="applicability[]" class="form-select">
+        <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
             <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Only to this asset component</option>
             <option value='yes_to_all+{{$sec2_4_a8_rows[$i][0]}}'>To all asset components in this project</option>
             <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>Not to this asset component</option>
@@ -1098,6 +1100,7 @@ $permissions=json_decode($project_permissions);
 </script> --}}
 
 
+
 <script>
     function validateInput(inputElement) {
 
@@ -1106,6 +1109,13 @@ $permissions=json_decode($project_permissions);
         inputElement.value = Math.floor(inputElement.value);
       }
     }
+
+    function checkapplicability(selectElement) {
+        if (selectElement.value.startsWith("no+")) {
+            alert("This action will apply only to this asset component and its risk level for this control will be changed to zero; this action will not affect the risk levels as they currently stand for the other asset components in this project. Changes will be applied when the 'Save Changes' button is pressed.");
+        }
+    }
+
   </script>
 
 @endsection
