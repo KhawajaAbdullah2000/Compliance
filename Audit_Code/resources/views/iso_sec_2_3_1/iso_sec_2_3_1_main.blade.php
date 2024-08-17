@@ -1110,11 +1110,22 @@ $permissions=json_decode($project_permissions);
       }
     }
 
+    // function checkapplicability(selectElement) {
+    //     if (selectElement.value.startsWith("no+")) {
+    //         alert("This action will apply only to this asset component and its risk level for this control will be changed to zero; this action will not affect the risk levels as they currently stand for the other asset components in this project. Changes will be applied when the 'Save Changes' button is pressed.");
+    //     }
+    // }
+
     function checkapplicability(selectElement) {
-        if (selectElement.value.startsWith("no+")) {
-            alert("This action will apply only to this asset component and its risk level for this control will be changed to zero; this action will not affect the risk levels as they currently stand for the other asset components in this project. Changes will be applied when the 'Save Changes' button is pressed.");
-        }
+    if (selectElement.value.startsWith("no+")) {
+        swal({
+            
+            text: "This action will apply only to this asset component and its risk level for this control will be changed to zero; this action will not affect the risk levels as they currently stand for the other asset components in this project. Changes will be applied when the 'Save Changes' button is pressed.",
+            icon: "warning",  // You can change the icon to "info", "success", or "error" as needed
+            button: "OK",
+        });
     }
+}
 
   </script>
 
