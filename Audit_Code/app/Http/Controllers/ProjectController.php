@@ -290,20 +290,33 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
               if($project->project_type==4){
 
 
-                $results = DB::table('iso_sec_2_1')
-                ->join('iso_sec_2_3_1', 'iso_sec_2_1.assessment_id', '=', 'iso_sec_2_3_1.asset_id')
-                ->select(
-                    'iso_sec_2_1.s_name',
-                    'iso_sec_2_1.c_name',
-                    DB::raw('MAX(iso_sec_2_3_1.risk_level) as max_risk_level'),
-                    DB::raw('MIN(iso_sec_2_3_1.risk_level) as min_risk_level'),
-                    DB::raw('((MAX(iso_sec_2_3_1.risk_level) + MIN(iso_sec_2_3_1.risk_level)) / 2) as average_risk_level')
-                    )
+                // $results = DB::table('iso_sec_2_1')
+                // ->join('iso_sec_2_3_1', 'iso_sec_2_1.assessment_id', '=', 'iso_sec_2_3_1.asset_id')
+                // ->select(
+                //     'iso_sec_2_1.s_name',
+                //     'iso_sec_2_1.c_name',
+                //     DB::raw('MAX(iso_sec_2_3_1.risk_level) as max_risk_level'),
+                //     DB::raw('MIN(iso_sec_2_3_1.risk_level) as min_risk_level'),
+                //     DB::raw('((MAX(iso_sec_2_3_1.risk_level) + MIN(iso_sec_2_3_1.risk_level)) / 2) as average_risk_level')
+                //     )
 
-                ->where('iso_sec_2_1.project_id', $proj_id)
-                ->groupBy('iso_sec_2_1.s_name', 'iso_sec_2_1.c_name')
-                ->get()
-                ->groupBy('s_name');
+                // ->where('iso_sec_2_1.project_id', $proj_id)
+                // ->groupBy('iso_sec_2_1.s_name', 'iso_sec_2_1.c_name')
+                // ->get()
+                // ->groupBy('s_name');
+                $results = DB::table('iso_sec_2_1 as i1')
+        ->join('iso_sec_2_3_1 as i2', 'i1.assessment_id', '=', 'i2.asset_id')
+        ->select(
+            'i1.s_name',
+            DB::raw('COUNT(DISTINCT i1.c_name) as total_asset_components'),
+            DB::raw("SUM(CASE WHEN i2.applicability IN ('yes', 'yes_to_all') THEN 1 ELSE 0 END) as applicable_asset_components"),
+            DB::raw("SUM(CASE WHEN i2.applicability = 'no' THEN 1 ELSE 0 END) as not_applicable_asset_components")
+        )
+        ->where('i1.project_id', $proj_id)
+        ->groupBy('i1.s_name')
+        ->get();
+
+    
 
 
                 return view('dashboard.ai_wizard',[
