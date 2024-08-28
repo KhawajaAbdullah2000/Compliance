@@ -289,22 +289,7 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
 
               if($project->project_type==4){
 
-
-                // $results = DB::table('iso_sec_2_1')
-                // ->join('iso_sec_2_3_1', 'iso_sec_2_1.assessment_id', '=', 'iso_sec_2_3_1.asset_id')
-                // ->select(
-                //     'iso_sec_2_1.s_name',
-                //     'iso_sec_2_1.c_name',
-                //     DB::raw('MAX(iso_sec_2_3_1.risk_level) as max_risk_level'),
-                //     DB::raw('MIN(iso_sec_2_3_1.risk_level) as min_risk_level'),
-                //     DB::raw('((MAX(iso_sec_2_3_1.risk_level) + MIN(iso_sec_2_3_1.risk_level)) / 2) as average_risk_level')
-                //     )
-
-                // ->where('iso_sec_2_1.project_id', $proj_id)
-                // ->groupBy('iso_sec_2_1.s_name', 'iso_sec_2_1.c_name')
-                // ->get()
-                // ->groupBy('s_name');
-                $results = DB::table('iso_sec_2_1 as i1')
+    $results = DB::table('iso_sec_2_1 as i1')
         ->join('iso_sec_2_3_1 as i2', 'i1.assessment_id', '=', 'i2.asset_id')
         ->select(
             'i1.s_name',
@@ -316,12 +301,38 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
         ->groupBy('i1.s_name')
         ->get();
 
-    
 
 
+      
+        $results2 = DB::table('iso_sec_2_3_1')
+        ->select(
+            'iso_sec_2_1.s_name',
+            DB::raw('COUNT(DISTINCT iso_sec_2_1.c_name) as total_asset_components'),
+            DB::raw('MAX(iso_sec_2_3_1.risk_level) as max_risk'),
+            DB::raw('MIN(iso_sec_2_3_1.risk_level) as min_risk'),
+            DB::raw('SUM(iso_sec_2_3_1.risk_level) / COUNT(iso_sec_2_3_1.risk_level) as avg_risk'),
+            DB::raw('MIN(iso_risk_treatment.treatment_target_date) as earliest_treatment_target_date'),
+            DB::raw('MAX(iso_risk_treatment.treatment_target_date) as farthest_treatment_target_date'),
+            DB::raw('MIN(iso_risk_treatment.acceptance_actual_date) as earliest_acceptance_actual_date'),
+            DB::raw('MAX(iso_risk_treatment.acceptance_actual_date) as farthest_acceptance_actual_date')
+        )
+        ->join('iso_sec_2_1', 'iso_sec_2_3_1.asset_id', '=', 'iso_sec_2_1.assessment_id')
+        ->join('iso_risk_treatment', function($join) {
+            $join->on('iso_sec_2_3_1.asset_id', '=', 'iso_risk_treatment.asset_id')
+                 ->on('iso_sec_2_3_1.project_id', '=', 'iso_risk_treatment.project_id')
+                 ->on('iso_sec_2_3_1.assessment_id', '=', 'iso_risk_treatment.assessment_id');
+        })
+        ->where('iso_sec_2_3_1.project_id', $proj_id)
+        ->groupBy('iso_sec_2_1.s_name')
+        ->get();
+       
+        $project_date=Db::table('projects')->where('project_id',$proj_id)->first();
+       
                 return view('dashboard.ai_wizard',[
                     'project'=>$project,
-                    'results'=>$results
+                    'results'=>$results,
+                    'results2'=>$results2,
+                    'project_date'=>$project_date->project_creation_date
                 ]);
 
             }else{
