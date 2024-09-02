@@ -308,6 +308,9 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
         ->select(
             'iso_sec_2_1.s_name',
             DB::raw('COUNT(DISTINCT iso_sec_2_1.c_name) as total_asset_components'),
+            DB::raw("SUM(CASE WHEN iso_sec_2_3_1.applicability != 'no' AND iso_sec_2_3_1.risk_level BETWEEN 0 AND 3 THEN 1 ELSE 0 END) as low_risk_count"),
+            DB::raw("SUM(CASE WHEN iso_sec_2_3_1.applicability != 'no' AND iso_sec_2_3_1.risk_level > 3 AND iso_sec_2_3_1.risk_level <= 7 THEN 1 ELSE 0 END) as medium_risk_count"),
+            DB::raw("SUM(CASE WHEN iso_sec_2_3_1.applicability != 'no' AND iso_sec_2_3_1.risk_level > 7 AND iso_sec_2_3_1.risk_level <= 10 THEN 1 ELSE 0 END) as high_risk_count"),
             DB::raw('MAX(iso_sec_2_3_1.risk_level) as max_risk'),
             DB::raw('MIN(iso_sec_2_3_1.risk_level) as min_risk'),
             DB::raw('SUM(iso_sec_2_3_1.risk_level) / COUNT(iso_sec_2_3_1.risk_level) as avg_risk'),
@@ -326,6 +329,8 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
         ->groupBy('iso_sec_2_1.s_name')
         ->get();
        
+
+     
         $project_date=Db::table('projects')->where('project_id',$proj_id)->first();
        
                 return view('dashboard.ai_wizard',[

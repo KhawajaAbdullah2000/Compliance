@@ -72,6 +72,9 @@
                         <tr>
                             <th>Service Name</th>
                             <th>Total Asset Components</th>
+                            <th>High risk for all controls</th>
+                            <th>Medium risk for all controls</th>
+                            <th>Low risk for all controls</th>
                             <th>Highest for any asset component</th>
                             <th>Lowst for any assest component</th>
                             <th>Median for any asset component</th>
@@ -87,6 +90,9 @@
                             <tr>
                                 <td>{{ $result->s_name }}</td>
                                 <td>{{$result->total_asset_components}}</td>
+                                <td>{{ $result->high_risk_count }}</td>
+                                <td>{{ $result->medium_risk_count }}</td>
+                                <td>{{ $result->low_risk_count }}</td>
                                 <td>{{ $result->max_risk }}</td>
                                 <td>{{ $result->min_risk }}</td>
                                 <td>{{ number_format($result->avg_risk, 5) }}</td>
