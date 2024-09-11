@@ -33,27 +33,27 @@
     </div>
 
 
-        @if($servicesInProjects->count() > 0)
+        @if($results->count() > 0)
 
-        <h3>Projects and Services</h3>
+        <h3>Project: {{$project->project_name}}</h3>
         <div class="row mt-4">
             <div class="col-lg-12">
                 <table class="table table-hover table-dark">
                     <thead>
                         <tr>
-                            <th>Project Name</th>
-                            <th>No. of Services</th>
+                            <th>Service Name</th>
+                            <th>No. of Asset Components</th>
 
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($servicesInProjects as $result)
+                        @foreach($results as $result)
                         <tr>
-                            <td><a  href="/iso_sections/{{$result->project_id}}/{{auth()->user()->id}}">
-                                {{ $result->project_name }}</a>
+                            <td><a href="/services_controls_dashboard/{{$result->project_id}}/{{auth()->user()->id}}/{{$result->s_name}}">
+                                {{ $result->s_name }}</a>
                                </td>
-                            <td><a class="btn btn-primary btn-md px-4" href="/dashboard_services_and_components/{{$result->project_id}}/{{auth()->user()->id}}">
-                                {{ $result->services }}</a>
+                            <td><a class="btn btn-primary btn-md px-4" href="/components_control_dashboard/{{$project->project_id}}/{{auth()->user()->id}}/{{$result->s_name}}" >
+                                {{ $result->component_count }}</a>
                                </td>
 
                         </tr>
@@ -66,7 +66,7 @@
 
 
         @else
-            <h2 class="fw-bold">No Projects yet</h2>
+            <h2 class="fw-bold">No Services added yet</h2>
         @endif
 
 

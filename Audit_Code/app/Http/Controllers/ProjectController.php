@@ -287,64 +287,76 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
                 $project=Project::join('project_types','projects.project_type','project_types.id')
                 ->where('projects.project_id',$proj_id)->first();
 
-              if($project->project_type==4){
+              if($project){
 
-    $results = DB::table('iso_sec_2_1 as i1')
-        ->join('iso_sec_2_3_1 as i2', 'i1.assessment_id', '=', 'i2.asset_id')
-        ->select(
-            'i1.s_name',
-            DB::raw('COUNT(DISTINCT i1.c_name) as total_asset_components'),
-            DB::raw("SUM(CASE WHEN i2.applicability IN ('yes', 'yes_to_all') THEN 1 ELSE 0 END) as applicable_asset_components"),
-            DB::raw("SUM(CASE WHEN i2.applicability = 'no' THEN 1 ELSE 0 END) as not_applicable_asset_components")
-        )
-        ->where('i1.project_id', $proj_id)
-        ->groupBy('i1.s_name')
-        ->get();
+                $user=Db::table('users')->where('id',$user_id)->first();
+
+                $servicesInProject= DB::table('projects')
+                ->join('iso_sec_2_1', 'projects.project_id', '=', 'iso_sec_2_1.project_id')
+                ->select('projects.project_name','projects.project_id', DB::raw('COUNT(DISTINCT iso_sec_2_1.s_name) as services'))
+                ->groupBy('projects.project_id', 'projects.project_name')
+                ->get();
+
+                //dd($servicesInProject);
 
 
+    // $results = DB::table('iso_sec_2_1 as i1')
+    //     ->join('iso_sec_2_3_1 as i2', 'i1.assessment_id', '=', 'i2.asset_id')
+    //     ->select(
+    //         'i1.s_name',
+    //         DB::raw('COUNT(DISTINCT i1.c_name) as total_asset_components'),
+    //         DB::raw("SUM(CASE WHEN i2.applicability IN ('yes', 'yes_to_all') THEN 1 ELSE 0 END) as applicable_asset_components"),
+    //         DB::raw("SUM(CASE WHEN i2.applicability = 'no' THEN 1 ELSE 0 END) as not_applicable_asset_components")
+    //     )
+    //     ->where('i1.project_id', $proj_id)
+    //     ->groupBy('i1.s_name')
+    //     ->get();
 
-      
-        $results2 = DB::table('iso_sec_2_3_1')
-        ->select(
-            'iso_sec_2_1.s_name',
-            DB::raw('COUNT(DISTINCT iso_sec_2_1.c_name) as total_asset_components'),
-            DB::raw("SUM(CASE WHEN iso_sec_2_3_1.applicability != 'no' AND iso_sec_2_3_1.risk_level BETWEEN 0 AND 3 THEN 1 ELSE 0 END) as low_risk_count"),
-            DB::raw("SUM(CASE WHEN iso_sec_2_3_1.applicability != 'no' AND iso_sec_2_3_1.risk_level > 3 AND iso_sec_2_3_1.risk_level <= 7 THEN 1 ELSE 0 END) as medium_risk_count"),
-            DB::raw("SUM(CASE WHEN iso_sec_2_3_1.applicability != 'no' AND iso_sec_2_3_1.risk_level > 7 AND iso_sec_2_3_1.risk_level <= 10 THEN 1 ELSE 0 END) as high_risk_count"),
-            DB::raw('MAX(iso_sec_2_3_1.risk_level) as max_risk'),
-            DB::raw('MIN(iso_sec_2_3_1.risk_level) as min_risk'),
-            DB::raw('SUM(iso_sec_2_3_1.risk_level) / COUNT(iso_sec_2_3_1.risk_level) as avg_risk'),
-            DB::raw('MIN(iso_risk_treatment.treatment_target_date) as earliest_treatment_target_date'),
-            DB::raw('MAX(iso_risk_treatment.treatment_target_date) as farthest_treatment_target_date'),
-            DB::raw('MIN(iso_risk_treatment.acceptance_actual_date) as earliest_acceptance_actual_date'),
-            DB::raw('MAX(iso_risk_treatment.acceptance_actual_date) as farthest_acceptance_actual_date')
-        )
-        ->join('iso_sec_2_1', 'iso_sec_2_3_1.asset_id', '=', 'iso_sec_2_1.assessment_id')
-        ->join('iso_risk_treatment', function($join) {
-            $join->on('iso_sec_2_3_1.asset_id', '=', 'iso_risk_treatment.asset_id')
-                 ->on('iso_sec_2_3_1.project_id', '=', 'iso_risk_treatment.project_id')
-                 ->on('iso_sec_2_3_1.assessment_id', '=', 'iso_risk_treatment.assessment_id');
-        })
-        ->where('iso_sec_2_3_1.project_id', $proj_id)
-        ->groupBy('iso_sec_2_1.s_name')
-        ->get();
-       
 
-     
+
+
+        // $results2 = DB::table('iso_sec_2_3_1')
+        // ->select(
+        //     'iso_sec_2_1.s_name',
+        //     DB::raw('COUNT(DISTINCT iso_sec_2_1.c_name) as total_asset_components'),
+        //     DB::raw("SUM(CASE WHEN iso_sec_2_3_1.applicability != 'no' AND iso_sec_2_3_1.risk_level BETWEEN 0 AND 3 THEN 1 ELSE 0 END) as low_risk_count"),
+        //     DB::raw("SUM(CASE WHEN iso_sec_2_3_1.applicability != 'no' AND iso_sec_2_3_1.risk_level > 3 AND iso_sec_2_3_1.risk_level <= 7 THEN 1 ELSE 0 END) as medium_risk_count"),
+        //     DB::raw("SUM(CASE WHEN iso_sec_2_3_1.applicability != 'no' AND iso_sec_2_3_1.risk_level > 7 AND iso_sec_2_3_1.risk_level <= 10 THEN 1 ELSE 0 END) as high_risk_count"),
+        //     DB::raw('MAX(iso_sec_2_3_1.risk_level) as max_risk'),
+        //     DB::raw('MIN(iso_sec_2_3_1.risk_level) as min_risk'),
+        //     DB::raw('SUM(iso_sec_2_3_1.risk_level) / COUNT(iso_sec_2_3_1.risk_level) as avg_risk'),
+        //     DB::raw('MIN(iso_risk_treatment.treatment_target_date) as earliest_treatment_target_date'),
+        //     DB::raw('MAX(iso_risk_treatment.treatment_target_date) as farthest_treatment_target_date'),
+        //     DB::raw('MIN(iso_risk_treatment.acceptance_actual_date) as earliest_acceptance_actual_date'),
+        //     DB::raw('MAX(iso_risk_treatment.acceptance_actual_date) as farthest_acceptance_actual_date')
+        // )
+        // ->join('iso_sec_2_1', 'iso_sec_2_3_1.asset_id', '=', 'iso_sec_2_1.assessment_id')
+        // ->join('iso_risk_treatment', function($join) {
+        //     $join->on('iso_sec_2_3_1.asset_id', '=', 'iso_risk_treatment.asset_id')
+        //          ->on('iso_sec_2_3_1.project_id', '=', 'iso_risk_treatment.project_id')
+        //          ->on('iso_sec_2_3_1.assessment_id', '=', 'iso_risk_treatment.assessment_id');
+        // })
+        // ->where('iso_sec_2_3_1.project_id', $proj_id)
+        // ->groupBy('iso_sec_2_1.s_name')
+        // ->get();
+
+
+
         $project_date=Db::table('projects')->where('project_id',$proj_id)->first();
-       
+
                 return view('dashboard.ai_wizard',[
                     'project'=>$project,
-                    'results'=>$results,
-                    'results2'=>$results2,
+                    'servicesInProjects'=>$servicesInProject,
                     'project_date'=>$project_date->project_creation_date
                 ]);
 
             }else{
-                return view('dashboard.ai_wizard',[
-                    'project'=>$project
+                //Prject not found
+                return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+                // return view('dashboard.ai_wizard',[
+                //     'project'=>$project
 
-                ]);
+                // ]);
 
             }
 
@@ -352,6 +364,124 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
                 return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
             }
         }
+
+        public function dashboard_services_and_components($proj_id,$user_id){
+            if($user_id==auth()->user()->id){
+                $project=Project::join('project_types','projects.project_type','project_types.id')
+                ->where('projects.project_id',$proj_id)->first();
+
+              if($project){
+                $results = DB::table('iso_sec_2_1')
+                ->select('project_id','s_name', DB::raw('COUNT(DISTINCT c_name) as component_count'))
+                ->where('project_id', $proj_id)
+                ->groupBy('s_name','project_id')
+                ->get();
+
+
+               return view('dashboard.components_in_services',[
+                'project_id'=>$proj_id,
+                'project'=>$project,
+                'results'=>$results
+               ]);
+
+              }else{
+                return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+              }
+
+        }
+
+    }
+
+    public function services_controls_dashboard($proj_id,$user_id,$s_name){
+        if($user_id==auth()->user()->id){
+            $project=Project::join('project_types','projects.project_type','project_types.id')
+            ->where('projects.project_id',$proj_id)->first();
+
+            if($project){
+                $results = DB::table('iso_sec_2_3_1 as risk_assessment')
+                ->join('iso_sec_2_1 as components', 'risk_assessment.asset_id', '=', 'components.assessment_id')
+                ->select(
+                    DB::raw('
+                        CASE
+                            WHEN risk_assessment.risk_level BETWEEN 0 AND 3 THEN "Low"
+                            WHEN risk_assessment.risk_level BETWEEN 4 AND 7 THEN "Medium"
+                            WHEN risk_assessment.risk_level BETWEEN 8 AND 10 THEN "High"
+                            ELSE "Unknown"
+                        END as risk_category'),
+                    DB::raw('LEFT(risk_assessment.control_num, 1) as control_number_start'),
+                    DB::raw('COUNT(*) as total_controls')
+                )
+                ->where('components.project_id', $proj_id)
+                ->where('components.s_name',$s_name)
+                ->groupBy('control_number_start', 'risk_category')
+                ->orderBy('control_number_start')
+                ->get();
+
+                $num_of_components = DB::table('iso_sec_2_1')
+                ->select( DB::raw('COUNT(DISTINCT c_name) as component_count'))
+                ->where('project_id', $proj_id)
+                ->where('s_name',$s_name)
+                ->first();
+
+
+
+                return view('dashboard.services_controls_dashboard',[
+                    'project'=>$project,
+                    'num_of_components'=>$num_of_components,
+                    'results'=>$results,
+                    's_name'=>$s_name
+                ]);
+
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+
+    }
+
+    public function components_control_dashboard($proj_id,$user_id,$s_name){
+        if($user_id==auth()->user()->id){
+            $project=Project::join('project_types','projects.project_type','project_types.id')
+            ->where('projects.project_id',$proj_id)->first();
+
+            if($project){
+                $results = DB::table('iso_sec_2_3_1 as risk_assessment')
+                ->join('iso_sec_2_1 as components', 'risk_assessment.asset_id', '=', 'components.assessment_id')
+                ->select(
+                    'components.c_name',
+                    DB::raw('
+                        CASE
+                            WHEN risk_assessment.risk_level BETWEEN 0 AND 3 THEN "Low"
+                            WHEN risk_assessment.risk_level BETWEEN 4 AND 7 THEN "Medium"
+                            WHEN risk_assessment.risk_level BETWEEN 8 AND 10 THEN "High"
+                            ELSE "Unknown"
+                        END as risk_category'),
+                    DB::raw('LEFT(risk_assessment.control_num, 1) as control_number_start'),
+                    DB::raw('COUNT(*) as total_controls')
+                )
+                ->where('components.project_id', $proj_id)
+                ->where('components.s_name', $s_name)
+                ->groupBy('components.c_name', 'control_number_start', 'risk_category')
+                ->orderBy('components.c_name')
+                ->orderBy('control_number_start')
+                ->get();
+
+
+
+
+                return view('dashboard.components_controls_dashboard',[
+                    'project'=>$project,
+                    'results'=>$results,
+                    's_name'=>$s_name
+                ]);
+
+
+
+            }
+
+        }
+        return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+
+    }
 
     public function reports($proj_id, $user_id)
     {

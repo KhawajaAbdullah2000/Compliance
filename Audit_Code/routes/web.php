@@ -132,6 +132,11 @@ route::get("/my_personal_dashboard/{user_id}",[ProjectController::class,'my_pers
 
 //ai wizard
 route::get("ai_wizard/{proj_id}/{user_id}",[ProjectController::class,'ai_wizard'])->name('ai_wizard');
+route::get('dashboard_services_and_components/{proj_id}/{user_id}',[ProjectController::class,'dashboard_services_and_components']);
+route::get('services_controls_dashboard/{proj_id}/{user_id}/{s_name}',[ProjectController::class,'services_controls_dashboard']);
+route::get('components_control_dashboard/{proj_id}/{user_id}/{s_name}',[ProjectController::class,'components_control_dashboard']);
+
+
 
 
 

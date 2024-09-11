@@ -147,7 +147,7 @@ class IsoSec2_1 extends Controller
         $filepath = public_path('ISO_SOA_A5.xlsx');
         $sec2_4_a5_data = Excel::toArray([], $filepath); //with header
         $sec2_4_a5_rows = array_slice($sec2_4_a5_data[0], 1); //without header(first row)
-    
+
 
         $filepath2 = public_path('ISO_SOA_A6.xlsx');
         $sec2_4_a6_data = Excel::toArray([], $filepath2); //with header
@@ -193,7 +193,7 @@ class IsoSec2_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
+
                         try {
                             Db::table('iso_sec_2_1')->insert([
                                 'project_id' => $proj_id,
@@ -208,7 +208,7 @@ class IsoSec2_1 extends Controller
                                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                             ]);
 
-                 
+
 
 
                         } catch (\Exception $e) {
@@ -224,7 +224,7 @@ class IsoSec2_1 extends Controller
 
                         return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                             ->with('success', 'Record Added successfully');
-                    }
+
                 }
             }
         }
@@ -249,7 +249,6 @@ class IsoSec2_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
 
                         $project=Project::join('project_types','projects.project_type','project_types.id')
                         ->where('projects.project_id',$proj_id)->first();
@@ -261,7 +260,7 @@ class IsoSec2_1 extends Controller
                             'project_permissions' => $checkpermission->project_permissions,
                             'project'=>$project
                         ]);
-                    }
+
                 }
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
