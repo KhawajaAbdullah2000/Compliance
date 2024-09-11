@@ -32,36 +32,87 @@
         </div>
     </div>
 
-    @if($project->project_type==4)
+    @if($project->project_type == 4)
 
-    @if($results->count() > 0)
+        @if($results->count() > 0)
 
-        @foreach ($results as $service_name => $components)
-            <h2 class="fw-bold mt-5">Risk Levels for {{ $service_name }}</h2>
-            <table class="table table-primary table-responsive">
-                <thead>
-                    <tr>
-                        <th>Asset Component Name</th>
-                        <th>Highest Risk level</th>
-                        <th>Lowest Risk level</th>
-                        <th>Mean Risk Level (Calculated)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($components as $res)
+        <h3>Report Name: ISO 27001:2022 Statement of Applicability (SoA) Analytics </h3>
+        <div class="row mt-4">
+            <div class="col-lg-12">
+                <table class="table table-hover table-dark">
+                    <thead>
                         <tr>
-                            <td>{{$res->c_name}}</td>
-                            <td>{{$res->max_risk_level}}</td>
-                            <td>{{$res->min_risk_level}}</td>
-                            <td>{{ number_format($res->average_risk_level, 4) }}</td>
+                            <th>Service Name</th>
+                            <th>Total Asset Components</th>
+                            <th>On which Annex A controls are applicable</th>
+                            <th>On which Annex A controls are not applicable</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        @endforeach
-    @else
-        <h2 class="fw-bold">No risk assessment done yet</h2>
-    @endif
+                    </thead>
+                    <tbody>
+                        @foreach($results as $result)
+                        <tr>
+                            <td>{{ $result->s_name }}</td>
+                            <td>{{ $result->total_asset_components }}</td>
+                            <td>{{ $result->applicable_asset_components }}</td>
+                            <td>{{ $result->not_applicable_asset_components }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <h3 class="mt-4">Report Name: Information Security Risk Analytics </h3>
+
+        <div class="row mt-4">
+
+            <div class="col-md-12">
+                <table class="table table-hover table-primary">
+                    <thead>
+                        <tr>
+                            <th>Service Name</th>
+                            <th>Total Asset Components</th>
+                            <th>High risk for all controls</th>
+                            <th>Medium risk for all controls</th>
+                            <th>Low risk for all controls</th>
+                            <th>Highest for any asset component</th>
+                            <th>Lowst for any assest component</th>
+                            <th>Median for any asset component</th>
+                            <th>Project Creation Date</th>
+                            <th>Earliest Treatment Target Date for any asset component</th>
+                            <th>Farthest Treatment Target Date for any asset component</th>
+                            <th>Earliest Treatment Actual COmpletion Date for any asset component</th>
+                            <th>Farthest Treatment Actual COmpletion Date for any asset component</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($results2 as $result)
+                            <tr>
+                                <td>{{ $result->s_name }}</td>
+                                <td>{{$result->total_asset_components}}</td>
+                                <td>{{ $result->high_risk_count }}</td>
+                                <td>{{ $result->medium_risk_count }}</td>
+                                <td>{{ $result->low_risk_count }}</td>
+                                <td>{{ $result->max_risk }}</td>
+                                <td>{{ $result->min_risk }}</td>
+                                <td>{{ number_format($result->avg_risk, 5) }}</td>
+                                <td>{{$project_date}}</td>
+                                <td>{{ $result->earliest_treatment_target_date }}</td>
+                                <td>{{ $result->farthest_treatment_target_date }}</td>
+                                <td>{{ $result->earliest_acceptance_actual_date }}</td>
+                                <td>{{ $result->farthest_acceptance_actual_date }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+        @else
+            <h2 class="fw-bold">No risk assessment done yet</h2>
+        @endif
 
     @endif
 </div>

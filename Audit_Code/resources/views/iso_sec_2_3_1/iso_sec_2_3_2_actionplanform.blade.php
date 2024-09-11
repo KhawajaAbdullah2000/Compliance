@@ -193,6 +193,14 @@ $permissions=json_decode($project_permissions);
                 @endif
               </div>
 
+              <div class="form-group mt-4">
+                <label for=""> Actual Acceptane date</label>
+                <input type="date" name="acceptance_actual_date" value="{{old('acceptance_actual_date',$treatmentData->acceptance_actual_date)}}">
+                    @if($errors->has('acceptance_actual_date'))
+                    <div class="text-danger">{{ $errors->first('acceptance_actual_date') }}</div>
+                @endif
+              </div>
+
 
 
 

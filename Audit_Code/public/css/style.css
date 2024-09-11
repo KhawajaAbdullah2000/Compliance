@@ -15,6 +15,12 @@ body {
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.custom-badge {
+    font-size: 0.90rem;  /* Increase the font size */
+    padding: 0.5em 1em;  /* Adjust the padding */
+    border-radius: 0.5rem;  /* Optional: Make the badge more rounded */
+}
+
 #sidebar {
     min-width: 300px;
     max-width: 300px;

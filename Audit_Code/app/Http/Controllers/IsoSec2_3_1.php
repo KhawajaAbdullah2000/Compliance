@@ -861,6 +861,7 @@ class IsoSec2_3_1 extends Controller
             'treatment_target_date' => '',
             'treatment_comp_date' => '',
             'responsibility_for_treatment' => '',
+            'acceptance_actual_date'
         ]);
 
 
@@ -887,6 +888,7 @@ class IsoSec2_3_1 extends Controller
                                 'treatment_target_date' => $req->treatment_target_date,
                                 'treatment_comp_date' => $req->treatment_comp_date,
                                 'responsibility_for_treatment' => $req->responsibility_for_treatment,
+                                'acceptance_actual_date'=>$req->acceptance_actual_date,
                                 'last_edited_by' => $user_id,
                                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                             ]);

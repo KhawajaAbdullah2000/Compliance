@@ -133,7 +133,8 @@ $permissions=json_decode($project_permissions);
                 <col style="width: 100px;">
                 <col style="width: 100px;">
                 <col style="width: 100px;">
-                <col style="width: 200px;">
+                <col style="width: 150px;">
+                <col style="width: 250px;">
                 <col style="width: 100px;">
             </colgroup>
 
@@ -156,6 +157,7 @@ $permissions=json_decode($project_permissions);
                     <input type="checkbox" id="selectAllThreat" /> --}}
                 </th>
                 <th>Risk Level</th>
+                <th>Risk Category</th> 
                <th>Edit</th>
 
               </tr>
@@ -181,7 +183,7 @@ $permissions=json_decode($project_permissions);
 
                     @if($a5->applicability!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
-                 <select name="applicability[]" class="form-select">
+                 <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
             <option value='yes+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability=="yes"?'selected':''}}>Only to this asset       component</option>
 
@@ -193,10 +195,12 @@ $permissions=json_decode($project_permissions);
                     </select>
                      {{-- <p>{{$a5->applicability}} </p> --}}
                         @break
+
+
                     @endif
 
                     @if($loop->last)
-                    <select name="applicability[]" class="form-select">
+                    <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
 
                         <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Only to this Asset Component</option>
@@ -208,7 +212,7 @@ $permissions=json_decode($project_permissions);
 
                     @endforeach
                     @else
-                    <select name="applicability[]" class="form-select">
+                    <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
                         <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Only to this Asset Component</option>
                         <option value='yes_to_all+{{$sec2_4_a5_rows[$i][0]}}'>To all asset components in this project</option>
@@ -315,6 +319,43 @@ $permissions=json_decode($project_permissions);
 
                 </td>
 
+                <td>
+                    @if($a5_results->count()>0)
+                        @foreach ($a5_results as $a5)
+                            @if($a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+                                @php
+                                    $riskLevel = $a5->risk_level;
+                                    $riskCategory = '';
+                                    $badgeClass = '';
+                                    if ($riskLevel <= 3) {
+                                        $riskCategory = 'Low risk';
+                                        $badgeClass = 'badge bg-success';
+                                    } elseif ($riskLevel > 3 && $riskLevel <= 7) {
+                                        $riskCategory = 'Medium risk';
+                                        $badgeClass = 'badge bg-warning';
+                                    } elseif ($riskLevel > 7 && $riskLevel <= 10) {
+                                        $riskCategory = 'High risk';
+                                        $badgeClass = 'badge bg-danger';
+                                    }
+                                @endphp
+                                <span class="{{ $badgeClass }} custom-badge">{{ $riskCategory }}</span>
+                                @break
+                            @endif
+
+                            @if($loop->last)
+                                <span class="badge bg-secondary">No Risk</span>
+                            @endif
+                        @endforeach
+                    @else
+                        <span class="badge bg-secondary">No Risk</span>
+                    @endif
+                </td>
+
+
+
+
+
+
                  <td>
                 @if($a5_results->count()>0)
                     @foreach ($a5_results as $a5)
@@ -375,7 +416,7 @@ $permissions=json_decode($project_permissions);
                 @foreach ($a6_results as $a6)
 
                 @if($a6->applicability!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
-                <select name="applicability[]" class="form-select">
+                <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
                     <option value='yes+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability=="yes"?'selected':''}}>Only to this asset component</option>
 
@@ -389,7 +430,7 @@ $permissions=json_decode($project_permissions);
 
                 @if($loop->last)
 
-               <select name="applicability[]" class="form-select">
+               <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
 
                 <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Only to this asset component</option>
@@ -401,7 +442,7 @@ $permissions=json_decode($project_permissions);
                 @endforeach
                 @else
 
-               <select name="applicability[]" class="form-select">
+               <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
 
                 <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Only to this asset component</option>
@@ -507,6 +548,38 @@ $permissions=json_decode($project_permissions);
 
             </td>
 
+            <td>
+                @if($a6_results->count()>0)
+                    @foreach ($a6_results as $a6)
+                        @if($a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+                            @php
+                                $riskLevel = $a6->risk_level;
+                                $riskCategory = '';
+                                $badgeClass = '';
+                                if ($riskLevel <= 3) {
+                                    $riskCategory = 'Low risk';
+                                    $badgeClass = 'badge bg-success';
+                                } elseif ($riskLevel > 3 && $riskLevel <= 7) {
+                                    $riskCategory = 'Medium risk';
+                                    $badgeClass = 'badge bg-warning';
+                                } elseif ($riskLevel > 7 && $riskLevel <= 10) {
+                                    $riskCategory = 'High risk';
+                                    $badgeClass = 'badge bg-danger';
+                                }
+                            @endphp
+                            <span class="{{ $badgeClass }} custom-badge">{{ $riskCategory }}</span>
+                            @break
+                        @endif
+
+                        @if($loop->last)
+                            <span class="badge bg-secondary">No Risk</span>
+                        @endif
+                    @endforeach
+                @else
+                    <span class="badge bg-secondary">No Risk</span>
+                @endif
+            </td>
+
 
              <td>
                 @if($a6_results->count()>0)
@@ -565,7 +638,7 @@ $permissions=json_decode($project_permissions);
 
                 @if($a7->applicability!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
 
-                <select name="applicability[]" class="form-select">
+                <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
                     <option value='yes+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability=="yes"?'selected':''}}>Only to this asset component</option>
 
@@ -577,7 +650,7 @@ $permissions=json_decode($project_permissions);
                     @endif
 
                     @if($loop->last)
-                    <select name="applicability[]" class="form-select">
+                    <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
 
                         <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Only to this asset component</option>
@@ -588,7 +661,7 @@ $permissions=json_decode($project_permissions);
 
             @endforeach
         @else
-        <select name="applicability[]" class="form-select">
+        <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
             <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Only to this asset component</option>
             <option value='yes_to_all+{{$sec2_4_a7_rows[$i][0]}}'>To all asset components in this project</option>
             <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>Not to this asset component</option>
@@ -702,6 +775,38 @@ $permissions=json_decode($project_permissions);
 
          </td>
 
+         <td>
+            @if($a7_results->count()>0)
+                @foreach ($a7_results as $a7)
+                    @if($a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+                        @php
+                            $riskLevel = $a7->risk_level;
+                            $riskCategory = '';
+                            $badgeClass = '';
+                            if ($riskLevel <= 3) {
+                                $riskCategory = 'Low risk';
+                                $badgeClass = 'badge bg-success';
+                            } elseif ($riskLevel > 3 && $riskLevel <= 7) {
+                                $riskCategory = 'Medium risk';
+                                $badgeClass = 'badge bg-warning';
+                            } elseif ($riskLevel > 7 && $riskLevel <= 10) {
+                                $riskCategory = 'High risk';
+                                $badgeClass = 'badge bg-danger';
+                            }
+                        @endphp
+                        <span class="{{ $badgeClass }} custom-badge">{{ $riskCategory }}</span>
+                        @break
+                    @endif
+
+                    @if($loop->last)
+                        <span class="badge bg-secondary">No Risk</span>
+                    @endif
+                @endforeach
+            @else
+                <span class="badge bg-secondary">No Risk</span>
+            @endif
+        </td>
+
           <td>
             @if($a7_results->count()>0)
                 @foreach ($a7_results as $a7)
@@ -758,7 +863,7 @@ $permissions=json_decode($project_permissions);
 
                 @if($a8->applicability!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
 
-                <select name="applicability[]" class="form-select">
+                <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
                     <option value='yes+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability=="yes"?'selected':''}}>Only to this asset component</option>
                     <option value='yes_to_all+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability=="yes_to_all"?'selected':''}}>To all asset components in this project</option>
@@ -769,7 +874,7 @@ $permissions=json_decode($project_permissions);
                     @endif
 
                     @if($loop->last)
-                    <select name="applicability[]" class="form-select">
+                    <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
                         <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Only to this asset component</option>
                         <option value='yes_to_all+{{$sec2_4_a8_rows[$i][0]}}'>To all asset components in this project</option>
@@ -778,7 +883,7 @@ $permissions=json_decode($project_permissions);
 
             @endforeach
         @else
-        <select name="applicability[]" class="form-select">
+        <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
             <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Only to this asset component</option>
             <option value='yes_to_all+{{$sec2_4_a8_rows[$i][0]}}'>To all asset components in this project</option>
             <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>Not to this asset component</option>
@@ -881,6 +986,38 @@ $permissions=json_decode($project_permissions);
          <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
             @endif
 
+        </td>
+
+        <td>
+            @if($a8_results->count()>0)
+                @foreach ($a8_results as $a8)
+                    @if($a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+                        @php
+                            $riskLevel = $a8->risk_level;
+                            $riskCategory = '';
+                            $badgeClass = '';
+                            if ($riskLevel <= 3) {
+                                $riskCategory = 'Low risk';
+                                $badgeClass = 'badge bg-success';
+                            } elseif ($riskLevel > 3 && $riskLevel <= 7) {
+                                $riskCategory = 'Medium risk';
+                                $badgeClass = 'badge bg-warning';
+                            } elseif ($riskLevel > 7 && $riskLevel <= 10) {
+                                $riskCategory = 'High risk';
+                                $badgeClass = 'badge bg-danger';
+                            }
+                        @endphp
+                        <span class="{{ $badgeClass }} custom-badge">{{ $riskCategory }}</span>
+                        @break
+                    @endif
+
+                    @if($loop->last)
+                        <span class="badge bg-secondary">No Risk</span>
+                    @endif
+                @endforeach
+            @else
+                <span class="badge bg-secondary">No Risk</span>
+            @endif
         </td>
 
 
@@ -1098,6 +1235,7 @@ $permissions=json_decode($project_permissions);
 </script> --}}
 
 
+
 <script>
     function validateInput(inputElement) {
 
@@ -1106,6 +1244,24 @@ $permissions=json_decode($project_permissions);
         inputElement.value = Math.floor(inputElement.value);
       }
     }
+
+    // function checkapplicability(selectElement) {
+    //     if (selectElement.value.startsWith("no+")) {
+    //         alert("This action will apply only to this asset component and its risk level for this control will be changed to zero; this action will not affect the risk levels as they currently stand for the other asset components in this project. Changes will be applied when the 'Save Changes' button is pressed.");
+    //     }
+    // }
+
+    function checkapplicability(selectElement) {
+    if (selectElement.value.startsWith("no+")) {
+        swal({
+            
+            text: "This action will apply only to this asset component and its risk level for this control will be changed to zero; this action will not affect the risk levels as they currently stand for the other asset components in this project. Changes will be applied when the 'Save Changes' button is pressed.",
+            icon: "warning",  // You can change the icon to "info", "success", or "error" as needed
+            button: "OK",
+        });
+    }
+}
+
   </script>
 
 @endsection
