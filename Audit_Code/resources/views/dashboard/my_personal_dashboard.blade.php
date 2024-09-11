@@ -10,6 +10,25 @@
     <h2 class="text-center fw-bold mb-4">Visual and AI Dashboard</h2>
 
     <div class="row">
+        <div class="col-md-6 text-center mt-4">
+            <h3 class="mb-3">ISO 270001 Projects</h3>
+            <div style="width: 800px; height: 400px; margin: auto;">
+                <canvas id="projectsTypeStatusBarChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-6 text-center mt-4">
+            <h3 class="mb-3">PCI DSS Projects</h3>
+            <div style="width: 800px; height: 400px; margin: auto;">
+                <canvas id="projectsTypeStatusBarChart2"></canvas>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="row">
         <div class="col-lg-12 text-center mt-4" >
             <h3 class="mb-3">Projects Created by me (by type)</h3>
             <div style="width: 400px; height: 400px; margin: auto;">
@@ -45,6 +64,92 @@
 
 @section('scripts')
 <script>
+
+var ctx_bar1 = document.getElementById('projectsTypeStatusBarChart').getContext('2d');
+    var projectsTypeStatusBarChart = new Chart(ctx_bar1, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($projectsAndStatusBarChart->pluck('status')) !!},
+            datasets: [{
+                label: 'Project Count by Status',
+                data: {!! json_encode($projectsAndStatusBarChart->pluck('project_count')) !!},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    stacked: true
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+
+    var ctx_bar2 = document.getElementById('projectsTypeStatusBarChart2').getContext('2d');
+    var projectsTypeStatusBarChart = new Chart(ctx_bar2, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($projectsAndStatusBarChart2->pluck('status')) !!},
+            datasets: [{
+                label: 'Project Count by Status',
+                data: {!! json_encode($projectsAndStatusBarChart2->pluck('project_count')) !!},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    stacked: true
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+
+
  var ctx1 = document.getElementById('projectsPieChart').getContext('2d');
 var projectsPieChart1 = new Chart(ctx1, {
     type: 'pie',

@@ -241,6 +241,8 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
             // $project=Project::join('project_types','projects.project_type','project_types.id')
             // ->where('projects.project_id',$proj_id)->first();
 
+            $user=Db::table('users')->where('id',$user_id)->first();
+
             $projectsCreatedCount = DB::table('projects')
             ->join('project_types', 'projects.project_type', '=', 'project_types.id')
             ->where('created_by', $user_id)
@@ -271,11 +273,33 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
            ->groupBy('projects.status')
            ->get();
 
+           $projectsAndStatusBarChart = DB::table('projects')
+            ->join('project_types', 'projects.project_type', '=', 'project_types.id')
+            ->select('project_types.type', 'projects.status', DB::raw('COUNT(*) as project_count'))
+            ->where('projects.org_id', $user->org_id)
+            ->groupBy('project_types.type', 'projects.status')
+            ->where('project_types.type','=','ISO 27001:2022')
+            ->get();
+
+            $projectsAndStatusBarChart2 = DB::table('projects')
+            ->join('project_types', 'projects.project_type', '=', 'project_types.id')
+            ->select('project_types.type', 'projects.status', DB::raw('COUNT(*) as project_count'))
+            ->where('projects.org_id', $user->org_id)
+            ->groupBy('project_types.type', 'projects.status')
+            ->where('project_types.type','=','PCI-DSS v4-Single-Tenant Service Provider (stSP)')
+            ->get();
+
+
+
+
+
             return view('dashboard.my_personal_dashboard',[
               'projectsCreatedCount'=>$projectsCreatedCount,
               'permissionsInaProjectCount' => $permissionsInaProjectCount,
               'projectsCreatedByMeByStatus'=> $projectsCreatedByMeByStatus,
               'projectsAssignedByStatus'   => $projectsAssignedByStatus,
+              'projectsAndStatusBarChart'=>$projectsAndStatusBarChart,
+              'projectsAndStatusBarChart2'=>$projectsAndStatusBarChart2
             ]);
 
         }
