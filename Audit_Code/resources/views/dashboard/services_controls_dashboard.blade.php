@@ -6,7 +6,6 @@
 
 <div class="container">
 
-    <h2>Number of Components: <a class="btn btn-warning px-3" href="/components_control_dashboard/{{$project->project_id}}/{{auth()->user()->id}}/{{$s_name}}">{{$num_of_components->component_count}} </a> </h2>
 
     <div class="row mt-5">
         <div class="col-lg-12">
@@ -34,6 +33,10 @@
             </table>
         </div>
     </div>
+    <h1>Service Name: {{$s_name}}</h1>
+
+
+    <h2>Number of Asset Components: <a class="btn btn-warning px-3" href="/components_control_dashboard/{{$project->project_id}}/{{auth()->user()->id}}/{{$s_name}}">{{$num_of_components->component_count}} </a> </h2>
 
 
         @if($results->count() > 0)
@@ -41,7 +44,7 @@
         <div class="row mt-4">
             <div class="col-lg-12">
                 <table class="table table-bordered table-info">
-                    <thead>
+                    <thead style="text-align: center">
                         <tr>
                             <th rowspan="2">Risk Category</th>
                             <th colspan="4">ISO 27001-Annex A Control group</th>
@@ -54,7 +57,7 @@
                             <th>8</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="text-align: center">
                         @php
                             // Initialize arrays to hold the counts for each control number and risk category
                             $riskCategories = ['Low', 'Medium', 'High'];

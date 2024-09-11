@@ -35,7 +35,7 @@
 
         @if($results->count() > 0)
 
-        <h3>Project: {{$project->project_name}}</h3>
+        <h3>Services and Assets Components in {{$project->project_name}}</h3>
         <div class="row mt-4">
             <div class="col-lg-12">
                 <table class="table table-hover table-dark">
@@ -49,7 +49,7 @@
                     <tbody>
                         @foreach($results as $result)
                         <tr>
-                            <td><a href="/services_controls_dashboard/{{$result->project_id}}/{{auth()->user()->id}}/{{$result->s_name}}">
+                            <td><a style="color:white" href="/services_controls_dashboard/{{$result->project_id}}/{{auth()->user()->id}}/{{$result->s_name}}">
                                 {{ $result->s_name }}</a>
                                </td>
                             <td><a class="btn btn-primary btn-md px-4" href="/components_control_dashboard/{{$project->project_id}}/{{auth()->user()->id}}/{{$result->s_name}}" >

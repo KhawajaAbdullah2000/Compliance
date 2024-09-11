@@ -6,7 +6,6 @@
 
 <div class="container">
 
-    <h2>Service Name: {{$s_name}}</h2>
 
     <div class="row mt-5">
         <div class="col-lg-12">
@@ -35,17 +34,20 @@
         </div>
     </div>
 
+    <h1>Service Name: {{$s_name}}</h1>
+    <h2>Risk Profile for each Asset Component  </h2>
+
 
         @if($results->count() > 0)
 
         <div class="row mt-4">
             <div class="col-lg-12">
-                <table class="table table-bordered">
-                    <thead>
+                <table class="table table-bordered table-info">
+                    <thead style="text-align: center">
                         <tr>
                             <th rowspan="2">Asset Component</th>
                             <th rowspan="2">Risk Category</th>
-                            <th colspan="4">ISO 27001-Annex A Control group</th>
+                            <th colspan="4" >ISO 27001-Annex A Control group</th>
                             <th rowspan="2">All</th>
                         </tr>
                         <tr>
@@ -55,7 +57,7 @@
                             <th>8</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="text-align: center">
                         @php
                             // Group the results by component name (c_name)
                             $groupedResults = $results->groupBy('c_name');

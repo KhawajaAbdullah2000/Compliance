@@ -35,7 +35,7 @@
 
         @if($servicesInProjects->count() > 0)
 
-        <h3>Projects and Services</h3>
+        <h3>AI Wizard for {{$project->project_name}} </h3>
         <div class="row mt-4">
             <div class="col-lg-12">
                 <table class="table table-hover table-dark">
@@ -49,7 +49,7 @@
                     <tbody>
                         @foreach($servicesInProjects as $result)
                         <tr>
-                            <td><a  href="/iso_sections/{{$result->project_id}}/{{auth()->user()->id}}">
+                            <td><a style="color:white" class="fw-bold" href="/iso_sections/{{$result->project_id}}/{{auth()->user()->id}}">
                                 {{ $result->project_name }}</a>
                                </td>
                             <td><a class="btn btn-primary btn-md px-4" href="/dashboard_services_and_components/{{$result->project_id}}/{{auth()->user()->id}}">
