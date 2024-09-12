@@ -43,7 +43,7 @@
         <div class="row mt-4">
             <div class="col-lg-12">
                 <table class="table table-bordered table-info">
-                    <thead style="text-align: center">
+                    <thead style="text-align: center;">
                         <tr>
                             <th rowspan="2">Asset Component</th>
                             <th rowspan="2">Risk Category</th>
@@ -66,11 +66,13 @@
                         @foreach ($groupedResults as $componentName => $componentResults)
                             @php
                                 // Initialize arrays to hold the counts for each control number and risk category for this component
-                                $riskCategories = ['Low', 'Medium', 'High'];
+                                $riskCategories = ['High', 'Medium', 'Low'];
                                 $controlCounts = [
-                                    'Low' => ['5' => 0, '6' => 0, '7' => 0, '8' => 0],
-                                    'Medium' => ['5' => 0, '6' => 0, '7' => 0, '8' => 0],
                                     'High' => ['5' => 0, '6' => 0, '7' => 0, '8' => 0],
+                                    'Medium' => ['5' => 0, '6' => 0, '7' => 0, '8' => 0],
+                                    'Low' => ['5' => 0, '6' => 0, '7' => 0, '8' => 0],
+                                    
+                                    
                                 ];
 
                                 // Populate the controlCounts array from the componentResults collection
@@ -83,18 +85,20 @@
                             @php
                                 // Calculate the total controls for the current risk category by summing up the values for control numbers 5, 6, 7, and 8
                                 $totalControls = $controlCounts[$category]['5'] + $controlCounts[$category]['6'] + $controlCounts[$category]['7'] + $controlCounts[$category]['8'];
-                            @endphp
-                            <tr>
-                                @if ($loop->first)
-                                    <td rowspan="3">{{ $componentName }}</td>
-                                @endif
-                                <td>{{ $category }}</td>
-                                <td>{{ $controlCounts[$category]['5'] }}</td>
-                                <td>{{ $controlCounts[$category]['6'] }}</td>
-                                <td>{{ $controlCounts[$category]['7'] }}</td>
-                                <td>{{ $controlCounts[$category]['8'] }}</td>
-                                <td>{{ $totalControls }}</td>
-                            </tr>
+                                $color = ($category == 'High' ? 'red' : ($category == 'Medium' ? 'orange' : 'green'));
+                          @endphp
+                       
+                       <tr>
+                        @if ($loop->first)
+                            <td rowspan="3">{{ $componentName }}</td> <!-- No background color here -->
+                        @endif
+                        <td style="background-color: {{$color}};">{{ $category }}</td>
+                        <td style="background-color: {{$color}};">{{ $controlCounts[$category]['5'] }}</td>
+                        <td style="background-color: {{$color}};">{{ $controlCounts[$category]['6'] }}</td>
+                        <td style="background-color: {{$color}};">{{ $controlCounts[$category]['7'] }}</td>
+                        <td style="background-color: {{$color}};">{{ $controlCounts[$category]['8'] }}</td>
+                        <td style="background-color: {{$color}};">{{ $totalControls }}</td>
+                    </tr>
                             @endforeach
                         @endforeach
                     </tbody>
