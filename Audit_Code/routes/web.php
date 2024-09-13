@@ -135,7 +135,7 @@ route::get("ai_wizard/{proj_id}/{user_id}",[ProjectController::class,'ai_wizard'
 route::get('dashboard_services_and_components/{proj_id}/{user_id}',[ProjectController::class,'dashboard_services_and_components']);
 route::get('services_controls_dashboard/{proj_id}/{user_id}/{s_name}',[ProjectController::class,'services_controls_dashboard']);
 route::get('components_control_dashboard/{proj_id}/{user_id}/{s_name}',[ProjectController::class,'components_control_dashboard']);
-
+route::get('risk_profile_graphical/{proj_id}/{user_id}',[ProjectController::class,'risk_profile_graphical']);
 
 
 

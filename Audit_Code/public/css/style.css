@@ -15,6 +15,10 @@ body {
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.my_margin_top{
+    margin-top:50px;
+}
+
 .custom-badge {
     font-size: 0.90rem;  /* Increase the font size */
     padding: 0.5em 1em;  /* Adjust the padding */

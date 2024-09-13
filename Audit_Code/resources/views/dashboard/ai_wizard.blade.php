@@ -43,6 +43,8 @@
                         <tr>
                             <th>Project Name</th>
                             <th>No. of Services</th>
+                            <th>Asset Components Risk Profile - Tabular</th>
+                            <th>Asset Components Risk Profile - Graphical</th>
 
                         </tr>
                     </thead>
@@ -52,8 +54,16 @@
                             <td><a style="color:white" class="fw-bold" href="/iso_sections/{{$result->project_id}}/{{auth()->user()->id}}">
                                 {{ $result->project_name }}</a>
                                </td>
-                            <td><a class="btn btn-primary btn-md px-4" href="/dashboard_services_and_components/{{$result->project_id}}/{{auth()->user()->id}}">
+                            <td><a class="btn btn-outline-primary btn-md px-4 text-white fw-bold" href="/dashboard_services_and_components/{{$result->project_id}}/{{auth()->user()->id}}">
                                 {{ $result->services }}</a>
+                               </td>
+
+                               <td><a class="btn btn-success btn-md px-4" href="/dashboard_services_and_components/{{$result->project_id}}/{{auth()->user()->id}}">
+                                Risk Profile Tabular</a>
+                               </td>
+
+                               <td><a class="btn btn-warning btn-md px-4" href="/risk_profile_graphical/{{$result->project_id}}/{{auth()->user()->id}}">
+                                Risk Profile-Graphical</a>
                                </td>
 
                         </tr>

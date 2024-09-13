@@ -321,50 +321,6 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
                 ->groupBy('projects.project_id', 'projects.project_name')
                 ->get();
 
-                //dd($servicesInProject);
-
-
-    // $results = DB::table('iso_sec_2_1 as i1')
-    //     ->join('iso_sec_2_3_1 as i2', 'i1.assessment_id', '=', 'i2.asset_id')
-    //     ->select(
-    //         'i1.s_name',
-    //         DB::raw('COUNT(DISTINCT i1.c_name) as total_asset_components'),
-    //         DB::raw("SUM(CASE WHEN i2.applicability IN ('yes', 'yes_to_all') THEN 1 ELSE 0 END) as applicable_asset_components"),
-    //         DB::raw("SUM(CASE WHEN i2.applicability = 'no' THEN 1 ELSE 0 END) as not_applicable_asset_components")
-    //     )
-    //     ->where('i1.project_id', $proj_id)
-    //     ->groupBy('i1.s_name')
-    //     ->get();
-
-
-
-
-        // $results2 = DB::table('iso_sec_2_3_1')
-        // ->select(
-        //     'iso_sec_2_1.s_name',
-        //     DB::raw('COUNT(DISTINCT iso_sec_2_1.c_name) as total_asset_components'),
-        //     DB::raw("SUM(CASE WHEN iso_sec_2_3_1.applicability != 'no' AND iso_sec_2_3_1.risk_level BETWEEN 0 AND 3 THEN 1 ELSE 0 END) as low_risk_count"),
-        //     DB::raw("SUM(CASE WHEN iso_sec_2_3_1.applicability != 'no' AND iso_sec_2_3_1.risk_level > 3 AND iso_sec_2_3_1.risk_level <= 7 THEN 1 ELSE 0 END) as medium_risk_count"),
-        //     DB::raw("SUM(CASE WHEN iso_sec_2_3_1.applicability != 'no' AND iso_sec_2_3_1.risk_level > 7 AND iso_sec_2_3_1.risk_level <= 10 THEN 1 ELSE 0 END) as high_risk_count"),
-        //     DB::raw('MAX(iso_sec_2_3_1.risk_level) as max_risk'),
-        //     DB::raw('MIN(iso_sec_2_3_1.risk_level) as min_risk'),
-        //     DB::raw('SUM(iso_sec_2_3_1.risk_level) / COUNT(iso_sec_2_3_1.risk_level) as avg_risk'),
-        //     DB::raw('MIN(iso_risk_treatment.treatment_target_date) as earliest_treatment_target_date'),
-        //     DB::raw('MAX(iso_risk_treatment.treatment_target_date) as farthest_treatment_target_date'),
-        //     DB::raw('MIN(iso_risk_treatment.acceptance_actual_date) as earliest_acceptance_actual_date'),
-        //     DB::raw('MAX(iso_risk_treatment.acceptance_actual_date) as farthest_acceptance_actual_date')
-        // )
-        // ->join('iso_sec_2_1', 'iso_sec_2_3_1.asset_id', '=', 'iso_sec_2_1.assessment_id')
-        // ->join('iso_risk_treatment', function($join) {
-        //     $join->on('iso_sec_2_3_1.asset_id', '=', 'iso_risk_treatment.asset_id')
-        //          ->on('iso_sec_2_3_1.project_id', '=', 'iso_risk_treatment.project_id')
-        //          ->on('iso_sec_2_3_1.assessment_id', '=', 'iso_risk_treatment.assessment_id');
-        // })
-        // ->where('iso_sec_2_3_1.project_id', $proj_id)
-        // ->groupBy('iso_sec_2_1.s_name')
-        // ->get();
-
-
 
         $project_date=Db::table('projects')->where('project_id',$proj_id)->first();
 
@@ -462,6 +418,8 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
 
     }
 
+
+
     public function components_control_dashboard($proj_id,$user_id,$s_name){
         if($user_id==auth()->user()->id){
             $project=Project::join('project_types','projects.project_type','project_types.id')
@@ -504,6 +462,94 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
 
         }
         return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+
+    }
+
+
+
+    public function risk_profile_graphical($proj_id,$user_id){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+
+        if ($checkpermission) {
+    //         $data = DB::table('iso_sec_2_1 as sec1')
+    // ->join('iso_sec_2_3_1 as sec3', 'sec1.assessment_id', '=', 'sec3.asset_id')
+    // ->select(
+    //     'sec1.c_name',
+    //     DB::raw('
+    //         CASE
+    //             WHEN sec3.risk_level BETWEEN 0 AND 3 THEN "Low"
+    //             WHEN sec3.risk_level BETWEEN 4 AND 7 THEN "Medium"
+    //             WHEN sec3.risk_level BETWEEN 8 AND 10 THEN "High"
+    //             ELSE "Unknown"
+    //         END as risk_category'),
+    //     DB::raw('COUNT(sec3.risk_level) as total')
+    // )
+    // ->where('sec1.project_id', $proj_id)
+    // ->groupBy('sec1.c_name', 'risk_category')
+    // ->get();
+
+    $data = DB::table('iso_sec_2_1 as sec1')
+    ->join('iso_sec_2_3_1 as sec3', 'sec1.assessment_id', '=', 'sec3.asset_id')
+    ->select(
+        'sec1.c_name',
+        DB::raw('
+            CASE
+                WHEN sec3.risk_level BETWEEN 0 AND 3 THEN "Low"
+                WHEN sec3.risk_level BETWEEN 4 AND 7 THEN "Medium"
+                WHEN sec3.risk_level BETWEEN 8 AND 10 THEN "High"
+                ELSE "Unknown"
+            END as risk_category'),
+        DB::raw('
+            CASE
+                WHEN sec3.control_num LIKE "5.%" THEN "Control 5"
+                WHEN sec3.control_num LIKE "6.%" THEN "Control 6"
+                WHEN sec3.control_num LIKE "7.%" THEN "Control 7"
+                WHEN sec3.control_num LIKE "8.%" THEN "Control 8"
+                ELSE "Other Controls"
+            END as control_group'),
+        DB::raw('COUNT(sec3.risk_level) as total')
+    )
+    ->where('sec1.project_id', $proj_id)
+    ->groupBy('sec1.c_name', 'risk_category', 'control_group')
+    ->get();
+
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$proj_id)->first();
+
+    $chartData = $data->groupBy('c_name')->map(function ($componentData) {
+        // Group data by control group
+        return $componentData->groupBy('control_group')->map(function ($controlData) {
+            // Prepare datasets by risk category (Low, Medium, High)
+            return [
+                'Low' => $controlData->where('risk_category', 'Low')->pluck('total')->toArray(),
+                'Medium' => $controlData->where('risk_category', 'Medium')->pluck('total')->toArray(),
+                'High' => $controlData->where('risk_category', 'High')->pluck('total')->toArray(),
+            ];
+        });
+    });
+
+
+    return view('dashboard.risk_profile_graphical',[
+        'project'=>$project,
+        'chartData'=>$chartData
+    ]);
+
+        }
+
+
+        return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+
+
 
     }
 

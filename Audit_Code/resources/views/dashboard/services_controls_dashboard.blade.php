@@ -43,12 +43,12 @@
 
         <div class="row mt-4">
             <div class="col-lg-12">
-                <table class="table table-bordered table-info">
+                <table class="table table-bordered ">
                     <thead style="text-align: center">
                         <tr>
-                            <th rowspan="2">Risk Category</th>
-                            <th colspan="4">ISO 27001-Annex A Control group</th>
-                            <th rowspan="2">All</th>
+                            <th rowspan="2" style="color:teal;">Risk Category</th>
+                            <th colspan="4" style="color:teal;">ISO 27001-Annex A Control group</th>
+                            <th rowspan="2" style="color:teal;">All</th>
                         </tr>
                         <tr>
                             <th>5</th>
@@ -65,8 +65,8 @@
                                 'High' => ['5' => 0, '6' => 0, '7' => 0, '8' => 0],
                                 'Medium' => ['5' => 0, '6' => 0, '7' => 0, '8' => 0],
                                 'Low' => ['5' => 0, '6' => 0, '7' => 0, '8' => 0],
-                              
-                               
+
+
                             ];
 
                             // Populate the controlCounts array from the $results collection
@@ -83,11 +83,11 @@
                        @endphp
                         <tr>
                             <td>{{ $category }}</td>
-                            <td style="background-color: {{$color}};">{{ $controlCounts[$category]['5'] }}</td>
-                            <td style="background-color: {{$color}};">{{ $controlCounts[$category]['6'] }}</td>
-                            <td style="background-color: {{$color}};">{{ $controlCounts[$category]['7'] }}</td>
-                            <td style="background-color: {{$color}};">{{ $controlCounts[$category]['8'] }}</td>
-                            <td style="background-color: {{$color}};">{{ $totalControls }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold">{{ $controlCounts[$category]['5'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold">{{ $controlCounts[$category]['6'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold">{{ $controlCounts[$category]['7'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold">{{ $controlCounts[$category]['8'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold">{{ $totalControls }}</td>
                         </tr>
                         @endforeach
                     </tbody>
