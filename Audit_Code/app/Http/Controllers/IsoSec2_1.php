@@ -44,6 +44,14 @@ class IsoSec2_1 extends Controller
                     $org_projects=Db::table('projects')->where('org_id',auth()->user()->org_id)
                     ->where('project_id','!=',$proj_id)->get();
 
+                    $distinctServices= DB::table('iso_sec_2_1')
+                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
+                    ->select('iso_sec_2_1.s_name')
+                    ->distinct('iso_sec_2_1.s_name')  // Ensures distinct s_name values
+                    ->get();
+
+                
+
 
                     return view('iso_sec_2_1.iso_sec_2_1_main', [
                         'data' => $data,
@@ -51,7 +59,8 @@ class IsoSec2_1 extends Controller
                         'project_name' => $checkpermission->project_name,
                         'project_permissions' => $checkpermission->project_permissions,
                         'project'=>$project,
-                        'org_projects'=>$org_projects
+                        'org_projects'=>$org_projects,
+                        'distinctServices'=>$distinctServices
                     ]);
 
             }
