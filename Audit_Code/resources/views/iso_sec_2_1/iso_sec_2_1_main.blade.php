@@ -95,11 +95,84 @@
               <option value="">select --</option>
               @foreach($distinctServices as $d)
               <option value="{{$d->s_name}}">{{$d->s_name}}</option>
-    
+
+              @endforeach
+            </select>
+          </div>
+
+          <div class="col-md-3">
+
+            <label>Select Group</label>
+            <select id="g_name" name="g_name" class="bg-info form-select">
+              <option value="">select --</option>
+              @foreach($distinctGroups as $d)
+              <option value="{{$d->g_name}}">{{$d->g_name}}</option>
+
+              @endforeach
+            </select>
+          </div>
+
+          <div class="col-md-3">
+
+            <label>Select Asset</label>
+            <select id="name" name="name" class="bg-info form-select">
+              <option value="">select --</option>
+              @foreach($distinctAssets as $d)
+              <option value="{{$d->name}}">{{$d->name}}</option>
+
+              @endforeach
+            </select>
+          </div>
+
+
+          <div class="col-md-3">
+
+            <label>Select Asset Component</label>
+            <select id="c_name" name="c_name" class="bg-info form-select">
+              <option value="">select --</option>
+              @foreach($distinctComponents as $d)
+              <option value="{{$d->c_name}}">{{$d->c_name}}</option>
+
               @endforeach
             </select>
           </div>
         </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h5 class="fw-bold">Table Columns View:</h5>
+                <div class="border p-3" style="border: 1px solid #ccc; border-radius: 5px;">
+                    <div class="d-flex flex-column">
+                        <div class="form-check">
+                            <input class="form-check-input toggle-column" type="checkbox" id="toggleGroup" data-column="1">
+                            <label class="form-check-label" for="toggleGroup">Asset Group</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input toggle-column" type="checkbox" id="toggleAsset" data-column="2">
+                            <label class="form-check-label" for="toggleAsset">Asset</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input toggle-column" type="checkbox" id="toggleOwner" data-column="4">
+                            <label class="form-check-label" for="toggleOwner">Owner Dept</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input toggle-column" type="checkbox" id="togglePhysical" data-column="5">
+                            <label class="form-check-label" for="togglePhysical">Physical Location</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input toggle-column" type="checkbox" id="toggleLogical" data-column="6">
+                            <label class="form-check-label" for="toggleLogical">Logical Location</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
 
         <table id="myTable2" class="table table-responsive table-primary table-striped mt-4">
             <thead class="thead-dark table-pointer">
@@ -120,7 +193,8 @@
             </thead>
             <tbody>
                 @foreach ($data as $d)
-                <tr style="text-align: center;" class="service-row" data-service="{{ $d->s_name }}">
+                <tr style="text-align: center;" class="service-row" data-service="{{ $d->s_name }}"
+                    data-group="{{ $d->g_name }}" data-name="{{ $d->name }}" data-c_name="{{ $d->c_name }}">
                         <td class="fw-bold">{{ $d->s_name }}</td>
                         <td>{{ $d->g_name }}</td>
                         <td>{{ $d->name }}</td>
@@ -290,30 +364,90 @@
 
         <script>
 
-          
 $(document).ready(function() {
-        $('#s_name').on('change', function() {
-            var selectedService = $(this).val();
+    function filterRows() {
+        var selectedService = $('#s_name').val();
+        var selectedGroup = $('#g_name').val();
+        var selectedName = $('#name').val();
+        var selectedComponent = $('#c_name').val();
 
-            // Show all rows if no service is selected
-            if (selectedService === "") {
-                $('.service-row').show();
+
+        $('.service-row').each(function() {
+            var service = $(this).data('service');
+            var group = $(this).data('group');
+            var name = $(this).data('name');
+            var c_name=$(this).data('c_name');
+            var showRow = true;
+
+            // Check if the row matches the selected service (if any)
+            if (selectedService && service !== selectedService) {
+                showRow = false;
+            }
+
+            // Check if the row matches the selected group (if any)
+            if (selectedGroup && group !== selectedGroup) {
+                showRow = false;
+            }
+
+            if (selectedName && name !== selectedName) {
+                showRow = false;
+            }
+
+            if (selectedComponent && c_name !== selectedComponent) {
+                showRow = false;
+            }
+
+
+            // Show or hide the row based on the above conditions
+            if (showRow) {
+                $(this).show();
             } else {
-                // Hide all rows that don't match the selected service
-                $('.service-row').each(function() {
-                    var service = $(this).data('service');
-                    if (service === selectedService) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
+                $(this).hide();
             }
         });
+    }
+
+    // Listen for changes in the service filter
+    $('#s_name').on('change', function() {
+        filterRows();
     });
+
+    // Listen for changes in the group filter
+    $('#g_name').on('change', function() {
+        filterRows();
+    });
+
+    $('#name').on('change', function() {
+        filterRows();
+    });
+
+    $('#c_name').on('change', function() {
+        filterRows();
+    });
+});
 
 
 </script>
+
+
+<script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Function to toggle columns
+        document.querySelectorAll('.toggle-column').forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                var column = this.getAttribute('data-column');
+                var display = this.checked ? 'none' : '';
+                var table = document.getElementById('myTable2');
+                for (var i = 0; i < table.rows.length; i++) {
+                    table.rows[i].cells[column].style.display = display;
+                }
+            });
+        });
+    });
+</script>
+
+
+
     @endsection
 
 
