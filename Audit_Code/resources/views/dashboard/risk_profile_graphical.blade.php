@@ -34,7 +34,7 @@
 
     @foreach($chartData as $component => $controls)
     <div class="my_margin_top">
-        <h3>{{ $component }} - Risk Levels by Control Group</h3>
+        <h3>{{ $component }} - Risk Levels by ISO 27001 Annexure 1 Control Group</h3>
         <canvas id="chart-{{ $component }}" width="400" height="200"></canvas>
     </div>
 

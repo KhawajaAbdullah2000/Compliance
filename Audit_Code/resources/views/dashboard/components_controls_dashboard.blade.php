@@ -47,7 +47,7 @@
                         <tr>
                             <th rowspan="2" style="color:teal;">Asset Component</th>
                             <th rowspan="2" style="color:teal;">Risk Category</th>
-                            <th colspan="4" style="color:teal;">ISO 27001-Annex A Control group</th>
+                            <th colspan="4" style="color:teal;">ISO 27001-Annex A Control Group</th>
                             <th rowspan="2" style="color:teal;">All</th>
                         </tr>
                         <tr>
