@@ -76,14 +76,69 @@ $permissions=json_decode($project_permissions);
     @endisset
 
 
+</p>
+
+<h3 class="">Severity of Adverse Impacts</h3>
+
+<p><span class="fw-bold">Risk Confidentiality:</span>
+@if($assetData->risk_confidentiality==10)
+High
+@endif
+
+@if($assetData->risk_confidentiality==5)
+Medium
+@endif
+
+@if($assetData->risk_confidentiality==1)
+Low
+@endif
+</p>
+
+
+<p><span class="fw-bold">Risk Integrity:</span>
+
+    @if($assetData->risk_integrity==10)
+High
+@endif
+
+@if($assetData->risk_integrity==5)
+Medium
+@endif
+
+@if($assetData->risk_integrity==1)
+Low
+@endif
 
 </p>
+
+<p><span class="fw-bold">Risk Availability:</span>
+
+    @if($assetData->risk_availability==10)
+High
+@endif
+
+@if($assetData->risk_availability==5)
+Medium
+@endif
+
+@if($assetData->risk_availability==1)
+Low
+@endif
+
+</p>
+
 
 
 </div>
 
 <form action="/iso_sec2_3_1_initial_add/{{$assetData->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" method="post" class="mx-4 mt-4">
     @csrf
+
+    <input type="hidden" name="risk_confidentiality_value" value="{{$assetData->risk_confidentiality}}">
+    <input type="hidden" name="risk_integrity_value" value="{{$assetData->risk_integrity}}">
+    <input type="hidden" name="risk_availability_value" value="{{$assetData->risk_availability}}">
+
+
 
 
     @if(in_array('Data Inputter',$permissions))
@@ -93,35 +148,6 @@ $permissions=json_decode($project_permissions);
     @endif
     </table>
 
-    <div class="row">
-
-
-    <div class="col-lg-6">
-
-    <div class="fw-bold">
-        <label for="">Select Asset value</label>
-        {{-- <p>{{$global_asset_value}}</p> --}}
-        <select name="asset_value" class="form-control boxstyling" id="assetSelect">
-
-            @if($global_asset_value!=null)
-                <option value=10 {{old('asset_value',$global_asset_value->asset_value)==10?'selected':''}}>High</option>
-                <option value=5 {{old('asset_value',$global_asset_value->asset_value)==5?'selected':''}}>Medium</option>
-                <option value=1 {{old('asset_value',$global_asset_value->asset_value)==1?'selected':''}}>Low</option>
-            @else
-            <option value=10 {{old('asset_value')==10?'selected':''}}>High</option>
-            <option value=5 {{old('asset_value')==5?'selected':''}}>Medium</option>
-            <option value=1 {{old('asset_value')==1?'selected':''}}>Low</option>
-
-            @endif
-
-        </select>
-    </div>
-    </div>
-
-    </div>
-
-
-
 
     <div class="mt-4">
         <table class="table table-responsive table-primary table-striped">
@@ -129,12 +155,13 @@ $permissions=json_decode($project_permissions);
                 <col style="width: 100px;">
                 <col style="width: 300px;">
                 <col style="width: 300px;">
-                <col style="width: 300px;">
+                <col style="width: 400px;">
                 <col style="width: 100px;">
                 <col style="width: 100px;">
                 <col style="width: 100px;">
                 <col style="width: 150px;">
-                <col style="width: 250px;">
+                <col style="width: 150px;">
+                <col style="width: 150px;">
                 <col style="width: 100px;">
             </colgroup>
 
@@ -143,21 +170,13 @@ $permissions=json_decode($project_permissions);
                 <th>Control Number</th>
                 <th>Title Of Control</th>
                 <th>Description of Control</th>
-                <th>Control is Applicable?
-                     {{-- Select All No
-                    <input type="checkbox" id="selectAllApplicability" /> --}}
-                </th>
-                <th>Control Compliance%
-                    {{-- Set all to 0
-                    <input type="checkbox" id="selectAllControlCompliance" /> --}}
-                </th>
+                <th>Control is Applicable?</th>
+                <th>Control Compliance%</th>
                 <th>Vulnerability%</th>
-                <th>Threat%
-                    {{-- Set all to 0
-                    <input type="checkbox" id="selectAllThreat" /> --}}
-                </th>
-                <th>Risk Level</th>
-                <th>Risk Category</th> 
+                <th>Threat%</th>
+                <th>Risk Confidentiality</th>
+                <th>Risk Integrity</th>
+                <th>Risk Availability</th>
                <th>Edit</th>
 
               </tr>
@@ -187,7 +206,7 @@ $permissions=json_decode($project_permissions);
 
             <option value='yes+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability=="yes"?'selected':''}}>Only to this asset       component</option>
 
-            <option value='yes_to_all+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability=="yes_to_all"?'selected':''}}>To all asset components in this project</option>
+            <option value='yes_to_all+{{$sec2_4_a5_rows[$i][0]}}' {{$a5->applicability=="yes_to_all"?'selected':''}}>To all asset components in this Service</option>
 
 
 
@@ -204,7 +223,7 @@ $permissions=json_decode($project_permissions);
 
 
                         <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Only to this Asset Component</option>
-                        <option value='yes_to_all+{{$sec2_4_a5_rows[$i][0]}}'>To all asset components in this project</option>
+                        <option value='yes_to_all+{{$sec2_4_a5_rows[$i][0]}}'>To all asset components in this Service</option>
 
                         <option value='no+{{$sec2_4_a5_rows[$i][0]}}'>Not to this asset component</option>
                     </select>
@@ -215,7 +234,7 @@ $permissions=json_decode($project_permissions);
                     <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
                         <option value='yes+{{$sec2_4_a5_rows[$i][0]}}'>Only to this Asset Component</option>
-                        <option value='yes_to_all+{{$sec2_4_a5_rows[$i][0]}}'>To all asset components in this project</option>
+                        <option value='yes_to_all+{{$sec2_4_a5_rows[$i][0]}}'>To all asset components in this Service</option>
                         <option value='no+{{$sec2_4_a5_rows[$i][0]}}'>Not to this asset component</option>
                     </select>
                     @endif
@@ -296,60 +315,115 @@ $permissions=json_decode($project_permissions);
                 </td>
 
                 <td>
+                    @if($a5_results->count() > 0)
+                        @foreach ($a5_results as $a5)
+                            @if($a5->risk_level != null && $a5->control_num === strval($sec2_4_a5_rows[$i][0]))
+
+                                {{-- Determine background color class --}}
+                                @php
+                                    $backgroundClass = '';
+                                    if ($a5->risk_level >= 0 && $a5->risk_level <= 3) {
+                                        $backgroundClass = 'green-background';
+                                    } elseif ($a5->risk_level >= 4 && $a5->risk_level <= 7) {
+                                        $backgroundClass = 'orange-background';
+                                    } elseif ($a5->risk_level >= 8 && $a5->risk_level <= 10) {
+                                        $backgroundClass = 'red-background';
+                                    }
+                                @endphp
+
+                                <input type="number" name="risk_level[]" value="{{ $a5->risk_level }}"
+                                    class="form-control {{ $backgroundClass }}"
+                                    data-control-id="{{ $sec2_4_a5_rows[$i][0] }}" readonly>
+                                @break
+
+                            @endif
+
+                            @if($loop->last)
+                                <input type="number" name="risk_level[]"
+                                    class="form-control"
+                                    data-control-id="{{ $sec2_4_a5_rows[$i][0] }}" readonly>
+                            @endif
+                        @endforeach
+                    @else
+                        <input type="number" name="risk_level[]"
+                            class="form-control"
+                            data-control-id="{{ $sec2_4_a5_rows[$i][0] }}" readonly>
+                    @endif
+                </td>
+
+
+
+                <td>
                     @if($a5_results->count()>0)
                     @foreach ($a5_results as $a5)
 
-                        @if($a5->risk_level!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
-            <input type="number" name="risk_level[]" value={{$a5->risk_level}} class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+                        @if($a5->risk_integrity!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
-                             {{-- <p>{{$a5->risk_level}}</p> --}}
+                        @php
+                                    $backgroundClass = '';
+                                    if ($a5->risk_integrity >= 0 && $a5->risk_integrity <= 3) {
+                                        $backgroundClass = 'green-background';
+                                    } elseif ($a5->risk_integrity >= 4 && $a5->risk_integrity <= 7) {
+                                        $backgroundClass = 'orange-background';
+                                    } elseif ($a5->risk_integrity >= 8 && $a5->risk_integrity <= 10) {
+                                        $backgroundClass = 'red-background';
+                                    }
+                                @endphp
+
+            <input type="number" name="risk_integrity[]" value={{$a5->risk_integrity}} class="form-control {{$backgroundClass}}" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+
                                 @break
                             @endif
 
                             @if($loop->last)
-         <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+         <input type="number" name="risk_integrity[]" class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
                     @endif
 
                     @endforeach
                 @else
-    <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+    <input type="number" name="risk_integrity[]" class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
 
                 @endif
 
 
                 </td>
 
+
                 <td>
                     @if($a5_results->count()>0)
-                        @foreach ($a5_results as $a5)
-                            @if($a5->control_num===strval($sec2_4_a5_rows[$i][0]))
-                                @php
-                                    $riskLevel = $a5->risk_level;
-                                    $riskCategory = '';
-                                    $badgeClass = '';
-                                    if ($riskLevel <= 3) {
-                                        $riskCategory = 'Low risk';
-                                        $badgeClass = 'badge bg-success';
-                                    } elseif ($riskLevel > 3 && $riskLevel <= 7) {
-                                        $riskCategory = 'Medium risk';
-                                        $badgeClass = 'badge bg-warning';
-                                    } elseif ($riskLevel > 7 && $riskLevel <= 10) {
-                                        $riskCategory = 'High risk';
-                                        $badgeClass = 'badge bg-danger';
-                                    }
-                                @endphp
-                                <span class="{{ $badgeClass }} custom-badge">{{ $riskCategory }}</span>
+                    @foreach ($a5_results as $a5)
+
+                        @if($a5->risk_availability!=null && $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+
+                        @php
+                        $backgroundClass = '';
+                        if ($a5->risk_availability >= 0 && $a5->risk_availability <= 3) {
+                            $backgroundClass = 'green-background';
+                        } elseif ($a5->risk_availability >= 4 && $a5->risk_availability <= 7) {
+                            $backgroundClass = 'orange-background';
+                        } elseif ($a5->risk_availability >= 8 && $a5->risk_availability <= 10) {
+                            $backgroundClass = 'red-background';
+                        }
+                    @endphp
+
+            <input type="number" name="risk_availability[]" value={{$a5->risk_availability}} class="form-control {{$backgroundClass}}" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+
                                 @break
                             @endif
 
                             @if($loop->last)
-                                <span class="badge bg-secondary">No Risk</span>
-                            @endif
-                        @endforeach
-                    @else
-                        <span class="badge bg-secondary">No Risk</span>
+         <input type="number" name="risk_availability[]" class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
                     @endif
+
+                    @endforeach
+                @else
+    <input type="number" name="risk_availability[]" class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+
+                @endif
+
+
                 </td>
+
 
 
 
@@ -420,7 +494,7 @@ $permissions=json_decode($project_permissions);
 
                     <option value='yes+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability=="yes"?'selected':''}}>Only to this asset component</option>
 
-                    <option value='yes_to_all+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability=="yes_to_all"?'selected':''}}>To all asset components in this project</option>
+                    <option value='yes_to_all+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability=="yes_to_all"?'selected':''}}>To all asset components in this Service</option>
 
                     <option value='no+{{$sec2_4_a6_rows[$i][0]}}' {{$a6->applicability=="no"?'selected':''}}>Not to this asset component</option>
                 </select>
@@ -434,7 +508,7 @@ $permissions=json_decode($project_permissions);
 
 
                 <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Only to this asset component</option>
-                <option value='yes_to_all+{{$sec2_4_a6_rows[$i][0]}}'>To all asset components in this project</option>
+                <option value='yes_to_all+{{$sec2_4_a6_rows[$i][0]}}'>To all asset components in this Service</option>
                 <option value='no+{{$sec2_4_a6_rows[$i][0]}}'>Not to this asset component</option>
             </select>
                 @endif
@@ -446,7 +520,7 @@ $permissions=json_decode($project_permissions);
 
 
                 <option value='yes+{{$sec2_4_a6_rows[$i][0]}}'>Only to this asset component</option>
-                <option value='yes_to_all+{{$sec2_4_a6_rows[$i][0]}}'>To all asset components in this project</option>
+                <option value='yes_to_all+{{$sec2_4_a6_rows[$i][0]}}'>To all asset components in this Service</option>
                 <option value='no+{{$sec2_4_a6_rows[$i][0]}}'>Not to this asset component</option>
             </select>
                 @endif
@@ -530,9 +604,17 @@ $permissions=json_decode($project_permissions);
                 @foreach ($a6_results as $a6)
 
                     @if($a6->risk_level!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
-                    <input type="number" name="risk_level[]" value={{$a6->risk_level}} class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
-
-                        {{-- <p>{{$a6->risk_level}} </p> --}}
+                    @php
+                    $backgroundClass = '';
+                    if ($a6->risk_level >= 0 && $a6->risk_level <= 3) {
+                        $backgroundClass = 'green-background';
+                    } elseif ($a6->risk_level >= 4 && $a6->risk_level <= 7) {
+                        $backgroundClass = 'orange-background';
+                    } elseif ($a6->risk_level >= 8 && $a6->risk_level <= 10) {
+                        $backgroundClass = 'red-background';
+                    }
+                @endphp
+                    <input type="number" name="risk_level[]" value={{$a6->risk_level}} class="form-control {{$backgroundClass}}" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
                             @break
                         @endif
 
@@ -550,35 +632,67 @@ $permissions=json_decode($project_permissions);
 
             <td>
                 @if($a6_results->count()>0)
-                    @foreach ($a6_results as $a6)
-                        @if($a6->control_num===strval($sec2_4_a6_rows[$i][0]))
-                            @php
-                                $riskLevel = $a6->risk_level;
-                                $riskCategory = '';
-                                $badgeClass = '';
-                                if ($riskLevel <= 3) {
-                                    $riskCategory = 'Low risk';
-                                    $badgeClass = 'badge bg-success';
-                                } elseif ($riskLevel > 3 && $riskLevel <= 7) {
-                                    $riskCategory = 'Medium risk';
-                                    $badgeClass = 'badge bg-warning';
-                                } elseif ($riskLevel > 7 && $riskLevel <= 10) {
-                                    $riskCategory = 'High risk';
-                                    $badgeClass = 'badge bg-danger';
-                                }
-                            @endphp
-                            <span class="{{ $badgeClass }} custom-badge">{{ $riskCategory }}</span>
+                @foreach ($a6_results as $a6)
+
+                    @if($a6->risk_integrity!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+                    @php
+                    $backgroundClass = '';
+                    if ($a6->risk_integrity >= 0 && $a6->risk_integrity <= 3) {
+                        $backgroundClass = 'green-background';
+                    } elseif ($a6->risk_integrity >= 4 && $a6->risk_integrity <= 7) {
+                        $backgroundClass = 'orange-background';
+                    } elseif ($a6->risk_integrity >= 8 && $a6->risk_integrity <= 10) {
+                        $backgroundClass = 'red-background';
+                    }
+                @endphp
+                    <input type="number" name="risk_integrity[]" value={{$a6->risk_integrity}} class="form-control {{$backgroundClass}}" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
                             @break
                         @endif
 
                         @if($loop->last)
-                            <span class="badge bg-secondary">No Risk</span>
-                        @endif
-                    @endforeach
-                @else
-                    <span class="badge bg-secondary">No Risk</span>
+     <input type="number" name="risk_integrity[]" class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
                 @endif
+
+                @endforeach
+            @else
+     <input type="number" name="risk_integrity[]" class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+
+            @endif
+
             </td>
+
+            <td>
+                @if($a6_results->count()>0)
+                @foreach ($a6_results as $a6)
+
+                    @if($a6->risk_availability!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+                    @php
+                    $backgroundClass = '';
+                    if ($a6->risk_availability >= 0 && $a6->risk_availability <= 3) {
+                        $backgroundClass = 'green-background';
+                    } elseif ($a6->risk_availability >= 4 && $a6->risk_availability <= 7) {
+                        $backgroundClass = 'orange-background';
+                    } elseif ($a6->risk_availability >= 8 && $a6->risk_availability <= 10) {
+                        $backgroundClass = 'red-background';
+                    }
+                @endphp
+                    <input type="number" name="risk_availability[]" value={{$a6->risk_availability}} class="form-control {{$backgroundClass}}" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+                            @break
+                        @endif
+
+                        @if($loop->last)
+     <input type="number" name="risk_availability[]" class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+                @endif
+
+                @endforeach
+            @else
+     <input type="number" name="risk_availability[]" class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+
+            @endif
+
+            </td>
+
+
 
 
              <td>
@@ -642,7 +756,7 @@ $permissions=json_decode($project_permissions);
 
                     <option value='yes+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability=="yes"?'selected':''}}>Only to this asset component</option>
 
-                    <option value='yes_to_all+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability=="yes_to_all"?'selected':''}}>To all asset components in this project</option>
+                    <option value='yes_to_all+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability=="yes_to_all"?'selected':''}}>To all asset components in this Service</option>
 
                     <option value='no+{{$sec2_4_a7_rows[$i][0]}}' {{$a7->applicability=="no"?'selected':''}}>Not to this asset component</option>
                 </select>
@@ -654,7 +768,7 @@ $permissions=json_decode($project_permissions);
 
 
                         <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Only to this asset component</option>
-                        <option value='yes_to_all+{{$sec2_4_a7_rows[$i][0]}}'>To all asset components in this project</option>
+                        <option value='yes_to_all+{{$sec2_4_a7_rows[$i][0]}}'>To all asset components in this Service</option>
 
                         <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>Not to this asset component</option>
                     </select>            @endif
@@ -663,7 +777,7 @@ $permissions=json_decode($project_permissions);
         @else
         <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
             <option value='yes+{{$sec2_4_a7_rows[$i][0]}}'>Only to this asset component</option>
-            <option value='yes_to_all+{{$sec2_4_a7_rows[$i][0]}}'>To all asset components in this project</option>
+            <option value='yes_to_all+{{$sec2_4_a7_rows[$i][0]}}'>To all asset components in this Service</option>
             <option value='no+{{$sec2_4_a7_rows[$i][0]}}'>Not to this asset component</option>
         </select>
         @endif
@@ -755,9 +869,17 @@ $permissions=json_decode($project_permissions);
             @foreach ($a7_results as $a7)
 
                 @if($a7->risk_level!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
-                <input type="number" name="risk_level[]" value={{$a7->risk_level}} class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
-
-                    {{-- <p>{{$a7->risk_level}} </p> --}}
+                @php
+                $backgroundClass = '';
+                if ($a7->risk_level >= 0 && $a7->risk_level <= 3) {
+                    $backgroundClass = 'green-background';
+                } elseif ($a7->risk_level >= 4 && $a7->risk_level <= 7) {
+                    $backgroundClass = 'orange-background';
+                } elseif ($a7->risk_level >= 8 && $a7->risk_level <= 10) {
+                    $backgroundClass = 'red-background';
+                }
+            @endphp
+                <input type="number" name="risk_level[]" value={{$a7->risk_level}} class="form-control {{$backgroundClass}}" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
                         @break
                     @endif
 
@@ -775,37 +897,73 @@ $permissions=json_decode($project_permissions);
 
          </td>
 
+
          <td>
             @if($a7_results->count()>0)
-                @foreach ($a7_results as $a7)
-                    @if($a7->control_num===strval($sec2_4_a7_rows[$i][0]))
-                        @php
-                            $riskLevel = $a7->risk_level;
-                            $riskCategory = '';
-                            $badgeClass = '';
-                            if ($riskLevel <= 3) {
-                                $riskCategory = 'Low risk';
-                                $badgeClass = 'badge bg-success';
-                            } elseif ($riskLevel > 3 && $riskLevel <= 7) {
-                                $riskCategory = 'Medium risk';
-                                $badgeClass = 'badge bg-warning';
-                            } elseif ($riskLevel > 7 && $riskLevel <= 10) {
-                                $riskCategory = 'High risk';
-                                $badgeClass = 'badge bg-danger';
-                            }
-                        @endphp
-                        <span class="{{ $badgeClass }} custom-badge">{{ $riskCategory }}</span>
+            @foreach ($a7_results as $a7)
+
+                @if($a7->risk_integrity!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+                @php
+                $backgroundClass = '';
+                if ($a7->risk_integrity >= 0 && $a7->risk_integrity <= 3) {
+                    $backgroundClass = 'green-background';
+                } elseif ($a7->risk_integrity >= 4 && $a7->risk_integrity <= 7) {
+                    $backgroundClass = 'orange-background';
+                } elseif ($a7->risk_integrity >= 8 && $a7->risk_integrity <= 10) {
+                    $backgroundClass = 'red-background';
+                }
+            @endphp
+                <input type="number" name="risk_integrity[]" value={{$a7->risk_integrity}} class="form-control {{$backgroundClass}}" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
                         @break
                     @endif
 
                     @if($loop->last)
-                        <span class="badge bg-secondary">No Risk</span>
+            <input type="number" name="risk_integrity[]" class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
+
+
                     @endif
-                @endforeach
-            @else
-                <span class="badge bg-secondary">No Risk</span>
-            @endif
-        </td>
+
+            @endforeach
+        @else
+             <input type="number" name="risk_integrity[]" class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
+
+        @endif
+
+         </td>
+
+         <td>
+            @if($a7_results->count()>0)
+            @foreach ($a7_results as $a7)
+
+                @if($a7->risk_availability!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+                @php
+                $backgroundClass = '';
+                if ($a7->risk_availability >= 0 && $a7->risk_availability <= 3) {
+                    $backgroundClass = 'green-background';
+                } elseif ($a7->risk_availability >= 4 && $a7->risk_availability <= 7) {
+                    $backgroundClass = 'orange-background';
+                } elseif ($a7->risk_availability >= 8 && $a7->risk_availability <= 10) {
+                    $backgroundClass = 'red-background';
+                }
+            @endphp
+                <input type="number" name="risk_availability[]" value={{$a7->risk_availability}} class="form-control {{$backgroundClass}}" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
+                        @break
+                    @endif
+
+                    @if($loop->last)
+            <input type="number" name="risk_availability[]" class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
+
+
+                    @endif
+
+            @endforeach
+        @else
+             <input type="number" name="risk_availability[]" class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
+
+        @endif
+
+         </td>
+
 
           <td>
             @if($a7_results->count()>0)
@@ -866,7 +1024,7 @@ $permissions=json_decode($project_permissions);
                 <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
                     <option value='yes+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability=="yes"?'selected':''}}>Only to this asset component</option>
-                    <option value='yes_to_all+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability=="yes_to_all"?'selected':''}}>To all asset components in this project</option>
+                    <option value='yes_to_all+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability=="yes_to_all"?'selected':''}}>To all asset components in this Service</option>
 
                     <option value='no+{{$sec2_4_a8_rows[$i][0]}}' {{$a8->applicability=="no"?'selected':''}}>Not to this asset component</option>
                 </select>
@@ -877,7 +1035,7 @@ $permissions=json_decode($project_permissions);
                     <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
 
                         <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Only to this asset component</option>
-                        <option value='yes_to_all+{{$sec2_4_a8_rows[$i][0]}}'>To all asset components in this project</option>
+                        <option value='yes_to_all+{{$sec2_4_a8_rows[$i][0]}}'>To all asset components in this Service</option>
                         <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>Not to this asset component</option>
                     </select>            @endif
 
@@ -885,7 +1043,7 @@ $permissions=json_decode($project_permissions);
         @else
         <select name="applicability[]" class="form-select" onchange="checkapplicability(this)">
             <option value='yes+{{$sec2_4_a8_rows[$i][0]}}'>Only to this asset component</option>
-            <option value='yes_to_all+{{$sec2_4_a8_rows[$i][0]}}'>To all asset components in this project</option>
+            <option value='yes_to_all+{{$sec2_4_a8_rows[$i][0]}}'>To all asset components in this Service</option>
             <option value='no+{{$sec2_4_a8_rows[$i][0]}}'>Not to this asset component</option>
         </select>
         @endif
@@ -970,9 +1128,17 @@ $permissions=json_decode($project_permissions);
             @foreach ($a8_results as $a8)
 
                 @if($a8->risk_level!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
-                <input type="number" name="risk_level[]" value={{$a8->risk_level}} class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
-
-                    {{-- <p>{{$a8->risk_level}}</p> --}}
+                @php
+                $backgroundClass = '';
+                if ($a8->risk_level >= 0 && $a8->risk_level <= 3) {
+                    $backgroundClass = 'green-background';
+                } elseif ($a8->risk_level >= 4 && $a8->risk_level <= 7) {
+                    $backgroundClass = 'orange-background';
+                } elseif ($a8->risk_level >= 8 && $a8->risk_level <= 10) {
+                    $backgroundClass = 'red-background';
+                }
+            @endphp
+                <input type="number" name="risk_level[]" value={{$a8->risk_level}} class="form-control {{$backgroundClass}}" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
                         @break
                     @endif
 
@@ -990,35 +1156,67 @@ $permissions=json_decode($project_permissions);
 
         <td>
             @if($a8_results->count()>0)
-                @foreach ($a8_results as $a8)
-                    @if($a8->control_num===strval($sec2_4_a8_rows[$i][0]))
-                        @php
-                            $riskLevel = $a8->risk_level;
-                            $riskCategory = '';
-                            $badgeClass = '';
-                            if ($riskLevel <= 3) {
-                                $riskCategory = 'Low risk';
-                                $badgeClass = 'badge bg-success';
-                            } elseif ($riskLevel > 3 && $riskLevel <= 7) {
-                                $riskCategory = 'Medium risk';
-                                $badgeClass = 'badge bg-warning';
-                            } elseif ($riskLevel > 7 && $riskLevel <= 10) {
-                                $riskCategory = 'High risk';
-                                $badgeClass = 'badge bg-danger';
-                            }
-                        @endphp
-                        <span class="{{ $badgeClass }} custom-badge">{{ $riskCategory }}</span>
+            @foreach ($a8_results as $a8)
+
+                @if($a8->risk_integrity!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+                @php
+                $backgroundClass = '';
+                if ($a8->risk_integrity >= 0 && $a8->risk_integrity <= 3) {
+                    $backgroundClass = 'green-background';
+                } elseif ($a8->risk_integrity >= 4 && $a8->risk_integrity <= 7) {
+                    $backgroundClass = 'orange-background';
+                } elseif ($a8->risk_integrity >= 8 && $a8->risk_integrity <= 10) {
+                    $backgroundClass = 'red-background';
+                }
+            @endphp
+                <input type="number" name="risk_integrity[]" value={{$a8->risk_integrity}} class="form-control {{$backgroundClass}}" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
                         @break
                     @endif
 
                     @if($loop->last)
-                        <span class="badge bg-secondary">No Risk</span>
-                    @endif
-                @endforeach
-            @else
-                <span class="badge bg-secondary">No Risk</span>
+         <input type="number" name="risk_integrity[]" class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
+
+                      @endif
+
+            @endforeach
+        @else
+         <input type="number" name="risk_integrity[]" class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
             @endif
+
         </td>
+
+        <td>
+            @if($a8_results->count()>0)
+            @foreach ($a8_results as $a8)
+
+                @if($a8->risk_availability!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+                @php
+                $backgroundClass = '';
+                if ($a8->risk_availability >= 0 && $a8->risk_availability <= 3) {
+                    $backgroundClass = 'green-background';
+                } elseif ($a8->risk_availability >= 4 && $a8->risk_availability <= 7) {
+                    $backgroundClass = 'orange-background';
+                } elseif ($a8->risk_availability >= 8 && $a8->risk_availability <= 10) {
+                    $backgroundClass = 'red-background';
+                }
+            @endphp
+                <input type="number" name="risk_availability[]" value={{$a8->risk_availability}} class="form-control {{$backgroundClass}}" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
+                        @break
+                    @endif
+
+                    @if($loop->last)
+         <input type="number" name="risk_availability[]" class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
+
+                      @endif
+
+            @endforeach
+        @else
+         <input type="number" name="risk_availability[]" class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
+            @endif
+
+        </td>
+
+
 
 
          <td>
@@ -1254,7 +1452,7 @@ $permissions=json_decode($project_permissions);
     function checkapplicability(selectElement) {
     if (selectElement.value.startsWith("no+")) {
         swal({
-            
+
             text: "This action will apply only to this asset component and its risk level for this control will be changed to zero; this action will not affect the risk levels as they currently stand for the other asset components in this project. Changes will be applied when the 'Save Changes' button is pressed.",
             icon: "warning",  // You can change the icon to "info", "success", or "error" as needed
             button: "OK",

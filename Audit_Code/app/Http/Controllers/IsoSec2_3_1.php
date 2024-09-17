@@ -13,6 +13,92 @@ use App\Models\Risk;
 
 class IsoSec2_3_1 extends Controller
 {
+
+    public function iso_sec_2_3_1_risk_selection($asset_id,$proj_id,$user_id){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+
+                if ($checkpermission->type_id == 4) {
+
+
+                    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+
+                    $asset=Db::table('iso_sec_2_1')->where('assessment_id',$asset_id)->first();
+                    return view('iso_sec_2_3_1.iso_sec_2_3_1_risk_selection', [
+
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project' => $project,
+                        'asset'=>$asset
+                    ]);
+
+                }
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+    }
+
+    public function Risk_Selection_form_Submit(Request $req,$asset_id,$proj_id,$user_id){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+
+                if ($checkpermission->type_id == 4) {
+
+                    $service=  Db::table('iso_sec_2_1')
+                    ->where('assessment_id',$asset_id)->first();
+
+
+                  Db::table('iso_sec_2_1')
+                  ->where('s_name',$service->s_name)
+                  ->where('project_id',$proj_id)
+                  ->update(
+                    [
+                        'risk_confidentiality'=>$req->risk_confidentiality,
+                        'risk_integrity'=>$req->risk_integrity,
+                        'risk_availability'=>$req->risk_availability
+
+                    ]
+                    );
+
+                    return redirect()->route('iso_sec_2_3_1',[
+                        'asset_id'=>$asset_id,
+                        'proj_id'=>$proj_id,
+                        'user_id'=>$user_id
+                    ]);
+
+                }
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+    }
+
+
     public function iso_sec_2_3_1($asset_id, $proj_id, $user_id)
     {
         if ($user_id == auth()->user()->id) {
@@ -98,47 +184,17 @@ class IsoSec2_3_1 extends Controller
 
     public function iso_sec2_3_1_initial_add(Request $req, $asset_id, $proj_id, $user_id)
     {
+
+
         $risk=Risk::where('asset_id',$asset_id)->get();
         $req->validate([
-            'asset_value' => 'required',
+
             'applicability' => ['required', 'array', 'min:1'],
             'control_compliance' => ['required', 'array', 'min:1'],
            // 'vulnerability' => ['required', 'array', 'min:1'],
             'threat' => ['required', 'array', 'min:1'],
            // 'risk_level' => ['required', 'array', 'min:1']
         ]);
-
-
-        $global_asset_value = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->first();
-        if ($global_asset_value != null and $global_asset_value->asset_value != $req->asset_value) {
-            $old_risk = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->get();
-
-            foreach ($old_risk as $old) {
-                Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
-                    ->where('control_num', $old->control_num)
-                    ->update(
-                        [
-                            'asset_value' => $req->asset_value,
-                            'risk_level' => ($old->vulnerability / 100.0) * ($old->threat / 100.0) * $req->asset_value
-                        ]
-                    );
-            }
-
-
-
-            //risk treatment tale also initially contains risk assessment data
-            foreach ($old_risk as $old) {
-                Db::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)
-                    ->where('control_num', $old->control_num)
-                    ->update(
-                        [
-                            'asset_value' => $req->asset_value,
-                            'risk_level' => ($old->vulnerability / 100.0) * ($old->threat / 100.0) * $req->asset_value
-                        ]
-                    );
-            }
-        }
-
 
 
 
@@ -183,14 +239,34 @@ class IsoSec2_3_1 extends Controller
 
 
 
-         $my_filter = array_filter($req->input('risk_level'), function($value) {
-            return $value !== null;
-        });
-        $req->merge(['risk_level' => $my_filter]);
-        $risk_level = $req->input('risk_level');
-        $filtered_risk_level= array_filter($risk_level, function($value) {
-            return $value !== null;
-        });
+        //  $my_filter = array_filter($req->input('risk_level'), function($value) {
+        //     return $value !== null;
+        // });
+        // $req->merge(['risk_level' => $my_filter]);
+        // $risk_level = $req->input('risk_level');
+        // $filtered_risk_confidentiality= array_filter($risk_level, function($value) {
+        //     return $value !== null;
+        // });
+
+
+        // $my_filter = array_filter($req->input('risk_integrity'), function($value) {
+        //     return $value !== null;
+        // });
+        // $req->merge(['risk_integrity' => $my_filter]);
+        // $risk_level = $req->input('risk_integrity');
+        // $filtered_risk_integrity= array_filter($risk_level, function($value) {
+        //     return $value !== null;
+        // });
+
+
+        // $my_filter = array_filter($req->input('risk_availability'), function($value) {
+        //     return $value !== null;
+        // });
+        // $req->merge(['risk_availability' => $my_filter]);
+        // $risk_level = $req->input('risk_availability');
+        // $filtered_risk_availability= array_filter($risk_level, function($value) {
+        //     return $value !== null;
+        // });
 
 
 
@@ -225,31 +301,34 @@ class IsoSec2_3_1 extends Controller
                     ->where('control_num', $numberArray[$key])->first();
 
 
-
                     if($check){ //if record already exists
                         DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
                         ->where('control_num', $numberArray[$key])
                         ->update([
-                            'asset_value' => $req->asset_value,
+
                             'applicability' => "yes",
                             'control_num'=>$numberArray[$key],
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->asset_value ,
+                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
+                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
+                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
 
                         DB::table('iso_risk_treatment')->where('project_id',$proj_id)->where('asset_id',$asset_id)
                         ->where('control_num', $numberArray[$key])->update([
-                            'asset_value' => $req->asset_value,
+
                             'applicability' => "yes",
                             'control_num'=>$numberArray[$key],
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->asset_value ,
+                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
+                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
+                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
@@ -260,13 +339,15 @@ class IsoSec2_3_1 extends Controller
                     DB::table('iso_sec_2_3_1')->insert([
                         'project_id' => $proj_id,
                         'asset_id' => $asset_id,
-                        'asset_value' => $req->asset_value,
+
                             'applicability' => "yes",
                             'control_num'=>$numberArray[$key],
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->asset_value ,
+                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
+                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
+                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
@@ -274,13 +355,15 @@ class IsoSec2_3_1 extends Controller
                     DB::table('iso_risk_treatment')->insert([
                         'project_id' => $proj_id,
                         'asset_id' => $asset_id,
-                       'asset_value' => $req->asset_value,
+
                        'control_num'=>$numberArray[$key],
                             'applicability' => "yes",
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->asset_value ,
+                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
+                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
+                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
@@ -303,26 +386,30 @@ class IsoSec2_3_1 extends Controller
 
                     DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
                     ->where('control_num', $numberArray[$key])->update([
-                        'asset_value' => $req->asset_value,
+
                         'applicability' => "no",
                         'control_num'=>$numberArray[$key],
                         'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
                         'risk_level' => 0,
+                        'risk_integrity'=>0,
+                        'risk_availability'=>0,
                         'last_edited_by' => $user_id,
                         'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
 
                     DB::table('iso_risk_treatment')->where('project_id',$proj_id)->where('asset_id',$asset_id)
                     ->where('control_num', $numberArray[$key])->update([
-                        'asset_value' => $req->asset_value,
+
                         'applicability' => "no",
                         'control_num'=>$numberArray[$key],
                    'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                        'risk_level' => 0,
+                            'risk_level' => 0,
+                        'risk_integrity'=>0,
+                        'risk_availability'=>0,
                         'last_edited_by' => $user_id,
                         'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
@@ -334,13 +421,15 @@ class IsoSec2_3_1 extends Controller
                 DB::table('iso_sec_2_3_1')->insert([
                     'project_id' => $proj_id,
                     'asset_id' => $asset_id,
-                    'asset_value' => $req->asset_value,
+
                     'control_num' => $numberArray[$key],
                     'applicability' => "no",
                    'control_compliance' => $filtered_control_compliance[$key],
                      'vulnerability' => 100-$filtered_control_compliance[$key],
                       'threat' => $filtered_threat[$key],
-                    'risk_level' => 0,
+                      'risk_level' => 0,
+                      'risk_integrity'=>0,
+                      'risk_availability'=>0,
                     'last_edited_by' => $user_id,
                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                 ]);
@@ -348,13 +437,15 @@ class IsoSec2_3_1 extends Controller
                 DB::table('iso_risk_treatment')->insert([
                     'project_id' => $proj_id,
                     'asset_id' => $asset_id,
-                    'asset_value' => $req->asset_value,
+
                     'control_num' => $numberArray[$key],
                     'applicability' => "no",
                     'control_compliance' => $filtered_control_compliance[$key],
                     'vulnerability' => 100-$filtered_control_compliance[$key],
                     'threat' => $filtered_threat[$key],
                     'risk_level' => 0,
+                    'risk_integrity'=>0,
+                    'risk_availability'=>0,
                     'last_edited_by' => $user_id,
                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                 ]);
@@ -370,26 +461,30 @@ class IsoSec2_3_1 extends Controller
                         DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
                         ->where('control_num', $numberArray[$key])
                         ->update([
-                            'asset_value' => $req->asset_value,
+
                             'applicability' => "yes_to_all",
                             'control_num'=>$numberArray[$key],
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->asset_value ,
+                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
+                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
+                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
 
                         DB::table('iso_risk_treatment')->where('project_id',$proj_id)->where('asset_id',$asset_id)
                         ->where('control_num', $numberArray[$key])->update([
-                            'asset_value' => $req->asset_value,
+
                             'applicability' => "yes_to_all",
                             'control_num'=>$numberArray[$key],
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->asset_value ,
+                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
+                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
+                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
@@ -400,41 +495,44 @@ class IsoSec2_3_1 extends Controller
                     DB::table('iso_sec_2_3_1')->insert([
                         'project_id' => $proj_id,
                         'asset_id' => $asset_id,
-                        'asset_value' => $req->asset_value,
                             'applicability' => "yes_to_all",
                             'control_num'=>$numberArray[$key],
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->asset_value ,
-                            'last_edited_by' => $user_id,
+                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
+                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
+                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,                            'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
 
                     DB::table('iso_risk_treatment')->insert([
                         'project_id' => $proj_id,
                         'asset_id' => $asset_id,
-                       'asset_value' => $req->asset_value,
                        'control_num'=>$numberArray[$key],
                             'applicability' => "yes_to_all",
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->asset_value ,
-                            'last_edited_by' => $user_id,
+                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
+                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
+                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,                            'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
 
                 }
 
+                $service=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
 
-            $otherAssets= Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id','!=',$asset_id)
+
+                //other assets in this service
+            $otherAssets= Db::table('iso_sec_2_1')->where('project_id',$proj_id)
+            ->where('s_name',$service->s_name)
+            ->where('assessment_id','!=',$asset_id)
             ->get();
 
             if($otherAssets->count()>0){
                 foreach($otherAssets as $other){
-
-
                     $check=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)
                     ->where('asset_id',$other->assessment_id)->where('control_num', $numberArray[$key])->first();
                     if($check){ //if record already exists
@@ -446,8 +544,9 @@ class IsoSec2_3_1 extends Controller
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $check->asset_value ,
-                            'last_edited_by' => $user_id,
+                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
+                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
+                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,                            'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
 
@@ -458,45 +557,39 @@ class IsoSec2_3_1 extends Controller
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $check->asset_value ,
-                            'last_edited_by' => $user_id,
+                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
+                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
+                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,                            'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
 
                     }else{
-                        //record inserting first time
-                       $AssetValue=10;
-                        $getAssetValue=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)
-                        ->where('asset_id',$other->assessment_id)->first();
-                        if($getAssetValue){
-                            $AssetValue=$getAssetValue->asset_value;
-                        }
 
                     DB::table('iso_sec_2_3_1')->insert([
                         'project_id' => $proj_id,
                         'asset_id' => $other->assessment_id,
-                        'asset_value'=>$AssetValue,
                          'applicability' => "yes_to_all",
                             'control_num'=>$numberArray[$key],
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $AssetValue ,
-                            'last_edited_by' => $user_id,
+                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
+                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
+                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,                            'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
 
                     DB::table('iso_risk_treatment')->insert([
                         'project_id' => $proj_id,
                         'asset_id' => $other->assessment_id,
-                       'asset_value' => $AssetValue,
                        'control_num'=>$numberArray[$key],
                             'applicability' => "yes",
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $AssetValue ,
-                            'last_edited_by' => $user_id,
+                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
+                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
+                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,                            'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
 

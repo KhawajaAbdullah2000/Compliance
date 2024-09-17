@@ -19,6 +19,22 @@ body {
     margin-top:50px;
 }
 
+.green-background {
+    background-color: green;
+    color: white; /* Optional: for better readability */
+}
+
+.orange-background {
+    background-color: orange;
+    color: white; /* Optional */
+}
+
+.red-background {
+    background-color: red;
+    color: white; /* Optional */
+}
+
+
 .custom-badge {
     font-size: 0.90rem;  /* Increase the font size */
     padding: 0.5em 1em;  /* Adjust the padding */

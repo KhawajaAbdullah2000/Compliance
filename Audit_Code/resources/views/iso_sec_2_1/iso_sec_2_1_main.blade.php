@@ -206,8 +206,10 @@
 
                         @if ($project->project_type == 4)
                             <td>
-                                <a href="/iso_sec_2_3_1/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}"
+                                <a href="/iso_sec_2_3_1_risk_selection/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}"
                                     class="btn btn-sm my_bg_color text-white">Initiate or Edit</a>
+                                {{-- <a href="/iso_sec_2_3_1/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}"
+                                    class="btn btn-sm my_bg_color text-white">Initiate or Edit</a> --}}
                             </td>
                         @endif
 
