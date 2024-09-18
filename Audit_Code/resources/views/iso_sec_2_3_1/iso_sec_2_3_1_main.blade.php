@@ -143,7 +143,7 @@ Low
 
     @if(in_array('Data Inputter',$permissions))
     <div class="float-end mb-4">
-      <button type="submit" class="btn my_bg_color text-white btn-lg mt-5"  id="submitForm">Save Changes</button>
+      <button type="submit" class="btn my_bg_color text-white btn-lg mt-5"  id="submitForm">Update Changes</button>
     </div>
     @endif
     </table>

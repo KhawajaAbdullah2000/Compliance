@@ -628,6 +628,7 @@ class IsoSec2_3_1 extends Controller
     //editing risk assessment
     public function edit_risk_assessment($proj_id, $user_id, $asset_id, $control_num)
     {
+    
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -649,9 +650,14 @@ class IsoSec2_3_1 extends Controller
 
                     $assetData = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
                         ->where('control_num', $control_num)->first();
+                
+                        $riskData=Db::table('iso_sec_2_1')->where('project_id',$proj_id)
+                        ->where('assessment_id',$asset_id)->first();
+                    
                     return view('iso_sec_2_3_1.iso_sec_2_3_1_edit', [
                         'project' => $project,
-                        'assetData' => $assetData
+                        'assetData' => $assetData,
+                        'riskData'=>$riskData
                     ]);
                 }
             }

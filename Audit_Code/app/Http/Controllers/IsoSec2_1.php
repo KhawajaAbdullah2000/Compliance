@@ -348,6 +348,7 @@ class IsoSec2_1 extends Controller
 
     public function iso_sec_2_1_edit($assessment_id, $proj_id, $user_id)
     {
+    
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',

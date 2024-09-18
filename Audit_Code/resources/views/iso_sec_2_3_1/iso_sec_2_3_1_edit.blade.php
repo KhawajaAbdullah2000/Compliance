@@ -63,22 +63,54 @@
             @csrf
             @method('PUT')
 
-            <div class="fw-bold mb-3">
-                <label for="">Asset Value:
-                    @if ($assetData->asset_value==10)
-                    High
-                    @endif
+            <h3 class="">Severity of Adverse Impacts</h3>
 
-                    @if ($assetData->asset_value==5)
-                    Medium
-                    @endif
-
-                    @if ($assetData->asset_value==1)
-                    Low
-                    @endif
-                </label>
-
-            </div>
+            <p><span class="fw-bold">Risk Confidentiality:</span>
+            @if($riskData->risk_confidentiality==10)
+            High
+            @endif
+            
+            @if($riskData->risk_confidentiality==5)
+            Medium
+            @endif
+            
+            @if($riskData->risk_confidentiality==1)
+            Low
+            @endif
+            </p>
+            
+            
+            <p><span class="fw-bold">Risk Integrity:</span>
+            
+                @if($riskData->risk_integrity==10)
+            High
+            @endif
+            
+            @if($riskData->risk_integrity==5)
+            Medium
+            @endif
+            
+            @if($riskData->risk_integrity==1)
+            Low
+            @endif
+            
+            </p>
+            
+            <p><span class="fw-bold">Risk Availability:</span>
+            
+                @if($riskData->risk_availability==10)
+            High
+            @endif
+            
+            @if($riskData->risk_availability==5)
+            Medium
+            @endif
+            
+            @if($riskData->risk_availability==1)
+            Low
+            @endif
+            
+            </p>
 
     <div class="form-group">
         <label for="" class="fw-bold">Applicability: </label>
