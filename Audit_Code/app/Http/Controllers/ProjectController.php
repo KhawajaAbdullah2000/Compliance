@@ -316,9 +316,12 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
                 $user=Db::table('users')->where('id',$user_id)->first();
 
                 $servicesInProject= DB::table('projects')
+                ->where('projects.project_id',$proj_id)
                 ->join('iso_sec_2_1', 'projects.project_id', '=', 'iso_sec_2_1.project_id')
+
                 ->select('projects.project_name','projects.project_id', DB::raw('COUNT(DISTINCT iso_sec_2_1.s_name) as services'))
                 ->groupBy('projects.project_id', 'projects.project_name')
+
                 ->get();
 
 
