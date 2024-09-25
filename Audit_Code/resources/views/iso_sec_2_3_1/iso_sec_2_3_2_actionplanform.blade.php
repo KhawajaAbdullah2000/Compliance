@@ -45,9 +45,9 @@ $permissions=json_decode($project_permissions);
 
 
 
-<div class="row">
+<div class="row g-5">
 
-    <div class="col-lg-6">
+    <div class="col-md-6">
 
 
         <table class="table table-bordered table-warning">
@@ -57,7 +57,7 @@ $permissions=json_decode($project_permissions);
                     <th>Asset Group Name</th>
                     <th>Asset Name</th>
                     <th>Asset Component Name</th>
-                    <th>Asset Component Value</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -66,18 +66,64 @@ $permissions=json_decode($project_permissions);
                     <td>@isset($assetData->g_name){{$assetData->g_name}}@endisset</td>
                     <td>@isset($assetData->name){{$assetData->name}}@endisset</td>
                     <td>@isset($assetData->c_name){{$assetData->c_name}}@endisset</td>
-                    <td>
-                        @if($assetvalue == 10)
-                        High
-                        @elseif($assetvalue == 5)
-                        Medium
-                        @elseif($assetvalue == 1)
-                        Low
-                        @endif
-                    </td>
                 </tr>
             </tbody>
         </table>
+
+
+</div>
+
+<div class="col-md-6">
+
+    <h3 class="">Severity of Adverse Impacts</h3>
+
+    <p><span class="fw-bold">Risk Confidentiality:</span>
+    @if($assetData->risk_confidentiality==10)
+    High
+    @endif
+
+    @if($assetData->risk_confidentiality==5)
+    Medium
+    @endif
+
+    @if($assetData->risk_confidentiality==1)
+    Low
+    @endif
+    </p>
+
+
+    <p><span class="fw-bold">Risk Integrity:</span>
+
+        @if($assetData->risk_integrity==10)
+    High
+    @endif
+
+    @if($assetData->risk_integrity==5)
+    Medium
+    @endif
+
+    @if($assetData->risk_integrity==1)
+    Low
+    @endif
+
+    </p>
+
+    <p><span class="fw-bold">Risk Availability:</span>
+
+        @if($assetData->risk_availability==10)
+    High
+    @endif
+
+    @if($assetData->risk_availability==5)
+    Medium
+    @endif
+
+    @if($assetData->risk_availability==1)
+    Low
+    @endif
+
+    </p>
+
 
 
 </div>
@@ -90,9 +136,9 @@ $permissions=json_decode($project_permissions);
 
 <div class="row">
 
-<div class="col-lg-6">
+<div class="col-md-6">
 
-<table style="width: 50%;" class="table table-bordered table-secondary">
+<table class="table table-bordered table-secondary">
     <tbody>
 
         <tr>
@@ -143,6 +189,8 @@ $permissions=json_decode($project_permissions);
 </table>
 
 </div>
+
+
 </div>
 
 

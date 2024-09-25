@@ -36,34 +36,94 @@ $permissions = json_decode($project_permissions);
         </div>
     </div>
 
-    <table class="table table-bordered table-warning" style="width:50%;">
-        <thead>
-            <tr>
-                <th>Service Name</th>
-                <th>Asset Group Name</th>
-                <th>Asset Name</th>
-                <th>Asset Component Name</th>
-                <th>Asset Component Value</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{$assetData->s_name}}</td>
-                <td>@isset($assetData->g_name){{$assetData->g_name}}@endisset</td>
-                <td>@isset($assetData->name){{$assetData->name}}@endisset</td>
-                <td>@isset($assetData->c_name){{$assetData->c_name}}@endisset</td>
-                <td>
-                    @if($assetvalue == 10)
-                    High
-                    @elseif($assetvalue == 5)
-                    Medium
-                    @elseif($assetvalue == 1)
-                    Low
-                    @endif
-                </td>
-            </tr>
-        </tbody>
-    </table>
+
+
+<div class="row g-5">
+    <div class="col-md-6">
+
+        <table class="table table-bordered table-warning">
+            <thead>
+                <tr>
+                    <th>Service Name</th>
+                    <th>Asset Group Name</th>
+                    <th>Asset Name</th>
+                    <th>Asset Component Name</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{$assetData->s_name}}</td>
+                    <td>@isset($assetData->g_name){{$assetData->g_name}}@endisset</td>
+                    <td>@isset($assetData->name){{$assetData->name}}@endisset</td>
+                    <td>@isset($assetData->c_name){{$assetData->c_name}}@endisset</td>
+
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="col-md-6 ml-5">
+
+        <h3 class="">Severity of Adverse Impacts</h3>
+
+<p><span class="fw-bold">Risk Confidentiality:</span>
+@if($assetData->risk_confidentiality==10)
+High
+@endif
+
+@if($assetData->risk_confidentiality==5)
+Medium
+@endif
+
+@if($assetData->risk_confidentiality==1)
+Low
+@endif
+</p>
+
+
+<p><span class="fw-bold">Risk Integrity:</span>
+
+    @if($assetData->risk_integrity==10)
+High
+@endif
+
+@if($assetData->risk_integrity==5)
+Medium
+@endif
+
+@if($assetData->risk_integrity==1)
+Low
+@endif
+
+</p>
+
+<p><span class="fw-bold">Risk Availability:</span>
+
+    @if($assetData->risk_availability==10)
+High
+@endif
+
+@if($assetData->risk_availability==5)
+Medium
+@endif
+
+@if($assetData->risk_availability==1)
+Low
+@endif
+
+</p>
+
+
+
+    </div>
+
+
+</div>
+
+
+
 
 
     @if ($errors->any())
@@ -107,9 +167,7 @@ $permissions = json_decode($project_permissions);
                                 @endif
                             </div>
 
-                            {{-- <div class="mb-4">
-                                <button type="submit" class="btn btn-success btn-sm">Save Changes</button>
-                            </div> --}}
+
                         </div>
 
                         <input type="hidden" name="control_num" value="{{$control_num}}">
@@ -175,35 +233,25 @@ $permissions = json_decode($project_permissions);
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-bold">Risk Level</td>
+                                    <td class="fw-bold">Risk Confidentiality</td>
                                     <td>{{$treatmentData->risk_level}}</td>
                                     <td>
                                         <input type="number" name="risk_level" class="form-control" data-control-id="{{$after_risk_treatment->control_num}}" value="{{old('risk_level',$after_risk_treatment->risk_level)}}" readonly>
                                     </td>
                                 </tr>
+
                                 <tr>
-                                    <td class="fw-bold">Asset Component Value</td>
+                                    <td class="fw-bold">Risk Integrity</td>
+                                    <td>{{$treatmentData->risk_integrity}}</td>
                                     <td>
-                                        @if($treatmentData->asset_value == 10)
-                                        High
-                                        @endif
-                                        @if($treatmentData->asset_value == 5)
-                                        Medium
-                                        @endif
-                                        @if($treatmentData->asset_value == 1)
-                                        Low
-                                        @endif
+                                        <input type="number" name="risk_integrity" class="form-control" data-control-id="{{$after_risk_treatment->control_num}}" value="{{old('risk_integrity',$after_risk_treatment->risk_integrity)}}" readonly>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Risk Availability</td>
+                                    <td>{{$treatmentData->risk_availability}}</td>
                                     <td>
-                                        @if($after_risk_treatment->asset_value == 10)
-                                        High
-                                        @endif
-                                        @if($after_risk_treatment->asset_value == 5)
-                                        Medium
-                                        @endif
-                                        @if($after_risk_treatment->asset_value == 1)
-                                        Low
-                                        @endif
+                                        <input type="number" name="risk_availability" class="form-control" data-control-id="{{$after_risk_treatment->control_num}}" value="{{old('risk_availability',$after_risk_treatment->risk_availability)}}" readonly>
                                     </td>
                                 </tr>
                             </tbody>
@@ -213,27 +261,40 @@ $permissions = json_decode($project_permissions);
             </div>
         </div>
 
-        {{-- <div class="col-lg-6 mt-4">
-            @if($after_risk_treatment->residual_risk_treatment == "retain and accept risk")
-            <a href="/risk_treatment_justification/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" class="btn my_bg_color text-white fw-bold">Create Justification</a>
-            @endif
-        </div> --}}
+
     </div>
 </div>
 
 @section('scripts')
 <script>
     $(document).ready(function(){
-        var assetValue = {{ $assetvalue }};
+        var asset_confidentiality = {{ $assetData->risk_confidentiality }};
+        var asset_integrity={{$assetData->risk_integrity}};
+        var asset_availability={{$assetData->risk_availability}};
+
         var vulnerabilityValue = parseFloat($('input[name="vulnerability"]').val()) || null;
         var threatValue = parseFloat($('input[name="threat"]').val()) || null;
 
         function updateRiskLevel() {
-            if (!isNaN(assetValue) && !isNaN(vulnerabilityValue) && !isNaN(threatValue)) {
-                var riskLevel = (vulnerabilityValue / 100) * (threatValue / 100) * assetValue;
+            if (!isNaN(asset_confidentiality) && !isNaN(vulnerabilityValue) && !isNaN(threatValue)) {
+                var riskLevel = (vulnerabilityValue / 100) * (threatValue / 100) * asset_confidentiality;
                 $('input[name="risk_level"]').val(riskLevel.toFixed(4));
             } else {
                 $('input[name="risk_level"]').val('');
+            }
+
+            if (!isNaN(asset_integrity) && !isNaN(vulnerabilityValue) && !isNaN(threatValue)) {
+                var riskLevel = (vulnerabilityValue / 100) * (threatValue / 100) * asset_integrity;
+                $('input[name="risk_integrity"]').val(riskLevel.toFixed(4));
+            } else {
+                $('input[name="risk_integrity"]').val('');
+            }
+
+            if (!isNaN(asset_availability) && !isNaN(vulnerabilityValue) && !isNaN(threatValue)) {
+                var riskLevel = (vulnerabilityValue / 100) * (threatValue / 100) * asset_availability;
+                $('input[name="asset_availability"]').val(riskLevel.toFixed(4));
+            } else {
+                $('input[name="asset_availability"]').val('');
             }
         }
 

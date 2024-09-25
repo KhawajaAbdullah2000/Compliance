@@ -628,7 +628,7 @@ class IsoSec2_3_1 extends Controller
     //editing risk assessment
     public function edit_risk_assessment($proj_id, $user_id, $asset_id, $control_num)
     {
-    
+
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -650,10 +650,10 @@ class IsoSec2_3_1 extends Controller
 
                     $assetData = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
                         ->where('control_num', $control_num)->first();
-                
+
                         $riskData=Db::table('iso_sec_2_1')->where('project_id',$proj_id)
                         ->where('assessment_id',$asset_id)->first();
-                    
+
                     return view('iso_sec_2_3_1.iso_sec_2_3_1_edit', [
                         'project' => $project,
                         'assetData' => $assetData,
@@ -840,9 +840,6 @@ class IsoSec2_3_1 extends Controller
                     $controls = DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
                         ->pluck('control_num')->toArray();
 
-                    $asset_value=DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
-                    ->first()->asset_value;
-
 
 
                     $assetData = Db::table('iso_sec_2_1')
@@ -851,8 +848,6 @@ class IsoSec2_3_1 extends Controller
 
                     $assetDataForFive = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)
                         ->where('asset_id', $asset_id)->get();
-
-
 
 
 
@@ -872,7 +867,7 @@ class IsoSec2_3_1 extends Controller
                         'check' => $check,
                         'project' => $project,
                         'assetDataForFive' => $assetDataForFive,
-                        'asset_value'=>$asset_value
+
 
                     ]);
                 }
@@ -883,8 +878,6 @@ class IsoSec2_3_1 extends Controller
 
     public function iso_sec_2_3_2_risk_treat_form($control_num, $asset_id, $proj_id, $user_id)
     {
-        //if component selected
-
 
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -936,7 +929,6 @@ class IsoSec2_3_1 extends Controller
                             'project_permissions' => $checkpermission->project_permissions,
                             'asset_id' => $asset_id,
                             'control_num' => $control_num,
-                            'assetvalue' => $asset_risk_assess->asset_value,
                             'users' => $users,
                             'treatmentData' => $asset_risk_assess,
                             'assetData' => $assetData,
@@ -1006,7 +998,6 @@ class IsoSec2_3_1 extends Controller
     public function iso_sec_2_3_2_treat_form1_submit(Request $req, $asset_id, $control_num, $proj_id, $user_id)
     {
 
-       // dd($req->all());
 
         $req->validate([
             'applicability'=>'required',
@@ -1014,7 +1005,9 @@ class IsoSec2_3_1 extends Controller
             'control_compliance' => 'required',
             'vulnerability' => 'required',
             'threat' => 'required',
-            'risk_level' => 'required'
+            'risk_level' => 'required',
+            'risk_integrity'=>'required',
+            'risk_availability'=>'required'
 
         ]);
 
@@ -1049,6 +1042,8 @@ class IsoSec2_3_1 extends Controller
                                 'vulnerability' => $risk_assessment->vulnerability,
                                 'threat' => $risk_assessment->threat,
                                 'risk_level' => $risk_assessment->risk_level,
+                                'risk_integrity' => $risk_assessment->risk_integrity,
+                                'risk_availability' => $risk_assessment->risk_availability,
                                 'last_edited_by' => $user_id,
                                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
 
@@ -1065,6 +1060,8 @@ class IsoSec2_3_1 extends Controller
                                     'vulnerability' => $req->vulnerability,
                                     'threat' => $req->threat,
                                     'risk_level' => $req->risk_level,
+                                    'risk_integrity' => $req->risk_integrity,
+                                    'risk_availability' => $req->risk_availability,
                                     'last_edited_by' => $user_id,
                                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
 
@@ -1081,12 +1078,13 @@ class IsoSec2_3_1 extends Controller
                                     'vulnerability' => $req->vulnerability,
                                     'threat' => $req->threat,
                                     'risk_level' => $req->risk_level,
+                                    'risk_integrity' => $req->risk_integrity,
+                                    'risk_availability' => $req->risk_availability,
                                     'last_edited_by' => $user_id,
                                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
 
                                 ]);
                         }
-
 
                             return redirect()->route('risk_treatment_edit_action_plan_form', [
                                 'asset_id' => $asset_id,  'control_num' => $control_num,
@@ -1158,6 +1156,7 @@ class IsoSec2_3_1 extends Controller
 
     public function risk_treatment_edit_action_plan_form($asset_id, $control_num, $proj_id, $user_id)
     {
+
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -1210,7 +1209,6 @@ class IsoSec2_3_1 extends Controller
                             'project_permissions' => $checkpermission->project_permissions,
                             'asset_id' => $asset_id,
                             'control_num' => $control_num,
-                            'assetvalue' => $asset_risk_assess->asset_value,
                             'users' => $users,
                             'treatmentData' => $asset_risk_assess,
                             'risk_assessment'=>$risk_assessment,

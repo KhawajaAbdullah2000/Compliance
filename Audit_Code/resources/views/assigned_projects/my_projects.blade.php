@@ -41,7 +41,7 @@
 
       <td>
 
-        <a href="/ai_wizard/{{$pro->project_code}}/{{auth()->user()->id}}"
+         <a href="/iso_sections/{{$pro->project_code}}/{{auth()->user()->id}}"
             data-toggle="tooltip" data-placement="top" title="Edit Project details">
         <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
         </a>
