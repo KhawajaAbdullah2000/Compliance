@@ -21,6 +21,8 @@
             <th style="text-align: center">Edit Project</th>
             <th style="text-align: center">Project Visuals</th>
              <th style="text-align: :center">Risk Visuals</th>
+             <th style="text-align: :center">Risk Computations</th>
+
             <th style="text-align: center">Reports</th>
         </tr>
     </thead>
@@ -57,11 +59,18 @@
       <td>
 
         <a href="/ai_wizard/{{$pro->project_code}}/{{auth()->user()->id}}"
-            data-toggle="tooltip" data-placement="top" title="Edit Project details">
+            data-toggle="tooltip" data-placement="top" title="Risk visuals">
         <i class="fas fa-chart-line fa-lg" style="color: #124903;"></i>
         </a>
         </td>
 
+        <td>
+
+            <a href="/risk_computation/{{$pro->project_code}}/{{auth()->user()->id}}"
+                data-toggle="tooltip" data-placement="top" title="Risk Computations">
+            <i class="fas fa-calculator fa-lg" style="color: #124903;"></i>
+            </a>
+            </td>
 
 
 
