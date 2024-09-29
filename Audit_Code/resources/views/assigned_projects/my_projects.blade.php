@@ -21,7 +21,7 @@
             <th style="text-align: center">Edit Project</th>
             <th style="text-align: center">Project Visuals</th>
              <th style="text-align: :center">Risk Visuals</th>
-             <th style="text-align: :center">Risk Computations</th>
+             <th style="text-align: :center">Risk Distribution</th>
 
             <th style="text-align: center">Reports</th>
         </tr>

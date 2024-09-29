@@ -5,7 +5,34 @@
 @include('user-nav')
 
 
+
 <div class="container">
+
+    @php
+    function getColor($value) {
+        if ($value >= 0 && $value <= 39) {
+            return 'lightgreen';
+        } elseif ($value >= 40 && $value <= 79) {
+            return 'yellow';
+        } elseif ($value >= 80 && $value <= 100) {
+            return 'pink';
+        }
+        return 'transparent'; // Default for values outside the range
+    }
+
+    function getRiskColor($value) {
+        if ($value >= 0.0 && $value <= 3.9) {
+            return 'lightgreen';
+        } elseif ($value >= 4.0 && $value <= 7.9) {
+            return 'yellow';
+        } elseif ($value >= 8.0 && $value <= 10.0) {
+            return 'pink';
+        }
+        return 'transparent'; // Default for values outside the range
+    }
+
+
+@endphp
 
 
 <div class="row mt-5">
@@ -89,9 +116,9 @@
             <label class="form-label fw-bold">Select Risk Type</label>
             <select class="form-select" name="risk_type">
                 <option value="all" {{ request('risk_type') == 'all' ? 'selected' : '' }}>All</option>
-                <option value="risk_level" {{ request('risk_type') == 'risk_level' ? 'selected' : '' }}>Risk Confidentiality</option>
-                <option value="risk_integrity" {{ request('risk_type') == 'risk_integrity' ? 'selected' : '' }}>Risk Integrity</option>
-                <option value="risk_availability" {{ request('risk_type') == 'risk_availability' ? 'selected' : '' }}>Risk Availability</option>
+                <option value="risk_level" {{ request('risk_type') == 'risk_level' ? 'selected' : '' }}>Confidentiality Risk</option>
+                <option value="risk_integrity" {{ request('risk_type') == 'risk_integrity' ? 'selected' : '' }}>Integrity Risk</option>
+                <option value="risk_availability" {{ request('risk_type') == 'risk_availability' ? 'selected' : '' }}>Availability Risk</option>
             </select>
         </div>
 
@@ -115,101 +142,51 @@
 
 </div>
 
-{{-- <h4 class="mt-4">Risk Assessment Results</h4>
-
-@if($results->isEmpty())
-    <p>No data available for the selected filters.</p>
-@else
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Service Name</th>
-                <th>Group Name</th>
-                <th>Asset Name</th>
-                <th>Component Name</th>
-                <th>Control Number</th>
-                <th>Applicability</th>
-                <th>Vulnerability</th>
-                <th>Threat</th>
-
-                <!-- Conditionally display risk columns -->
-                @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
-                    <th>Risk Confidentiality</th>
-                @endif
-                @if(request('risk_type') == 'all' || request('risk_type') == 'risk_integrity')
-                    <th>Risk Integrity</th>
-                @endif
-                @if(request('risk_type') == 'all' || request('risk_type') == 'risk_availability')
-                    <th>Risk Availability</th>
-                @endif
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($results as $result)
-                <tr>
-                    <td>{{ $result->s_name }}</td>
-                    <td>{{ $result->g_name }}</td>
-                    <td>{{ $result->name }}</td>
-                    <td>{{ $result->c_name }}</td>
-                    <td>{{ $result->control_num }}</td>
-                    <td>{{ $result->applicability }}</td>
-                    <td>{{ $result->vulnerability }}</td>
-                    <td>{{ $result->threat }}</td>
-
-                    <!-- Conditionally display risk values -->
-                    @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
-                        <td>{{ $result->risk_level ?? 'N/A' }}</td>
-                    @endif
-                    @if(request('risk_type') == 'all' || request('risk_type') == 'risk_integrity')
-                        <td>{{ $result->risk_integrity ?? 'N/A' }}</td>
-                    @endif
-                    @if(request('risk_type') == 'all' || request('risk_type') == 'risk_availability')
-                        <td>{{ $result->risk_availability ?? 'N/A' }}</td>
-                    @endif
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-@endif --}}
 
 
-<h4 class="mt-4 text-center fw-bold">Risk Computation Results</h4>
+
+<h4 class="mt-4 text-center fw-bold">Risk Distribution Results</h4>
 
     @if($results->isEmpty())
         <p>No data available for the selected filters.</p>
     @else
-        <!-- Check if 'All' is selected for components and display separate tables -->
         @if(request('component') == 'all'|| request('component')==null)
             @foreach($results->groupBy('c_name') as $componentName => $componentResults)
-                <!-- Display Asset and Service Details Above the Table -->
-                <h5 class="mt-4">Component: {{ $componentName }}</h5>
-                <p><strong>Service Name:</strong> {{ $componentResults->first()->s_name }}</p>
-                <p><strong>Group Name:</strong> {{ $componentResults->first()->g_name }}</p>
-                <p><strong>Asset Name:</strong> {{ $componentResults->first()->name }}</p>
 
-                <table class="table table-bordered">
+
+                <div class="card mt-4 bg-secondary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Component: {{ $componentName }}</h5>
+                        <p class="card-text"><strong>Service Name:</strong> {{ $componentResults->first()->s_name }}</p>
+                        <p class="card-text"><strong>Group Name:</strong> {{ $componentResults->first()->g_name }}</p>
+                        <p class="card-text"><strong>Asset Name:</strong> {{ $componentResults->first()->name }}</p>
+                    </div>
+                </div>
+
+
+                <table class="table table-bordered fw-bold">
                     <thead>
                         <tr>
                             <th>Control Number</th>
-                            <th>Vulnerability</th>
-                            <th>Threat</th>
+                            <th>Vulnerability %</th>
+                            <th>Threat %</th>
 
                             <!-- Conditionally display risk columns -->
 
                             @if(request('risk_type') == 'all' || request('risk_type') == null)
-                            <th>Risk Confidentiality</th>
-                            <th>Risk Integrity</th>
-                            <th>Risk Availability</th>
+                            <th>Confidentiality Risk</th>
+                            <th>Integrity Risk</th>
+                            <th>Availability Risk</th>
                         @endif
 
                             @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
-                                <th>Risk Confidentiality</th>
+                                <th>Confidentiality Risk</th>
                             @endif
                             @if(request('risk_type') == 'all' || request('risk_type') == 'risk_integrity')
-                                <th>Risk Integrity</th>
+                                <th>Integrity Risk</th>
                             @endif
                             @if(request('risk_type') == 'all' || request('risk_type') == 'risk_availability')
-                                <th>Risk Availability</th>
+                                <th>Availability Risk</th>
                             @endif
                         </tr>
                     </thead>
@@ -217,28 +194,28 @@
                         @foreach($componentResults as $result)
                             <tr>
                                 <td>{{ $result->control_num }}</td>
-                                <td>{{ $result->vulnerability }}</td>
-                                <td>{{ $result->threat }}</td>
+                                <td style="background-color: {{ getColor($result->vulnerability) }}">{{ $result->vulnerability }}</td>
+                                <td style="background-color: {{ getColor($result->threat) }}">{{ $result->threat }}</td>
 
                                 <!-- Conditionally display risk values -->
 
                                 @if(request('risk_type') == 'all' || request('risk_type') == null)
-                                <td>{{ $result->risk_level ?? 'N/A' }}</td>
-                                <td>{{ $result->risk_integrity ?? 'N/A' }}</td>
-                                <td>{{ $result->risk_availability ?? 'N/A' }}</td>
+                                <td style="background-color: {{ getRiskColor($result->risk_level) }}">{{ $result->risk_level ?? 'N/A' }}</td>
+                                <td style="background-color: {{ getRiskColor($result->risk_integrity) }}">{{ $result->risk_integrity ?? 'N/A' }}</td>
+                                <td style="background-color: {{ getRiskColor($result->risk_availability) }}"> {{ $result->risk_availability ?? 'N/A' }}</td>
 
                                 @endif
 
 
 
                                 @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
-                                    <td>{{ $result->risk_level ?? 'N/A' }}</td>
+                                    <td style="background-color: {{ getRiskColor($result->risk_level) }}">{{ $result->risk_level ?? 'N/A' }}</td>
                                 @endif
                                 @if(request('risk_type') == 'all' || request('risk_type') == 'risk_integrity')
-                                    <td>{{ $result->risk_integrity ?? 'N/A' }}</td>
+                                    <td style="background-color: {{ getRiskColor($result->risk_integrity) }}">{{ $result->risk_integrity ?? 'N/A' }}</td>
                                 @endif
                                 @if(request('risk_type') == 'all' || request('risk_type') == 'risk_availability')
-                                    <td>{{ $result->risk_availability ?? 'N/A' }}</td>
+                                    <td style="background-color: {{ getRiskColor($result->risk_availability) }}">{{ $result->risk_availability ?? 'N/A' }}</td>
                                 @endif
                             </tr>
                         @endforeach
@@ -249,15 +226,22 @@
             <!-- Single table for All data -->
             <!-- Display Asset and Service Details Above the Table -->
 
-            <p><strong>Service Name:</strong> {{ $results->first()->s_name }}</p>
+            <div class="card mt-4 bg-secondary text-white">
+                <div class="card-body">
+                    <h5 class="card-title"><strong>Service Name:</strong> {{ $results->first()->s_name }}</h5>
+
+                </div>
+            </div>
+
+
 
 
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Control Number</th>
-                        <th>Vulnerability</th>
-                        <th>Threat</th>
+                        <th>Vulnerability %</th>
+                        <th>Threat %</th>
 
                         <!-- Conditionally display risk columns -->
 
@@ -282,25 +266,25 @@
                     @foreach($results as $result)
                         <tr>
                             <td>{{ $result->control_num }}</td>
-                            <td>{{ $result->vulnerability }}</td>
-                            <td>{{ $result->threat }}</td>
+                            <td style="background-color: {{ getColor($result->vulnerability) }}">{{ $result->vulnerability }}</td>
+                            <td style="background-color: {{ getColor($result->threat) }}">{{ $result->threat }}</td>
                             <!-- Conditionally display risk values -->
 
                             @if(request('risk_type') == 'all' || request('risk_type') == null)
-                            <td>{{ $result->risk_level ?? 'N/A' }}</td>
-                            <td>{{ $result->risk_integrity ?? 'N/A' }}</td>
-                            <td>{{ $result->risk_availability ?? 'N/A' }}</td>
+                            <td style="background-color: {{ getRiskColor($result->risk_level) }}">{{ $result->risk_level ?? 'N/A' }}</td>
+                            <td style="background-color: {{ getRiskColor($result->risk_integrity) }}">{{ $result->risk_integrity ?? 'N/A' }}</td>
+                            <td style="background-color: {{ getRiskColor($result->risk_availability) }}">{{ $result->risk_availability ?? 'N/A' }}</td>
 
                             @endif
 
                             @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
-                                <td>{{ $result->risk_level ?? 'N/A' }}</td>
+                                <td style="background-color: {{ getRiskColor($result->risk_level) }}">{{ $result->risk_level ?? 'N/A' }}</td>
                             @endif
                             @if(request('risk_type') == 'all' || request('risk_type') == 'risk_integrity')
-                                <td>{{ $result->risk_integrity ?? 'N/A' }}</td>
+                                <td style="background-color: {{ getRiskColor($result->risk_integrity) }}">{{ $result->risk_integrity ?? 'N/A' }}</td>
                             @endif
                             @if(request('risk_type') == 'all' || request('risk_type') == 'risk_availability')
-                                <td>{{ $result->risk_availability ?? 'N/A' }}</td>
+                                <td style="background-color: {{ getRiskColor($result->risk_availability) }}">{{ $result->risk_availability ?? 'N/A' }}</td>
                             @endif
                         </tr>
                     @endforeach
@@ -310,6 +294,13 @@
     @endif
 </div>
 
+@section('scripts')
+<script>
+
+</script>
+
+
+@endsection
 
 
 @endsection
