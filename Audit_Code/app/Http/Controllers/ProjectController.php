@@ -546,7 +546,8 @@ class ProjectController extends Controller
                 ->get();
 
             $query = DB::table('iso_sec_2_1 as iso1')
-                ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id');
+                ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+                ->where('iso1.project_id',$proj_id);
 
             // Dynamically select risk columns based on user input for 'risk_type'
             $query->select(
@@ -560,17 +561,13 @@ class ProjectController extends Controller
                 'iso2.threat',
             );
 
-
-
-
             // Check the value of 'risk_type' and adjust the columns
             $riskType = $req->input('risk_type');
 
             if ($riskType == 'all' || $riskType==null) {
                 $query->addSelect(
                     'iso2.risk_level',
-                    'iso2.risk_integrity',
-                    'iso2.risk_availability'
+
                 );
             } else {
                 $query->addSelect('iso2.' . $riskType);
@@ -611,7 +608,8 @@ class ProjectController extends Controller
                 }
             });
 
-            $results = $query->get();
+            $results = $query->orderBy('iso2.control_num','asc')
+           ->get();
 
             return view('dashboard.risk_calculation', [
                 'project' => $project,

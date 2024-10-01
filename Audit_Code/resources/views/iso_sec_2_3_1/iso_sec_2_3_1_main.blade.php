@@ -322,11 +322,11 @@ Low
                                 {{-- Determine background color class --}}
                                 @php
                                     $backgroundClass = '';
-                                    if ($a5->risk_level >= 0 && $a5->risk_level <= 3) {
+                                    if ($a5->risk_level >= 0 && $a5->risk_level <0.9) {
                                         $backgroundClass = 'green-background';
-                                    } elseif ($a5->risk_level >= 4 && $a5->risk_level <= 7) {
+                                    } elseif ($a5->risk_level >= 0.9 && $a5->risk_level < 7.2) {
                                         $backgroundClass = 'orange-background';
-                                    } elseif ($a5->risk_level >= 8 && $a5->risk_level <= 10) {
+                                    } elseif ($a5->risk_level >= 7.2 && $a5->risk_level <= 10) {
                                         $backgroundClass = 'red-background';
                                     }
                                 @endphp
@@ -361,11 +361,11 @@ Low
 
                         @php
                                     $backgroundClass = '';
-                                    if ($a5->risk_integrity >= 0 && $a5->risk_integrity <= 3) {
+                                    if ($a5->risk_level >= 0 && $a5->risk_level <0.9) {
                                         $backgroundClass = 'green-background';
-                                    } elseif ($a5->risk_integrity >= 4 && $a5->risk_integrity <= 7) {
+                                    } elseif ($a5->risk_level >= 0.9 && $a5->risk_level < 7.2) {
                                         $backgroundClass = 'orange-background';
-                                    } elseif ($a5->risk_integrity >= 8 && $a5->risk_integrity <= 10) {
+                                    } elseif ($a5->risk_level >= 7.2 && $a5->risk_level <= 10) {
                                         $backgroundClass = 'red-background';
                                     }
                                 @endphp
@@ -397,11 +397,11 @@ Low
 
                         @php
                         $backgroundClass = '';
-                        if ($a5->risk_availability >= 0 && $a5->risk_availability <= 3) {
+                        if ($a5->risk_level >= 0 && $a5->risk_level <0.9) {
                             $backgroundClass = 'green-background';
-                        } elseif ($a5->risk_availability >= 4 && $a5->risk_availability <= 7) {
+                        } elseif ($a5->risk_level >= 0.9 && $a5->risk_level < 7.2) {
                             $backgroundClass = 'orange-background';
-                        } elseif ($a5->risk_availability >= 8 && $a5->risk_availability <= 10) {
+                        } elseif ($a5->risk_level >= 7.2 && $a5->risk_level <= 10) {
                             $backgroundClass = 'red-background';
                         }
                     @endphp
@@ -605,15 +605,15 @@ Low
 
                     @if($a6->risk_level!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
                     @php
-                    $backgroundClass = '';
-                    if ($a6->risk_level >= 0 && $a6->risk_level <= 3) {
-                        $backgroundClass = 'green-background';
-                    } elseif ($a6->risk_level >= 4 && $a6->risk_level <= 7) {
-                        $backgroundClass = 'orange-background';
-                    } elseif ($a6->risk_level >= 8 && $a6->risk_level <= 10) {
-                        $backgroundClass = 'red-background';
-                    }
-                @endphp
+                                    $backgroundClass = '';
+                                    if ($a6->risk_level >= 0 && $a6->risk_level <0.9) {
+                                        $backgroundClass = 'green-background';
+                                    } elseif ($a6->risk_level >= 0.9 && $a6->risk_level < 7.2) {
+                                        $backgroundClass = 'orange-background';
+                                    } elseif ($a6->risk_level >= 7.2 && $a6->risk_level <= 10) {
+                                        $backgroundClass = 'red-background';
+                                    }
+                                @endphp
                     <input type="number" name="risk_level[]" value={{$a6->risk_level}} class="form-control {{$backgroundClass}}" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
                             @break
                         @endif
@@ -636,15 +636,15 @@ Low
 
                     @if($a6->risk_integrity!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
                     @php
-                    $backgroundClass = '';
-                    if ($a6->risk_integrity >= 0 && $a6->risk_integrity <= 3) {
-                        $backgroundClass = 'green-background';
-                    } elseif ($a6->risk_integrity >= 4 && $a6->risk_integrity <= 7) {
-                        $backgroundClass = 'orange-background';
-                    } elseif ($a6->risk_integrity >= 8 && $a6->risk_integrity <= 10) {
-                        $backgroundClass = 'red-background';
-                    }
-                @endphp
+                                    $backgroundClass = '';
+                                    if ($a6->risk_level >= 0 && $a6->risk_level <0.9) {
+                                        $backgroundClass = 'green-background';
+                                    } elseif ($a6->risk_level >= 0.9 && $a6->risk_level < 7.2) {
+                                        $backgroundClass = 'orange-background';
+                                    } elseif ($a6->risk_level >= 7.2 && $a6->risk_level <= 10) {
+                                        $backgroundClass = 'red-background';
+                                    }
+                                @endphp
                     <input type="number" name="risk_integrity[]" value={{$a6->risk_integrity}} class="form-control {{$backgroundClass}}" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
                             @break
                         @endif
@@ -667,15 +667,15 @@ Low
 
                     @if($a6->risk_availability!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
                     @php
-                    $backgroundClass = '';
-                    if ($a6->risk_availability >= 0 && $a6->risk_availability <= 3) {
-                        $backgroundClass = 'green-background';
-                    } elseif ($a6->risk_availability >= 4 && $a6->risk_availability <= 7) {
-                        $backgroundClass = 'orange-background';
-                    } elseif ($a6->risk_availability >= 8 && $a6->risk_availability <= 10) {
-                        $backgroundClass = 'red-background';
-                    }
-                @endphp
+                                    $backgroundClass = '';
+                                    if ($a6->risk_level >= 0 && $a6->risk_level <0.9) {
+                                        $backgroundClass = 'green-background';
+                                    } elseif ($a6->risk_level >= 0.9 && $a6->risk_level < 7.2) {
+                                        $backgroundClass = 'orange-background';
+                                    } elseif ($a6->risk_level >= 7.2 && $a6->risk_level <= 10) {
+                                        $backgroundClass = 'red-background';
+                                    }
+                                @endphp
                     <input type="number" name="risk_availability[]" value={{$a6->risk_availability}} class="form-control {{$backgroundClass}}" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
                             @break
                         @endif
@@ -871,11 +871,11 @@ Low
                 @if($a7->risk_level!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
                 @php
                 $backgroundClass = '';
-                if ($a7->risk_level >= 0 && $a7->risk_level <= 3) {
+                if ($a7->risk_level >= 0 && $a7->risk_level <0.9) {
                     $backgroundClass = 'green-background';
-                } elseif ($a7->risk_level >= 4 && $a7->risk_level <= 7) {
+                } elseif ($a7->risk_level >= 0.9 && $a7->risk_level < 7.2) {
                     $backgroundClass = 'orange-background';
-                } elseif ($a7->risk_level >= 8 && $a7->risk_level <= 10) {
+                } elseif ($a7->risk_level >= 7.2 && $a7->risk_level <= 10) {
                     $backgroundClass = 'red-background';
                 }
             @endphp
@@ -905,11 +905,11 @@ Low
                 @if($a7->risk_integrity!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
                 @php
                 $backgroundClass = '';
-                if ($a7->risk_integrity >= 0 && $a7->risk_integrity <= 3) {
+                if ($a7->risk_level >= 0 && $a7->risk_level <0.9) {
                     $backgroundClass = 'green-background';
-                } elseif ($a7->risk_integrity >= 4 && $a7->risk_integrity <= 7) {
+                } elseif ($a7->risk_level >= 0.9 && $a7->risk_level < 7.2) {
                     $backgroundClass = 'orange-background';
-                } elseif ($a7->risk_integrity >= 8 && $a7->risk_integrity <= 10) {
+                } elseif ($a7->risk_level >= 7.2 && $a7->risk_level <= 10) {
                     $backgroundClass = 'red-background';
                 }
             @endphp
@@ -938,11 +938,11 @@ Low
                 @if($a7->risk_availability!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
                 @php
                 $backgroundClass = '';
-                if ($a7->risk_availability >= 0 && $a7->risk_availability <= 3) {
+                if ($a7->risk_level >= 0 && $a7->risk_level <0.9) {
                     $backgroundClass = 'green-background';
-                } elseif ($a7->risk_availability >= 4 && $a7->risk_availability <= 7) {
+                } elseif ($a7->risk_level >= 0.9 && $a7->risk_level < 7.2) {
                     $backgroundClass = 'orange-background';
-                } elseif ($a7->risk_availability >= 8 && $a7->risk_availability <= 10) {
+                } elseif ($a7->risk_level >= 7.2 && $a7->risk_level <= 10) {
                     $backgroundClass = 'red-background';
                 }
             @endphp
@@ -1130,11 +1130,11 @@ Low
                 @if($a8->risk_level!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
                 @php
                 $backgroundClass = '';
-                if ($a8->risk_level >= 0 && $a8->risk_level <= 3) {
+                if ($a8->risk_level >= 0 && $a8->risk_level <0.9) {
                     $backgroundClass = 'green-background';
-                } elseif ($a8->risk_level >= 4 && $a8->risk_level <= 7) {
+                } elseif ($a8->risk_level >= 0.9 && $a8->risk_level < 7.2) {
                     $backgroundClass = 'orange-background';
-                } elseif ($a8->risk_level >= 8 && $a8->risk_level <= 10) {
+                } elseif ($a8->risk_level >= 7.2 && $a8->risk_level <= 10) {
                     $backgroundClass = 'red-background';
                 }
             @endphp
@@ -1161,11 +1161,11 @@ Low
                 @if($a8->risk_integrity!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
                 @php
                 $backgroundClass = '';
-                if ($a8->risk_integrity >= 0 && $a8->risk_integrity <= 3) {
+                if ($a8->risk_level >= 0 && $a8->risk_level <0.9) {
                     $backgroundClass = 'green-background';
-                } elseif ($a8->risk_integrity >= 4 && $a8->risk_integrity <= 7) {
+                } elseif ($a8->risk_level >= 0.9 && $a8->risk_level < 7.2) {
                     $backgroundClass = 'orange-background';
-                } elseif ($a8->risk_integrity >= 8 && $a8->risk_integrity <= 10) {
+                } elseif ($a8->risk_level >= 7.2 && $a8->risk_level <= 10) {
                     $backgroundClass = 'red-background';
                 }
             @endphp
@@ -1192,11 +1192,11 @@ Low
                 @if($a8->risk_availability!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
                 @php
                 $backgroundClass = '';
-                if ($a8->risk_availability >= 0 && $a8->risk_availability <= 3) {
+                if ($a8->risk_level >= 0 && $a8->risk_level <0.9) {
                     $backgroundClass = 'green-background';
-                } elseif ($a8->risk_availability >= 4 && $a8->risk_availability <= 7) {
+                } elseif ($a8->risk_level >= 0.9 && $a8->risk_level < 7.2) {
                     $backgroundClass = 'orange-background';
-                } elseif ($a8->risk_availability >= 8 && $a8->risk_availability <= 10) {
+                } elseif ($a8->risk_level >= 7.2 && $a8->risk_level <= 10) {
                     $backgroundClass = 'red-background';
                 }
             @endphp

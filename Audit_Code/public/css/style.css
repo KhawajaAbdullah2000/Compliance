@@ -20,18 +20,21 @@ body {
 }
 
 .green-background {
-    background-color: green;
-    color: white; /* Optional: for better readability */
+    background-color:lightgreen;
+    font-weight: bold;
+
 }
 
 .orange-background {
-    background-color: orange;
-    color: white; /* Optional */
+    background-color: yellow;
+    font-weight: bold;
+
 }
 
 .red-background {
-    background-color: red;
-    color: white; /* Optional */
+    background-color:pink;
+    font-weight: bold;
+
 }
 
 
