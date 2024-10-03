@@ -60,7 +60,7 @@
             </tbody>
         </table>
     </div>
-</div>
+
 
 <div class="row">
     <div class="col-md-4">
@@ -137,8 +137,38 @@
         <div class="form-group mt-4">
             <button type="submit" class="btn btn-success">Compute Risk Distribution</button>
         </div>
+
+        <div class="form-group mt-4">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#heatmapModal">
+                View Risk Heatmap
+            </button>
+        </div>
+
+
     </div>
 </form>
+
+
+   <!-- Modal for heatmap -->
+   <div class="modal fade" id="heatmapModal" tabindex="-1" aria-labelledby="heatmapModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="heatmapModalLabel">Risk Heatmap</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Heatmap canvas -->
+                <canvas id="heatmapChart" width="600" height="400"></canvas>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
 
 </div>
 
@@ -293,10 +323,89 @@
     @endif
 </div>
 
+
+
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@2.0.0"></script> <!-- For Matrix plugin -->
+
 <script>
 
+    const matrixData = [
+        { x: 0, y: 0, v: {{ $heatmapData[0]['count'] }} }, // Low Vulnerability, Low Threat
+        { x: 0, y: 1, v: {{ $heatmapData[1]['count'] }} }, // Low Vulnerability, Medium Threat
+        { x: 0, y: 2, v: {{ $heatmapData[2]['count'] }} }, // Low Vulnerability, High Threat
+        { x: 1, y: 0, v: {{ $heatmapData[3]['count'] }} }, // Medium Vulnerability, Low Threat
+        { x: 1, y: 1, v: {{ $heatmapData[4]['count'] }} }, // Medium Vulnerability, Medium Threat
+        { x: 1, y: 2, v: {{ $heatmapData[5]['count'] }} }, // Medium Vulnerability, High Threat
+        { x: 2, y: 0, v: {{ $heatmapData[6]['count'] }} }, // High Vulnerability, Low Threat
+        { x: 2, y: 1, v: {{ $heatmapData[7]['count'] }} }, // High Vulnerability, Medium Threat
+        { x: 2, y: 2, v: {{ $heatmapData[8]['count'] }} }  // High Vulnerability, High Threat
+    ];
+
+    const vulnerabilityLabels = ['Low', 'Medium', 'High'];
+    const threatLabels = ['Low ', 'Medium', 'High'];
+
+    const ctx = document.getElementById('heatmapChart').getContext('2d');
+    const heatmapChart = new Chart(ctx, {
+        type: 'matrix',
+        data: {
+            datasets: [{
+                label: 'Risk Heatmap',
+                data: matrixData,
+                backgroundColor(ctx) {
+                    const value = ctx.dataset.data[ctx.dataIndex].v;
+                    return value > 5 ? 'rgba(255,0,0,0.6)' : value > 3 ? 'rgba(255,255,0,0.6)' : 'rgba(0,255,0,0.6)';
+                },
+                borderWidth: 1,
+                width(ctx) {
+                    const a = ctx.chart.chartArea || {};
+                    return (a.right - a.left) / 3 - 1; // 3 vulnerability levels
+                },
+                height(ctx) {
+                    const a = ctx.chart.chartArea || {};
+                    return (a.bottom - a.top) / 3 - 1; // 3 threat levels
+                }
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label(ctx) {
+                            const value = ctx.dataset.data[ctx.dataIndex].v;
+                            const vulnerability = vulnerabilityLabels[ctx.dataset.data[ctx.dataIndex].x];
+                            const threat = threatLabels[ctx.dataset.data[ctx.dataIndex].y];
+                            return `Vulnerability: ${vulnerability}, Threat: ${threat}, Risk Count: ${value}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    type: 'category',
+                    labels: vulnerabilityLabels,
+                    title: {
+                        display: true,
+                        text: 'Vulnerability'
+                    }
+                },
+                y: {
+                    type: 'category',
+                    labels: threatLabels,
+                    title: {
+                        display: true,
+                        text: 'Threat'
+                    }
+                }
+            }
+        }
+    });
 </script>
+
+</script>
+
 
 
 @endsection
