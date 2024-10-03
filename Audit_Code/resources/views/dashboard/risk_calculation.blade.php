@@ -331,20 +331,21 @@
 
 <script>
 
-    const matrixData = [
-        { x: 0, y: 0, v: {{ $heatmapData[0]['count'] }} }, // Low Vulnerability, Low Threat
-        { x: 0, y: 1, v: {{ $heatmapData[1]['count'] }} }, // Low Vulnerability, Medium Threat
-        { x: 0, y: 2, v: {{ $heatmapData[2]['count'] }} }, // Low Vulnerability, High Threat
-        { x: 1, y: 0, v: {{ $heatmapData[3]['count'] }} }, // Medium Vulnerability, Low Threat
-        { x: 1, y: 1, v: {{ $heatmapData[4]['count'] }} }, // Medium Vulnerability, Medium Threat
-        { x: 1, y: 2, v: {{ $heatmapData[5]['count'] }} }, // Medium Vulnerability, High Threat
-        { x: 2, y: 0, v: {{ $heatmapData[6]['count'] }} }, // High Vulnerability, Low Threat
-        { x: 2, y: 1, v: {{ $heatmapData[7]['count'] }} }, // High Vulnerability, Medium Threat
-        { x: 2, y: 2, v: {{ $heatmapData[8]['count'] }} }  // High Vulnerability, High Threat
-    ];
-
     const vulnerabilityLabels = ['Low', 'Medium', 'High'];
-    const threatLabels = ['Low ', 'Medium', 'High'];
+    const threatLabels = ['Low', 'Medium', 'High'];
+
+    // Matrix data for the heatmap
+    const matrixData = [
+        { x: 0, y: 0, v: {{ $heatmapData[0]['count'] }} },  // Low Vulnerability, Low Threat
+        { x: 0, y: 1, v: {{ $heatmapData[1]['count'] }} },  // Low Vulnerability, Medium Threat
+        { x: 0, y: 2, v: {{ $heatmapData[2]['count'] }} },  // Low Vulnerability, High Threat
+        { x: 1, y: 0, v: {{ $heatmapData[3]['count'] }} },  // Medium Vulnerability, Low Threat
+        { x: 1, y: 1, v: {{ $heatmapData[4]['count'] }} },  // Medium Vulnerability, Medium Threat
+        { x: 1, y: 2, v: {{ $heatmapData[5]['count'] }} },  // Medium Vulnerability, High Threat
+        { x: 2, y: 0, v: {{ $heatmapData[6]['count'] }} },  // High Vulnerability, Low Threat
+        { x: 2, y: 1, v: {{ $heatmapData[7]['count'] }} },  // High Vulnerability, Medium Threat
+        { x: 2, y: 2, v: {{ $heatmapData[8]['count'] }} }   // High Vulnerability, High Threat
+    ];
 
     const ctx = document.getElementById('heatmapChart').getContext('2d');
     const heatmapChart = new Chart(ctx, {
@@ -360,11 +361,11 @@
                 borderWidth: 1,
                 width(ctx) {
                     const a = ctx.chart.chartArea || {};
-                    return (a.right - a.left) / 3 - 1; // 3 vulnerability levels
+                    return (a.right - a.left) / 3 - 1;  // Width of each box
                 },
                 height(ctx) {
                     const a = ctx.chart.chartArea || {};
-                    return (a.bottom - a.top) / 3 - 1; // 3 threat levels
+                    return (a.bottom - a.top) / 3 - 1;  // Height of each box
                 }
             }]
         },
@@ -402,7 +403,8 @@
             }
         }
     });
-</script>
+
+
 
 </script>
 

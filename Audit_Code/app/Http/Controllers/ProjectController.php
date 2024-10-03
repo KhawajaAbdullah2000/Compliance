@@ -615,17 +615,20 @@ class ProjectController extends Controller
             $results = $query->orderBy('iso2.control_num','asc')
            ->get();
            $heatmapData = [
-            // (X, Y) => [count, risk_level]
-            ['x' => 'Low Vulnerability', 'y' => 'Low Threat', 'count' => $results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],
-            ['x' => 'Low Vulnerability', 'y' => 'Medium Threat', 'count' => $results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],
-            ['x' => 'Low Vulnerability', 'y' => 'High Threat', 'count' => $results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],
-            ['x' => 'Medium Vulnerability', 'y' => 'Low Threat', 'count' => $results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],
-            ['x' => 'Medium Vulnerability', 'y' => 'Medium Threat', 'count' => $results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],
-            ['x' => 'Medium Vulnerability', 'y' => 'High Threat', 'count' => $results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],
-            ['x' => 'High Vulnerability', 'y' => 'Low Threat', 'count' => $results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],
-            ['x' => 'High Vulnerability', 'y' => 'Medium Threat', 'count' => $results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],
-            ['x' => 'High Vulnerability', 'y' => 'High Threat', 'count' => $results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]
+            // Each data point represents a combination of Vulnerability (x) and Threat (y).
+            ['x' => 0, 'y' => 0, 'count' => $results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+            ['x' => 0, 'y' => 1, 'count' => $results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+            ['x' => 0, 'y' => 2, 'count' => $results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+            ['x' => 1, 'y' => 0, 'count' => $results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+            ['x' => 1, 'y' => 1, 'count' => $results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+            ['x' => 1, 'y' => 2, 'count' => $results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+            ['x' => 2, 'y' => 0, 'count' => $results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+            ['x' => 2, 'y' => 1, 'count' => $results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+            ['x' => 2, 'y' => 2, 'count' => $results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
         ];
+
             return view('dashboard.risk_calculation', [
                 'project' => $project,
                 'servicesInProject' => $servicesInProject,
