@@ -327,85 +327,97 @@
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@2.0.0"></script> <!-- For Matrix plugin -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-
     const vulnerabilityLabels = ['Low', 'Medium', 'High'];
     const threatLabels = ['Low', 'Medium', 'High'];
 
-    // Matrix data for the heatmap
-    const matrixData = [
-        { x: 0, y: 0, v: {{ $heatmapData[0]['count'] }} },  // Low Vulnerability, Low Threat
-        { x: 0, y: 1, v: {{ $heatmapData[1]['count'] }} },  // Low Vulnerability, Medium Threat
-        { x: 0, y: 2, v: {{ $heatmapData[2]['count'] }} },  // Low Vulnerability, High Threat
-        { x: 1, y: 0, v: {{ $heatmapData[3]['count'] }} },  // Medium Vulnerability, Low Threat
-        { x: 1, y: 1, v: {{ $heatmapData[4]['count'] }} },  // Medium Vulnerability, Medium Threat
-        { x: 1, y: 2, v: {{ $heatmapData[5]['count'] }} },  // Medium Vulnerability, High Threat
-        { x: 2, y: 0, v: {{ $heatmapData[6]['count'] }} },  // High Vulnerability, Low Threat
-        { x: 2, y: 1, v: {{ $heatmapData[7]['count'] }} },  // High Vulnerability, Medium Threat
-        { x: 2, y: 2, v: {{ $heatmapData[8]['count'] }} }   // High Vulnerability, High Threat
+    const scatterPlotData = [
+        { x: 1, y: 1, r: {{ $scatterPlotData[0]['r'] }} },  // Low Vulnerability, Low Threat
+        { x: 1, y: 2, r: {{ $scatterPlotData[1]['r'] }} },  // Low Vulnerability, Medium Threat
+        { x: 1, y: 3, r: {{ $scatterPlotData[2]['r'] }} },  // Low Vulnerability, High Threat
+        { x: 2, y: 1, r: {{ $scatterPlotData[3]['r'] }} },  // Medium Vulnerability, Low Threat
+        { x: 2, y: 2, r: {{ $scatterPlotData[4]['r'] }} },  // Medium Vulnerability, Medium Threat
+        { x: 2, y: 3, r: {{ $scatterPlotData[5]['r'] }} },  // Medium Vulnerability, High Threat
+        { x: 3, y: 1, r: {{ $scatterPlotData[6]['r'] }} },  // High Vulnerability, Low Threat
+        { x: 3, y: 2, r: {{ $scatterPlotData[7]['r'] }} },  // High Vulnerability, Medium Threat
+        { x: 3, y: 3, r: {{ $scatterPlotData[8]['r'] }} }   // High Vulnerability, High Threat
     ];
 
     const ctx = document.getElementById('heatmapChart').getContext('2d');
-    const heatmapChart = new Chart(ctx, {
-        type: 'matrix',
+    const scatterChart = new Chart(ctx, {
+        type: 'scatter',  // Use 'bubble' for scatter plot with radius
         data: {
             datasets: [{
-                label: 'Risk Heatmap',
-                data: matrixData,
-                backgroundColor(ctx) {
-                    const value = ctx.dataset.data[ctx.dataIndex].v;
-                    return value > 5 ? 'rgba(255,0,0,0.6)' : value > 3 ? 'rgba(255,255,0,0.6)' : 'rgba(0,255,0,0.6)';
-                },
+                label: 'Risk Count',
+                data: scatterPlotData,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',  // Color of bubbles
+                borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
-                width(ctx) {
-                    const a = ctx.chart.chartArea || {};
-                    return (a.right - a.left) / 3 - 1;  // Width of each box
-                },
-                height(ctx) {
-                    const a = ctx.chart.chartArea || {};
-                    return (a.bottom - a.top) / 3 - 1;  // Height of each box
-                }
+                // Fixed size for each point
+                radius: 10  // Fixed radius size
             }]
         },
         options: {
             responsive: true,
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label(ctx) {
-                            const value = ctx.dataset.data[ctx.dataIndex].v;
-                            const vulnerability = vulnerabilityLabels[ctx.dataset.data[ctx.dataIndex].x];
-                            const threat = threatLabels[ctx.dataset.data[ctx.dataIndex].y];
-                            return `Vulnerability: ${vulnerability}, Threat: ${threat}, Risk Count: ${value}`;
-                        }
-                    }
-                }
-            },
+            animation: {
+        duration: 1200,  // Animation duration in milliseconds
+        easing: 'easeInQuad'  // Easing effect for the animation
+    },
             scales: {
                 x: {
-                    type: 'category',
-                    labels: vulnerabilityLabels,
                     title: {
                         display: true,
-                        text: 'Vulnerability'
+                        text: 'Vulnerability',
+                        font: {
+                            size: 16,  // Set font size
+                            weight: 'bold'  // Make it bold
+                        }
+                    },
+                    ticks: {
+                        callback: function(value, index, values) {
+                            return vulnerabilityLabels[index];
+                        },
+                        stepSize: 1,
+                        beginAtZero: true,
+                        max: 3
                     }
                 },
                 y: {
-                    type: 'category',
-                    labels: threatLabels,
                     title: {
                         display: true,
-                        text: 'Threat'
+                        text: 'Threat',
+                        font: {
+                            size: 16,  // Set font size
+                            weight: 'bold'  // Make it bold
+                        }
+                    },
+                    ticks: {
+                        callback: function(value, index, values) {
+                            return threatLabels[index];
+                        },
+                        stepSize: 1,
+                        beginAtZero: true,
+                        max: 3
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const vulnerability = vulnerabilityLabels[context.raw.x - 1];
+                            const threat = threatLabels[context.raw.y - 1];
+                            const riskCount = context.raw.r;
+                            return `Vulnerability: ${vulnerability}, Threat: ${threat}, Risk Count: ${riskCount}`;
+                        }
                     }
                 }
             }
         }
     });
-
-
-
 </script>
 
 
