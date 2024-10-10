@@ -183,8 +183,10 @@
         @if(request('component') == 'all'|| request('component')==null)
             @foreach($results->groupBy('c_name') as $componentName => $componentResults)
 
-                <div class="card mt-4 bg-secondary text-white">
-                    <div class="card-body">
+
+
+            <div class="card mt-4 bg-secondary text-white cursor-pointer" data-bs-toggle="collapse" href="#collapseTable{{ $loop->index }}" role="button" aria-expanded="false" aria-controls="collapseTable{{ $loop->index }}">
+                <div class="card-body">
                         <h5 class="card-title">Component: {{ $componentName }}</h5>
                         <p class="card-text"><strong>Service Name:</strong> {{ $componentResults->first()->s_name }}</p>
                         <p class="card-text"><strong>Group Name:</strong> {{ $componentResults->first()->g_name }}</p>
@@ -192,6 +194,7 @@
                     </div>
                 </div>
 
+                <div class="collapse" id="collapseTable{{ $loop->index }}">
 
                 <table class="table table-bordered fw-bold">
                     <thead>
@@ -250,6 +253,7 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
             @endforeach
         @else
             <!-- Single table for All data -->
@@ -329,6 +333,18 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('click', function () {
+                const targetId = this.getAttribute('data-bs-target');
+                const targetCollapse = document.querySelector(targetId);
+                targetCollapse.classList.toggle('show');
+            });
+        });
+    });
+</script>
 
 <script>
     const vulnerabilityLabels = ['Low', 'Medium', 'High'];
