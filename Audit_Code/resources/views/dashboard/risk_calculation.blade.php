@@ -4,6 +4,14 @@
 
 @include('user-nav')
 
+@php
+    // Define a label based on the request
+    $riskLabel = match (request('risk_type')) {
+        'risk_integrity' => 'Integrity Risk',
+        'risk_availability' => 'Availability Risk',
+        default => 'Confidentiality Risk',  // Default to Confidentiality Risk
+    };
+@endphp
 
 
 <div class="container">
@@ -115,7 +123,7 @@
         <div class="form-group mt-2">
             <label class="form-label fw-bold">Select Risk Type</label>
             <select class="form-select" name="risk_type">
-                {{-- <option value="all" {{ request('risk_type') == 'all' ? 'selected' : '' }}>All</option> --}}
+
                 <option value="risk_level" {{ request('risk_type') == 'risk_level' ? 'selected' : '' }}>Confidentiality Risk</option>
                 <option value="risk_integrity" {{ request('risk_type') == 'risk_integrity' ? 'selected' : '' }}>Integrity Risk</option>
                 <option value="risk_availability" {{ request('risk_type') == 'risk_availability' ? 'selected' : '' }}>Availability Risk</option>
@@ -330,9 +338,9 @@
 
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const cards = document.querySelectorAll('.card');
@@ -350,90 +358,212 @@
     const vulnerabilityLabels = ['Low', 'Medium', 'High'];
     const threatLabels = ['Low', 'Medium', 'High'];
 
-    const scatterPlotData = [
-        { x: 1, y: 1, r: {{ $scatterPlotData[0]['r'] }} },  // Low Vulnerability, Low Threat
-        { x: 1, y: 2, r: {{ $scatterPlotData[1]['r'] }} },  // Low Vulnerability, Medium Threat
-        { x: 1, y: 3, r: {{ $scatterPlotData[2]['r'] }} },  // Low Vulnerability, High Threat
-        { x: 2, y: 1, r: {{ $scatterPlotData[3]['r'] }} },  // Medium Vulnerability, Low Threat
-        { x: 2, y: 2, r: {{ $scatterPlotData[4]['r'] }} },  // Medium Vulnerability, Medium Threat
-        { x: 2, y: 3, r: {{ $scatterPlotData[5]['r'] }} },  // Medium Vulnerability, High Threat
-        { x: 3, y: 1, r: {{ $scatterPlotData[6]['r'] }} },  // High Vulnerability, Low Threat
-        { x: 3, y: 2, r: {{ $scatterPlotData[7]['r'] }} },  // High Vulnerability, Medium Threat
-        { x: 3, y: 3, r: {{ $scatterPlotData[8]['r'] }} }   // High Vulnerability, High Threat
-    ];
+    // const scatterPlotData = [
+    //     { x: 1, y: 1, r: {{ $scatterPlotData[0]['r'] }} },  // Low Vulnerability, Low Threat
+    //     { x: 1, y: 2, r: {{ $scatterPlotData[1]['r'] }} },  // Low Vulnerability, Medium Threat
+    //     { x: 1, y: 3, r: {{ $scatterPlotData[2]['r'] }} },  // Low Vulnerability, High Threat
+    //     { x: 2, y: 1, r: {{ $scatterPlotData[3]['r'] }} },  // Medium Vulnerability, Low Threat
+    //     { x: 2, y: 2, r: {{ $scatterPlotData[4]['r'] }} },  // Medium Vulnerability, Medium Threat
+    //     { x: 2, y: 3, r: {{ $scatterPlotData[5]['r'] }} },  // Medium Vulnerability, High Threat
+    //     { x: 3, y: 1, r: {{ $scatterPlotData[6]['r'] }} },  // High Vulnerability, Low Threat
+    //     { x: 3, y: 2, r: {{ $scatterPlotData[7]['r'] }} },  // High Vulnerability, Medium Threat
+    //     { x: 3, y: 3, r: {{ $scatterPlotData[8]['r'] }} }   // High Vulnerability, High Threat
+    // ];
 
-    const ctx = document.getElementById('heatmapChart').getContext('2d');
-    const scatterChart = new Chart(ctx, {
-        type: 'scatter',  // Use 'bubble' for scatter plot with radius
-        data: {
-            datasets: [{
-                label: 'Risk Count',
-                data: scatterPlotData,
-                backgroundColor: 'rgba(54, 162, 235, 0.5)',  // Color of bubbles
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1,
-                // Fixed size for each point
-                radius: 10  // Fixed radius size
-            }]
-        },
-        options: {
-            responsive: true,
-            animation: {
-        duration: 1200,  // Animation duration in milliseconds
-        easing: 'easeInQuad'  // Easing effect for the animation
+    const scatterPlotData = [
+    { x: 1, y: 1, riskCount: {{ $scatterPlotData[0]['r'] ?? 0 }} },  // Low Vulnerability, Low Threat
+    { x: 1, y: 2, riskCount: {{ $scatterPlotData[1]['r'] ?? 0 }} },  // Low Vulnerability, Medium Threat
+    { x: 1, y: 3, riskCount: {{ $scatterPlotData[2]['r'] ?? 0 }} },  // Low Vulnerability, High Threat
+    { x: 2, y: 1, riskCount: {{ $scatterPlotData[3]['r'] ?? 0 }} },  // Medium Vulnerability, Low Threat
+    { x: 2, y: 2, riskCount: {{ $scatterPlotData[4]['r'] ?? 0 }} },  // Medium Vulnerability, Medium Threat
+    { x: 2, y: 3, riskCount: {{ $scatterPlotData[5]['r'] ?? 0 }} },  // Medium Vulnerability, High Threat
+    { x: 3, y: 1, riskCount: {{ $scatterPlotData[6]['r'] ?? 0 }} },  // High Vulnerability, Low Threat
+    { x: 3, y: 2, riskCount: {{ $scatterPlotData[7]['r'] ?? 0 }} },  // High Vulnerability, Medium Threat
+    { x: 3, y: 3, riskCount: {{ $scatterPlotData[8]['r'] ?? 0 }} }   // High Vulnerability, High Threat
+];
+
+
+// Function to scale the radius based on risk count
+function scaleRadius(riskCount, minRisk, maxRisk, minRadius, maxRadius) {
+    return ((riskCount - minRisk) / (maxRisk - minRisk)) * (maxRadius - minRadius) + minRadius;
+}
+
+// Find min and max risk counts
+const riskCounts = scatterPlotData.map(data => data.riskCount);
+const minRisk = Math.min(...riskCounts);
+const maxRisk = Math.max(...riskCounts);
+
+const minRadius = 10;  // Minimum bubble size
+const maxRadius = 30; // Maximum bubble size
+
+// Update scatterPlotData to include scaled radius
+const scaledScatterPlotData = scatterPlotData.map(data => ({
+    ...data,
+    r: scaleRadius(data.riskCount, minRisk, maxRisk, minRadius, maxRadius)  // Scale radius
+}));
+
+const ctx = document.getElementById('heatmapChart').getContext('2d');
+Chart.register(ChartDataLabels);
+
+const scatterChart = new Chart(ctx, {
+    type: 'bubble',  // Use 'bubble' type to enable variable radius
+    data: {
+        datasets: [{
+            label: '{{ $riskLabel }} Risk Count',
+            data: scaledScatterPlotData,  // Use data with scaled radius
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',  // Bubble color
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
     },
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Vulnerability',
-                        font: {
-                            size: 16,  // Set font size
-                            weight: 'bold'  // Make it bold
-                        }
-                    },
-                    ticks: {
-                        callback: function(value, index, values) {
-                            return vulnerabilityLabels[index];
-                        },
-                        stepSize: 1,
-                        beginAtZero: true,
-                        max: 3
-                    }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Threat',
-                        font: {
-                            size: 16,  // Set font size
-                            weight: 'bold'  // Make it bold
-                        }
-                    },
-                    ticks: {
-                        callback: function(value, index, values) {
-                            return threatLabels[index];
-                        },
-                        stepSize: 1,
-                        beginAtZero: true,
-                        max: 3
+    options: {
+        responsive: true,
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        const vulnerability = vulnerabilityLabels[context.raw.x - 1];
+                        const threat = threatLabels[context.raw.y - 1];
+                        const riskCount = context.raw.riskCount;
+                        return `Vulnerability: ${vulnerability}, Threat: ${threat}, Risk Count: ${riskCount}`;
                     }
                 }
             },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const vulnerability = vulnerabilityLabels[context.raw.x - 1];
-                            const threat = threatLabels[context.raw.y - 1];
-                            const riskCount = context.raw.r;
-                            return `Vulnerability: ${vulnerability}, Threat: ${threat}, Risk Count: ${riskCount}`;
-                        }
+            datalabels: {
+                align: 'center',
+                anchor: 'center',
+                formatter: function(value) {
+                    return value.riskCount;  // Show the risk count on the bubble
+                },
+                color: '#000',  // Text color for the count
+                font: {
+                    weight: 'bold'
+                }
+            }
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Vulnerability',
+                    font: {
+                        size: 16,  // Set font size
+                        weight: 'bold'  // Make it bold
                     }
+                },
+                ticks: {
+                    callback: function(value, index, values) {
+                        return vulnerabilityLabels[index];
+                    },
+                    stepSize: 1,
+                    font: {
+                        size: 12,  // Set font size
+
+                    },
+                    beginAtZero: true,
+                    max: 3
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Threat',
+                    font: {
+                        size: 16,  // Set font size
+                        weight: 'bold'  // Make it bold
+                    }
+                },
+                ticks: {
+                    callback: function(value, index, values) {
+                        return threatLabels[index];
+                    },
+                    stepSize: 1,
+                    font: {
+                        size: 12,  // Set font size
+
+                    },
+                    beginAtZero: true,
+                    max: 3
                 }
             }
         }
-    });
+    }
+});
+
+
+
+    // const ctx = document.getElementById('heatmapChart').getContext('2d');
+    // const scatterChart = new Chart(ctx, {
+    //     type: 'scatter',  // Use 'bubble' for scatter plot with radius
+    //     data: {
+    //         datasets: [{
+    //             label: 'Risk Count',
+    //             data: scatterPlotData,
+    //             backgroundColor: 'rgba(54, 162, 235, 0.5)',  // Color of bubbles
+    //             borderColor: 'rgba(54, 162, 235, 1)',
+    //             borderWidth: 1,
+    //             // Fixed size for each point
+    //             radius: 10  // Fixed radius size
+    //         }]
+    //     },
+    //     options: {
+    //         responsive: true,
+    //         animation: {
+    //     duration: 1200,  // Animation duration in milliseconds
+    //     easing: 'easeInQuad'  // Easing effect for the animation
+    // },
+    //         scales: {
+    //             x: {
+    //                 title: {
+    //                     display: true,
+    //                     text: 'Vulnerability',
+    //                     font: {
+    //                         size: 16,  // Set font size
+    //                         weight: 'bold'  // Make it bold
+    //                     }
+    //                 },
+    //                 ticks: {
+    //                     callback: function(value, index, values) {
+    //                         return vulnerabilityLabels[index];
+    //                     },
+    //                     stepSize: 1,
+    //                     beginAtZero: true,
+    //                     max: 3
+    //                 }
+    //             },
+    //             y: {
+    //                 title: {
+    //                     display: true,
+    //                     text: 'Threat',
+    //                     font: {
+    //                         size: 16,  // Set font size
+    //                         weight: 'bold'  // Make it bold
+    //                     }
+    //                 },
+    //                 ticks: {
+    //                     callback: function(value, index, values) {
+    //                         return threatLabels[index];
+    //                     },
+    //                     stepSize: 1,
+    //                     beginAtZero: true,
+    //                     max: 3
+    //                 }
+    //             }
+    //         },
+    //         plugins: {
+    //             tooltip: {
+    //                 callbacks: {
+    //                     label: function(context) {
+    //                         const vulnerability = vulnerabilityLabels[context.raw.x - 1];
+    //                         const threat = threatLabels[context.raw.y - 1];
+    //                         const riskCount = context.raw.r;
+    //                         return `Vulnerability: ${vulnerability}, Threat: ${threat}, Risk Count: ${riskCount}`;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // });
 </script>
 
 
