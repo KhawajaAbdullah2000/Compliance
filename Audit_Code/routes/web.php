@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CY_SAMA;
 use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\OrganizationController;
@@ -267,6 +268,16 @@ route::get("pci_multi_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[P
 route::get('pci_multi_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Multi_Sheet::class,'pci_multi_sec2_2_sub_req_edit'])->name('pci_multi_sec2_2_sub_req_edit');
 route::post('pci_multi_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_form']);
 route::put('pci_multi_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_edit_form']);
+
+//CY SAMA
+route::get("cy_sama_subsections/{proj_id}/{user_id}",[CY_SAMA::class,'cy_sama_subsections'])->name('cy_sama_subsections');
+route::get("cy_sama_section_2_2/{title_num}/{proj_id}/{user_id}",[CY_SAMA::class,'cy_sama_section_2_2'])->name('cy_sama_section_2_2');
+route::get("cy_sama_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[CY_SAMA::class,'cy_sama_sec_2_2_req'])->name('cy_sama_sec_2_2_req');
+route::get('cy_sama_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec2_2_sub_req_edit'])->name('cy_sama_sec2_2_sub_req_edit');
+route::post('cy_sama_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec_2_2_form']);
+
+route::put('cy_sama_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec_2_2_edit_form']);
+
 
 
 //for merchant

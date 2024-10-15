@@ -146,6 +146,20 @@ class ProjectController extends Controller
                     ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
                 );
             }
+
+            elseif ($checkpermission->type_id == 5) {
+                //Cybersecurity SAMA
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+
+                return view(
+                    '.CY_SAMA.main_sections',
+                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
+                );
+            }
+
+
+
         } else {
             return redirect()->route('assigned_projects', ['user_id' => $user_id]);
         }

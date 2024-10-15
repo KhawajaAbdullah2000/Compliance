@@ -4,10 +4,9 @@
 
 @include('user-nav')
 
+@include('iso_sec_nav')
+
 <div class="container">
-
-
-
 
     <div class="row mt-5">
         <div class="col-lg-12">
@@ -15,7 +14,8 @@
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
-                        <td>  {{$project->project_name}}
+                        <td> <a href="/iso_sections/{{$project->project_id}}/{{auth()->user()->id}}"> {{$project->project_name}}
+                        </a>
                         </td>
                         <td class="fw-bold">Your Email:</td>
                         <td>{{auth()->user()->email}}</td>
@@ -37,19 +37,34 @@
         </div>
     </div>
 
-    <div class="row mt-4 w-75">
+    <div class="row h-100 w-75">
+        <div class="row mt-2" >
+            <div class="col-12">
+
+         <a href="/cy_sama_section_2_2/{{3.1}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">3.1 Cyber Security Leadership and Governance</p></a>
+        </div>
+        </div>
+
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg my_bg_color text-white w-100"><p class="fw-bold" style="text-align:left;">Upload or Enter Services and/or Assets in the scope of this project</p></a>
+         <a href="/cy_sama_section_2_2/{{3.2}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">3.2 Cyber Security Risk Management and Compliance</p></a>
         </div>
         </div>
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/pci_multi_sheet_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg my_bg_color text-white w-100"><p class="fw-bold" style="text-align:left;">Upload or enter evidence against the mandatory requirements of PCI-DSS v4-Multi-Tenant Service Provider (mtSP)</p></a>
+         <a href="/cy_sama_section_2_2/{{3.3}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">3.3 Cyber Security Operations and Technology</p></a>
         </div>
         </div>
+
+        <div class="row mt-2">
+            <div class="col-12">
+         <a href="/cy_sama_section_2_2/{{3.4}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">3.4 Third Party Cyber Security</p></a>
+        </div>
+        </div>
+
+
 
 
 

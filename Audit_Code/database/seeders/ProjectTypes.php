@@ -19,6 +19,7 @@ class ProjectTypes extends Seeder
             // ['id'=>2,'type'=>'PCI-DSS v4-Multi-Tenant Service Provider (mtSP)'],
             // ['id'=>3,'type'=>'PCI-DSS v4-Merchant'],
             ['id'=>4,'type'=>'ISO 27001:2022']
+            // ['id'=>5,'type'=>'Cyber Security Framework - SAMA'],
 
         ]);
     }

@@ -204,6 +204,7 @@
                         <td>{{ $d->logical_loc }} </td>
 
 
+                      {{-- If ISO Project --}}
                         @if ($project->project_type == 4)
                             <td>
                                 <a href="/iso_sec_2_3_1_risk_selection/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}"
