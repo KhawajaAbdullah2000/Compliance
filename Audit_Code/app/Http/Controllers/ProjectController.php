@@ -158,6 +158,18 @@ class ProjectController extends Controller
                 );
             }
 
+            elseif ($checkpermission->type_id == 6) {
+                //SBP ETGRMF
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+
+                return view(
+                    '.SBP_ETGRMF.main_sections',
+                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
+                );
+            }
+
+
 
 
         } else {

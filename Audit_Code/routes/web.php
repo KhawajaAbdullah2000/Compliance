@@ -18,6 +18,7 @@ use App\Http\Controllers\PCI_Merchant_Sheet;
 use App\Http\Controllers\PCI_Multi_Sheet;
 use App\Http\Controllers\PCI_Single_Sheet;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SBP_ETGRMF;
 use App\Http\Controllers\v3_2_s2_Controller;
 use App\Http\Controllers\v3_2_s3_Controller;
 use App\Http\Controllers\v3_2_s4_Controller;
@@ -275,9 +276,16 @@ route::get("cy_sama_section_2_2/{title_num}/{proj_id}/{user_id}",[CY_SAMA::class
 route::get("cy_sama_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[CY_SAMA::class,'cy_sama_sec_2_2_req'])->name('cy_sama_sec_2_2_req');
 route::get('cy_sama_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec2_2_sub_req_edit'])->name('cy_sama_sec2_2_sub_req_edit');
 route::post('cy_sama_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec_2_2_form']);
-
 route::put('cy_sama_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec_2_2_edit_form']);
 
+
+//sbp etgrmf
+route::get("sbp_etgrmf_subsections/{proj_id}/{user_id}",[SBP_ETGRMF::class,'sbp_etgrmf_subsections'])->name('sbp_etgrmf_subsections');
+route::get("sbp_etgrmf_section_2_2/{title_num}/{proj_id}/{user_id}",[SBP_ETGRMF::class,'sbp_etgrmf_section_2_2'])->name('sbp_etgrmf_section_2_2');
+route::get("sbp_etgrmf_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_req'])->name('sbp_etgrmf_sec_2_2_req');
+route::get('sbp_etgrmf_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec2_2_sub_req_edit'])->name('sbp_etgrmf_sec2_2_sub_req_edit');
+route::post('sbp_etgrmf_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_form']);
+route::put('sbp_etgrmf_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_edit_form']);
 
 
 //for merchant
