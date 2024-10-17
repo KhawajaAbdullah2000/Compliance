@@ -169,6 +169,18 @@ class ProjectController extends Controller
                 );
             }
 
+            elseif ($checkpermission->type_id == 7) {
+                //KSA NCA ECC
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+
+                return view(
+                    '.KSA_NCA.main_sections',
+                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
+                );
+            }
+
+
 
 
 

@@ -14,6 +14,7 @@ use App\Http\Controllers\IsoSec2_4_A5;
 use App\Http\Controllers\IsoSec2_4_A6;
 use App\Http\Controllers\IsoSec2_4_A7;
 use App\Http\Controllers\IsoSec2_4_A8;
+use App\Http\Controllers\KSA_NCA;
 use App\Http\Controllers\PCI_Merchant_Sheet;
 use App\Http\Controllers\PCI_Multi_Sheet;
 use App\Http\Controllers\PCI_Single_Sheet;
@@ -277,6 +278,16 @@ route::get("cy_sama_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[CY_
 route::get('cy_sama_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec2_2_sub_req_edit'])->name('cy_sama_sec2_2_sub_req_edit');
 route::post('cy_sama_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec_2_2_form']);
 route::put('cy_sama_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec_2_2_edit_form']);
+
+//for KSA NCA ECC
+route::get("ksa_nca_subsections/{proj_id}/{user_id}",[KSA_NCA::class,'ksa_nca_subsections'])->name('ksa_nca_subsections');
+route::get("ksa_nca_section_2_2/{title_num}/{proj_id}/{user_id}",[KSA_NCA::class,'ksa_nca_section_2_2'])->name('ksa_nca_section_2_2');
+route::get("ksa_nca_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[KSA_NCA::class,'ksa_nca_sec_2_2_req'])->name('ksa_nca_sec_2_2_req');
+route::get('ksa_nca_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[KSA_NCA::class,'ksa_nca_sec2_2_sub_req_edit'])->name('ksa_nca_sec2_2_sub_req_edit');
+route::post('ksa_nca_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_form']);
+route::put('ksa_nca_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_edit_form']);
+
+
 
 
 //sbp etgrmf

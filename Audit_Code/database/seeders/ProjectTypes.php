@@ -21,7 +21,7 @@ class ProjectTypes extends Seeder
             ['id'=>4,'type'=>'ISO 27001:2022']
             // ['id'=>5,'type'=>'Cyber Security Framework - SAMA'],
               // ['id'=>6,'type'=>'SBP ETGRMF'],
-
+             // ['id'=>7,'type'=>'KSA NCA ECC'],
 
         ]);
     }
