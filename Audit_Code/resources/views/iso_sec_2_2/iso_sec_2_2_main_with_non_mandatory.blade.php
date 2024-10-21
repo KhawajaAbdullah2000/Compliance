@@ -4,7 +4,6 @@
 
 @include('user-nav')
 
-
 @include('iso_sec_nav')
 @php
 $permissions=json_decode($project_permissions);
@@ -40,37 +39,63 @@ $permissions=json_decode($project_permissions);
         </div>
     </div>
 
-    <a href="/iso_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{Session::get('user_req')}}" class="btn btn-primary btn-md float-end">Go to All Requirements</a>
-
 
       <h2 class="text-center fw-bold mt-4 mb-4">
-   {{$data[0][2]}}
+        @if($title==11)
+       Non Mandatory Controls
+        @endif
     </h2>
 
 
     <table class="table table-bordered table-responsive table-primary">
 
-        <thead style="vertical-align: middle;text-align:center;">
-            <td class="fw-bold" style="width:10%">Req. No</td>
-            <td class="fw-bold" style="width:80%">Mandatory Requirement</td>
-            <td class="fw-bold" style="width:10%">Actions</td>
+        <thead>
+            <td>Title of Mandatory Requirement</td>
+            <td>Actions</td>
         </thead>
 
         <tbody>
-
-            @foreach ($data as $d )
             <tr>
-                <td style="text-align:center">{{$d[3]}}</td>
-                 <td>{!! nl2br($d[4]) !!}</td>
-                 <td style="text-align:center">
-                <a href="/iso_sec2_2_sub_req_edit/{{$d[3]}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}">
-                    <i class="fas fa-edit fa-lg" style="color: #114a1d;"></i>
-                </a>
-            </td>
 
-             </tr>
+                <td>
+                    <p>Organization Controls</p>
+                    </td>
+                <td><a href="/iso_sec_2_2_req/5/{{$title}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white">View</a></td>
 
-            @endforeach
+                </tr>
+
+                <tr>
+                <td>
+                    <p>People Controls</p>
+                    </td>
+                <td><a href="/iso_sec_2_2_req/6/{{$title}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white">View</a></td>
+
+            </tr>
+
+            <tr>
+                <td>
+                    <p>Physical Controls</p>
+                    </td>
+                <td><a href="/iso_sec_2_2_req/7/{{$title}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white">View</a></td>
+
+            </tr>
+
+            <tr>
+                <td>
+                    <p>Technological Controls</p>
+                    </td>
+                <td><a href="/iso_sec_2_2_req/8/{{$title}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-sm my_bg_color text-white">View</a></td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
 
 
         </tbody>
@@ -78,20 +103,5 @@ $permissions=json_decode($project_permissions);
     </table>
 
 </div>
-
-@section('scripts')
-
-@if(Session::has('success'))
-<script>
-    swal({
-  title: "{{Session::get('success')}}",
-  icon: "success",
-  closeOnClickOutside: true,
-  timer: 3000,
-    });
-</script>
-@endif
-
-@endsection
 
 @endsection

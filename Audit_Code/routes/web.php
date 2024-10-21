@@ -246,7 +246,9 @@ route::get('iso_sec_2_3_edit_table/{asset_id}/{control_num}/{proj_id}/{user_id}'
 route::put('iso_sec_2_3_edit_table_submit/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3_edit_table_submit']);
 
 //ISO sec2.2
-route::get('iso_sec_2_2_subsections/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec_2_2_subsections'])->name('iso_sec_2_2_subsections');
+
+
+route::get('iso_sec_2_2_subsections/{proj_id}/{user_id}/{user_req}',[IsoSec2_2::class,'iso_sec_2_2_subsections'])->name('iso_sec_2_2_subsections');
 route::get('iso_section2_2/{title_num}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_section2_2'])->name('iso_sec_2_2_main');
 route::get('iso_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec_2_2_req'])->name('iso_sec_2_2_req');
 route::get('iso_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec2_2_sub_req_edit'])->name('iso_sec2_2_sub_req_edit');

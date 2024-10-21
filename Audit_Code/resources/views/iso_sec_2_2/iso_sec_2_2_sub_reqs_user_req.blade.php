@@ -44,7 +44,20 @@ $permissions=json_decode($project_permissions);
 
 
       <h2 class="text-center fw-bold mt-4 mb-4">
-   {{$data[0][2]}}
+@if($main_req_num==5)
+
+Organization Controls
+
+@elseif($main_req_num==6)
+People Controls
+
+@elseif($main_req_num==7)
+Physical Controls
+
+@elseif($main_req_num==8)
+Technological Controls
+
+@endif
     </h2>
 
 
@@ -60,10 +73,10 @@ $permissions=json_decode($project_permissions);
 
             @foreach ($data as $d )
             <tr>
-                <td style="text-align:center">{{$d[3]}}</td>
-                 <td>{!! nl2br($d[4]) !!}</td>
+                <td style="text-align:center">{{$d[0]}}</td>
+                 <td>{!! nl2br($d[2]) !!}</td>
                  <td style="text-align:center">
-                <a href="/iso_sec2_2_sub_req_edit/{{$d[3]}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}">
+                <a href="/iso_sec2_2_sub_req_edit/{{$d[0]}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}">
                     <i class="fas fa-edit fa-lg" style="color: #114a1d;"></i>
                 </a>
             </td>
