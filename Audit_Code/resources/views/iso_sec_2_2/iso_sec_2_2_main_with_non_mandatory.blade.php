@@ -42,7 +42,7 @@ $permissions=json_decode($project_permissions);
 
       <h2 class="text-center fw-bold mt-4 mb-4">
         @if($title==11)
-       Non Mandatory Controls
+       Annex A
         @endif
     </h2>
 
