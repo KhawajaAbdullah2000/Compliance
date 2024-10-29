@@ -57,7 +57,7 @@ $permissions=json_decode($project_permissions);
                     <th>Asset Group Name</th>
                     <th>Asset Name</th>
                     <th>Asset Component Name</th>
-                    <th>Asset Component Value</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -66,15 +66,7 @@ $permissions=json_decode($project_permissions);
                     <td>@isset($assetData->g_name){{$assetData->g_name}}@endisset</td>
                     <td>@isset($assetData->name){{$assetData->name}}@endisset</td>
                     <td>@isset($assetData->c_name){{$assetData->c_name}}@endisset</td>
-                    <td>
-                        @if($assetvalue == 10)
-                        High
-                        @elseif($assetvalue == 5)
-                        Medium
-                        @elseif($assetvalue == 1)
-                        Low
-                        @endif
-                    </td>
+
                 </tr>
             </tbody>
         </table>

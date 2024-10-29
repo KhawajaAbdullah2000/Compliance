@@ -18,22 +18,22 @@ class RiskAssessmentExport implements FromCollection, WithHeadings
     public function collection()
     {
         $projectName = DB::table('projects')->where('project_id', $this->proj_id)->first()->project_name;
-        $reportData = Db::table('iso_sec_2_1')->join('iso_sec_2_3_1','iso_sec_2_1.assessment_id','iso_sec_2_3_1.asset_id')
-        ->where('iso_sec_2_1.project_id', $this->proj_id)->orderBy('asset_id','asc')->orderBy('control_num','asc')
+        $reportData = Db::table('iso_sec_2_2')
+        ->where('iso_sec_2_2.project_id', $this->proj_id)->orderBy('title_num','asc')
         ->get(
             [
-                'g_name', 'name', 'c_name', 'owner_dept', 'physical_loc',
-                'logical_loc', 's_name','control_num','applicability','asset_value','control_compliance',
-                'vulnerability','threat','risk_level'
+               'title_num','sub_req','comp_status','comments','attachment'
+
             ]
         );
 
-        $transformedData = $reportData->map(function ($item) use ($projectName) {
-            // Prepend a single quote to control_num to ensure it's treated as text
-            $item->control_num = "'".$item->control_num."'";
-            
+        $transformedData = $reportData->map(function ($item) {
+
+           if($item->title_num==11){
+            $item->title_num='Appendix A';
+           }
+
             $rowData = collect($item)->toArray();
-            array_unshift($rowData, $projectName); // Add project name as first column
             return $rowData;
         });
 
@@ -44,21 +44,13 @@ class RiskAssessmentExport implements FromCollection, WithHeadings
     {
         // Adjust these headings to match your actual column names
         return [
-            'Project Name',
-            'Asset Group Name',
-            'Asset Name',
-            'Asset Component Name',
-            'Asset Owner Dept',
-            'Asset Physical Location',
-            'Asset Logical Location',
-            'Service Name for which it is an underlying asset',
-            'Control Num',
-            'Applicability',
-            'Asset Value',
-            'Control Compliance',
-            'Vulnerability',
-            'Threat',
-            'Risk Level'
+            'Title num',
+            'SUb Request',
+            'Compliance Status',
+            'Comments (optional)',
+            'Attachment (Optional)'
+
+
 
         ];
     }

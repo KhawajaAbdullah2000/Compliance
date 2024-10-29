@@ -1246,7 +1246,6 @@ class IsoSec2_3_1 extends Controller
                             ->where('control_num', $control_num)->first();
 
 
-
                         $super = Db::table('users')->where('privilege_id', 1)->pluck('id')->toArray();
 
                         //superusers of that organization
@@ -1267,13 +1266,13 @@ class IsoSec2_3_1 extends Controller
                      $after_risk_treatment = Db::table('iso_risk_treatment')->where('project_id', $proj_id)->where('asset_id', $asset_id)
                             ->where('control_num', $control_num)->first();
 
+
                         return view('iso_sec_2_3_1.iso_sec_2_3_2_justification', [
                             'project_id' => $checkpermission->project_id,
                             'project_name' => $checkpermission->project_name,
                             'project_permissions' => $checkpermission->project_permissions,
                             'asset_id' => $asset_id,
                             'control_num' => $control_num,
-                            'assetvalue' => $asset_risk_assess->asset_value,
                             'users' => $users,
                             'treatmentData' => $asset_risk_assess,
                             'assetData' => $assetData,

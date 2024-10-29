@@ -126,6 +126,10 @@ route::get('iso_sections/{proj_id}/{user_id}',[ProjectController::class,'iso_sec
 // route::get("/meta_data/{proj_id}/{user_id}",[ProjectController::class,'metaData'])->name('meta_data');
 route::get("/reports/{proj_id}/{user_id}",[ProjectController::class,'reports'])->name('reports');
 route::get("/assets_in_scope/{proj_id}/{user_id}",[ProjectController::class,'assets_in_scope'])->name('assets_in_scope');
+route::get("/mandatory_and_nonmandatory_controls/{proj_id}/{user_id}",[ProjectController::class,'mandatory_and_nonmandatory_controls'])->name('mandatory_and_nonmandatory_controls');
+
+
+
 route::get("/risk_assessment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_assessment_report']);
 route::get("/risk_treatment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_treatment']);
 route::get("/dashboard/{proj_id}/{user_id}",[ProjectController::class,'dashBoard'])->name('dashboard');

@@ -736,8 +736,9 @@ class ProjectController extends Controller
         }
     }
 
-    public function risk_assessment_report($proj_id, $user_id)
-    {
+
+    public function mandatory_and_nonmandatory_controls($proj_id,$user_id){
+
         $checkpermission = Db::table('project_details')->select(
             'project_types.id as type_id',
             'project_details.project_code',
@@ -752,48 +753,80 @@ class ProjectController extends Controller
 
         if ($checkpermission) {
 
+
             $project = Db::table('projects')->where('project_id', $proj_id)->first('project_name');
 
-            $report_data = Db::table('iso_sec_2_1')->join('iso_sec_2_3_1', 'iso_sec_2_1.assessment_id', 'iso_sec_2_3_1.asset_id')
-                ->where('iso_sec_2_1.project_id', $proj_id)->orderBy('control_num', 'asc')->orderBy('asset_id', 'asc')
-                ->get(
-                    [
-                        'g_name',
-                        'name',
-                        'c_name',
-                        'owner_dept',
-                        'physical_loc',
-                        'logical_loc',
-                        's_name',
-                        'control_num',
-                        'applicability',
-                        'asset_value',
-                        'control_compliance',
-                        'vulnerability',
-                        'threat',
-                        'risk_level'
-                    ]
-                );
-            //dd($report_data);
+            $report_data = Db::table('iso_sec_2_2')
+            ->where('iso_sec_2_2.project_id', $proj_id)->orderBy('title_num','asc')->get([
+                'title_num',
+                'sub_req',
+                'comp_status',
+                'comments',
+                'attachment',
 
-
-            //  dd($report_data);
+            ]);
             if ($report_data->count() > 0) {
 
-                $safeProjectName = Str::slug($project->project_name, '_'); // Example: converting "Project Name!" to "Project_Name"
+                $safeProjectName = Str::slug($project->project_name, '_');
 
-                //Append the project name to the report filename
+
                 $filename = 'RiskAssessmentReport_' . $safeProjectName . '.xlsx';
 
                 $export = new RiskAssessmentExport($proj_id);
                 return Excel::download($export, $filename);
             } else {
+
                 return redirect()->route('assigned_projects', ['user_id' => $user_id]);
             }
         } else {
             return redirect()->route('assigned_projects', ['user_id' => $user_id]);
         }
     }
+
+
+    // public function risk_assessment_report($proj_id, $user_id)
+    // {
+    //     $checkpermission = Db::table('project_details')->select(
+    //         'project_types.id as type_id',
+    //         'project_details.project_code',
+    //         'project_details.project_permissions',
+    //         'projects.project_name'
+    //     )
+    //         ->join('projects', 'project_details.project_code', 'projects.project_id')
+    //         ->join('project_types', 'projects.project_type', 'project_types.id')
+    //         ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+    //         ->first();
+
+
+    //     if ($checkpermission) {
+
+    //         $project = Db::table('projects')->where('project_id', $proj_id)->first('project_name');
+
+    //         $report_data = Db::table('iso_sec_2_1')->join('iso_sec_2_3_1', 'iso_sec_2_1.assessment_id', 'iso_sec_2_3_1.asset_id')
+    //             ->where('iso_sec_2_1.project_id', $proj_id)->orderBy('control_num', 'asc')->orderBy('asset_id', 'asc')
+    //             ->get(
+    //                 [
+    //                      'title','sub_req','comp_status','comments','attachment'
+    //                 ]
+    //             );
+
+
+    //         if ($report_data->count() > 0) {
+
+    //             $safeProjectName = Str::slug($project->project_name, '_'); // Example: converting "Project Name!" to "Project_Name"
+
+    //             //Append the project name to the report filename
+    //             $filename = 'RiskAssessmentReport_' . $safeProjectName . '.xlsx';
+
+    //             $export = new RiskAssessmentExport($proj_id);
+    //             return Excel::download($export, $filename);
+    //         } else {
+    //             return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+    //         }
+    //     } else {
+    //         return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+    //     }
+    // }
 
     public function risk_treatment($proj_id, $user_id)
     {
@@ -817,7 +850,8 @@ class ProjectController extends Controller
                 'iso_risk_treatment',
                 'iso_sec_2_1.assessment_id',
                 'iso_risk_treatment.asset_id'
-            )->get();
+            )->where('iso_sec_2_1.project_id',$proj_id)
+            ->get();
 
 
             if ($report_data->count() > 0) {
