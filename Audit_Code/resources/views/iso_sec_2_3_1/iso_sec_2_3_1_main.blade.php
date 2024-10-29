@@ -56,76 +56,79 @@ $permissions=json_decode($project_permissions);
     </div>
 @endif
 
-<p class="">
+<div class="row mt-4">
+<div class="col-md-4">
+    <div class="card" style="max-width: 400px;">
+        <div class="card-header">
+            <h3 class="card-title">Asset Details</h3>
+          </div>
+        <div class="card-body">
+          <p class="">
+            <span class="fw-bold">Service Name:</span> {{$assetData->s_name}}
 
- <span class="fw-bold">  Service Name: </span> {{$assetData->s_name}}
+            @isset($assetData->g_name)
+            <br>
+            <span class="fw-bold">Asset Group Name:</span> {{$assetData->g_name}}
+            @endisset
 
-    @isset($assetData->g_name)
-    <br>
-    <span class="fw-bold">  Asset Group Name: </span> {{$assetData->g_name}}
-    @endisset
+            @isset($assetData->name)
+            <br>
+            <span class="fw-bold">Asset Name:</span> {{$assetData->name}}
+            @endisset
 
-    @isset($assetData->name)
-    <br>
-    <span class="fw-bold"> Asset Name: </span> {{$assetData->name}}
-    @endisset
+            @isset($assetData->c_name)
+            <br>
+            <span class="fw-bold">Asset Component Name:</span> {{$assetData->c_name}}
+            @endisset
+          </p>
+        </div>
+      </div>
 
-    @isset($assetData->c_name)
-    <br>
-    <span class="fw-bold">  Asset Component Name: </span>{{$assetData->c_name}}
-    @endisset
+</div>
 
+<div class="col-md-4">
 
-</p>
+    <div class="card" style="max-width: 400px;">
+        <div class="card-header">
+          <h3 class="card-title">Severity of Adverse Impacts</h3>
+        </div>
+        <div class="card-body">
+          <p><span class="fw-bold">Risk Confidentiality:</span>
+            @if($assetData->risk_confidentiality == 10)
+              <span class="text-danger">High</span>
+            @elseif($assetData->risk_confidentiality == 5)
+              <span class="text-warning">Medium</span>
+            @elseif($assetData->risk_confidentiality == 1)
+              <span class="text-success">Low</span>
+            @endif
+          </p>
 
-<h3 class="">Severity of Adverse Impacts</h3>
+          <p><span class="fw-bold">Risk Integrity:</span>
+            @if($assetData->risk_integrity == 10)
+              <span class="text-danger">High</span>
+            @elseif($assetData->risk_integrity == 5)
+              <span class="text-warning">Medium</span>
+            @elseif($assetData->risk_integrity == 1)
+              <span class="text-success">Low</span>
+            @endif
+          </p>
 
-<p><span class="fw-bold">Risk Confidentiality:</span>
-@if($assetData->risk_confidentiality==10)
-High
-@endif
+          <p><span class="fw-bold">Risk Availability:</span>
+            @if($assetData->risk_availability == 10)
+              <span class="text-danger">High</span>
+            @elseif($assetData->risk_availability == 5)
+              <span class="text-warning">Medium</span>
+            @elseif($assetData->risk_availability == 1)
+              <span class="text-success">Low</span>
+            @endif
+          </p>
+        </div>
 
-@if($assetData->risk_confidentiality==5)
-Medium
-@endif
+      </div>
 
-@if($assetData->risk_confidentiality==1)
-Low
-@endif
-</p>
+</div>
 
-
-<p><span class="fw-bold">Risk Integrity:</span>
-
-    @if($assetData->risk_integrity==10)
-High
-@endif
-
-@if($assetData->risk_integrity==5)
-Medium
-@endif
-
-@if($assetData->risk_integrity==1)
-Low
-@endif
-
-</p>
-
-<p><span class="fw-bold">Risk Availability:</span>
-
-    @if($assetData->risk_availability==10)
-High
-@endif
-
-@if($assetData->risk_availability==5)
-Medium
-@endif
-
-@if($assetData->risk_availability==1)
-Low
-@endif
-
-</p>
+</div>
 
 
 
