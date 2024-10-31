@@ -272,6 +272,8 @@ Low
         var asset_integrity={{$assetData->risk_integrity}};
         var asset_availability={{$assetData->risk_availability}};
 
+
+
         var vulnerabilityValue = parseFloat($('input[name="vulnerability"]').val()) || null;
         var threatValue = parseFloat($('input[name="threat"]').val()) || null;
 
@@ -284,6 +286,7 @@ Low
             }
 
             if (!isNaN(asset_integrity) && !isNaN(vulnerabilityValue) && !isNaN(threatValue)) {
+                
                 var riskLevel = (vulnerabilityValue / 100) * (threatValue / 100) * asset_integrity;
                 $('input[name="risk_integrity"]').val(riskLevel.toFixed(4));
             } else {
@@ -292,9 +295,10 @@ Low
 
             if (!isNaN(asset_availability) && !isNaN(vulnerabilityValue) && !isNaN(threatValue)) {
                 var riskLevel = (vulnerabilityValue / 100) * (threatValue / 100) * asset_availability;
-                $('input[name="asset_availability"]').val(riskLevel.toFixed(4));
+                console.log(riskLevel)
+                $('input[name="risk_availability"]').val(riskLevel.toFixed(4));
             } else {
-                $('input[name="asset_availability"]').val('');
+                $('input[name="risk_availability"]').val('');
             }
         }
 

@@ -6,6 +6,10 @@
 
 @php
 $permissions=json_decode($project_permissions);
+
+$formatValues = function ($value) {
+    return $value === 'yes_to_all' ? 'yes' : $value;
+};
 @endphp
 
 
@@ -144,18 +148,24 @@ $permissions=json_decode($project_permissions);
         <tr>
             <td></td>
             <td>Current Risk Assessment</td>
-            <td>Target Risk Level</td>
+            <td>Target Confidentiality Risk Level</td>
+            <td>Target Integrity Risk Level</td>
+            <td>Target Availability Risk Level</td>
         </tr>
 
         <tr>
             <td class="fw-bold" >Control is Applicable?</td>
-            <td>  {{$risk_assessment->applicability}}</td>
-            <td>  {{$treatmentData->applicability}}</td>
+            <td>  {{$formatValues($risk_assessment->applicability)}}</td>
+            <td>  {{$formatValues($treatmentData->applicability)}}</td>
+            <td>  {{$formatValues($treatmentData->applicability)}}</td>
+            <td>  {{$formatValues($treatmentData->applicability)}}</td>
         </tr>
 
         <tr>
             <td class="fw-bold" >Control Compliance</td>
             <td>  {{$risk_assessment->control_compliance}}%</td>
+            <td>  {{$treatmentData->control_compliance}}%</td>
+            <td>  {{$treatmentData->control_compliance}}%</td>
             <td>  {{$treatmentData->control_compliance}}%</td>
         </tr>
 
@@ -163,22 +173,30 @@ $permissions=json_decode($project_permissions);
             <td class="fw-bold" >Vulnerability</td>
             <td>  {{$risk_assessment->vulnerability}}%</td>
             <td>  {{$treatmentData->vulnerability}}%</td>
+            <td>  {{$treatmentData->vulnerability}}%</td>
+            <td>  {{$treatmentData->vulnerability}}%</td>
         </tr>
 
         <tr>
             <td class="fw-bold" >Threat</td>
             <td>  {{$risk_assessment->threat}}%</td>
             <td>  {{$treatmentData->threat}}%</td>
+            <td>  {{$treatmentData->threat}}%</td>
+            <td>  {{$treatmentData->threat}}%</td>
         </tr>
 
         <tr>
             <td class="fw-bold" >Risk Level</td>
-            <td>  {{$risk_assessment->risk_level}}</td>
+            <td>  {{$risk_assessment->risk_level}},{{$risk_assessment->risk_integrity}}, {{$risk_assessment->risk_availability}} </td>
             <td>  {{$treatmentData->risk_level}}</td>
+            <td>  {{$treatmentData->risk_integrity}}</td>
+            <td>  {{$treatmentData->risk_availability}}</td>
         </tr>
         <tr>
             <td class="fw-bold" >Residual Risk Treatment</td>
             <td> - </td>
+            <td>  {{$treatmentData->residual_risk_treatment}}</td>
+            <td>  {{$treatmentData->residual_risk_treatment}}</td>
             <td>  {{$treatmentData->residual_risk_treatment}}</td>
 
         </tr>
