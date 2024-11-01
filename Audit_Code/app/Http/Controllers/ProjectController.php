@@ -238,6 +238,8 @@ class ProjectController extends Controller
                 ->groupBy('applicability')
                 ->get();
 
+               
+
 
 
 
