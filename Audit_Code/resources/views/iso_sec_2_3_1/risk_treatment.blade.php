@@ -53,7 +53,7 @@
                 <table class="table table-bordered table-warning" >
                     <thead>
                         <tr>
-                            <th>Asset Component Value</th>
+
                             <th>Service Name</th>
                             <th>Asset Group Name</th>
                             <th>Asset Name</th>
@@ -62,15 +62,6 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>
-                                @if($asset_value==10)
-                                High
-                                @elseif ($asset_value==5)
-                                Medium
-                                @else
-                                Low
-                                @endif
-                            </td>
                             <td>{{$assetData->s_name}}</td>
                             <td>@isset($assetData->g_name){{$assetData->g_name}}@endisset</td>
                             <td>@isset($assetData->name){{$assetData->name}}@endisset</td>
@@ -88,8 +79,8 @@
         @if (isset($check))
             <div class="mt-4">
                 <table class="table table-responsive table-primary table-striped">
-                    <thead class="thead-dark">
-                        <tr>
+                    <thead class="thead-dark" >
+                        <tr style="text-align: center">
                             <th>Control Number</th>
                             <th>Title Of Control</th>
                             <th>Description of Control</th>
@@ -97,7 +88,9 @@
                             <th>Control Compliance</th>
                             <th>Vulnerability</th>
                             <th>threat</th>
-                            <th>Risk Level</th>
+                            <th>Risk Confidentiality</th>
+                            <th>Risk Integrity</th>
+                            <th>Risk Availability</th>
                             <th>Action</th>
 
 
@@ -106,7 +99,7 @@
                     <tbody>
 
                         @for ($i = 0; $i < count($sec2_4_a5_rows); $i++)
-                            <tr style="vertical-align: middle;text-align:initial">
+                            <tr style="vertical-align: middle;text-align:center">
 
                                 @foreach ($sec2_4_a5_rows[$i] as $col)
                                     @if (in_array(strval($sec2_4_a5_rows[$i][0]), $controls, true))
@@ -123,12 +116,27 @@
 
                                 @foreach ($assetDataForFive as $a5)
                                     @if($a5->control_num===strval($sec2_4_a5_rows[$i][0]))
-                                    <td>{{$a5->applicability}}</td>
+                                    <td>
+                                        @if($a5->applicability=='yes')
+                                        Only to this asset component
+                                        @endif
+
+                                        @if($a5->applicability=='yes_to_all')
+                                        To all asset components in this project
+                                        @endif
+
+                                        @if($a5->applicability=='no')
+                                        Not to this asset component
+                                        @endif
+
+                                    </td>
+
                                     <td>{{$a5->control_compliance}}%</td>
                                     <td>{{$a5->vulnerability}}%</td>
                                     <td>{{$a5->threat}}%</td>
                                     <td>{{$a5->risk_level}}</td>
-
+                                    <td>{{$a5->risk_integrity}}</td>
+                                    <td>{{$a5->risk_availability}}</td>
                                     @break
                                     @endif
 
@@ -172,7 +180,18 @@
 
                                 @foreach ($assetDataForFive as $a5)
                                 @if($a5->control_num===strval($sec2_4_a6_rows[$i][0]))
-                                <td>{{$a5->applicability}}</td>
+                                <td>  @if($a5->applicability=='yes')
+                                    Only to this asset component
+                                    @endif
+
+                                    @if($a5->applicability=='yes_to_all')
+                                    To all asset components in this project
+                                    @endif
+
+                                    @if($a5->applicability=='no')
+                                    Not to this asset component
+                                    @endif
+</td>
                                 <td>{{$a5->control_compliance}}%</td>
                                 <td>{{$a5->vulnerability}}%</td>
                                 <td>{{$a5->threat}}%</td>
@@ -218,7 +237,18 @@
 
                                 @foreach ($assetDataForFive as $a5)
                                 @if($a5->control_num===strval($sec2_4_a7_rows[$i][0]))
-                                <td>{{$a5->applicability}}</td>
+                                <td>  @if($a5->applicability=='yes')
+                                    Only to this asset component
+                                    @endif
+
+                                    @if($a5->applicability=='yes_to_all')
+                                    To all asset components in this project
+                                    @endif
+
+                                    @if($a5->applicability=='no')
+                                    Not to this asset component
+                                    @endif
+</td>
                                 <td>{{$a5->control_compliance}}%</td>
                                 <td>{{$a5->vulnerability}}%</td>
                                 <td>{{$a5->threat}}%</td>
@@ -263,7 +293,18 @@
 
                                 @foreach ($assetDataForFive as $a5)
                                 @if($a5->control_num===strval($sec2_4_a8_rows[$i][0]))
-                                <td>{{$a5->applicability}}</td>
+                                <td>  @if($a5->applicability=='yes')
+                                    Only to this asset component
+                                    @endif
+
+                                    @if($a5->applicability=='yes_to_all')
+                                    To all asset components in this project
+                                    @endif
+
+                                    @if($a5->applicability=='no')
+                                    Not to this asset component
+                                    @endif
+</td>
                                 <td>{{$a5->control_compliance}}%</td>
                                 <td>{{$a5->vulnerability}}%</td>
                                 <td>{{$a5->threat}}%</td>

@@ -40,6 +40,9 @@ $permissions=json_decode($project_permissions);
         </div>
     </div>
 
+    <a href="/iso_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{Session::get('user_req')}}" class="btn btn-primary btn-md float-end">Go to All Requirements</a>
+
+
       <h2 class="text-center fw-bold mt-4 mb-4">
    {{$data[0][2]}}
     </h2>

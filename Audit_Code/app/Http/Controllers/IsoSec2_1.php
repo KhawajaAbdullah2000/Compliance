@@ -44,6 +44,39 @@ class IsoSec2_1 extends Controller
                     $org_projects=Db::table('projects')->where('org_id',auth()->user()->org_id)
                     ->where('project_id','!=',$proj_id)->get();
 
+                    $distinctServices= DB::table('iso_sec_2_1')
+                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
+                    ->select('iso_sec_2_1.s_name')
+                    ->where('iso_sec_2_1.project_id',$proj_id)
+                    ->distinct('iso_sec_2_1.s_name')
+                     // Ensures distinct s_name values
+                    ->get();
+
+                    $distinctGroups= DB::table('iso_sec_2_1')
+                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
+                    ->select('iso_sec_2_1.g_name')
+                    ->where('iso_sec_2_1.project_id',$proj_id)
+                    ->distinct('iso_sec_2_1.g_name')
+                    ->get();
+
+                    $distinctAssets= DB::table('iso_sec_2_1')
+                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
+                    ->select('iso_sec_2_1.name')
+                    ->where('iso_sec_2_1.project_id',$proj_id)
+                    ->distinct('iso_sec_2_1.name')
+                    ->get();
+
+
+                    $distinctComponents= DB::table('iso_sec_2_1')
+                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
+                    ->select('iso_sec_2_1.c_name')
+                    ->where('iso_sec_2_1.project_id',$proj_id)
+                    ->distinct('iso_sec_2_1.c_name')
+                    ->get();
+
+
+
+
 
                     return view('iso_sec_2_1.iso_sec_2_1_main', [
                         'data' => $data,
@@ -51,7 +84,11 @@ class IsoSec2_1 extends Controller
                         'project_name' => $checkpermission->project_name,
                         'project_permissions' => $checkpermission->project_permissions,
                         'project'=>$project,
-                        'org_projects'=>$org_projects
+                        'org_projects'=>$org_projects,
+                        'distinctServices'=>$distinctServices,
+                        'distinctGroups'=>$distinctGroups,
+                        'distinctAssets'=>$distinctAssets,
+                        'distinctComponents'=>$distinctComponents
                     ]);
 
             }
@@ -87,12 +124,52 @@ class IsoSec2_1 extends Controller
                  $project=Project::join('project_types','projects.project_type','project_types.id')
                  ->where('projects.project_id',$proj_id)->first();
 
+
+                 $org_projects=Db::table('projects')->where('org_id',auth()->user()->org_id)
+                 ->where('project_id','!=',$proj_id)->get();
+
+                 $distinctServices= DB::table('iso_sec_2_1')
+                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
+                    ->select('iso_sec_2_1.s_name')
+                    ->where('iso_sec_2_1.project_id',$proj_id)
+                    ->distinct('iso_sec_2_1.s_name')
+                     // Ensures distinct s_name values
+                    ->get();
+
+                    $distinctGroups= DB::table('iso_sec_2_1')
+                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
+                    ->select('iso_sec_2_1.g_name')
+                    ->where('iso_sec_2_1.project_id',$proj_id)
+                    ->distinct('iso_sec_2_1.g_name')
+                    ->get();
+
+                    $distinctAssets= DB::table('iso_sec_2_1')
+                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
+                    ->select('iso_sec_2_1.name')
+                    ->where('iso_sec_2_1.project_id',$proj_id)
+                    ->distinct('iso_sec_2_1.name')
+                    ->get();
+
+
+                    $distinctComponents= DB::table('iso_sec_2_1')
+                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
+                    ->select('iso_sec_2_1.c_name')
+                    ->where('iso_sec_2_1.project_id',$proj_id)
+                    ->distinct('iso_sec_2_1.c_name')
+                    ->get();
+
+
                     return view('iso_sec_2_1.iso_sec_2_3_main', [
                         'data' => $data,
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
                         'project_permissions' => $checkpermission->project_permissions,
-                        'project'=>$project
+                        'project'=>$project,
+                        'org_projects'=>$org_projects,
+                        'distinctServices'=>$distinctServices,
+                        'distinctGroups'=>$distinctGroups,
+                        'distinctAssets'=>$distinctAssets,
+                        'distinctComponents'=>$distinctComponents
                     ]);
                 }
             }
@@ -144,6 +221,24 @@ class IsoSec2_1 extends Controller
 
     public function new_iso_sec_2_1(Request $req, $proj_id, $user_id)
     {
+        $filepath = public_path('ISO_SOA_A5.xlsx');
+        $sec2_4_a5_data = Excel::toArray([], $filepath); //with header
+        $sec2_4_a5_rows = array_slice($sec2_4_a5_data[0], 1); //without header(first row)
+
+
+        $filepath2 = public_path('ISO_SOA_A6.xlsx');
+        $sec2_4_a6_data = Excel::toArray([], $filepath2); //with header
+        $sec2_4_a6_rows = array_slice($sec2_4_a6_data[0], 1); //without header(first row)
+
+        $filepath3 = public_path('ISO_SOA_A7.xlsx');
+        $sec2_4_a7_data = Excel::toArray([], $filepath3); //with header
+        $sec2_4_a7_rows = array_slice($sec2_4_a7_data[0], 1); //without header(first row)
+
+
+        $filepath4 = public_path('ISO_SOA_A8.xlsx');
+        $sec2_4_a8_data = Excel::toArray([], $filepath4); //with header
+        $sec2_4_a8_rows = array_slice($sec2_4_a8_data[0], 1); //without header(first row)
+
         $req->validate(
             [
                'g_name' => 'required',
@@ -175,7 +270,7 @@ class IsoSec2_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
+
                         try {
                             Db::table('iso_sec_2_1')->insert([
                                 'project_id' => $proj_id,
@@ -189,6 +284,10 @@ class IsoSec2_1 extends Controller
                                 'last_edited_by' => $user_id,
                                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                             ]);
+
+
+
+
                         } catch (\Exception $e) {
                             $error=$e->getMessage();
                             if($e->getCode()==23000){
@@ -202,7 +301,7 @@ class IsoSec2_1 extends Controller
 
                         return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                             ->with('success', 'Record Added successfully');
-                    }
+
                 }
             }
         }
@@ -227,7 +326,6 @@ class IsoSec2_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
 
                         $project=Project::join('project_types','projects.project_type','project_types.id')
                         ->where('projects.project_id',$proj_id)->first();
@@ -239,7 +337,7 @@ class IsoSec2_1 extends Controller
                             'project_permissions' => $checkpermission->project_permissions,
                             'project'=>$project
                         ]);
-                    }
+
                 }
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
@@ -250,6 +348,7 @@ class IsoSec2_1 extends Controller
 
     public function iso_sec_2_1_edit($assessment_id, $proj_id, $user_id)
     {
+    
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',

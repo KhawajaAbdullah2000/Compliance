@@ -11,7 +11,7 @@
     <div class="container-fluid">
         <div class="row no-gutters">
             <div class="col-md-6  d-flex align-items-center justify-content-center flex-column">
-                <img src="https://img.freepik.com/free-vector/auditor-concept-business-operation-specialist-professional-financial-management-financial-inspection-analytics-isolated-flat-vector-illustration_613284-2577.jpg?size=626&ext=jpg&ga=GA1.1.2008272138.1708387200&semt=ais" alt="Image" style="width: 100%;">
+                <img src="{{ asset('logo.png') }}" alt="Image" style="width: 80%; height:90%">
             </div>
             <div class="col-md-6 d-flex align-items-center justify-content-center">
                 <div>
