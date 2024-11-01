@@ -6,6 +6,10 @@
 
 @php
 $permissions=json_decode($project_permissions);
+
+$formatValues = function ($value) {
+    return $value === 'yes_to_all' ? 'yes' : $value;
+};
 @endphp
 
 
@@ -45,9 +49,9 @@ $permissions=json_decode($project_permissions);
 
 
 
-<div class="row">
+<div class="row g-5">
 
-    <div class="col-lg-6">
+    <div class="col-md-6">
 
 
         <table class="table table-bordered table-warning">
@@ -57,7 +61,7 @@ $permissions=json_decode($project_permissions);
                     <th>Asset Group Name</th>
                     <th>Asset Name</th>
                     <th>Asset Component Name</th>
-                    <th>Asset Component Value</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -66,18 +70,64 @@ $permissions=json_decode($project_permissions);
                     <td>@isset($assetData->g_name){{$assetData->g_name}}@endisset</td>
                     <td>@isset($assetData->name){{$assetData->name}}@endisset</td>
                     <td>@isset($assetData->c_name){{$assetData->c_name}}@endisset</td>
-                    <td>
-                        @if($assetvalue == 10)
-                        High
-                        @elseif($assetvalue == 5)
-                        Medium
-                        @elseif($assetvalue == 1)
-                        Low
-                        @endif
-                    </td>
                 </tr>
             </tbody>
         </table>
+
+
+</div>
+
+<div class="col-md-6">
+
+    <h3 class="">Severity of Adverse Impacts</h3>
+
+    <p><span class="fw-bold">Risk Confidentiality:</span>
+    @if($assetData->risk_confidentiality==10)
+    High
+    @endif
+
+    @if($assetData->risk_confidentiality==5)
+    Medium
+    @endif
+
+    @if($assetData->risk_confidentiality==1)
+    Low
+    @endif
+    </p>
+
+
+    <p><span class="fw-bold">Risk Integrity:</span>
+
+        @if($assetData->risk_integrity==10)
+    High
+    @endif
+
+    @if($assetData->risk_integrity==5)
+    Medium
+    @endif
+
+    @if($assetData->risk_integrity==1)
+    Low
+    @endif
+
+    </p>
+
+    <p><span class="fw-bold">Risk Availability:</span>
+
+        @if($assetData->risk_availability==10)
+    High
+    @endif
+
+    @if($assetData->risk_availability==5)
+    Medium
+    @endif
+
+    @if($assetData->risk_availability==1)
+    Low
+    @endif
+
+    </p>
+
 
 
 </div>
@@ -90,26 +140,32 @@ $permissions=json_decode($project_permissions);
 
 <div class="row">
 
-<div class="col-lg-6">
+<div class="col-md-6">
 
-<table style="width: 50%;" class="table table-bordered table-secondary">
+<table class="table table-bordered table-secondary">
     <tbody>
 
         <tr>
             <td></td>
             <td>Current Risk Assessment</td>
-            <td>Target Risk Level</td>
+            <td>Target Confidentiality Risk Level</td>
+            <td>Target Integrity Risk Level</td>
+            <td>Target Availability Risk Level</td>
         </tr>
 
         <tr>
             <td class="fw-bold" >Control is Applicable?</td>
-            <td>  {{$risk_assessment->applicability}}</td>
-            <td>  {{$treatmentData->applicability}}</td>
+            <td>  {{$formatValues($risk_assessment->applicability)}}</td>
+            <td>  {{$formatValues($treatmentData->applicability)}}</td>
+            <td>  {{$formatValues($treatmentData->applicability)}}</td>
+            <td>  {{$formatValues($treatmentData->applicability)}}</td>
         </tr>
 
         <tr>
             <td class="fw-bold" >Control Compliance</td>
             <td>  {{$risk_assessment->control_compliance}}%</td>
+            <td>  {{$treatmentData->control_compliance}}%</td>
+            <td>  {{$treatmentData->control_compliance}}%</td>
             <td>  {{$treatmentData->control_compliance}}%</td>
         </tr>
 
@@ -117,22 +173,30 @@ $permissions=json_decode($project_permissions);
             <td class="fw-bold" >Vulnerability</td>
             <td>  {{$risk_assessment->vulnerability}}%</td>
             <td>  {{$treatmentData->vulnerability}}%</td>
+            <td>  {{$treatmentData->vulnerability}}%</td>
+            <td>  {{$treatmentData->vulnerability}}%</td>
         </tr>
 
         <tr>
             <td class="fw-bold" >Threat</td>
             <td>  {{$risk_assessment->threat}}%</td>
             <td>  {{$treatmentData->threat}}%</td>
+            <td>  {{$treatmentData->threat}}%</td>
+            <td>  {{$treatmentData->threat}}%</td>
         </tr>
 
         <tr>
             <td class="fw-bold" >Risk Level</td>
-            <td>  {{$risk_assessment->risk_level}}</td>
+            <td>  {{$risk_assessment->risk_level}},{{$risk_assessment->risk_integrity}}, {{$risk_assessment->risk_availability}} </td>
             <td>  {{$treatmentData->risk_level}}</td>
+            <td>  {{$treatmentData->risk_integrity}}</td>
+            <td>  {{$treatmentData->risk_availability}}</td>
         </tr>
         <tr>
             <td class="fw-bold" >Residual Risk Treatment</td>
             <td> - </td>
+            <td>  {{$treatmentData->residual_risk_treatment}}</td>
+            <td>  {{$treatmentData->residual_risk_treatment}}</td>
             <td>  {{$treatmentData->residual_risk_treatment}}</td>
 
         </tr>
@@ -143,6 +207,8 @@ $permissions=json_decode($project_permissions);
 </table>
 
 </div>
+
+
 </div>
 
 
@@ -190,6 +256,14 @@ $permissions=json_decode($project_permissions);
                 <input type="date" name="treatment_comp_date" value="{{old('treatment_comp_date',$treatmentData->treatment_comp_date)}}">
                     @if($errors->has('treatment_comp_date'))
                     <div class="text-danger">{{ $errors->first('treatment_comp_date') }}</div>
+                @endif
+              </div>
+
+              <div class="form-group mt-4">
+                <label for=""> Actual Acceptane date</label>
+                <input type="date" name="acceptance_actual_date" value="{{old('acceptance_actual_date',$treatmentData->acceptance_actual_date)}}">
+                    @if($errors->has('acceptance_actual_date'))
+                    <div class="text-danger">{{ $errors->first('acceptance_actual_date') }}</div>
                 @endif
               </div>
 

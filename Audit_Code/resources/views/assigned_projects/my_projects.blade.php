@@ -19,7 +19,10 @@
             <th style="text-align: center">Project status</th>
             <th style="text-align: center">Project Permissions</th>
             <th style="text-align: center">Edit Project</th>
-            <th style="text-align: center">Dashboard</th>
+            <th style="text-align: center">Project Visuals</th>
+             <th style="text-align: :center">Risk Visuals</th>
+             <th style="text-align: :center">Risk Distribution</th>
+
             <th style="text-align: center">Reports</th>
         </tr>
     </thead>
@@ -37,9 +40,10 @@
            {{$per}},
            @endforeach
       </td>
+
       <td>
 
-        <a href="/iso_sections/{{$pro->project_code}}/{{auth()->user()->id}}"
+         <a href="/iso_sections/{{$pro->project_code}}/{{auth()->user()->id}}"
             data-toggle="tooltip" data-placement="top" title="Edit Project details">
         <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
         </a>
@@ -49,13 +53,26 @@
             <a href="/dashboard/{{$pro->project_code}}/{{auth()->user()->id}}"
                 data-toggle="tooltip" data-placement="top" title="View Project Dashboard">
             <i class="fas fa-tachometer-alt fa-lg" style="color: #124903;"></i>
-
             </a>
-            {{-- <a href="/meta_data/{{$pro->project_code}}/{{auth()->user()->id}}"
-                data-toggle="tooltip" data-placement="top" title="View Project Users">
-            <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
-            </a> --}}
         </td>
+
+      <td>
+
+        <a href="/ai_wizard/{{$pro->project_code}}/{{auth()->user()->id}}"
+            data-toggle="tooltip" data-placement="top" title="Risk visuals">
+        <i class="fas fa-chart-line fa-lg" style="color: #124903;"></i>
+        </a>
+        </td>
+
+        <td>
+
+            <a href="/risk_computation/{{$pro->project_code}}/{{auth()->user()->id}}"
+                data-toggle="tooltip" data-placement="top" title="Risk Computations">
+            <i class="fas fa-calculator fa-lg" style="color: #124903;"></i>
+            </a>
+            </td>
+
+
 
         <td>
             <a href="/reports/{{$pro->project_code}}/{{auth()->user()->id}}"

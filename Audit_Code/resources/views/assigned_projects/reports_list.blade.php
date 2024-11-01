@@ -19,9 +19,16 @@
         <div class="row mt-2">
             <div class="col-12">
 
+         <a href="/mandatory_and_nonmandatory_controls/{{$proj_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Risk Asessment Mandatory and Non Mandatory Controls</p></a>
+        </div>
+        </div>
+{{--
+        <div class="row mt-2">
+            <div class="col-12">
+
          <a href="/risk_assessment_report/{{$proj_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning"><p class="fw-bold">Risk Assessment by Asset/Service</p></a>
         </div>
-        </div>
+        </div> --}}
 
         <div class="row mt-2">
             <div class="col-12">

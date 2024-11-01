@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CY_SAMA;
 use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\OrganizationController;
@@ -13,10 +14,12 @@ use App\Http\Controllers\IsoSec2_4_A5;
 use App\Http\Controllers\IsoSec2_4_A6;
 use App\Http\Controllers\IsoSec2_4_A7;
 use App\Http\Controllers\IsoSec2_4_A8;
+use App\Http\Controllers\KSA_NCA;
 use App\Http\Controllers\PCI_Merchant_Sheet;
 use App\Http\Controllers\PCI_Multi_Sheet;
 use App\Http\Controllers\PCI_Single_Sheet;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SBP_ETGRMF;
 use App\Http\Controllers\v3_2_s2_Controller;
 use App\Http\Controllers\v3_2_s3_Controller;
 use App\Http\Controllers\v3_2_s4_Controller;
@@ -123,6 +126,10 @@ route::get('iso_sections/{proj_id}/{user_id}',[ProjectController::class,'iso_sec
 // route::get("/meta_data/{proj_id}/{user_id}",[ProjectController::class,'metaData'])->name('meta_data');
 route::get("/reports/{proj_id}/{user_id}",[ProjectController::class,'reports'])->name('reports');
 route::get("/assets_in_scope/{proj_id}/{user_id}",[ProjectController::class,'assets_in_scope'])->name('assets_in_scope');
+route::get("/mandatory_and_nonmandatory_controls/{proj_id}/{user_id}",[ProjectController::class,'mandatory_and_nonmandatory_controls'])->name('mandatory_and_nonmandatory_controls');
+
+
+
 route::get("/risk_assessment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_assessment_report']);
 route::get("/risk_treatment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_treatment']);
 route::get("/dashboard/{proj_id}/{user_id}",[ProjectController::class,'dashBoard'])->name('dashboard');
@@ -132,6 +139,12 @@ route::get("/my_personal_dashboard/{user_id}",[ProjectController::class,'my_pers
 
 //ai wizard
 route::get("ai_wizard/{proj_id}/{user_id}",[ProjectController::class,'ai_wizard'])->name('ai_wizard');
+route::get('dashboard_services_and_components/{proj_id}/{user_id}',[ProjectController::class,'dashboard_services_and_components']);
+route::get('services_controls_dashboard/{proj_id}/{user_id}/{s_name}',[ProjectController::class,'services_controls_dashboard']);
+route::get('components_control_dashboard/{proj_id}/{user_id}/{s_name}',[ProjectController::class,'components_control_dashboard']);
+route::get('risk_profile_graphical/{proj_id}/{user_id}',[ProjectController::class,'risk_profile_graphical']);
+route::get("risk_computation/{proj_id}/{user_id}",[ProjectController::class,'risk_computation'])->name('risk_computation');
+
 
 
 
@@ -201,6 +214,8 @@ route::post('upload_assets/{proj_id}/{user_id}',[IsoSec2_1::class,'upload_assets
 route::get('iso_sec_2_3/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3'])->name('iso_sec_2_3');
 
 //ISosec2.3.1
+route::get('iso_sec_2_3_1_risk_selection/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_1_risk_selection'])->name('iso_sec_2_3_1_risk_selection');
+route::put('iso_sec2_3_1_risk_selection/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'Risk_Selection_form_Submit']);
 route::get('iso_sec_2_3_1/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_1'])->name('iso_sec_2_3_1');
 route::Post('iso_sec2_3_1_initial_add/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec2_3_1_initial_add']);
 
@@ -235,7 +250,9 @@ route::get('iso_sec_2_3_edit_table/{asset_id}/{control_num}/{proj_id}/{user_id}'
 route::put('iso_sec_2_3_edit_table_submit/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3_edit_table_submit']);
 
 //ISO sec2.2
-route::get('iso_sec_2_2_subsections/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec_2_2_subsections'])->name('iso_sec_2_2_subsections');
+
+
+route::get('iso_sec_2_2_subsections/{proj_id}/{user_id}/{user_req}',[IsoSec2_2::class,'iso_sec_2_2_subsections'])->name('iso_sec_2_2_subsections');
 route::get('iso_section2_2/{title_num}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_section2_2'])->name('iso_sec_2_2_main');
 route::get('iso_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec_2_2_req'])->name('iso_sec_2_2_req');
 route::get('iso_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec2_2_sub_req_edit'])->name('iso_sec2_2_sub_req_edit');
@@ -259,6 +276,33 @@ route::get("pci_multi_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[P
 route::get('pci_multi_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Multi_Sheet::class,'pci_multi_sec2_2_sub_req_edit'])->name('pci_multi_sec2_2_sub_req_edit');
 route::post('pci_multi_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_form']);
 route::put('pci_multi_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_edit_form']);
+
+//CY SAMA
+route::get("cy_sama_subsections/{proj_id}/{user_id}",[CY_SAMA::class,'cy_sama_subsections'])->name('cy_sama_subsections');
+route::get("cy_sama_section_2_2/{title_num}/{proj_id}/{user_id}",[CY_SAMA::class,'cy_sama_section_2_2'])->name('cy_sama_section_2_2');
+route::get("cy_sama_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[CY_SAMA::class,'cy_sama_sec_2_2_req'])->name('cy_sama_sec_2_2_req');
+route::get('cy_sama_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec2_2_sub_req_edit'])->name('cy_sama_sec2_2_sub_req_edit');
+route::post('cy_sama_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec_2_2_form']);
+route::put('cy_sama_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec_2_2_edit_form']);
+
+//for KSA NCA ECC
+route::get("ksa_nca_subsections/{proj_id}/{user_id}",[KSA_NCA::class,'ksa_nca_subsections'])->name('ksa_nca_subsections');
+route::get("ksa_nca_section_2_2/{title_num}/{proj_id}/{user_id}",[KSA_NCA::class,'ksa_nca_section_2_2'])->name('ksa_nca_section_2_2');
+route::get("ksa_nca_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[KSA_NCA::class,'ksa_nca_sec_2_2_req'])->name('ksa_nca_sec_2_2_req');
+route::get('ksa_nca_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[KSA_NCA::class,'ksa_nca_sec2_2_sub_req_edit'])->name('ksa_nca_sec2_2_sub_req_edit');
+route::post('ksa_nca_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_form']);
+route::put('ksa_nca_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_edit_form']);
+
+
+
+
+//sbp etgrmf
+route::get("sbp_etgrmf_subsections/{proj_id}/{user_id}",[SBP_ETGRMF::class,'sbp_etgrmf_subsections'])->name('sbp_etgrmf_subsections');
+route::get("sbp_etgrmf_section_2_2/{title_num}/{proj_id}/{user_id}",[SBP_ETGRMF::class,'sbp_etgrmf_section_2_2'])->name('sbp_etgrmf_section_2_2');
+route::get("sbp_etgrmf_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_req'])->name('sbp_etgrmf_sec_2_2_req');
+route::get('sbp_etgrmf_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec2_2_sub_req_edit'])->name('sbp_etgrmf_sec2_2_sub_req_edit');
+route::post('sbp_etgrmf_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_form']);
+route::put('sbp_etgrmf_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_edit_form']);
 
 
 //for merchant
