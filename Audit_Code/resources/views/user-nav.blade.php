@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <!-- Brand -->
         <a class="navbar-brand" href="{{ route('user_home') }}">
-            <img src="{{ asset('logo.png') }}" alt="GRCT" class="img-fluid" style="max-height: 120px;">
+            <img src="{{ asset('logo.png') }}" alt="GRCT" class="img-fluid" style="max-height: 160px; max-width:500px">
         </a>
 
         <!-- Toggler Button -->
