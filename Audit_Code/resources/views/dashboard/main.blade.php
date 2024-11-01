@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <a href="/ai_wizard/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-success text-white btn-md">Go to AI wizard for this project</a>
+    {{-- <a href="/ai_wizard/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-success text-white btn-md">Go to AI wizard for this project</a> --}}
 
 
 

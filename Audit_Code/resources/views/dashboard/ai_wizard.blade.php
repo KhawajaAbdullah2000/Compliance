@@ -32,38 +32,54 @@
         </div>
     </div>
 
-    @if($project->project_type==4)
 
-    @if($results->count() > 0)
+        @if($servicesInProjects->count() > 0)
 
-        @foreach ($results as $service_name => $components)
-            <h2 class="fw-bold mt-5">Risk Levels for {{ $service_name }}</h2>
-            <table class="table table-primary table-responsive">
-                <thead>
-                    <tr>
-                        <th>Asset Component Name</th>
-                        <th>Highest Risk level</th>
-                        <th>Lowest Risk level</th>
-                        <th>Mean Risk Level (Calculated)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($components as $res)
+        <h3>AI Wizard for {{$project->project_name}} </h3>
+        <div class="row mt-4">
+            <div class="col-lg-12">
+                <table class="table table-hover table-dark">
+                    <thead>
                         <tr>
-                            <td>{{$res->c_name}}</td>
-                            <td>{{$res->max_risk_level}}</td>
-                            <td>{{$res->min_risk_level}}</td>
-                            <td>{{ number_format($res->average_risk_level, 4) }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        @endforeach
-    @else
-        <h2 class="fw-bold">No risk assessment done yet</h2>
-    @endif
+                            <th>Project Name</th>
+                            <th>No. of Services</th>
+                            <th>Asset Components Risk Profile - Tabular</th>
+                            <th>Asset Components Risk Profile - Graphical</th>
 
-    @endif
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($servicesInProjects as $result)
+                        <tr>
+                            <td><a style="color:white" class="fw-bold" href="/iso_sections/{{$result->project_id}}/{{auth()->user()->id}}">
+                                {{ $result->project_name }}</a>
+                               </td>
+                            <td><a class="btn btn-outline-primary btn-md px-4 text-white fw-bold" href="/dashboard_services_and_components/{{$result->project_id}}/{{auth()->user()->id}}">
+                                {{ $result->services }}</a>
+                               </td>
+
+                               <td><a class="btn btn-success btn-md px-4" href="/dashboard_services_and_components/{{$result->project_id}}/{{auth()->user()->id}}">
+                                Risk Profile Tabular</a>
+                               </td>
+
+                               <td><a class="btn btn-warning btn-md px-4" href="/risk_profile_graphical/{{$result->project_id}}/{{auth()->user()->id}}">
+                                Risk Profile-Graphical</a>
+                               </td>
+
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+        @else
+            <h2 class="fw-bold">No Projects yet</h2>
+        @endif
+
+
 </div>
 
 @endsection

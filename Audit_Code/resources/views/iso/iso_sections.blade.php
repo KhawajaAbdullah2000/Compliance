@@ -47,9 +47,17 @@
 
         <div class="row mt-2">
             <div class="col-12">
+                <button class="btn btn-lg my_bg_color text-white w-100" id="alertButton">
+                    <p class="fw-bold" style="text-align:left;">Upload or enter evidence against the mandatory requirements of ISO 27001:2022</p>
+                </button>
+            </div>
+        </div>
+
+        {{-- <div class="row mt-2">
+            <div class="col-12">
          <a href="/iso_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg my_bg_color text-white w-100"><p class="fw-bold" style="text-align:left;">Upload or enter evidence against the mandatory requirements of ISO 27001:2022</p></a>
         </div>
-        </div>
+        </div> --}}
 
         <div class="row mt-2">
             <div class="col-12">
@@ -63,18 +71,13 @@
         </div>
         </div>
 
-         {{-- <div class="row mt-2">
-            <div class="col-12">
-         <a href="/iso_sec_2_3_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg my_bg_color text-white"><p class="fw-bold">Section2.3.1- Information Security Risk Assessment And Treatment</p></a>
-        </div>
-        </div> --}}
+
 
         <div class="row mt-2 mb-2">
             <div class="col-12">
          <a href="/iso_section2_4_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg my_bg_color text-white w-100"><p class="fw-bold" style="text-align:left;">Create or Edit Statement of Applicability</p></a>
         </div>
         </div>
-            {{-- <a href="/v_3_2_section1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg my_bg_color text-white">Section1</a> --}}
 
 
 
@@ -83,6 +86,31 @@
 </div>
 
 
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('alertButton').addEventListener('click', function() {
+        Swal.fire({
 
+            text: "Do you want to proceed with uploading evidence for non-mandatory requirements also?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If the user clicked 'Yes', redirect to a specific URL
+                window.location.href = "/iso_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/yes";
+            } else {
+                // If the user clicked 'No', redirect to another URL
+                window.location.href = "/iso_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/no";
+            }
+        });
+    });
+</script>
+
+@endsection
 
 @endsection

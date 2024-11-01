@@ -51,7 +51,7 @@
 
 <div class="row justify-content-center">
 
-    <div class="col-md-6">
+    <div class="col-md-12">
 
         <div class="card mt-2">
             <div class="card-header my_bg_color text-white text-center">
@@ -63,55 +63,154 @@
             @csrf
             @method('PUT')
 
-            <div class="fw-bold mb-3">
-                <label for="">Asset Value:
-                    @if ($assetData->asset_value==10)
-                    High
-                    @endif
+            <h3 class="">Severity of Adverse Impacts</h3>
 
-                    @if ($assetData->asset_value==5)
-                    Medium
-                    @endif
+            <p><span class="fw-bold">Risk Confidentiality:</span>
+            @if($riskData->risk_confidentiality==10)
+            High
+            @endif
+            
+            @if($riskData->risk_confidentiality==5)
+            Medium
+            @endif
+            
+            @if($riskData->risk_confidentiality==1)
+            Low
+            @endif
+            </p>
+            
+            
+            <p><span class="fw-bold">Risk Integrity:</span>
+            
+                @if($riskData->risk_integrity==10)
+            High
+            @endif
+            
+            @if($riskData->risk_integrity==5)
+            Medium
+            @endif
+            
+            @if($riskData->risk_integrity==1)
+            Low
+            @endif
+            
+            </p>
+            
+            <p><span class="fw-bold">Risk Availability:</span>
+            
+                @if($riskData->risk_availability==10)
+            High
+            @endif
+            
+            @if($riskData->risk_availability==5)
+            Medium
+            @endif
+            
+            @if($riskData->risk_availability==1)
+            Low
+            @endif
+            
+            </p>
 
-                    @if ($assetData->asset_value==1)
-                    Low
-                    @endif
-                </label>
+    <div class="form-group">
+        <label for="" class="fw-bold">Applicability: </label>
+
+        @if($assetData->applicability=='yes')
+        Only to this asset component
+        @endif
+
+        @if($assetData->applicability=='yes_to_all')
+        To all asset components in this project
+        @endif
+
+        @if($assetData->applicability=='no')
+        Not to this asset component
+        @endif
+</td>
+
+
 
             </div>
 
-            <div class="form-group">
-                <label for="">Applicability</label>
-                <select name="applicability" class="form-select">
-                    <option value=""> Select--  </option>
 
-                    <option value='yes' {{ old('applicability',$assetData->applicability) == "yes"? 'selected' : '' }}>Yes</option>
-
-                    <option value='no' {{ old('applicability',$assetData->applicability) == "no"? 'selected' : '' }}>No</option>
-                </select>
-
-
-            </div>
 
             <div class="form-group mt-4">
-                <label for="">Control Compliance %</label>
-                <input type="number" name="control_compliance" oninput="validateInput(this)" class="form-control" min=0 max=100 data-control-id="{{$assetData->control_num}}" value="{{old('control_compliance',$assetData->control_compliance)}}">
+                <label for="" class="fw-bold">Description of Vulnerability</label>
+                <br>
+                <input class="form-check-input" type="radio" name="desc_vulnerability" value="Description of control is fully met"
+                    {{ old('desc_vulnerability', $assetData->desc_vulnerability) == 'Description of control is fully met' ? 'checked' : '' }}>
+                <label for="">Description of control is fully met</label><br>
+
+                <input class="form-check-input" type="radio" name="desc_vulnerability" value="Description of control is partially met or not met"
+                    {{ old('desc_vulnerability', $assetData->desc_vulnerability) == 'Description of control is partially met or not met' ? 'checked' : '' }}>
+                <label for="">Description of control is partially met or not met</label><br>
+
+                <input class="form-check-input" type="radio" name="desc_vulnerability" value="Other"
+                    {{ old('desc_vulnerability', $assetData->desc_vulnerability) == 'Other' ? 'checked' : '' }}>
+                <label for="">Other</label><br>
+
+                <input type="text" name="desc_vulnerability_other" class="form-control"
+                    value="{{ old('desc_vulnerability_other', $assetData->desc_vulnerability_other) }}">
             </div>
 
 
-            <div class="form-group mt-4">
-                <label for="">Vulnerability %</label>
-                <input type="number" name="vulnerability" class="form-control" data-control-id="{{$assetData->control_num}}" readonly value="{{old('vulnerability',$assetData->vulnerability)}}">
+
+
+            <div class=" mt-4">
+                <label for="" class="fw-bold">Description of Threat</label>
+                <br>
+                <input class="form-check-input" type="radio" name="desc_threat" value="Asset component is directly publicly exposed"
+                {{ old('desc_threat', $assetData->desc_threat) == 'Asset component is directly publicly exposed' ? 'checked' : '' }}>
+                <label for="">Asset component is directly publicly exposed</label>
+
+                <br>
+
+
+
+                <input class="form-check-input" type="radio" name="desc_threat" value="Asset component is NOT directly publicly exposed"
+                    {{ old('desc_threat', $assetData->desc_threat) == 'Asset component is NOT directly publicly exposed ' ? 'checked' : '' }}>
+                <label for="">Asset component is NOT directly publicly exposed</label>
+
+                <br>
+
+
+
+                <input class="form-check-input" type="radio" name="desc_threat" value="Other"
+                    {{ old('desc_threat', $assetData->desc_threat) == 'Other' ? 'checked' : '' }}>
+                <label for="">Other</label>
+
+                <input type="text" name="desc_threat_other" class="form-control"
+                    value="{{ old('desc_threat_other', $assetData->desc_threat_other) }}">
             </div>
 
-            <div class="form-group mt-4">
-                <label for="">Threat %</label>
-                <input type="number" name="threat" class="form-control" min=0 max=100 data-control-id="{{$assetData->control_num}}" value="{{old('threat',$assetData->threat)}}">
-            </div>
+
 
             <div class="form-group mt-4">
-                <label for="">Risk Level</label>
-                <input type="number" name="risk_level" class="form-control" data-control-id="{{$assetData->control_num}}" value="{{old('risk_level',$assetData->risk_level)}}" readonly>
+                <label for="risk" class="fw-bold">Types of Risk</label>
+                <br>
+                @php
+                $descRisk = old('desc_risk', $assetData->desc_risk);
+                $selectedRisks = is_string($descRisk) ? json_decode($descRisk, true) : $descRisk;
+            @endphp
+
+                <input type="checkbox" name="desc_risk[]" value="Breach of data confidentiality"
+                    {{ is_array($selectedRisks) && in_array('Breach of data confidentiality', $selectedRisks) ? 'checked' : '' }}>
+                <label for="">Breach of data confidentiality</label><br>
+
+                <input type="checkbox" name="desc_risk[]" value="Breach of data integrity"
+                    {{ is_array($selectedRisks) && in_array('Breach of data integrity', $selectedRisks) ? 'checked' : '' }}>
+                <label for="">Breach of data integrity</label><br>
+
+                <input type="checkbox" name="desc_risk[]" value="Information or Service Denial"
+                    {{ is_array($selectedRisks) && in_array('Information or Service Denial', $selectedRisks) ? 'checked' : '' }}>
+                <label for="">Information or Service Denial</label><br>
+
+                <input type="checkbox" name="desc_risk[]" value="Other"
+                    {{ is_array($selectedRisks) && in_array('Other', $selectedRisks) ? 'checked' : '' }}>
+                <label for="">Other</label><br>
+
+                <input type="text" name="desc_risk_other" class="form-control"
+                    value="{{ old('desc_risk_other', $assetData->desc_risk_other) }}">
             </div>
 
 
@@ -138,7 +237,7 @@
 
 @section('scripts')
 
-<script>
+{{-- <script>
     $(document).ready(function(){
         // Initialize values from the form's current state
         var assetValue = {{$assetData->asset_value}};
@@ -175,11 +274,11 @@
         // Initial call to set everything up with current values
         updateRiskLevel();
     });
-</script>
+</script> --}}
 
 
 
- <script>
+ {{-- <script>
      function validateInput(inputElement) {
 
        if (inputElement.value.indexOf(".") !== -1) {
@@ -187,7 +286,7 @@
          inputElement.value = Math.floor(inputElement.value);
        }
      }
-   </script>
+   </script> --}}
 
 @endsection
 

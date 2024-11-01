@@ -6,6 +6,8 @@ body {
     width: 100%;
 }
 
+
+
 .navbar {
     padding: 15px 10px;
     border: none;
@@ -13,6 +15,35 @@ body {
     margin-bottom: 40px;
     -webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.my_margin_top{
+    margin-top:50px;
+}
+
+.green-background {
+    background-color:lightgreen;
+    font-weight: bold;
+
+}
+
+.orange-background {
+    background-color: yellow;
+    font-weight: bold;
+
+}
+
+.red-background {
+    background-color:pink;
+    font-weight: bold;
+
+}
+
+
+.custom-badge {
+    font-size: 0.90rem;  /* Increase the font size */
+    padding: 0.5em 1em;  /* Adjust the padding */
+    border-radius: 0.5rem;  /* Optional: Make the badge more rounded */
 }
 
 #sidebar {
@@ -320,6 +351,8 @@ thead.table-pointer {
     cursor: pointer;
     text-decoration: underline;
 }
+
+
 
 
 @media only screen and (max-width: 479px) {

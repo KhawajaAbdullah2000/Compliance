@@ -111,45 +111,75 @@ class ProjectController extends Controller
             $permissions = json_decode($checkpermission->project_permissions);
             if ($checkpermission->type_id == 4) {
 
-                $project=Project::join('project_types','projects.project_type','project_types.id')
-                ->where('projects.project_id',$proj_id)->first();
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
 
                 return view(
                     'iso.iso_sections',
-                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name,'project'=>$project]
+                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
                 );
             }
 
             //pci single sheet
-            elseif ($checkpermission->type_id == 1){
-                $project=Project::join('project_types','projects.project_type','project_types.id')
-                ->where('projects.project_id',$proj_id)->first();
+            elseif ($checkpermission->type_id == 1) {
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
 
                 return view(
                     '.pci_single_sheet.main_sections',
-                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name,'project'=>$project]
+                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
                 );
-            }
-
-            elseif ($checkpermission->type_id == 2){
-                $project=Project::join('project_types','projects.project_type','project_types.id')
-                ->where('projects.project_id',$proj_id)->first();
+            } elseif ($checkpermission->type_id == 2) {
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
 
                 return view(
                     '.pci_multi_sheet.main_sections',
-                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name,'project'=>$project]
+                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
                 );
-            }
-
-            elseif ($checkpermission->type_id == 3){
-                $project=Project::join('project_types','projects.project_type','project_types.id')
-                ->where('projects.project_id',$proj_id)->first();
+            } elseif ($checkpermission->type_id == 3) {
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
 
                 return view(
                     '.pci_merchant_sheet.main_sections',
-                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name,'project'=>$project]
+                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
                 );
             }
+
+            elseif ($checkpermission->type_id == 5) {
+                //Cybersecurity SAMA
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+
+                return view(
+                    '.CY_SAMA.main_sections',
+                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
+                );
+            }
+
+            elseif ($checkpermission->type_id == 6) {
+                //SBP ETGRMF
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+
+                return view(
+                    '.SBP_ETGRMF.main_sections',
+                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
+                );
+            }
+
+            elseif ($checkpermission->type_id == 7) {
+                //KSA NCA ECC
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+
+                return view(
+                    '.KSA_NCA.main_sections',
+                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
+                );
+            }
+
 
 
 
@@ -172,36 +202,37 @@ class ProjectController extends Controller
     //     return view('assigned_projects.metadata', ['org_data' => $org_data, 'endusers' => $endusers]);
     // }
 
-    public function dashBoard($proj_id,$user_id){
+    public function dashBoard($proj_id, $user_id)
+    {
 
-            $project=Project::join('project_types','projects.project_type','project_types.id')
-            ->where('projects.project_id',$proj_id)->first();
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
 
-            $groupsPerService = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
+        $groupsPerService = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
             ->select('s_name', DB::raw('count(distinct g_name) as unique_groups_count'))
             ->groupBy('s_name')
             ->get();
 
 
-$componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
-               ->select('g_name', DB::raw('count(distinct c_name) as unique_components_count'))
-               ->groupBy('g_name')
-               ->get();
+        $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
+            ->select('g_name', DB::raw('count(distinct c_name) as unique_components_count'))
+            ->groupBy('g_name')
+            ->get();
 
-            //    $mandatory_requirements_submitted=DB::table('iso_sec_2_2')->where('project_id',$proj_id)->get()->count();
-            //    $mandatory_requirements_left=120-$mandatory_requirements_submitted;
-
-
-               $mandatory_controls = DB::table('iso_sec_2_2')->where('project_id',$proj_id)
-               ->select('comp_status', DB::raw('count(*) as total'))
-               ->whereIn('comp_status', ['yes', 'no', 'partial'])
-               ->groupBy('comp_status')
-               ->get();
+        //    $mandatory_requirements_submitted=DB::table('iso_sec_2_2')->where('project_id',$proj_id)->get()->count();
+        //    $mandatory_requirements_left=120-$mandatory_requirements_submitted;
 
 
-               if ($project->project_type==4){
+        $mandatory_controls = DB::table('iso_sec_2_2')->where('project_id', $proj_id)
+            ->select('comp_status', DB::raw('count(*) as total'))
+            ->whereIn('comp_status', ['yes', 'no', 'partial'])
+            ->groupBy('comp_status')
+            ->get();
 
-                $applicability=DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)
+
+        if ($project->project_type == 4) {
+
+            $applicability = DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)
                 ->select('applicability', DB::raw('count(*) as total'))
                 ->whereIn('applicability', ['yes', 'no'])
                 ->groupBy('applicability')
@@ -212,127 +243,454 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
 
 
 
-                return view('dashboard.main',[
-                    'project'=>$project,
-                    'groupsPerService'=>$groupsPerService,
-                    'componentsPerGroup'=>$componentsPerGroup,
-                    'mandatory_controls'=>$mandatory_controls,
-                    'applicability'=>$applicability
-                 ]);
-
-
-               }else{
-                return view('dashboard.main',[
-                    'project'=>$project,
-                    'groupsPerService'=>$groupsPerService,
-                    'componentsPerGroup'=>$componentsPerGroup,
-                    'mandatory_controls'=>$mandatory_controls
-                 ]);
-
-               }
-
-
-
-
-
+            return view('dashboard.main', [
+                'project' => $project,
+                'groupsPerService' => $groupsPerService,
+                'componentsPerGroup' => $componentsPerGroup,
+                'mandatory_controls' => $mandatory_controls,
+                'applicability' => $applicability
+            ]);
+        } else {
+            return view('dashboard.main', [
+                'project' => $project,
+                'groupsPerService' => $groupsPerService,
+                'componentsPerGroup' => $componentsPerGroup,
+                'mandatory_controls' => $mandatory_controls
+            ]);
+        }
     }
 
-    public function my_personal_dashboard($user_id){
+    public function my_personal_dashboard($user_id)
+    {
 
 
-            // $project=Project::join('project_types','projects.project_type','project_types.id')
-            // ->where('projects.project_id',$proj_id)->first();
+        // $project=Project::join('project_types','projects.project_type','project_types.id')
+        // ->where('projects.project_id',$proj_id)->first();
 
-            $projectsCreatedCount = DB::table('projects')
+        $user = Db::table('users')->where('id', $user_id)->first();
+
+        $projectsCreatedCount = DB::table('projects')
             ->join('project_types', 'projects.project_type', '=', 'project_types.id')
             ->where('created_by', $user_id)
             ->select('project_types.type', DB::raw('count(*) as total'))
             ->groupBy('project_types.type')
             ->get();
 
-            $permissionsInaProjectCount = DB::table('projects')
+        $permissionsInaProjectCount = DB::table('projects')
             ->join('project_types', 'projects.project_type', '=', 'project_types.id')
             ->join('project_details', 'projects.project_id', '=', 'project_details.project_code')
             ->where('assigned_enduser', $user_id)
             ->select('project_types.type', DB::raw('count(*) as total'))
-            ->groupBy('project_types.type','project_details.assigned_enduser')
+            ->groupBy('project_types.type', 'project_details.assigned_enduser')
             ->get();
-           // dd($permissionsInaProjectCount);
-           // dd($projectsCreatedCount);
+        // dd($permissionsInaProjectCount);
+        // dd($projectsCreatedCount);
 
-           $projectsCreatedByMeByStatus = DB::table('projects')
-           ->select('projects.status', DB::raw('count(*) as total'))
-           ->where('created_by',$user_id)
-           ->groupBy('projects.status')
-           ->get();
+        $projectsCreatedByMeByStatus = DB::table('projects')
+            ->select('projects.status', DB::raw('count(*) as total'))
+            ->where('created_by', $user_id)
+            ->groupBy('projects.status')
+            ->get();
 
-           $projectsAssignedByStatus = DB::table('projects')
-           ->join('project_details', 'projects.project_id', '=', 'project_details.project_code')
-           ->where('assigned_enduser', $user_id)
-           ->select('projects.status', DB::raw('count(*) as total'))
-           ->groupBy('projects.status')
-           ->get();
+        $projectsAssignedByStatus = DB::table('projects')
+            ->join('project_details', 'projects.project_id', '=', 'project_details.project_code')
+            ->where('assigned_enduser', $user_id)
+            ->select('projects.status', DB::raw('count(*) as total'))
+            ->groupBy('projects.status')
+            ->get();
 
-            return view('dashboard.my_personal_dashboard',[
-              'projectsCreatedCount'=>$projectsCreatedCount,
-              'permissionsInaProjectCount' => $permissionsInaProjectCount,
-              'projectsCreatedByMeByStatus'=> $projectsCreatedByMeByStatus,
-              'projectsAssignedByStatus'   => $projectsAssignedByStatus,
-            ]);
+        $projectsAndStatusBarChart = DB::table('projects')
+            ->join('project_types', 'projects.project_type', '=', 'project_types.id')
+            ->select('project_types.type', 'projects.status', DB::raw('COUNT(*) as project_count'))
+            ->where('projects.org_id', $user->org_id)
+            ->groupBy('project_types.type', 'projects.status')
+            ->where('project_types.type', '=', 'ISO 27001:2022')
+            ->get();
 
-        }
-
-
-
-        public function ai_wizard($proj_id,$user_id){
-            if($user_id==auth()->user()->id){
-                $project=Project::join('project_types','projects.project_type','project_types.id')
-                ->where('projects.project_id',$proj_id)->first();
-
-              if($project->project_type==4){
+        $projectsAndStatusBarChart2 = DB::table('projects')
+            ->join('project_types', 'projects.project_type', '=', 'project_types.id')
+            ->select('project_types.type', 'projects.status', DB::raw('COUNT(*) as project_count'))
+            ->where('projects.org_id', $user->org_id)
+            ->groupBy('project_types.type', 'projects.status')
+            ->where('project_types.type', '=', 'PCI-DSS v4-Single-Tenant Service Provider (stSP)')
+            ->get();
 
 
-                $results = DB::table('iso_sec_2_1')
-                ->join('iso_sec_2_3_1', 'iso_sec_2_1.assessment_id', '=', 'iso_sec_2_3_1.asset_id')
-                ->select(
-                    'iso_sec_2_1.s_name',
-                    'iso_sec_2_1.c_name',
-                    DB::raw('MAX(iso_sec_2_3_1.risk_level) as max_risk_level'),
-                    DB::raw('MIN(iso_sec_2_3_1.risk_level) as min_risk_level'),
-                    DB::raw('((MAX(iso_sec_2_3_1.risk_level) + MIN(iso_sec_2_3_1.risk_level)) / 2) as average_risk_level')
-                    )
-
-                ->where('iso_sec_2_1.project_id', $proj_id)
-                ->groupBy('iso_sec_2_1.s_name', 'iso_sec_2_1.c_name')
-                ->get()
-                ->groupBy('s_name');
 
 
-                return view('dashboard.ai_wizard',[
-                    'project'=>$project,
-                    'results'=>$results
+
+        return view('dashboard.my_personal_dashboard', [
+            'projectsCreatedCount' => $projectsCreatedCount,
+            'permissionsInaProjectCount' => $permissionsInaProjectCount,
+            'projectsCreatedByMeByStatus' => $projectsCreatedByMeByStatus,
+            'projectsAssignedByStatus'   => $projectsAssignedByStatus,
+            'projectsAndStatusBarChart' => $projectsAndStatusBarChart,
+            'projectsAndStatusBarChart2' => $projectsAndStatusBarChart2
+        ]);
+    }
+
+
+
+    public function ai_wizard($proj_id, $user_id)
+    {
+        if ($user_id == auth()->user()->id) {
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+
+            if ($project) {
+
+                $user = Db::table('users')->where('id', $user_id)->first();
+
+                $servicesInProject = DB::table('projects')
+                    ->where('projects.project_id', $proj_id)
+                    ->join('iso_sec_2_1', 'projects.project_id', '=', 'iso_sec_2_1.project_id')
+                    ->select('projects.project_name', 'projects.project_id', DB::raw('COUNT(DISTINCT iso_sec_2_1.s_name) as services'))
+                    ->groupBy('projects.project_id', 'projects.project_name')
+                    ->get();
+
+
+                $project_date = Db::table('projects')->where('project_id', $proj_id)->first();
+
+                return view('dashboard.ai_wizard', [
+                    'project' => $project,
+                    'servicesInProjects' => $servicesInProject,
+                    'project_date' => $project_date->project_creation_date
                 ]);
-
-            }else{
-                return view('dashboard.ai_wizard',[
-                    'project'=>$project
-
-                ]);
-
-            }
-
-            }else{
+            } else {
+                //Prject not found
                 return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+                // return view('dashboard.ai_wizard',[
+                //     'project'=>$project
+
+                // ]);
+
+            }
+        } else {
+            return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+        }
+    }
+
+    public function dashboard_services_and_components($proj_id, $user_id)
+    {
+        if ($user_id == auth()->user()->id) {
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+
+            if ($project) {
+                $results = DB::table('iso_sec_2_1')
+                    ->select('project_id', 's_name', DB::raw('COUNT(DISTINCT c_name) as component_count'))
+                    ->where('project_id', $proj_id)
+                    ->groupBy('s_name', 'project_id')
+                    ->get();
+
+
+                return view('dashboard.components_in_services', [
+                    'project_id' => $proj_id,
+                    'project' => $project,
+                    'results' => $results
+                ]);
+            } else {
+                return redirect()->route('assigned_projects', ['user_id' => $user_id]);
             }
         }
+    }
+
+    public function services_controls_dashboard($proj_id, $user_id, $s_name)
+    {
+        if ($user_id == auth()->user()->id) {
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+
+            if ($project) {
+                $results = DB::table('iso_sec_2_3_1 as risk_assessment')
+                    ->join('iso_sec_2_1 as components', 'risk_assessment.asset_id', '=', 'components.assessment_id')
+                    ->select(
+                        DB::raw('
+                        CASE
+                            WHEN risk_assessment.risk_level BETWEEN 0 AND 3 THEN "Low"
+                            WHEN risk_assessment.risk_level BETWEEN 4 AND 7 THEN "Medium"
+                            WHEN risk_assessment.risk_level BETWEEN 8 AND 10 THEN "High"
+                            ELSE "Unknown"
+                        END as risk_category'),
+                        DB::raw('LEFT(risk_assessment.control_num, 1) as control_number_start'),
+                        DB::raw('COUNT(*) as total_controls')
+                    )
+                    ->where('components.project_id', $proj_id)
+                    ->where('components.s_name', $s_name)
+                    ->groupBy('control_number_start', 'risk_category')
+                    ->orderBy('control_number_start')
+                    ->get();
+
+                $num_of_components = DB::table('iso_sec_2_1')
+                    ->select(DB::raw('COUNT(DISTINCT c_name) as component_count'))
+                    ->where('project_id', $proj_id)
+                    ->where('s_name', $s_name)
+                    ->first();
+
+
+
+                return view('dashboard.services_controls_dashboard', [
+                    'project' => $project,
+                    'num_of_components' => $num_of_components,
+                    'results' => $results,
+                    's_name' => $s_name
+                ]);
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+    }
+
+
+
+    public function components_control_dashboard($proj_id, $user_id, $s_name)
+    {
+        if ($user_id == auth()->user()->id) {
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+
+            if ($project) {
+                $results = DB::table('iso_sec_2_3_1 as risk_assessment')
+                    ->join('iso_sec_2_1 as components', 'risk_assessment.asset_id', '=', 'components.assessment_id')
+                    ->select(
+                        'components.c_name',
+                        DB::raw('
+                        CASE
+                            WHEN risk_assessment.risk_level BETWEEN 0 AND 3 THEN "Low"
+                            WHEN risk_assessment.risk_level BETWEEN 4 AND 7 THEN "Medium"
+                            WHEN risk_assessment.risk_level BETWEEN 8 AND 10 THEN "High"
+                            ELSE "Unknown"
+                        END as risk_category'),
+                        DB::raw('LEFT(risk_assessment.control_num, 1) as control_number_start'),
+                        DB::raw('COUNT(*) as total_controls')
+                    )
+                    ->where('components.project_id', $proj_id)
+                    ->where('components.s_name', $s_name)
+                    ->groupBy('components.c_name', 'control_number_start', 'risk_category')
+                    ->orderBy('components.c_name')
+                    ->orderBy('control_number_start')
+                    ->get();
+
+
+
+
+                return view('dashboard.components_controls_dashboard', [
+                    'project' => $project,
+                    'results' => $results,
+                    's_name' => $s_name
+                ]);
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+    }
+
+
+
+    public function risk_profile_graphical($proj_id, $user_id)
+    {
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+
+        if ($checkpermission) {
+
+            $data = DB::table('iso_sec_2_1 as sec1')
+                ->join('iso_sec_2_3_1 as sec3', 'sec1.assessment_id', '=', 'sec3.asset_id')
+                ->select(
+                    'sec1.c_name',
+                    DB::raw('
+            CASE
+                WHEN sec3.risk_level BETWEEN 0 AND 3 THEN "Low"
+                WHEN sec3.risk_level BETWEEN 4 AND 7 THEN "Medium"
+                WHEN sec3.risk_level BETWEEN 8 AND 10 THEN "High"
+                ELSE "Unknown"
+            END as risk_category'),
+                    DB::raw('
+            CASE
+                WHEN sec3.control_num LIKE "5.%" THEN "Control 5"
+                WHEN sec3.control_num LIKE "6.%" THEN "Control 6"
+                WHEN sec3.control_num LIKE "7.%" THEN "Control 7"
+                WHEN sec3.control_num LIKE "8.%" THEN "Control 8"
+                ELSE "Other Controls"
+            END as control_group'),
+                    DB::raw('COUNT(sec3.risk_level) as total')
+                )
+                ->where('sec1.project_id', $proj_id)
+                ->groupBy('sec1.c_name', 'risk_category', 'control_group')
+                ->get();
+
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+
+            $chartData = $data->groupBy('c_name')->map(function ($componentData) {
+                // Group data by control group
+                return $componentData->groupBy('control_group')->map(function ($controlData) {
+                    // Prepare datasets by risk category (Low, Medium, High)
+                    return [
+                        'Low' => $controlData->where('risk_category', 'Low')->pluck('total')->toArray(),
+                        'Medium' => $controlData->where('risk_category', 'Medium')->pluck('total')->toArray(),
+                        'High' => $controlData->where('risk_category', 'High')->pluck('total')->toArray(),
+                    ];
+                });
+            });
+
+
+            return view('dashboard.risk_profile_graphical', [
+                'project' => $project,
+                'chartData' => $chartData
+            ]);
+        }
+
+
+        return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+    }
+
+
+    public function risk_computation($proj_id, $user_id, Request $req)
+    {
+
+        if ($user_id == auth()->user()->id) {
+
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+
+            $servicesInProject = DB::table('iso_sec_2_1')
+                ->where('project_id', $proj_id)
+                ->distinct()
+                ->select('s_name')
+                ->get();
+
+            $groupsInProject = DB::table('iso_sec_2_1')
+                ->where('project_id', $proj_id)
+                ->distinct()
+                ->select('g_name')
+                ->get();
+
+            $namesInProject = DB::table('iso_sec_2_1')
+                ->where('project_id', $proj_id)
+                ->distinct()
+                ->select('name')
+                ->get();
+
+            $componentsInProject = DB::table('iso_sec_2_1')
+                ->where('project_id', $proj_id)
+                ->distinct()
+                ->select('c_name')
+                ->get();
+
+
+
+
+
+            $query = DB::table('iso_sec_2_1 as iso1')
+                ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+                ->where('iso1.project_id',$proj_id);
+
+            // Dynamically select risk columns based on user input for 'risk_type'
+            $query->select(
+                'iso1.s_name',
+                'iso1.g_name',
+                'iso1.name',
+                'iso1.c_name',
+                'iso2.control_num',
+                'iso2.applicability',
+                'iso2.vulnerability',
+                'iso2.threat',
+            );
+
+            // Check the value of 'risk_type' and adjust the columns
+            $riskType = $req->input('risk_type');
+
+            if ($riskType == 'all' || $riskType==null) {
+                $query->addSelect(
+                    'iso2.risk_level',
+
+                );
+            } else {
+                $query->addSelect('iso2.' . $riskType);
+            }
+
+
+            $query->when($req->input('service') && $req->input('service') != 'all', function ($query) use ($req) {
+                return $query->where('iso1.s_name', $req->input('service'));
+            });
+
+            $query->when($req->input('group') && $req->input('group') != 'all', function ($query) use ($req) {
+                return $query->where('iso1.g_name', $req->input('group'));
+            });
+
+            $query->when($req->input('name') && $req->input('name') != 'all', function ($query) use ($req) {
+                return $query->where('iso1.name', $req->input('name'));
+            });
+
+            $query->when($req->input('component') && $req->input('component') != 'all', function ($query) use ($req) {
+                return $query->where('iso1.c_name', $req->input('component'));
+            });
+
+
+
+            // Control group filter (for controls 5, 6, 7, 8, or all)
+            $query->when($req->input('control_group') && $req->input('control_group') != 'all', function ($query) use ($req) {
+                $controlGroup = $req->input('control_group');
+
+
+                if ($controlGroup == 5) {
+                    return $query->whereBetween('iso2.control_num', [5.1, 5.99]);
+                } elseif ($controlGroup == 6) {
+                    return $query->whereBetween('iso2.control_num', [6.1, 6.99]);
+                } elseif ($controlGroup == 7) {
+                    return $query->whereBetween('iso2.control_num', [7.1, 7.99]);
+                } elseif ($controlGroup == 8) {
+                    return $query->whereBetween('iso2.control_num', [8.1, 8.99]);
+                }
+            });
+
+            $results = $query->orderBy('iso2.control_num','asc')
+           ->get();
+           $scatterPlotData = [
+            // x = Vulnerability, y = Threat, r = Risk Count (point size)
+            ['x' => 1, 'y' => 1, 'r' => $results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+            ['x' => 1, 'y' => 2, 'r' => $results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+            ['x' => 1, 'y' => 3, 'r' => $results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+            ['x' => 2, 'y' => 1, 'r' => $results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+            ['x' => 2, 'y' => 2, 'r' => $results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+            ['x' => 2, 'y' => 3, 'r' => $results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+            ['x' => 3, 'y' => 1, 'r' => $results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+            ['x' => 3, 'y' => 2, 'r' => $results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+            ['x' => 3, 'y' => 3, 'r' => $results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+        ];
+
+
+            return view('dashboard.risk_calculation', [
+                'project' => $project,
+                'servicesInProject' => $servicesInProject,
+                'groupsInProject' => $groupsInProject,
+                'namesInProject' => $namesInProject,
+                'componentsInProject' => $componentsInProject,
+                'results' => $results,
+                'scatterPlotData' => $scatterPlotData
+
+            ]);
+        } else {
+            return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+        }
+    }
 
     public function reports($proj_id, $user_id)
     {
 
-        $project=Db::table('projects')->where('project_id',$proj_id)->first();
+        $project = Db::table('projects')->where('project_id', $proj_id)->first();
 
-            return view('assigned_projects.reports_list', ['proj_id' => $proj_id, 'project_name' => $project->project_name]);
-
+        return view('assigned_projects.reports_list', ['proj_id' => $proj_id, 'project_name' => $project->project_name]);
     }
 
     public function assets_in_scope($proj_id, $user_id)
@@ -354,7 +712,12 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
             $project = Db::table('projects')->where('project_id', $proj_id)->first('project_name');
 
             $report_data = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->get([
-                's_name', 'g_name', 'name', 'c_name', 'owner_dept', 'physical_loc',
+                's_name',
+                'g_name',
+                'name',
+                'c_name',
+                'owner_dept',
+                'physical_loc',
                 'logical_loc'
             ]);
             if ($report_data->count() > 0) {
@@ -375,8 +738,9 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
         }
     }
 
-    public function risk_assessment_report($proj_id, $user_id)
-    {
+
+    public function mandatory_and_nonmandatory_controls($proj_id,$user_id){
+
         $checkpermission = Db::table('project_details')->select(
             'project_types.id as type_id',
             'project_details.project_code',
@@ -391,33 +755,29 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
 
         if ($checkpermission) {
 
-           $project = Db::table('projects')->where('project_id', $proj_id)->first('project_name');
 
-            $report_data = Db::table('iso_sec_2_1')->join('iso_sec_2_3_1','iso_sec_2_1.assessment_id','iso_sec_2_3_1.asset_id')
-            ->where('iso_sec_2_1.project_id', $proj_id)->orderBy('control_num','asc')->orderBy('asset_id','asc')
-            ->get(
-                [
-                    'g_name', 'name', 'c_name', 'owner_dept', 'physical_loc',
-                    'logical_loc', 's_name','control_num','applicability','asset_value','control_compliance',
-                    'vulnerability','threat','risk_level'
-                ]
-            );
-           //dd($report_data);
+            $project = Db::table('projects')->where('project_id', $proj_id)->first('project_name');
 
+            $report_data = Db::table('iso_sec_2_2')
+            ->where('iso_sec_2_2.project_id', $proj_id)->orderBy('title_num','asc')->get([
+                'title_num',
+                'sub_req',
+                'comp_status',
+                'comments',
+                'attachment',
 
-          //  dd($report_data);
+            ]);
             if ($report_data->count() > 0) {
 
-                 $safeProjectName = Str::slug($project->project_name, '_'); // Example: converting "Project Name!" to "Project_Name"
+                $safeProjectName = Str::slug($project->project_name, '_');
 
-                //Append the project name to the report filename
+
                 $filename = 'RiskAssessmentReport_' . $safeProjectName . '.xlsx';
 
                 $export = new RiskAssessmentExport($proj_id);
                 return Excel::download($export, $filename);
-
-
             } else {
+
                 return redirect()->route('assigned_projects', ['user_id' => $user_id]);
             }
         } else {
@@ -425,7 +785,53 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
         }
     }
 
-    public function risk_treatment($proj_id,$user_id){
+
+    // public function risk_assessment_report($proj_id, $user_id)
+    // {
+    //     $checkpermission = Db::table('project_details')->select(
+    //         'project_types.id as type_id',
+    //         'project_details.project_code',
+    //         'project_details.project_permissions',
+    //         'projects.project_name'
+    //     )
+    //         ->join('projects', 'project_details.project_code', 'projects.project_id')
+    //         ->join('project_types', 'projects.project_type', 'project_types.id')
+    //         ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+    //         ->first();
+
+
+    //     if ($checkpermission) {
+
+    //         $project = Db::table('projects')->where('project_id', $proj_id)->first('project_name');
+
+    //         $report_data = Db::table('iso_sec_2_1')->join('iso_sec_2_3_1', 'iso_sec_2_1.assessment_id', 'iso_sec_2_3_1.asset_id')
+    //             ->where('iso_sec_2_1.project_id', $proj_id)->orderBy('control_num', 'asc')->orderBy('asset_id', 'asc')
+    //             ->get(
+    //                 [
+    //                      'title','sub_req','comp_status','comments','attachment'
+    //                 ]
+    //             );
+
+
+    //         if ($report_data->count() > 0) {
+
+    //             $safeProjectName = Str::slug($project->project_name, '_'); // Example: converting "Project Name!" to "Project_Name"
+
+    //             //Append the project name to the report filename
+    //             $filename = 'RiskAssessmentReport_' . $safeProjectName . '.xlsx';
+
+    //             $export = new RiskAssessmentExport($proj_id);
+    //             return Excel::download($export, $filename);
+    //         } else {
+    //             return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+    //         }
+    //     } else {
+    //         return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+    //     }
+    // }
+
+    public function risk_treatment($proj_id, $user_id)
+    {
 
 
         $checkpermission = Db::table('project_details')->select(
@@ -439,38 +845,31 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
             ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
             ->first();
 
-            if($checkpermission){
+        if ($checkpermission) {
 
-            $projectName=Db::table('projects')->where('project_id', $proj_id)->first('project_name')->project_name;
-         $report_data = Db::table('iso_sec_2_1')->join('iso_risk_treatment','iso_sec_2_1.assessment_id',
-         'iso_risk_treatment.asset_id')->get();
-
-
-                if ($report_data->count()>0){
-                    $safeProjectName = Str::slug($projectName, '_'); // Example: converting "Project Name!" to "Project_Name"
-
-                    //Append the project name to the report filename
-                    $filename = 'RiskTreatmentReport_' . $safeProjectName . '.xlsx';
-
-                    $export = new RiskTreatmentReport($proj_id);
-                    return Excel::download($export, $filename);
+            $projectName = Db::table('projects')->where('project_id', $proj_id)->first('project_name')->project_name;
+            $report_data = Db::table('iso_sec_2_1')->join(
+                'iso_risk_treatment',
+                'iso_sec_2_1.assessment_id',
+                'iso_risk_treatment.asset_id'
+            )->where('iso_sec_2_1.project_id',$proj_id)
+            ->get();
 
 
+            if ($report_data->count() > 0) {
+                $safeProjectName = Str::slug($projectName, '_'); // Example: converting "Project Name!" to "Project_Name"
 
-                }else{
-                    return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+                //Append the project name to the report filename
+                $filename = 'RiskTreatmentReport_' . $safeProjectName . '.xlsx';
 
-                }
-
-
-
-            }else{
+                $export = new RiskTreatmentReport($proj_id);
+                return Excel::download($export, $filename);
+            } else {
                 return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
-
             }
-
-
-
+        } else {
+            return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+        }
     }
 
 
@@ -492,13 +891,16 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
                 $permissions = json_decode($checkpermission->project_permissions);
                 if ($checkpermission->type_id == 4) {
 
-                    $project=Project::join('project_types','projects.project_type','project_types.id')
-                    ->where('projects.project_id',$proj_id)->first();
+                    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                        ->where('projects.project_id', $proj_id)->first();
 
                     return view(
                         'iso.iso_sec2_4_subsections',
-                        ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name,
-                        'project'=>$project]
+                        [
+                            'project_id' => $proj_id,
+                            'project_name' => $checkpermission->project_name,
+                            'project' => $project
+                        ]
                     );
                 }
             }
@@ -507,24 +909,20 @@ $componentsPerGroup = DB::table('iso_sec_2_1')->where('project_id',$proj_id)
     }
 
 
-    public function delete_my_project($proj_id,$user_id){
-        if($user_id==auth()->user()->id){
+    public function delete_my_project($proj_id, $user_id)
+    {
+        if ($user_id == auth()->user()->id) {
 
-            $check=Db::table('projects')->where('project_id',$proj_id)->where('created_by',$user_id)->first();
-            if($check){
+            $check = Db::table('projects')->where('project_id', $proj_id)->where('created_by', $user_id)->first();
+            if ($check) {
 
-                Db::table('projects')->where('project_id',$proj_id)->where('created_by',$user_id)->delete();
-                return redirect()->route('projects', ['user_id' => $user_id])->with('success','Project Deleted');
-
-
-            }else{
+                Db::table('projects')->where('project_id', $proj_id)->where('created_by', $user_id)->delete();
+                return redirect()->route('projects', ['user_id' => $user_id])->with('success', 'Project Deleted');
+            } else {
                 return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
-
             }
-
-        }else{
+        } else {
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
-
         }
     }
 
