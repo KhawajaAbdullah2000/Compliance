@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('model_type');
             $table->unsignedBigInteger('model_id');
 
-            $table->primary(['role_id', 'model_id', 'model_type']);
             $table->index(['model_id', 'model_type']);
+            $table->primary(['role_id', 'model_id', 'model_type']);
         });
     }
 
