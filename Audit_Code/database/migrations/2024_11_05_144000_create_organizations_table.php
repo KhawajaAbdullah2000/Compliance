@@ -23,9 +23,9 @@ return new class extends Migration
             $table->string('city', 100);
             $table->integer('zip_code');
             $table->string('address', 100);
-            $table->string('record_created_by', 100);
-            $table->date('record_creation_date');
-            $table->time('record_creation_time');
+            $table->string('record_created_by', 100)->nullable();
+            $table->date('record_creation_date')->nullable();
+            $table->time('record_creation_time')->nullable();
             $table->string('status', 20);
             $table->timestamps();
 

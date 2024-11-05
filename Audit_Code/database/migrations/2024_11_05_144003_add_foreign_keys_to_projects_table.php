@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::table('projects', function (Blueprint $table) {
             $table->foreign(['created_by'], 'createdbyfk')->references(['id'])->on('users')->onUpdate('SET NULL')->onDelete('SET NULL');
-            $table->foreign(['project_type'], 'projtype')->references(['id'])->on('project_types')->onUpdate('SET NULL')->onDelete('SET NULL');
             $table->foreign(['org_id'], 'organfkss')->references(['org_id'])->on('organizations')->onUpdate('SET NULL')->onDelete('SET NULL');
+            $table->foreign(['project_type'], 'projtype')->references(['id'])->on('project_types')->onUpdate('SET NULL')->onDelete('SET NULL');
         });
     }
 
@@ -29,8 +29,8 @@ return new class extends Migration
     {
         Schema::table('projects', function (Blueprint $table) {
             $table->dropForeign('createdbyfk');
-            $table->dropForeign('projtype');
             $table->dropForeign('organfkss');
+            $table->dropForeign('projtype');
         });
     }
 };

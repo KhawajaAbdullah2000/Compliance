@@ -23,7 +23,9 @@ return new class extends Migration
             $table->string('owner_dept', 300);
             $table->string('physical_loc', 300);
             $table->string('logical_loc', 300);
-            
+            $table->integer('risk_confidentiality')->default(10);
+            $table->integer('risk_integrity')->default(10);
+            $table->integer('risk_availability')->default(10);
             $table->unsignedBigInteger('last_edited_by')->nullable()->index('last_edited_by');
             $table->dateTime('last_edited_at');
 

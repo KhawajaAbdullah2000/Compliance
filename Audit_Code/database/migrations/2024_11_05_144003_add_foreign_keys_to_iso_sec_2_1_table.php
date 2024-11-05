@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('iso_sec_2_1', function (Blueprint $table) {
             $table->foreign(['last_edited_by'], 'iso_sec2_1_edit')->references(['id'])->on('users')->onUpdate('CASCADE')->onDelete('SET NULL');
-            $table->foreign(['project_id'], 'iso_sec2_1_proj')->references(['project_id'])->on('projects')->onUpdate('CASCADE')->onDelete('SET NULL');
+            $table->foreign(['project_id'], 'iso_sec2_1_proj')->references(['project_id'])->on('projects')->onUpdate('CASCADE')->onDelete('CASCADE');
         });
     }
 

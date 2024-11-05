@@ -14,7 +14,11 @@ class DatabaseSeeder extends Seeder
         $this->call(RootAdminSeeder::class);
         $this->call(PrivilegeSeeder::class);
         $this->call(RolesTableSeeder::class);
+        $this->call(GlobalRoles::class);
         $this->call(ProjectTypes::class);
+        $this->call(Organization::class);
+        $this->call(SuperUser::class);
+
 
     }
 }
