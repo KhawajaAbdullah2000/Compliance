@@ -4,6 +4,7 @@
 
 @include('user-nav')
 
+
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
@@ -121,9 +122,9 @@
 </div>
 
 {{-- @section('scripts')
-<script>
 
-</script>
+
+
 @endsection --}}
 
 @endsection

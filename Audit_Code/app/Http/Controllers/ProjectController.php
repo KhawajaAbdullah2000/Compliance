@@ -407,9 +407,9 @@ class ProjectController extends Controller
                     ->select(
                         DB::raw('
                         CASE
-                            WHEN risk_assessment.risk_level BETWEEN 0 AND 3 THEN "Low"
-                            WHEN risk_assessment.risk_level BETWEEN 4 AND 7 THEN "Medium"
-                            WHEN risk_assessment.risk_level BETWEEN 8 AND 10 THEN "High"
+                            WHEN risk_assessment.risk_level BETWEEN 0.000 AND 0.99999 THEN "Low"
+                            WHEN risk_assessment.risk_level BETWEEN 1.000 AND 7.2000 THEN "Medium"
+                            WHEN risk_assessment.risk_level BETWEEN 7.3 AND 10.000 THEN "High"
                             ELSE "Unknown"
                         END as risk_category'),
                         DB::raw('LEFT(risk_assessment.control_num, 1) as control_number_start'),
@@ -455,9 +455,9 @@ class ProjectController extends Controller
                         'components.c_name',
                         DB::raw('
                         CASE
-                            WHEN risk_assessment.risk_level BETWEEN 0 AND 3 THEN "Low"
-                            WHEN risk_assessment.risk_level BETWEEN 4 AND 7 THEN "Medium"
-                            WHEN risk_assessment.risk_level BETWEEN 8 AND 10 THEN "High"
+                            WHEN risk_assessment.risk_level BETWEEN 0.0000 AND 0.9999 THEN "Low"
+                            WHEN risk_assessment.risk_level BETWEEN 1.0000 AND 7.20000 THEN "Medium"
+                            WHEN risk_assessment.risk_level BETWEEN 7.3000 AND 10.000 THEN "High"
                             ELSE "Unknown"
                         END as risk_category'),
                         DB::raw('LEFT(risk_assessment.control_num, 1) as control_number_start'),
@@ -507,9 +507,9 @@ class ProjectController extends Controller
                     'sec1.c_name',
                     DB::raw('
             CASE
-                WHEN sec3.risk_level BETWEEN 0 AND 3 THEN "Low"
-                WHEN sec3.risk_level BETWEEN 4 AND 7 THEN "Medium"
-                WHEN sec3.risk_level BETWEEN 8 AND 10 THEN "High"
+                WHEN sec3.risk_level BETWEEN 0.00 AND 0.999 THEN "Low"
+                WHEN sec3.risk_level BETWEEN 1.00 AND 7.2000 THEN "Medium"
+                WHEN sec3.risk_level BETWEEN 7.300 AND 10.000 THEN "High"
                 ELSE "Unknown"
             END as risk_category'),
                     DB::raw('

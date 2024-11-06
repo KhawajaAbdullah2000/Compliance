@@ -90,14 +90,14 @@
 
                        <tr>
                         @if ($loop->first)
-                            <td rowspan="3">{{ $componentName }}</td> <!-- No background color here -->
+                            <td rowspan="3" class="fw-bold">{{ $componentName }}</td> <!-- No background color here -->
                         @endif
-                        <td style="background-color: {{$color}};">{{ $category }}</td>
-                        <td style="background-color: {{$color}};">{{ $controlCounts[$category]['5'] }}</td>
-                        <td style="background-color: {{$color}};">{{ $controlCounts[$category]['6'] }}</td>
-                        <td style="background-color: {{$color}};">{{ $controlCounts[$category]['7'] }}</td>
-                        <td style="background-color: {{$color}};">{{ $controlCounts[$category]['8'] }}</td>
-                        <td style="background-color: {{$color}};">{{ $totalControls }}</td>
+                        <td style="background-color: {{$color}};" class="text-white fw-bold">{{ $category }}</td>
+                        <td style="background-color: {{$color}};" class="text-white fw-bold">{{ $controlCounts[$category]['5'] }}</td>
+                        <td style="background-color: {{$color}};" class="text-white fw-bold">{{ $controlCounts[$category]['6'] }}</td>
+                        <td style="background-color: {{$color}};" class="text-white fw-bold">{{ $controlCounts[$category]['7'] }}</td>
+                        <td style="background-color: {{$color}};" class="text-white fw-bold">{{ $controlCounts[$category]['8'] }}</td>
+                        <td style="background-color: {{$color}};" class="text-white fw-bold">{{ $totalControls }}</td>
                     </tr>
                             @endforeach
                         @endforeach

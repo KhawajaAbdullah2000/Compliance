@@ -82,12 +82,12 @@
                             $color = ($category == 'High' ? 'red' : ($category == 'Medium' ? 'orange' : 'green'));
                        @endphp
                         <tr>
-                            <td>{{ $category }}</td>
-                            <td style="background-color: {{$color}};font-weight:bold">{{ $controlCounts[$category]['5'] }}</td>
-                            <td style="background-color: {{$color}};font-weight:bold">{{ $controlCounts[$category]['6'] }}</td>
-                            <td style="background-color: {{$color}};font-weight:bold">{{ $controlCounts[$category]['7'] }}</td>
-                            <td style="background-color: {{$color}};font-weight:bold">{{ $controlCounts[$category]['8'] }}</td>
-                            <td style="background-color: {{$color}};font-weight:bold">{{ $totalControls }}</td>
+                            <td class="fw-bold">{{ $category }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold;color:white">{{ $controlCounts[$category]['5'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold ;color:white">{{ $controlCounts[$category]['6'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold ;color:white">{{ $controlCounts[$category]['7'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold ;color:white">{{ $controlCounts[$category]['8'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold ;color:white">{{ $totalControls }}</td>
                         </tr>
                         @endforeach
                     </tbody>
