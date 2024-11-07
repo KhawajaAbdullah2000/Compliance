@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CY_SAMA;
 use App\Http\Controllers\UserController;
 
@@ -34,10 +35,12 @@ use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Support\Str;
 
-use function Ramsey\Uuid\v3;
 
 //Excel cript
 ROute::get('excel',[UserController::class,'excel']);
+
+route::get('test_api',[ApiController::class,'test_api']);
+
 
 
 Route::get('/', function () {
@@ -144,9 +147,6 @@ route::get('services_controls_dashboard/{proj_id}/{user_id}/{s_name}',[ProjectCo
 route::get('components_control_dashboard/{proj_id}/{user_id}/{s_name}',[ProjectController::class,'components_control_dashboard']);
 route::get('risk_profile_graphical/{proj_id}/{user_id}',[ProjectController::class,'risk_profile_graphical']);
 route::get("risk_computation/{proj_id}/{user_id}",[ProjectController::class,'risk_computation'])->name('risk_computation');
-
-
-
 
 route::get('iso_section2_4_subsections/{proj_id}/{user_id}',[ProjectController::class,'iso_section2_4_subsections']);
 
