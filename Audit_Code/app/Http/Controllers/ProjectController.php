@@ -507,9 +507,9 @@ class ProjectController extends Controller
                     'sec1.c_name',
                     DB::raw('
             CASE
-                WHEN sec3.risk_level BETWEEN 0.00 AND 0.999 THEN "Low"
-                WHEN sec3.risk_level BETWEEN 1.00 AND 7.2000 THEN "Medium"
-                WHEN sec3.risk_level BETWEEN 7.300 AND 10.000 THEN "High"
+                WHEN sec3.risk_level BETWEEN 0.00000 AND 0.999999 THEN "Low"
+                WHEN sec3.risk_level BETWEEN 1.00000 AND 7.200000 THEN "Medium"
+                WHEN sec3.risk_level BETWEEN 7.300000 AND 10.00000 THEN "High"
                 ELSE "Unknown"
             END as risk_category'),
                     DB::raw('
@@ -541,6 +541,7 @@ class ProjectController extends Controller
                 });
             });
 
+       
 
             return view('dashboard.risk_profile_graphical', [
                 'project' => $project,

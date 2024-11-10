@@ -4,6 +4,14 @@
 
 @include('user-nav')
 
+@php
+    function sanitizeId($string)
+{
+    return preg_replace('/[^A-Za-z0-9]/', '_', $string);
+}
+
+@endphp
+
 
 <div class="container">
     <div class="row mt-5">
@@ -36,12 +44,12 @@
     @foreach($chartData as $component => $controls)
     <div class="my_margin_top">
         <h3>{{ $component }} - Risk Levels by ISO 27001 Annexure 1 Control Group</h3>
-        <canvas id="chart-{{ $component }}" width="400" height="200"></canvas>
+        <canvas id="chart-{{ sanitizeId($component)}}" width="400" height="200" style="display: block;"></canvas>
     </div>
 
     <script>
-        const ctx{{ $component }} = document.getElementById('chart-{{ $component }}').getContext('2d');
-        new Chart(ctx{{ $component }}, {
+        const ctx{{ sanitizeId($component) }} = document.getElementById('chart-{{ sanitizeId($component) }}').getContext('2d');
+        new Chart(ctx{{ sanitizeId($component) }}, {
             type: 'bar',
             data: {
                 labels: {!! json_encode(array_keys($controls->toArray())) !!}, // Control groups (e.g., Control 5, Control 6)
