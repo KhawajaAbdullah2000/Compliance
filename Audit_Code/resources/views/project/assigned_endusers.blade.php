@@ -47,7 +47,7 @@
           $permissions=json_decode($user->project_permissions)
           @endphp
            @foreach ($permissions as $per)
-           {{$per}},
+           {{$per}} @unless($loop->last), @endunless
            @endforeach
       </td>
      <td>

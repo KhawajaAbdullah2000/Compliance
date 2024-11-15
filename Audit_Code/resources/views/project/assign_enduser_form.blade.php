@@ -12,7 +12,7 @@
 
     <div class="card">
         <div class="card-body">
-          <h3 class="card-title text-center text-bold mb-3">Assign end userto {{$project_id}}</h3>
+          <h3 class="card-title text-center text-bold mb-3">Assign end user to {{$project->project_name}}</h3>
 
           <form action="/assign_enduser_to_project/{{$project_id}}" method="post">
             @csrf
@@ -34,9 +34,10 @@
               <div class="form-group mt-4">
                 <label for=""><h3>Project Permissions</h3></label>
                 @foreach ($permissions as $p)
+                @if($p->name!='Project Creator')
                 <br>
                    {{ $p->name}} <input type="checkbox" name="project_permissions[]" value="{{$p->name}}">
-
+                  @endif
                 @endforeach
 
               </div>

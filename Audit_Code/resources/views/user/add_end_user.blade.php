@@ -47,12 +47,7 @@
                          </select>
                         </div>
 
-                        {{-- <div class="form-group">
-                          <label for="" class="form-label">Sub Organization</label>
-                             <select class="boxstyling bg-primary form-select" name="organizations_sub_org" id="sub_org">
-
-                             </select>
-                            </div> --}}
+                     
                          @endif
 
                         <div class="form-group mt-2">
@@ -118,8 +113,10 @@
                             <label for="roles"><h3>Roles</h3></label>
                             <br>
                             @foreach ($permissions as $p)
+                            @if($p->name=='Project Creator')
                                {{ $p->name}} <input type="checkbox" name="roles[]" value="{{$p->name}}">
                                <br>
+                               @endif
                             @endforeach
 
                           </div>

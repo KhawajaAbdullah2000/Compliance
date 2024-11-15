@@ -19,11 +19,22 @@
 
                                     @role('end user')
                 <h4 class="mt-4">Email: {{auth()->user()->email}}</h4>
-                <h4 class="mt-4">Global roles: @foreach (auth()->user()->permissions as $per)
-                                    {{ $per->name}}
-                                    @unless ($loop->last), @endunless
-                                    @endforeach
-                </h4>
+
+                <h5 class="mt-4">Organization: {{auth()->user()->organization->name}}</h5>
+                <h5 class="mt-4">Department: {{auth()->user()->organization->sub_org}}</h5>
+
+
+                <h5 class="mt-4">Global roles: 
+                    @if (auth()->user()->permissions->isEmpty())
+                        none
+                    @else
+                        @foreach (auth()->user()->permissions as $per)
+                            {{ $per->name }}
+                            @unless ($loop->last), @endunless
+                        @endforeach
+                    @endif
+                </h5>
+                
 
                 @can('Project Creator')
 

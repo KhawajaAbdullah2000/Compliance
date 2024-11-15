@@ -45,7 +45,7 @@ public function add_end_user_form(Request $req){
             'zip_code'=>'required|numeric',
             'password'=>'required|max:30',
             'status'=>'required',
-            'roles'=>'required'
+            // 'roles'=>'required'
         ],
         [
             'org_id.required'=>'Select an organization'
