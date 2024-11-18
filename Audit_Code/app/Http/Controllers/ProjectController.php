@@ -471,8 +471,6 @@ class ProjectController extends Controller
                     ->get();
 
 
-
-
                 return view('dashboard.components_controls_dashboard', [
                     'project' => $project,
                     'results' => $results,

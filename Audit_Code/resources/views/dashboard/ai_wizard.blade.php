@@ -76,7 +76,7 @@
 
 
         @else
-            <h2 class="fw-bold">No Projects yet</h2>
+            <h2 class="fw-bold">No Assets uploaded Yet</h2>
         @endif
 
 

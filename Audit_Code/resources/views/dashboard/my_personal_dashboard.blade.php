@@ -4,7 +4,7 @@
 
 @include('user-nav')
 
-<div class="container-fluid">
+<div class="container-fluid mt-4">
 
 
     <h2 class="text-center fw-bold mb-4">Visual and AI Dashboard</h2>
