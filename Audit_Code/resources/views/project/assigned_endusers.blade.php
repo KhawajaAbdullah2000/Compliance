@@ -37,7 +37,7 @@
     <div class="d-flex justify-content-end align-items-center mb-4">
     
         <a class="btn btn-success btn-md" href="/assign_end_user/{{$project_id}}">
-            <i class="fas fa-plus"></i> Create New User
+            <i class="fas fa-plus"></i> Assign a new End User
         </a>
     </div>
     <!-- Assigned Users Table -->

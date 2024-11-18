@@ -158,7 +158,7 @@ class EndUserController extends Controller
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ]
             );
-            return redirect()->route('assigned_endusers', ['id' => $proj_id]);
+            return redirect()->route('assigned_endusers', ['id' => $proj_id])->with('success','User Assigned to the project Successfully');
 
         } else {
             return redirect()->route('projects', ['user_id' => auth()->user()->id])->with('error', 'Couldnot find the project');

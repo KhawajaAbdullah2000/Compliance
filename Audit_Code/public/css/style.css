@@ -34,7 +34,7 @@ body {
 }
 
 .btn-danger:hover {
-    background-color: #5d59e0;
+    background-color: rgb(203, 95, 95);
 }
 
 .my_margin_top{

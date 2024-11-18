@@ -1,10 +1,9 @@
 
-
 @extends('master')
 
 @section('content')
 
-<section class="vh-100" style="background: linear-gradient(to right, #a96ceb, #2575fc);">
+<section class="vh-100" style="background: url('/cover_login.jpg') no-repeat center fixed; background-size:cover;">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">

@@ -364,7 +364,7 @@ class IsoSec2_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
+                   
                         $data = Db::table('iso_sec_2_1')->where('assessment_id', $assessment_id)->where('project_id', $proj_id)->first();
 
                         $project=Project::join('project_types','projects.project_type','project_types.id')
@@ -377,7 +377,7 @@ class IsoSec2_1 extends Controller
                             'project_permissions' => $checkpermission->project_permissions,
                             'project'=>$project
                         ]);
-                    }
+                    
                 }
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
@@ -419,7 +419,7 @@ class IsoSec2_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
+                   
                         Db::table('iso_sec_2_1')->where('assessment_id',$assessment_id)->where('project_id',$proj_id)
                         ->update([
                             'project_id' => $proj_id,
@@ -436,7 +436,7 @@ class IsoSec2_1 extends Controller
 
                         return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                             ->with('success', 'Record Updated successfully');
-                    }
+                    
                 }
             }
         }
@@ -459,13 +459,13 @@ class IsoSec2_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
+                    
                         Db::table('iso_sec_2_1')->where('assessment_id',$assessment_id)->where('project_id',$proj_id)
                         ->delete();
 
                         return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                             ->with('success', 'Record Deleted successfully');
-                    }
+                    
                 }
             }
         }
@@ -484,6 +484,7 @@ class IsoSec2_1 extends Controller
         $req->validate([
             'file' => 'required|mimes:xlsx,xls',
         ]);
+
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -499,7 +500,6 @@ class IsoSec2_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
 
                         $file = $req->file('file');
                         $data = Excel::toArray([], $file);
@@ -615,7 +615,7 @@ class IsoSec2_1 extends Controller
 
 
 
-                    }
+                    
                 }
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
