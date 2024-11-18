@@ -6,15 +6,35 @@ body {
     width: 100%;
 }
 
+.navbar-brand img:hover {
+    transform: scale(1.6);
+}
 
+.navbar-light .nav-link {
+    color: #333;
+    font-size: medium;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
 
 .navbar {
-    padding: 15px 10px;
+    padding: 15px;
     border: none;
     border-radius: 0;
-    margin-bottom: 40px;
     -webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#myTable_wrapper .dataTables_filter {
+    margin-bottom: 10px; 
+}
+
+.bg-home-card{
+    background-color:rgb(24, 24, 24);
+}
+
+.btn-danger:hover {
+    background-color: #5d59e0;
 }
 
 .my_margin_top{

@@ -1,93 +1,103 @@
+
+
 @extends('master')
 
 @section('content')
 
 @include('user-nav')
 
-<div class="container">
+<div class="container py-5">
+    <!-- Page Heading -->
+    <h1 class="text-center fw-bold mb-5">Projects Where Roles Are Assigned to Me</h1>
 
-    <h1 class="text-center mb-4">Projects where roles are assigned to me</h1>
+    <!-- Projects Table -->
+    <div class="card shadow-lg border-0">
+        <div class="card-body">
+            <table class="table table-hover table-bordered text-center align-middle" id="myTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Project Type</th>
+                        <th>Project Status</th>
+                        <th>Project Permissions</th>
+                        <th>Edit Project</th>
+                        <th>Project Visuals</th>
+                        <th>Risk Visuals</th>
+                        <th>Risk Distribution</th>
+                        <th>Reports</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($projects as $pro)
+                    <tr>
+                        <!-- Project Name -->
+                        <td>
+                            <a href="/iso_sections/{{ $pro->project_code }}/{{ auth()->user()->id }}" class="text-primary text-reset fw-bold">
+                                {{ $pro->project_name }}
+                            </a>
+                        </td>
 
+                        <!-- Project Type -->
+                        <td>{{ $pro->type }}</td>
 
+                        <!-- Project Status -->
+                        <td>{{ $pro->status }}</td>
 
+                        <!-- Project Permissions -->
+                        <td>
+                            @php
+                            $permissions = json_decode($pro->project_permissions);
+                            @endphp
+                            @foreach ($permissions as $per)
+                                {{ $per }}@unless($loop->last), @endunless
+                            @endforeach
+                        </td>
 
-<table class="table table-responsive table-hover mt-4" id="myTable">
-    <thead>
-        <tr >
-            <th style="text-align: center">Project Name</th>
-            <th style="text-align: center">Project type</th>
-            <th style="text-align: center">Project status</th>
-            <th style="text-align: center">Project Permissions</th>
-            <th style="text-align: center">Edit Project</th>
-            <th style="text-align: center">Project Visuals</th>
-             <th style="text-align: :center">Risk Visuals</th>
-             <th style="text-align: :center">Risk Distribution</th>
+                        <!-- Edit Project -->
+                        <td>
+                            <a href="/iso_sections/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
+                               data-toggle="tooltip" title="Edit Project">
+                                <i class="fas fa-edit fa-lg text-success"></i>
+                            </a>
+                        </td>
 
-            <th style="text-align: center">Reports</th>
-        </tr>
-    </thead>
-    <tbody>
-      @foreach($projects as $pro)
-      <tr style="text-align: center;vertical-align:middle">
-        <td> <a href="/iso_sections/{{$pro->project_code}}/{{auth()->user()->id}}"> {{$pro->project_name}}</a> </td>
-        <td>{{$pro->type}}</td>
-        <td>{{$pro->status}}</td>
-      <td>
-       @php
-          $permissions=json_decode($pro->project_permissions)
-          @endphp
-           @foreach ($permissions as $per)
-           {{$per}},
-           @endforeach
-      </td>
+                        <!-- Project Visuals -->
+                        <td>
+                            <a href="/dashboard/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
+                               data-toggle="tooltip" title="View Project Dashboard">
+                                <i class="fas fa-tachometer-alt fa-lg text-info"></i>
+                            </a>
+                        </td>
 
-      <td>
+                        <!-- Risk Visuals -->
+                        <td>
+                            <a href="/ai_wizard/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
+                               data-toggle="tooltip" title="Risk Visuals">
+                                <i class="fas fa-chart-line fa-lg text-warning"></i>
+                            </a>
+                        </td>
 
-         <a href="/iso_sections/{{$pro->project_code}}/{{auth()->user()->id}}"
-            data-toggle="tooltip" data-placement="top" title="Edit Project details">
-        <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
-        </a>
-        </td>
+                        <!-- Risk Distribution -->
+                        <td>
+                            <a href="/risk_computation/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
+                               data-toggle="tooltip" title="Risk Distribution">
+                                <i class="fas fa-calculator fa-lg text-primary"></i>
+                            </a>
+                        </td>
 
-        <td>
-            <a href="/dashboard/{{$pro->project_code}}/{{auth()->user()->id}}"
-                data-toggle="tooltip" data-placement="top" title="View Project Dashboard">
-            <i class="fas fa-tachometer-alt fa-lg" style="color: #124903;"></i>
-            </a>
-        </td>
-
-      <td>
-
-        <a href="/ai_wizard/{{$pro->project_code}}/{{auth()->user()->id}}"
-            data-toggle="tooltip" data-placement="top" title="Risk visuals">
-        <i class="fas fa-chart-line fa-lg" style="color: #124903;"></i>
-        </a>
-        </td>
-
-        <td>
-
-            <a href="/risk_computation/{{$pro->project_code}}/{{auth()->user()->id}}"
-                data-toggle="tooltip" data-placement="top" title="Risk Computations">
-            <i class="fas fa-calculator fa-lg" style="color: #124903;"></i>
-            </a>
-            </td>
-
-
-
-        <td>
-            <a href="/reports/{{$pro->project_code}}/{{auth()->user()->id}}"
-                data-toggle="tooltip" data-placement="top" title="Project Report">
-            <i class="fas fa-copy fa-lg" style="color: #124903;"></i>
-            </a>
-        </td>
-
-
-      </tr>
-       @endforeach
-    </tbody>
-
-</table>
-
+                        <!-- Reports -->
+                        <td>
+                            <a href="/reports/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
+                               data-toggle="tooltip" title="Project Report">
+                                <i class="fas fa-copy fa-lg text-danger"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 @section('scripts')
@@ -95,10 +105,10 @@
 @if(Session::has('success'))
 <script>
     swal({
-  title: "{{Session::get('success')}}",
-  icon: "success",
-  closeOnClickOutside: true,
-  timer: 3000,
+        title: "{{ Session::get('success') }}",
+        icon: "success",
+        closeOnClickOutside: true,
+        timer: 3000,
     });
 </script>
 @endif
@@ -106,29 +116,33 @@
 @if(Session::has('error'))
 <script>
     swal({
-  title: "{{Session::get('error')}}",
-  icon: "error",
-  closeOnClickOutside: true,
-  timer: 3000,
+        title: "{{ Session::get('error') }}",
+        icon: "error",
+        closeOnClickOutside: true,
+        timer: 3000,
     });
 </script>
 @endif
 
 <script>
+    // Initialize DataTable
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+            language: {
+                searchPlaceholder: "Search projects...",
+                search: "_INPUT_",
+            },
+            paging: true,
+            ordering: false,
+            info: true,
+            lengthChange: false,
+        });
 
-let table = new DataTable('#myTable',
-    {
-    language: {
-       searchPlaceholder: "search"
-    },
-      "ordering": false
-
-     }
-     );
-
+        // Initialize tooltips
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 </script>
 
 @endsection
-
 
 @endsection

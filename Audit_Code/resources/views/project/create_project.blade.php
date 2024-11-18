@@ -4,58 +4,47 @@
 
 @include('user-nav')
 
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <h3 class="card-title text-center fw-bold mb-4">Create New Project</h3>
 
-<div class="container">
+                    <form class="row g-4" method="POST" action="/create_project/{{auth()->user()->id}}">
+                        @csrf
+                        <!-- Project Name -->
+                        <div class="col-md-6">
+                            <label for="name" class="form-label fw-semibold">Project Name</label>
+                            <input type="text" class="form-control rounded-pill" name="project_name" value="{{old('project_name')}}" placeholder="Enter project name">
+                            @if($errors->has('project_name'))
+                                <div class="text-danger mt-2 small">{{ $errors->first('project_name') }}</div>
+                            @endif
+                        </div>
 
-    <div class="card">
-        <div class="card-body">
-          <h3 class="card-title text-center fw-bold mb-3">Create new Project</h3>
+                        <!-- Project Type -->
+                        <div class="col-md-6">
+                            <label for="type" class="form-label fw-semibold">Project Type</label>
+                            <select class="form-select rounded-pill" name="project_type">
+                                <option value="">Select Project Type</option>
+                                @foreach ($types as $t)
+                                    <option value="{{$t->id}}" {{ old('project_type') == $t->id ? 'selected' : '' }}>{{$t->type}}</option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('project_type'))
+                                <div class="text-danger mt-2 small">{{ $errors->first('project_type') }}</div>
+                            @endif
+                        </div>
 
-          <form class="row g-3" method="POST" action="/create_project/{{auth()->user()->id}}">
-            @csrf
-            <div class="col-md-6">
-              <label for="name" class="form-label">Project Name</label>
-              <input type="text" class="form-control" name="project_name" value="{{old('project_name')}}">
+                        <!-- Submit Button -->
+                        <div class="col-12 text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-md px-5 rounded-pill">Create Project</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            @if($errors->has('project_name'))
-            <div class="text-danger">{{ $errors->first('project_name') }}</div>
-        @endif
-
-            <div class="col-md-6">
-                <label for="type" class="form-label">Type</label>
-                <select class="boxstyling bg-info form-select" name="project_type">
-                    <option value="">Select Project type</option>
-                    @foreach ($types as $t)
-
-                    <option value="{{$t->id}}" {{ old('project_type') == $t->id? 'selected' : '' }}>{{$t->type}}</option>
-
-                    @endforeach
-
-
-                </select>
-            </div>
-         @if($errors->has('project_type'))
-            <div class="text-danger">{{ $errors->first('project_type') }}</div>
-        @endif
-
-
-
-
-            <div class="col-12 text-center mt-5">
-              <button type="submit" class="btn btn-primary">Create Project</button>
-            </div>
-          </form>
-
-
-
         </div>
-      </div>
-
+    </div>
 </div>
 
-
-
-
 @endsection
-
-
