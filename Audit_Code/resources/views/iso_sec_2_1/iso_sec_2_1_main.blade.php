@@ -115,7 +115,7 @@ $permissions = json_decode($project_permissions);
     <div class="row">
             <h5 class="fw-bold">Table Columns View:</h5>
         <div class="col-md-6">
-            <h5 class="fw-bold">Table Columns View:</h5>
+    
             <div class="border p-3" style="border: 1px solid #ccc; border-radius: 5px;">
                 <div class="d-flex flex-column">
                     <div class="form-check">
@@ -377,19 +377,51 @@ filterRows();
 
 
 <script>
+// document.addEventListener('DOMContentLoaded', function () {
+// document.querySelectorAll('.toggle-column').forEach(function (checkbox) {
+// checkbox.addEventListener('change', function () {
+//     var column = this.getAttribute('data-column');
+//     var display = this.checked ? 'none' : '';
+//     var table = document.getElementById('myTable2');
+//     for (var i = 0; i < table.rows.length; i++) {
+//         table.rows[i].cells[column].style.display = display;
+//     }
+// });
+// });
+// });
 document.addEventListener('DOMContentLoaded', function () {
-// Function to toggle columns
-document.querySelectorAll('.toggle-column').forEach(function (checkbox) {
-checkbox.addEventListener('change', function () {
-    var column = this.getAttribute('data-column');
-    var display = this.checked ? 'none' : '';
-    var table = document.getElementById('myTable2');
-    for (var i = 0; i < table.rows.length; i++) {
-        table.rows[i].cells[column].style.display = display;
+    const table = document.getElementById('myTable2');
+    const checkboxes = document.querySelectorAll('.toggle-column');
+
+    // Function to toggle column visibility
+    function toggleColumn(column, isVisible) {
+        const display = isVisible ? '' : 'none';
+        for (let i = 0; i < table.rows.length; i++) {
+            table.rows[i].cells[column].style.display = display;
+        }
     }
+
+    // Initialize column visibility based on saved state or default
+    checkboxes.forEach(function (checkbox) {
+        const column = checkbox.getAttribute('data-column');
+        const isVisible = localStorage.getItem(`column_${column}`) === 'false' ? false : true; // Default to visible
+        checkbox.checked = !isVisible; // Checkbox unchecked by default for visible columns
+        toggleColumn(column, isVisible);
+    });
+
+    // Add event listener for each checkbox
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            const column = this.getAttribute('data-column');
+            const isVisible = !this.checked; // Invert the checkbox state for visibility
+            toggleColumn(column, isVisible);
+
+            // Save state to localStorage
+            localStorage.setItem(`column_${column}`, isVisible);
+        });
+    });
 });
-});
-});
+
 </script>
 
 
