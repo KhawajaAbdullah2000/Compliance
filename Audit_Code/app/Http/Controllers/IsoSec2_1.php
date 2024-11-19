@@ -226,12 +226,17 @@ class IsoSec2_1 extends Controller
         $req->validate(
             [
                 's_name' => 'required|string',
-               'c_name' => 'required'
+               'c_name' => 'required|array|min:1',
+               'c_name.*' => 'required|string|max:255'
             ],
-            [
-                '*.required' => 'This field is required'
+            [ 
+                    '*.required' => 'This field is required',
+                    'c_name.min' => 'You must add at least one component.',
+                    'c_name.*.required' => 'Need atleast 1 component',
+                
             ]
         );
+     
 
 
         if ($user_id == auth()->user()->id) {
@@ -251,11 +256,14 @@ class IsoSec2_1 extends Controller
                 if (in_array('Data Inputter', $permissions)) {
 
                         try {
+
+                            foreach ($req->c_name as $component) {
+
                             Db::table('iso_sec_2_1')->insert([
                                 'project_id' => $proj_id,
                                 'g_name' => $req->g_name,
                                 'name' => $req->name,
-                                'c_name' => $req->c_name,
+                                'c_name' => $component,
                                 'owner_dept' => $req->owner_dept,
                                 'physical_loc' => $req->physical_loc,
                                 'logical_loc' => $req->logical_loc,
@@ -264,6 +272,7 @@ class IsoSec2_1 extends Controller
                                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                             ]);
 
+                        }
 
 
 
@@ -517,15 +526,13 @@ class IsoSec2_1 extends Controller
                             if($row[1]!=null){
                                 $g_name[]=$row[1];
                             }else{
-                                $error="Asset Group Name of an asset Missing";
-                                break;
+                                $g_name[]=null;
                             }
 
                             if($row[2]!=null){
                                 $name[]=$row[2];
                             }else{
-                                $error="Asset Name of an asset Missing";
-                                break;
+                                $name[]=null;
                             }
 
 
@@ -539,22 +546,19 @@ class IsoSec2_1 extends Controller
                             if($row[4]!=null){
                                 $owner_dept[]=$row[4];
                             }else{
-                                $error="Owner dept of an asset Missing";
-                                break;
+                                $owner_dept[]=null;
                             }
 
                             if($row[5]!=null){
                                 $physical_loc[]=$row[5];
                             }else{
-                                $error="Physical Location of an asset Missing";
-                                break;
+                                $physical_loc[]=null;
                             }
 
                             if($row[6]!=null){
                                 $logical_loc[]=$row[6];
                             }else{
-                                $error="Logical location of an asset Missing";
-                                break;
+                                $logical_loc[]=null;
                             }
 
 
@@ -585,7 +589,7 @@ class IsoSec2_1 extends Controller
                         } catch (\Exception $e) {
 
                             if($e->getCode()==23000){
-                                $error="Each row must contain a unique combination of Asset Group Name,Name, and Component Name.All 3 cannot be same for multiple rows";
+                                $error="Each Asset must contain unique Service and Asset component. Duplicate Found!";
                             }else{
                                 $error=$e->getCode();
                             }
