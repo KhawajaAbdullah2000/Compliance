@@ -114,14 +114,31 @@ $permissions = json_decode($project_permissions);
     <!-- Table with Toggle Columns -->
     <div class="row">
             <h5 class="fw-bold">Table Columns View:</h5>
-            <div class="col-md-6 mb-4">
-            <div class="border p-3 rounded">
-                @foreach (['Group', 'Asset', 'Owner Dept', 'Physical Location', 'Logical Location'] as $index => $label)
-                <div class="form-check">
-                    <input class="form-check-input toggle-column" type="checkbox" id="toggle{{ $label }}" data-column="{{ $index + 1 }}">
-                    <label class="form-check-label" for="toggle{{ $label }}">{{ $label }}</label>
+        <div class="col-md-6">
+            <h5 class="fw-bold">Table Columns View:</h5>
+            <div class="border p-3" style="border: 1px solid #ccc; border-radius: 5px;">
+                <div class="d-flex flex-column">
+                    <div class="form-check">
+                        <input class="form-check-input toggle-column" type="checkbox" id="toggleGroup" data-column="1">
+                        <label class="form-check-label" for="toggleGroup">Asset Group</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input toggle-column" type="checkbox" id="toggleAsset" data-column="2">
+                        <label class="form-check-label" for="toggleAsset">Asset</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input toggle-column" type="checkbox" id="toggleOwner" data-column="4">
+                        <label class="form-check-label" for="toggleOwner">Owner Dept</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input toggle-column" type="checkbox" id="togglePhysical" data-column="5">
+                        <label class="form-check-label" for="togglePhysical">Physical Location</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input toggle-column" type="checkbox" id="toggleLogical" data-column="6">
+                        <label class="form-check-label" for="toggleLogical">Logical Location</label>
+                    </div>
                 </div>
-                @endforeach
             </div>
         </div>
     </div>

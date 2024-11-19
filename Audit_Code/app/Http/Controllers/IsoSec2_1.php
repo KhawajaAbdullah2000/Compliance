@@ -221,33 +221,12 @@ class IsoSec2_1 extends Controller
 
     public function new_iso_sec_2_1(Request $req, $proj_id, $user_id)
     {
-        $filepath = public_path('ISO_SOA_A5.xlsx');
-        $sec2_4_a5_data = Excel::toArray([], $filepath); //with header
-        $sec2_4_a5_rows = array_slice($sec2_4_a5_data[0], 1); //without header(first row)
-
-
-        $filepath2 = public_path('ISO_SOA_A6.xlsx');
-        $sec2_4_a6_data = Excel::toArray([], $filepath2); //with header
-        $sec2_4_a6_rows = array_slice($sec2_4_a6_data[0], 1); //without header(first row)
-
-        $filepath3 = public_path('ISO_SOA_A7.xlsx');
-        $sec2_4_a7_data = Excel::toArray([], $filepath3); //with header
-        $sec2_4_a7_rows = array_slice($sec2_4_a7_data[0], 1); //without header(first row)
-
-
-        $filepath4 = public_path('ISO_SOA_A8.xlsx');
-        $sec2_4_a8_data = Excel::toArray([], $filepath4); //with header
-        $sec2_4_a8_rows = array_slice($sec2_4_a8_data[0], 1); //without header(first row)
+    
 
         $req->validate(
             [
-               'g_name' => 'required',
-                'name' => 'required',
-               'c_name' => 'required',
-                'owner_dept' => 'required|string',
-                'physical_loc' => 'required|string',
-                'logical_loc' => 'required|string',
                 's_name' => 'required|string',
+               'c_name' => 'required'
             ],
             [
                 '*.required' => 'This field is required'
@@ -291,7 +270,7 @@ class IsoSec2_1 extends Controller
                         } catch (\Exception $e) {
                             $error=$e->getMessage();
                             if($e->getCode()==23000){
-                 $error="Service,AssetGroup,Asset and COmponent name must be unique in a project";
+                 $error="Service and Asset component must be unique in a project";
                             }
                             return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                             ->with('error', $error);
@@ -349,6 +328,7 @@ class IsoSec2_1 extends Controller
     public function iso_sec_2_1_edit($assessment_id, $proj_id, $user_id)
     {
     
+      
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -386,16 +366,13 @@ class IsoSec2_1 extends Controller
 
     public function iso_sec_2_1_submit_edit(Request $req, $assessment_id, $proj_id, $user_id)
     {
+       
 
         $req->validate(
             [
-               'g_name' => 'required',
-                'name' => 'required',
-               'c_name' => 'required',
-                'owner_dept' => 'required|string',
-                'physical_loc' => 'required|string',
-                'logical_loc' => 'required|string',
                 's_name' => 'required|string',
+               'c_name' => 'required',
+               
             ],
             [
                 '*.required' => 'This field is required',
@@ -419,6 +396,10 @@ class IsoSec2_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
+
+                    try{
+
+                    
                    
                         Db::table('iso_sec_2_1')->where('assessment_id',$assessment_id)->where('project_id',$proj_id)
                         ->update([
@@ -436,7 +417,15 @@ class IsoSec2_1 extends Controller
 
                         return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                             ->with('success', 'Record Updated successfully');
-                    
+                    }catch (\Exception $e) {
+                        $error=$e->getMessage();
+                        if($e->getCode()==23000){
+             $error="Service and Asset component must be unique in a project";
+                        }
+                        return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
+                        ->with('error', $error);
+
+                    }
                 }
             }
         }
