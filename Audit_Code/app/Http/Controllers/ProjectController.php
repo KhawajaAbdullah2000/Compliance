@@ -402,7 +402,7 @@ class ProjectController extends Controller
                 ->where('projects.project_id', $proj_id)->first();
 
             if ($project) {
-                $results = DB::table('iso_sec_2_3_1 as risk_assessment')
+                $resultsConfidentiality = DB::table('iso_sec_2_3_1 as risk_assessment')
                     ->join('iso_sec_2_1 as components', 'risk_assessment.asset_id', '=', 'components.assessment_id')
                     ->select(
                         DB::raw('
@@ -410,6 +410,44 @@ class ProjectController extends Controller
                             WHEN risk_assessment.risk_level BETWEEN 0.000 AND 0.99999 THEN "Low"
                             WHEN risk_assessment.risk_level BETWEEN 1.000 AND 7.2000 THEN "Medium"
                             WHEN risk_assessment.risk_level BETWEEN 7.3 AND 10.000 THEN "High"
+                            ELSE "Unknown"
+                        END as risk_category'),
+                        DB::raw('LEFT(risk_assessment.control_num, 1) as control_number_start'),
+                        DB::raw('COUNT(*) as total_controls')
+                    )
+                    ->where('components.project_id', $proj_id)
+                    ->where('components.s_name', $s_name)
+                    ->groupBy('control_number_start', 'risk_category')
+                    ->orderBy('control_number_start')
+                    ->get();
+
+                    $resultsIntegrity = DB::table('iso_sec_2_3_1 as risk_assessment')
+                    ->join('iso_sec_2_1 as components', 'risk_assessment.asset_id', '=', 'components.assessment_id')
+                    ->select(
+                        DB::raw('
+                        CASE
+                            WHEN risk_assessment.risk_integrity BETWEEN 0.000 AND 0.99999 THEN "Low"
+                            WHEN risk_assessment.risk_integrity BETWEEN 1.000 AND 7.2999 THEN "Medium"
+                            WHEN risk_assessment.risk_integrity BETWEEN 7.300 AND 10.000 THEN "High"
+                            ELSE "Unknown"
+                        END as risk_category'),
+                        DB::raw('LEFT(risk_assessment.control_num, 1) as control_number_start'),
+                        DB::raw('COUNT(*) as total_controls')
+                    )
+                    ->where('components.project_id', $proj_id)
+                    ->where('components.s_name', $s_name)
+                    ->groupBy('control_number_start', 'risk_category')
+                    ->orderBy('control_number_start')
+                    ->get();
+                    
+                    $resultsAvailability= DB::table('iso_sec_2_3_1 as risk_assessment')
+                    ->join('iso_sec_2_1 as components', 'risk_assessment.asset_id', '=', 'components.assessment_id')
+                    ->select(
+                        DB::raw('
+                        CASE
+                            WHEN risk_assessment.risk_availability BETWEEN 0.000 AND 0.99999 THEN "Low"
+                            WHEN risk_assessment.risk_availability BETWEEN 1.000 AND 7.2999 THEN "Medium"
+                            WHEN risk_assessment.risk_availability BETWEEN 7.3000 AND 10.000 THEN "High"
                             ELSE "Unknown"
                         END as risk_category'),
                         DB::raw('LEFT(risk_assessment.control_num, 1) as control_number_start'),
@@ -432,7 +470,9 @@ class ProjectController extends Controller
                 return view('dashboard.services_controls_dashboard', [
                     'project' => $project,
                     'num_of_components' => $num_of_components,
-                    'results' => $results,
+                    'resultsConfidentiality' => $resultsConfidentiality,
+                    'resultsIntegrity'=>$resultsIntegrity,
+                    'resultsAvailability'=>$resultsAvailability,
                     's_name' => $s_name
                 ]);
             }
@@ -449,14 +489,14 @@ class ProjectController extends Controller
                 ->where('projects.project_id', $proj_id)->first();
 
             if ($project) {
-                $results = DB::table('iso_sec_2_3_1 as risk_assessment')
+                $resultsConfidentiality = DB::table('iso_sec_2_3_1 as risk_assessment')
                     ->join('iso_sec_2_1 as components', 'risk_assessment.asset_id', '=', 'components.assessment_id')
                     ->select(
                         'components.c_name',
                         DB::raw('
                         CASE
                             WHEN risk_assessment.risk_level BETWEEN 0.0000 AND 0.9999 THEN "Low"
-                            WHEN risk_assessment.risk_level BETWEEN 1.0000 AND 7.20000 THEN "Medium"
+                            WHEN risk_assessment.risk_level BETWEEN 1.0000 AND 7.2999 THEN "Medium"
                             WHEN risk_assessment.risk_level BETWEEN 7.3000 AND 10.000 THEN "High"
                             ELSE "Unknown"
                         END as risk_category'),
@@ -470,10 +510,53 @@ class ProjectController extends Controller
                     ->orderBy('control_number_start')
                     ->get();
 
+                    $resultsIntegrity = DB::table('iso_sec_2_3_1 as risk_assessment')
+                    ->join('iso_sec_2_1 as components', 'risk_assessment.asset_id', '=', 'components.assessment_id')
+                    ->select(
+                        'components.c_name',
+                        DB::raw('
+                        CASE
+                            WHEN risk_assessment.risk_integrity BETWEEN 0.0000 AND 0.9999 THEN "Low"
+                            WHEN risk_assessment.risk_integrity BETWEEN 1.0000 AND 7.2999 THEN "Medium"
+                            WHEN risk_assessment.risk_integrity BETWEEN 7.3000 AND 10.000 THEN "High"
+                            ELSE "Unknown"
+                        END as risk_category'),
+                        DB::raw('LEFT(risk_assessment.control_num, 1) as control_number_start'),
+                        DB::raw('COUNT(*) as total_controls')
+                    )
+                    ->where('components.project_id', $proj_id)
+                    ->where('components.s_name', $s_name)
+                    ->groupBy('components.c_name', 'control_number_start', 'risk_category')
+                    ->orderBy('components.c_name')
+                    ->orderBy('control_number_start')
+                    ->get();
+
+                    $resultsAvailability = DB::table('iso_sec_2_3_1 as risk_assessment')
+                    ->join('iso_sec_2_1 as components', 'risk_assessment.asset_id', '=', 'components.assessment_id')
+                    ->select(
+                        'components.c_name',
+                        DB::raw('
+                        CASE
+                            WHEN risk_assessment.risk_availability BETWEEN 0.0000 AND 0.9999 THEN "Low"
+                            WHEN risk_assessment.risk_availability BETWEEN 1.0000 AND 7.2999 THEN "Medium"
+                            WHEN risk_assessment.risk_availability BETWEEN 7.3000 AND 10.000 THEN "High"
+                            ELSE "Unknown"
+                        END as risk_category'),
+                        DB::raw('LEFT(risk_assessment.control_num, 1) as control_number_start'),
+                        DB::raw('COUNT(*) as total_controls')
+                    )
+                    ->where('components.project_id', $proj_id)
+                    ->where('components.s_name', $s_name)
+                    ->groupBy('components.c_name', 'control_number_start', 'risk_category')
+                    ->orderBy('components.c_name')
+                    ->orderBy('control_number_start')
+                    ->get();
 
                 return view('dashboard.components_controls_dashboard', [
                     'project' => $project,
-                    'results' => $results,
+                    'resultsConfidentiality' => $resultsConfidentiality,
+                    'resultsIntegrity'=>$resultsIntegrity,
+                    'resultsAvailability'=>$resultsAvailability,
                     's_name' => $s_name
                 ]);
             }
