@@ -214,6 +214,7 @@ route::post('upload_assets/{proj_id}/{user_id}',[IsoSec2_1::class,'upload_assets
 route::get('iso_sec_2_3/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3'])->name('iso_sec_2_3');
 
 //ISosec2.3.1
+
 route::get('iso_sec_2_3_1_risk_selection/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_1_risk_selection'])->name('iso_sec_2_3_1_risk_selection');
 route::put('iso_sec2_3_1_risk_selection/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'Risk_Selection_form_Submit']);
 route::get('iso_sec_2_3_1/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_1'])->name('iso_sec_2_3_1');
@@ -251,9 +252,9 @@ route::put('iso_sec_2_3_edit_table_submit/{proj_id}/{user_id}',[IsoSec2_3::class
 
 //ISO sec2.2
 
-
-route::get('iso_sec_2_2_subsections/{proj_id}/{user_id}/{user_req}',[IsoSec2_2::class,'iso_sec_2_2_subsections'])->name('iso_sec_2_2_subsections');
-route::get('iso_section2_2/{title_num}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_section2_2'])->name('iso_sec_2_2_main');
+route::get('iso_sec_2_2_evidence/{asset_id}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec_2_2_evidence'])->name('iso_sec_2_2_evidence');
+route::get('iso_sec_2_2_subsections/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_sec_2_2_subsections'])->name('iso_sec_2_2_subsections');
+route::get('iso_section2_2/{title_num}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_section2_2'])->name('iso_sec_2_2_main');
 route::get('iso_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec_2_2_req'])->name('iso_sec_2_2_req');
 route::get('iso_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec2_2_sub_req_edit'])->name('iso_sec2_2_sub_req_edit');
 route::post('iso_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec_2_2_form']);

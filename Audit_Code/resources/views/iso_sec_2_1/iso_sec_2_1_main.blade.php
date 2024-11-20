@@ -164,6 +164,10 @@ $permissions = json_decode($project_permissions);
                 @if ($project->project_type == 4)
                 <th>Risk Assessment</th>
                 @endif
+
+                @if ($project->project_type == 4)
+                <th>Enter Evidence</th>
+                @endif
                 <th>Actions</th>
             </tr>
         </thead>
@@ -181,6 +185,12 @@ $permissions = json_decode($project_permissions);
                 @if ($project->project_type == 4)
                 <td>
                     <a href="/iso_sec_2_3_1_risk_selection/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}" class="btn btn-primary btn-sm rounded-pill">Initiate</a>
+                </td>
+                @endif
+
+                @if ($project->project_type == 4)
+                <td>
+                    <a href="/iso_sec_2_2_evidence/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}" class="btn btn-primary btn-sm rounded-pill">Enter</a>
                 </td>
                 @endif
                 <td>

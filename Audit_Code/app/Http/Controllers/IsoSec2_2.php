@@ -11,9 +11,42 @@ use App\Models\Project;
 class IsoSec2_2 extends Controller
 {
 
+public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
+    if ($user_id == auth()->user()->id) {
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
 
+            if ($checkpermission->type_id == 4) {
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
 
-    public function iso_sec_2_2_subsections(Request $req, $proj_id, $user_id, $user_req)
+                $asset=Db::table('iso_sec_2_1')->where('assessment_id',$asset_id)->first();
+              
+
+                return view('iso_sec_2_2.iso_sec_2_2_evidence_selection', [
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project' => $project,
+                    'asset'=>$asset
+                   
+                ]);
+            }
+        }
+    }
+    return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+}
+
+    public function iso_sec_2_2_subsections(Request $req, $proj_id, $user_id,$asset_id)
     {
 
         if ($user_id == auth()->user()->id) {
@@ -34,19 +67,23 @@ class IsoSec2_2 extends Controller
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                         ->where('projects.project_id', $proj_id)->first();
 
-                    if ($req->session()->exists('user_req')) {
-                        $req->session()->forget('user_req');
-                        $req->session()->put('user_req', $user_req);
+                    if ($req->session()->exists('evidenceLevel')) {
+                        $req->session()->forget('evidenceLevel');
+                        $req->session()->put('evidenceLevel', $req->evidenceLevel);
                     } else {
-                        $req->session()->put('user_req', $user_req);
+                        $req->session()->put('evidenceLevel', $req->evidenceLevel);
                     }
 
+                  $asset=Db::table('iso_sec_2_1')->where('assessment_id',$asset_id)->first();
+              
+                
 
                     return view('iso_sec_2_2.iso_sec_2_2_subsections', [
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
                         'project' => $project,
-                        'user_req' => $user_req
+                        'asset'=>$asset
+                        
                     ]);
                 }
             }
@@ -55,9 +92,9 @@ class IsoSec2_2 extends Controller
     }
 
 
-    public function iso_section2_2($title_num, $proj_id, $user_id)
+    public function iso_section2_2($title_num, $proj_id, $user_id,$asset_id)
     {
-
+   
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -77,6 +114,12 @@ class IsoSec2_2 extends Controller
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                         ->where('projects.project_id', $proj_id)->first();
 
+                        $asset=Db::table('iso_sec_2_1')->where('assessment_id',$asset_id)->first();
+
+
+
+                                            
+                        
                     if ($title_num == 11) {
                         //non mandatory controls
                         return view('iso_sec_2_2.iso_sec_2_2_main_with_non_mandatory', [
@@ -84,7 +127,8 @@ class IsoSec2_2 extends Controller
                             'project_name' => $checkpermission->project_name,
                             'project_permissions' => $checkpermission->project_permissions,
                             'title' => $title_num,
-                            'project' => $project
+                            'project' => $project,
+                            'asset'=>$asset
                         ]);
                     }
 
@@ -101,14 +145,14 @@ class IsoSec2_2 extends Controller
 
 
 
-
                     return view('iso_sec_2_2.iso_sec_2_2_main', [
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
                         'project_permissions' => $checkpermission->project_permissions,
                         'data' => $filteredData,
                         'title' => $title_num,
-                        'project' => $project
+                        'project' => $project,
+                        'asset'=>$asset
                     ]);
                 }
             }
