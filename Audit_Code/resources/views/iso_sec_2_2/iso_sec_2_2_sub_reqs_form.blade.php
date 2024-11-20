@@ -40,6 +40,53 @@ $permissions=json_decode($project_permissions);
         </div>
     </div>
 
+    @if(session('evidenceLevel')!='project')
+    <table class="table table-bordered table-hover text-center align-middle">
+        <thead class="table-dark ">
+            <tr>
+                <th>Service</th>
+                    <th>Asset Group</th>
+                    <th>Asset</th>
+                    <th>Asset Component</th>
+                    <th>Asset Owner Dept</th>
+                    <th>Asset Physical Location</th>
+                    <th>Asset Logical Location</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+                <td>{{ $asset->s_name }}</td>
+                <td>{{ $asset->g_name }}</td>
+                <td>{{ $asset->name }}</td>
+                <td>{{ $asset->c_name }}</td>
+                <td>{{ $asset->owner_dept }}</td>
+                <td>{{ $asset->physical_loc }}</td>
+                <td>{{ $asset->logical_loc }}</td>
+               
+            </tr>
+           
+        </tbody>
+    </table>
+@endif
+
+@if(Session('evidenceLevel')=='project')
+
+<a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}">View Services and Assets in this Project</a>
+
+@endif
+
+
+
+<h3>Select From below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
+    @if(Session('evidenceLevel')=='service') All Assets in the service: {{$asset->s_name}} @endif
+    @if(Session('evidenceLevel')=='group') All Assets in the group: {{$asset->g_name}} @endif
+    @if(Session('evidenceLevel')=='name') All Assets in: {{$asset->name}} @endif
+    @if(Session('evidenceLevel')=='component') the Component: {{$asset->c_name}} @endif
+
+</h3>
+
 
     <h2 class="text-center fw-bold mt-4 mb-4">
         {{$filteredData[0][2]}}
@@ -64,7 +111,7 @@ $permissions=json_decode($project_permissions);
                       </div>
                     <div class="card-body">
 
-                <form action="/iso_sec_2_2_edit_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}" method="post" enctype="multipart/form-data">
+                <form action="/iso_sec_2_2_edit_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="form-group">
@@ -136,7 +183,7 @@ $permissions=json_decode($project_permissions);
 
             <div class="card-body">
 
-        <form action="/iso_sec_2_2_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}" method="post" enctype="multipart/form-data">
+        <form action="/iso_sec_2_2_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group">

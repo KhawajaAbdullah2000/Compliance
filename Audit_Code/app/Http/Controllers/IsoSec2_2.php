@@ -160,8 +160,9 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-    public function iso_sec_2_2_req(Request $req, $main_req_num, $title, $proj_id, $user_id)
+    public function iso_sec_2_2_req(Request $req, $main_req_num, $title, $proj_id, $user_id,$asset_id)
     {
+     
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -188,6 +189,7 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                         ->where('projects.project_id', $proj_id)->first();
 
+                        $asset=Db::table('iso_sec_2_1')->where('assessment_id',$asset_id)->first();
 
                     if ($title == 11) {
                         //non mandatory requirements
@@ -223,14 +225,10 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                             'data' => $filteredData,
                             'main_req_num' => $main_req_num,
                             'title' => $title,
-                            'project' => $project
+                            'project' => $project,
+                            'asset'=>$asset
                         ]);
                     }
-
-
-
-
-
 
 
                     $filepath = public_path('ISO_SEC_2_2.xlsx');
@@ -254,7 +252,8 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                         'data' => $filteredData,
                         'main_req_num' => $main_req_num,
                         'title' => $title,
-                        'project' => $project
+                        'project' => $project,
+                        'asset'=>$asset
                     ]);
                 }
             }
@@ -262,8 +261,9 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-    public function iso_sec2_2_sub_req_edit($sub_req, $title, $proj_id, $user_id)
+    public function iso_sec2_2_sub_req_edit($sub_req, $title, $proj_id, $user_id,$asset_id)
     {
+  
 
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -281,15 +281,15 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
 
                 if ($checkpermission->type_id == 4) {
                     $result = Db::table('iso_sec_2_2')->join('users', 'iso_sec_2_2.last_edited_by', 'users.id')
-                        ->where('project_id', $proj_id)->where('sub_req', $sub_req)->first();
+                        ->where('project_id', $proj_id)->where('sub_req', $sub_req)->where('asset_id',$asset_id)
+                        ->first();
                 }
-
-
 
 
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
 
+                    $asset=Db::table('iso_sec_2_1')->where('assessment_id',$asset_id)->first();
 
                     if($title==11){
 
@@ -321,7 +321,8 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                                 'sub_req' => $sub_req,
                                 'result' => $result,
                                 'filteredData' => $filteredData,
-                                'project' => $project
+                                'project' => $project,
+                                'asset'=>$asset
                             ]);
 
 
@@ -350,7 +351,8 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                     'sub_req' => $sub_req,
                     'result' => $result,
                     'filteredData' => $filteredData,
-                    'project' => $project
+                    'project' => $project,
+                    'asset'=>$asset
                 ]);
             }
         }
@@ -358,7 +360,8 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
     }
 
 
-    public function iso_sec_2_2_form(Request $req, $sub_req, $title, $proj_id, $user_id)
+    //new insert in sec2_2
+    public function iso_sec_2_2_form(Request $req, $sub_req, $title, $proj_id, $user_id,$asset_id)
     {
         $req->validate([
             'comp_status' => 'required'
@@ -378,15 +381,61 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if ($checkpermission->type_id == 4) {
+
+                    $evidenceLevel = $req->session()->get('evidenceLevel');
+
+                  
                     if (in_array('Data Inputter', $permissions)) {
 
-                        if ($req->attachment != null) {
+                        if($evidenceLevel=='component'){
+                            $fileName=null;
+                            if ($req->attachment != null) {
+                                $fileName = time() . '.' . $req->attachment->extension();
+                                $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
+                            }
+    
+                                Db::table('iso_sec_2_2')->insert([
+                                    'asset_id'=>$asset_id,
+                                    'project_id' => $proj_id,
+                                    'comp_status' => $req->comp_status,
+                                    'comments' => $req->comments,
+                                    'title_num' => $title,
+                                    'sub_req' => $sub_req,
+                                    'attachment' => $fileName,
+                                    'last_edited_by' => $user_id,
+                                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                                ]);
 
-                            //saving file
+                        }
+
+                        $assetDetails=DB::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
+
+                        $assets=null;
+
+                        if($evidenceLevel=='name'){
+                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('name',$assetDetails->name)->get();
+                        }
+
+                        if($evidenceLevel=='group'){
+                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('g_name',$assetDetails->g_name)->get();
+                        }
+                        if($evidenceLevel=='service'){
+                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('s_name',$assetDetails->s_name)->get();
+                        }
+
+                        if($evidenceLevel=='project'){
+                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->get();
+                        }
+
+                        $fileName=null;
+                        if ($req->attachment != null) {
                             $fileName = time() . '.' . $req->attachment->extension();
                             $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
+                        }
 
+                        foreach($assets as $ass){ 
                             Db::table('iso_sec_2_2')->insert([
+                                'asset_id'=>$ass->assessment_id,
                                 'project_id' => $proj_id,
                                 'comp_status' => $req->comp_status,
                                 'comments' => $req->comments,
@@ -396,28 +445,18 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                                 'last_edited_by' => $user_id,
                                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                             ]);
-                        } else {
 
-                            Db::table('iso_sec_2_2')->insert([
-                                'project_id' => $proj_id,
-                                'comp_status' => $req->comp_status,
-                                'comments' => $req->comments,
-                                'title_num' => $title,
-                                'sub_req' => $sub_req,
-                                'last_edited_by' => $user_id,
-                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-
-                            ]);
                         }
-
+                            
+                    }
                         $mysessionreq = $req->session()->get('main_req_num');
 
                         return redirect()->route(
                             'iso_sec_2_2_req',
-                            ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id]
+                            ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id,'asset_id'=>$asset_id]
                         )
                             ->with('success', 'Record Updated SUccessfully');
-                    }
+                    
                 }
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);

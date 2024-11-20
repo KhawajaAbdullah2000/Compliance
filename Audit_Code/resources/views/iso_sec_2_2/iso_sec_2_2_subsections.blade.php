@@ -78,7 +78,7 @@
 
 
 
-<h3>Selet From below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
+<h3>Select From below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
     @if(Session('evidenceLevel')=='service') All Assets in the service: {{$asset->s_name}} @endif
     @if(Session('evidenceLevel')=='group') All Assets in the group: {{$asset->g_name}} @endif
     @if(Session('evidenceLevel')=='name') All Assets in: {{$asset->name}} @endif

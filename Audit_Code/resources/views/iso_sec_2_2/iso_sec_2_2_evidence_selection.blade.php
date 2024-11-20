@@ -83,15 +83,19 @@
                         <label class="form-check-label" for="service">Service</label>
                     </div>
     
+                    @if($asset->g_name!=null)
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="evidenceLevel" value="group">
                         <label class="form-check-label" for="assetGroup">Asset Group</label>
                     </div>
+                    @endif
     
+                    @if($asset->name!=null)
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="evidenceLevel" value="name">
                         <label class="form-check-label" for="asset">Asset</label>
                     </div>
+                    @endif
     
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="evidenceLevel" value="component">
