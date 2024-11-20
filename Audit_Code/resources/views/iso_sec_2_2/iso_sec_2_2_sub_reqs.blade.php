@@ -40,7 +40,6 @@ $permissions=json_decode($project_permissions);
         </div>
     </div>
 
-    {{-- <a href="/iso_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{Session::get('user_req')}}" class="btn btn-primary btn-md float-end">Go to All Requirements</a> --}}
     @if(session('evidenceLevel')!='project')
     <table class="table table-bordered table-hover text-center align-middle">
         <thead class="table-dark ">
@@ -77,6 +76,8 @@ $permissions=json_decode($project_permissions);
 <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}">View Services and Assets in this Project</a>
 
 @endif
+
+<a href="/iso_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary btn-md float-end mb-4">Go to All Requirements</a>
 
 
 

@@ -387,12 +387,14 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                   
                     if (in_array('Data Inputter', $permissions)) {
 
+                        $fileName=null;
+                        if ($req->attachment != null) {
+                            $fileName = time() . '.' . $req->attachment->extension();
+                            $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
+                        }
+
                         if($evidenceLevel=='component'){
-                            $fileName=null;
-                            if ($req->attachment != null) {
-                                $fileName = time() . '.' . $req->attachment->extension();
-                                $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
-                            }
+                           
     
                                 Db::table('iso_sec_2_2')->insert([
                                     'asset_id'=>$asset_id,
@@ -405,6 +407,13 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                                     'last_edited_by' => $user_id,
                                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                                 ]);
+                                $mysessionreq = $req->session()->get('main_req_num');
+
+                        return redirect()->route(
+                            'iso_sec_2_2_req',
+                            ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id,'asset_id'=>$asset_id]
+                        )
+                            ->with('success', 'Record Updated SUccessfully');
 
                         }
 
@@ -427,11 +436,7 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                             $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->get();
                         }
 
-                        $fileName=null;
-                        if ($req->attachment != null) {
-                            $fileName = time() . '.' . $req->attachment->extension();
-                            $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
-                        }
+                
 
                         foreach($assets as $ass){ 
                             Db::table('iso_sec_2_2')->insert([
@@ -462,10 +467,11 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
         }
     }
-    public function iso_sec_2_2_edit_form(Request $req, $sub_req, $title, $proj_id, $user_id)
+    public function iso_sec_2_2_edit_form(Request $req, $sub_req, $title, $proj_id, $user_id,$asset_id)
     {
         $req->validate([
-            'comp_status' => 'required'
+            'comp_status' => 'required',
+            'attachment' => 'file|mimes:jpg,png,pdf,doc,docx,xlsx|max:5096', 
         ]);
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -482,36 +488,114 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if ($checkpermission->type_id == 4) {
+                    $evidenceLevel = $req->session()->get('evidenceLevel');
                     if (in_array('Data Inputter', $permissions)) {
 
+
+
+                        if($evidenceLevel=='component'){
+
+                            
                         if ($req->attachment != null) {
                             $fileName = time() . '.' . $req->attachment->extension();
                             $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
                             Db::table('iso_sec_2_2')->where('project_id', $proj_id)->where('sub_req', $sub_req)
-                                ->update([
-                                    'comp_status' => $req->comp_status,
-                                    'comments' => $req->comments,
-                                    'attachment' => $fileName,
-                                    'last_edited_by' => $user_id,
-                                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                                ]);
-                        } else {
+                            ->where('asset_id',$asset_id)
+                            ->update([
+                                'comp_status' => $req->comp_status,
+                                'comments' => $req->comments,
+                                'attachment' => $fileName,
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                            ]);
+
+                        }else{
                             Db::table('iso_sec_2_2')->where('project_id', $proj_id)->where('sub_req', $sub_req)
-                                ->update([
+                            ->where('asset_id',$asset_id)
+                            ->update([
+                                'comp_status' => $req->comp_status,
+                                'comments' => $req->comments,
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                            ]);
 
-                                    'comp_status' => $req->comp_status,
-                                    'comments' => $req->comments,
-                                    'last_edited_by' => $user_id,
-                                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-
-                                ]);
                         }
+
+                        
+                        $mysessionreq = $req->session()->get('main_req_num');
+
+                        return redirect()->route(
+                            'iso_sec_2_2_req',
+                            ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id,'asset_id'=>$asset_id]
+                        )
+                            ->with('success', 'Record Updated SUccessfully');
+                            
+                        }
+                       
+
+            
+                           
+
+                     $assetDetails=DB::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
+
+                     $assets=null;
+        
+                     if($evidenceLevel=='name'){
+                    $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('name',$assetDetails->name)->get();
+                         }
+        
+                                if($evidenceLevel=='group'){
+                                    $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('g_name',$assetDetails->g_name)->get();
+                                }
+                                if($evidenceLevel=='service'){
+                                    $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('s_name',$assetDetails->s_name)->get();
+                                }
+        
+                                if($evidenceLevel=='project'){
+                                    $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->get();
+                                }
+
+                                if ($req->attachment != null) {
+                                    $fileName = time() . '.' . $req->attachment->extension();
+                                    $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
+                                    foreach($assets as $ass){ 
+                                        Db::table('iso_sec_2_2')->where('project_id', $proj_id)->where('sub_req', $sub_req)
+                                        ->where('asset_id',$asset_id)->update([
+                                            'comp_status' => $req->comp_status,
+                                            'comments' => $req->comments,
+                                            'title_num' => $title,
+                                            'sub_req' => $sub_req,
+                                            'attachment' => $fileName,
+                                            'last_edited_by' => $user_id,
+                                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                                        ]);
+            
+                                    }
+
+                                }else{
+                                    foreach($assets as $ass){ 
+                                        Db::table('iso_sec_2_2')->where('project_id', $proj_id)->where('sub_req', $sub_req)
+                                        ->where('asset_id',$asset_id)->update([
+                                            'comp_status' => $req->comp_status,
+                                            'comments' => $req->comments,
+                                            'title_num' => $title,
+                                            'sub_req' => $sub_req,
+                                            'last_edited_by' => $user_id,
+                                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                                        ]);
+            
+                                    }
+
+                                }
+        
+                               
+                        
 
                         $mysessionreq = $req->session()->get('main_req_num');
 
                         return redirect()->route(
                             'iso_sec_2_2_req',
-                            ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id]
+                            ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id,'asset_id'=>$asset_id]
                         )
                             ->with('success', 'Record Updated SUccessfully');
                     }
