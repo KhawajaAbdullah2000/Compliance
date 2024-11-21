@@ -252,6 +252,7 @@ route::put('iso_sec_2_3_edit_table_submit/{proj_id}/{user_id}',[IsoSec2_3::class
 
 //ISO sec2.2
 
+route::get('iso_section2_2_from_main/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_section2_2_from_main']);
 route::get('iso_sec_2_2_evidence/{asset_id}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec_2_2_evidence'])->name('iso_sec_2_2_evidence');
 route::get('iso_sec_2_2_subsections/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_sec_2_2_subsections'])->name('iso_sec_2_2_subsections');
 route::get('iso_section2_2/{title_num}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_section2_2'])->name('iso_sec_2_2_main');
@@ -262,12 +263,12 @@ route::put('iso_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_i
 
 
 //PCI single sheet
-route::get("pci_single_sheet_subsections/{proj_id}/{user_id}",[PCI_Single_Sheet::class,'pci_single_sheet_subsections'])->name('pci_single_sheet_subsections');
-route::get("pci_section_2_2/{title_num}/{proj_id}/{user_id}",[PCI_Single_Sheet::class,'pci_section_2_2'])->name('pci_section_2_2_main');
-route::get("pci_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[PCI_Single_Sheet::class,'pci_sec_2_2_req'])->name('pci_sec_2_2_req');
-route::get('pci_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Single_Sheet::class,'pci_sec2_2_sub_req_edit'])->name('pci_sec2_2_sub_req_edit');
-route::post('pci_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Single_Sheet::class,'pci_sec_2_2_form']);
-route::put('pci_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Single_Sheet::class,'pci_sec_2_2_edit_form']);
+route::get("pci_single_sheet_subsections/{proj_id}/{user_id}/{asset_id}",[PCI_Single_Sheet::class,'pci_single_sheet_subsections'])->name('pci_single_sheet_subsections');
+route::get("pci_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[PCI_Single_Sheet::class,'pci_section_2_2'])->name('pci_section_2_2_main');
+route::get("pci_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[PCI_Single_Sheet::class,'pci_sec_2_2_req'])->name('pci_sec_2_2_req');
+route::get('pci_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Single_Sheet::class,'pci_sec2_2_sub_req_edit'])->name('pci_sec2_2_sub_req_edit');
+route::post('pci_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Single_Sheet::class,'pci_sec_2_2_form']);
+route::put('pci_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Single_Sheet::class,'pci_sec_2_2_edit_form']);
 
 
 //PCI Multi sheet

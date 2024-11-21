@@ -11,6 +11,88 @@ use App\Models\Project;
 class IsoSec2_2 extends Controller
 {
 
+    public function iso_section2_2_from_main($proj_id,$user_id){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+
+                    $data = DB::table('iso_sec_2_1')->join(
+                        'users',
+                        'iso_sec_2_1.last_edited_by',
+                        'users.id'
+                    )
+                        ->where('project_id', $proj_id)->get();
+
+                 $project=Project::join('project_types','projects.project_type','project_types.id')
+                        ->where('projects.project_id',$proj_id)->first();
+
+
+
+
+                    $org_projects=Db::table('projects')->where('org_id',auth()->user()->org_id)
+                    ->where('project_id','!=',$proj_id)->get();
+
+                    $distinctServices= DB::table('iso_sec_2_1')
+                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
+                    ->select('iso_sec_2_1.s_name')
+                    ->where('iso_sec_2_1.project_id',$proj_id)
+                    ->distinct('iso_sec_2_1.s_name')
+                     // Ensures distinct s_name values
+                    ->get();
+
+                    $distinctGroups= DB::table('iso_sec_2_1')
+                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
+                    ->select('iso_sec_2_1.g_name')
+                    ->where('iso_sec_2_1.project_id',$proj_id)
+                    ->distinct('iso_sec_2_1.g_name')
+                    ->get();
+
+                    $distinctAssets= DB::table('iso_sec_2_1')
+                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
+                    ->select('iso_sec_2_1.name')
+                    ->where('iso_sec_2_1.project_id',$proj_id)
+                    ->distinct('iso_sec_2_1.name')
+                    ->get();
+
+
+                    $distinctComponents= DB::table('iso_sec_2_1')
+                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
+                    ->select('iso_sec_2_1.c_name')
+                    ->where('iso_sec_2_1.project_id',$proj_id)
+                    ->distinct('iso_sec_2_1.c_name')
+                    ->get();
+
+
+
+
+
+                    return view('iso_sec_2_1.iso_sec_2_1_from_main', [
+                        'data' => $data,
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project'=>$project,
+                        'org_projects'=>$org_projects,
+                        'distinctServices'=>$distinctServices,
+                        'distinctGroups'=>$distinctGroups,
+                        'distinctAssets'=>$distinctAssets,
+                        'distinctComponents'=>$distinctComponents
+                    ]);
+
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+    }
 public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
     if ($user_id == auth()->user()->id) {
         $checkpermission = Db::table('project_details')->select(
@@ -26,21 +108,36 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
             ->first();
         if ($checkpermission) {
 
-            if ($checkpermission->type_id == 4) {
+            
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
 
                 $asset=Db::table('iso_sec_2_1')->where('assessment_id',$asset_id)->first();
               
+                //ISO 
+                if ($checkpermission->type_id == 4) {
+                    return view('iso_sec_2_2.iso_sec_2_2_evidence_selection', [
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project' => $project,
+                        'asset'=>$asset
+                       
+                    ]);
+                }
 
-                return view('iso_sec_2_2.iso_sec_2_2_evidence_selection', [
-                    'project_id' => $checkpermission->project_id,
-                    'project_name' => $checkpermission->project_name,
-                    'project' => $project,
-                    'asset'=>$asset
-                   
-                ]);
-            }
+                //PCI SIngle tenant
+                if ($checkpermission->type_id == 1) {
+                    return view('pci_single_sheet.pci_sec_2_2_evidence_selection', [
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project' => $project,
+                        'asset'=>$asset
+                       
+                    ]);
+                }
+
+                
+            
         }
     }
     return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
@@ -67,14 +164,12 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                         ->where('projects.project_id', $proj_id)->first();
 
-                    if ($req->session()->exists('evidenceLevel')) {
-                        $req->session()->forget('evidenceLevel');
-                        $req->session()->put('evidenceLevel', $req->evidenceLevel);
-                    } else {
-                        $req->session()->put('evidenceLevel', $req->evidenceLevel);
-                    }
+                        if ($req->evidenceLevel!=null) {
+                            $req->session()->forget('evidenceLevel');
+                            $req->session()->put('evidenceLevel', $req->evidenceLevel);
+                        } 
 
-                  $asset=Db::table('iso_sec_2_1')->where('assessment_id',$asset_id)->first();
+                  $asset=Db::table(table: 'iso_sec_2_1')->where('assessment_id',$asset_id)->first();
               
                 
 
@@ -528,7 +623,7 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                             'iso_sec_2_2_req',
                             ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id,'asset_id'=>$asset_id]
                         )
-                            ->with('success', 'Record Updated SUccessfully');
+                            ->with('success', 'Record Updated Successfully');
                             
                         }
                        
@@ -597,7 +692,7 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                             'iso_sec_2_2_req',
                             ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id,'asset_id'=>$asset_id]
                         )
-                            ->with('success', 'Record Updated SUccessfully');
+                            ->with('success', 'Record Updated Successfully');
                     }
                 }
             }
