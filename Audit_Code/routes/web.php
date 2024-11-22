@@ -272,12 +272,12 @@ route::put('pci_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_i
 
 
 //PCI Multi sheet
-route::get("pci_multi_sheet_subsections/{proj_id}/{user_id}",[PCI_Multi_Sheet::class,'pci_multi_sheet_subsections'])->name('pci_multi_sheet_subsections');
-route::get("pci_multi_section_2_2/{title_num}/{proj_id}/{user_id}",[PCI_Multi_Sheet::class,'pci_multi_section_2_2'])->name('pci_multi_section_2_2_main');
-route::get("pci_multi_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_req'])->name('pci_multi_sec_2_2_req');
-route::get('pci_multi_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Multi_Sheet::class,'pci_multi_sec2_2_sub_req_edit'])->name('pci_multi_sec2_2_sub_req_edit');
-route::post('pci_multi_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_form']);
-route::put('pci_multi_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_edit_form']);
+route::get("pci_multi_sheet_subsections/{proj_id}/{user_id}/{asset_id}",[PCI_Multi_Sheet::class,'pci_multi_sheet_subsections'])->name('pci_multi_sheet_subsections');
+route::get("pci_multi_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[PCI_Multi_Sheet::class,'pci_multi_section_2_2'])->name('pci_multi_section_2_2_main');
+route::get("pci_multi_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_req'])->name('pci_multi_sec_2_2_req');
+route::get('pci_multi_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Multi_Sheet::class,'pci_multi_sec2_2_sub_req_edit'])->name('pci_multi_sec2_2_sub_req_edit');
+route::post('pci_multi_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_form']);
+route::put('pci_multi_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_edit_form']);
 
 //CY SAMA
 route::get("cy_sama_subsections/{proj_id}/{user_id}",[CY_SAMA::class,'cy_sama_subsections'])->name('cy_sama_subsections');
@@ -308,12 +308,12 @@ route::put('sbp_etgrmf_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',
 
 
 //for merchant
-route::get("pci_merchant_sheet_subsections/{proj_id}/{user_id}",[PCI_Merchant_Sheet::class,'pci_merchant_subsections'])->name('pci_merchant_sheet_subsections');
-route::get("pci_merchant_section_2_2/{title_num}/{proj_id}/{user_id}",[PCI_Merchant_Sheet::class,'pci_merchant_section_2_2'])->name('pci_merchant_section_2_2_main');
-route::get("pci_merchant_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[PCI_Merchant_Sheet::class,'pci_merchant_sec_2_2_req'])->name('pci_merchant_sec_2_2_req');
-route::get('pci_merchant_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Merchant_Sheet::class,'pci_merchant_sec2_2_sub_req_edit'])->name('pci_merchant_sec2_2_sub_req_edit');
-route::post('pci_merchant_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Merchant_Sheet::class,'pci_merchant_sec_2_2_form']);
-route::put('pci_merchant_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Merchant_Sheet::class,'pci_merchant_sec_2_2_edit_form']);
+route::get("pci_merchant_sheet_subsections/{proj_id}/{user_id}/{asset_id}",[PCI_Merchant_Sheet::class,'pci_merchant_sheet_subsections'])->name('pci_merchant_sheet_subsections');
+route::get("pci_merchant_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[PCI_Merchant_Sheet::class,'pci_merchant_section_2_2'])->name('pci_merchant_section_2_2_main');
+route::get("pci_merchant_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[PCI_Merchant_Sheet::class,'pci_merchant_sec_2_2_req'])->name('pci_merchant_sec_2_2_req');
+route::get('pci_merchant_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Merchant_Sheet::class,'pci_merchant_sec2_2_sub_req_edit'])->name('pci_merchant_sec2_2_sub_req_edit');
+route::post('pci_merchant_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Merchant_Sheet::class,'pci_merchant_sec_2_2_form']);
+route::put('pci_merchant_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Merchant_Sheet::class,'pci_merchant_sec_2_2_edit_form']);
 
 
 // route::get('v_3_2_section1_subsections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1_subsections']);

@@ -77,7 +77,7 @@ $permissions=json_decode($project_permissions);
 
 @endif
 
-<a href="/iso_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary btn-md float-end mb-4">Go to All Requirements</a>
+<a href="/pci_single_sheet_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary btn-md float-end mb-4">Go to All Requirements</a>
 
 
 

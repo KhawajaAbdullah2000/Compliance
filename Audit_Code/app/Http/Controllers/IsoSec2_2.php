@@ -136,6 +136,29 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                     ]);
                 }
 
+                 //PCI Multi tenant
+                 if ($checkpermission->type_id == 2) {
+                    return view('pci_multi_sheet.pci_sec_2_2_evidence_selection', [
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project' => $project,
+                        'asset'=>$asset
+                       
+                    ]);
+                }
+
+                 //PCI Merchant tenant
+                 if ($checkpermission->type_id == 3) {
+                    return view('pci_merchant_sheet.pci_sec_2_2_evidence_selection', [
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project' => $project,
+                        'asset'=>$asset
+                       
+                    ]);
+                }
+
+
                 
             
         }
