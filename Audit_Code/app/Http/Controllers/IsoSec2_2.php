@@ -158,6 +158,17 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                     ]);
                 }
 
+                 //CY SAMA
+                 if ($checkpermission->type_id == 5) {
+                    return view('CY_SAMA.cy_sama_sec_2_2_evidence_selection', [
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project' => $project,
+                        'asset'=>$asset
+                       
+                    ]);
+                }
+
 
                 
             

@@ -280,12 +280,12 @@ route::post('pci_multi_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset
 route::put('pci_multi_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_edit_form']);
 
 //CY SAMA
-route::get("cy_sama_subsections/{proj_id}/{user_id}",[CY_SAMA::class,'cy_sama_subsections'])->name('cy_sama_subsections');
-route::get("cy_sama_section_2_2/{title_num}/{proj_id}/{user_id}",[CY_SAMA::class,'cy_sama_section_2_2'])->name('cy_sama_section_2_2');
-route::get("cy_sama_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[CY_SAMA::class,'cy_sama_sec_2_2_req'])->name('cy_sama_sec_2_2_req');
-route::get('cy_sama_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec2_2_sub_req_edit'])->name('cy_sama_sec2_2_sub_req_edit');
-route::post('cy_sama_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec_2_2_form']);
-route::put('cy_sama_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec_2_2_edit_form']);
+route::get("cy_sama_subsections/{proj_id}/{user_id}/{asset_id}",[CY_SAMA::class,'cy_sama_subsections'])->name('cy_sama_subsections');
+route::get("cy_sama_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[CY_SAMA::class,'cy_sama_section_2_2'])->name('cy_sama_section_2_2');
+route::get("cy_sama_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[CY_SAMA::class,'cy_sama_sec_2_2_req'])->name('cy_sama_sec_2_2_req');
+route::get('cy_sama_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[CY_SAMA::class,'cy_sama_sec2_2_sub_req_edit'])->name('cy_sama_sec2_2_sub_req_edit');
+route::post('cy_sama_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[CY_SAMA::class,'cy_sama_sec_2_2_form']);
+route::put('cy_sama_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[CY_SAMA::class,'cy_sama_sec_2_2_edit_form']);
 
 //for KSA NCA ECC
 route::get("ksa_nca_subsections/{proj_id}/{user_id}",[KSA_NCA::class,'ksa_nca_subsections'])->name('ksa_nca_subsections');

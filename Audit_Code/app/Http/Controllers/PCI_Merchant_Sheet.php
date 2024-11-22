@@ -342,7 +342,7 @@ class PCI_Merchant_Sheet extends Controller
                 ->first();
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
-                if ($checkpermission->type_id == 2) {
+                if ($checkpermission->type_id == 3) {
                     $evidenceLevel = $req->session()->get('evidenceLevel');
                     if (in_array('Data Inputter', $permissions)) {
 
