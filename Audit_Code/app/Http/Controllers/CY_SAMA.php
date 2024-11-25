@@ -7,6 +7,7 @@ use App\Models\Project;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\User;    
 
 class CY_SAMA extends Controller
 {
@@ -180,7 +181,8 @@ class CY_SAMA extends Controller
 
                 if ($checkpermission->type_id == 5) {
                     $result=Db::table('iso_sec_2_2')->join('users','iso_sec_2_2.last_edited_by','users.id')
-                    ->where('project_id',$proj_id)->where('sub_req',$sub_req)->first();
+                    ->where('project_id',$proj_id)->where('sub_req',$sub_req)->where('asset_id',$asset_id)
+                    ->first();
                 }
 
                 $filepath=public_path('CY_SAMA.xlsx');
@@ -200,6 +202,18 @@ class CY_SAMA extends Controller
 
                 $asset = Db::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
 
+                $super = Db::table('users')->where('privilege_id', 1)->pluck('id')->toArray();
+
+                //superusers of that organization
+                $superusers_of_that_org = DB::table('superusers')->wherein('user_id', $super)
+                                ->where('org_id', auth()->user()->org_id)->pluck('user_id')->toArray();
+                            // dd($superusers_of_that_org);
+
+                            //organziatons of those superusers
+                $orgs = Db::table('users')->wherein('id', $superusers_of_that_org)->pluck('org_id')->toArray();
+
+                $users = User::where('privilege_id', 5)->wherein('org_id', $orgs)->get(['id', 'first_name', 'last_name']);
+
 
                 return view('CY_SAMA.cy_sama_sec_2_2_sub_reqs_form', [
                     'project_id' => $checkpermission->project_id,
@@ -210,7 +224,8 @@ class CY_SAMA extends Controller
                    'result'=>$result,
                    'filteredData'=>$filteredData,
                    'project'=>$project,
-                   'asset'=>$asset
+                   'asset'=>$asset,
+                   'users'=>$users
                      ]);
 
             }
@@ -219,9 +234,8 @@ class CY_SAMA extends Controller
 
     }
 
-    public function cy_sama_sec_2_2_form(Request $req, $sub_req, $title, $proj_id, $user_id, $asset_id)
+    public function cy_sama_sec_2_2_form(Request $req, $sub_req, $title, $proj_id, $user_id,$asset_id)
     {
-    
         $req->validate([
             'comp_status' => 'required'
         ]);
@@ -240,99 +254,105 @@ class CY_SAMA extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if ($checkpermission->type_id == 5) {
-                
 
                     $evidenceLevel = $req->session()->get('evidenceLevel');
 
-
+                  
                     if (in_array('Data Inputter', $permissions)) {
 
-                        $fileName = null;
+                        $fileName=null;
                         if ($req->attachment != null) {
                             $fileName = time() . '.' . $req->attachment->extension();
-                            $req->attachment->move(public_path('cy_sama_sec_2_2'), $fileName);
+                            $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
                         }
 
+                        $data=[
+                                    'comp_status' => $req->comp_status,
+                                    'comments' => $req->comments,
+                                    'attachment' => $fileName,
+                                    'treatment_action' => $req->treatment_action,
+                                    'treatment_target_date' => $req->treatment_target_date,
+                                    'treatment_comp_date' => $req->treatment_comp_date,
+                                    'responsibility_for_treatment' => $req->responsibility_for_treatment,
+                                    'acceptance_actual_date'=>$req->acceptance_actual_date,
+                                    'last_edited_by' => $user_id,
+                                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                        ];
 
                         if ($evidenceLevel == 'component') {
 
-
-                            Db::table('iso_sec_2_2')->insert([
-                                'asset_id' => $asset_id,
-                                'project_id' => $proj_id,
-                                'comp_status' => $req->comp_status,
-                                'comments' => $req->comments,
-                                'title_num' => $title,
-                                'sub_req' => $sub_req,
-                                'attachment' => $fileName,
-                                'last_edited_by' => $user_id,
-                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                            ]);
+                            // If evidence level is 'component', just insert or update for the specific asset
+                            DB::table('iso_sec_2_2')->updateOrInsert(
+                                [
+                                    'project_id' => $proj_id, 
+                                    'asset_id' => $asset_id,
+                                    'title_num' => $title,
+                                    'sub_req' => $sub_req,
+                                ], 
+                                $data
+                            );
+                        
+                            // Redirect after updating the specific asset
                             $mysessionreq = $req->session()->get('main_req_num');
-
                             return redirect()->route(
                                 'cy_sama_sec_2_2_req',
                                 ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
                             )
                                 ->with('success', 'Record Updated Successfully');
+                        }
+                        
 
+                        $assetDetails=DB::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
+
+                        $assets=null;
+
+                        if($evidenceLevel=='name'){
+                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('name',$assetDetails->name)->get();
                         }
 
-                        $assetDetails = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
-
-                        $assets = null;
-
-                        if ($evidenceLevel == 'name') {
-                            $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('name', $assetDetails->name)->get();
+                        if($evidenceLevel=='group'){
+                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('g_name',$assetDetails->g_name)->get();
+                        }
+                        if($evidenceLevel=='service'){
+                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('s_name',$assetDetails->s_name)->get();
                         }
 
-                        if ($evidenceLevel == 'group') {
-                            $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('g_name', $assetDetails->g_name)->get();
-                        }
-                        if ($evidenceLevel == 'service') {
-                            $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('s_name', $assetDetails->s_name)->get();
+                        if($evidenceLevel=='project'){
+                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->get();
                         }
 
-                        if ($evidenceLevel == 'project') {
-                            $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->get();
+                
+
+                        foreach($assets as $ass){ 
+                            DB::table('iso_sec_2_2')->updateOrInsert(
+                                [
+                                    'project_id' => $proj_id, 
+                                    'asset_id' => $ass->assessment_id, 
+                                    'title_num' => $title,
+                                    'sub_req' => $sub_req,
+                                ], 
+                                $data
+                            );
                         }
-
-                        foreach ($assets as $ass) {
-                            Db::table('iso_sec_2_2')->insert([
-                                'asset_id' => $ass->assessment_id,
-                                'project_id' => $proj_id,
-                                'comp_status' => $req->comp_status,
-                                'comments' => $req->comments,
-                                'title_num' => $title,
-                                'sub_req' => $sub_req,
-                                'attachment' => $fileName,
-                                'last_edited_by' => $user_id,
-                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                            ]);
-
-                        }
-
+                            
                     }
-                    $mysessionreq = $req->session()->get('main_req_num');
+                        $mysessionreq = $req->session()->get('main_req_num');
 
-                    return redirect()->route(
-                        'cy_sama_sec_2_2_req',
-                        ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                    )
-                        ->with('success', 'Record Updated Successfully');
-
+                        return redirect()->route(
+                            'cy_sama_sec_2_2_req',
+                            ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id,'asset_id'=>$asset_id]
+                        )
+                            ->with('success', 'Record Updated SUccessfully');
+                    
                 }
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
         }
-
     }
-
-    public function cy_sama_sec_2_2_edit_form(Request $req, $sub_req, $title, $proj_id, $user_id, $asset_id)
+    public function cy_sama_sec_2_2_edit_form(Request $req, $sub_req, $title, $proj_id, $user_id,$asset_id)
     {
         $req->validate([
-            'comp_status' => 'required',
-            'attachment' => 'file|mimes:jpg,png,pdf,doc,docx,xlsx|max:5096',
+            'comp_status' => 'required'
         ]);
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -349,117 +369,110 @@ class CY_SAMA extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if ($checkpermission->type_id == 5) {
+
                     $evidenceLevel = $req->session()->get('evidenceLevel');
+
+                  
                     if (in_array('Data Inputter', $permissions)) {
 
-
-
-                        if ($evidenceLevel == 'component') {
-
-
-                            if ($req->attachment != null) {
-                                $fileName = time() . '.' . $req->attachment->extension();
-                                $req->attachment->move(public_path('cy_sama_sec_2_2'), $fileName);
-                                Db::table('iso_sec_2_2')->where('project_id', $proj_id)->where('sub_req', $sub_req)
-                                    ->where('asset_id', $asset_id)
-                                    ->update([
-                                        'comp_status' => $req->comp_status,
-                                        'comments' => $req->comments,
-                                        'attachment' => $fileName,
-                                        'last_edited_by' => $user_id,
-                                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                                    ]);
-
-                            } else {
-                                Db::table('iso_sec_2_2')->where('project_id', $proj_id)->where('sub_req', $sub_req)
-                                    ->where('asset_id', $asset_id)
-                                    ->update([
-                                        'comp_status' => $req->comp_status,
-                                        'comments' => $req->comments,
-                                        'last_edited_by' => $user_id,
-                                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                                    ]);
-
-                            }
-
-
-                            $mysessionreq = $req->session()->get('main_req_num');
-
-                            return redirect()->route(
-                                'cy_sama_sec_2_2_req',
-                                ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                            )
-                                ->with('success', 'Record Updated Successfully');
-
-                        }
-
-
-
-
-
-                        $assetDetails = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
-
-                        $assets = null;
-
-                        if ($evidenceLevel == 'name') {
-                            $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('name', $assetDetails->name)->get();
-                        }
-
-                        if ($evidenceLevel == 'group') {
-                            $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('g_name', $assetDetails->g_name)->get();
-                        }
-                        if ($evidenceLevel == 'service') {
-                            $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('s_name', $assetDetails->s_name)->get();
-                        }
-
-                        if ($evidenceLevel == 'project') {
-                            $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->get();
-                        }
-
+                        $fileName=null;
                         if ($req->attachment != null) {
                             $fileName = time() . '.' . $req->attachment->extension();
                             $req->attachment->move(public_path('cy_sama_sec_2_2'), $fileName);
-                            foreach ($assets as $ass) {
-                                Db::table('iso_sec_2_2')->where('project_id', $proj_id)->where('sub_req', $sub_req)
-                                    ->where('asset_id', $asset_id)->update([
-                                            'comp_status' => $req->comp_status,
-                                            'comments' => $req->comments,
-                                            'title_num' => $title,
-                                            'sub_req' => $sub_req,
-                                            'attachment' => $fileName,
-                                            'last_edited_by' => $user_id,
-                                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                                        ]);
-
-                            }
-
-                        } else {
-                            foreach ($assets as $ass) {
-                                Db::table('iso_sec_2_2')->where('project_id', $proj_id)->where('sub_req', $sub_req)
-                                    ->where('asset_id', $asset_id)->update([
-                                            'comp_status' => $req->comp_status,
-                                            'comments' => $req->comments,
-                                            'title_num' => $title,
-                                            'sub_req' => $sub_req,
-                                            'last_edited_by' => $user_id,
-                                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                                        ]);
-
-                            }
+                            $data=[
+                                'comp_status' => $req->comp_status,
+                                'comments' => $req->comments,
+                           
+                                'attachment' => $fileName,
+                                'treatment_action' => $req->treatment_action,
+                                'treatment_target_date' => $req->treatment_target_date,
+                                'treatment_comp_date' => $req->treatment_comp_date,
+                                'responsibility_for_treatment' => $req->responsibility_for_treatment,
+                                'acceptance_actual_date'=>$req->acceptance_actual_date,
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                                ];
+                    }
+                    else{
+                            $data=[
+                                'comp_status' => $req->comp_status,
+                                'comments' => $req->comments,
+                        
+                                'treatment_action' => $req->treatment_action,
+                                'treatment_target_date' => $req->treatment_target_date,
+                                'treatment_comp_date' => $req->treatment_comp_date,
+                                'responsibility_for_treatment' => $req->responsibility_for_treatment,
+                                'acceptance_actual_date'=>$req->acceptance_actual_date,
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                    ];
 
                         }
 
 
-
-
+                        if($evidenceLevel=='component'){
+                           
+                            DB::table('iso_sec_2_2')->updateOrInsert(
+                                [
+                                    'project_id' => $proj_id, 
+                                    'asset_id' => $asset_id, 
+                                    'title_num' => $title,
+                                    'sub_req' => $sub_req,
+                                ], 
+                                $data
+                            );
                         $mysessionreq = $req->session()->get('main_req_num');
 
                         return redirect()->route(
                             'cy_sama_sec_2_2_req',
-                            ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
+                            ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id,'asset_id'=>$asset_id]
                         )
-                            ->with('success', 'Record Updated Successfully');
+                            ->with('success', 'Record Updated SUccessfully');
+
+                        }
+
+                        $assetDetails=DB::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
+
+                        $assets=null;
+
+                        if($evidenceLevel=='name'){
+                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('name',$assetDetails->name)->get();
+                        }
+
+                        if($evidenceLevel=='group'){
+                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('g_name',$assetDetails->g_name)->get();
+                        }
+                        if($evidenceLevel=='service'){
+                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('s_name',$assetDetails->s_name)->get();
+                        }
+
+                        if($evidenceLevel=='project'){
+                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->get();
+                        }
+
+                
+
+                        foreach($assets as $ass){ 
+                            DB::table('iso_sec_2_2')->updateOrInsert(
+                                [
+                                    'project_id' => $proj_id, 
+                                    'asset_id' => $ass->assessment_id, 
+                                    'title_num' => $title,
+                                    'sub_req' => $sub_req,
+                                ], 
+                                $data
+                            );
+                        }
+                            
                     }
+                        $mysessionreq = $req->session()->get('main_req_num');
+
+                        return redirect()->route(
+                            'cy_sama_sec_2_2_req',
+                            ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id,'asset_id'=>$asset_id]
+                        )
+                            ->with('success', 'Record Updated SUccessfully');
+                    
                 }
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);

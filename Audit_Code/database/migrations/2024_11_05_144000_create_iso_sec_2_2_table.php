@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('attachment', 1000)->nullable();
             $table->unsignedBigInteger('last_edited_by')->nullable()->index('last_edited_by');
             $table->dateTime('last_edited_at');
-
             $table->unique(['project_id', 'sub_req'], 'project_id');
         });
     }
