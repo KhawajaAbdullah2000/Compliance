@@ -170,6 +170,29 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                     ]);
                 }
 
+                   //SBP ETGRMF
+                   if ($checkpermission->type_id == 6) {
+                    return view('SBP_ETGRMF.sbp_etgrmf_sec_2_2_evidence_selection', [
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project' => $project,
+                        'asset'=>$asset
+                       
+                    ]);
+                }
+
+                 //KSA NCA
+                 if ($checkpermission->type_id == 7) {
+                    return view('KSA_NCA.ksa_nca_sec_2_2_evidence_selection', [
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project' => $project,
+                        'asset'=>$asset
+                       
+                    ]);
+                }
+
+
 
                 
             

@@ -37,36 +37,86 @@
         </div>
     </div>
 
+    
+    @if(Session('evidenceLevel')!='project')
+    <table  class="table table-bordered table-hover text-center align-middle">
+        <thead class="table-dark ">
+            <tr>
+                <th>Service</th>
+                    <th>Asset Group</th>
+                    <th>Asset</th>
+                    <th>Asset Component</th>
+                    <th>Asset Owner Dept</th>
+                    <th>Asset Physical Location</th>
+                    <th>Asset Logical Location</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+           
+            <tr>
+                <td>{{ $asset->s_name }}</td>
+                <td>{{ $asset->g_name }}</td>
+                <td>{{ $asset->name }}</td>
+                <td>{{ $asset->c_name }}</td>
+                <td>{{ $asset->owner_dept }}</td>
+                <td>{{ $asset->physical_loc }}</td>
+                <td>{{ $asset->logical_loc }}</td>
+               
+            </tr>
+      
+        </tbody>
+    </table>
+    
+    
+    @endif
+    
+    @if(Session('evidenceLevel')=='project')
+    
+    <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}">View Services and Assets in this Project</a>
+    
+    @endif
+    
+    
+    
+    <h3>Select From below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
+        @if(Session('evidenceLevel')=='service') All Assets in the service: {{$asset->s_name}} @endif
+        @if(Session('evidenceLevel')=='group') All Assets in the group: {{$asset->g_name}} @endif
+        @if(Session('evidenceLevel')=='name') All Assets in: {{$asset->name}} @endif
+        @if(Session('evidenceLevel')=='component') the Component: {{$asset->c_name}} @endif
+    
+    </h3>
+
     <div class="row h-100 w-75">
         <div class="row mt-2" >
             <div class="col-12">
 
-         <a href="/ksa_nca_section_2_2/{{1}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">1. Cybersecurity Governance</p></a>
+         <a href="/ksa_nca_section_2_2/{{1}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">1. Cybersecurity Governance</p></a>
         </div>
         </div>
 
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/ksa_nca_section_2_2/{{2}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">2. Cybersecurity Defense</p></a>
+         <a href="/ksa_nca_section_2_2/{{2}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">2. Cybersecurity Defense</p></a>
         </div>
         </div>
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/ksa_nca_section_2_2/{{3}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">3. Cybersecurity Resilience</p></a>
+         <a href="/ksa_nca_section_2_2/{{3}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">3. Cybersecurity Resilience</p></a>
         </div>
         </div>
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/ksa_nca_section_2_2/{{4}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">4. Third-Party and Cloud Computing Cybersecurity</p></a>
+         <a href="/ksa_nca_section_2_2/{{4}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">4. Third-Party and Cloud Computing Cybersecurity</p></a>
         </div>
         </div>
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/ksa_nca_section_2_2/{{5}}/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">5. Industrial Control Systems Cybersecurity</p></a>
+         <a href="/ksa_nca_section_2_2/{{5}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">5. Industrial Control Systems Cybersecurity</p></a>
         </div>
         </div>
 

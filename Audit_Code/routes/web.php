@@ -288,23 +288,23 @@ route::post('cy_sama_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_i
 route::put('cy_sama_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[CY_SAMA::class,'cy_sama_sec_2_2_edit_form']);
 
 //for KSA NCA ECC
-route::get("ksa_nca_subsections/{proj_id}/{user_id}",[KSA_NCA::class,'ksa_nca_subsections'])->name('ksa_nca_subsections');
-route::get("ksa_nca_section_2_2/{title_num}/{proj_id}/{user_id}",[KSA_NCA::class,'ksa_nca_section_2_2'])->name('ksa_nca_section_2_2');
-route::get("ksa_nca_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[KSA_NCA::class,'ksa_nca_sec_2_2_req'])->name('ksa_nca_sec_2_2_req');
-route::get('ksa_nca_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[KSA_NCA::class,'ksa_nca_sec2_2_sub_req_edit'])->name('ksa_nca_sec2_2_sub_req_edit');
-route::post('ksa_nca_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_form']);
-route::put('ksa_nca_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_edit_form']);
+route::get("ksa_nca_sec_2_2_subsections/{proj_id}/{user_id}/{asset_id}",[KSA_NCA::class,'ksa_nca_subsections'])->name('ksa_nca_subsections');
+route::get("ksa_nca_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[KSA_NCA::class,'ksa_nca_section_2_2'])->name('ksa_nca_section_2_2');
+route::get("ksa_nca_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[KSA_NCA::class,'ksa_nca_sec_2_2_req'])->name('ksa_nca_sec_2_2_req');
+route::get('ksa_nca_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'ksa_nca_sec2_2_sub_req_edit'])->name('ksa_nca_sec2_2_sub_req_edit');
+route::post('ksa_nca_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_form']);
+route::put('ksa_nca_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_edit_form']);
 
 
 
 
 //sbp etgrmf
-route::get("sbp_etgrmf_subsections/{proj_id}/{user_id}",[SBP_ETGRMF::class,'sbp_etgrmf_subsections'])->name('sbp_etgrmf_subsections');
-route::get("sbp_etgrmf_section_2_2/{title_num}/{proj_id}/{user_id}",[SBP_ETGRMF::class,'sbp_etgrmf_section_2_2'])->name('sbp_etgrmf_section_2_2');
-route::get("sbp_etgrmf_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_req'])->name('sbp_etgrmf_sec_2_2_req');
-route::get('sbp_etgrmf_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec2_2_sub_req_edit'])->name('sbp_etgrmf_sec2_2_sub_req_edit');
-route::post('sbp_etgrmf_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_form']);
-route::put('sbp_etgrmf_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_edit_form']);
+route::get("sbp_etgrmf_subsections/{proj_id}/{user_id}/{asset_id}",[SBP_ETGRMF::class,'sbp_etgrmf_subsections'])->name('sbp_etgrmf_subsections');
+route::get("sbp_etgrmf_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[SBP_ETGRMF::class,'sbp_etgrmf_section_2_2'])->name('sbp_etgrmf_section_2_2');
+route::get("sbp_etgrmf_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_req'])->name('sbp_etgrmf_sec_2_2_req');
+route::get('sbp_etgrmf_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec2_2_sub_req_edit'])->name('sbp_etgrmf_sec2_2_sub_req_edit');
+route::post('sbp_etgrmf_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_form']);
+route::put('sbp_etgrmf_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_edit_form']);
 
 
 //for merchant
