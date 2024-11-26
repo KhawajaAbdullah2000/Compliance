@@ -285,16 +285,45 @@ class IsoSec2_3_1 extends Controller
         }
 
 
+  
 
 
         // try {
         foreach ($yesNoArray as $key => $value) {
 
-            if ($value == "yes") {
-                //only to this asset component
+    
+
+                 //only to this asset component
+                 $risk_level=((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value;
+                 $risk_integrity=((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value;
+ 
+                 $risk_availability=((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value;
+
+            if(in_array($numberArray[$key],array(8.6,8.13,8.14))){
+                       $risk_level=0;  
+
+            }
+
+            if(in_array($numberArray[$key],array(8.6,8.13,8.14,6.6,8.11,8,12))){
+                $risk_integrity=0;  
+
+     }
+
+     if(in_array($numberArray[$key],array(6.6,8.11,8,12))){
+        $risk_availability=0;  
+
+}
+
+
+
+           
+
+                if ($value == "yes") {
 
                 if (isset($filtered_control_compliance[$key]) && isset($filtered_threat[$key]))
                  {
+                    
+                  
 
 
                     $check=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
@@ -302,6 +331,9 @@ class IsoSec2_3_1 extends Controller
 
 
                     if($check){ //if record already exists
+
+
+
                         DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
                         ->where('control_num', $numberArray[$key])
                         ->update([
@@ -311,9 +343,9 @@ class IsoSec2_3_1 extends Controller
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
-                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
-                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,
+                            'risk_level' =>$risk_level,
+                            'risk_integrity' =>$risk_integrity,
+                            'risk_availability' =>$risk_availability,
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
@@ -326,9 +358,9 @@ class IsoSec2_3_1 extends Controller
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
-                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
-                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,
+                            'risk_level' =>$risk_level,
+                            'risk_integrity' =>$risk_integrity,
+                            'risk_availability' =>$risk_availability,
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
@@ -345,9 +377,9 @@ class IsoSec2_3_1 extends Controller
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
-                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
-                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,
+                           'risk_level' =>$risk_level,
+                            'risk_integrity' =>$risk_integrity,
+                            'risk_availability' =>$risk_availability,
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
@@ -361,9 +393,9 @@ class IsoSec2_3_1 extends Controller
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
-                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
-                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,
+                            'risk_level' =>$risk_level,
+                            'risk_integrity' =>$risk_integrity,
+                            'risk_availability' =>$risk_availability,
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
@@ -467,9 +499,9 @@ class IsoSec2_3_1 extends Controller
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
-                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
-                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,
+                           'risk_level' =>$risk_level,
+                            'risk_integrity' =>$risk_integrity,
+                            'risk_availability' =>$risk_availability,
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
@@ -482,9 +514,9 @@ class IsoSec2_3_1 extends Controller
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
-                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
-                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,
+                           'risk_level' =>$risk_level,
+                            'risk_integrity' =>$risk_integrity,
+                            'risk_availability' =>$risk_availability,
                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
@@ -500,9 +532,10 @@ class IsoSec2_3_1 extends Controller
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
-                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
-                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,                            'last_edited_by' => $user_id,
+                            'risk_level' =>$risk_level,
+                            'risk_integrity' =>$risk_integrity,
+                            'risk_availability' =>$risk_availability,             
+                           'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
 
@@ -514,9 +547,10 @@ class IsoSec2_3_1 extends Controller
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
-                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
-                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,                            'last_edited_by' => $user_id,
+                           'risk_level' =>$risk_level,
+                            'risk_integrity' =>$risk_integrity,
+                            'risk_availability' =>$risk_availability,
+                         'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
 
@@ -544,9 +578,10 @@ class IsoSec2_3_1 extends Controller
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
-                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
-                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,                            'last_edited_by' => $user_id,
+                            'risk_level' =>$risk_level,
+                            'risk_integrity' =>$risk_integrity,
+                            'risk_availability' =>$risk_availability,
+                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
 
@@ -557,9 +592,10 @@ class IsoSec2_3_1 extends Controller
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
-                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
-                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,                            'last_edited_by' => $user_id,
+                            'risk_level' =>$risk_level,
+                            'risk_integrity' =>$risk_integrity,
+                            'risk_availability' =>$risk_availability,
+                            'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
 
@@ -573,9 +609,10 @@ class IsoSec2_3_1 extends Controller
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
-                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
-                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,                            'last_edited_by' => $user_id,
+                           'risk_level' =>$risk_level,
+                            'risk_integrity' =>$risk_integrity,
+                            'risk_availability' =>$risk_availability,
+                            'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
 
@@ -587,9 +624,10 @@ class IsoSec2_3_1 extends Controller
                             'control_compliance' => $filtered_control_compliance[$key],
                             'vulnerability' => 100-$filtered_control_compliance[$key],
                             'threat' => $filtered_threat[$key],
-                            'risk_level' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value,
-                            'risk_integrity' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value,
-                            'risk_availability' =>((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value,                            'last_edited_by' => $user_id,
+                            'risk_level' =>$risk_level,
+                            'risk_integrity' =>$risk_integrity,
+                            'risk_availability' =>$risk_availability,
+                             'last_edited_by' => $user_id,
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ]);
 
