@@ -751,6 +751,8 @@ class ProjectController extends Controller
             ['x' => 3, 'y' => 3, 'r' => $results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
         ];
 
+        //dd( $results ); 
+
 
             return view('dashboard.risk_calculation', [
                 'project' => $project,
