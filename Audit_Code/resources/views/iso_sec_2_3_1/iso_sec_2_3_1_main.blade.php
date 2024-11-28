@@ -113,9 +113,10 @@ $permissions=json_decode($project_permissions);
 
 </div>
 
-<div class="col-md-6">
+<div class="col-md-6 mx-2">
 
 <div class="card">
+    <h3 class="fw-bold mt-2 mx-2">Filter by Control Group</h3>
  
     <div class="card-body">
       <div class="row">
@@ -228,7 +229,7 @@ $permissions=json_decode($project_permissions);
                         @else
                         <td>
                        <p data-bs-toggle="tooltip" title="{!! nl2br($col) !!}">
-                                 <i class="fas fa-eye fa-lg text-success"></i> </p>
+                                 <i class="fas fa-comment fa-lg text-success"></i> </p>
                           </td>
 
                         @endif
@@ -525,7 +526,7 @@ $permissions=json_decode($project_permissions);
                  @else
                  <td>
                 <p data-bs-toggle="tooltip" title="{!! nl2br($col) !!}">
-                          <i class="fas fa-eye fa-lg text-success"></i> </p>
+                          <i class="fas fa-comment fa-lg text-success"></i> </p>
                    </td>
 
                  @endif
@@ -812,7 +813,7 @@ $permissions=json_decode($project_permissions);
               @else
               <td>
              <p data-bs-toggle="tooltip" title="{!! nl2br($col) !!}">
-                       <i class="fas fa-eye fa-lg text-success"></i> </p>
+                       <i class="fas fa-comment fa-lg text-success"></i> </p>
                 </td>
 
               @endif
@@ -1088,7 +1089,7 @@ $permissions=json_decode($project_permissions);
              @else
              <td>
             <p data-bs-toggle="tooltip" title="{!! nl2br($col) !!}">
-                      <i class="fas fa-eye fa-lg text-success"></i> </p>
+                      <i class="fas fa-comment fa-lg text-success"></i> </p>
                </td>
 
              @endif
@@ -1555,7 +1556,11 @@ console.log("rows to toggle: "+ rowsToToggle)
     });
 </script> --}}
 
-
+<script>
+$(function () {
+  $('[data-bs-toggle="tooltip"]').tooltip()
+})
+    </script>
 
 <script>
     function validateInput(inputElement) {
