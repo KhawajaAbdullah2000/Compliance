@@ -21,6 +21,7 @@
                         <th>Project Status</th>
                         <th>Project Permissions</th>
                         <th>Edit Project</th>
+                        {{-- <th>Risk & Compliance Heatmap</th> --}}
                         <th>Project Visuals</th>
                         <th>Risk Visuals</th>
                         <th>Risk Distribution</th>
@@ -60,6 +61,14 @@
                                 <i class="fas fa-edit fa-lg text-success"></i>
                             </a>
                         </td>
+
+                             <!-- Risk and Compliance Heatmap -->
+                             {{-- <td>
+                                <a href="/risk_compliance_heatmap/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
+                                   data-toggle="tooltip" title="Risk and Compliance Heatmap">
+                                    <i class="fas fa-bars fa-lg text-warning"></i>
+                                </a>
+                            </td> --}}
 
                         <!-- Project Visuals -->
                         <td>

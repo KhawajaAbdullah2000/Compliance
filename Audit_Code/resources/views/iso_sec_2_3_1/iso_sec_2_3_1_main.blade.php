@@ -180,6 +180,7 @@ $permissions=json_decode($project_permissions);
     @endif
     </table>
 
+ 
 
     <div class="mt-4">
         <table class="table table-responsive table-primary table-striped">
@@ -213,15 +214,24 @@ $permissions=json_decode($project_permissions);
 
               </tr>
             </thead>
+            
             <tbody>
 
         @for ($i = 0; $i < count($sec2_4_a5_rows); $i++)
-        <tr style="vertical-align: middle;text-align:initial" class="control-row-5">
+        <tr style="vertical-align: middle;text-align:center" class="control-row-5">
                     @foreach ($sec2_4_a5_rows[$i] as $col)
                     @if(isset($col))
+                    @if($loop->index != 2)
                        <td>
                           <p>{!! nl2br($col) !!}</p>
                         </td>
+                        @else
+                        <td>
+                       <p data-bs-toggle="tooltip" title="{!! nl2br($col) !!}">
+                                 <i class="fas fa-eye fa-lg text-success"></i> </p>
+                          </td>
+
+                        @endif
 
                     @endif
 
@@ -505,13 +515,20 @@ $permissions=json_decode($project_permissions);
     {{-- sec2_4_a6rows --}}
 
     @for ($i = 0; $i < count($sec2_4_a6_rows); $i++)
-    <tr style="vertical-align: middle;text-align:initial" class="control-row-6">
+    <tr style="vertical-align: middle;text-align:center" class="control-row-6">
                 @foreach ($sec2_4_a6_rows[$i] as $col)
                 @if(isset($col))
-                   <td>
-                      <p>{!! nl2br($col) !!}</p>
-                    </td>
+                @if($loop->index != 2)
+                <td>
+                   <p>{!! nl2br($col) !!}</p>
+                 </td>
+                 @else
+                 <td>
+                <p data-bs-toggle="tooltip" title="{!! nl2br($col) !!}">
+                          <i class="fas fa-eye fa-lg text-success"></i> </p>
+                   </td>
 
+                 @endif
                 @endif
 
                 @endforeach
@@ -785,13 +802,20 @@ $permissions=json_decode($project_permissions);
  {{-- sec2_4_a7rows --}}
 
  @for ($i = 0; $i < count($sec2_4_a7_rows); $i++)
- <tr style="vertical-align: middle;text-align:initial" class="control-row-7">
+ <tr style="vertical-align: middle;text-align:center" class="control-row-7">
              @foreach ($sec2_4_a7_rows[$i] as $col)
              @if(isset($col))
-                <td>
-                   <p>{!! nl2br($col) !!}</p>
-                 </td>
+             @if($loop->index != 2)
+             <td>
+                <p>{!! nl2br($col) !!}</p>
+              </td>
+              @else
+              <td>
+             <p data-bs-toggle="tooltip" title="{!! nl2br($col) !!}">
+                       <i class="fas fa-eye fa-lg text-success"></i> </p>
+                </td>
 
+              @endif
              @endif
 
              @endforeach
@@ -1054,12 +1078,20 @@ $permissions=json_decode($project_permissions);
 {{-- sec2_4_a8rows --}}
 
 @for ($i = 0; $i < count($sec2_4_a8_rows); $i++)
-<tr style="vertical-align: middle;text-align:initial" class="control-row-8">
+<tr style="vertical-align: middle;text-align:center" class="control-row-8">
             @foreach ($sec2_4_a8_rows[$i] as $col)
             @if(isset($col))
-               <td>
-                  <p>{!! nl2br($col) !!}</p>
-                </td>
+            @if($loop->index != 2)
+            <td>
+               <p>{!! nl2br($col) !!}</p>
+             </td>
+             @else
+             <td>
+            <p data-bs-toggle="tooltip" title="{!! nl2br($col) !!}">
+                      <i class="fas fa-eye fa-lg text-success"></i> </p>
+               </td>
+
+             @endif
 
             @endif
 
@@ -1320,7 +1352,9 @@ $permissions=json_decode($project_permissions);
 
 
         </tr>
+
 @endfor
+
 
 
 
@@ -1338,7 +1372,8 @@ $permissions=json_decode($project_permissions);
 
     </div>
 
-
+   
+   
 
         </form>
 

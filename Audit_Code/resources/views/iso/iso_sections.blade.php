@@ -47,7 +47,7 @@
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/iso_section2_2_from_main/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg my_bg_color text-white w-100"><p class="fw-bold" style="text-align:left;">Undertake information security risk assessment on the Services and/or Assets</p></a>
+         <a href="/iso_section2_2_from_main/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg my_bg_color text-white w-100"><p class="fw-bold" style="text-align:left;">Upload or enter evidence against the mandatory requirements of ISO 27001:2022</p></a>
         </div>
         </div>
 

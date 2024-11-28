@@ -124,6 +124,7 @@ class IsoSec2_3_1 extends Controller
                     $sec2_4_a5_data = Excel::toArray([], $filepath); //with header
                     $sec2_4_a5_rows = array_slice($sec2_4_a5_data[0], 1); //without header(first row)
 
+                   
                     $filepath2 = public_path('ISO_SOA_A6.xlsx');
                     $sec2_4_a6_data = Excel::toArray([], $filepath2); //with header
                     $sec2_4_a6_rows = array_slice($sec2_4_a6_data[0], 1); //without header(first row)
@@ -158,6 +159,7 @@ class IsoSec2_3_1 extends Controller
 
                     $global_asset_value = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->first();
 
+                 
 
                     return view('iso_sec_2_3_1.iso_sec_2_3_1_main', [
 

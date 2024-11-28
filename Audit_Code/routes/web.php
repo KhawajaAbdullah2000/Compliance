@@ -136,7 +136,7 @@ route::get("/dashboard/{proj_id}/{user_id}",[ProjectController::class,'dashBoard
 route::get('delete_my_project/{proj_id}/{user_id}',[ProjectController::class,'delete_my_project']);
 //perosnal dashooard on home
 route::get("/my_personal_dashboard/{user_id}",[ProjectController::class,'my_personal_dashboard'])->name('my_personal_dashboard');
-
+Route::get('risk_compliance_heatmap/{proj_id}/{user_id}',[ProjectController::class,'risk_compliance_heatmap'])->name('risk_compliance_heatmap');
 //ai wizard
 route::get("ai_wizard/{proj_id}/{user_id}",[ProjectController::class,'ai_wizard'])->name('ai_wizard');
 route::get('dashboard_services_and_components/{proj_id}/{user_id}',[ProjectController::class,'dashboard_services_and_components']);

@@ -191,7 +191,25 @@ $sum2=0;
 
 
 
-<h4 class="mt-4 text-center fw-bold">Risk Distribution Results</h4>
+<h4 class="mt-4 text-center fw-bold">Risk Distribution Results (
+
+    @if(request('risk_type') == 'all' || request('risk_type') == null)
+    <span>Data Confidentiality </span>
+@endif
+
+    @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
+    <span>Data Confidentiality </span>
+@endif
+@if(request('risk_type') == 'all' || request('risk_type') == 'risk_integrity')
+    <span>Data Integrity</span>
+@endif
+@if(request('risk_type') == 'all' || request('risk_type') == 'risk_availability')
+    <span>Data Availability</span>
+@endif
+    
+    
+    
+    )</h4>
 
     @if($results->isEmpty())
         <p>No data available for the selected filters.</p>
@@ -210,6 +228,80 @@ $sum2=0;
                         <p class="card-text"><strong>Service Name:</strong> {{ $componentResults->first()->s_name }}</p>
                         <p class="card-text"><strong>Group Name:</strong> {{ $componentResults->first()->g_name }}</p>
                         <p class="card-text"><strong>Asset Name:</strong> {{ $componentResults->first()->name }}</p>
+                        <p>Impact level due to the loss of
+                            @if(request('risk_type') == 'all' || request('risk_type') == null)
+                            <span>  Data Confidentiality:
+
+                    
+                            @if($componentResults->first()->Confidentiality_Risk==1)
+                            Low
+                            @endif
+                            @if($componentResults->first()->Confidentiality_Risk==5)
+                            Medium
+                            @endif
+                            @if($componentResults->first()->Confidentiality_Risk==10)
+                            High
+                            @endif
+
+                        </span>
+                   
+                    @endif
+
+                        @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
+                        <span>  Data Confidentiality 
+                          
+                        
+                            @if($componentResults->first()->Confidentiality_Risk==1)
+                            Low
+                            @endif
+                            @if($componentResults->first()->Confidentiality_Risk==5)
+                            Medium
+                            @endif
+                            @if($componentResults->first()->Confidentiality_Risk==10)
+                            High
+                            @endif
+                        </span>
+
+                        @endif
+                        @if(request('risk_type') == 'risk_integrity')
+                        <span>  Data Integrity: 
+                            
+                        
+                            @if($componentResults->first()->Integrity_Risk==1)
+                            Low
+                            @endif
+                            @if($componentResults->first()->Integrity_Risk==5)
+                            Medium
+                            @endif
+                            @if($componentResults->first()->Integrity_Risk==10)
+                            High
+                            @endif
+
+
+                        </span>
+
+                        @endif
+                        @if( request('risk_type') == 'risk_availability')
+                        <span>  Data Availability: 
+                            
+                        
+                            @if($componentResults->first()->Availability_Risk==1)
+                            Low
+                            @endif
+                            @if($componentResults->first()->Availability_Risk==5)
+                            Medium
+                            @endif
+                            @if($componentResults->first()->Availability_Risk==10)
+                            High
+                            @endif
+
+
+                        </span>
+
+                        @endif
+                            
+                        </p>
+                
                     </div>
                 </div>
 
@@ -225,19 +317,19 @@ $sum2=0;
                             <!-- Conditionally display risk columns -->
 
                             @if(request('risk_type') == 'all' || request('risk_type') == null)
-                            <th>Impact Level due to loss of Data Confidentiality</th>
+                            <th>Confidentiality Risk</th>
                             {{-- <th>Integrity Risk</th>
                             <th>Availability Risk</th> --}}
                         @endif
 
                             @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
-                                <th>Impact Level due to loss of Data Confidentiality </th>
+                                <th> Confidentiality Risk </th>
                             @endif
-                            @if(request('risk_type') == 'all' || request('risk_type') == 'risk_integrity')
-                                <th>Impact Level due to loss of Data Integrity</th>
+                            @if(request('risk_type') == 'risk_integrity')
+                                <th> Integrity Risk</th>
                             @endif
-                            @if(request('risk_type') == 'all' || request('risk_type') == 'risk_availability')
-                                <th>Impact Level due to loss of Data Availability</th>
+                            @if(request('risk_type') == 'risk_availability')
+                                <th>Availability Risk</th>
                             @endif
                         </tr>
                     </thead>
@@ -306,6 +398,81 @@ $sum2=0;
                     <h5 class="card-title"><strong>Service Name:</strong> {{ $results->first()->s_name }}</h5>
                     <h5 class="card-title"><strong>Component Name:</strong> {{ $results->first()->c_name }}</h5>
 
+                    <p>Impact level due to the loss of
+                        @if(request('risk_type') == 'all' || request('risk_type') == null)
+                        <span>  Data Confidentiality:
+
+                
+                        @if($results->first()->first()->Confidentiality_Risk==1)
+                        Low
+                        @endif
+                        @if($results->first()->first()->Confidentiality_Risk==5)
+                        Medium
+                        @endif
+                        @if($results->first()->Confidentiality_Risk==10)
+                        High
+                        @endif
+
+                    </span>
+               
+                @endif
+
+                    @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
+                    <span>  Data Confidentiality 
+                      
+                    
+                        @if($results->first()->Confidentiality_Risk==1)
+                        Low
+                        @endif
+                        @if($results->first()->Confidentiality_Risk==5)
+                        Medium
+                        @endif
+                        @if($results->first()->Confidentiality_Risk==10)
+                        High
+                        @endif
+                    </span>
+
+                    @endif
+                    @if(request('risk_type') == 'risk_integrity')
+                    <span>  Data Integrity: 
+                        
+                    
+                        @if($results->first()->Integrity_Risk==1)
+                        Low
+                        @endif
+                        @if($results->first()->Integrity_Risk==5)
+                        Medium
+                        @endif
+                        @if($results->first()->Integrity_Risk==10)
+                        High
+                        @endif
+
+
+                    </span>
+
+                    @endif
+                    @if( request('risk_type') == 'risk_availability')
+                    <span>  Data Availability: 
+                        
+                    
+                        @if($results->first()->Availability_Risk==1)
+                        Low
+                        @endif
+                        @if($results->first()->Availability_Risk==5)
+                        Medium
+                        @endif
+                        @if($results->first()->Availability_Risk==10)
+                        High
+                        @endif
+
+
+                    </span>
+
+                    @endif
+                        
+                    </p>
+            
+
                 </div>
             </div>
 
@@ -320,18 +487,18 @@ $sum2=0;
                         <!-- Conditionally display risk columns -->
 
                         @if(request('risk_type') == 'all' || request('risk_type') == null)
-                        <th> Impact Level due to loss of Data Confidentiality</th>
+                        <th>  Confidentiality Risk</th>
                    
                     @endif
 
                         @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
-                            <th>Impact Level due to loss of Data Confidentiality</th>
+                            <th> Confidentiality Risk</th>
                         @endif
-                        @if(request('risk_type') == 'all' || request('risk_type') == 'risk_integrity')
-                            <th>Impact Level due to loss of Data Integrity</th>
+                        @if(request('risk_type') == 'risk_integrity')
+                            <th> Integrity Risk</th>
                         @endif
-                        @if(request('risk_type') == 'all' || request('risk_type') == 'risk_availability')
-                            <th>Impact Level due to loss of Data Availability</th>
+                        @if( request('risk_type') == 'risk_availability')
+                            <th>Availability Risk</th>
                         @endif
                     </tr>
                 </thead>

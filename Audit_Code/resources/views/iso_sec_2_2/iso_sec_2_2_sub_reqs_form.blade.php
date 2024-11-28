@@ -143,10 +143,10 @@ $permissions = json_decode($project_permissions);
                         @endif
                     </div>
 
-                    <h3 class="fw-bold">Assign Action</h3>
+                    <h3 class="fw-bold">Action Plan</h3>
 
                     <div class="form-group mb-4">
-                        <label for=""> Treatment Action</label>
+                        <label for=""> Action</label>
                         <textarea name="treatment_action" cols="70" rows="5" class="form-control">{{old('treatment_action',$result->treatment_action)}}</textarea>
         
                             @if($errors->has('treatment_action'))
@@ -156,7 +156,7 @@ $permissions = json_decode($project_permissions);
         
         
                       <div class="form-group mb-4">
-                        <label for=""> Treatment Target Date</label>
+                        <label for="">Target Date</label>
                         <input type="date" name="treatment_target_date" value="{{old('treatment_target_date',$result->treatment_target_date)}}">
                             @if($errors->has('treatment_target_date'))
                             <div class="text-danger">{{ $errors->first('treatment_target_date') }}</div>
@@ -164,7 +164,7 @@ $permissions = json_decode($project_permissions);
                       </div>
         
                        <div class="form-group mb-4">
-                        <label for=""> Treatment Completion Date</label>
+                        <label for=""> Completion Date</label>
                         <input type="date" name="treatment_comp_date" value="{{old('treatment_comp_date',$result->treatment_comp_date)}}">
                             @if($errors->has('treatment_comp_date'))
                             <div class="text-danger">{{ $errors->first('treatment_comp_date') }}</div>
@@ -183,7 +183,7 @@ $permissions = json_decode($project_permissions);
         
         
                        <div class="form-group mb-4">
-                        <label for=""> Responsbility for Treatment</label>
+                        <label for=""> Responsbility of:</label>
                         <select class="boxstyling form-select" name="responsibility_for_treatment">
                             <option value="">Select User</option>
                              @foreach ($users as $user)
@@ -247,10 +247,10 @@ $permissions = json_decode($project_permissions);
                             <input type="file" name="attachment" class="form-control">
                         </div>
 
-                        <h3 class="fw-bold">Assign Action</h3>
+                        <h3 class="fw-bold">Action Plan</h3>
 
                         <div class="form-group mb-4">
-                            <label for=""> Treatment Action</label>
+                            <label for="">Action</label>
                             <textarea name="treatment_action" cols="70" rows="5" class="form-control">{{old('treatment_action')}}</textarea>
             
                                 @if($errors->has('treatment_action'))
@@ -260,7 +260,7 @@ $permissions = json_decode($project_permissions);
             
             
                           <div class="form-group mb-4">
-                            <label for=""> Treatment Target Date</label>
+                            <label for=""> Target Date</label>
                             <input type="date" name="treatment_target_date" value="{{old('treatment_target_date')}}">
                                 @if($errors->has('treatment_target_date'))
                                 <div class="text-danger">{{ $errors->first('treatment_target_date') }}</div>
@@ -268,7 +268,7 @@ $permissions = json_decode($project_permissions);
                           </div>
             
                            <div class="form-group mb-4">
-                            <label for=""> Treatment Completion Date</label>
+                            <label for="">Completion Date</label>
                             <input type="date" name="treatment_comp_date" value="{{old('treatment_comp_date')}}">
                                 @if($errors->has('treatment_comp_date'))
                                 <div class="text-danger">{{ $errors->first('treatment_comp_date') }}</div>
@@ -287,7 +287,7 @@ $permissions = json_decode($project_permissions);
             
             
                            <div class="form-group mb-4">
-                            <label for=""> Responsbility for Treatment</label>
+                            <label for=""> Responsbility of: </label>
                             <select class="boxstyling form-select" name="responsibility_for_treatment">
                                 <option value="">Select User</option>
                                  @foreach ($users as $user)
