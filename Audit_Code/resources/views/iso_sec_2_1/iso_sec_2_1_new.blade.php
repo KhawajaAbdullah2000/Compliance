@@ -80,14 +80,26 @@ $permissions = json_decode($project_permissions);
                             @endif
                         </div>
 
-                        <!-- Asset Component Name -->
-                        <div class="mb-4">
-                            <label for="c_name" class="form-label fw-semibold">Asset Component Name</label>
-                            <input type="text" name="c_name" id="c_name" class="form-control rounded-pill" value="{{old('c_name')}}">
-                            @if($errors->has('c_name'))
-                            <div class="text-danger small mt-2">{{ $errors->first('c_name') }}</div>
-                            @endif
+        
+                    <div class="mb-4">
+                        <label for="c_name" class="form-label fw-semibold">Asset Component Names</label>
+                        <div id="component-fields">
+                            <div class="input-group mb-3">
+                                <input type="text" name="c_name[]" class="form-control rounded-pill" placeholder="Enter Component Name">
+                                <button type="button" class="btn btn-success add-component">+</button>
+                            </div>
                         </div>
+                        @if($errors->has('c_name'))
+                        <div class="text-danger small mt-2">{{ $errors->first('c_name') }}</div>
+                        @endif
+                    
+                        <!-- Display validation error for individual c_name entries -->
+                        @foreach ($errors->get('c_name.*') as $errorMessages)
+                            @foreach ($errorMessages as $errorMessage)
+                                <div class="text-danger small mt-2">{{ $errorMessage }}</div>
+                            @endforeach
+                        @endforeach
+                    </div>
 
                         <!-- Asset Owner Department -->
                         <div class="mb-4">
@@ -126,5 +138,32 @@ $permissions = json_decode($project_permissions);
         </div>
     </div>
 </div>
+
+@section('scripts')
+<script>
+    $(document).ready(function () {
+        // Add a new component field
+        $(document).on('click', '.add-component', function () {
+            let newField = `
+                <div class="input-group mb-3">
+                    <input type="text" name="c_name[]" class="form-control rounded-pill" placeholder="Enter Component Name">
+                    <button type="button" class="btn btn-success add-component">+</button>
+                    <button type="button" class="btn btn-danger remove-component">-</button>
+                </div>`;
+            $('#component-fields').append(newField);
+
+            // Ensure the first field only has the '+' button
+            $('#component-fields .input-group:first .remove-component').remove();
+        });
+
+        // Remove a component field
+        $(document).on('click', '.remove-component', function () {
+            $(this).closest('.input-group').remove();
+        });
+    });
+</script>
+
+
+@endsection
 
 @endsection

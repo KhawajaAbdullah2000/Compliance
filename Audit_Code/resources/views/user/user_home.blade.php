@@ -46,8 +46,12 @@
                     @can('Project Creator')
                     <div class="d-grid gap-3">
                         <a href="/create_project/{{ auth()->user()->id }}" class="btn btn-outline-light btn-lg">Create New Project</a>
-                        <a href="/my_personal_dashboard/{{ auth()->user()->id }}" class="btn btn-outline-info btn-lg">Visual and AI Dashboard</a>
+                        <a href="/assigned_projects/{{ auth()->user()->id }}" class="btn btn-outline-info btn-lg">Go to Dashboard</a>
+
+                        {{-- <a href="/my_personal_dashboard/{{ auth()->user()->id }}" class="btn btn-outline-info btn-lg">Visual and AI Dashboard</a> --}}
                     </div>
+
+                    
                     @endcan
 
                     @endrole

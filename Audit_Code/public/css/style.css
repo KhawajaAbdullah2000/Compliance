@@ -17,6 +17,10 @@ body {
     transition: color 0.3s ease;
 }
 
+.hidden-row{
+    display:none;
+}
+
 .navbar {
     padding: 15px;
     border: none;

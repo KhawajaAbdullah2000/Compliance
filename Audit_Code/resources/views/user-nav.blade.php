@@ -45,7 +45,7 @@
                 </li>
                 @endcan
                 <li class="nav-item">
-                    <a class="nav-link" href="/assigned_projects/{{ auth()->user()->id }}">Assigned Projects</a>
+                    <a class="nav-link" href="/assigned_projects/{{ auth()->user()->id }}">Go to Dashboard</a>
                 </li>
                 @endrole
             </ul>

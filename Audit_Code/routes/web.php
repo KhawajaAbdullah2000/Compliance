@@ -136,7 +136,7 @@ route::get("/dashboard/{proj_id}/{user_id}",[ProjectController::class,'dashBoard
 route::get('delete_my_project/{proj_id}/{user_id}',[ProjectController::class,'delete_my_project']);
 //perosnal dashooard on home
 route::get("/my_personal_dashboard/{user_id}",[ProjectController::class,'my_personal_dashboard'])->name('my_personal_dashboard');
-
+Route::get('risk_compliance_heatmap/{proj_id}/{user_id}',[ProjectController::class,'risk_compliance_heatmap'])->name('risk_compliance_heatmap');
 //ai wizard
 route::get("ai_wizard/{proj_id}/{user_id}",[ProjectController::class,'ai_wizard'])->name('ai_wizard');
 route::get('dashboard_services_and_components/{proj_id}/{user_id}',[ProjectController::class,'dashboard_services_and_components']);
@@ -214,6 +214,7 @@ route::post('upload_assets/{proj_id}/{user_id}',[IsoSec2_1::class,'upload_assets
 route::get('iso_sec_2_3/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3'])->name('iso_sec_2_3');
 
 //ISosec2.3.1
+
 route::get('iso_sec_2_3_1_risk_selection/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_1_risk_selection'])->name('iso_sec_2_3_1_risk_selection');
 route::put('iso_sec2_3_1_risk_selection/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'Risk_Selection_form_Submit']);
 route::get('iso_sec_2_3_1/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_1'])->name('iso_sec_2_3_1');
@@ -251,67 +252,68 @@ route::put('iso_sec_2_3_edit_table_submit/{proj_id}/{user_id}',[IsoSec2_3::class
 
 //ISO sec2.2
 
-
-route::get('iso_sec_2_2_subsections/{proj_id}/{user_id}/{user_req}',[IsoSec2_2::class,'iso_sec_2_2_subsections'])->name('iso_sec_2_2_subsections');
-route::get('iso_section2_2/{title_num}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_section2_2'])->name('iso_sec_2_2_main');
-route::get('iso_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec_2_2_req'])->name('iso_sec_2_2_req');
-route::get('iso_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec2_2_sub_req_edit'])->name('iso_sec2_2_sub_req_edit');
-route::post('iso_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec_2_2_form']);
-route::put('iso_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec_2_2_edit_form']);
+route::get('iso_section2_2_from_main/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_section2_2_from_main']);
+route::get('iso_sec_2_2_evidence/{asset_id}/{proj_id}/{user_id}',[IsoSec2_2::class,'iso_sec_2_2_evidence'])->name('iso_sec_2_2_evidence');
+route::get('iso_sec_2_2_subsections/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_sec_2_2_subsections'])->name('iso_sec_2_2_subsections');
+route::get('iso_section2_2/{title_num}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_section2_2'])->name('iso_sec_2_2_main');
+route::get('iso_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_sec_2_2_req'])->name('iso_sec_2_2_req');
+route::get('iso_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_sec2_2_sub_req_edit'])->name('iso_sec2_2_sub_req_edit');
+route::post('iso_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_sec_2_2_form']);
+route::put('iso_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_sec_2_2_edit_form']);
 
 
 //PCI single sheet
-route::get("pci_single_sheet_subsections/{proj_id}/{user_id}",[PCI_Single_Sheet::class,'pci_single_sheet_subsections'])->name('pci_single_sheet_subsections');
-route::get("pci_section_2_2/{title_num}/{proj_id}/{user_id}",[PCI_Single_Sheet::class,'pci_section_2_2'])->name('pci_section_2_2_main');
-route::get("pci_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[PCI_Single_Sheet::class,'pci_sec_2_2_req'])->name('pci_sec_2_2_req');
-route::get('pci_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Single_Sheet::class,'pci_sec2_2_sub_req_edit'])->name('pci_sec2_2_sub_req_edit');
-route::post('pci_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Single_Sheet::class,'pci_sec_2_2_form']);
-route::put('pci_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Single_Sheet::class,'pci_sec_2_2_edit_form']);
+route::get("pci_single_sheet_subsections/{proj_id}/{user_id}/{asset_id}",[PCI_Single_Sheet::class,'pci_single_sheet_subsections'])->name('pci_single_sheet_subsections');
+route::get("pci_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[PCI_Single_Sheet::class,'pci_section_2_2'])->name('pci_section_2_2_main');
+route::get("pci_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[PCI_Single_Sheet::class,'pci_sec_2_2_req'])->name('pci_sec_2_2_req');
+route::get('pci_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Single_Sheet::class,'pci_sec2_2_sub_req_edit'])->name('pci_sec2_2_sub_req_edit');
+route::post('pci_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Single_Sheet::class,'pci_sec_2_2_form']);
+route::put('pci_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Single_Sheet::class,'pci_sec_2_2_edit_form']);
 
 
 //PCI Multi sheet
-route::get("pci_multi_sheet_subsections/{proj_id}/{user_id}",[PCI_Multi_Sheet::class,'pci_multi_sheet_subsections'])->name('pci_multi_sheet_subsections');
-route::get("pci_multi_section_2_2/{title_num}/{proj_id}/{user_id}",[PCI_Multi_Sheet::class,'pci_multi_section_2_2'])->name('pci_multi_section_2_2_main');
-route::get("pci_multi_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_req'])->name('pci_multi_sec_2_2_req');
-route::get('pci_multi_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Multi_Sheet::class,'pci_multi_sec2_2_sub_req_edit'])->name('pci_multi_sec2_2_sub_req_edit');
-route::post('pci_multi_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_form']);
-route::put('pci_multi_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_edit_form']);
+route::get("pci_multi_sheet_subsections/{proj_id}/{user_id}/{asset_id}",[PCI_Multi_Sheet::class,'pci_multi_sheet_subsections'])->name('pci_multi_sheet_subsections');
+route::get("pci_multi_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[PCI_Multi_Sheet::class,'pci_multi_section_2_2'])->name('pci_multi_section_2_2_main');
+route::get("pci_multi_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_req'])->name('pci_multi_sec_2_2_req');
+route::get('pci_multi_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Multi_Sheet::class,'pci_multi_sec2_2_sub_req_edit'])->name('pci_multi_sec2_2_sub_req_edit');
+route::post('pci_multi_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_form']);
+route::put('pci_multi_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_edit_form']);
 
 //CY SAMA
-route::get("cy_sama_subsections/{proj_id}/{user_id}",[CY_SAMA::class,'cy_sama_subsections'])->name('cy_sama_subsections');
-route::get("cy_sama_section_2_2/{title_num}/{proj_id}/{user_id}",[CY_SAMA::class,'cy_sama_section_2_2'])->name('cy_sama_section_2_2');
-route::get("cy_sama_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[CY_SAMA::class,'cy_sama_sec_2_2_req'])->name('cy_sama_sec_2_2_req');
-route::get('cy_sama_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec2_2_sub_req_edit'])->name('cy_sama_sec2_2_sub_req_edit');
-route::post('cy_sama_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec_2_2_form']);
-route::put('cy_sama_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[CY_SAMA::class,'cy_sama_sec_2_2_edit_form']);
+route::get("cy_sama_subsections/{proj_id}/{user_id}/{asset_id}",[CY_SAMA::class,'cy_sama_subsections'])->name('cy_sama_subsections');
+route::get("cy_sama_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[CY_SAMA::class,'cy_sama_section_2_2'])->name('cy_sama_section_2_2');
+route::get("cy_sama_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[CY_SAMA::class,'cy_sama_sec_2_2_req'])->name('cy_sama_sec_2_2_req');
+route::get('cy_sama_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[CY_SAMA::class,'cy_sama_sec2_2_sub_req_edit'])->name('cy_sama_sec2_2_sub_req_edit');
+route::post('cy_sama_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[CY_SAMA::class,'cy_sama_sec_2_2_form']);
+route::put('cy_sama_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[CY_SAMA::class,'cy_sama_sec_2_2_edit_form']);
 
 //for KSA NCA ECC
-route::get("ksa_nca_subsections/{proj_id}/{user_id}",[KSA_NCA::class,'ksa_nca_subsections'])->name('ksa_nca_subsections');
-route::get("ksa_nca_section_2_2/{title_num}/{proj_id}/{user_id}",[KSA_NCA::class,'ksa_nca_section_2_2'])->name('ksa_nca_section_2_2');
-route::get("ksa_nca_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[KSA_NCA::class,'ksa_nca_sec_2_2_req'])->name('ksa_nca_sec_2_2_req');
-route::get('ksa_nca_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[KSA_NCA::class,'ksa_nca_sec2_2_sub_req_edit'])->name('ksa_nca_sec2_2_sub_req_edit');
-route::post('ksa_nca_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_form']);
-route::put('ksa_nca_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_edit_form']);
+route::get("ksa_nca_sec_2_2_subsections/{proj_id}/{user_id}/{asset_id}",[KSA_NCA::class,'ksa_nca_subsections'])->name('ksa_nca_subsections');
+route::get("ksa_nca_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[KSA_NCA::class,'ksa_nca_section_2_2'])->name('ksa_nca_section_2_2');
+route::get("ksa_nca_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[KSA_NCA::class,'ksa_nca_sec_2_2_req'])->name('ksa_nca_sec_2_2_req');
+route::get('ksa_nca_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'ksa_nca_sec2_2_sub_req_edit'])->name('ksa_nca_sec2_2_sub_req_edit');
+route::post('ksa_nca_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_form']);
+route::put('ksa_nca_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_edit_form']);
 
 
 
 
 //sbp etgrmf
-route::get("sbp_etgrmf_subsections/{proj_id}/{user_id}",[SBP_ETGRMF::class,'sbp_etgrmf_subsections'])->name('sbp_etgrmf_subsections');
-route::get("sbp_etgrmf_section_2_2/{title_num}/{proj_id}/{user_id}",[SBP_ETGRMF::class,'sbp_etgrmf_section_2_2'])->name('sbp_etgrmf_section_2_2');
-route::get("sbp_etgrmf_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_req'])->name('sbp_etgrmf_sec_2_2_req');
-route::get('sbp_etgrmf_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec2_2_sub_req_edit'])->name('sbp_etgrmf_sec2_2_sub_req_edit');
-route::post('sbp_etgrmf_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_form']);
-route::put('sbp_etgrmf_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_edit_form']);
+route::get("sbp_etgrmf_subsections/{proj_id}/{user_id}/{asset_id}",[SBP_ETGRMF::class,'sbp_etgrmf_subsections'])->name('sbp_etgrmf_subsections');
+route::get("sbp_etgrmf_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[SBP_ETGRMF::class,'sbp_etgrmf_section_2_2'])->name('sbp_etgrmf_section_2_2');
+route::get("sbp_etgrmf_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_req'])->name('sbp_etgrmf_sec_2_2_req');
+route::get('sbp_etgrmf_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec2_2_sub_req_edit'])->name('sbp_etgrmf_sec2_2_sub_req_edit');
+route::post('sbp_etgrmf_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_form']);
+route::put('sbp_etgrmf_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_edit_form']);
 
 
 //for merchant
-route::get("pci_merchant_sheet_subsections/{proj_id}/{user_id}",[PCI_Merchant_Sheet::class,'pci_merchant_subsections'])->name('pci_merchant_sheet_subsections');
-route::get("pci_merchant_section_2_2/{title_num}/{proj_id}/{user_id}",[PCI_Merchant_Sheet::class,'pci_merchant_section_2_2'])->name('pci_merchant_section_2_2_main');
-route::get("pci_merchant_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}",[PCI_Merchant_Sheet::class,'pci_merchant_sec_2_2_req'])->name('pci_merchant_sec_2_2_req');
-route::get('pci_merchant_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Merchant_Sheet::class,'pci_merchant_sec2_2_sub_req_edit'])->name('pci_merchant_sec2_2_sub_req_edit');
-route::post('pci_merchant_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Merchant_Sheet::class,'pci_merchant_sec_2_2_form']);
-route::put('pci_merchant_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}',[PCI_Merchant_Sheet::class,'pci_merchant_sec_2_2_edit_form']);
+route::get("pci_merchant_sheet_subsections/{proj_id}/{user_id}/{asset_id}",[PCI_Merchant_Sheet::class,'pci_merchant_sheet_subsections'])->name('pci_merchant_sheet_subsections');
+route::get("pci_merchant_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[PCI_Merchant_Sheet::class,'pci_merchant_section_2_2'])->name('pci_merchant_section_2_2_main');
+route::get("pci_merchant_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[PCI_Merchant_Sheet::class,'pci_merchant_sec_2_2_req'])->name('pci_merchant_sec_2_2_req');
+route::get('pci_merchant_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Merchant_Sheet::class,'pci_merchant_sec2_2_sub_req_edit'])->name('pci_merchant_sec2_2_sub_req_edit');
+route::post('pci_merchant_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Merchant_Sheet::class,'pci_merchant_sec_2_2_form']);
+route::put('pci_merchant_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Merchant_Sheet::class,'pci_merchant_sec_2_2_edit_form']);
 
 
 // route::get('v_3_2_section1_subsections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1_subsections']);

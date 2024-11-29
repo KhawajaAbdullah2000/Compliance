@@ -160,15 +160,9 @@ $permissions = json_decode($project_permissions);
                     <th onclick="sortTable(4)">Asset Owner Dept</th>
                     <th onclick="sortTable(5)">Asset Physical Location</th>
                     <th onclick="sortTable(6)">Asset Logical Location</th>
-
-                @if ($project->project_type == 4)
-                <th>Risk Assessment</th>
-                @endif
-
-               
-                <th>Enter Evidence</th>
+                 <th>Enter Evidence</th>
            
-                <th>Actions</th>
+        
             </tr>
         </thead>
         <tbody>
@@ -182,48 +176,19 @@ $permissions = json_decode($project_permissions);
                 <td>{{ $d->owner_dept }}</td>
                 <td>{{ $d->physical_loc }}</td>
                 <td>{{ $d->logical_loc }}</td>
-                @if ($project->project_type == 4)
-                <td>
-                    <a href="/iso_sec_2_3_1_risk_selection/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}" class="btn btn-primary btn-sm rounded-pill">Initiate</a>
-                </td>
-                @endif
+           
 
                 <td>
                     <a href="/iso_sec_2_2_evidence/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}" class="btn btn-warning btn-sm rounded-pill">Enter</a>
                 </td>
           
-                <td>
-                    @if (in_array('Data Inputter', $permissions))
-                    <a href="/iso_sec_2_1_edit/{{ $d->assessment_id }}/{{ $d->project_id }}/{{ auth()->user()->id }}">
-                        <i class="fas fa-edit text-success"></i>
-                    </a>
-                    <a href="/iso_sec_2_1_delete/{{ $d->assessment_id }}/{{ $d->project_id }}/{{ auth()->user()->id }}">
-                        <i class="fas fa-trash text-danger"></i>
-                    </a>
-                    @else
-                    <i class="fas fa-lock text-secondary"></i>
-                    @endif
-                </td>
+             
             </tr>
             @endforeach
         </tbody>
     </table>
 
-    <!-- Upload Section -->
-    <div class="mt-4">
-        <a href="{{ route('download_asset_template') }}" class="text-decoration-underline text-primary">Download Excel Template</a>
-        <form action="/upload_assets/{{ $project_id }}/{{ auth()->user()->id }}" method="POST" enctype="multipart/form-data" class="mt-3">
-            @csrf
-            <div class="form-group col-md-3">
-                <label for="file" class="form-label fw-bold">Upload a Populated Excel Sheet</label>
-                <input type="file" name="file" id="file" class="form-control">
-                @error('file')
-                <div class="text-danger small">{{ $message }}</div>
-                @enderror
-            </div>
-            <button type="submit" class="btn btn-success btn-sm rounded-pill mt-2">Upload</button>
-        </form>
-    </div>
+ 
 </div>
 
 @section('scripts')
@@ -386,18 +351,7 @@ filterRows();
 
 
 <script>
-// document.addEventListener('DOMContentLoaded', function () {
-// document.querySelectorAll('.toggle-column').forEach(function (checkbox) {
-// checkbox.addEventListener('change', function () {
-//     var column = this.getAttribute('data-column');
-//     var display = this.checked ? 'none' : '';
-//     var table = document.getElementById('myTable2');
-//     for (var i = 0; i < table.rows.length; i++) {
-//         table.rows[i].cells[column].style.display = display;
-//     }
-// });
-// });
-// });
+
 document.addEventListener('DOMContentLoaded', function () {
     const table = document.getElementById('myTable2');
     const checkboxes = document.querySelectorAll('.toggle-column');

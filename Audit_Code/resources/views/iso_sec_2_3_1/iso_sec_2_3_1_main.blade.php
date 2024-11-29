@@ -42,9 +42,8 @@ $permissions=json_decode($project_permissions);
 
 
 
-    <h2 class="text-center fw-bold">Information Security Risk Assessment</h2>
+    <h3 class="fw-bold">Information Security Risk Assessment Applicable to</h3>
 
-    <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md float-end">Assets in this Project</a>
 
     @if ($errors->any())
     <div class="alert alert-danger">
@@ -56,81 +55,107 @@ $permissions=json_decode($project_permissions);
     </div>
 @endif
 
-<div class="row mt-4">
-<div class="col-md-4">
-    <div class="card" style="max-width: 400px;">
-        <div class="card-header">
-            <h3 class="card-title">Asset Details</h3>
+<div class="col-md-6 mt-4">
+<table class="table table-bordered table-responsive">
+    <tr>
+        <td class="bg-secondary text-white">Service</td>
+        <td>{{$assetData->s_name}}</td>
+        <td class="bg-secondary text-white">Asset Group</td>
+        <td>{{$assetData->g_name}}</td>
+        <td class="bg-secondary text-white">Asset</td>
+        <td>{{$assetData->name}}</td>
+        <td class="bg-secondary text-white">Asset Component</td>
+        <td>{{$assetData->c_name}}</td>
+    </tr>
+</table>
+</div>
+
+<h3 class="fw-bold mt-2">Severity of Adverse Impacts</h3>
+<div class="col-md-6">
+<table class="table mt-2 table-bordered table-responsive">
+    <tr>
+        <td class="bg-secondary text-white">Risk to Data Confidentiality</td>
+        <td>  @if($assetData->risk_confidentiality == 10)
+            <span class="text-danger">High</span>
+          @elseif($assetData->risk_confidentiality == 5)
+            <span class="text-warning">Medium</span>
+          @elseif($assetData->risk_confidentiality == 1)
+            <span class="text-success">Low</span>
+          @endif</td>
+        <td class="bg-secondary text-white">Risk to Data Integrity</td>
+        <td>    @if($assetData->risk_integrity == 10)
+            <span class="text-danger">High</span>
+          @elseif($assetData->risk_integrity == 5)
+            <span class="text-warning">Medium</span>
+          @elseif($assetData->risk_integrity == 1)
+            <span class="text-success">Low</span>
+          @endif</td>
+        <td class="bg-secondary text-white">Risk to Data Availability</td>
+        <td>    @if($assetData->risk_availability == 10)
+            <span class="text-danger">High</span>
+          @elseif($assetData->risk_availability == 5)
+            <span class="text-warning">Medium</span>
+          @elseif($assetData->risk_availability == 1)
+            <span class="text-success">Low</span>
+          @endif</td>
+  
+        
+    </tr>
+</table>
+
+</div>
+
+
+
+
+
+
+
+</div>
+
+<div class="col-md-6 mx-2">
+
+<div class="card">
+    <h3 class="fw-bold mt-2 mx-2">Filter by Control Group</h3>
+ 
+    <div class="card-body">
+      <div class="row">
+        <!-- Column 1 -->
+        <div class="col-md-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="5" id="checkbox1" checked>
+            <label class="form-check-label" for="checkbox1">
+            Organization Controls
+            </label>
           </div>
-        <div class="card-body">
-          <p class="">
-            <span class="fw-bold">Service Name:</span> {{$assetData->s_name}}
-
-            @isset($assetData->g_name)
-            <br>
-            <span class="fw-bold">Asset Group Name:</span> {{$assetData->g_name}}
-            @endisset
-
-            @isset($assetData->name)
-            <br>
-            <span class="fw-bold">Asset Name:</span> {{$assetData->name}}
-            @endisset
-
-            @isset($assetData->c_name)
-            <br>
-            <span class="fw-bold">Asset Component Name:</span> {{$assetData->c_name}}
-            @endisset
-          </p>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="6" id="checkbox2" checked>
+            <label class="form-check-label" for="checkbox2">
+              People Controls
+            </label>
+          </div>
         </div>
-      </div>
-
-</div>
-
-<div class="col-md-4">
-
-    <div class="card" style="max-width: 400px;">
-        <div class="card-header">
-          <h3 class="card-title">Severity of Adverse Impacts</h3>
-        </div>
-        <div class="card-body">
-          <p><span class="fw-bold">Risk Confidentiality:</span>
-            @if($assetData->risk_confidentiality == 10)
-              <span class="text-danger">High</span>
-            @elseif($assetData->risk_confidentiality == 5)
-              <span class="text-warning">Medium</span>
-            @elseif($assetData->risk_confidentiality == 1)
-              <span class="text-success">Low</span>
-            @endif
-          </p>
-
-          <p><span class="fw-bold">Risk Integrity:</span>
-            @if($assetData->risk_integrity == 10)
-              <span class="text-danger">High</span>
-            @elseif($assetData->risk_integrity == 5)
-              <span class="text-warning">Medium</span>
-            @elseif($assetData->risk_integrity == 1)
-              <span class="text-success">Low</span>
-            @endif
-          </p>
-
-          <p><span class="fw-bold">Risk Availability:</span>
-            @if($assetData->risk_availability == 10)
-              <span class="text-danger">High</span>
-            @elseif($assetData->risk_availability == 5)
-              <span class="text-warning">Medium</span>
-            @elseif($assetData->risk_availability == 1)
-              <span class="text-success">Low</span>
-            @endif
-          </p>
+        <!-- Column 2 -->
+        <div class="col-md-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="7" id="checkbox3" checked>
+            <label class="form-check-label" for="checkbox3">
+              Physical Controls
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="8" id="checkbox4" checked>
+            <label class="form-check-label" for="checkbox4">
+            Technological Controls
+            </label>
+          </div>
         </div>
 
-      </div>
-
-</div>
-
-</div>
-
-
+   
+        </div>
+      </div> 
+    </div> 
+  </div>
 
 </div>
 
@@ -145,12 +170,18 @@ $permissions=json_decode($project_permissions);
 
 
     @if(in_array('Data Inputter',$permissions))
-    <div class="float-end mb-4">
-      <button type="submit" class="btn my_bg_color text-white btn-lg mt-5"  id="submitForm">Update Changes</button>
-    </div>
+    <div class="d-flex justify-content-end mb-4">
+        <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md me-2">
+          Assets in this Project
+        </a>
+        <button type="submit" class="btn my_bg_color text-white btn-md" id="submitForm">
+          Update Changes
+        </button>
+      </div>
     @endif
     </table>
 
+ 
 
     <div class="mt-4">
         <table class="table table-responsive table-primary table-striped">
@@ -184,15 +215,24 @@ $permissions=json_decode($project_permissions);
 
               </tr>
             </thead>
+            
             <tbody>
 
         @for ($i = 0; $i < count($sec2_4_a5_rows); $i++)
-        <tr style="vertical-align: middle;text-align:initial">
+        <tr style="vertical-align: middle;text-align:center" class="control-row-5">
                     @foreach ($sec2_4_a5_rows[$i] as $col)
                     @if(isset($col))
+                    @if($loop->index != 2)
                        <td>
                           <p>{!! nl2br($col) !!}</p>
                         </td>
+                        @else
+                        <td>
+                       <p data-bs-toggle="tooltip" title="{!! nl2br($col) !!}">
+                                 <i class="fas fa-comment fa-lg text-success"></i> </p>
+                          </td>
+
+                        @endif
 
                     @endif
 
@@ -476,13 +516,20 @@ $permissions=json_decode($project_permissions);
     {{-- sec2_4_a6rows --}}
 
     @for ($i = 0; $i < count($sec2_4_a6_rows); $i++)
-    <tr style="vertical-align: middle;text-align:initial">
+    <tr style="vertical-align: middle;text-align:center" class="control-row-6">
                 @foreach ($sec2_4_a6_rows[$i] as $col)
                 @if(isset($col))
-                   <td>
-                      <p>{!! nl2br($col) !!}</p>
-                    </td>
+                @if($loop->index != 2)
+                <td>
+                   <p>{!! nl2br($col) !!}</p>
+                 </td>
+                 @else
+                 <td>
+                <p data-bs-toggle="tooltip" title="{!! nl2br($col) !!}">
+                          <i class="fas fa-comment fa-lg text-success"></i> </p>
+                   </td>
 
+                 @endif
                 @endif
 
                 @endforeach
@@ -636,6 +683,7 @@ $permissions=json_decode($project_permissions);
             <td>
                 @if($a6_results->count()>0)
                 @foreach ($a6_results as $a6)
+                @if($a6->risk_integrity!=null && $a6->control_num!=6.6)
 
                     @if($a6->risk_integrity!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
                     @php
@@ -653,11 +701,23 @@ $permissions=json_decode($project_permissions);
                         @endif
 
                         @if($loop->last)
+                      @if( $a6->control_num!=6.6)
      <input type="number" name="risk_integrity[]" class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+              @else
+              <input type="number" name="risk_integrity[]" class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly value=0>
+
+              @endif
+
+     
+     @endif
+
+                @else
+
                 @endif
 
                 @endforeach
             @else
+
      <input type="number" name="risk_integrity[]" class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
 
             @endif
@@ -667,6 +727,8 @@ $permissions=json_decode($project_permissions);
             <td>
                 @if($a6_results->count()>0)
                 @foreach ($a6_results as $a6)
+
+                @if($a6->risk_integrity!=null && $a6->control_num!=6.6)
 
                     @if($a6->risk_availability!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
                     @php
@@ -687,8 +749,12 @@ $permissions=json_decode($project_permissions);
      <input type="number" name="risk_availability[]" class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
                 @endif
 
+
+                @endif
+
                 @endforeach
             @else
+
      <input type="number" name="risk_availability[]" class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
 
             @endif
@@ -737,13 +803,20 @@ $permissions=json_decode($project_permissions);
  {{-- sec2_4_a7rows --}}
 
  @for ($i = 0; $i < count($sec2_4_a7_rows); $i++)
- <tr style="vertical-align: middle;text-align:initial">
+ <tr style="vertical-align: middle;text-align:center" class="control-row-7">
              @foreach ($sec2_4_a7_rows[$i] as $col)
              @if(isset($col))
-                <td>
-                   <p>{!! nl2br($col) !!}</p>
-                 </td>
+             @if($loop->index != 2)
+             <td>
+                <p>{!! nl2br($col) !!}</p>
+              </td>
+              @else
+              <td>
+             <p data-bs-toggle="tooltip" title="{!! nl2br($col) !!}">
+                       <i class="fas fa-comment fa-lg text-success"></i> </p>
+                </td>
 
+              @endif
              @endif
 
              @endforeach
@@ -1006,12 +1079,20 @@ $permissions=json_decode($project_permissions);
 {{-- sec2_4_a8rows --}}
 
 @for ($i = 0; $i < count($sec2_4_a8_rows); $i++)
-<tr style="vertical-align: middle;text-align:initial">
+<tr style="vertical-align: middle;text-align:center" class="control-row-8">
             @foreach ($sec2_4_a8_rows[$i] as $col)
             @if(isset($col))
-               <td>
-                  <p>{!! nl2br($col) !!}</p>
-                </td>
+            @if($loop->index != 2)
+            <td>
+               <p>{!! nl2br($col) !!}</p>
+             </td>
+             @else
+             <td>
+            <p data-bs-toggle="tooltip" title="{!! nl2br($col) !!}">
+                      <i class="fas fa-comment fa-lg text-success"></i> </p>
+               </td>
+
+             @endif
 
             @endif
 
@@ -1130,6 +1211,8 @@ $permissions=json_decode($project_permissions);
             @if($a8_results->count()>0)
             @foreach ($a8_results as $a8)
 
+            @if( $a8->control_num!=null && !in_array( $a8->control_num, array(8.6,8.13,8.14) ) )
+
                 @if($a8->risk_level!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
                 @php
                 $backgroundClass = '';
@@ -1149,7 +1232,9 @@ $permissions=json_decode($project_permissions);
          <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
 
                       @endif
+@else
 
+@endif
             @endforeach
         @else
          <input type="number" name="risk_level[]" class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
@@ -1160,6 +1245,9 @@ $permissions=json_decode($project_permissions);
         <td>
             @if($a8_results->count()>0)
             @foreach ($a8_results as $a8)
+
+            @if( $a8->control_num!=null && !in_array( $a8->control_num, array(8.11,8.12,8.6,8.13,8.14)) )
+            
 
                 @if($a8->risk_integrity!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
                 @php
@@ -1180,6 +1268,11 @@ $permissions=json_decode($project_permissions);
          <input type="number" name="risk_integrity[]" class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
 
                       @endif
+@else
+
+@endif
+
+
 
             @endforeach
         @else
@@ -1191,6 +1284,9 @@ $permissions=json_decode($project_permissions);
         <td>
             @if($a8_results->count()>0)
             @foreach ($a8_results as $a8)
+
+            @if( $a8->control_num!=null && !in_array( $a8->control_num, array(8.11,8.12) ) )
+
 
                 @if($a8->risk_availability!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
                 @php
@@ -1211,7 +1307,9 @@ $permissions=json_decode($project_permissions);
          <input type="number" name="risk_availability[]" class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
 
                       @endif
+@else
 
+@endif
             @endforeach
         @else
          <input type="number" name="risk_availability[]" class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
@@ -1255,7 +1353,9 @@ $permissions=json_decode($project_permissions);
 
 
         </tr>
+
 @endfor
+
 
 
 
@@ -1273,7 +1373,8 @@ $permissions=json_decode($project_permissions);
 
     </div>
 
-
+   
+   
 
         </form>
 
@@ -1302,6 +1403,26 @@ $permissions=json_decode($project_permissions);
 </script>
 @endif
 
+<script>
+    $(document).ready(function () {
+        console.log("Hello ")
+      // Handle checkbox toggle
+      $('.form-check-input').change(function () {
+        console.log("Change detected")
+        const controlValue = $(this).val(); // Get the value of the checkbox
+        console.log("Control value is: "+ controlValue)
+        const rowsToToggle = `.control-row-${controlValue}`; // Build the class selector for rows
+console.log("rows to toggle: "+ rowsToToggle)
+        if ($(this).is(':checked')) {
+          // Show rows when checkbox is checked
+          $(rowsToToggle).removeClass('hidden-row');
+        } else {
+          // Hide rows when checkbox is unchecked
+          $(rowsToToggle).addClass('hidden-row');
+        }
+      });
+    });
+  </script>
 
 
 
@@ -1435,7 +1556,11 @@ $permissions=json_decode($project_permissions);
     });
 </script> --}}
 
-
+<script>
+$(function () {
+  $('[data-bs-toggle="tooltip"]').tooltip()
+})
+    </script>
 
 <script>
     function validateInput(inputElement) {

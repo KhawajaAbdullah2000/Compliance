@@ -196,6 +196,8 @@
                                 <td>{{$a5->vulnerability}}%</td>
                                 <td>{{$a5->threat}}%</td>
                                 <td>{{$a5->risk_level}}</td>
+                                <td>{{$a5->risk_integrity}}</td>
+                                <td>{{$a5->risk_availability}}</td>
                                 @break
                                 @endif
 
@@ -253,6 +255,8 @@
                                 <td>{{$a5->vulnerability}}%</td>
                                 <td>{{$a5->threat}}%</td>
                                 <td>{{$a5->risk_level}}</td>
+                                <td>{{$a5->risk_integrity}}</td>
+                                <td>{{$a5->risk_availability}}</td>
                                 @break
                                 @endif
 
@@ -309,6 +313,8 @@
                                 <td>{{$a5->vulnerability}}%</td>
                                 <td>{{$a5->threat}}%</td>
                                 <td>{{$a5->risk_level}}</td>
+                                <td>{{$a5->risk_integrity}}</td>
+                                <td>{{$a5->risk_availability}}</td>
                                 @break
                                 @endif
 

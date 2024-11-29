@@ -47,7 +47,7 @@
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/ksa_nca_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg my_bg_color text-white w-100"><p class="fw-bold" style="text-align:left;">Upload or enter evidence against the mandatory requirements of KSA NCA ECC</p></a>
+         <a href="/iso_section2_2_from_main/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg my_bg_color text-white w-100"><p class="fw-bold" style="text-align:left;">Upload or enter evidence against the mandatory requirements of KSA NCA ECC</p></a>
         </div>
         </div>
 

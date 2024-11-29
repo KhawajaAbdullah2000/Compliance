@@ -5,6 +5,14 @@
 @include('user-nav')
 
 @php
+
+$sum=0;
+$sum2=0;
+
+@endphp
+
+@php
+
     // Define a label based on the request
     $riskLabel = match (request('risk_type')) {
         'risk_integrity' => 'Integrity Risk',
@@ -183,7 +191,25 @@
 
 
 
-<h4 class="mt-4 text-center fw-bold">Risk Distribution Results</h4>
+<h4 class="mt-4 text-center fw-bold">Risk Distribution Results (
+
+    @if(request('risk_type') == 'all' || request('risk_type') == null)
+    <span>Data Confidentiality </span>
+@endif
+
+    @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
+    <span>Data Confidentiality </span>
+@endif
+@if(request('risk_type') == 'all' || request('risk_type') == 'risk_integrity')
+    <span>Data Integrity</span>
+@endif
+@if(request('risk_type') == 'all' || request('risk_type') == 'risk_availability')
+    <span>Data Availability</span>
+@endif
+    
+    
+    
+    )</h4>
 
     @if($results->isEmpty())
         <p>No data available for the selected filters.</p>
@@ -191,6 +217,9 @@
         @if(request('component') == 'all'|| request('component')==null)
             @foreach($results->groupBy('c_name') as $componentName => $componentResults)
 
+            @php
+            $sum=0;
+            @endphp
 
 
             <div class="card mt-4 bg-secondary text-white cursor-pointer" data-bs-toggle="collapse" href="#collapseTable{{ $loop->index }}" role="button" aria-expanded="false" aria-controls="collapseTable{{ $loop->index }}">
@@ -199,6 +228,80 @@
                         <p class="card-text"><strong>Service Name:</strong> {{ $componentResults->first()->s_name }}</p>
                         <p class="card-text"><strong>Group Name:</strong> {{ $componentResults->first()->g_name }}</p>
                         <p class="card-text"><strong>Asset Name:</strong> {{ $componentResults->first()->name }}</p>
+                        <p>Impact level due to the loss of
+                            @if(request('risk_type') == 'all' || request('risk_type') == null)
+                            <span>  Data Confidentiality:
+
+                    
+                            @if($componentResults->first()->Confidentiality_Risk==1)
+                            Low
+                            @endif
+                            @if($componentResults->first()->Confidentiality_Risk==5)
+                            Medium
+                            @endif
+                            @if($componentResults->first()->Confidentiality_Risk==10)
+                            High
+                            @endif
+
+                        </span>
+                   
+                    @endif
+
+                        @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
+                        <span>  Data Confidentiality 
+                          
+                        
+                            @if($componentResults->first()->Confidentiality_Risk==1)
+                            Low
+                            @endif
+                            @if($componentResults->first()->Confidentiality_Risk==5)
+                            Medium
+                            @endif
+                            @if($componentResults->first()->Confidentiality_Risk==10)
+                            High
+                            @endif
+                        </span>
+
+                        @endif
+                        @if(request('risk_type') == 'risk_integrity')
+                        <span>  Data Integrity: 
+                            
+                        
+                            @if($componentResults->first()->Integrity_Risk==1)
+                            Low
+                            @endif
+                            @if($componentResults->first()->Integrity_Risk==5)
+                            Medium
+                            @endif
+                            @if($componentResults->first()->Integrity_Risk==10)
+                            High
+                            @endif
+
+
+                        </span>
+
+                        @endif
+                        @if( request('risk_type') == 'risk_availability')
+                        <span>  Data Availability: 
+                            
+                        
+                            @if($componentResults->first()->Availability_Risk==1)
+                            Low
+                            @endif
+                            @if($componentResults->first()->Availability_Risk==5)
+                            Medium
+                            @endif
+                            @if($componentResults->first()->Availability_Risk==10)
+                            High
+                            @endif
+
+
+                        </span>
+
+                        @endif
+                            
+                        </p>
+                
                     </div>
                 </div>
 
@@ -220,18 +323,20 @@
                         @endif
 
                             @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
-                                <th>Confidentiality Risk</th>
+                                <th> Confidentiality Risk </th>
                             @endif
-                            @if(request('risk_type') == 'all' || request('risk_type') == 'risk_integrity')
-                                <th>Integrity Risk</th>
+                            @if(request('risk_type') == 'risk_integrity')
+                                <th> Integrity Risk</th>
                             @endif
-                            @if(request('risk_type') == 'all' || request('risk_type') == 'risk_availability')
+                            @if(request('risk_type') == 'risk_availability')
                                 <th>Availability Risk</th>
                             @endif
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($componentResults as $result)
+                    
+
                             <tr>
                                 <td>{{ $result->control_num }}</td>
                                 <td>{{ getValue($result->vulnerability) }}</td>
@@ -241,43 +346,138 @@
 
                                 @if(request('risk_type') == 'all' || request('risk_type') == null)
                                 <td style="background-color: {{ getRiskColor($result->risk_level) }}">{{ $result->risk_level ?? 'N/A' }}</td>
-                                {{-- <td style="background-color: {{ getRiskColor($result->risk_integrity) }}">{{ $result->risk_integrity ?? 'N/A' }}</td>
-                                <td style="background-color: {{ getRiskColor($result->risk_availability) }}"> {{ $result->risk_availability ?? 'N/A' }}</td> --}}
+                                @php
+                                $sum=$sum+$result->risk_level;
+                                @endphp
+
+                    
 
                                 @endif
-
 
 
                                 @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
                                     <td style="background-color: {{ getRiskColor($result->risk_level) }}">{{ $result->risk_level ?? 'N/A' }}</td>
+                                    @php
+                                    $sum=$sum+$result->risk_level;
+                                    @endphp
                                 @endif
                                 @if(request('risk_type') == 'all' || request('risk_type') == 'risk_integrity')
                                     <td style="background-color: {{ getRiskColor($result->risk_integrity) }}">{{ $result->risk_integrity ?? 'N/A' }}</td>
+                                    @php
+                                    $sum=$sum+$result->risk_integrity;
+                                    @endphp
                                 @endif
                                 @if(request('risk_type') == 'all' || request('risk_type') == 'risk_availability')
                                     <td style="background-color: {{ getRiskColor($result->risk_availability) }}">{{ $result->risk_availability ?? 'N/A' }}</td>
+                                    @php
+                                    $sum=$sum+$result->risk_availability;
+                                    @endphp
                                 @endif
                             </tr>
+                           
                         @endforeach
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="fw-bold">Total: {{$sum}}</td>
+                        </tr>
+                       
                     </tbody>
                 </table>
             </div>
             @endforeach
         @else
+
             <!-- Single table for All data -->
             <!-- Display Asset and Service Details Above the Table -->
 
             <div class="card mt-4 bg-secondary text-white">
                 <div class="card-body">
                     <h5 class="card-title"><strong>Service Name:</strong> {{ $results->first()->s_name }}</h5>
+                    <h5 class="card-title"><strong>Component Name:</strong> {{ $results->first()->c_name }}</h5>
+
+                    <p>Impact level due to the loss of
+                        @if(request('risk_type') == 'all' || request('risk_type') == null)
+                        <span>  Data Confidentiality:
+
+                
+                        @if($results->first()->first()->Confidentiality_Risk==1)
+                        Low
+                        @endif
+                        @if($results->first()->first()->Confidentiality_Risk==5)
+                        Medium
+                        @endif
+                        @if($results->first()->Confidentiality_Risk==10)
+                        High
+                        @endif
+
+                    </span>
+               
+                @endif
+
+                    @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
+                    <span>  Data Confidentiality 
+                      
+                    
+                        @if($results->first()->Confidentiality_Risk==1)
+                        Low
+                        @endif
+                        @if($results->first()->Confidentiality_Risk==5)
+                        Medium
+                        @endif
+                        @if($results->first()->Confidentiality_Risk==10)
+                        High
+                        @endif
+                    </span>
+
+                    @endif
+                    @if(request('risk_type') == 'risk_integrity')
+                    <span>  Data Integrity: 
+                        
+                    
+                        @if($results->first()->Integrity_Risk==1)
+                        Low
+                        @endif
+                        @if($results->first()->Integrity_Risk==5)
+                        Medium
+                        @endif
+                        @if($results->first()->Integrity_Risk==10)
+                        High
+                        @endif
+
+
+                    </span>
+
+                    @endif
+                    @if( request('risk_type') == 'risk_availability')
+                    <span>  Data Availability: 
+                        
+                    
+                        @if($results->first()->Availability_Risk==1)
+                        Low
+                        @endif
+                        @if($results->first()->Availability_Risk==5)
+                        Medium
+                        @endif
+                        @if($results->first()->Availability_Risk==10)
+                        High
+                        @endif
+
+
+                    </span>
+
+                    @endif
+                        
+                    </p>
+            
 
                 </div>
             </div>
 
 
-
-
-            <table class="table table-bordered">
+            <table class="table table-bordered" >
                 <thead>
                     <tr>
                         <th>Control Number</th>
@@ -287,23 +487,25 @@
                         <!-- Conditionally display risk columns -->
 
                         @if(request('risk_type') == 'all' || request('risk_type') == null)
-                        <th>Risk Confidentiality</th>
-                        {{-- <th>Risk Integrity</th>
-                        <th>Risk Availability</th> --}}
+                        <th>  Confidentiality Risk</th>
+                   
                     @endif
 
                         @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
-                            <th>Risk Confidentiality</th>
+                            <th> Confidentiality Risk</th>
                         @endif
-                        @if(request('risk_type') == 'all' || request('risk_type') == 'risk_integrity')
-                            <th>Risk Integrity</th>
+                        @if(request('risk_type') == 'risk_integrity')
+                            <th> Integrity Risk</th>
                         @endif
-                        @if(request('risk_type') == 'all' || request('risk_type') == 'risk_availability')
-                            <th>Risk Availability</th>
+                        @if( request('risk_type') == 'risk_availability')
+                            <th>Availability Risk</th>
                         @endif
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                    $sum2=0;
+                    @endphp
                     @foreach($results as $result)
                         <tr>
                             <td>{{ $result->control_num }}</td>
@@ -311,24 +513,40 @@
                             <td >{{ getValue($result->threat) }}</td>
                             <!-- Conditionally display risk values -->
 
-                            @if(request('risk_type') == 'all' || request('risk_type') == null)
+                            {{-- @if(request('risk_type') == 'all' || request('risk_type') == null)
                             <td style="background-color: {{ getRiskColor($result->risk_level) }}">{{ $result->risk_level ?? 'N/A' }}</td>
-                            {{-- <td style="background-color: {{ getRiskColor($result->risk_integrity) }}">{{ $result->risk_integrity ?? 'N/A' }}</td>
-                            <td style="background-color: {{ getRiskColor($result->risk_availability) }}">{{ $result->risk_availability ?? 'N/A' }}</td> --}}
-
-                            @endif
+                            @php
+                            $sum2=$sum2+$result->risk_level;
+                            @endphp
+                            @endif --}}
 
                             @if(request('risk_type') == 'all' || request('risk_type') == 'risk_level')
                                 <td style="background-color: {{ getRiskColor($result->risk_level) }}">{{ $result->risk_level ?? 'N/A' }}</td>
+                                @php
+                                $sum2=$sum2+$result->risk_level;
+                                @endphp
                             @endif
                             @if(request('risk_type') == 'all' || request('risk_type') == 'risk_integrity')
                                 <td style="background-color: {{ getRiskColor($result->risk_integrity) }}">{{ $result->risk_integrity ?? 'N/A' }}</td>
+                                @php
+                                $sum2=$sum2+$result->risk_integrity;
+                                @endphp
                             @endif
                             @if(request('risk_type') == 'all' || request('risk_type') == 'risk_availability')
                                 <td style="background-color: {{ getRiskColor($result->risk_availability) }}">{{ $result->risk_availability ?? 'N/A' }}</td>
+                                @php
+                                $sum2=$sum2+$result->risk_availability;
+                                @endphp
                             @endif
                         </tr>
                     @endforeach
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class='fw-bold'>Total: {{$sum2}}</td>
+                    </tr>
                 </tbody>
             </table>
         @endif

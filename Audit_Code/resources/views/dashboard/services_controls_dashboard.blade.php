@@ -38,8 +38,9 @@
 
     <h2>Number of Asset Components: <a class="btn btn-warning px-3" href="/components_control_dashboard/{{$project->project_id}}/{{auth()->user()->id}}/{{$s_name}}">{{$num_of_components->component_count}} </a> </h2>
 
+    <h3 class="fw-bold">Risk Confidentiality</h3>
 
-        @if($results->count() > 0)
+        @if($resultsConfidentiality->count() > 0)
 
         <div class="row mt-4">
             <div class="col-lg-12">
@@ -70,7 +71,7 @@
                             ];
 
                             // Populate the controlCounts array from the $results collection
-                            foreach ($results as $result) {
+                            foreach ($resultsConfidentiality as $result) {
                                 $controlCounts[$result->risk_category][$result->control_number_start] = $result->total_controls;
                             }
                         @endphp
@@ -100,8 +101,145 @@
 
 
         @else
-            <h2 class="fw-bold">No Risk Assessment Done Yet</h2>
+            <h2 class="fw-bold">No Confidentiality Risk Assessment Done Yet</h2>
         @endif
+
+
+        <h3 class="fw-bold">Risk Integrity</h3>
+
+        @if($resultsIntegrity->count() > 0)
+
+        <div class="row mt-4">
+            <div class="col-lg-12">
+                <table class="table table-bordered ">
+                    <thead style="text-align: center">
+                        <tr>
+                            <th rowspan="2" style="color:teal;">Risk Category</th>
+                            <th colspan="4" style="color:teal;">ISO 27001-Annex A Control Group</th>
+                            <th rowspan="2" style="color:teal;">All</th>
+                        </tr>
+                        <tr>
+                            <th>5</th>
+                            <th>6</th>
+                            <th>7</th>
+                            <th>8</th>
+                        </tr>
+                    </thead>
+                    <tbody style="text-align: center">
+                        @php
+                            // Initialize arrays to hold the counts for each control number and risk category
+                            $riskCategories = ['High', 'Medium', 'Low'];
+                            $controlCounts = [
+                                'High' => ['5' => 0, '6' => 0, '7' => 0, '8' => 0],
+                                'Medium' => ['5' => 0, '6' => 0, '7' => 0, '8' => 0],
+                                'Low' => ['5' => 0, '6' => 0, '7' => 0, '8' => 0],
+
+
+                            ];
+
+                            // Populate the controlCounts array from the $results collection
+                            foreach ($resultsIntegrity as $result) {
+                                $controlCounts[$result->risk_category][$result->control_number_start] = $result->total_controls;
+                            }
+                        @endphp
+
+                        @foreach ($riskCategories as $category)
+                        @php
+                            // Calculate the total controls for the current risk category by summing up the values for control numbers 5, 6, 7, and 8
+                            $totalControls = $controlCounts[$category]['5'] + $controlCounts[$category]['6'] + $controlCounts[$category]['7'] + $controlCounts[$category]['8'];
+                            $color = ($category == 'High' ? 'red' : ($category == 'Medium' ? 'orange' : 'green'));
+                       @endphp
+                        <tr>
+                            <td class="fw-bold">{{ $category }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold;color:white">{{ $controlCounts[$category]['5'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold ;color:white">{{ $controlCounts[$category]['6'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold ;color:white">{{ $controlCounts[$category]['7'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold ;color:white">{{ $controlCounts[$category]['8'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold ;color:white">{{ $totalControls }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+
+
+        @else
+            <h2 class="fw-bold">No Integrity Risk Assessment Done Yet</h2>
+        @endif
+
+
+        
+        <h3 class="fw-bold">Risk Availability</h3>
+
+        @if($resultsAvailability->count() > 0)
+
+        <div class="row mt-4">
+            <div class="col-lg-12">
+                <table class="table table-bordered ">
+                    <thead style="text-align: center">
+                        <tr>
+                            <th rowspan="2" style="color:teal;">Risk Category</th>
+                            <th colspan="4" style="color:teal;">ISO 27001-Annex A Control Group</th>
+                            <th rowspan="2" style="color:teal;">All</th>
+                        </tr>
+                        <tr>
+                            <th>5</th>
+                            <th>6</th>
+                            <th>7</th>
+                            <th>8</th>
+                        </tr>
+                    </thead>
+                    <tbody style="text-align: center">
+                        @php
+                            // Initialize arrays to hold the counts for each control number and risk category
+                            $riskCategories = ['High', 'Medium', 'Low'];
+                            $controlCounts = [
+                                'High' => ['5' => 0, '6' => 0, '7' => 0, '8' => 0],
+                                'Medium' => ['5' => 0, '6' => 0, '7' => 0, '8' => 0],
+                                'Low' => ['5' => 0, '6' => 0, '7' => 0, '8' => 0],
+
+
+                            ];
+
+                            // Populate the controlCounts array from the $results collection
+                            foreach ($resultsAvailability as $result) {
+                                $controlCounts[$result->risk_category][$result->control_number_start] = $result->total_controls;
+                            }
+                        @endphp
+
+                        @foreach ($riskCategories as $category)
+                        @php
+                            // Calculate the total controls for the current risk category by summing up the values for control numbers 5, 6, 7, and 8
+                            $totalControls = $controlCounts[$category]['5'] + $controlCounts[$category]['6'] + $controlCounts[$category]['7'] + $controlCounts[$category]['8'];
+                            $color = ($category == 'High' ? 'red' : ($category == 'Medium' ? 'orange' : 'green'));
+                       @endphp
+                        <tr>
+                            <td class="fw-bold">{{ $category }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold;color:white">{{ $controlCounts[$category]['5'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold ;color:white">{{ $controlCounts[$category]['6'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold ;color:white">{{ $controlCounts[$category]['7'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold ;color:white">{{ $controlCounts[$category]['8'] }}</td>
+                            <td style="background-color: {{$color}};font-weight:bold ;color:white">{{ $totalControls }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+
+
+        @else
+            <h2 class="fw-bold">No Availability Risk Assessment Done Yet</h2>
+        @endif
+
+
 
 
 </div>

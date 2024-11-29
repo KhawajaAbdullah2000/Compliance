@@ -8,28 +8,29 @@
 
 <div class="container py-5">
     <!-- Page Heading -->
-    <h1 class="text-center fw-bold mb-5">Projects Where Roles Are Assigned to Me</h1>
+    <h1 class="text-center fw-bold mb-5">Risk and Compliance Projects of Organization: {{auth()->user()->organization->name}}</h1>
 
     <!-- Projects Table -->
     <div class="card shadow-lg border-0">
         <div class="card-body">
-            <table class="table table-hover table-bordered text-center align-middle" id="myTable">
+            <table class="table table-hover table-bordered text-center " id="myTable">
                 <thead class="table-dark">
-                    <tr>
-                        <th>Project Name</th>
-                        <th>Project Type</th>
-                        <th>Project Status</th>
-                        <th>Project Permissions</th>
-                        <th>Edit Project</th>
-                        <th>Project Visuals</th>
-                        <th>Risk Visuals</th>
-                        <th>Risk Distribution</th>
-                        <th>Reports</th>
+                    <tr >
+                        <th style='text-align:center'>Project Name</th>
+                        <th style='text-align:center'>Project Type</th>
+                        <th style='text-align:center'>Project Status</th>
+                        <th style='text-align:center'>Project Permissions</th>
+                        <th style='text-align:center'>Edit Project</th>
+                        {{-- <th>Risk & Compliance Heatmap</th> --}}
+                        <th style='text-align:center'>Project Visuals</th>
+                        <th style='text-align:center'>Risk Visuals</th>
+                        <th style='text-align:center'>Risk Distribution</th>
+                        <th style='text-align:center'>Reports</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($projects as $pro)
-                    <tr>
+                    <tr style='text-align:center'>
                         <!-- Project Name -->
                         <td>
                             <a href="/iso_sections/{{ $pro->project_code }}/{{ auth()->user()->id }}" class="text-primary text-reset fw-bold">
@@ -41,7 +42,8 @@
                         <td>{{ $pro->type }}</td>
 
                         <!-- Project Status -->
-                        <td>{{ $pro->status }}</td>
+                        <td> <p data-bs-toggle="tooltip" title="{{$pro->status}}">
+                            <i style="color: blueviolet;" class="fas fa-inbox fa-lg"></i> </p></td>
 
                         <!-- Project Permissions -->
                         <td>
@@ -60,6 +62,14 @@
                                 <i class="fas fa-edit fa-lg text-success"></i>
                             </a>
                         </td>
+
+                             <!-- Risk and Compliance Heatmap -->
+                             {{-- <td>
+                                <a href="/risk_compliance_heatmap/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
+                                   data-toggle="tooltip" title="Risk and Compliance Heatmap">
+                                    <i class="fas fa-bars fa-lg text-warning"></i>
+                                </a>
+                            </td> --}}
 
                         <!-- Project Visuals -->
                         <td>
@@ -123,6 +133,14 @@
     });
 </script>
 @endif
+
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+</script>
 
 <script>
     // Initialize DataTable
