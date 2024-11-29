@@ -163,15 +163,11 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-4">
         <div class="col-md-6">
             <button type="submit" class="btn btn-success text-white fw-bold mt-4">Save and continue Risk Assessment for the selected component</button>
         </div>
-        <div class="col-md-6 mt-4">
-            <p><span class="fw-bold">Asset Group Name: </span>{{$asset->g_name}}</p>
-            <p><span class="fw-bold">Asset Name: </span>{{$asset->name}}</p>
-            <p><span class="fw-bold">Asset Component Name: </span>{{$asset->c_name}}</p>
-        </div>
+     
     </div>
 </form>
 
