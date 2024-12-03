@@ -217,14 +217,78 @@ class ProjectController extends Controller
     }
 
     public function risk_compliance_heatmap($proj_id,$user_id){
-      $yesCount= DB::table('iso_sec_2_2')->where('project_id',$proj_id)->where('comp_status','yes')->count();
+
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+
+            $total=Db::table('iso_sec_2_2')->where('project_id',$proj_id)->count();
+
+
+            $yesCount= DB::table('iso_sec_2_2')->where('project_id',$proj_id)->where('comp_status','yes')->count();
       $noCount= DB::table('iso_sec_2_2')->where('project_id',$proj_id)->where('comp_status','no')->count();
-
       $partialCount= DB::table('iso_sec_2_2')->where('project_id',$proj_id)->where('comp_status','partial')->count();
+      $actionPlanCount= DB::table('iso_sec_2_2')->where('project_id',$proj_id)
+      ->whereIn('comp_status', ['no', 'partial'])
+      ->whereNotNull('treatment_target_date')
+      ->count();
 
-      dd($yesCount,$noCount,$partialCount);
+      $distinctServiceCount = DB::table('iso_sec_2_1')
+    ->distinct()
+    ->count('s_name');
+
+    $distinctGroupCount = DB::table('iso_sec_2_1')
+    ->distinct()
+    ->count('g_name');
+
+    $distinctNameCount = DB::table('iso_sec_2_1')
+    ->distinct()
+    ->count('name');
+
+    $distinctComponentCount = DB::table('iso_sec_2_1')
+    ->distinct()
+    ->count('c_name');
+
+
+    $partialPlanTotal= Db::table('iso_sec_2_2')->where('project_id',$proj_id)
+    ->where('comp_status','!=','yes')
+    ->count();
+
+    
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$proj_id)->first();
+
+    return view('risk_compliance_heatmap.heatmap',[
+        'yesCount'=>(($yesCount)/$total)*100,
+        'noCount'=>(($noCount)/$total)*100,
+        'partialCount'=>(($partialCount)/$total)*100,
+        'actionPlanCount'=>(($actionPlanCount)/$partialPlanTotal)*100,
+        'distinctServiceCount'=>$distinctServiceCount,
+        'distinctGroupCount'=>$distinctGroupCount,
+        'distinctNameCount'=>$distinctNameCount,
+        'distinctComponentCount'=>$distinctComponentCount,
+        'project'=>$project
+
+
+    ]);
+
+
+        }
+
+        return redirect()->route('assigned_projects', ['user_id' => $user_id]);
 
       
+
+
    
     }
 

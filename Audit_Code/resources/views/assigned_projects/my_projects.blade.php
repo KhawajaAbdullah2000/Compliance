@@ -21,7 +21,7 @@
                         <th style='text-align:center'>Project Status</th>
                         <th style='text-align:center'>Project Permissions</th>
                         <th style='text-align:center'>Edit Project</th>
-                        {{-- <th>Risk & Compliance Heatmap</th> --}}
+                     <th>Risk & Compliance Heatmap</th> 
                         <th style='text-align:center'>Project Visuals</th>
                         <th style='text-align:center'>Risk Visuals</th>
                         <th style='text-align:center'>Risk Distribution</th>
@@ -64,12 +64,12 @@
                         </td>
 
                              <!-- Risk and Compliance Heatmap -->
-                             {{-- <td>
+                             <td>
                                 <a href="/risk_compliance_heatmap/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                    data-toggle="tooltip" title="Risk and Compliance Heatmap">
                                     <i class="fas fa-bars fa-lg text-warning"></i>
                                 </a>
-                            </td> --}}
+                            </td>
 
                         <!-- Project Visuals -->
                         <td>
