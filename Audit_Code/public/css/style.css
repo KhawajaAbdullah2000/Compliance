@@ -16,6 +16,44 @@ body {
     font-weight: 500;
     transition: color 0.3s ease;
 }
+.low { background-color: green; color: white; }
+.medium { background-color: yellow; }
+.high { background-color: red; color: white; }
+th.rotate {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+.risk-header {
+    background-color: #0074A2; /* Blue background for header */
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.risk-row {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.risk-red {
+    background-color: red;
+    color: white;
+    padding: 15px;
+}
+
+.risk-yellow {
+    background-color: yellow;
+    color: black;
+    padding: 15px;
+}
+
+.risk-green {
+    background-color: green;
+    color: white;
+    padding: 15px;
+}
+
 
 .hidden-row{
     display:none;

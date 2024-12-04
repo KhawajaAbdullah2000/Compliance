@@ -267,6 +267,160 @@ class ProjectController extends Controller
     $project=Project::join('project_types','projects.project_type','project_types.id')
     ->where('projects.project_id',$proj_id)->first();
 
+
+    //For heaptmap data confidentiality
+    $query = DB::table('iso_sec_2_1 as iso1')
+                ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+                ->where('iso1.project_id', $proj_id);
+
+            $query->select(
+                'iso1.s_name',
+                'iso1.g_name',
+                'iso1.name',
+                'iso1.c_name',
+                'iso2.control_num',
+                'iso2.applicability',
+                'iso2.vulnerability',
+                'iso2.threat',
+                
+            );
+
+            $query->addSelect( 'iso2.risk_level');
+
+            $iso_risk_results = $query->orderBy('iso2.control_num', 'asc')
+                ->get();
+             
+              
+            $scatterPlotDataRiskConfidentiality = [
+                // x = Vulnerability, y = Threat, r = Risk Count (point size)
+                ['x' => 1, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+                ['x' => 1, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+                ['x' => 1, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+                ['x' => 2, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+                ['x' => 2, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+                ['x' => 2, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+                ['x' => 3, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+                ['x' => 3, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+                ['x' => 3, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+            ];
+
+            //for Data integrity
+            $query = DB::table('iso_sec_2_1 as iso1')
+            ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+            ->where('iso1.project_id', $proj_id);
+
+        $query->select(
+            'iso1.s_name',
+            'iso1.g_name',
+            'iso1.name',
+            'iso1.c_name',
+            'iso2.control_num',
+            'iso2.applicability',
+            'iso2.vulnerability',
+            'iso2.threat',
+            
+        );
+
+        $query->addSelect( 'iso2.risk_integrity');
+
+        $iso_risk_integrity_results = $query->orderBy('iso2.control_num', 'asc')
+            ->get();
+         
+          
+        $scatterPlotDataRiskIntegrity = [
+            // x = Vulnerability, y = Threat, r = Risk Count (point size)
+            ['x' => 1, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+            ['x' => 1, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+            ['x' => 1, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+            ['x' => 2, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+            ['x' => 2, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+            ['x' => 2, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+            ['x' => 3, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+            ['x' => 3, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+            ['x' => 3, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+        ];
+
+         //for Data Availability
+         $query = DB::table('iso_sec_2_1 as iso1')
+         ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+         ->where('iso1.project_id', $proj_id);
+
+     $query->select(
+         'iso1.s_name',
+         'iso1.g_name',
+         'iso1.name',
+         'iso1.c_name',
+         'iso2.control_num',
+         'iso2.applicability',
+         'iso2.vulnerability',
+         'iso2.threat',
+         
+     );
+
+     $query->addSelect( 'iso2.risk_availability');
+
+     $iso_risk_availability_results = $query->orderBy('iso2.control_num', 'asc')
+         ->get();
+      
+       
+     $scatterPlotDataRiskAvailability = [
+         // x = Vulnerability, y = Threat, r = Risk Count (point size)
+         ['x' => 1, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+         ['x' => 1, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+         ['x' => 1, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+         ['x' => 2, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+         ['x' => 2, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+         ['x' => 2, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+         ['x' => 3, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+         ['x' => 3, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+         ['x' => 3, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+     ];
+
+     $serviceOrderRiskConfidentiality = DB::table('iso_sec_2_3_1 as sec_2_3_1')
+     ->join('iso_sec_2_1 as sec_2_1', function ($join) {
+         $join->on('sec_2_3_1.project_id', '=', 'sec_2_1.project_id')
+              ->on('sec_2_3_1.asset_id', '=', 'sec_2_1.assessment_id'); // Adjust column names if necessary
+     })
+     ->where('sec_2_3_1.project_id', $proj_id) // Filter by specific project
+     ->groupBy('sec_2_1.s_name') // Group by service name
+     ->select('sec_2_1.s_name', DB::raw('SUM(sec_2_3_1.risk_level) as total_risk_level'))
+     ->orderby('total_risk_level','desc')
+     ->get();
+
+     $serviceOrderRiskIntegrity = DB::table('iso_sec_2_3_1 as sec_2_3_1')
+     ->join('iso_sec_2_1 as sec_2_1', function ($join) {
+         $join->on('sec_2_3_1.project_id', '=', 'sec_2_1.project_id')
+              ->on('sec_2_3_1.asset_id', '=', 'sec_2_1.assessment_id'); // Adjust column names if necessary
+     })
+     ->where('sec_2_3_1.project_id', $proj_id) // Filter by specific project
+     ->groupBy('sec_2_1.s_name') // Group by service name
+     ->select('sec_2_1.s_name', DB::raw('SUM(sec_2_3_1.risk_integrity) as total_risk_level'))
+     ->orderby('total_risk_level','desc')
+     ->get();
+
+     $serviceOrderRiskAvailability = DB::table('iso_sec_2_3_1 as sec_2_3_1')
+     ->join('iso_sec_2_1 as sec_2_1', function ($join) {
+         $join->on('sec_2_3_1.project_id', '=', 'sec_2_1.project_id')
+              ->on('sec_2_3_1.asset_id', '=', 'sec_2_1.assessment_id'); // Adjust column names if necessary
+     })
+     ->where('sec_2_3_1.project_id', $proj_id) // Filter by specific project
+     ->groupBy('sec_2_1.s_name') // Group by service name
+     ->select('sec_2_1.s_name', DB::raw('SUM(sec_2_3_1.risk_availability) as total_risk_level'))
+     ->orderby('total_risk_level','desc')
+     ->get();
+
+
+
+
+
+
+
     return view('risk_compliance_heatmap.heatmap',[
         'yesCount'=>(($yesCount)/$total)*100,
         'noCount'=>(($noCount)/$total)*100,
@@ -276,7 +430,13 @@ class ProjectController extends Controller
         'distinctGroupCount'=>$distinctGroupCount,
         'distinctNameCount'=>$distinctNameCount,
         'distinctComponentCount'=>$distinctComponentCount,
-        'project'=>$project
+        'project'=>$project,
+        'scatterPlotDataRiskConfidentiality'=>$scatterPlotDataRiskConfidentiality,
+        'scatterPlotDataRiskIntegrity'=>$scatterPlotDataRiskIntegrity,
+        'scatterPlotDataRiskAvailability'=>$scatterPlotDataRiskAvailability,
+        'serviceOrderRiskConfidentiality'=>$serviceOrderRiskConfidentiality,
+        'serviceOrderRiskIntegrity'=>$serviceOrderRiskIntegrity,
+        'serviceOrderRiskAvailability'=>$serviceOrderRiskAvailability
 
 
     ]);

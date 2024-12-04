@@ -710,78 +710,7 @@ const scatterChart = new Chart(ctx, {
 
 
 
-    // const ctx = document.getElementById('heatmapChart').getContext('2d');
-    // const scatterChart = new Chart(ctx, {
-    //     type: 'scatter',  // Use 'bubble' for scatter plot with radius
-    //     data: {
-    //         datasets: [{
-    //             label: 'Risk Count',
-    //             data: scatterPlotData,
-    //             backgroundColor: 'rgba(54, 162, 235, 0.5)',  // Color of bubbles
-    //             borderColor: 'rgba(54, 162, 235, 1)',
-    //             borderWidth: 1,
-    //             // Fixed size for each point
-    //             radius: 10  // Fixed radius size
-    //         }]
-    //     },
-    //     options: {
-    //         responsive: true,
-    //         animation: {
-    //     duration: 1200,  // Animation duration in milliseconds
-    //     easing: 'easeInQuad'  // Easing effect for the animation
-    // },
-    //         scales: {
-    //             x: {
-    //                 title: {
-    //                     display: true,
-    //                     text: 'Vulnerability',
-    //                     font: {
-    //                         size: 16,  // Set font size
-    //                         weight: 'bold'  // Make it bold
-    //                     }
-    //                 },
-    //                 ticks: {
-    //                     callback: function(value, index, values) {
-    //                         return vulnerabilityLabels[index];
-    //                     },
-    //                     stepSize: 1,
-    //                     beginAtZero: true,
-    //                     max: 3
-    //                 }
-    //             },
-    //             y: {
-    //                 title: {
-    //                     display: true,
-    //                     text: 'Threat',
-    //                     font: {
-    //                         size: 16,  // Set font size
-    //                         weight: 'bold'  // Make it bold
-    //                     }
-    //                 },
-    //                 ticks: {
-    //                     callback: function(value, index, values) {
-    //                         return threatLabels[index];
-    //                     },
-    //                     stepSize: 1,
-    //                     beginAtZero: true,
-    //                     max: 3
-    //                 }
-    //             }
-    //         },
-    //         plugins: {
-    //             tooltip: {
-    //                 callbacks: {
-    //                     label: function(context) {
-    //                         const vulnerability = vulnerabilityLabels[context.raw.x - 1];
-    //                         const threat = threatLabels[context.raw.y - 1];
-    //                         const riskCount = context.raw.r;
-    //                         return `Vulnerability: ${vulnerability}, Threat: ${threat}, Risk Count: ${riskCount}`;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // });
+   
 </script>
 
 
