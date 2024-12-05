@@ -6,7 +6,7 @@
 
 @php
     $totalPercentage = 0; // To store the sum of percentages
-    $totalServices = count($complianceData); // Total number of 
+    $totalNames = count($complianceData); // Total number of 
     $totalDataConfidentiality=0;
     $totalDataIntegrity=0;
     $totalDataAvailability=0;
@@ -45,21 +45,20 @@
         </div>
     </div>
 
-    <h3 class="fw-bold text-center mt-2">Risk and Compliance Details for Project: {{$project->project_name}}</h3>
+    <h3 class="fw-bold text-center mt-2">Risk and Compliance Details by Asset for Service : {{$service_name}}</h3>
+
+    <h4 class="fw-bold">{{$service_name}}</h4>
     <table class='table table-hover table-responsive'>
         <thead class="table-dark">
             <tr>
-                <th>Service Name</th>
+                <th>Asset</th>
                 <th>Mandatory Compliance %</th>
                 <th>Risk of data confidentiality% </th>
                 <th>Risk of data integrity% </th>
                 <th>Risk of data availability% </th>
                 <th>Consolidated risk of CIA %</th>
                 <th>Risk and Compliance Heatmap</th>
-                <th>Drill down by Asset Group</th>
-                <th>Drill down by Asset</th>
                 <th>Drill down by Asset Component</th>
-                <th>Drill down by control group</th>
             </tr>
         </thead>
         <tbody>
@@ -72,7 +71,7 @@
                     $consolidated_risk+=$data['totalDataConfidentiality']+$data['totalDataIntegrity']+$data['totalDataAvailability'];
                 @endphp
                 <tr>
-                    <td>{{ $data['service_name'] }}</td>
+                    <td>{{ $data['asset_name'] }}</td>
                     <td>{{ number_format($data['percentage'], 2) }}%</td>
                     <td>{{number_format(($data['totalDataConfidentiality']/900)*100,5)}}%</td>
                     <td>{{number_format(($data['totalDataIntegrity']/870)*100,5)}}%</td>
@@ -80,38 +79,17 @@
                     <td>{{number_format((($data['totalDataConfidentiality']+$data['totalDataIntegrity']+$data['totalDataAvailability'])/2670)*100,5)}}</td>
 
                     <td>
-                        <a href="/risk_compliance_heatmap/{{ $project->project_id }}/{{$data['service_name']}}/{{ auth()->user()->id }}" 
-                           data-toggle="tooltip" title="Risk and Compliance Heatmap for {{$data['service_name']}}">
+                        <a href="/risk_compliance_heatmap/{{ $project->project_id }}/{{$data['asset_name']}}/{{ auth()->user()->id }}" 
+                           data-toggle="tooltip" title="Risk and Compliance Heatmap for {{$data['asset_name']}}">
                             <i class="fas fa-map fa-lg text-warning"></i>
                         </a>
                     </td>
 
-                    
+                    {{-- may add service_name also in path --}}
                     <td>
-                        <a href="/drill_down_by_asset_group/{{ $project->project_id }}/{{$data['service_name']}}/{{ auth()->user()->id }}" 
-                           data-toggle="tooltip" title="Drill down by asset group in Service: {{$data['service_name']}}">
+                        <a href="/drill_down_by_asset_component_from_service_from_asset/{{ $project->project_id }}/{{$service_name}}/{{$data['asset_name']}}/{{ auth()->user()->id }}" 
+                           data-toggle="tooltip" title="Drill down by asset group in Service: {{$data['asset_name']}}">
                             <i class="fas fa-eye fa-lg text-danger"></i>
-                        </a>
-                    </td>
-
-                    <td>
-                        <a href="/drill_down_by_asset/{{ $project->project_id }}/{{$data['service_name']}}/{{ auth()->user()->id }}" 
-                           data-toggle="tooltip" title="Drill down by assets in Service: {{$data['service_name']}}">
-                            <i class="fas fa-layer-group fa-lg text-info"></i>
-                        </a>
-                    </td>
-
-                    <td>
-                        <a href="/drill_down_by_asset_component/{{ $project->project_id }}/{{$data['service_name']}}/{{ auth()->user()->id }}" 
-                           data-toggle="tooltip" title="Drill down by asset components in Service: {{$data['service_name']}}">
-                            <i class="fas fa-eye fa-lg text-warning"></i>
-                        </a>
-                    </td>
-
-                    <td>
-                        <a href="/drill_down_by_control_group/{{ $project->project_id }}/{{$data['service_name']}}/{{ auth()->user()->id }}" 
-                           data-toggle="tooltip" title="Drill down by control group in Service: {{$data['service_name']}}">
-                            <i class="fas fa-bookmark fa-lg text-success"></i>
                         </a>
                     </td>
 
@@ -122,18 +100,15 @@
             @endforeach
             @php
                 // Calculate the overall percentage
-                $overallPercentage = $totalServices > 0 ? $totalPercentage / $totalServices : 0;
+                $overallPercentage = $totalNames > 0 ? $totalPercentage / $totalNames : 0;
             @endphp
             <tr class="table-primary">
-                <td class="fw-bold">All Services</td>
+                <td class="fw-bold">All Assets</td>
                 <td class="fw-bold">{{ number_format($overallPercentage, 5) }}%</td>
                 <td class="fw-bold">{{ number_format(($totalDataConfidentiality/2700), 5) }}%</td>
                 <td class="fw-bold">{{ number_format(($totalDataIntegrity/2610), 5) }}%</td>
                 <td class="fw-bold">{{ number_format(($totalDataAvailability/2700), 5) }}%</td>
                 <td class="fw-bold">{{ number_format(($consolidated_risk/8010), 5) }}%</td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td></td>
                 <td></td>
 

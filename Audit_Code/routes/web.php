@@ -139,6 +139,20 @@ route::get("/my_personal_dashboard/{user_id}",[ProjectController::class,'my_pers
 Route::get('risk_compliance_heatmap/{proj_id}/{user_id}',[ProjectController::class,'risk_compliance_heatmap'])->name('risk_compliance_heatmap');
 Route::get('drill_down_by_service/{proj_id}/{user_id}',[ProjectController::class,'drill_down_by_service'])->name('drill_down_by_service');
 
+Route::get('drill_down_by_asset_group/{proj_id}/{s_name}/{user_id}',[ProjectController::class,'drill_down_by_asset_group'])->name('drill_down_by_asset_group');
+
+Route::get('drill_down_by_asset/{proj_id}/{s_name}/{user_id}',[ProjectController::class,'drill_down_by_asset'])->name('drill_down_by_asset');
+
+Route::get('drill_down_by_asset_component/{proj_id}/{s_name}/{user_id}',[ProjectController::class,'drill_down_by_asset_component'])->name('drill_down_by_asset_component');
+
+
+Route::get('drill_down_by_asset_from_asset_group/{proj_id}/{s_name}/{g_name}/{user_id}',[ProjectController::class,'drill_down_by_asset_from_asset_group'])->name('drill_down_by_asset_from_asset_group');
+
+Route::get('drill_down_by_asset_component_from_asset/{proj_id}/{s_name}/{g_name}/{asset}/{user_id}',[ProjectController::class,'drill_down_by_asset_component_from_asset']);
+
+Route::get('drill_down_by_asset_component_from_service_from_asset/{proj_id}/{s_name}/{asset}/{user_id}',[ProjectController::class,'drill_down_by_asset_component_from_service_from_asset']);
+
+
 Route::get('risk_compliance_heatmap/{proj_id}/{s_name}/{user_id}',[ProjectController::class,'risk_compliance_service_heatmap'])->name('risk_compliance_service_heatmap');
 
 

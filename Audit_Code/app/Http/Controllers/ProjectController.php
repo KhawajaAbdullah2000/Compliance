@@ -765,6 +765,552 @@ foreach ($uniqueServices as $service) {
 
     }
 
+    public function drill_down_by_asset_group($proj_id,$s_name,$user_id){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+
+                
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$proj_id)->first();
+
+    $uniqueGroups = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
+    ->where('s_name',$s_name) //for drill down by asset group
+    ->select('g_name')
+    ->distinct()
+    ->get();
+
+$complianceData = [];
+
+foreach ($uniqueGroups as $group) {
+    $gName = $group->g_name;
+
+    // Get all asset_ids associated with this service (s_name)
+    $assetIds =DB::table('iso_sec_2_1')->where('project_id',$proj_id)
+    ->where('g_name', $gName)
+        ->pluck('assessment_id')
+        ->toArray();
+ 
+
+    // Count compliance controls where comp_status == 'yes'
+    $complianceCount = DB::table('iso_sec_2_2')->whereIn('asset_id', $assetIds)
+        ->where('comp_status', 'yes')
+        ->count();
+
+    
+     
+
+    // Total number of records for the service in iso_sec_2_2
+    $totalRecords =  DB::table('iso_sec_2_2')->where('project_id', $proj_id)
+                         ->whereIn('asset_id', $assetIds)->count();
+
+    // Calculate percentage
+    $percentage = $totalRecords > 0 ? ($complianceCount / $totalRecords) * 100 : 0;
+
+    $totalDataConfidentiality = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_level');
+
+    $totalDataIntegrity = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_integrity');
+
+    $totalDataAvailability = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_availability');
+
+    $complianceData[] = [
+        'group_name' => $gName,
+        'compliance_count' => $complianceCount,
+        'total_records' => $totalRecords,
+        'percentage' => $percentage,
+        'totalDataConfidentiality'=>$totalDataConfidentiality,
+        'totalDataIntegrity'=>$totalDataIntegrity,
+        'totalDataAvailability'=>$totalDataAvailability
+    ];
+
+}
+
+    return view('risk_compliance_heatmap.drill_down_by_asset_group',[
+        'project'=>$project,
+        'complianceData'=>$complianceData,
+        'service_name'=>$s_name
+    ]);
+
+
+
+
+        }else{
+            return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+
+        }
+
+
+
+    }
+
+    
+    public function drill_down_by_asset($proj_id,$s_name,$user_id){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+
+                
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$proj_id)->first();
+
+    $uniqueNames = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
+    ->where('s_name',$s_name) //for drill down by asset from services
+    ->select('name')
+    ->distinct()
+    ->get();
+
+$complianceData = [];
+
+foreach ($uniqueNames as $name) {
+    $nName = $name->name;
+
+    // Get all asset_ids associated with this service (s_name)
+    $assetIds =DB::table('iso_sec_2_1')->where('project_id',$proj_id)
+    ->where('g_name', $nName)
+        ->pluck('assessment_id')
+        ->toArray();
+ 
+
+    // Count compliance controls where comp_status == 'yes'
+    $complianceCount = DB::table('iso_sec_2_2')->whereIn('asset_id', $assetIds)
+        ->where('comp_status', 'yes')
+        ->count();
+
+    
+     
+
+    // Total number of records for the service in iso_sec_2_2
+    $totalRecords =  DB::table('iso_sec_2_2')->where('project_id', $proj_id)
+                         ->whereIn('asset_id', $assetIds)->count();
+
+    // Calculate percentage
+    $percentage = $totalRecords > 0 ? ($complianceCount / $totalRecords) * 100 : 0;
+
+    $totalDataConfidentiality = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_level');
+
+    $totalDataIntegrity = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_integrity');
+
+    $totalDataAvailability = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_availability');
+
+    $complianceData[] = [
+        'asset_name' => $nName,
+        'compliance_count' => $complianceCount,
+        'total_records' => $totalRecords,
+        'percentage' => $percentage,
+        'totalDataConfidentiality'=>$totalDataConfidentiality,
+        'totalDataIntegrity'=>$totalDataIntegrity,
+        'totalDataAvailability'=>$totalDataAvailability
+    ];
+
+}
+
+    return view('risk_compliance_heatmap.drill_down_by_asset',[
+        'project'=>$project,
+        'complianceData'=>$complianceData,
+        'service_name'=>$s_name
+    ]);
+
+
+
+
+        }else{
+            return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+
+        }
+
+
+
+    }
+
+    public function drill_down_by_asset_component($proj_id,$s_name,$user_id){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+
+                
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$proj_id)->first();
+
+    $uniqueComponents = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
+    ->where('s_name',$s_name) //for drill down by asset from services
+    ->select('c_name')
+    ->distinct()
+    ->get();
+
+$complianceData = [];
+
+foreach ($uniqueComponents as $cname) {
+    $cName = $cname->c_name;
+
+    // Get all asset_ids associated with this service (s_name)
+    $assetIds =DB::table('iso_sec_2_1')->where('project_id',$proj_id)
+    ->where('g_name', $cName)
+        ->pluck('assessment_id')
+        ->toArray();
+ 
+
+    // Count compliance controls where comp_status == 'yes'
+    $complianceCount = DB::table('iso_sec_2_2')->whereIn('asset_id', $assetIds)
+        ->where('comp_status', 'yes')
+        ->count();
+
+    
+     
+
+    // Total number of records for the service in iso_sec_2_2
+    $totalRecords =  DB::table('iso_sec_2_2')->where('project_id', $proj_id)
+                         ->whereIn('asset_id', $assetIds)->count();
+
+    // Calculate percentage
+    $percentage = $totalRecords > 0 ? ($complianceCount / $totalRecords) * 100 : 0;
+
+    $totalDataConfidentiality = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_level');
+
+    $totalDataIntegrity = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_integrity');
+
+    $totalDataAvailability = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_availability');
+
+    $complianceData[] = [
+        'component_name' => $cName,
+        'compliance_count' => $complianceCount,
+        'total_records' => $totalRecords,
+        'percentage' => $percentage,
+        'totalDataConfidentiality'=>$totalDataConfidentiality,
+        'totalDataIntegrity'=>$totalDataIntegrity,
+        'totalDataAvailability'=>$totalDataAvailability
+    ];
+
+}
+
+    return view('risk_compliance_heatmap.drill_down_by_asset_component',[
+        'project'=>$project,
+        'complianceData'=>$complianceData,
+        'service_name'=>$s_name
+    ]);
+
+
+
+
+        }else{
+            return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+
+        }
+
+
+
+    }
+
+
+    public function drill_down_by_asset_from_asset_group($proj_id,$s_name,$g_name,$user_id){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+
+                
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$proj_id)->first();
+
+    $uniqueNames = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
+    ->where('s_name',$s_name) 
+    ->where('g_name',$g_name)//dril down  y asset group from service so need service as well here
+    ->select('name')
+    ->distinct()
+    ->get();
+
+$complianceData = [];
+
+foreach ($uniqueNames as $name) {
+    $nName = $name->name;
+
+    // Get all asset_ids associated with this service (s_name)
+    $assetIds =DB::table('iso_sec_2_1')->where('project_id',$proj_id)
+    ->where('g_name', $nName)
+        ->pluck('assessment_id')
+        ->toArray();
+ 
+
+    // Count compliance controls where comp_status == 'yes'
+    $complianceCount = DB::table('iso_sec_2_2')->whereIn('asset_id', $assetIds)
+        ->where('comp_status', 'yes')
+        ->count();
+
+    
+     
+
+    // Total number of records for the service in iso_sec_2_2
+    $totalRecords =  DB::table('iso_sec_2_2')->where('project_id', $proj_id)
+                         ->whereIn('asset_id', $assetIds)->count();
+
+    // Calculate percentage
+    $percentage = $totalRecords > 0 ? ($complianceCount / $totalRecords) * 100 : 0;
+
+    $totalDataConfidentiality = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_level');
+
+    $totalDataIntegrity = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_integrity');
+
+    $totalDataAvailability = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_availability');
+
+    $complianceData[] = [
+        'asset_name' => $nName,
+        'compliance_count' => $complianceCount,
+        'total_records' => $totalRecords,
+        'percentage' => $percentage,
+        'totalDataConfidentiality'=>$totalDataConfidentiality,
+        'totalDataIntegrity'=>$totalDataIntegrity,
+        'totalDataAvailability'=>$totalDataAvailability
+    ];
+
+}
+
+    return view('risk_compliance_heatmap.drill_down_by_asset_from_asset_group',[
+        'project'=>$project,
+        'complianceData'=>$complianceData,
+        'service_name'=>$s_name,
+        'group_name'=>$g_name
+    ]);
+
+
+
+
+        }else{
+            return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+
+        }
+
+
+    }
+
+    public function drill_down_by_asset_component_from_asset($proj_id,$s_name,$g_name,$name,$user_id){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+
+                
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$proj_id)->first();
+
+    $uniqueComponents = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
+    ->where('s_name',$s_name)
+    ->where('g_name',$g_name)
+    ->where('name',$name)
+    ->select('c_name')
+    ->distinct()
+    ->get();
+
+$complianceData = [];
+
+foreach ($uniqueComponents as $cname) {
+    $cName = $cname->c_name;
+
+    // Get all asset_ids associated with this service (s_name)
+    $assetIds =DB::table('iso_sec_2_1')->where('project_id',$proj_id)
+    ->where('g_name', $cName)
+        ->pluck('assessment_id')
+        ->toArray();
+ 
+
+    // Count compliance controls where comp_status == 'yes'
+    $complianceCount = DB::table('iso_sec_2_2')->whereIn('asset_id', $assetIds)
+        ->where('comp_status', 'yes')
+        ->count();
+
+    
+     
+
+    // Total number of records for the service in iso_sec_2_2
+    $totalRecords =  DB::table('iso_sec_2_2')->where('project_id', $proj_id)
+                         ->whereIn('asset_id', $assetIds)->count();
+
+    // Calculate percentage
+    $percentage = $totalRecords > 0 ? ($complianceCount / $totalRecords) * 100 : 0;
+
+    $totalDataConfidentiality = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_level');
+
+    $totalDataIntegrity = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_integrity');
+
+    $totalDataAvailability = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_availability');
+
+    $complianceData[] = [
+        'component_name' => $cName,
+        'compliance_count' => $complianceCount,
+        'total_records' => $totalRecords,
+        'percentage' => $percentage,
+        'totalDataConfidentiality'=>$totalDataConfidentiality,
+        'totalDataIntegrity'=>$totalDataIntegrity,
+        'totalDataAvailability'=>$totalDataAvailability
+    ];
+
+}
+
+    return view('risk_compliance_heatmap.drill_down_by_asset_component_from_asset',[
+        'project'=>$project,
+        'complianceData'=>$complianceData,
+        'service_name'=>$s_name,
+        'group_name'=>$g_name,
+        'name'=>$name
+    ]);
+
+
+
+
+        }else{
+            return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+
+        }
+
+
+    }
+
+    public function drill_down_by_asset_component_from_service_from_asset($proj_id,$s_name,$name,$user_id){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+
+                
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$proj_id)->first();
+
+    $uniqueComponents = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
+    ->where('s_name',$s_name)
+    ->where('name',$name)
+    ->select('c_name')
+    ->distinct()
+    ->get();
+
+$complianceData = [];
+
+foreach ($uniqueComponents as $cname) {
+    $cName = $cname->c_name;
+
+    // Get all asset_ids associated with this service (s_name)
+    $assetIds =DB::table('iso_sec_2_1')->where('project_id',$proj_id)
+    ->where('g_name', $cName)
+        ->pluck('assessment_id')
+        ->toArray();
+ 
+
+    // Count compliance controls where comp_status == 'yes'
+    $complianceCount = DB::table('iso_sec_2_2')->whereIn('asset_id', $assetIds)
+        ->where('comp_status', 'yes')
+        ->count();
+
+    
+     
+
+    // Total number of records for the service in iso_sec_2_2
+    $totalRecords =  DB::table('iso_sec_2_2')->where('project_id', $proj_id)
+                         ->whereIn('asset_id', $assetIds)->count();
+
+    // Calculate percentage
+    $percentage = $totalRecords > 0 ? ($complianceCount / $totalRecords) * 100 : 0;
+
+    $totalDataConfidentiality = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_level');
+
+    $totalDataIntegrity = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_integrity');
+
+    $totalDataAvailability = DB::table('iso_sec_2_3_1')->whereIn('asset_id', $assetIds)
+    ->sum('risk_availability');
+
+    $complianceData[] = [
+        'component_name' => $cName,
+        'compliance_count' => $complianceCount,
+        'total_records' => $totalRecords,
+        'percentage' => $percentage,
+        'totalDataConfidentiality'=>$totalDataConfidentiality,
+        'totalDataIntegrity'=>$totalDataIntegrity,
+        'totalDataAvailability'=>$totalDataAvailability
+    ];
+
+}
+
+    return view('risk_compliance_heatmap.drill_down_by_asset_component_from_service_from_asset',[
+        'project'=>$project,
+        'complianceData'=>$complianceData,
+        'service_name'=>$s_name,
+        'name'=>$name
+    ]);
+
+
+
+
+        }else{
+            return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+
+        }
+
+    }
+
     public function my_personal_dashboard($user_id)
     {
 

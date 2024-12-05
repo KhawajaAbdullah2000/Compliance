@@ -68,7 +68,7 @@
                              <td>
                                 <a href="/risk_compliance_heatmap/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                    data-toggle="tooltip" title="Risk and Compliance Heatmap">
-                                    <i class="fas fa-bars fa-lg text-warning"></i>
+                                    <i class="fas fa-map fa-lg text-warning"></i>
                                 </a>
                             </td>
 
