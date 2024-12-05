@@ -21,7 +21,8 @@
                         <th style='text-align:center'>Project Status</th>
                         <th style='text-align:center'>Project Permissions</th>
                         <th style='text-align:center'>Edit Project</th>
-                     <th>Risk & Compliance Heatmap</th> 
+                        <th style='text-align:center'>Risk & Compliance Heatmap</th> 
+                        <th style='text-align:center'>Drill Down by Service</th> 
                         <th style='text-align:center'>Project Visuals</th>
                         <th style='text-align:center'>Risk Visuals</th>
                         <th style='text-align:center'>Risk Distribution</th>
@@ -68,6 +69,14 @@
                                 <a href="/risk_compliance_heatmap/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                    data-toggle="tooltip" title="Risk and Compliance Heatmap">
                                     <i class="fas fa-bars fa-lg text-warning"></i>
+                                </a>
+                            </td>
+
+                               <!-- Drill down by service -->
+                               <td>
+                                <a href="/drill_down_by_service/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
+                                   data-toggle="tooltip" title="Drill down by service">
+                                    <i class="fas fa-eye fa-lg text-danger"></i>
                                 </a>
                             </td>
 
