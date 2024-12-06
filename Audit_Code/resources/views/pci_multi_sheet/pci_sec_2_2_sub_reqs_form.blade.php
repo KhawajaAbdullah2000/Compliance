@@ -98,14 +98,14 @@ $permissions=json_decode($project_permissions);
          @if(in_array('Data Inputter', $permissions))
          @isset($result)
          <div class="container d-flex justify-content-center">
-         <div class="card shadow-lg border-0 mt-5 mb-5" style="max-width: 600px; width: 100%;">
-             <div class="card-header bg-primary text-white text-center">
+         <div class="card shadow-lg border-0 mt-5 mb-5" style="max-width: 1000px; width: 100%;">
+             <div class="card-header bg-success text-white text-center">
                  <h3>Edit Status and/or assign action</h3>
              </div>
              <div class="card-body">
-                 <form action="/pci_multi_sec_2_2_edit_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" enctype="multipart/form-data">
+                 <form action="/pci_multi_sec_2_2_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" enctype="multipart/form-data">
                      @csrf
-                     @method('PUT')
+                   
  
                      <!-- Compliance Status -->
                      <div class="mb-4">
@@ -196,10 +196,26 @@ $permissions=json_decode($project_permissions);
          
          
  
-                     <!-- Submit Button -->
-                     <div class="text-center">
-                         <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill">Save Changes</button>
-                     </div>
+                       <div class="row">
+                        <div class="col-md-4">
+                     <button type="submit" class="btn btn-success px-5 rounded-pill" name="action" value="1">Apply only to this control and
+                        save changes
+                        </button>
+                    </div>
+                            <div class="col-md-4">
+                            
+                        <button type="submit" class="btn btn-success  px-5 rounded-pill" name="action" value="2">Apply to all controls in this
+                            domain and save changes
+                            </button>
+                        </div>
+
+                        <div class="col-md-4">
+                            
+                        <button type="submit" class="btn btn-success  px-5 rounded-pill" name="action" value="3">Apply to all controls in all
+                            domains and save changes
+                            </button>
+                        </div>
+                        </div>
                  </form>
              </div>
          </div>
@@ -207,7 +223,7 @@ $permissions=json_decode($project_permissions);
          @else
          <!-- New Compliance Status Form -->
          <div class="container d-flex justify-content-center">
-             <div class="card shadow-lg border-0 mt-5 mb-5" style="max-width: 600px; width: 100%;">
+             <div class="card shadow-lg border-0 mt-5 mb-5" style="max-width: 1000px; width: 100%;">
                  <div class="card-header bg-success text-white text-center">
                      <h3>Edit Status and/or assign action</h3>
                  </div>
@@ -299,8 +315,28 @@ $permissions=json_decode($project_permissions);
              
          
                          <!-- Submit Button -->
-                         <div class="text-center">
-                             <button type="submit" class="btn btn-success btn-lg px-5 rounded-pill">Submit</button>
+                         <div class="row">
+                            <div class="col-md-4">
+                         <button type="submit" class="btn btn-success px-5 rounded-pill" name="action" value="1">Apply only to this control and
+                            save changes
+                            </button>
+                        </div>
+                                <div class="col-md-4">
+                                
+                            <button type="submit" class="btn btn-success  px-5 rounded-pill" name="action" value="2">Apply to all controls in this
+                                domain and save changes
+                                </button>
+                            </div>
+
+                            <div class="col-md-4">
+                                
+                            <button type="submit" class="btn btn-success  px-5 rounded-pill" name="action" value="3">Apply to all controls in all
+                                domains and save changes
+                                </button>
+                            </div>
+                            </div>
+
+                         
                          </div>
                      </form>
                  </div>

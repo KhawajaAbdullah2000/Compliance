@@ -31,23 +31,23 @@
                 </thead>
                 <tbody>
                     @foreach($projects as $pro)
-                    <tr style='text-align:center'>
+                    <tr>
                         <!-- Project Name -->
-                        <td>
+                        <td style='text-align:initial'>
                             <a href="/iso_sections/{{ $pro->project_code }}/{{ auth()->user()->id }}" class="text-primary text-reset fw-bold">
                                 {{ $pro->project_name }}
                             </a>
                         </td>
 
                         <!-- Project Type -->
-                        <td>{{ $pro->type }}</td>
+                        <td style='text-align:initial'>{{ $pro->type }}</td>
 
                         <!-- Project Status -->
                         <td> <p data-bs-toggle="tooltip" title="{{$pro->status}}">
                             <i style="color: blueviolet;" class="fas fa-inbox fa-lg"></i> </p></td>
 
                         <!-- Project Permissions -->
-                        <td>
+                        <td style='text-align:initial'>
                             @php
                             $permissions = json_decode($pro->project_permissions);
                             @endphp
@@ -57,7 +57,7 @@
                         </td>
 
                         <!-- Edit Project -->
-                        <td>
+                        <td style='text-align:center'>
                             <a href="/iso_sections/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                data-toggle="tooltip" title="Edit Project">
                                 <i class="fas fa-edit fa-lg text-success"></i>
@@ -65,7 +65,7 @@
                         </td>
 
                              <!-- Risk and Compliance Heatmap -->
-                             <td>
+                             <td style='text-align:center'>
                                 <a href="/risk_compliance_heatmap/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                    data-toggle="tooltip" title="Risk and Compliance Heatmap">
                                     <i class="fas fa-map fa-lg text-warning"></i>
@@ -73,7 +73,7 @@
                             </td>
 
                                <!-- Drill down by service -->
-                               <td>
+                               <td style='text-align:center'>
                                 <a href="/drill_down_by_service/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                    data-toggle="tooltip" title="Drill down by service">
                                     <i class="fas fa-eye fa-lg text-danger"></i>
@@ -81,7 +81,7 @@
                             </td>
 
                         <!-- Project Visuals -->
-                        <td>
+                        <td style='text-align:center'>
                             <a href="/dashboard/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                data-toggle="tooltip" title="View Project Dashboard">
                                 <i class="fas fa-tachometer-alt fa-lg text-info"></i>
@@ -89,7 +89,7 @@
                         </td>
 
                         <!-- Risk Visuals -->
-                        <td>
+                        <td style='text-align:center'>
                             <a href="/ai_wizard/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                data-toggle="tooltip" title="Risk Visuals">
                                 <i class="fas fa-chart-line fa-lg text-warning"></i>
@@ -97,7 +97,7 @@
                         </td>
 
                         <!-- Risk Distribution -->
-                        <td>
+                        <td style='text-align:center'>
                             <a href="/risk_computation/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                data-toggle="tooltip" title="Risk Distribution">
                                 <i class="fas fa-calculator fa-lg text-primary"></i>
@@ -105,7 +105,7 @@
                         </td>
 
                         <!-- Reports -->
-                        <td>
+                        <td style='text-align:center'>
                             <a href="/reports/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                data-toggle="tooltip" title="Project Report">
                                 <i class="fas fa-copy fa-lg text-danger"></i>

@@ -28,8 +28,6 @@ return new class extends Migration
             $table->integer('risk_availability')->default(10);
             $table->unsignedBigInteger('last_edited_by')->nullable()->index('last_edited_by');
             $table->dateTime('last_edited_at');
-
-            $table->unique(['project_id', 'g_name', 'name', 'c_name', 's_name'], 'project_id_2');
         });
     }
 

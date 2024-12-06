@@ -278,9 +278,7 @@ class IsoSec2_1 extends Controller
 
                         } catch (\Exception $e) {
                             $error=$e->getMessage();
-                            if($e->getCode()==23000){
-                 $error="Service and Asset component must be unique in a project";
-                            }
+                        
                             return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                             ->with('error', $error);
 
@@ -407,8 +405,6 @@ class IsoSec2_1 extends Controller
                 if (in_array('Data Inputter', $permissions)) {
 
                     try{
-
-                    
                    
                         Db::table('iso_sec_2_1')->where('assessment_id',$assessment_id)->where('project_id',$proj_id)
                         ->update([
@@ -428,9 +424,6 @@ class IsoSec2_1 extends Controller
                             ->with('success', 'Record Updated successfully');
                     }catch (\Exception $e) {
                         $error=$e->getMessage();
-                        if($e->getCode()==23000){
-             $error="Service and Asset component must be unique in a project";
-                        }
                         return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                         ->with('error', $error);
 
@@ -588,13 +581,8 @@ class IsoSec2_1 extends Controller
 
                         } catch (\Exception $e) {
 
-                            if($e->getCode()==23000){
-                                $error="Each Asset must contain unique Service and Asset component. Duplicate Found!";
-                            }else{
-                                $error=$e->getCode();
-                            }
-
-
+                            $error=$e->getMessage();
+                           
                             return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                         ->with('error', $error);
                         }
