@@ -154,6 +154,17 @@ Route::get('drill_down_by_asset_component_from_service_from_asset/{proj_id}/{s_n
 
 
 Route::get('risk_compliance_heatmap/{proj_id}/{s_name}/{user_id}',[ProjectController::class,'risk_compliance_service_heatmap'])->name('risk_compliance_service_heatmap');
+Route::get('risk_compliance_heatmap_from_asset_group/{proj_id}/{s_name}/{g_name}/{user_id}',[ProjectController::class,'risk_compliance_heatmap_from_asset_group']);
+
+Route::get('risk_compliance_heatmap_by_asset_from_asset_group/{proj_id}/{s_name}/{g_name}/{name}/{user_id}',[ProjectController::class,'risk_compliance_heatmap_by_asset_from_asset_group']);
+
+Route::get('risk_compliance_heatmap_for_asset_component_by_asset/{proj_id}/{s_name}/{g_name}/{name}/{c_name}/{user_id}',[ProjectController::class,'risk_compliance_heatmap_for_asset_component_by_asset']);
+Route::get('risk_compliance_heatmap_by_service_and_asset/{proj_id}/{s_name}/{name}/{user_id}',[ProjectController::class,'risk_compliance_heatmap_by_service_and_asset']);
+Route::get('risk_compliance_heatmap_by_service_asset_component/{proj_id}/{s_name}/{name}/{c_name}/{user_id}',[ProjectController::class,'risk_compliance_heatmap_by_service_asset_component']);
+
+Route::get('risk_compliance_heatmap_by_service_and_component/{proj_id}/{s_name}/{c_name}/{user_id}',[ProjectController::class,'risk_compliance_heatmap_by_service_and_component']);
+
+
 
 
 

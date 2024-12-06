@@ -257,9 +257,11 @@
 
 // Function to scale the radius based on risk count
 function scaleRadius(riskCount, minRisk, maxRisk, minRadius, maxRadius) {
+    if (minRisk === maxRisk) {
+        return minRadius; // Avoid division by zero
+    }
     return ((riskCount - minRisk) / (maxRisk - minRisk)) * (maxRadius - minRadius) + minRadius;
 }
-
 // Find min and max risk counts
 const riskCountsConfidentiality = scatterPlotDataRiskConfidentiality.map(data => data.riskCount);
 const minRiskscatterPlotDataRiskConfidentiality = Math.min(...riskCountsConfidentiality);
@@ -377,10 +379,7 @@ const scatterPlotDataRiskIntegrity = [
 ];
 
 
-// Function to scale the radius based on risk count
- function scaleRadius(riskCount, minRisk, maxRisk, minRadius, maxRadius) {
-     return ((riskCount - minRisk) / (maxRisk - minRisk)) * (maxRadius - minRadius) + minRadius;
- }
+
 
 // Find min and max risk counts
 const riskCountsIntegrity = scatterPlotDataRiskIntegrity.map(data => data.riskCount);
@@ -498,10 +497,7 @@ const scatterPlotDataRiskAvailability = [
 ];
 
 
-// Function to scale the radius based on risk count
- function scaleRadius(riskCount, minRisk, maxRisk, minRadius, maxRadius) {
-     return ((riskCount - minRisk) / (maxRisk - minRisk)) * (maxRadius - minRadius) + minRadius;
- }
+
 
 // Find min and max risk counts
 const riskCountsAvailability = scatterPlotDataRiskAvailability .map(data => data.riskCount);

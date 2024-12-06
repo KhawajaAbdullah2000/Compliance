@@ -263,6 +263,9 @@ class ProjectController extends Controller
     ->where('comp_status','!=','yes')
     ->count();
 
+    $action = $partialPlanTotal != 0 ? ($actionPlanCount / $partialPlanTotal) * 100 : 0;
+
+
     
     $project=Project::join('project_types','projects.project_type','project_types.id')
     ->where('projects.project_id',$proj_id)->first();
@@ -425,7 +428,7 @@ class ProjectController extends Controller
         'yesCount'=>(($yesCount)/$total)*100,
         'noCount'=>(($noCount)/$total)*100,
         'partialCount'=>(($partialCount)/$total)*100,
-        'actionPlanCount'=>(($actionPlanCount)/$partialPlanTotal)*100,
+        'actionPlanCount'=>$action,
         'distinctServiceCount'=>$distinctServiceCount,
         'distinctGroupCount'=>$distinctGroupCount,
         'distinctNameCount'=>$distinctNameCount,
@@ -515,8 +518,12 @@ class ProjectController extends Controller
 
  $partialPlanTotal= Db::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
  ->where('iso_sec_2_2.project_id',$proj_id)
+ ->where('s_name',$s_name)
      ->where('comp_status','!=','yes')
      ->count();
+
+     $action = $partialPlanTotal != 0 ? ($actionPlanCount / $partialPlanTotal) * 100 : 0;
+
 
     
     $project=Project::join('project_types','projects.project_type','project_types.id')
@@ -565,7 +572,8 @@ class ProjectController extends Controller
             //for Data integrity
             $query = DB::table('iso_sec_2_1 as iso1')
             ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
-            ->where('iso1.project_id', $proj_id);
+            ->where('iso1.project_id', $proj_id)
+            ->where('iso1.s_name',$s_name);
 
         $query->select(
             'iso1.s_name',
@@ -603,7 +611,8 @@ class ProjectController extends Controller
          //for Data Availability
          $query = DB::table('iso_sec_2_1 as iso1')
          ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
-         ->where('iso1.project_id', $proj_id);
+         ->where('iso1.project_id', $proj_id)
+         ->where('iso1.s_name',$s_name);
 
      $query->select(
          'iso1.s_name',
@@ -652,7 +661,7 @@ class ProjectController extends Controller
         'yesCount'=>(($yesCount)/$total)*100,
         'noCount'=>(($noCount)/$total)*100,
         'partialCount'=>(($partialCount)/$total)*100,
-        'actionPlanCount'=>(($actionPlanCount)/$partialPlanTotal)*100,
+        'actionPlanCount'=>$action,
         'distinctGroupCount'=>$distinctGroupCount,
         'distinctNameCount'=>$distinctNameCount,
         'distinctComponentCount'=>$distinctComponentCount,
@@ -674,6 +683,1402 @@ class ProjectController extends Controller
       
 
 
+
+    }
+
+    public function risk_compliance_heatmap_from_asset_group($proj_id,$s_name,$g_name,$user_id){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+
+        $total=Db::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+        ->where('iso_sec_2_2.project_id',$proj_id)
+        ->where('iso_sec_2_1.s_name',$s_name)
+        ->where('iso_sec_2_1.g_name',$g_name)
+        ->count();
+
+
+
+     $yesCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.g_name',$g_name)
+      ->where('comp_status','yes')->count();
+
+     
+
+      $noCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+      ->where('iso_sec_2_2.project_id',$proj_id)
+      ->where('iso_sec_2_1.s_name',$s_name)
+      ->where('iso_sec_2_1.g_name',$g_name)
+      ->where('comp_status','no')->count();
+
+      $partialCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.g_name',$g_name)
+     ->where('comp_status','partial')->count();
+
+      $actionPlanCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.g_name',$g_name)
+      ->whereIn('comp_status', ['no', 'partial'])
+      ->whereNotNull('treatment_target_date')
+      ->count();
+
+
+
+
+
+    $distinctNameCount = DB::table('iso_sec_2_1')
+    ->where('s_name',$s_name)
+    ->where('g_name',$g_name)
+    ->distinct()
+    ->count('name');
+
+    $distinctComponentCount = DB::table('iso_sec_2_1')
+    ->where('s_name',$s_name)
+    ->where('g_name',$g_name)
+    ->distinct()
+    ->count('c_name');
+
+
+ $partialPlanTotal= Db::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+ ->where('iso_sec_2_2.project_id',$proj_id)
+ ->where('s_name',$s_name)
+ ->where('g_name',$g_name)
+     ->where('comp_status','!=','yes')
+     ->count();
+
+     $action = $partialPlanTotal != 0 ? ($actionPlanCount / $partialPlanTotal) * 100 : 0;
+
+
+    
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$proj_id)->first();
+
+
+    //For heaptmap data confidentiality
+    $query = DB::table('iso_sec_2_1 as iso1')
+                ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+                ->where('iso1.project_id', $proj_id)
+                ->where('iso1.s_name',$s_name)
+                ->where('iso1.g_name',$g_name);
+
+            $query->select(
+                'iso1.s_name',
+                'iso1.g_name',
+                'iso1.name',
+                'iso1.c_name',
+                'iso2.control_num',
+                'iso2.applicability',
+                'iso2.vulnerability',
+                'iso2.threat',
+                
+            );
+
+            $query->addSelect( 'iso2.risk_level');
+
+            $iso_risk_results = $query->orderBy('iso2.control_num', 'asc')
+                ->get();
+             
+              
+            $scatterPlotDataRiskConfidentiality = [
+                // x = Vulnerability, y = Threat, r = Risk Count (point size)
+                ['x' => 1, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+                ['x' => 1, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+                ['x' => 1, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+                ['x' => 2, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+                ['x' => 2, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+                ['x' => 2, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+                ['x' => 3, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+                ['x' => 3, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+                ['x' => 3, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+            ];
+
+            //for Data integrity
+            $query = DB::table('iso_sec_2_1 as iso1')
+            ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+            ->where('iso1.project_id', $proj_id)
+            ->where('iso1.s_name',$s_name)
+            ->where('iso1.g_name',$g_name);
+
+        $query->select(
+            'iso1.s_name',
+            'iso1.g_name',
+            'iso1.name',
+            'iso1.c_name',
+            'iso2.control_num',
+            'iso2.applicability',
+            'iso2.vulnerability',
+            'iso2.threat',
+            
+        );
+
+        $query->addSelect( 'iso2.risk_integrity');
+
+        $iso_risk_integrity_results = $query->orderBy('iso2.control_num', 'asc')
+            ->get();
+         
+          
+        $scatterPlotDataRiskIntegrity = [
+            // x = Vulnerability, y = Threat, r = Risk Count (point size)
+            ['x' => 1, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+            ['x' => 1, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+            ['x' => 1, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+            ['x' => 2, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+            ['x' => 2, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+            ['x' => 2, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+            ['x' => 3, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+            ['x' => 3, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+            ['x' => 3, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+        ];
+
+         //for Data Availability
+         $query = DB::table('iso_sec_2_1 as iso1')
+         ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+         ->where('iso1.project_id', $proj_id)
+         ->where('iso1.s_name',$s_name)
+         ->where('iso1.g_name',$g_name);
+
+     $query->select(
+         'iso1.s_name',
+         'iso1.g_name',
+         'iso1.name',
+         'iso1.c_name',
+         'iso2.control_num',
+         'iso2.applicability',
+         'iso2.vulnerability',
+         'iso2.threat',
+         
+     );
+
+     $query->addSelect( 'iso2.risk_availability');
+
+     $iso_risk_availability_results = $query->orderBy('iso2.control_num', 'asc')
+         ->get();
+      
+       
+     $scatterPlotDataRiskAvailability = [
+         // x = Vulnerability, y = Threat, r = Risk Count (point size)
+         ['x' => 1, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+         ['x' => 1, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+         ['x' => 1, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+         ['x' => 2, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+         ['x' => 2, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+         ['x' => 2, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+         ['x' => 3, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+         ['x' => 3, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+         ['x' => 3, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+     ];
+
+    
+
+  
+
+
+
+    return view('risk_compliance_heatmap.heatmap_from_asset_group',[
+        'yesCount'=>(($yesCount)/$total)*100,
+        'noCount'=>(($noCount)/$total)*100,
+        'partialCount'=>(($partialCount)/$total)*100,
+        'actionPlanCount'=>$action,
+        'distinctNameCount'=>$distinctNameCount,
+        'distinctComponentCount'=>$distinctComponentCount,
+        'project'=>$project,
+        'scatterPlotDataRiskConfidentiality'=>$scatterPlotDataRiskConfidentiality,
+        'scatterPlotDataRiskIntegrity'=>$scatterPlotDataRiskIntegrity,
+        'scatterPlotDataRiskAvailability'=>$scatterPlotDataRiskAvailability,
+        's_name'=>$s_name,
+        'g_name'=>$g_name
+
+
+    ]);
+
+
+        }
+
+        return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+
+      
+    }
+
+    public function risk_compliance_heatmap_by_asset_from_asset_group($proj_id,$s_name,$g_name,$name,$user_id){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+
+        $total=Db::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+        ->where('iso_sec_2_2.project_id',$proj_id)
+        ->where('iso_sec_2_1.s_name',$s_name)
+        ->where('iso_sec_2_1.g_name',$g_name)
+        ->where('iso_sec_2_1.name',$name)
+        ->count();
+
+
+
+     $yesCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.g_name',$g_name)
+     ->where('iso_sec_2_1.name',$name)
+      ->where('comp_status','yes')->count();
+
+     
+
+      $noCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+      ->where('iso_sec_2_2.project_id',$proj_id)
+      ->where('iso_sec_2_1.s_name',$s_name)
+      ->where('iso_sec_2_1.g_name',$g_name)
+      ->where('iso_sec_2_1.name',$name)
+      ->where('comp_status','no')->count();
+
+      $partialCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.g_name',$g_name)
+     ->where('iso_sec_2_1.name',$name)
+     ->where('comp_status','partial')->count();
+
+      $actionPlanCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.g_name',$g_name)
+     ->where('iso_sec_2_1.name',$name)
+      ->whereIn('comp_status', ['no', 'partial'])
+      ->whereNotNull('treatment_target_date')
+      ->count();
+
+
+
+
+    $distinctComponentCount = DB::table('iso_sec_2_1')
+    ->where('s_name',$s_name)
+    ->where('g_name',$g_name)
+    ->where('name',$name)
+    ->distinct()
+    ->count('c_name');
+
+
+ $partialPlanTotal= Db::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+ ->where('iso_sec_2_2.project_id',$proj_id)
+ ->where('s_name',$s_name)
+ ->where('g_name',$g_name)
+ ->where('name',$name)
+     ->where('comp_status','!=','yes')
+     ->count();
+
+     $action = $partialPlanTotal != 0 ? ($actionPlanCount / $partialPlanTotal) * 100 : 0;
+
+
+    
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$proj_id)->first();
+
+
+    //For heaptmap data confidentiality
+    $query = DB::table('iso_sec_2_1 as iso1')
+                ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+                ->where('iso1.project_id', $proj_id)
+                ->where('iso1.s_name',$s_name)
+                ->where('iso1.g_name',$g_name)
+                ->where('iso1.name',$name);
+
+            $query->select(
+                'iso1.s_name',
+                'iso1.g_name',
+                'iso1.name',
+                'iso1.c_name',
+                'iso2.control_num',
+                'iso2.applicability',
+                'iso2.vulnerability',
+                'iso2.threat',
+                
+            );
+
+            $query->addSelect( 'iso2.risk_level');
+
+            $iso_risk_results = $query->orderBy('iso2.control_num', 'asc')
+                ->get();
+             
+              
+            $scatterPlotDataRiskConfidentiality = [
+                // x = Vulnerability, y = Threat, r = Risk Count (point size)
+                ['x' => 1, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+                ['x' => 1, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+                ['x' => 1, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+                ['x' => 2, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+                ['x' => 2, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+                ['x' => 2, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+                ['x' => 3, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+                ['x' => 3, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+                ['x' => 3, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+            ];
+
+            //for Data integrity
+            $query = DB::table('iso_sec_2_1 as iso1')
+            ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+            ->where('iso1.project_id', $proj_id)
+            ->where('iso1.s_name',$s_name)
+            ->where('iso1.g_name',$g_name)
+            ->where('iso1.name',$name);
+
+        $query->select(
+            'iso1.s_name',
+            'iso1.g_name',
+            'iso1.name',
+            'iso1.c_name',
+            'iso2.control_num',
+            'iso2.applicability',
+            'iso2.vulnerability',
+            'iso2.threat',
+            
+        );
+
+        $query->addSelect( 'iso2.risk_integrity');
+
+        $iso_risk_integrity_results = $query->orderBy('iso2.control_num', 'asc')
+            ->get();
+         
+          
+        $scatterPlotDataRiskIntegrity = [
+            // x = Vulnerability, y = Threat, r = Risk Count (point size)
+            ['x' => 1, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+            ['x' => 1, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+            ['x' => 1, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+            ['x' => 2, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+            ['x' => 2, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+            ['x' => 2, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+            ['x' => 3, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+            ['x' => 3, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+            ['x' => 3, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+        ];
+
+         //for Data Availability
+         $query = DB::table('iso_sec_2_1 as iso1')
+         ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+         ->where('iso1.project_id', $proj_id)
+         ->where('iso1.s_name',$s_name)
+         ->where('iso1.g_name',$g_name)
+         ->where('iso1.name',$name);
+
+     $query->select(
+         'iso1.s_name',
+         'iso1.g_name',
+         'iso1.name',
+         'iso1.c_name',
+         'iso2.control_num',
+         'iso2.applicability',
+         'iso2.vulnerability',
+         'iso2.threat',
+         
+     );
+
+     $query->addSelect( 'iso2.risk_availability');
+
+     $iso_risk_availability_results = $query->orderBy('iso2.control_num', 'asc')
+         ->get();
+      
+       
+     $scatterPlotDataRiskAvailability = [
+         // x = Vulnerability, y = Threat, r = Risk Count (point size)
+         ['x' => 1, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+         ['x' => 1, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+         ['x' => 1, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+         ['x' => 2, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+         ['x' => 2, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+         ['x' => 2, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+         ['x' => 3, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+         ['x' => 3, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+         ['x' => 3, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+     ];
+
+    
+
+  
+
+
+
+    return view('risk_compliance_heatmap.heatmap_by_asset_from_asset_group',[
+        'yesCount'=>(($yesCount)/$total)*100,
+        'noCount'=>(($noCount)/$total)*100,
+        'partialCount'=>(($partialCount)/$total)*100,
+        'actionPlanCount'=>$action,
+        'distinctComponentCount'=>$distinctComponentCount,
+        'project'=>$project,
+        'scatterPlotDataRiskConfidentiality'=>$scatterPlotDataRiskConfidentiality,
+        'scatterPlotDataRiskIntegrity'=>$scatterPlotDataRiskIntegrity,
+        'scatterPlotDataRiskAvailability'=>$scatterPlotDataRiskAvailability,
+        's_name'=>$s_name,
+        'g_name'=>$g_name,
+        'name'=>$name
+
+
+    ]);
+
+
+        }
+
+        return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+
+    }
+
+    public function risk_compliance_heatmap_for_asset_component_by_asset($proj_id,$s_name,$g_name,$name,$c_name,$user_id){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+
+        $total=Db::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+        ->where('iso_sec_2_2.project_id',$proj_id)
+        ->where('iso_sec_2_1.s_name',$s_name)
+        ->where('iso_sec_2_1.g_name',$g_name)
+        ->where('iso_sec_2_1.name',$name)
+        ->where('iso_sec_2_1.c_name',$c_name)
+        ->count();
+
+
+
+     $yesCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.g_name',$g_name)
+     ->where('iso_sec_2_1.name',$name)
+     ->where('iso_sec_2_1.c_name',$c_name)
+      ->where('comp_status','yes')->count();
+
+     
+
+      $noCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+      ->where('iso_sec_2_2.project_id',$proj_id)
+      ->where('iso_sec_2_1.s_name',$s_name)
+      ->where('iso_sec_2_1.g_name',$g_name)
+      ->where('iso_sec_2_1.name',$name)
+      ->where('iso_sec_2_1.c_name',$c_name)
+      ->where('comp_status','no')->count();
+
+      $partialCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.g_name',$g_name)
+     ->where('iso_sec_2_1.name',$name)
+     ->where('iso_sec_2_1.c_name',$c_name)
+     ->where('comp_status','partial')->count();
+
+      $actionPlanCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.g_name',$g_name)
+     ->where('iso_sec_2_1.name',$name)
+     ->where('iso_sec_2_1.c_name',$c_name)
+      ->whereIn('comp_status', ['no', 'partial'])
+      ->whereNotNull('treatment_target_date')
+      ->count();
+
+
+
+
+ $partialPlanTotal= Db::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+ ->where('iso_sec_2_2.project_id',$proj_id)
+ ->where('s_name',$s_name)
+ ->where('g_name',$g_name)
+ ->where('name',$name)
+ ->where('c_name',$c_name)
+ ->where('comp_status','!=','yes')
+ ->count();
+
+     $action = $partialPlanTotal != 0 ? ($actionPlanCount / $partialPlanTotal) * 100 : 0;
+
+
+    
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$proj_id)->first();
+
+
+    //For heaptmap data confidentiality
+    $query = DB::table('iso_sec_2_1 as iso1')
+                ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+                ->where('iso1.project_id', $proj_id)
+                ->where('iso1.s_name',$s_name)
+                ->where('iso1.g_name',$g_name)
+                ->where('iso1.name',$name)
+                ->where('iso1.c_name',$c_name);
+
+            $query->select(
+                'iso1.s_name',
+                'iso1.g_name',
+                'iso1.name',
+                'iso1.c_name',
+                'iso2.control_num',
+                'iso2.applicability',
+                'iso2.vulnerability',
+                'iso2.threat',
+                
+            );
+
+            $query->addSelect( 'iso2.risk_level');
+
+            $iso_risk_results = $query->orderBy('iso2.control_num', 'asc')
+                ->get();
+             
+              
+            $scatterPlotDataRiskConfidentiality = [
+                // x = Vulnerability, y = Threat, r = Risk Count (point size)
+                ['x' => 1, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+                ['x' => 1, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+                ['x' => 1, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+                ['x' => 2, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+                ['x' => 2, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+                ['x' => 2, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+                ['x' => 3, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+                ['x' => 3, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+                ['x' => 3, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+            ];
+
+            //for Data integrity
+            $query = DB::table('iso_sec_2_1 as iso1')
+            ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+            ->where('iso1.project_id', $proj_id)
+            ->where('iso1.s_name',$s_name)
+            ->where('iso1.g_name',$g_name)
+            ->where('iso1.name',$name)
+            ->where('iso1.c_name',$c_name);
+
+        $query->select(
+            'iso1.s_name',
+            'iso1.g_name',
+            'iso1.name',
+            'iso1.c_name',
+            'iso2.control_num',
+            'iso2.applicability',
+            'iso2.vulnerability',
+            'iso2.threat',
+            
+        );
+
+        $query->addSelect( 'iso2.risk_integrity');
+
+        $iso_risk_integrity_results = $query->orderBy('iso2.control_num', 'asc')
+            ->get();
+         
+          
+        $scatterPlotDataRiskIntegrity = [
+            // x = Vulnerability, y = Threat, r = Risk Count (point size)
+            ['x' => 1, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+            ['x' => 1, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+            ['x' => 1, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+            ['x' => 2, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+            ['x' => 2, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+            ['x' => 2, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+            ['x' => 3, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+            ['x' => 3, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+            ['x' => 3, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+        ];
+
+         //for Data Availability
+         $query = DB::table('iso_sec_2_1 as iso1')
+         ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+         ->where('iso1.project_id', $proj_id)
+         ->where('iso1.s_name',$s_name)
+         ->where('iso1.g_name',$g_name)
+         ->where('iso1.name',$name)
+         ->where('iso1.c_name',$c_name);
+
+     $query->select(
+         'iso1.s_name',
+         'iso1.g_name',
+         'iso1.name',
+         'iso1.c_name',
+         'iso2.control_num',
+         'iso2.applicability',
+         'iso2.vulnerability',
+         'iso2.threat',
+         
+     );
+
+     $query->addSelect( 'iso2.risk_availability');
+
+     $iso_risk_availability_results = $query->orderBy('iso2.control_num', 'asc')
+         ->get();
+      
+       
+     $scatterPlotDataRiskAvailability = [
+         // x = Vulnerability, y = Threat, r = Risk Count (point size)
+         ['x' => 1, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+         ['x' => 1, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+         ['x' => 1, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+         ['x' => 2, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+         ['x' => 2, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+         ['x' => 2, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+         ['x' => 3, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+         ['x' => 3, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+         ['x' => 3, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+     ];
+
+    
+
+  
+
+
+
+    return view('risk_compliance_heatmap.heatmap_by_asset_component_from_asset',[
+        'yesCount'=>(($yesCount)/$total)*100,
+        'noCount'=>(($noCount)/$total)*100,
+        'partialCount'=>(($partialCount)/$total)*100,
+        'actionPlanCount'=>$action,
+        'project'=>$project,
+        'scatterPlotDataRiskConfidentiality'=>$scatterPlotDataRiskConfidentiality,
+        'scatterPlotDataRiskIntegrity'=>$scatterPlotDataRiskIntegrity,
+        'scatterPlotDataRiskAvailability'=>$scatterPlotDataRiskAvailability,
+        's_name'=>$s_name,
+        'g_name'=>$g_name,
+        'name'=>$name,
+        'c_name'=>$c_name
+
+
+    ]);
+
+
+        }
+
+        return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+
+    }
+
+    public function risk_compliance_heatmap_by_service_and_asset($proj_id,$s_name,$name,$user_id){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+
+        $total=Db::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+        ->where('iso_sec_2_2.project_id',$proj_id)
+        ->where('iso_sec_2_1.s_name',$s_name)
+        ->where('iso_sec_2_1.name',$name)
+        ->count();
+
+
+
+     $yesCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.name',$name)
+      ->where('comp_status','yes')->count();
+
+     
+
+      $noCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+      ->where('iso_sec_2_2.project_id',$proj_id)
+      ->where('iso_sec_2_1.s_name',$s_name)
+      ->where('iso_sec_2_1.name',$name)
+      ->where('comp_status','no')->count();
+
+      $partialCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.name',$name)
+     ->where('comp_status','partial')->count();
+
+      $actionPlanCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.name',$name)
+      ->whereIn('comp_status', ['no', 'partial'])
+      ->whereNotNull('treatment_target_date')
+      ->count();
+
+
+
+
+ $partialPlanTotal= Db::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+ ->where('iso_sec_2_2.project_id',$proj_id)
+ ->where('s_name',$s_name)
+ ->where('name',$name)
+ ->where('comp_status','!=','yes')
+ ->count();
+
+     $action = $partialPlanTotal != 0 ? ($actionPlanCount / $partialPlanTotal) * 100 : 0;
+
+
+    
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$proj_id)->first();
+
+    $distinctGroupCount = DB::table('iso_sec_2_1')
+    ->where('s_name',$s_name)
+    ->where('name',$name)
+    ->distinct()
+    ->count('g_name');
+
+    $distinctComponentCount = DB::table('iso_sec_2_1')
+    ->where('s_name',$s_name)
+    ->where('name',$name)
+    ->distinct()
+    ->count('c_name');
+
+
+    //For heaptmap data confidentiality
+    $query = DB::table('iso_sec_2_1 as iso1')
+                ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+                ->where('iso1.project_id', $proj_id)
+                ->where('iso1.s_name',$s_name)
+                ->where('iso1.name',$name);
+
+            $query->select(
+                'iso1.s_name',
+                'iso1.g_name',
+                'iso1.name',
+                'iso1.c_name',
+                'iso2.control_num',
+                'iso2.applicability',
+                'iso2.vulnerability',
+                'iso2.threat',
+                
+            );
+
+            $query->addSelect( 'iso2.risk_level');
+
+            $iso_risk_results = $query->orderBy('iso2.control_num', 'asc')
+                ->get();
+             
+              
+            $scatterPlotDataRiskConfidentiality = [
+                // x = Vulnerability, y = Threat, r = Risk Count (point size)
+                ['x' => 1, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+                ['x' => 1, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+                ['x' => 1, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+                ['x' => 2, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+                ['x' => 2, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+                ['x' => 2, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+                ['x' => 3, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+                ['x' => 3, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+                ['x' => 3, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+            ];
+
+            //for Data integrity
+            $query = DB::table('iso_sec_2_1 as iso1')
+            ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+            ->where('iso1.project_id', $proj_id)
+            ->where('iso1.s_name',$s_name)
+            ->where('iso1.name',$name);
+
+        $query->select(
+            'iso1.s_name',
+            'iso1.g_name',
+            'iso1.name',
+            'iso1.c_name',
+            'iso2.control_num',
+            'iso2.applicability',
+            'iso2.vulnerability',
+            'iso2.threat',
+            
+        );
+
+        $query->addSelect( 'iso2.risk_integrity');
+
+        $iso_risk_integrity_results = $query->orderBy('iso2.control_num', 'asc')
+            ->get();
+         
+          
+        $scatterPlotDataRiskIntegrity = [
+            // x = Vulnerability, y = Threat, r = Risk Count (point size)
+            ['x' => 1, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+            ['x' => 1, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+            ['x' => 1, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+            ['x' => 2, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+            ['x' => 2, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+            ['x' => 2, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+            ['x' => 3, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+            ['x' => 3, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+            ['x' => 3, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+        ];
+
+         //for Data Availability
+         $query = DB::table('iso_sec_2_1 as iso1')
+         ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+         ->where('iso1.project_id', $proj_id)
+         ->where('iso1.s_name',$s_name)
+         ->where('iso1.name',$name);
+
+     $query->select(
+         'iso1.s_name',
+         'iso1.g_name',
+         'iso1.name',
+         'iso1.c_name',
+         'iso2.control_num',
+         'iso2.applicability',
+         'iso2.vulnerability',
+         'iso2.threat',
+         
+     );
+
+     $query->addSelect( 'iso2.risk_availability');
+
+     $iso_risk_availability_results = $query->orderBy('iso2.control_num', 'asc')
+         ->get();
+      
+       
+     $scatterPlotDataRiskAvailability = [
+         // x = Vulnerability, y = Threat, r = Risk Count (point size)
+         ['x' => 1, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+         ['x' => 1, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+         ['x' => 1, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+         ['x' => 2, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+         ['x' => 2, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+         ['x' => 2, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+         ['x' => 3, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+         ['x' => 3, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+         ['x' => 3, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+     ];
+
+    
+
+  
+
+
+
+    return view('risk_compliance_heatmap.heatmap_by_service_and_asset',[
+        'yesCount'=>(($yesCount)/$total)*100,
+        'noCount'=>(($noCount)/$total)*100,
+        'partialCount'=>(($partialCount)/$total)*100,
+        'actionPlanCount'=>$action,
+        'project'=>$project,
+        'scatterPlotDataRiskConfidentiality'=>$scatterPlotDataRiskConfidentiality,
+        'scatterPlotDataRiskIntegrity'=>$scatterPlotDataRiskIntegrity,
+        'scatterPlotDataRiskAvailability'=>$scatterPlotDataRiskAvailability,
+        's_name'=>$s_name,
+        'name'=>$name,
+        'distinctComponentCount'=>$distinctComponentCount,
+        'distinctGroupCount'=>$distinctGroupCount
+
+    ]);
+
+
+        }
+
+        return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+
+    }
+
+    public function risk_compliance_heatmap_by_service_asset_component($proj_id,$s_name,$name,$c_name,$user_id){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+
+        $total=Db::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+        ->where('iso_sec_2_2.project_id',$proj_id)
+        ->where('iso_sec_2_1.s_name',$s_name)
+        ->where('iso_sec_2_1.name',$name)
+        ->where('iso_sec_2_1.c_name',$c_name)
+        ->count();
+
+
+
+     $yesCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.name',$name)
+     ->where('iso_sec_2_1.c_name',$c_name)
+      ->where('comp_status','yes')->count();
+
+     
+
+      $noCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+      ->where('iso_sec_2_2.project_id',$proj_id)
+      ->where('iso_sec_2_1.s_name',$s_name)
+      ->where('iso_sec_2_1.name',$name)
+      ->where('iso_sec_2_1.c_name',$c_name)
+      ->where('comp_status','no')->count();
+
+      $partialCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.name',$name)
+     ->where('iso_sec_2_1.c_name',$c_name)
+     ->where('comp_status','partial')->count();
+
+      $actionPlanCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.name',$name)
+     ->where('iso_sec_2_1.c_name',$c_name)
+      ->whereIn('comp_status', ['no', 'partial'])
+      ->whereNotNull('treatment_target_date')
+      ->count();
+
+
+
+
+ $partialPlanTotal= Db::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+ ->where('iso_sec_2_2.project_id',$proj_id)
+ ->where('s_name',$s_name)
+ ->where('name',$name)
+ ->where('c_name',$c_name)
+ ->where('comp_status','!=','yes')
+ ->count();
+
+     $action = $partialPlanTotal != 0 ? ($actionPlanCount / $partialPlanTotal) * 100 : 0;
+
+
+    
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$proj_id)->first();
+
+    $distinctGroupCount = DB::table('iso_sec_2_1')
+    ->where('s_name',$s_name)
+    ->where('name',$name)
+    ->where('c_name',$c_name)
+    ->distinct()
+    ->count('g_name');
+
+
+    //For heaptmap data confidentiality
+    $query = DB::table('iso_sec_2_1 as iso1')
+                ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+                ->where('iso1.project_id', $proj_id)
+                ->where('iso1.s_name',$s_name)
+                ->where('iso1.name',$name)
+                ->where('iso1.c_name',$c_name);
+
+            $query->select(
+                'iso1.s_name',
+                'iso1.g_name',
+                'iso1.name',
+                'iso1.c_name',
+                'iso2.control_num',
+                'iso2.applicability',
+                'iso2.vulnerability',
+                'iso2.threat',
+                
+            );
+
+            $query->addSelect( 'iso2.risk_level');
+
+            $iso_risk_results = $query->orderBy('iso2.control_num', 'asc')
+                ->get();
+             
+              
+            $scatterPlotDataRiskConfidentiality = [
+                // x = Vulnerability, y = Threat, r = Risk Count (point size)
+                ['x' => 1, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+                ['x' => 1, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+                ['x' => 1, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+                ['x' => 2, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+                ['x' => 2, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+                ['x' => 2, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+                ['x' => 3, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+                ['x' => 3, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+                ['x' => 3, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+            ];
+
+            //for Data integrity
+            $query = DB::table('iso_sec_2_1 as iso1')
+            ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+            ->where('iso1.project_id', $proj_id)
+            ->where('iso1.s_name',$s_name)
+            ->where('iso1.name',$name)
+            ->where('iso1.c_name',$c_name);
+
+        $query->select(
+            'iso1.s_name',
+            'iso1.g_name',
+            'iso1.name',
+            'iso1.c_name',
+            'iso2.control_num',
+            'iso2.applicability',
+            'iso2.vulnerability',
+            'iso2.threat',
+            
+        );
+
+        $query->addSelect( 'iso2.risk_integrity');
+
+        $iso_risk_integrity_results = $query->orderBy('iso2.control_num', 'asc')
+            ->get();
+         
+          
+        $scatterPlotDataRiskIntegrity = [
+            // x = Vulnerability, y = Threat, r = Risk Count (point size)
+            ['x' => 1, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+            ['x' => 1, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+            ['x' => 1, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+            ['x' => 2, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+            ['x' => 2, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+            ['x' => 2, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+            ['x' => 3, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+            ['x' => 3, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+            ['x' => 3, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+        ];
+
+         //for Data Availability
+         $query = DB::table('iso_sec_2_1 as iso1')
+         ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+         ->where('iso1.project_id', $proj_id)
+         ->where('iso1.s_name',$s_name)
+         ->where('iso1.name',$name)
+         ->where('iso1.c_name',$c_name);
+
+     $query->select(
+         'iso1.s_name',
+         'iso1.g_name',
+         'iso1.name',
+         'iso1.c_name',
+         'iso2.control_num',
+         'iso2.applicability',
+         'iso2.vulnerability',
+         'iso2.threat',
+         
+     );
+
+     $query->addSelect( 'iso2.risk_availability');
+
+     $iso_risk_availability_results = $query->orderBy('iso2.control_num', 'asc')
+         ->get();
+      
+       
+     $scatterPlotDataRiskAvailability = [
+         // x = Vulnerability, y = Threat, r = Risk Count (point size)
+         ['x' => 1, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+         ['x' => 1, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+         ['x' => 1, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+         ['x' => 2, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+         ['x' => 2, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+         ['x' => 2, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+         ['x' => 3, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+         ['x' => 3, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+         ['x' => 3, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+     ];
+
+    
+
+  
+
+
+
+    return view('risk_compliance_heatmap.heatmap_by_service_and_asset_and_component',[
+        'yesCount'=>(($yesCount)/$total)*100,
+        'noCount'=>(($noCount)/$total)*100,
+        'partialCount'=>(($partialCount)/$total)*100,
+        'actionPlanCount'=>$action,
+        'project'=>$project,
+        'scatterPlotDataRiskConfidentiality'=>$scatterPlotDataRiskConfidentiality,
+        'scatterPlotDataRiskIntegrity'=>$scatterPlotDataRiskIntegrity,
+        'scatterPlotDataRiskAvailability'=>$scatterPlotDataRiskAvailability,
+        's_name'=>$s_name,
+        'name'=>$name,
+        'c_name'=>$c_name,
+        'distinctGroupCount'=>$distinctGroupCount
+
+    ]);
+
+
+        }
+
+        return redirect()->route('assigned_projects', ['user_id' => $user_id]);
+
+    }
+
+    public function risk_compliance_heatmap_by_service_and_component($proj_id,$s_name,$c_name,$user_id){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+
+        $total=Db::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+        ->where('iso_sec_2_2.project_id',$proj_id)
+        ->where('iso_sec_2_1.s_name',$s_name)
+        ->where('iso_sec_2_1.c_name',$c_name)
+        ->count();
+
+
+
+     $yesCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.c_name',$c_name)
+      ->where('comp_status','yes')->count();
+
+     
+
+      $noCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+      ->where('iso_sec_2_2.project_id',$proj_id)
+      ->where('iso_sec_2_1.s_name',$s_name)
+      ->where('iso_sec_2_1.c_name',$c_name)
+      ->where('comp_status','no')->count();
+
+      $partialCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.c_name',$c_name)
+     ->where('comp_status','partial')->count();
+
+      $actionPlanCount= DB::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+     ->where('iso_sec_2_2.project_id',$proj_id)
+     ->where('iso_sec_2_1.s_name',$s_name)
+     ->where('iso_sec_2_1.c_name',$c_name)
+      ->whereIn('comp_status', ['no', 'partial'])
+      ->whereNotNull('treatment_target_date')
+      ->count();
+
+
+
+
+ $partialPlanTotal= Db::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
+ ->where('iso_sec_2_2.project_id',$proj_id)
+ ->where('s_name',$s_name)
+ ->where('c_name',$c_name)
+ ->where('comp_status','!=','yes')
+ ->count();
+
+     $action = $partialPlanTotal != 0 ? ($actionPlanCount / $partialPlanTotal) * 100 : 0;
+
+
+    
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$proj_id)->first();
+
+    $distinctGroupCount = DB::table('iso_sec_2_1')
+    ->where('s_name',$s_name)
+    ->where('c_name',$c_name)
+    ->distinct()
+    ->count('g_name');
+
+    $distinctAssetCount = DB::table('iso_sec_2_1')
+    ->where('s_name',$s_name)
+    ->where('c_name',$c_name)
+    ->distinct()
+    ->count('name');
+
+
+
+    //For heaptmap data confidentiality
+    $query = DB::table('iso_sec_2_1 as iso1')
+                ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+                ->where('iso1.project_id', $proj_id)
+                ->where('iso1.s_name',$s_name)
+                ->where('iso1.c_name',$c_name);
+
+            $query->select(
+                'iso1.s_name',
+                'iso1.g_name',
+                'iso1.name',
+                'iso1.c_name',
+                'iso2.control_num',
+                'iso2.applicability',
+                'iso2.vulnerability',
+                'iso2.threat',
+                
+            );
+
+            $query->addSelect( 'iso2.risk_level');
+
+            $iso_risk_results = $query->orderBy('iso2.control_num', 'asc')
+                ->get();
+             
+              
+            $scatterPlotDataRiskConfidentiality = [
+                // x = Vulnerability, y = Threat, r = Risk Count (point size)
+                ['x' => 1, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+                ['x' => 1, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+                ['x' => 1, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+                ['x' => 2, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+                ['x' => 2, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+                ['x' => 2, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+                ['x' => 3, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+                ['x' => 3, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+                ['x' => 3, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+            ];
+
+            //for Data integrity
+            $query = DB::table('iso_sec_2_1 as iso1')
+            ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+            ->where('iso1.project_id', $proj_id)
+            ->where('iso1.s_name',$s_name)
+            ->where('iso1.c_name',$c_name);
+
+        $query->select(
+            'iso1.s_name',
+            'iso1.g_name',
+            'iso1.name',
+            'iso1.c_name',
+            'iso2.control_num',
+            'iso2.applicability',
+            'iso2.vulnerability',
+            'iso2.threat',
+            
+        );
+
+        $query->addSelect( 'iso2.risk_integrity');
+
+        $iso_risk_integrity_results = $query->orderBy('iso2.control_num', 'asc')
+            ->get();
+         
+          
+        $scatterPlotDataRiskIntegrity = [
+            // x = Vulnerability, y = Threat, r = Risk Count (point size)
+            ['x' => 1, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+            ['x' => 1, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+            ['x' => 1, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+            ['x' => 2, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+            ['x' => 2, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+            ['x' => 2, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+            ['x' => 3, 'y' => 1, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+            ['x' => 3, 'y' => 2, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+            ['x' => 3, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+        ];
+
+         //for Data Availability
+         $query = DB::table('iso_sec_2_1 as iso1')
+         ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
+         ->where('iso1.project_id', $proj_id)
+         ->where('iso1.s_name',$s_name)
+         ->where('iso1.c_name',$c_name);
+
+     $query->select(
+         'iso1.s_name',
+         'iso1.g_name',
+         'iso1.name',
+         'iso1.c_name',
+         'iso2.control_num',
+         'iso2.applicability',
+         'iso2.vulnerability',
+         'iso2.threat',
+         
+     );
+
+     $query->addSelect( 'iso2.risk_availability');
+
+     $iso_risk_availability_results = $query->orderBy('iso2.control_num', 'asc')
+         ->get();
+      
+       
+     $scatterPlotDataRiskAvailability = [
+         // x = Vulnerability, y = Threat, r = Risk Count (point size)
+         ['x' => 1, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+         ['x' => 1, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+         ['x' => 1, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
+
+         ['x' => 2, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+         ['x' => 2, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+         ['x' => 2, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
+
+         ['x' => 3, 'y' => 1, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+         ['x' => 3, 'y' => 2, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+         ['x' => 3, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+     ];
+
+    
+
+  
+
+
+
+    return view('risk_compliance_heatmap.heatmap_by_service_and_component',[
+        'yesCount'=>(($yesCount)/$total)*100,
+        'noCount'=>(($noCount)/$total)*100,
+        'partialCount'=>(($partialCount)/$total)*100,
+        'actionPlanCount'=>$action,
+        'project'=>$project,
+        'scatterPlotDataRiskConfidentiality'=>$scatterPlotDataRiskConfidentiality,
+        'scatterPlotDataRiskIntegrity'=>$scatterPlotDataRiskIntegrity,
+        'scatterPlotDataRiskAvailability'=>$scatterPlotDataRiskAvailability,
+        's_name'=>$s_name,
+        'c_name'=>$c_name,
+        'distinctGroupCount'=>$distinctGroupCount,
+        'distinctAssetCount'=>$distinctAssetCount
+
+    ]);
+
+
+        }
+
+        return redirect()->route('assigned_projects', ['user_id' => $user_id]);
 
     }
 

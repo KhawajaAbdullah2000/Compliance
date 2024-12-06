@@ -35,14 +35,14 @@
                     </tr>
 
                     <tr>
-                        <td class="fw-bold">No. of Services:</td>
-                        <td>{{ $distinctServiceCount }}</td>
-                        <td class="fw-bold">No. of Assets:</td>
-                        <td>{{ $distinctNameCount }}</td>
+                        <td class="fw-bold">Service</td>
+                        <td>{{ $s_name }}</td>
+                        <td class="fw-bold">Asset</td>
+                        <td>{{ $name }}</td>
                     </tr>
 
                     <tr>
-                        <td class="fw-bold">No. of Asset Groups:</td>
+                        <td class="fw-bold">Group</td>
                         <td>{{ $distinctGroupCount }}</td>
                         <td class="fw-bold">No. of Asset Components:</td>
                         <td>{{ $distinctComponentCount }}</td>
@@ -51,6 +51,8 @@
             </table>
         </div>
     </div>
+
+    <h3 class="text-center fw-bold">Risk and Compliance Heatmap for Service: {{$s_name}} and Asset: {{$name}}</h3>
 
     <div class="row text-center">
         <div class="col-md-3">
@@ -138,55 +140,7 @@
         </div>
     </div>
 
-{{-- 
-    <div class="row mt-4">
-        <div class="col-md-4">
-            <table class="table table-responsive table-bordered">
-                <tr>
-                    <td rowspan="4">Potential Damage if threat exploits vulnerabilities</td>
-                </tr>
-                <tr>
-                    <th>High</th>
-                    <td class="bg-warning">Count</td>
-                    <td class="bg-warning">Count</td>
-                    <td class="bg-danger">Count</td>
-                </tr>
 
-                <tr>
-                    <th>Medium</th>
-                    <td class="bg-warning">Count</td>
-                    <td class="bg-warning">Count</td>
-                    <td class="bg-warning">Count</td>
-                </tr>
-
-                <tr>
-                    <th>Low</th>
-                    <td class="bg-success">Count</td>
-                    <td class="bg-warning">Count</td>
-                    <td class="bg-warning">Count</td>
-                </tr>
-
-                <tr>
-                    <th rowspan="3" colspan="2">Risks to data
-                        confidentiality
-                        </th>
-                </tr>
-                <tr>
-                   
-                    <th>Low</th>
-                    <th>Medium</th>
-                    <th>High</th>
-                </tr>
-                <tr>
-                    <td colspan="3">Probability that threats will exploit
-                        vulnerabilities
-                        </td>
-                </tr>
-                
-            </table>
-
-        </div>
-    </div> --}}
     
     {{-- Heatmap --}}
     <div class="row mt-4" >
@@ -218,70 +172,6 @@
 
 
 
-    <div class="row mt-4">
-
-        <div class="col-md-4">
-            <table class="risk-table">
-                <tr>
-                    <td class="risk-header">Services in descending order of risk to data confidentiality</td>
-                </tr>
-                @foreach($serviceOrderRiskConfidentiality as $index => $service)
-                    <tr>
-                        <td class="risk-row
-                            @if($index === 0) risk-red
-                            @elseif($index === 1) risk-yellow
-                            @else risk-green
-                            @endif
-                        ">
-                            {{ $service->s_name }}
-                        </td>
-                    </tr>
-                @endforeach
-            </table>
-        </div>
-
-        <div class="col-md-4">
-            <table class="risk-table">
-                <tr>
-                    <td class="risk-header">Services in descending order of risk to data integrity</td>
-                </tr>
-                @foreach($serviceOrderRiskIntegrity as $index => $service)
-                    <tr>
-                        <td class="risk-row
-                            @if($index === 0) risk-red
-                            @elseif($index === 1) risk-yellow
-                            @else risk-green
-                            @endif
-                        ">
-                            {{ $service->s_name }}
-                        </td>
-                    </tr>
-                @endforeach
-            </table>
-        </div>
-
-
-        <div class="col-md-4">
-            <table class="risk-table">
-                <tr>
-                    <td class="risk-header">Services in descending order of risk to data availability</td>
-                </tr>
-                @foreach($serviceOrderRiskAvailability as $index => $service)
-                    <tr>
-                        <td class="risk-row
-                            @if($index === 0) risk-red
-                            @elseif($index === 1) risk-yellow
-                            @else risk-green
-                            @endif
-                        ">
-                            {{ $service->s_name }}
-                        </td>
-                    </tr>
-                @endforeach
-            </table>
-        </div>
-
-    </div>
 
 
 
@@ -317,6 +207,7 @@
 ];
 
 
+// Function to scale the radius based on risk count
 function scaleRadius(riskCount, minRisk, maxRisk, minRadius, maxRadius) {
     if (minRisk === maxRisk) {
         return minRadius; // Avoid division by zero
@@ -329,6 +220,8 @@ const riskCountsConfidentiality = scatterPlotDataRiskConfidentiality.map(data =>
 const minRiskscatterPlotDataRiskConfidentiality = Math.min(...riskCountsConfidentiality);
 const maxRiskscatterPlotDataRiskConfidentiality = Math.max(...riskCountsConfidentiality);
 
+
+
 const minRadius = 10;  // Minimum bubble size
 const maxRadius = 30; // Maximum bubble size
 
@@ -338,10 +231,10 @@ const scaledScatterPlotDataRiskConfidentiality = scatterPlotDataRiskConfidential
     r: scaleRadius(data.riskCount, minRiskscatterPlotDataRiskConfidentiality, maxRiskscatterPlotDataRiskConfidentiality, minRadius, maxRadius)  // Scale radius
 }));
 
-const ctx = document.getElementById('heatmapRiskConfidentialityChart').getContext('2d');
+const ctxConfidentiality = document.getElementById('heatmapRiskConfidentialityChart').getContext('2d');
 Chart.register(ChartDataLabels);
 
-const scatterChart = new Chart(ctx, {
+const scatterChartConfidentiality = new Chart(ctxConfidentiality, {
     type: 'bubble',  // Use 'bubble' type to enable variable radius
     data: {
         datasets: [{
@@ -448,6 +341,8 @@ const riskCountsIntegrity = scatterPlotDataRiskIntegrity.map(data => data.riskCo
 const minRiskscatterPlotDataRiskIntegrity = Math.min(...riskCountsIntegrity);
 const maxRiskscatterPlotDataRiskIntegrity = Math.max(...riskCountsIntegrity);
 
+console.log("MIn risk for integrity ",minRiskscatterPlotDataRiskIntegrity)
+console.log("Max risk for integrity ",maxRiskscatterPlotDataRiskIntegrity)
 
 
 // Update scatterPlotData to include scaled radius

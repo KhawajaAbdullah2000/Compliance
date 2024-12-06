@@ -79,8 +79,8 @@
                     <td>{{number_format((($data['totalDataConfidentiality']+$data['totalDataIntegrity']+$data['totalDataAvailability'])/2670)*100,5)}}</td>
 
                     <td>
-                        <a href="/risk_compliance_heatmap/{{ $project->project_id }}/{{$data['group_name']}}/{{ auth()->user()->id }}" 
-                           data-toggle="tooltip" title="Risk and Compliance Heatmap for {{$data['group_name']}}">
+                        <a href="/risk_compliance_heatmap_from_asset_group/{{ $project->project_id }}/{{$service_name}}/{{$data['group_name']}}/{{ auth()->user()->id }}" 
+                           data-toggle="tooltip" title="Risk and Compliance Heatmap for {{$data['group_name']}} in Service: {{$service_name}}">
                             <i class="fas fa-map fa-lg text-warning"></i>
                         </a>
                     </td>
