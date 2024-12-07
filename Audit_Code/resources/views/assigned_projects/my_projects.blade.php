@@ -19,8 +19,8 @@
                         <th style='text-align:center'>Project Name</th>
                         <th style='text-align:center'>Project Type</th>
                         <th style='text-align:center'>Project Status</th>
-                        <th style='text-align:center'>Project Permissions</th>
-                        <th style='text-align:center'>Edit Project</th>
+                        <th style='text-align:center'>My Permissions on Project</th>
+                        <th style='text-align:center'>Edit Project Data</th>
                         <th style='text-align:center'>Risk & Compliance Heatmap</th> 
                         <th style='text-align:center'>Drill Down by Service</th> 
                         <th style='text-align:center'>Project Visuals</th>

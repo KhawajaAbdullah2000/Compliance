@@ -111,10 +111,12 @@ $permissions=json_decode($project_permissions);
                      <div class="mb-4">
                          <label for="comp_status" class="form-label fw-semibold">Compliance Status</label>
                          <select name="comp_status" class="form-select rounded-pill">
-                             <option value="yes" {{ old('comp_status', $result->comp_status) == 'yes' ? 'selected' : '' }}>Yes</option>
-                             <option value="no" {{ old('comp_status', $result->comp_status) == 'no' ? 'selected' : '' }}>No</option>
+                             <option value="yes" {{ old('comp_status', $result->comp_status) == 'yes' ? 'selected' : '' }}>In place</option>
+                             <option value="no" {{ old('comp_status', $result->comp_status) == 'no' ? 'selected' : '' }}>Not in Place</option>
                              <option value="partial" {{ old('comp_status', $result->comp_status) == 'partial' ? 'selected' : '' }}>Partial</option>
-                         </select>
+                             <option value="not_applicable" {{ old('comp_status', $result->comp_status) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+
+                            </select>
                          @if($errors->has('comp_status'))
                          <div class="text-danger small mt-2">{{ $errors->first('comp_status') }}</div>
                          @endif
@@ -236,10 +238,12 @@ $permissions=json_decode($project_permissions);
                              <label for="comp_status" class="form-label fw-semibold">Compliance Status</label>
                              <select name="comp_status" class="form-select rounded-pill">
                                  <option value="">Select --</option>
-                                 <option value="yes" {{ old('comp_status') == 'yes' ? 'selected' : '' }}>Yes</option>
-                                 <option value="no" {{ old('comp_status') == 'no' ? 'selected' : '' }}>No</option>
+                                 <option value="yes" {{ old('comp_status') == 'yes' ? 'selected' : '' }}>In Place</option>
+                                 <option value="no" {{ old('comp_status') == 'no' ? 'selected' : '' }}>Not in Place</option>
                                  <option value="partial" {{ old('comp_status') == 'partial' ? 'selected' : '' }}>Partial</option>
-                             </select>
+                                 <option value="not_applicable" {{ old('comp_status') == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+
+                                </select>
                              @if($errors->has('comp_status'))
                              <div class="text-danger small mt-2">{{ $errors->first('comp_status') }}</div>
                              @endif

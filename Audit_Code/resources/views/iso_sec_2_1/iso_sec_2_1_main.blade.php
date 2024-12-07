@@ -150,9 +150,9 @@ $permissions = json_decode($project_permissions);
 @endif
 
     <!-- Data Table -->
-    <table id="myTable2" class="table table-bordered table-hover text-center align-middle">
+    <table id="myTable2" class="table table-bordered table-hover  align-middle">
         <thead class="table-dark ">
-            <tr style="cursor: pointer">
+            <tr style="cursor: pointer" class="text-center">
                 <th onclick="sortTable(0)">Service</th>
                     <th onclick="sortTable(1)">Asset Group</th>
                     <th onclick="sortTable(2)">Asset</th>
@@ -188,11 +188,11 @@ $permissions = json_decode($project_permissions);
                 </td>
                 @endif
 
-                <td>
+                <td class="text-center">
                     <a href="/iso_sec_2_2_evidence/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}" class="btn btn-warning btn-sm rounded-pill">Enter</a>
                 </td>
           
-                <td>
+                <td class="text-center">
                     @if (in_array('Data Inputter', $permissions))
                     <a href="/iso_sec_2_1_edit/{{ $d->assessment_id }}/{{ $d->project_id }}/{{ auth()->user()->id }}">
                         <i class="fas fa-edit text-success"></i>

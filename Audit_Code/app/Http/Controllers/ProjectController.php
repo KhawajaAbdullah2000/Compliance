@@ -231,7 +231,9 @@ class ProjectController extends Controller
 
         if ($checkpermission) {
 
-        $total=Db::table('iso_sec_2_2')->where('project_id',$proj_id)->count();
+        $total=Db::table('iso_sec_2_2')->where('project_id',$proj_id)
+        ->where('comp_status','!=','not_applicable')
+        ->count();
 
 
      $yesCount= DB::table('iso_sec_2_2')->where('project_id',$proj_id)->where('comp_status','yes')->count();
@@ -243,24 +245,29 @@ class ProjectController extends Controller
       ->count();
 
       $distinctServiceCount = DB::table('iso_sec_2_1')
+      ->where('project_id',$proj_id)
     ->distinct()
     ->count('s_name');
 
     $distinctGroupCount = DB::table('iso_sec_2_1')
+    ->where('project_id',$proj_id)
     ->distinct()
     ->count('g_name');
 
     $distinctNameCount = DB::table('iso_sec_2_1')
+    ->where('project_id',$proj_id)
     ->distinct()
     ->count('name');
 
     $distinctComponentCount = DB::table('iso_sec_2_1')
+    ->where('project_id',$proj_id)
     ->distinct()
     ->count('c_name');
 
 
     $partialPlanTotal= Db::table('iso_sec_2_2')->where('project_id',$proj_id)
     ->where('comp_status','!=','yes')
+    ->where('comp_status','!=','not_applicable')
     ->count();
 
     $action = $partialPlanTotal != 0 ? ($actionPlanCount / $partialPlanTotal) * 100 : 0;
@@ -472,6 +479,7 @@ class ProjectController extends Controller
         $total=Db::table('iso_sec_2_2')->join('iso_sec_2_1','iso_sec_2_1.assessment_id','iso_sec_2_2.asset_id')
         ->where('iso_sec_2_2.project_id',$proj_id)
         ->where('iso_sec_2_1.s_name',$s_name)
+        ->where('comp_status','!=','not_applicable')
         ->count();
 
 
@@ -501,16 +509,19 @@ class ProjectController extends Controller
 
 
     $distinctGroupCount = DB::table('iso_sec_2_1')
+    ->where('project_id',$proj_id)
     ->where('s_name',$s_name)
     ->distinct()
     ->count('g_name');
 
     $distinctNameCount = DB::table('iso_sec_2_1')
+    ->where('project_id',$proj_id)
     ->where('s_name',$s_name)
     ->distinct()
     ->count('name');
 
     $distinctComponentCount = DB::table('iso_sec_2_1')
+    ->where('project_id',$proj_id)
     ->where('s_name',$s_name)
     ->distinct()
     ->count('c_name');
@@ -704,6 +715,7 @@ class ProjectController extends Controller
         ->where('iso_sec_2_2.project_id',$proj_id)
         ->where('iso_sec_2_1.s_name',$s_name)
         ->where('iso_sec_2_1.g_name',$g_name)
+        ->where('comp_status','!=','not_applicable')
         ->count();
 
 
@@ -741,12 +753,14 @@ class ProjectController extends Controller
 
 
     $distinctNameCount = DB::table('iso_sec_2_1')
+    ->where('project_id',$proj_id)
     ->where('s_name',$s_name)
     ->where('g_name',$g_name)
     ->distinct()
     ->count('name');
 
     $distinctComponentCount = DB::table('iso_sec_2_1')
+    ->where('project_id',$proj_id)
     ->where('s_name',$s_name)
     ->where('g_name',$g_name)
     ->distinct()
@@ -938,6 +952,7 @@ class ProjectController extends Controller
         ->where('iso_sec_2_1.s_name',$s_name)
         ->where('iso_sec_2_1.g_name',$g_name)
         ->where('iso_sec_2_1.name',$name)
+        ->where('comp_status','!=','not_applicable')
         ->count();
 
 
@@ -978,6 +993,7 @@ class ProjectController extends Controller
 
 
     $distinctComponentCount = DB::table('iso_sec_2_1')
+    ->where('project_id',$proj_id)
     ->where('s_name',$s_name)
     ->where('g_name',$g_name)
     ->where('name',$name)
@@ -1174,6 +1190,7 @@ class ProjectController extends Controller
         ->where('iso_sec_2_1.g_name',$g_name)
         ->where('iso_sec_2_1.name',$name)
         ->where('iso_sec_2_1.c_name',$c_name)
+        ->where('comp_status','!=','not_applicable')
         ->count();
 
 
@@ -1408,6 +1425,7 @@ class ProjectController extends Controller
         ->where('iso_sec_2_2.project_id',$proj_id)
         ->where('iso_sec_2_1.s_name',$s_name)
         ->where('iso_sec_2_1.name',$name)
+        ->where('comp_status','!=','not_applicable')
         ->count();
 
 
@@ -1458,12 +1476,14 @@ class ProjectController extends Controller
     ->where('projects.project_id',$proj_id)->first();
 
     $distinctGroupCount = DB::table('iso_sec_2_1')
+    ->where('project_id',$proj_id)
     ->where('s_name',$s_name)
     ->where('name',$name)
     ->distinct()
     ->count('g_name');
 
     $distinctComponentCount = DB::table('iso_sec_2_1')
+    ->where('project_id',$proj_id)
     ->where('s_name',$s_name)
     ->where('name',$name)
     ->distinct()
@@ -1638,6 +1658,7 @@ class ProjectController extends Controller
         ->where('iso_sec_2_1.s_name',$s_name)
         ->where('iso_sec_2_1.name',$name)
         ->where('iso_sec_2_1.c_name',$c_name)
+        ->where('comp_status','!=','not_applicable')
         ->count();
 
 
@@ -1693,6 +1714,7 @@ class ProjectController extends Controller
     ->where('projects.project_id',$proj_id)->first();
 
     $distinctGroupCount = DB::table('iso_sec_2_1')
+    ->where('project_id',$proj_id)
     ->where('s_name',$s_name)
     ->where('name',$name)
     ->where('c_name',$c_name)
@@ -1870,6 +1892,7 @@ class ProjectController extends Controller
         ->where('iso_sec_2_2.project_id',$proj_id)
         ->where('iso_sec_2_1.s_name',$s_name)
         ->where('iso_sec_2_1.c_name',$c_name)
+        ->where('comp_status','!=','not_applicable')
         ->count();
 
 
@@ -1920,12 +1943,14 @@ class ProjectController extends Controller
     ->where('projects.project_id',$proj_id)->first();
 
     $distinctGroupCount = DB::table('iso_sec_2_1')
+    ->where('project_id',$proj_id)
     ->where('s_name',$s_name)
     ->where('c_name',$c_name)
     ->distinct()
     ->count('g_name');
 
     $distinctAssetCount = DB::table('iso_sec_2_1')
+    ->where('project_id',$proj_id)
     ->where('s_name',$s_name)
     ->where('c_name',$c_name)
     ->distinct()

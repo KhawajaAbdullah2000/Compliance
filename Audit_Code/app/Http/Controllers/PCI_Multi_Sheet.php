@@ -233,7 +233,6 @@ class PCI_Multi_Sheet extends Controller
     {
 
 
-      
         $req->validate([
             'comp_status' => 'required'
         ]);
@@ -253,9 +252,9 @@ class PCI_Multi_Sheet extends Controller
                 $permissions = json_decode($checkpermission->project_permissions);
                 if ($checkpermission->type_id == 2) {
 
-                    $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
-                    $data = Excel::toArray([], $filepath); //with header
-                    $rows = array_slice($data[0], 1); //without header(first row)
+                    // $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                    // $data = Excel::toArray([], $filepath); //with header
+                    // $rows = array_slice($data[0], 1); //without header(first row)
             
             
 
@@ -268,43 +267,63 @@ class PCI_Multi_Sheet extends Controller
                         if ($req->attachment != null) {
                             $fileName = time() . '.' . $req->attachment->extension();
                             $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
+                            $data=[
+                                'comp_status' => $req->comp_status,
+                                'comments' => $req->comments,
+                                'attachment' => $fileName,
+                                'treatment_action' => $req->treatment_action,
+                                'treatment_target_date' => $req->treatment_target_date,
+                                'treatment_comp_date' => $req->treatment_comp_date,
+                                'responsibility_for_treatment' => $req->responsibility_for_treatment,
+                                'acceptance_actual_date'=>$req->acceptance_actual_date,
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                    ];
+
+                        }
+                        else{
+
+                            $data=[
+                                'comp_status' => $req->comp_status,
+                                'comments' => $req->comments,
+                                'treatment_action' => $req->treatment_action,
+                                'treatment_target_date' => $req->treatment_target_date,
+                                'treatment_comp_date' => $req->treatment_comp_date,
+                                'responsibility_for_treatment' => $req->responsibility_for_treatment,
+                                'acceptance_actual_date'=>$req->acceptance_actual_date,
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                    ];
+
                         }
 
-                        $data=[
-                                    'comp_status' => $req->comp_status,
-                                    'comments' => $req->comments,
-                                    'attachment' => $fileName,
-                                    'treatment_action' => $req->treatment_action,
-                                    'treatment_target_date' => $req->treatment_target_date,
-                                    'treatment_comp_date' => $req->treatment_comp_date,
-                                    'responsibility_for_treatment' => $req->responsibility_for_treatment,
-                                    'acceptance_actual_date'=>$req->acceptance_actual_date,
-                                    'last_edited_by' => $user_id,
-                                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                        ];
-
-                        
                     
-
 
 
                             if ($evidenceLevel == 'component') {
 
                                 if($req->action==2){
+                                    $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                                    $data2 = Excel::toArray([], $filepath); //with header
+                                    $rows = array_slice($data2[0], 1); //without header(first row)
+                            
                                     //all controls in this domain
                                      $filteredData = collect($rows)->filter(function ($row) use ($title) {
                                     return strval($row[0]) === $title;
                                 })->values()->all();
 
+                            
                                 
                                     foreach ($filteredData as $innerArray) {
                                         // Access specific value from the inner array
                                         $fetch_sub_req = $innerArray['3']; 
+                                        $fetch_title=$innerArray['0'];
+
                                         DB::table('iso_sec_2_2')->updateOrInsert(
                                             [
                                                 'project_id' => $proj_id, 
                                                 'asset_id' => $asset_id,
-                                                'title_num' => $title,
+                                                'title_num' => $fetch_title,
                                                 'sub_req' => $fetch_sub_req,
                                             ], 
                                             $data
@@ -317,15 +336,24 @@ class PCI_Multi_Sheet extends Controller
                                 }
 
                                 if($req->action==3){
+                           
+                                    $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                                    $data2 = Excel::toArray([], $filepath); //with header
+                                    $rows = array_slice($data2[0], 1); //without header(first row)
+                            
+                     
+                                    //all controls in this domain
                                 
-                                     foreach ($rows as $innerArray) {
+                                     foreach ($rows as $innerArray2) {
                                         // Access specific value from the inner array
-                                        $fetch_sub_req = $innerArray['3']; 
+                                        $fetch_sub_req = $innerArray2['3']; 
+                                        $fetch_title=$innerArray2['0'];
+
                                         DB::table('iso_sec_2_2')->updateOrInsert(
                                             [
                                                 'project_id' => $proj_id, 
                                                 'asset_id' => $asset_id,
-                                                'title_num' => $title,
+                                                'title_num' => $fetch_title,
                                                 'sub_req' => $fetch_sub_req,
                                             ], 
                                             $data
@@ -338,6 +366,7 @@ class PCI_Multi_Sheet extends Controller
                                 }
 
                                 if($req->action==1){
+                       
                                     // If evidence level is 'component', just insert or update for the specific asset
                                     DB::table('iso_sec_2_2')->updateOrInsert(
                                         [
@@ -361,9 +390,7 @@ class PCI_Multi_Sheet extends Controller
                                     ->with('success', 'Record Updated Successfully');
                             }
 
-                        
-
-                      
+                    
                         
 
                         $assetDetails=DB::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
@@ -389,21 +416,29 @@ class PCI_Multi_Sheet extends Controller
 
                         foreach($assets as $ass){ 
                             if($req->action==2){
+                                $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                                $data2 = Excel::toArray([], $filepath); //with header
+                                $rows = array_slice($data2[0], 1); //without header(first row)
+                        
                                 //all controls in this domain
                                  $filteredData = collect($rows)->filter(function ($row) use ($title) {
                                 return strval($row[0]) === $title;
                             })->values()->all();
 
+          
+
                             
                                 foreach ($filteredData as $innerArray) {
                                     // Access specific value from the inner array
                                     $fetch_sub_req = $innerArray['3']; 
+                                    $fetch_title = $innerArray['0']; 
+                    
                                     DB::table('iso_sec_2_2')->updateOrInsert(
                                         [
                                             'project_id' => $proj_id, 
                                             'asset_id' => $ass->assessment_id, 
-                                            'title_num' => $title,
-                                            'sub_req' => $fetch_sub_req,
+                                            'title_num' => $fetch_title,
+                                            'sub_req'=>$fetch_sub_req
                                         ], 
                                         $data
                                     );
@@ -416,17 +451,25 @@ class PCI_Multi_Sheet extends Controller
 
                             if($req->action==3){
                                 //all controls in all  domains
-                          
-                            
+
+                                $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                                $data2 = Excel::toArray([], $filepath); //with header
+                                $rows = array_slice($data2[0], 1); //without header(first row)
+                        
+     
                                 foreach ($rows as $innerArray) {
+                       
                                     // Access specific value from the inner array
+                                    $fetch_title=$innerArray['0'];
                                     $fetch_sub_req = $innerArray['3']; 
+
                                     DB::table('iso_sec_2_2')->updateOrInsert(
                                         [
                                             'project_id' => $proj_id, 
                                             'asset_id' => $ass->assessment_id, 
-                                            'title_num' => $title,
                                             'sub_req' => $fetch_sub_req,
+                                            'title_num'=>$fetch_title
+
                                         ], 
                                         $data
                                     );
@@ -445,6 +488,7 @@ class PCI_Multi_Sheet extends Controller
                                             'asset_id' => $ass->assessment_id, 
                                             'title_num' => $title,
                                             'sub_req' => $sub_req,
+
                                         ], 
                                         $data
                                     );
