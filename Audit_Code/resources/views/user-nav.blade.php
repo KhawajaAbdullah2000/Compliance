@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <!-- Brand Logo -->
         <a class="navbar-brand" href="{{ route('user_home') }}">
-            <img src="{{ asset('logo.png') }}" alt="GRCT Logo" class="img-fluid" style="max-height: 120px;">
+            <img src="" alt="" class="img-fluid" style="max-height: 120px;">
         </a>
 
         <!-- Toggle Button for Mobile -->

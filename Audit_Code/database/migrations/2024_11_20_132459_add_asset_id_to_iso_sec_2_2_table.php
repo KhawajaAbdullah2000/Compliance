@@ -16,7 +16,7 @@ return new class extends Migration
 
             // Update the unique constraint to include project_id, sub_req, and asset_id
             $table->dropUnique('project_id');
-            $table->unique(['project_id', 'sub_req', 'asset_id'], 'project_subreq_asset_unique');
+            $table->unique(['project_id', 'sub_req','title_num', 'asset_id'], 'project_subreq_asset_unique');
         });
     }
 
