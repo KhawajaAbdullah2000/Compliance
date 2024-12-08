@@ -233,6 +233,7 @@ class ProjectController extends Controller
 
         $total=Db::table('iso_sec_2_2')->where('project_id',$proj_id)
         ->where('comp_status','!=','not_applicable')
+        ->where('comp_status','!=','not_tested')
         ->count();
 
 
@@ -268,6 +269,7 @@ class ProjectController extends Controller
     $partialPlanTotal= Db::table('iso_sec_2_2')->where('project_id',$proj_id)
     ->where('comp_status','!=','yes')
     ->where('comp_status','!=','not_applicable')
+    ->where('comp_status','!=','not_tested')
     ->count();
 
     $action = $partialPlanTotal != 0 ? ($actionPlanCount / $partialPlanTotal) * 100 : 0;
@@ -427,14 +429,17 @@ class ProjectController extends Controller
 
 
 
+     $yes=$total>0 ? ($yesCount/$total)*100:0;
+     $no=$total>0 ? ($noCount/$total)*100:0;
+     $partial=$total>0 ? ($partialCount/$total)*100:0;
 
 
 
 
     return view('risk_compliance_heatmap.heatmap',[
-        'yesCount'=>(($yesCount)/$total)*100,
-        'noCount'=>(($noCount)/$total)*100,
-        'partialCount'=>(($partialCount)/$total)*100,
+        'yesCount'=>$yes,
+        'noCount'=>$no,
+        'partialCount'=>$partial,
         'actionPlanCount'=>$action,
         'distinctServiceCount'=>$distinctServiceCount,
         'distinctGroupCount'=>$distinctGroupCount,
@@ -480,6 +485,7 @@ class ProjectController extends Controller
         ->where('iso_sec_2_2.project_id',$proj_id)
         ->where('iso_sec_2_1.s_name',$s_name)
         ->where('comp_status','!=','not_applicable')
+        ->where('comp_status','!=','not_tested')
         ->count();
 
 
@@ -716,6 +722,7 @@ class ProjectController extends Controller
         ->where('iso_sec_2_1.s_name',$s_name)
         ->where('iso_sec_2_1.g_name',$g_name)
         ->where('comp_status','!=','not_applicable')
+        ->where('comp_status','!=','not_tested')
         ->count();
 
 
@@ -953,6 +960,7 @@ class ProjectController extends Controller
         ->where('iso_sec_2_1.g_name',$g_name)
         ->where('iso_sec_2_1.name',$name)
         ->where('comp_status','!=','not_applicable')
+        ->where('comp_status','!=','not_tested')
         ->count();
 
 
@@ -1191,6 +1199,7 @@ class ProjectController extends Controller
         ->where('iso_sec_2_1.name',$name)
         ->where('iso_sec_2_1.c_name',$c_name)
         ->where('comp_status','!=','not_applicable')
+        ->where('comp_status','!=','not_tested')
         ->count();
 
 
@@ -1426,6 +1435,7 @@ class ProjectController extends Controller
         ->where('iso_sec_2_1.s_name',$s_name)
         ->where('iso_sec_2_1.name',$name)
         ->where('comp_status','!=','not_applicable')
+        ->where('comp_status','!=','not_tested')
         ->count();
 
 
@@ -1659,6 +1669,7 @@ class ProjectController extends Controller
         ->where('iso_sec_2_1.name',$name)
         ->where('iso_sec_2_1.c_name',$c_name)
         ->where('comp_status','!=','not_applicable')
+        ->where('comp_status','!=','not_tested')
         ->count();
 
 
@@ -1893,6 +1904,7 @@ class ProjectController extends Controller
         ->where('iso_sec_2_1.s_name',$s_name)
         ->where('iso_sec_2_1.c_name',$c_name)
         ->where('comp_status','!=','not_applicable')
+        ->where('comp_status','!=','not_tested')
         ->count();
 
 
@@ -2106,6 +2118,101 @@ class ProjectController extends Controller
         return redirect()->route('assigned_projects', ['user_id' => $user_id]);
 
     }
+
+
+    //Report 
+    public function compliance_status($proj_id,$user_id,Request $req){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+
+                
+    $project=Project::join('project_types','projects.project_type','project_types.id')
+    ->where('projects.project_id',$proj_id)->first();
+
+    $uniqueServices = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
+    ->select('s_name')
+    ->distinct()
+    ->get();
+
+    $selectedServices = $req->input('services', []);
+
+    if($req->input('services')){
+ 
+      $results = DB::table('iso_sec_2_1 AS services')
+      ->join('iso_sec_2_2 AS compliance', 'services.assessment_id', '=', 'compliance.asset_id')
+      ->select(
+          'services.s_name AS service_name',
+          'services.c_name AS component_name',
+          'compliance.comp_status',
+          DB::raw('COUNT(compliance.comp_status) AS status_count')
+      )
+      ->where('services.project_id',$proj_id)
+      ->whereIn('services.s_name', $selectedServices) // Filter by selected services
+      ->groupBy('services.s_name', 'services.c_name', 'compliance.comp_status') // Group by service, component, and comp_status
+      ->orderBy('services.s_name') // Optional: Order by service name
+      ->get();
+
+      $formattedResults = [];
+      $totalCounts = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
+      
+      foreach ($results as $result) {
+          $service = $result->service_name;
+          $component = $result->component_name;
+          $status = $result->comp_status;
+          $count = $result->status_count;
+      
+          // Initialize service and component in formattedResults
+          if (!isset($formattedResults[$service])) {
+              $formattedResults[$service] = [];
+          }
+      
+          if (!isset($formattedResults[$service][$component])) {
+              $formattedResults[$service][$component] = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0, 'total' => 0];
+          }
+      
+          // Add the count to the respective comp_status
+          $formattedResults[$service][$component][$status] += $count;
+      
+          // Update the total for the component
+          $formattedResults[$service][$component]['total'] += $count;
+      
+          // Update the grand totals for each status
+          $totalCounts[$status] += $count;
+      }
+         // Add the total for all rows
+         $totalCounts['total'] = array_sum($totalCounts);
+      
+   
+    return view('reports.compliance_status',[
+        'project'=>$project,
+        'uniqueServices'=>$uniqueServices,
+        'formattedResults'=>$formattedResults,
+        'selectedServices'=>$selectedServices
+    ]);
+
+}
+
+
+    return view('reports.compliance_status',[
+        'project'=>$project,
+        'uniqueServices'=>$uniqueServices,
+        'selectedServices'=>$selectedServices
+    ]);
+
+        }
+    
+    }
+
 
 
     public function drill_down_by_service($proj_id,$user_id){

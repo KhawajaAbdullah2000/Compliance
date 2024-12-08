@@ -164,7 +164,7 @@ Route::get('risk_compliance_heatmap_by_service_asset_component/{proj_id}/{s_name
 
 Route::get('risk_compliance_heatmap_by_service_and_component/{proj_id}/{s_name}/{c_name}/{user_id}',[ProjectController::class,'risk_compliance_heatmap_by_service_and_component']);
 
-
+Route::get('compliance_status/{proj_id}/{user_id}',[ProjectController::class,'compliance_status'])->name('compliance_status');
 
 
 

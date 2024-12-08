@@ -113,8 +113,10 @@ $permissions=json_decode($project_permissions);
                          <select name="comp_status" class="form-select rounded-pill">
                              <option value="yes" {{ old('comp_status', $result->comp_status) == 'yes' ? 'selected' : '' }}>In place</option>
                              <option value="no" {{ old('comp_status', $result->comp_status) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                             <option value="partial" {{ old('comp_status', $result->comp_status) == 'partial' ? 'selected' : '' }}>Partial</option>
                              <option value="not_applicable" {{ old('comp_status', $result->comp_status) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                             <option value="not_tested" {{ old('comp_status', $result->comp_status) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+
+                             <option value="partial" {{ old('comp_status', $result->comp_status) == 'partial' ? 'selected' : '' }}>Partial</option>
 
                             </select>
                          @if($errors->has('comp_status'))
@@ -240,9 +242,9 @@ $permissions=json_decode($project_permissions);
                                  <option value="">Select --</option>
                                  <option value="yes" {{ old('comp_status') == 'yes' ? 'selected' : '' }}>In Place</option>
                                  <option value="no" {{ old('comp_status') == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                 <option value="partial" {{ old('comp_status') == 'partial' ? 'selected' : '' }}>Partial</option>
                                  <option value="not_applicable" {{ old('comp_status') == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-
+                                 <option value="not_tested" {{ old('comp_status') == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                                 <option value="partial" {{ old('comp_status') == 'partial' ? 'selected' : '' }}>Partial</option>
                                 </select>
                              @if($errors->has('comp_status'))
                              <div class="text-danger small mt-2">{{ $errors->first('comp_status') }}</div>

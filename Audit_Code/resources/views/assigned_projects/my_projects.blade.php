@@ -23,10 +23,11 @@
                         <th style='text-align:center'>Edit Project Data</th>
                         <th style='text-align:center'>Risk & Compliance Heatmap</th> 
                         <th style='text-align:center'>Drill Down by Service</th> 
-                        <th style='text-align:center'>Project Visuals</th>
+                        {{-- <th style='text-align:center'>Project Visuals</th>
                         <th style='text-align:center'>Risk Visuals</th>
-                        <th style='text-align:center'>Risk Distribution</th>
-                        <th style='text-align:center'>Reports</th>
+                        <th style='text-align:center'>Risk Distribution</th> --}}
+                        {{-- <th style='text-align:center'>Reports</th> --}}
+                        <th class="text-center">Compliance Status by Asset Component</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -81,34 +82,41 @@
                             </td>
 
                         <!-- Project Visuals -->
-                        <td style='text-align:center'>
+                        {{-- <td style='text-align:center'>
                             <a href="/dashboard/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                data-toggle="tooltip" title="View Project Dashboard">
                                 <i class="fas fa-tachometer-alt fa-lg text-info"></i>
                             </a>
-                        </td>
+                        </td> --}}
 
                         <!-- Risk Visuals -->
-                        <td style='text-align:center'>
+                        {{-- <td style='text-align:center'>
                             <a href="/ai_wizard/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                data-toggle="tooltip" title="Risk Visuals">
                                 <i class="fas fa-chart-line fa-lg text-warning"></i>
                             </a>
-                        </td>
+                        </td> --}}
 
                         <!-- Risk Distribution -->
-                        <td style='text-align:center'>
+                        {{-- <td style='text-align:center'>
                             <a href="/risk_computation/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                data-toggle="tooltip" title="Risk Distribution">
                                 <i class="fas fa-calculator fa-lg text-primary"></i>
                             </a>
-                        </td>
+                        </td> --}}
 
                         <!-- Reports -->
-                        <td style='text-align:center'>
+                        {{-- <td style='text-align:center'>
                             <a href="/reports/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                data-toggle="tooltip" title="Project Report">
-                                <i class="fas fa-copy fa-lg text-danger"></i>
+                                <i class="fas fa-eye fa-lg text-success"></i>
+                            </a>
+                        </td> --}}
+
+                        <td style='text-align:center'>
+                            <a href="/compliance_status/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
+                               data-toggle="tooltip" title="Compliance Status">
+                                <i class="fas fa-book fa-lg text-danger"></i>
                             </a>
                         </td>
                     </tr>
