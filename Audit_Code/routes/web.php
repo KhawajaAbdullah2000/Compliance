@@ -166,7 +166,7 @@ Route::get('risk_compliance_heatmap_by_service_and_component/{proj_id}/{s_name}/
 
 Route::get('compliance_status/{proj_id}/{user_id}',[ProjectController::class,'compliance_status'])->name('compliance_status');
 
-
+Route::get('download_excel_compliance_status/{proj_id}/{user_id}',[ProjectController::class,'download_excel_compliance_status']);
 
 //ai wizard
 route::get("ai_wizard/{proj_id}/{user_id}",[ProjectController::class,'ai_wizard'])->name('ai_wizard');

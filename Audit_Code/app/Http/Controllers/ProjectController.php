@@ -12,6 +12,7 @@ use App\Exports\RiskAssessmentExport;
 use App\Exports\RiskTreatmentReport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ComplianceStatusExport;
 
 
 
@@ -668,6 +669,9 @@ class ProjectController extends Controller
 
   
 
+     $yes=$total>0 ? ($yesCount/$total)*100:0;
+     $no=$total>0 ? ($noCount/$total)*100:0;
+     $partial=$total>0 ? ($partialCount/$total)*100:0;
 
 
 
@@ -675,9 +679,9 @@ class ProjectController extends Controller
 
 
     return view('risk_compliance_heatmap.heatmap_for_service',[
-        'yesCount'=>(($yesCount)/$total)*100,
-        'noCount'=>(($noCount)/$total)*100,
-        'partialCount'=>(($partialCount)/$total)*100,
+        'yesCount'=>$yes,
+        'noCount'=>$no,
+        'partialCount'=>$partial,
         'actionPlanCount'=>$action,
         'distinctGroupCount'=>$distinctGroupCount,
         'distinctNameCount'=>$distinctNameCount,
@@ -910,15 +914,18 @@ class ProjectController extends Controller
      ];
 
     
+     $yes=$total>0 ? ($yesCount/$total)*100:0;
+     $no=$total>0 ? ($noCount/$total)*100:0;
+     $partial=$total>0 ? ($partialCount/$total)*100:0;
 
   
 
 
 
     return view('risk_compliance_heatmap.heatmap_from_asset_group',[
-        'yesCount'=>(($yesCount)/$total)*100,
-        'noCount'=>(($noCount)/$total)*100,
-        'partialCount'=>(($partialCount)/$total)*100,
+        'yesCount'=>$yes,
+        'noCount'=>$no,
+        'partialCount'=>$partial,
         'actionPlanCount'=>$action,
         'distinctNameCount'=>$distinctNameCount,
         'distinctComponentCount'=>$distinctComponentCount,
@@ -1148,16 +1155,19 @@ class ProjectController extends Controller
          ['x' => 3, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
      ];
 
-    
+     $yes=$total>0 ? ($yesCount/$total)*100:0;
+     $no=$total>0 ? ($noCount/$total)*100:0;
+     $partial=$total>0 ? ($partialCount/$total)*100:0;
+
 
   
 
 
 
     return view('risk_compliance_heatmap.heatmap_by_asset_from_asset_group',[
-        'yesCount'=>(($yesCount)/$total)*100,
-        'noCount'=>(($noCount)/$total)*100,
-        'partialCount'=>(($partialCount)/$total)*100,
+        'yesCount'=>$yes,
+        'noCount'=>$no,
+        'partialCount'=>$partial,
         'actionPlanCount'=>$action,
         'distinctComponentCount'=>$distinctComponentCount,
         'project'=>$project,
@@ -1386,16 +1396,19 @@ class ProjectController extends Controller
          ['x' => 3, 'y' => 3, 'r' => $iso_risk_availability_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
      ];
 
-    
+     $yes=$total>0 ? ($yesCount/$total)*100:0;
+     $no=$total>0 ? ($noCount/$total)*100:0;
+     $partial=$total>0 ? ($partialCount/$total)*100:0;
+
 
   
 
 
 
     return view('risk_compliance_heatmap.heatmap_by_asset_component_from_asset',[
-        'yesCount'=>(($yesCount)/$total)*100,
-        'noCount'=>(($noCount)/$total)*100,
-        'partialCount'=>(($partialCount)/$total)*100,
+        'yesCount'=>$yes,
+        'noCount'=>$no,
+        'partialCount'=>$partial,
         'actionPlanCount'=>$action,
         'project'=>$project,
         'scatterPlotDataRiskConfidentiality'=>$scatterPlotDataRiskConfidentiality,
@@ -1621,15 +1634,18 @@ class ProjectController extends Controller
      ];
 
     
+     $yes=$total>0 ? ($yesCount/$total)*100:0;
+     $no=$total>0 ? ($noCount/$total)*100:0;
+     $partial=$total>0 ? ($partialCount/$total)*100:0;
 
   
 
 
 
     return view('risk_compliance_heatmap.heatmap_by_service_and_asset',[
-        'yesCount'=>(($yesCount)/$total)*100,
-        'noCount'=>(($noCount)/$total)*100,
-        'partialCount'=>(($partialCount)/$total)*100,
+        'yesCount'=>$yes,
+        'noCount'=>$no,
+        'partialCount'=>$partial,
         'actionPlanCount'=>$action,
         'project'=>$project,
         'scatterPlotDataRiskConfidentiality'=>$scatterPlotDataRiskConfidentiality,
@@ -1858,14 +1874,17 @@ class ProjectController extends Controller
 
     
 
-  
+     $yes=$total>0 ? ($yesCount/$total)*100:0;
+     $no=$total>0 ? ($noCount/$total)*100:0;
+     $partial=$total>0 ? ($partialCount/$total)*100:0;
+
 
 
 
     return view('risk_compliance_heatmap.heatmap_by_service_and_asset_and_component',[
-        'yesCount'=>(($yesCount)/$total)*100,
-        'noCount'=>(($noCount)/$total)*100,
-        'partialCount'=>(($partialCount)/$total)*100,
+        'yesCount'=>$yes,
+        'noCount'=>$no,
+        'partialCount'=>$partial,
         'actionPlanCount'=>$action,
         'project'=>$project,
         'scatterPlotDataRiskConfidentiality'=>$scatterPlotDataRiskConfidentiality,
@@ -2091,15 +2110,18 @@ class ProjectController extends Controller
      ];
 
     
+     $yes=$total>0 ? ($yesCount/$total)*100:0;
+     $no=$total>0 ? ($noCount/$total)*100:0;
+     $partial=$total>0 ? ($partialCount/$total)*100:0;
 
   
 
 
 
     return view('risk_compliance_heatmap.heatmap_by_service_and_component',[
-        'yesCount'=>(($yesCount)/$total)*100,
-        'noCount'=>(($noCount)/$total)*100,
-        'partialCount'=>(($partialCount)/$total)*100,
+        'yesCount'=>$yes,
+        'noCount'=>$no,
+        'partialCount'=>$partial,
         'actionPlanCount'=>$action,
         'project'=>$project,
         'scatterPlotDataRiskConfidentiality'=>$scatterPlotDataRiskConfidentiality,
@@ -2211,6 +2233,59 @@ class ProjectController extends Controller
 
         }
     
+    }
+
+    public function download_excel_compliance_status($proj_id,$user_id,Request $req){
+        $selectedServices = $req->input('services', []);
+        $results = DB::table('iso_sec_2_1 AS services')
+      ->join('iso_sec_2_2 AS compliance', 'services.assessment_id', '=', 'compliance.asset_id')
+      ->select(
+          'services.s_name AS service_name',
+          'services.c_name AS component_name',
+          'compliance.comp_status',
+          DB::raw('COUNT(compliance.comp_status) AS status_count')
+      )
+      ->where('services.project_id',$proj_id)
+      ->whereIn('services.s_name', $selectedServices) // Filter by selected services
+      ->groupBy('services.s_name', 'services.c_name', 'compliance.comp_status') // Group by service, component, and comp_status
+      ->orderBy('services.s_name') // Optional: Order by service name
+      ->get();
+
+      $formattedResults = [];
+      $totalCounts = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
+      
+      foreach ($results as $result) {
+          $service = $result->service_name;
+          $component = $result->component_name;
+          $status = $result->comp_status;
+          $count = $result->status_count;
+      
+          // Initialize service and component in formattedResults
+          if (!isset($formattedResults[$service])) {
+              $formattedResults[$service] = [];
+          }
+      
+          if (!isset($formattedResults[$service][$component])) {
+              $formattedResults[$service][$component] = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0, 'total' => 0];
+          }
+      
+          // Add the count to the respective comp_status
+          $formattedResults[$service][$component][$status] += $count;
+      
+          // Update the total for the component
+          $formattedResults[$service][$component]['total'] += $count;
+      
+          // Update the grand totals for each status
+          $totalCounts[$status] += $count;
+      }
+         // Add the total for all rows
+         $totalCounts['total'] = array_sum($totalCounts);
+
+
+         return Excel::download(
+            new ComplianceStatusExport($formattedResults, $totalCounts),
+            'compliance_status.xlsx'
+        );
     }
 
 

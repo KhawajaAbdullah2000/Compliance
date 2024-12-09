@@ -68,6 +68,8 @@
 
 
     @if(isset($formattedResults))
+
+    <a id="downloadExcelButton" href="#" class="btn btn-success btn-md float-end mb-2">Download Excel</a>
     <table class="table table-bordered mt-4">
         <thead class="table-dark">
             <tr>
@@ -159,6 +161,35 @@
                 allServicesCheckbox.prop('checked', true);
             }
         });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Cache the button and checkboxes
+        const downloadExcelButton = $('#downloadExcelButton');
+        const serviceCheckboxes = $('.service-checkbox');
+        const projectID = {{ $project->project_id }};
+        const userID = {{ auth()->user()->id }};
+
+        // Function to update the Excel download link
+        function updateDownloadLink() {
+            const selectedServices = [];
+            serviceCheckboxes.each(function () {
+                if ($(this).is(':checked')) {
+                    selectedServices.push($(this).val());
+                }
+            });
+
+            // Construct the query string
+            const query = selectedServices.length > 0 ? '?services[]=' + selectedServices.join('&services[]=') : '';
+            const url = `/download_excel_compliance_status/${projectID}/${userID}${query}`;
+            downloadExcelButton.attr('href', url);
+        }
+
+        // Update the link on page load and when a checkbox changes
+        updateDownloadLink();
+        serviceCheckboxes.on('change', updateDownloadLink);
     });
 </script>
 
