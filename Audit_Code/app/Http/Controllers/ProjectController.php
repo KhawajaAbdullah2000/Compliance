@@ -22,7 +22,8 @@ class ProjectController extends Controller
     {
         $projects = Project::join('project_details', 'projects.project_id', 'project_details.project_code')
             ->join('project_types', 'projects.project_type', 'project_types.id')
-            ->where('project_details.assigned_enduser', $user_id)->latest('projects.project_creation_date')
+            ->where('project_details.assigned_enduser', $user_id)->orderBy('projects.project_creation_date','desc')
+         
             ->get(
                 [
                     'project_details.project_code',
@@ -2287,6 +2288,154 @@ class ProjectController extends Controller
             'compliance_status.xlsx'
         );
     }
+
+    public function duplicate_project($proj_id,$user_id,Request $req){
+    
+        $req->validate([
+            'project_name' => 'required|max:80|min:5|unique:projects',
+
+        ]);
+        $originalProject = DB::table('projects')->where('project_id', $proj_id)->first();
+      
+
+
+        // Create a new project with the same data but a different name
+        $newProjectData = [
+            'project_name' => $req->input('project_name'),
+            'org_id' => $originalProject->org_id,
+            'created_by' => $user_id, // Assuming the user duplicating is the creator
+            'project_creation_date' => Carbon::now()->format('Y-m-d'),
+            'project_creation_time' => Carbon::now()->format('H:i:s'),
+            'project_type' => $originalProject->project_type,
+            'status' => $originalProject->status,
+            'status_last_changed_by' => $originalProject->status_last_changed_by,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+    
+        // Insert the new project into the database
+        $newProjectId = DB::table('projects')->insertGetId($newProjectData);
+
+     
+
+        $relatedRows = DB::table('project_details')->where('project_code', $originalProject->project_id)->get();
+    
+            // Iterate over each related row to duplicate
+            foreach ($relatedRows as $row) {
+    
+                $newRowData = (array)$row; 
+                unset($newRowData['project_code']); 
+                $newRowData['project_code'] = $newProjectId; 
+                $newRowData['created_at'] = now(); 
+                $newRowData['updated_at'] = now();
+    
+                DB::table('project_details')->insert($newRowData);
+            }
+
+           // Step 1: Fetch the original assets
+$originalAssets = DB::table('iso_sec_2_1')->where('project_id', $originalProject->project_id)->get();
+
+// Map to store old asset IDs and their corresponding new asset IDs
+$assetMapping = [];
+
+// Step 2: Duplicate each asset and store the mapping of old to new asset IDs
+foreach ($originalAssets as $asset) {
+    // Convert the asset row to an array
+    $newAssetData = (array) $asset;
+
+    // Remove the `assessment_id` since it is auto-incremented
+    unset($newAssetData['assessment_id']);
+
+    // Replace the `project_id` with the new project ID
+    $newAssetData['project_id'] = $newProjectId;
+
+    // Update the timestamps if needed
+    $newAssetData['last_edited_at'] = now();
+
+    // Insert the new asset and get its new ID
+    $newAssetId = DB::table('iso_sec_2_1')->insertGetId($newAssetData);
+
+    // Store the mapping of old to new asset IDs
+    $assetMapping[$asset->assessment_id] = $newAssetId;
+}
+
+// Step 3: Fetch the original `iso_sec_2_2` rows
+$originalIsoSec2_2Rows = DB::table('iso_sec_2_2')->where('project_id', $originalProject->project_id)->get();
+
+// Step 4: Duplicate the `iso_sec_2_2` data with updated `project_id` and `asset_id`
+        foreach ($originalIsoSec2_2Rows as $row) {
+            // Convert the row to an array
+            $newRowData = (array) $row;
+
+            // Remove the `assessment_id` since it is auto-incremented
+            unset($newRowData['assessment_id']);
+
+            // Replace the `project_id` with the new project ID
+            $newRowData['project_id'] = $newProjectId;
+
+            // Replace the `asset_id` with the new asset ID from the mapping
+            if (isset($assetMapping[$row->asset_id])) {
+                $newRowData['asset_id'] = $assetMapping[$row->asset_id];
+            }
+
+            // Insert the new row into `iso_sec_2_2`
+            DB::table('iso_sec_2_2')->insert($newRowData);
+        }
+
+        $originalIsoSec2_3_1_Rows = DB::table('iso_sec_2_3_1')->where('project_id', $originalProject->project_id)->get();
+
+        foreach ($originalIsoSec2_3_1_Rows as $row) {
+            // Convert the row to an array
+            $newRowData = (array) $row;
+
+            // Remove the `assessment_id` since it is auto-incremented
+            unset($newRowData['assessment_id']);
+
+            // Replace the `project_id` with the new project ID
+            $newRowData['project_id'] = $newProjectId;
+
+            // Replace the `asset_id` with the new asset ID from the mapping
+            if (isset($assetMapping[$row->asset_id])) {
+                $newRowData['asset_id'] = $assetMapping[$row->asset_id];
+            }
+
+            // Insert the new row into `iso_sec_2_2`
+            DB::table('iso_sec_2_3_1')->insert($newRowData);
+        }
+
+        $originalIsoTreatment_Rows = DB::table('iso_risk_treatment')->where('project_id', $originalProject->project_id)->get();
+
+        foreach ($originalIsoTreatment_Rows as $row) {
+            // Convert the row to an array
+            $newRowData = (array) $row;
+
+            // Remove the `assessment_id` since it is auto-incremented
+            unset($newRowData['assessment_id']);
+
+            // Replace the `project_id` with the new project ID
+            $newRowData['project_id'] = $newProjectId;
+
+            // Replace the `asset_id` with the new asset ID from the mapping
+            if (isset($assetMapping[$row->asset_id])) {
+                $newRowData['asset_id'] = $assetMapping[$row->asset_id];
+            }
+
+            // Insert the new row into `iso_sec_2_2`
+            DB::table('iso_risk_treatment')->insert($newRowData);
+        }
+
+        return redirect()->route('assigned_projects',[
+            'user_id'=>$user_id
+        ]);
+
+
+
+      
+        }
+
+
+
+
 
 
 

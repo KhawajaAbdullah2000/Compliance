@@ -28,6 +28,7 @@
                         <th style='text-align:center'>Risk Distribution</th> --}}
                         {{-- <th style='text-align:center'>Reports</th> --}}
                         <th class="text-center">Compliance Status by Asset Component</th>
+                        <th class="text-center">Duplicate Project</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -119,10 +120,45 @@
                                 <i class="fas fa-book fa-lg text-danger"></i>
                             </a>
                         </td>
+
+                        <td style='text-align:center'>
+                            <i 
+                                class="fas fa-copy fa-lg text-danger" 
+                                data-toggle="modal" 
+                                data-target="#duplicateProjectModal" 
+                                data-project-code="{{ $pro->project_code }}" 
+                                title="Duplicate Project">
+                            </i>
+                        </td>
+                        <div class="modal fade" id="duplicateProjectModal" tabindex="-1" aria-labelledby="duplicateProjectModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="duplicateProjectModalLabel">Duplicate Project</h5>
+                                    </div>
+                                    <form id="duplicateProjectForm" method="POST">
+                                        @csrf
+                                        <div class="modal-body">
+                                            <div class="form-group mb-2">
+                                                <label for="projectName">New Project Name</label>
+                                                <input type="text" name="project_name" id="projectName" class="form-control" placeholder="Enter project name" required>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Duplicate</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+
+       
         </div>
     </div>
 </div>
@@ -139,6 +175,16 @@
     });
 </script>
 @endif
+
+<script>
+    $(document).on('click', '[data-toggle="modal"]', function () {
+        var projectCode = $(this).data('project-code');
+        var userId = "{{ auth()->user()->id }}";
+        var formAction = `/duplicate_project/${projectCode}/${userId}`;
+        $('#duplicateProjectForm').attr('action', formAction);
+    });
+</script>
+
 
 @if(Session::has('error'))
 <script>

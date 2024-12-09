@@ -168,6 +168,8 @@ Route::get('compliance_status/{proj_id}/{user_id}',[ProjectController::class,'co
 
 Route::get('download_excel_compliance_status/{proj_id}/{user_id}',[ProjectController::class,'download_excel_compliance_status']);
 
+Route::post('duplicate_project/{proj_id}/{user_id}',[ProjectController::class,'duplicate_project']);
+
 //ai wizard
 route::get("ai_wizard/{proj_id}/{user_id}",[ProjectController::class,'ai_wizard'])->name('ai_wizard');
 route::get('dashboard_services_and_components/{proj_id}/{user_id}',[ProjectController::class,'dashboard_services_and_components']);

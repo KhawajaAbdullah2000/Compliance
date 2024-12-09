@@ -183,7 +183,7 @@ $permissions = json_decode($project_permissions);
                 <td>{{ $d->physical_loc }}</td>
                 <td>{{ $d->logical_loc }}</td>
                 @if ($project->project_type == 4)
-                <td>
+                <td class="text-center">
                     <a href="/iso_sec_2_3_1_risk_selection/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}" class="btn btn-primary btn-sm rounded-pill">Initiate</a>
                 </td>
                 @endif
