@@ -70,7 +70,7 @@
                              <td style='text-align:center'>
                                 <a href="/risk_compliance_heatmap/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                    data-toggle="tooltip" title="Risk and Compliance Heatmap">
-                                    <i class="fas fa-map fa-lg text-warning"></i>
+                                    <i class="fas fa-book fa-lg text-warning"></i>
                                 </a>
                             </td>
 
@@ -78,7 +78,7 @@
                                <td style='text-align:center'>
                                 <a href="/drill_down_by_service/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                    data-toggle="tooltip" title="Drill down by service">
-                                    <i class="fas fa-eye fa-lg text-danger"></i>
+                                    <i class="fas fa-eye fa-lg" style="color: rgb(181, 48, 0)"></i>
                                 </a>
                             </td>
 
@@ -117,7 +117,8 @@
                         <td style='text-align:center'>
                             <a href="/compliance_status/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                data-toggle="tooltip" title="Compliance Status">
-                                <i class="fas fa-book fa-lg text-danger"></i>
+                               <img src="{{asset('compliance_report_icon.jpg')}}" style="width:30px;height:30px;"></img>
+                                {{-- <i class="fas fa-book fa-lg text-info"></i> --}}
                             </a>
                         </td>
 

@@ -2181,9 +2181,10 @@ class ProjectController extends Controller
       )
       ->where('services.project_id',$proj_id)
       ->whereIn('services.s_name', $selectedServices) // Filter by selected services
-      ->groupBy('services.s_name', 'services.c_name', 'compliance.comp_status') // Group by service, component, and comp_status
+      ->groupBy('services.s_name', 'services.c_name','compliance.comp_status') // Group by service, component, and comp_status
       ->orderBy('services.s_name') // Optional: Order by service name
       ->get();
+     
 
       $formattedResults = [];
       $totalCounts = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
@@ -2202,7 +2203,8 @@ class ProjectController extends Controller
           if (!isset($formattedResults[$service][$component])) {
               $formattedResults[$service][$component] = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0, 'total' => 0];
           }
-      
+
+    
           // Add the count to the respective comp_status
           $formattedResults[$service][$component][$status] += $count;
       
