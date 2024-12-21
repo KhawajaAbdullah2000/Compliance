@@ -31,10 +31,12 @@ class ProjectController extends Controller
                     'project_types.type',
                     'project_types.id as type_id',
                     'projects.status',
-                    'project_details.project_permissions'
+                    'project_details.project_permissions',
+                    'projects.created_by'
 
                 ]
             );
+         
         return view('assigned_projects.my_projects', ['projects' => $projects]);
     }
 

@@ -10,7 +10,7 @@
 
     <div class="card shadow-lg border-0">
         <div class="card-body">
-            <table class="table table-hover text-center align-middle" id="myTable">
+            <table class="table table-hover table-bordered align-middle" id="myTable">
                 <thead class="table-dark">
                     <tr>
                         
@@ -18,7 +18,7 @@
                         <th class="text-center">Creation Date</th>
                         <th class="text-center">Type</th>
                         <th class="text-center">Status</th>
-                        <th class="text-center">Edit</th>
+                        <th class="text-center">Metadata</th>
                         <th class="text-center">Dashboard</th>
                         <th class="text-center">Reports</th>
                         <th class="text-center">Delete</th>
@@ -28,14 +28,12 @@
                     @foreach ($projects as $pro)
                     <tr>
                         
-                        <td class="text-center align-middle">
-                            <a href="/edit_project/{{ $pro->project_id }}" class="fw-bold text-reset text-underline">{{ $pro->project_name }}</a>
-                        </td>
-                        
-                        <td class="text-center align-middle">{{ $pro->project_creation_date }}</td>
-                        <td class="text-center align-middle">{{ $pro->type }}</td>
-                        <td class="text-center align-middle">{{ $pro->status }}</td>
-                        <td class="text-center align-middle">
+                       
+                      <td style="text-align: initial;">{{ $pro->project_name }}</td>
+                        <td style="text-align: initial;">{{ $pro->project_creation_date }}</td>
+                        <td style="text-align: initial;">{{ $pro->type }}</td>
+                        <td style="text-align: initial;">{{ $pro->status }}</td>
+                        <td class="align-middle text-center">
                             <a href="/edit_project/{{ $pro->project_id }}" data-toggle="tooltip" data-placement="top" title="Edit Project">
                                 <i class="fas fa-edit fa-lg text-success"></i>
                             </a>

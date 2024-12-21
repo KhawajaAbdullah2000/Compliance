@@ -8,7 +8,7 @@
 
     <div class="card">
         <div class="card-body">
-          <h3 class="card-title text-center text-bold mb-3">Edit Project {{$project->project_id}}</h3>
+          <h3 class="card-title text-center text-bold mb-3"> Project {{$project->project_id}}</h3>
 
           <form class="row g-3" method="POST" action="/edit_project_submit/{{$project->project_id}}">
             @csrf

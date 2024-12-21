@@ -37,8 +37,9 @@ use Illuminate\Support\Str;
 use function Ramsey\Uuid\v3;
 
 //Excel cript
-ROute::get('excel',[UserController::class,'excel']);
-
+// ROute::get('excel',[UserController::class,'excel']);
+Route::get('ai',[UserController::class,'ai'])->name('ai');
+Route::post('ai',[UserController::class,'ask_pdf']);
 
 Route::get('/', function () {
     return view('login-view');

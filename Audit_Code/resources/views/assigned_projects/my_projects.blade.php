@@ -13,14 +13,15 @@
     <!-- Projects Table -->
     <div class="card shadow-lg border-0">
         <div class="card-body">
-            <table class="table table-hover table-bordered text-center " id="myTable">
+            <table class="table table-hover table-bordered text-center" id="myTable">
                 <thead class="table-dark">
                     <tr >
                         <th style='text-align:center'>Project Name</th>
                         <th style='text-align:center'>Project Type</th>
                         <th style='text-align:center'>Project Status</th>
                         <th style='text-align:center'>My Permissions on Project</th>
-                        <th style='text-align:center'>Edit Project Data</th>
+                        <th style='text-align:center'>Data</th>
+                        <th style='text-align:center'>Metadata</th>
                         <th style='text-align:center'>Risk & Compliance Heatmap</th> 
                         <th style='text-align:center'>Drill Down by Service</th> 
                         {{-- <th style='text-align:center'>Project Visuals</th>
@@ -36,9 +37,7 @@
                     <tr>
                         <!-- Project Name -->
                         <td style='text-align:initial'>
-                            <a href="/iso_sections/{{ $pro->project_code }}/{{ auth()->user()->id }}" class="text-primary text-reset fw-bold">
                                 {{ $pro->project_name }}
-                            </a>
                         </td>
 
                         <!-- Project Type -->
@@ -61,10 +60,23 @@
                         <!-- Edit Project -->
                         <td style='text-align:center'>
                             <a href="/iso_sections/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
-                               data-toggle="tooltip" title="Edit Project">
+                               data-toggle="tooltip" title="Edit Project Data">
                                 <i class="fas fa-edit fa-lg text-success"></i>
                             </a>
                         </td>
+
+                            <!-- Edit Project Metadata-->
+                            <td style='text-align:center'>
+                                @if($pro->created_by==auth()->user()->id)
+                                <a href="/edit_project/{{ $pro->project_code }}" data-toggle="tooltip" data-placement="top" title="Edit Project">
+                                    <i class="fas fa-edit fa-lg text-secondary"></i>
+                                </a>
+                                @else
+                                <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
+
+
+                                @endif
+                            </td>
 
                              <!-- Risk and Compliance Heatmap -->
                              <td style='text-align:center'>

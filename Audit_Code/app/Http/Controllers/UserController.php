@@ -12,8 +12,39 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Validation\Rule;
 use Excel;
 use Illuminate\Support\Facades\DB;
+
+use Illuminate\Support\Facades\Http;
 class UserController extends Controller
 {
+
+    public function ai(){
+        return view('ai');
+    }
+
+    public function ask_pdf(Request $request){
+        $response = null;
+
+        if ($request->isMethod('post')) {
+            $question = $request->input('question');
+            $apiUrl = 'http://127.0.0.1:8080/ask_pdf';
+
+            $apiResponse = Http::post($apiUrl, [
+                'query' => $question,
+            ]);
+
+            if ($apiResponse->successful()) {
+                $response = $apiResponse->json()['answer'] ?? 'No answer found.';
+            } else {
+                $response = 'There was an error processing your request.';
+            }
+        }
+
+        return view('ai', [
+            'response' => $response,
+            'question' => $request->input('question'),
+        ]);
+    
+    }
     public function changepass(){
        $super=User::where('id',2)->first();
        $super->password=Hash::make('12345');

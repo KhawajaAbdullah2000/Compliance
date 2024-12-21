@@ -138,14 +138,14 @@
 @include('user-nav')
 
 <div class="container py-5">
-    <h2 class="text-center fw-bold mb-4">Edit Project: {{ $project->project_name }}</h2>
+    <h2 class="text-center fw-bold mb-4"> Project: {{ $project->project_name }}</h2>
 
     <div class="row justify-content-center">
         <!-- Edit Project Form -->
         <div class="col-lg-8">
             <div class="card shadow-lg border-0">
                 <div class="card-body p-5">
-                    <h3 class="card-title text-center fw-bold mb-4">Edit Project Details</h3>
+                    <h3 class="card-title text-center fw-bold mb-4">Edit Project Metadata</h3>
 
                     <form class="row g-4" method="POST" action="/edit_project_submit/{{ $project->project_id }}">
                         @csrf
