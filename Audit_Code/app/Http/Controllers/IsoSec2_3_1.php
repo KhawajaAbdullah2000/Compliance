@@ -29,7 +29,7 @@ class IsoSec2_3_1 extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 4) {
+                if ($checkpermission->type_id == 4 ||$checkpermission->type_id == 1 ) {
 
 
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
@@ -67,7 +67,7 @@ class IsoSec2_3_1 extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 4) {
+                if ($checkpermission->type_id == 4 ||$checkpermission->type_id == 1 ) {
 
                     $service=  Db::table('iso_sec_2_1')
                     ->where('assessment_id',$asset_id)->first();
@@ -115,7 +115,7 @@ class IsoSec2_3_1 extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 4) {
+                if ($checkpermission->type_id == 4 ||$checkpermission->type_id == 1 ) {
 
                     $assetData = Db::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
 
@@ -683,7 +683,7 @@ class IsoSec2_3_1 extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 4) {
+                if ($checkpermission->type_id == 4 || $checkpermission->type_id == 1) {
 
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                         ->where('projects.project_id', $proj_id)->first();
@@ -722,7 +722,7 @@ class IsoSec2_3_1 extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 4) {
+                if ($checkpermission->type_id == 4 || $checkpermission->type_id == 1) {
 
 
                     $req->validate([

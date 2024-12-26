@@ -36,7 +36,7 @@
             </table>
         </div>
     </div>
-    <h3 class="fw-bold mt-2">information Security Risk Assessment for</h3>
+    <h3 class="fw-bold mt-2">Information Security Risk Assessment for</h3>
 
     <div class="col-md-8 mt-4">
         <table class="table table-bordered table-responsive">
