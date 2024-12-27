@@ -192,6 +192,17 @@ public function iso_sec_2_2_evidence($asset_id,$proj_id,$user_id){
                     ]);
                 }
 
+                //UAE IA
+                if ($checkpermission->type_id == 8) {
+                    return view('uae_ia.uae_ia_sec_2_2_evidence_selection', [
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project' => $project,
+                        'asset'=>$asset
+                       
+                    ]);
+                }
+
 
 
                 

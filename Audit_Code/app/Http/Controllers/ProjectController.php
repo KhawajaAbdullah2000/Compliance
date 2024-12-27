@@ -151,6 +151,17 @@ class ProjectController extends Controller
                     ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
                 );
             }
+            //UAE IA
+            elseif ($checkpermission->type_id == 8) {
+                //KSA NCA ECC
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+
+                return view(
+                    '.uae_ia.main_sections',
+                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
+                );
+            }
 
 
 
