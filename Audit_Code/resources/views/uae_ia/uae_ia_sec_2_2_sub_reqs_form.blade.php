@@ -77,7 +77,7 @@ $permissions=json_decode($project_permissions);
 
 @endif
 
-<a href="/pci_multi_sheet_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary btn-md float-end mb-4">Go to All Requirements</a>
+<a href="/uae_ia_sheet_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary btn-md float-end mb-4">Go to All Requirements</a>
 
 
 
@@ -89,10 +89,10 @@ $permissions=json_decode($project_permissions);
 
 
     <h2 class="text-center fw-bold mt-4 mb-4">
-    Req No. {{$filteredData[0][3]}}
+    Req No. {{$filteredData[0][4]}}
          </h2>
 
-        <p>{{$filteredData[0][4]}} </p>
+        <p>{{$filteredData[0][6]}} </p>
 
          <!-- Form Section -->
          @if(in_array('Data Inputter', $permissions))
@@ -103,7 +103,7 @@ $permissions=json_decode($project_permissions);
                  <h3>Edit Status and/or assign action</h3>
              </div>
              <div class="card-body">
-                 <form action="/pci_multi_sec_2_2_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" enctype="multipart/form-data">
+                 <form action="/uae_ia_sec_2_2_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" enctype="multipart/form-data">
                      @csrf
                    
  
@@ -139,7 +139,7 @@ $permissions=json_decode($project_permissions);
                          <input type="file" name="attachment" class="form-control">
                          @if(isset($result->attachment))
                          <p class="mt-3">Current Attachment: 
-                             <a href="{{ asset('iso_sec_2_2/'.$result->attachment) }}" download>{{ $result->attachment }}</a>
+                             <a href="{{ asset('uae_ia_sec_2_2/'.$result->attachment) }}" download>{{ $result->attachment }}</a>
                          </p>
                          @endif
                      </div>
@@ -232,7 +232,7 @@ $permissions=json_decode($project_permissions);
                      <h3>Edit Status and/or assign action</h3>
                  </div>
                  <div class="card-body">
-                     <form action="/pci_multi_sec_2_2_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" enctype="multipart/form-data">
+                     <form action="/uae_ia_sec_2_2_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" enctype="multipart/form-data">
                          @csrf
          
                          <!-- Compliance Status -->

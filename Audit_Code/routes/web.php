@@ -318,8 +318,10 @@ route::put('pci_multi_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{a
 //uae_ia
 route::get("uae_ia_sheet_subsections/{proj_id}/{user_id}/{asset_id}",[UAE_IA::class,'uae_ia_sheet_subsections'])->name('uae_ia_sheet_subsections');
 route::get("uae_ia_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[UAE_IA::class,'uae_ia_section_2_2'])->name('uae_ia_section_2_2');
-
 route::get("uae_ia_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[UAE_IA::class,'uae_ia_sec_2_2_req'])->name('uae_ia_sec_2_2_req');
+route::get('uae_ia_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[UAE_IA::class,'uae_ia_sec2_2_sub_req_edit'])->name('uae_ia_sec2_2_sub_req_edit');
+route::post('uae_ia_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[UAE_IA::class,'uae_ia_sec_2_2_form']);
+
 
 
 
