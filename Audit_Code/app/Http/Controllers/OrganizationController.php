@@ -25,10 +25,14 @@ class OrganizationController extends Controller
     }
 
     public function add_new_org(){
-        return view('root_user.add_new_org');
+        $proj_types=DB::table('project_types')->get();
+        
+        return view('root_user.add_new_org', ['proj_types' => $proj_types]);
+
     }
 
     public function register_new_org(Request $req){
+ 
         $req->validate([
             'name'=>'required|max:100',
             'sub_org'=>['required','max:100', Rule::unique('organizations')->where(function ($query) use ($req) {
@@ -40,52 +44,73 @@ class OrganizationController extends Controller
             'city'=>'required|max:100',
             'zip_code'=>'required|numeric',
             'address'=>'required|max:100',
-            'status'=>'required'
+            'status'=>'required',
+            'project_types' => 'required|array',
+            'project_types.*' => 'exists:project_types,id',
         ],
              [           
                 'sub_org.unique'=>'The department in this organization already exists'
             ]
 
         );
+
         $currentDateTime = now();
         $currentTime = $currentDateTime->format('H:i:s');
-        try{
-            $org=new Organization();
-            $org->name=$req->name;
-            $org->sub_org=$req->sub_org;
-            $org->type=$req->type;
-            $org->country=$req->country;
-            $org->state=$req->state;
-            $org->city=$req->city;
-            $org->zip_code=$req->zip_code;
-            $org->address=$req->address;
-            $org->status=$req->status;
-            $org->record_created_by=$req->record_created_by;
-            $org->record_creation_date=Carbon::now()->format('Y-m-d');
-           $org->record_creation_time=$currentTime;
-    
-           $org->save();
+        
+        $org = Organization::create([
+            'name' => $req->name,
+            'sub_org' => $req->sub_org,
+            'type' => $req->type,
+            'country' => $req->country,
+            'state' => $req->state,
+            'city' => $req->city,
+            'zip_code' => $req->zip_code,
+            'address' => $req->address,
+            'status' => $req->status,
+            'record_created_by' => $req->record_created_by,
+            'record_creation_date' => Carbon::now()->format('Y-m-d'),
+            'record_creation_time' => Carbon::now()->format('H:i:s'),
+        ]);
+
+
+           $projectTypes = $req->project_types;
+        $projectTypeData = [];
+        foreach ($projectTypes as $projectTypeId) {
+            $projectTypeData[] = [
+                'org_id' => $org->org_id, // Assuming `org_id` is the primary key
+                'project_type_id' => $projectTypeId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+        DB::table('organization_project_types')->insert($projectTypeData);
            return redirect()->route('organizations')->with('success','Added Successfully');
 
+           
     
-        }catch(Exception $e){
-            return redirect()->route('organizations')->with('error','Could not add the organization');
-        }
+        // }catch(Exception $e){
+        //     return redirect()->route('organizations')->with('error','Could not add the organization');
+        // }
        
 
     }
 
-    public function edit_org($name,$sub_org){
-        $org=Organization::where('name',$name)->where('sub_org',$sub_org)->first();
+    public function edit_org($org_id){
+        $org=Organization::where('org_id',$org_id)->first();
         if($org){
-            return view('root_user.edit_org',['org'=>$org]);
+            $proj_types=DB::table('project_types')->get();
+            $selected_proj_types = DB::table('organization_project_types')
+            ->where('org_id', $org_id)
+            ->pluck('project_type_id')
+            ->toArray();
+            return view('root_user.edit_org',['org'=>$org,'proj_types'=>$proj_types,'selected_proj_types'=>$selected_proj_types]);
         }
         else{
             return redirect()->route('organizations')->with('error','Organization not found');
         }
     }
 
-    public function update_org(Request $req,$name,$sub_org){
+    public function update_org(Request $req,$org_id){
         $req->validate([
             'name'=>'required|max:100|',
             'sub_org'=>'required',
@@ -95,14 +120,17 @@ class OrganizationController extends Controller
             'city'=>'required|max:100',
             'zip_code'=>'required|numeric',
             'address'=>'required|max:100',
-            'status'=>'required'
+            'status'=>'required',
+            'project_types' => 'required|array',
+            'project_types.*' => 'exists:project_types,id',
         ]
         );
-        $org= DB::table('organizations')->where('name',$name)->where('sub_org',$sub_org)->first('type');
+        $org= DB::table('organizations')->where('org_id',$org_id)->first();
 
             try{
-                DB::table('organizations')->where('name',$name)->where('sub_org',$sub_org)->
-                update(['name'=>$req->name,
+                DB::table('organizations')->where('org_id',$org_id)->
+                update([
+                'name'=>$req->name,
                 'sub_org'=>$req->sub_org,
                 'type'=>$req->type,
                 'country'=>$req->country,
@@ -113,6 +141,18 @@ class OrganizationController extends Controller
                 'status'=>$req->status
             ]);
 
+            DB::table('organization_project_types')->where('org_id', $org_id)->delete();
+            $projectTypeData = [];
+            foreach ($req->project_types as $project_type_id) {
+                $projectTypeData[] = [
+                    'org_id' => $org_id,
+                    'project_type_id' => $project_type_id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+            DB::table('organization_project_types')->insert($projectTypeData);
+        
 
 
                 return redirect()->route('organizations')->withSuccess('Record updated');
@@ -125,8 +165,8 @@ class OrganizationController extends Controller
 
     }
 
-    public function delete_org($name,$sub_org){
-        Db::table('organizations')->where('name',$name)->where('sub_org',$sub_org)->delete();
+    public function delete_org($org_id){
+        Db::table('organizations')->where('org_id',$org_id)->delete();
         return redirect()->route('organizations')->withSuccess('Organization deleted');
 
     }

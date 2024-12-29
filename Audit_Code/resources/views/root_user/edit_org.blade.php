@@ -30,7 +30,7 @@
           <div class="card-body">
             <h3 class="card-title text-center text-bold mb-3">Edit {{$org->name}} {{$org->sub_org}}</h3>
 
-            <form class="row g-3" method="POST" action="/edit_org/{{$org->name}}/{{$org->sub_org}}">
+            <form class="row g-3" method="POST" action="/edit_org/{{$org->org_id}}/">
               @csrf
               @method('PUT')
               <div class="col-md-6">
@@ -118,6 +118,29 @@
               <div class="text-danger">{{ $errors->first('status') }}</div>
           @endif
           </div>
+
+          <div class="col-12">
+            <label for="project_types" class="form-label">Select Project Types</label>
+            <div class="form-check">
+                @foreach($proj_types as $proj_type)
+                <div>
+                    <input 
+                        type="checkbox" 
+                        class="form-check-input" 
+                        name="project_types[]" 
+                        id="project_type_{{ $proj_type->id }}" 
+                        value="{{ $proj_type->id }}"
+                        {{ in_array($proj_type->id, $selected_proj_types) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="project_type_{{ $proj_type->id }}">
+                        {{ $proj_type->type }}
+                    </label>
+                </div>
+                @endforeach
+            </div>
+            @if($errors->has('project_types'))
+            <div class="text-danger">{{ $errors->first('project_types') }}</div>
+            @endif
+        </div>
 
 
 

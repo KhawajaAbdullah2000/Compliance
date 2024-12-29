@@ -117,6 +117,30 @@
         @endif
         </div>
 
+        <div class="col-12">
+          <label for="project_types" class="form-label">Select Project Types</label>
+          <div class="form-check">
+              @foreach($proj_types as $proj_type)
+              <div>
+                  <input 
+                      type="checkbox" 
+                      class="form-check-input" 
+                      name="project_types[]" 
+                      id="project_type_{{ $proj_type->id }}" 
+                      value="{{ $proj_type->id }}"
+                      {{ is_array(old('project_types')) && in_array($proj_type->id, old('project_types')) ? 'checked' : '' }}>
+                  <label class="form-check-label" for="project_type_{{ $proj_type->id }}">
+                      {{ $proj_type->type }}
+                  </label>
+              </div>
+              @endforeach
+          </div>
+          @if($errors->has('project_types'))
+          <div class="text-danger">{{ $errors->first('project_types') }}</div>
+          @endif
+      </div>
+      
+
 
 
             <div class="col-12">

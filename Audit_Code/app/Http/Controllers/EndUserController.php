@@ -32,7 +32,10 @@ class EndUserController extends Controller
 
     public function create_project($userid)
     {
-        $project_types = DB::table('project_types')->get();
+        $user_org=Db::table('users')->where('id',$userid)->first('org_id');
+        $selected_projects=DB::table('organization_project_types')->where('org_id',$user_org->org_id)->pluck('project_type_id')
+        ->toArray();
+        $project_types = DB::table('project_types')->whereIn('id',$selected_projects)->get();
         return view('project.create_project', ['types' => $project_types]);
 
     }

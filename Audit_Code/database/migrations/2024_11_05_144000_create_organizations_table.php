@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('organizations', function (Blueprint $table) {
-            $table->integer('org_id', true);
+            $table->integer('org_id',true);
             $table->string('name', 100);
             $table->string('type', 100);
             $table->string('sub_org', 100);
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('status', 20);
             $table->timestamps();
 
-            $table->unique(['name', 'sub_org'], 'name');
+           $table->unique(['name', 'sub_org','org_id'], 'name');
         });
     }
 

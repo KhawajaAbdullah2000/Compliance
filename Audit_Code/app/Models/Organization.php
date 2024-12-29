@@ -9,7 +9,21 @@ use Illuminate\Database\Eloquent\Model;
 class Organization extends Model
 {
 
- protected $primaryKey = ['name', 'sub_org'];
- public $incrementing = false;
+    protected $primaryKey = 'org_id';
+ public $incrementing = true;
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'sub_org',
+        'type',
+        'country',
+        'state',
+        'city',
+        'zip_code',
+        'address',
+        'status',
+        'record_created_by',
+        'record_creation_date',
+        'record_creation_time',
+    ];
 }
