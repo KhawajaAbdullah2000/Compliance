@@ -45,7 +45,6 @@ class IsoSec2_1 extends Controller
                     ->where('project_id','!=',$proj_id)->get();
 
                     $distinctServices= DB::table('iso_sec_2_1')
-                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
                     ->select('iso_sec_2_1.s_name')
                     ->where('iso_sec_2_1.project_id',$proj_id)
                     ->distinct('iso_sec_2_1.s_name')
@@ -53,14 +52,12 @@ class IsoSec2_1 extends Controller
                     ->get();
 
                     $distinctGroups= DB::table('iso_sec_2_1')
-                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
                     ->select('iso_sec_2_1.g_name')
                     ->where('iso_sec_2_1.project_id',$proj_id)
                     ->distinct('iso_sec_2_1.g_name')
                     ->get();
 
                     $distinctAssets= DB::table('iso_sec_2_1')
-                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
                     ->select('iso_sec_2_1.name')
                     ->where('iso_sec_2_1.project_id',$proj_id)
                     ->distinct('iso_sec_2_1.name')
@@ -68,7 +65,6 @@ class IsoSec2_1 extends Controller
 
 
                     $distinctComponents= DB::table('iso_sec_2_1')
-                    ->join('users', 'iso_sec_2_1.last_edited_by', '=', 'users.id')
                     ->select('iso_sec_2_1.c_name')
                     ->where('iso_sec_2_1.project_id',$proj_id)
                     ->distinct('iso_sec_2_1.c_name')
@@ -625,16 +621,16 @@ class IsoSec2_1 extends Controller
                 if (in_array('Data Inputter', $permissions)) {
 
 
-                        $project=Project::join('project_types','projects.project_type','project_types.id')
-                        ->where('projects.project_id',$proj_id)->first();
+                $project=Project::join('project_types','projects.project_type','project_types.id')
+                ->where('projects.project_id',$proj_id)->first();
 
-                        $services = DB::table('iso_sec_2_1')
+                $services = DB::table('iso_sec_2_1')
               ->where('project_id', $req->query('project_to_copy'))
               ->select('s_name')
-              ->groupBy('s_name')
+              ->distinct('s_name')
               ->get();
 
-                        $project_to_copy=Project::where('project_id',$req->query('project_to_copy'))->first();
+                $project_to_copy=Project::where('project_id',$req->query('project_to_copy'))->first();
 
 
                         return view('iso_sec_2_1.services_to_copy',[
@@ -680,11 +676,10 @@ class IsoSec2_1 extends Controller
 
 
 
-
                        $groups = DB::table('iso_sec_2_1')
            ->where('project_id', $proj_to_copy)->where('s_name',$servicename)
             ->select('g_name')
-             ->groupBy('g_name')
+             ->distinct('g_name')
               ->get();
 
                         $project_to_copy=Project::where('project_id',$proj_to_copy)->first();
@@ -714,6 +709,7 @@ class IsoSec2_1 extends Controller
         ],[
             'required'=>"Please select atleast one group"
         ]);
+
 
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -755,12 +751,9 @@ class IsoSec2_1 extends Controller
                         }
 
                     } catch (\Exception $e) {
-                        if($e->getCode()==23000){
-                            $error="Each row must contain a unique combination of Service Name,Asset Group Name,Name, and Component Name.All 4 cannot be same in a project";
-                        }else{
-                            $error=$e->getCode();
-                        }
-
+                       
+                        $error=$e->getCode();
+                        
                         return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                     ->with('error', $error);
                     }

@@ -59,7 +59,7 @@
 
      <tr>
         <td>{{$grp->g_name}}</td>
-        <td>   <input type="checkbox" name="group_to_copy[]" id="" value={{$grp->g_name}} checked></td>
+        <td>   <input type="checkbox" name="group_to_copy[]" id="" value="{{$grp->g_name}}" checked></td>
 
      </tr>
 

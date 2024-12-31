@@ -48,28 +48,7 @@ $permissions = json_decode($project_permissions);
     <h2 class="text-center fw-bold mb-4">Services & Assets</h2>
 
     <!-- Service and Asset Management Section -->
-    {{-- <h4 class="text-center fw-bold mb-4">Upload or Enter Services and Assets in Scope</h4>
 
-    @if ($org_projects->count() > 0 && in_array('Data Inputter', $permissions))
-    <div class="mb-5">
-        <form action="/copy_assets/{{ $project_id }}/{{ auth()->user()->id }}" method="get" class="d-flex align-items-center">
-            <div class="form-group w-50">
-                <label for="project_to_copy" class="form-label fw-semibold">Copy Service or Asset from</label>
-                <select class="form-select rounded-pill" name="project_to_copy">
-                    @foreach ($org_projects as $proj)
-                    <option value="{{ $proj->project_id }}" {{ old('project_to_copy') == $proj->project_id ? 'selected' : '' }}>
-                        {{ $proj->project_name }}
-                    </option>
-                    @endforeach
-                </select>
-                @if ($errors->has('project_to_copy'))
-                <div class="text-danger small mt-2">{{ $errors->first('project_to_copy') }}</div>
-                @endif
-            </div>
-            <button type="submit" class="btn btn-success btn-sm rounded-pill ms-3">Copy</button>
-        </form>
-    </div>
-    @endif --}}
 
     <!-- Filtering Section -->
     <div class="row mt-4 mb-4">
@@ -141,6 +120,31 @@ $permissions = json_decode($project_permissions);
                 </div>
             </div>
         </div>
+
+        
+    @if ($org_projects->count() > 0 && in_array('Data Inputter', $permissions))
+        <div class="col-md-6">
+        <form action="/copy_assets/{{ $project_id }}/{{ auth()->user()->id }}" method="get" class="d-flex align-items-center">
+            <div class="form-group w-50">
+                <label for="project_to_copy" class="form-label fw-semibold">Copy Service or Asset from</label>
+                <select class="form-select rounded-pill" name="project_to_copy">
+                    @foreach ($org_projects as $proj)
+                    <option value="{{ $proj->project_id }}" {{ old('project_to_copy') == $proj->project_id ? 'selected' : '' }}>
+                        {{ $proj->project_name }}
+                    </option>
+                    @endforeach
+                </select>
+                @if ($errors->has('project_to_copy'))
+                <div class="text-danger small mt-2">{{ $errors->first('project_to_copy') }}</div>
+                @endif
+                <button type="submit" class="btn btn-success btn-sm rounded-pill mt-2">Copy</button>
+
+            </div>
+
+        </form>
+    </div>
+ 
+    @endif 
     </div>
 
     @if (in_array('Data Inputter', $permissions))
