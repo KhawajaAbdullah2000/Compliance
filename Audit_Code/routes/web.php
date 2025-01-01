@@ -312,7 +312,7 @@ route::get("pci_multi_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[P
 route::get("pci_multi_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_req'])->name('pci_multi_sec_2_2_req');
 route::get('pci_multi_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Multi_Sheet::class,'pci_multi_sec2_2_sub_req_edit'])->name('pci_multi_sec2_2_sub_req_edit');
 route::post('pci_multi_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_form']);
-route::put('pci_multi_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_edit_form']);
+//route::put('pci_multi_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Multi_Sheet::class,'pci_multi_sec_2_2_edit_form']);
 
 
 //uae_ia
@@ -339,7 +339,6 @@ route::get("ksa_nca_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[KSA
 route::get("ksa_nca_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[KSA_NCA::class,'ksa_nca_sec_2_2_req'])->name('ksa_nca_sec_2_2_req');
 route::get('ksa_nca_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'ksa_nca_sec2_2_sub_req_edit'])->name('ksa_nca_sec2_2_sub_req_edit');
 route::post('ksa_nca_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_form']);
-route::put('ksa_nca_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_edit_form']);
 
 
 
@@ -350,7 +349,6 @@ route::get("sbp_etgrmf_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[
 route::get("sbp_etgrmf_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_req'])->name('sbp_etgrmf_sec_2_2_req');
 route::get('sbp_etgrmf_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec2_2_sub_req_edit'])->name('sbp_etgrmf_sec2_2_sub_req_edit');
 route::post('sbp_etgrmf_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_form']);
-route::put('sbp_etgrmf_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[SBP_ETGRMF::class,'sbp_etgrmf_sec_2_2_edit_form']);
 
 
 //for merchant
