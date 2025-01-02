@@ -294,7 +294,7 @@ route::get('iso_section2_2/{title_num}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_
 route::get('iso_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_sec_2_2_req'])->name('iso_sec_2_2_req');
 route::get('iso_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_sec2_2_sub_req_edit'])->name('iso_sec2_2_sub_req_edit');
 route::post('iso_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_sec_2_2_form']);
-route::put('iso_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_sec_2_2_edit_form']);
+route::post('iso_sec_2_2_form_user_req/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_sec_2_2_form_user_req']);
 
 
 //PCI single sheet
