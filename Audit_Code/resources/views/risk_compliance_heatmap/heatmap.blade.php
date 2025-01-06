@@ -124,7 +124,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="heatmapRiskAvailabilityModalLabel">Risk Integrity Heatmap</h5>
+                    <h5 class="modal-title" id="heatmapRiskAvailabilityModalLabel">Risk Availability Heatmap</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -296,11 +296,16 @@
 
 @section('scripts')
 
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix"></script>
+
 
 
 <script>
+    
+
     const vulnerabilityLabels = ['Low', 'Medium', 'High'];
     const threatLabels = ['Low', 'Medium', 'High'];
 
@@ -450,13 +455,13 @@ const maxRiskscatterPlotDataRiskIntegrity = Math.max(...riskCountsIntegrity);
 
 
 
-// Update scatterPlotData to include scaled radius
+//Update scatterPlotData to include scaled radius
 const scaledScatterPlotDataRiskIntegrity = scatterPlotDataRiskIntegrity.map(data => ({
     ...data,
     r: scaleRadius(data.riskCount, minRiskscatterPlotDataRiskIntegrity, maxRiskscatterPlotDataRiskIntegrity, minRadius, maxRadius)  // Scale radius
 }));
 
-
+//FOr Risk Integrity
 const ctxIntegrity = document.getElementById('heatmapRiskIntegrityChart').getContext('2d');
 Chart.register(ChartDataLabels);
 
@@ -544,6 +549,8 @@ const scatterChartIntegrity = new Chart(ctxIntegrity, {
         }
     }
 });
+
+
 
 //FOr Data Availability
 const scatterPlotDataRiskAvailability = [
@@ -664,10 +671,6 @@ const scatterChartAvailability  = new Chart(ctxAvailability , {
 });
 
 
-
-
-
-   
 </script>
 
 

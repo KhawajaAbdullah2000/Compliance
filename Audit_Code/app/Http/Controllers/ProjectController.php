@@ -371,6 +371,7 @@ class ProjectController extends Controller
             ['x' => 3, 'y' => 3, 'r' => $iso_risk_integrity_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
         ];
 
+
          //for Data Availability
          $query = DB::table('iso_sec_2_1 as iso1')
          ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
