@@ -16,11 +16,17 @@ class UserAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $restrictionDate = now()->createFromFormat('Y-m-d', '2025-07-7'); //7th july
+            if (now()->greaterThanOrEqualTo($restrictionDate)) {
+                return redirect()->route('home')->with('error','Please Login to access');
+            }
         if(Auth::check())
         {
+            
 
               if(Auth::user()->privilege_id!=4){
-                //he is rot user
+
+
                     return $next($request);
 
               }   

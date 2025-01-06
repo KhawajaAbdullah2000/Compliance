@@ -5,7 +5,12 @@
 
 @include('user-nav')
 
-
+<style>
+    #heatmapRiskConfidentialityChart {
+        max-width: 800px;
+        max-height: 500px;
+    }
+</style>
 
 <div class="container my-2">
     <div class="row mt-5">
@@ -93,8 +98,9 @@
                 </div>
                 <div class="modal-body">
                     <!-- Heatmap canvas -->
-                    <canvas id="heatmapRiskConfidentialityChart" width="600" height="400"></canvas>
-                </div>
+                    <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                        <canvas id="heatmapRiskConfidentialityChart"></canvas>
+                    </div>                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
@@ -299,138 +305,75 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix"></script>
-
 
 
 <script>
-    
 
     const vulnerabilityLabels = ['Low', 'Medium', 'High'];
     const threatLabels = ['Low', 'Medium', 'High'];
 
-    const scatterPlotDataRiskConfidentiality = [
-    { x: 1, y: 1, riskCount: {{ $scatterPlotDataRiskConfidentiality[0]['r'] ?? 0 }} },  // Low Vulnerability, Low Threat
-    { x: 1, y: 2, riskCount: {{ $scatterPlotDataRiskConfidentiality[1]['r'] ?? 0 }} },  // Low Vulnerability, Medium Threat
-    { x: 1, y: 3, riskCount: {{ $scatterPlotDataRiskConfidentiality[2]['r'] ?? 0 }} },  // Low Vulnerability, High Threat
-    { x: 2, y: 1, riskCount: {{ $scatterPlotDataRiskConfidentiality[3]['r'] ?? 0 }} },  // Medium Vulnerability, Low Threat
-    { x: 2, y: 2, riskCount: {{ $scatterPlotDataRiskConfidentiality[4]['r'] ?? 0 }} },  // Medium Vulnerability, Medium Threat
-    { x: 2, y: 3, riskCount: {{ $scatterPlotDataRiskConfidentiality[5]['r'] ?? 0 }} },  // Medium Vulnerability, High Threat
-    { x: 3, y: 1, riskCount: {{ $scatterPlotDataRiskConfidentiality[6]['r'] ?? 0 }} },  // High Vulnerability, Low Threat
-    { x: 3, y: 2, riskCount: {{ $scatterPlotDataRiskConfidentiality[7]['r'] ?? 0 }} },  // High Vulnerability, Medium Threat
-    { x: 3, y: 3, riskCount: {{ $scatterPlotDataRiskConfidentiality[8]['r'] ?? 0 }} }   // High Vulnerability, High Threat
-];
+    const ctx = document.getElementById('heatmapRiskConfidentialityChart').getContext('2d');
+    const scatterChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: @json($chartData['labels']),
+            datasets: [{
+                label: 'Risk Distribution',
+                data: @json($chartData['data']),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(199, 199, 199, 0.2)',
+                    'rgba(83, 102, 255, 0.2)',
+                    'rgba(128, 0, 128, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(199, 199, 199, 1)',
+                    'rgba(83, 102, 255, 1)',
+                    'rgba(128, 0, 128, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true, 
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                datalabels: {
+                    color: '#000',
+                    font: {
+                        weight: 'bold'
+                    },
+                    formatter: function(value) {
+                        return value; // Display counts only for existing slices
+                    }
+                }
+            }
+        },
+        plugins: [ChartDataLabels]
+    });
 
-
-function scaleRadius(riskCount, minRisk, maxRisk, minRadius, maxRadius) {
+    function scaleRadius(riskCount, minRisk, maxRisk, minRadius, maxRadius) {
     if (minRisk === maxRisk) {
         return minRadius; // Avoid division by zero
     }
     return ((riskCount - minRisk) / (maxRisk - minRisk)) * (maxRadius - minRadius) + minRadius;
 }
-
-// Find min and max risk counts
-const riskCountsConfidentiality = scatterPlotDataRiskConfidentiality.map(data => data.riskCount);
-const minRiskscatterPlotDataRiskConfidentiality = Math.min(...riskCountsConfidentiality);
-const maxRiskscatterPlotDataRiskConfidentiality = Math.max(...riskCountsConfidentiality);
-
 const minRadius = 10;  // Minimum bubble size
 const maxRadius = 30; // Maximum bubble size
-
-// Update scatterPlotData to include scaled radius
-const scaledScatterPlotDataRiskConfidentiality = scatterPlotDataRiskConfidentiality.map(data => ({
-    ...data,
-    r: scaleRadius(data.riskCount, minRiskscatterPlotDataRiskConfidentiality, maxRiskscatterPlotDataRiskConfidentiality, minRadius, maxRadius)  // Scale radius
-}));
-
-const ctx = document.getElementById('heatmapRiskConfidentialityChart').getContext('2d');
-Chart.register(ChartDataLabels);
-
-const scatterChart = new Chart(ctx, {
-    type: 'bubble',  // Use 'bubble' type to enable variable radius
-    data: {
-        datasets: [{
-            label: 'Data Confidentiality Risk Count',
-            data: scaledScatterPlotDataRiskConfidentiality,  // Use data with scaled radius
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',  // Bubble color
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        const vulnerability = vulnerabilityLabels[context.raw.x - 1];
-                        const threat = threatLabels[context.raw.y - 1];
-                        const riskCount = context.raw.riskCount;
-                        return `Vulnerability: ${vulnerability}, Threat: ${threat}, Risk Count: ${riskCount}`;
-                    }
-                }
-            },
-            datalabels: {
-                align: 'center',
-                anchor: 'center',
-                formatter: function(value) {
-                    return value.riskCount;  // Show the risk count on the bubble
-                },
-                color: '#000',  // Text color for the count
-                font: {
-                    weight: 'bold'
-                }
-            }
-        },
-        scales: {
-            x: {
-                title: {
-                    display: true,
-                    text: 'Vulnerability',
-                    font: {
-                        size: 16,  // Set font size
-                        weight: 'bold'  // Make it bold
-                    }
-                },
-                ticks: {
-                    callback: function(value, index, values) {
-                        return vulnerabilityLabels[index];
-                    },
-                    stepSize: 1,
-                    font: {
-                        size: 12,  // Set font size
-
-                    },
-                    beginAtZero: true,
-                    max: 3
-                }
-            },
-            y: {
-                title: {
-                    display: true,
-                    text: 'Threat',
-                    font: {
-                        size: 16,  // Set font size
-                        weight: 'bold'  // Make it bold
-                    }
-                },
-                ticks: {
-                    callback: function(value, index, values) {
-                        return threatLabels[index];
-                    },
-                    stepSize: 1,
-                    font: {
-                        size: 12,  // Set font size
-
-                    },
-                    beginAtZero: true,
-                    max: 3
-                }
-            }
-        }
-    }
-});
-
 
 //FOr Data Integrity
 const scatterPlotDataRiskIntegrity = [
