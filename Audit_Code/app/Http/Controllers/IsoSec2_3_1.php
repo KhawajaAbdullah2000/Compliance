@@ -29,7 +29,6 @@ class IsoSec2_3_1 extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 4 ||$checkpermission->type_id == 1 ) {
 
 
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
@@ -45,7 +44,7 @@ class IsoSec2_3_1 extends Controller
                         'asset'=>$asset
                     ]);
 
-                }
+                
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
@@ -67,7 +66,6 @@ class IsoSec2_3_1 extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 4 ||$checkpermission->type_id == 1 ) {
 
                     $service=  Db::table('iso_sec_2_1')
                     ->where('assessment_id',$asset_id)->first();
@@ -91,7 +89,7 @@ class IsoSec2_3_1 extends Controller
                         'user_id'=>$user_id
                     ]);
 
-                }
+                
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
@@ -115,7 +113,6 @@ class IsoSec2_3_1 extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 4 ||$checkpermission->type_id == 1 ) {
 
                     $assetData = Db::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
 
@@ -178,7 +175,7 @@ class IsoSec2_3_1 extends Controller
                         'project' => $project,
                         'global_asset_value' => $global_asset_value
                     ]);
-                }
+                
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
@@ -683,7 +680,6 @@ class IsoSec2_3_1 extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 4 || $checkpermission->type_id == 1) {
 
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                         ->where('projects.project_id', $proj_id)->first();
@@ -699,7 +695,7 @@ class IsoSec2_3_1 extends Controller
                         'assetData' => $assetData,
                         'riskData'=>$riskData
                     ]);
-                }
+                
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
@@ -721,9 +717,6 @@ class IsoSec2_3_1 extends Controller
                 ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
                 ->first();
             if ($checkpermission) {
-
-                if ($checkpermission->type_id == 4 || $checkpermission->type_id == 1) {
-
 
                     $req->validate([
 
@@ -759,7 +752,7 @@ class IsoSec2_3_1 extends Controller
                         'proj_id' => $proj_id,
                         'user_id' => auth()->user()->id
                     ])->with('success', 'Record Updated');
-                }
+                
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);

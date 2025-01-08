@@ -164,10 +164,8 @@ $permissions = json_decode($project_permissions);
                     <th onclick="sortTable(4)">Asset Owner Dept</th>
                     <th onclick="sortTable(5)">Asset Physical Location</th>
                     <th onclick="sortTable(6)">Asset Logical Location</th>
-
-                @if ($project->project_type == 4 || $project->project_type==1)
                 <th>Risk Assessment</th>
-                @endif
+
 
                
                 <th>Enter Evidence</th>
@@ -186,11 +184,11 @@ $permissions = json_decode($project_permissions);
                 <td>{{ $d->owner_dept }}</td>
                 <td>{{ $d->physical_loc }}</td>
                 <td>{{ $d->logical_loc }}</td>
-                @if ($project->project_type == 4 || $project->project_type==1)
+          
                 <td class="text-center">
                     <a href="/iso_sec_2_3_1_risk_selection/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}" class="btn btn-primary btn-sm rounded-pill">Initiate</a>
                 </td>
-                @endif
+            
 
                 <td class="text-center">
                     <a href="/iso_sec_2_2_evidence/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}" class="btn btn-warning btn-sm rounded-pill">Enter</a>
