@@ -374,6 +374,7 @@ class ProjectController extends Controller
                         'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()
                     ]
                 ];
+               
 
          
 
