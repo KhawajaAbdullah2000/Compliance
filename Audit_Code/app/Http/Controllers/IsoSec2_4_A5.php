@@ -29,7 +29,7 @@ class IsoSec2_4_A5 extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 4) {
+                if ($checkpermission->type_id) {
                     $data = DB::table('iso_sec_2_1')->join(
                         'users',
                         'iso_sec_2_1.last_edited_by',
@@ -66,7 +66,7 @@ class IsoSec2_4_A5 extends Controller
             ->first();
             if($checkpermission){
                 $permissions=json_decode($checkpermission->project_permissions);
-                        if($checkpermission->type_id==4){
+                        if($checkpermission->type_id){
                            //reading excel file
                            $filepath=public_path('ISO_SOA_A5.xlsx');
                            $data = Excel::toArray([], $filepath); //with header
@@ -82,7 +82,7 @@ class IsoSec2_4_A5 extends Controller
 
 
                         //    $results=Db::table('iso_sec2_4_a5')->join('users','iso_sec2_4_a5.last_edited_by','users.id')
-                        //    ->where('project_id',$proj_id)->get();
+                        //     ->where('project_id',$proj_id)->get();
 
                         $project=Project::join('project_types','projects.project_type','project_types.id')
                         ->where('projects.project_id',$proj_id)->first();
@@ -92,7 +92,6 @@ class IsoSec2_4_A5 extends Controller
                            'project_permissions'=>$checkpermission->project_permissions,
                            'results'=>$results,
                            'data'=>$rows,
-                           'results'=>$results,
                            'assetData'=>$assetData,
                            'project'=>$project
                            ]
@@ -132,7 +131,7 @@ class IsoSec2_4_A5 extends Controller
             if($checkpermission){
                 $permissions=json_decode($checkpermission->project_permissions);
                 if(in_array('Data Inputter',$permissions)){
-                        if($checkpermission->type_id==4){
+                        if($checkpermission->type_id){
                             $applicability = $req->input('applicability');
 
                             $filtered_applicability=array_filter($applicability);
@@ -190,7 +189,7 @@ class IsoSec2_4_A5 extends Controller
             if($checkpermission){
                 $permissions=json_decode($checkpermission->project_permissions);
                 if(in_array('Data Inputter',$permissions)){
-                        if($checkpermission->type_id==4){
+                        if($checkpermission->type_id){
                             $filepath=public_path('ISO_SOA_A5.xlsx');
                             $data = Excel::toArray([], $filepath); //with header
                            // $rows = array_slice($data[0], 1); //without header(first row)
@@ -265,7 +264,7 @@ class IsoSec2_4_A5 extends Controller
         if($checkpermission){
             $permissions=json_decode($checkpermission->project_permissions);
             if(in_array('Data Inputter',$permissions)){
-                    if($checkpermission->type_id==4){
+                    if($checkpermission->type_id){
 
                         $exists=DB::table('iso_sec2_4_a5')->where('control_num',$control_num)->where('project_id',$proj_id)
                         ->where('asset_id',$asset_id)->first();
@@ -368,7 +367,7 @@ public function edit_app_iso_sec2_4_a5(Request $req,$control_num,$proj_id,$user_
             if($checkpermission){
                 $permissions=json_decode($checkpermission->project_permissions);
                 if(in_array('Data Inputter',$permissions)){
-                        if($checkpermission->type_id==4){
+                        if($checkpermission->type_id){
 
                             $filepath=public_path('ISO_SOA_A5.xlsx');
                             $data = Excel::toArray([], $filepath); //with header
@@ -418,7 +417,7 @@ public function submit_edit_app_sec2_4_a5(Request $req,$control_num,$proj_id,$us
             if($checkpermission){
                 $permissions=json_decode($checkpermission->project_permissions);
                 if(in_array('Data Inputter',$permissions)){
-                        if($checkpermission->type_id==4){
+                        if($checkpermission->type_id){
 
 
 

@@ -81,13 +81,13 @@ $permissions=json_decode($project_permissions);
         <tbody>
 @foreach ($data as $d)
             <tr>
-                <td>{{substr($d->s_name,0,16)}}@if(strlen($d->s_name)>16)... @endif </td>
-                <td>{{substr($d->g_name,0,15)}} @if(strlen($d->g_name)>15)... @endif </td>
-                <td>{{substr($d->name,0,20)}} @if(strlen($d->name)>20)... @endif </td>
-                <td>{{substr($d->c_name,0,10)}}@if(strlen($d->c_name)>10)... @endif </td>
-                <td>{{substr($d->owner_dept,0,10)}}@if(strlen($d->owner_dept)>10)... @endif </td>
-                <td>{{substr($d->physical_loc,0,10)}}@if(strlen($d->physical_loc)>10).. @endif </td>
-                <td>{{substr($d->logical_loc,0,10)}}@if(strlen($d->logical_loc)>10)... @endif </td>
+                <td>{{substr($d->s_name,0,160)}}</td>
+                <td>{{substr($d->g_name,0,150)}} </td>
+                <td>{{substr($d->name,0,200)}} </td>
+                <td>{{substr($d->c_name,0,100)}} </td>
+                <td>{{substr($d->owner_dept,0,100)}} </td>
+                <td>{{substr($d->physical_loc,0,100)}} </td>
+                <td>{{substr($d->logical_loc,0,100)}} </td>
 
 
 
