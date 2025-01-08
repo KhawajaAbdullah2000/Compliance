@@ -27,7 +27,7 @@ class IsoSec2_4_A6 extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 4) {
+                if ($checkpermission->type_id) {
                     $data = DB::table('iso_sec_2_1')->join(
                         'users',
                         'iso_sec_2_1.last_edited_by',
@@ -64,7 +64,7 @@ class IsoSec2_4_A6 extends Controller
                 ->first();
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
-                if ($checkpermission->type_id == 4) {
+                if ($checkpermission->type_id) {
                     //reading excel file
                     $filepath = public_path('ISO_SOA_A6.xlsx');
                     $data = Excel::toArray([], $filepath); //with header
@@ -91,7 +91,7 @@ class IsoSec2_4_A6 extends Controller
                             'project_permissions' => $checkpermission->project_permissions,
                             'results' => $results,
                             'data' => $rows,
-                            'results' => $results,
+                   
                             'assetData' => $assetData,
                             'project'=>$project
                         ]
@@ -106,7 +106,6 @@ class IsoSec2_4_A6 extends Controller
 
     public function iso_sec2_4_a6_edit($control_num, $asset_id, $proj_id, $user_id)
     {
-
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -122,7 +121,7 @@ class IsoSec2_4_A6 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
+                    if ($checkpermission->type_id) {
                         $filepath = public_path('ISO_SOA_A6.xlsx');
                         $data = Excel::toArray([], $filepath); //with header
                         // $rows = array_slice($data[0], 1); //without header(first row)
@@ -199,7 +198,7 @@ class IsoSec2_4_A6 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
+                    if ($checkpermission->type_id) {
 
                         $exists = DB::table('iso_sec2_4_a6')->where('control_num', $control_num)->where('project_id', $proj_id)
                             ->where('asset_id', $asset_id)->first();

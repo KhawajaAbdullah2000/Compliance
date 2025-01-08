@@ -838,8 +838,6 @@ class IsoSec2_3_1 extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 4) {
-
                     $filepath = public_path('ISO_SOA_A5.xlsx');
                     $sec2_4_a5_data = Excel::toArray([], $filepath); //with header
                     $sec2_4_a5_rows = array_slice($sec2_4_a5_data[0], 1); //without header(first row)
@@ -903,7 +901,7 @@ class IsoSec2_3_1 extends Controller
 
 
                     ]);
-                }
+                
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
@@ -927,7 +925,7 @@ class IsoSec2_3_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
+                    if ($checkpermission->type_id) {
 
                         $asset_risk_assess = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
                             ->where('control_num', $control_num)->first();
@@ -1004,7 +1002,7 @@ class IsoSec2_3_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
+                    if ($checkpermission->type_id) {
 
                         DB::table('iso_risk_treatment')->where('project_id', $proj_id)->where('control_num', $control_num)
                             ->where('asset_id', $asset_id)->update([
@@ -1030,8 +1028,6 @@ class IsoSec2_3_1 extends Controller
 
     public function iso_sec_2_3_2_treat_form1_submit(Request $req, $asset_id, $control_num, $proj_id, $user_id)
     {
-
-
         $req->validate([
             'applicability'=>'required',
             'residual_risk_treatment' => "required|string",
@@ -1059,8 +1055,6 @@ class IsoSec2_3_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
-
 
                         if ($req->applicability != "no") {
 
@@ -1128,7 +1122,7 @@ class IsoSec2_3_1 extends Controller
 
 
 
-                    }
+                    
                 }
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
@@ -1160,7 +1154,7 @@ class IsoSec2_3_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
+                    if ($checkpermission->type_id) {
 
                         DB::table('iso_risk_treatment')->where('project_id', $proj_id)->where('control_num', $control_num)
                             ->where('asset_id', $asset_id)->update([
@@ -1205,7 +1199,7 @@ class IsoSec2_3_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
+                    if ($checkpermission->type_id) {
 
                 $risk_assessment= Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)
                 ->where('asset_id', $asset_id)
@@ -1273,7 +1267,7 @@ class IsoSec2_3_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
-                    if ($checkpermission->type_id == 4) {
+                    if ($checkpermission->type_id ) {
 
                         $asset_risk_assess = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
                             ->where('control_num', $control_num)->first();

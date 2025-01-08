@@ -189,8 +189,6 @@ class IsoSec2_1 extends Controller
                 ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
                 ->first();
             if ($checkpermission) {
-
-                if ($checkpermission->type_id == 4) {
                     $data = DB::table('iso_sec_2_1')->join(
                         'users',
                         'iso_sec_2_1.last_edited_by',
@@ -209,7 +207,7 @@ class IsoSec2_1 extends Controller
                         'project_permissions' => $checkpermission->project_permissions,
                         'project'=>$project
                     ]);
-                }
+                
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);

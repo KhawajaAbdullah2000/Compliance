@@ -3810,7 +3810,7 @@ foreach ($uniqueComponents as $cname) {
                 ->first();
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
-                if ($checkpermission->type_id == 4) {
+                if ($checkpermission->type_id) {
 
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                         ->where('projects.project_id', $proj_id)->first();

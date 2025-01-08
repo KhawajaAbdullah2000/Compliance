@@ -53,7 +53,6 @@ $headers=array('Control num','Title of COntrol','Descriptionof Control')
 
                   </div>
 
-
                   <div class="text-center mt-3">
                     <button type="submit" class="btn my_bg_color text-white btn-md">Submit</a>
                   </div>
