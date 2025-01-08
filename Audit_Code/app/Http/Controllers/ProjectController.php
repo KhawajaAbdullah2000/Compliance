@@ -318,66 +318,20 @@ class ProjectController extends Controller
                 ->get();
              
               
-                $scatterPlotDataRiskConfidentiality = [
-                    [
-                        'label' => 'Low Vulnerability & Low Threat',
-                        'x' => 1,
-                        'y' => 1,
-                        'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()
-                    ],
-                    [
-                        'label' => 'Low Vulnerability & Medium Threat',
-                        'x' => 1,
-                        'y' => 2,
-                        'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()
-                    ],
-                    [
-                        'label' => 'Low Vulnerability & High Threat',
-                        'x' => 1,
-                        'y' => 3,
-                        'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()
-                    ],
-                    [
-                        'label' => 'Medium Vulnerability & Low Threat',
-                        'x' => 2,
-                        'y' => 1,
-                        'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()
-                    ],
-                    [
-                        'label' => 'Medium Vulnerability & Medium Threat',
-                        'x' => 2,
-                        'y' => 2,
-                        'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()
-                    ],
-                    [
-                        'label' => 'Medium Vulnerability & High Threat',
-                        'x' => 2,
-                        'y' => 3,
-                        'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()
-                    ],
-                    [
-                        'label' => 'High Vulnerability & Low Threat',
-                        'x' => 3,
-                        'y' => 1,
-                        'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()
-                    ],
-                    [
-                        'label' => 'High Vulnerability & Medium Threat',
-                        'x' => 3,
-                        'y' => 2,
-                        'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()
-                    ],
-                    [
-                        'label' => 'High Vulnerability & High Threat',
-                        'x' => 3,
-                        'y' => 3,
-                        'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()
-                    ]
-                ];
-               
+            $scatterPlotDataRiskConfidentiality = [
+                // x = Vulnerability, y = Threat, r = Risk Count (point size)
+                ['x' => 1, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '<=', 20)->count()],  // Low Vulnerability, Low Threat
+                ['x' => 1, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Low Vulnerability, Medium Threat
+                ['x' => 1, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '<=', 20)->where('threat', '>', 70)->count()],  // Low Vulnerability, High Threat
 
-         
+                ['x' => 2, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '<=', 20)->count()],  // Medium Vulnerability, Low Threat
+                ['x' => 2, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // Medium Vulnerability, Medium Threat
+                ['x' => 2, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 20)->where('vulnerability', '<=', 70)->where('threat', '>', 70)->count()],  // Medium Vulnerability, High Threat
 
+                ['x' => 3, 'y' => 1, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '<=', 20)->count()],  // High Vulnerability, Low Threat
+                ['x' => 3, 'y' => 2, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 20)->where('threat', '<=', 70)->count()],  // High Vulnerability, Medium Threat
+                ['x' => 3, 'y' => 3, 'r' => $iso_risk_results->where('vulnerability', '>', 70)->where('threat', '>', 70)->count()]  // High Vulnerability, High Threat
+            ];
 
             //for Data integrity
             $query = DB::table('iso_sec_2_1 as iso1')
@@ -496,16 +450,6 @@ class ProjectController extends Controller
      $partial=$total>0 ? ($partialCount/$total)*100:0;
 
 
-     $filteredDataRiskConfidentiality = collect($scatterPlotDataRiskConfidentiality)->filter(function ($item) {
-        return $item['r'] > 0;
-    });
-    
-    // Prepare data for the chart
-    $chartData = [
-        'labels' => $filteredDataRiskConfidentiality->pluck('label')->values()->toArray(),
-        'data' => $filteredDataRiskConfidentiality->pluck('r')->values()->toArray()
-    ];
-
 
 
     return view('risk_compliance_heatmap.heatmap',[
@@ -523,8 +467,7 @@ class ProjectController extends Controller
         'scatterPlotDataRiskAvailability'=>$scatterPlotDataRiskAvailability,
         'serviceOrderRiskConfidentiality'=>$serviceOrderRiskConfidentiality,
         'serviceOrderRiskIntegrity'=>$serviceOrderRiskIntegrity,
-        'serviceOrderRiskAvailability'=>$serviceOrderRiskAvailability,
-        'chartData'=>$chartData
+        'serviceOrderRiskAvailability'=>$serviceOrderRiskAvailability
 
 
     ]);
@@ -744,6 +687,7 @@ class ProjectController extends Controller
      $yes=$total>0 ? ($yesCount/$total)*100:0;
      $no=$total>0 ? ($noCount/$total)*100:0;
      $partial=$total>0 ? ($partialCount/$total)*100:0;
+
 
 
 
