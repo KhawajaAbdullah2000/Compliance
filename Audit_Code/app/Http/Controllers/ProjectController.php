@@ -334,11 +334,11 @@ class ProjectController extends Controller
             ];
 
             //for Data integrity
-            $query = DB::table('iso_sec_2_1 as iso1')
+            $query2 = DB::table('iso_sec_2_1 as iso1')
             ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
             ->where('iso1.project_id', $proj_id);
 
-        $query->select(
+        $query2->select(
             'iso1.s_name',
             'iso1.g_name',
             'iso1.name',
@@ -352,7 +352,7 @@ class ProjectController extends Controller
 
         $query->addSelect( 'iso2.risk_integrity');
 
-        $iso_risk_integrity_results = $query->orderBy('iso2.control_num', 'asc')
+        $iso_risk_integrity_results = $query2->orderBy('iso2.control_num', 'asc')
             ->get();
          
           
@@ -373,11 +373,11 @@ class ProjectController extends Controller
 
 
          //for Data Availability
-         $query = DB::table('iso_sec_2_1 as iso1')
+         $query3 = DB::table('iso_sec_2_1 as iso1')
          ->join('iso_sec_2_3_1 as iso2', 'iso1.assessment_id', '=', 'iso2.asset_id')
          ->where('iso1.project_id', $proj_id);
 
-     $query->select(
+     $query3->select(
          'iso1.s_name',
          'iso1.g_name',
          'iso1.name',
@@ -389,9 +389,9 @@ class ProjectController extends Controller
          
      );
 
-     $query->addSelect( 'iso2.risk_availability');
+     $query3->addSelect( 'iso2.risk_availability');
 
-     $iso_risk_availability_results = $query->orderBy('iso2.control_num', 'asc')
+     $iso_risk_availability_results = $query3->orderBy('iso2.control_num', 'asc')
          ->get();
       
        
@@ -2664,7 +2664,8 @@ foreach ($uniqueNames as $name) {
 
     // Get all asset_ids associated with this service (s_name)
     $assetIds =DB::table('iso_sec_2_1')->where('project_id',$proj_id)
-    ->where('g_name', $nName)
+    ->where('s_name',$s_name)
+    ->where('name', $nName)
         ->pluck('assessment_id')
         ->toArray();
  
@@ -2754,7 +2755,8 @@ foreach ($uniqueComponents as $cname) {
 
     // Get all asset_ids associated with this service (s_name)
     $assetIds =DB::table('iso_sec_2_1')->where('project_id',$proj_id)
-    ->where('g_name', $cName)
+    ->where('s_name',$s_name)
+    ->where('c_name', $cName)
         ->pluck('assessment_id')
         ->toArray();
  
@@ -2815,6 +2817,7 @@ foreach ($uniqueComponents as $cname) {
 
 
     public function drill_down_by_asset_from_asset_group($proj_id,$s_name,$g_name,$user_id){
+   
         $checkpermission = Db::table('project_details')->select(
             'project_types.id as type_id',
             'project_details.project_code',
@@ -2839,6 +2842,8 @@ foreach ($uniqueComponents as $cname) {
     ->distinct()
     ->get();
 
+
+
 $complianceData = [];
 
 foreach ($uniqueNames as $name) {
@@ -2846,7 +2851,9 @@ foreach ($uniqueNames as $name) {
 
     // Get all asset_ids associated with this service (s_name)
     $assetIds =DB::table('iso_sec_2_1')->where('project_id',$proj_id)
-    ->where('g_name', $nName)
+    ->where('s_name',$s_name)
+    ->where('g_name', $g_name)
+    ->where('name', $nName)
         ->pluck('assessment_id')
         ->toArray();
  
@@ -2930,7 +2937,7 @@ foreach ($uniqueNames as $name) {
     ->select('c_name')
     ->distinct()
     ->get();
-
+    
 $complianceData = [];
 
 foreach ($uniqueComponents as $cname) {
@@ -2938,7 +2945,10 @@ foreach ($uniqueComponents as $cname) {
 
     // Get all asset_ids associated with this service (s_name)
     $assetIds =DB::table('iso_sec_2_1')->where('project_id',$proj_id)
-    ->where('g_name', $cName)
+    ->where('s_name',$s_name)
+    ->where('g_name',$g_name)
+    ->where('name',$name)
+    ->where('c_name', $cName)
         ->pluck('assessment_id')
         ->toArray();
  
@@ -3030,7 +3040,9 @@ foreach ($uniqueComponents as $cname) {
 
     // Get all asset_ids associated with this service (s_name)
     $assetIds =DB::table('iso_sec_2_1')->where('project_id',$proj_id)
-    ->where('g_name', $cName)
+    ->where('s_name',$s_name)
+    ->where('name',$name)
+    ->where('c_name', $cName)
         ->pluck('assessment_id')
         ->toArray();
  

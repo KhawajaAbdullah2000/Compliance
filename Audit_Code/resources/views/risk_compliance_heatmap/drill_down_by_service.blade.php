@@ -59,7 +59,7 @@
                 <th>Drill down by Asset Group</th>
                 <th>Drill down by Asset</th>
                 <th>Drill down by Asset Component</th>
-                <th>Drill down by control group</th>
+               
             </tr>
         </thead>
         <tbody>
@@ -108,12 +108,7 @@
                         </a>
                     </td>
 
-                    <td>
-                        <a href="/drill_down_by_control_group/{{ $project->project_id }}/{{$data['service_name']}}/{{ auth()->user()->id }}" 
-                           data-toggle="tooltip" title="Drill down by control group in Service: {{$data['service_name']}}">
-                            <i class="fas fa-bookmark fa-lg text-success"></i>
-                        </a>
-                    </td>
+             
 
                     
 
