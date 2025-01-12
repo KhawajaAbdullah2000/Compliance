@@ -21,36 +21,52 @@ class UserController extends Controller
         return view('ai');
     }
 
-    public function ask_pdf(Request $request){
-        $response = null;
+    public function uploadPdf(Request $request)
+    {
+    
+            // Handle PDF upload
+            $request->validate([
+                'file' => 'required|file|max:10240', 
+            ]);
+            // Send the file to Flask API
+            $file = $request->file('file');
+            $response = Http::attach(
+                'file', file_get_contents($file->getRealPath()), $file->getClientOriginalName()
+            )->post('http://127.0.0.1:8080/upload_pdf');
 
+            if ($response->successful()) {
+                $fileName = $file->getClientOriginalName();
+                return view('ai', ['fileName' => $fileName, 'success' => true]);
+            } else {
+                return view('ai', ['error' => 'Failed to upload the PDF.']);
+            }
+        
+
+       
+    }
+
+    public function askPdf(Request $request)
+    {
         if ($request->isMethod('post')) {
-            $question = $request->input('question');
-            $apiUrl = 'http://127.0.0.1:8080/ask_pdf';
-
-            $apiResponse = Http::post($apiUrl, [
-                'query' => $question,
+            // Handle question submission
+            $request->validate([
+                'question' => 'required|string',
             ]);
 
-            if ($apiResponse->successful()) {
-                $response = $apiResponse->json()['answer'] ?? 'No answer found.';
+            // Send the question to Flask API
+            $response = Http::post('http://127.0.0.1:8080/ask_pdf', [
+                'query' => $request->input('question'),
+            ]);
+
+            if ($response->successful()) {
+                return view('ai', ['response' => $response->json()['answer'], 'question' => $request->input('question')]);
             } else {
-                $response = 'There was an error processing your request.';
+                return view('ai', ['error' => 'Failed to fetch the response.']);
             }
         }
 
-        return view('ai', [
-            'response' => $response,
-            'question' => $request->input('question'),
-        ]);
-    
+       
     }
-    public function changepass(){
-       $super=User::where('id',2)->first();
-       $super->password=Hash::make('12345');
-       $super->save();
-    }
-
     public function login(Request $req){
         
         $req->validate([

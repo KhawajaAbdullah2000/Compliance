@@ -40,7 +40,10 @@ use function Ramsey\Uuid\v3;
 //Excel cript
 // ROute::get('excel',[UserController::class,'excel']);
 Route::get('ai',[UserController::class,'ai'])->name('ai');
-Route::post('ai',[UserController::class,'ask_pdf']);
+//Route::post('ai',[UserController::class,'ask_pdf']);
+
+Route::post('/upload-pdf', [UserController::class, 'uploadPdf'])->name('upload-pdf');
+Route::post('/ask-pdf', [UserController::class, 'askPdf'])->name('ask-question');
 
 Route::get('/', function () {
     return view('login-view');
