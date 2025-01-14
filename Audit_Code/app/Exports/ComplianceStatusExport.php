@@ -13,17 +13,19 @@ class ComplianceStatusExport implements FromArray, WithHeadings
     protected $formattedResults;
     protected $columnTotals;
 
-    public function __construct(array $formattedResults, array $columnTotals)
+   protected $domainNames;
+
+    public function __construct(array $formattedResults, array $columnTotals,array $domainNames)
     {
         $this->formattedResults = $formattedResults;
         $this->columnTotals = $columnTotals;
+        $this->domainNames = $domainNames;
     }
 
     public function headings(): array
     {
         return [
-            'Service',
-            'Asset Component',
+            'Domain',
             'In Place',
             'Not In Place',
             'Not Applicable',
@@ -38,11 +40,10 @@ class ComplianceStatusExport implements FromArray, WithHeadings
         $rows = [];
 
         // Add service and component rows
-        foreach ($this->formattedResults as $service => $components) {
-            foreach ($components as $component => $statuses) {
+        foreach ($this->formattedResults as $domain => $statuses) {
+         
                 $rows[] = [
-                    $service,
-                    $component,
+                    $this->domainNames[$domain] ?? 'Unknown Domain',
                     (string) ($statuses['yes'] ?? '0'),
                 (string) ($statuses['no'] ?? '0'),
                 (string) ($statuses['not_applicable'] ?? '0'),
@@ -51,12 +52,11 @@ class ComplianceStatusExport implements FromArray, WithHeadings
                 (string) ($statuses['total'] ?? '0'),
                 ];
             }
-        }
+
 
         // Add the totals row
         $rows[] = [
             'Total',
-            '', // Empty column for "Asset Component"
             (string) ($this->columnTotals['yes'] ?? '0'),
             (string) ($this->columnTotals['no'] ?? '0'),
             (string) ($this->columnTotals['not_applicable'] ?? '0'),
@@ -67,4 +67,6 @@ class ComplianceStatusExport implements FromArray, WithHeadings
 
         return $rows;
     }
+
+
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ComplianceMap;
 use App\Http\Controllers\CY_SAMA;
 use App\Http\Controllers\UAE_IA;
 use App\Http\Controllers\UserController;
@@ -361,6 +362,13 @@ route::get("pci_merchant_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/
 route::get('pci_merchant_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Merchant_Sheet::class,'pci_merchant_sec2_2_sub_req_edit'])->name('pci_merchant_sec2_2_sub_req_edit');
 route::post('pci_merchant_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Merchant_Sheet::class,'pci_merchant_sec_2_2_form']);
 route::put('pci_merchant_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Merchant_Sheet::class,'pci_merchant_sec_2_2_edit_form']);
+
+
+//Compliance Map
+route::get('compliance_map_all_services/{proj_id}/{user_id}',[ComplianceMap::class,'compliance_map_all_services'])->name('compliance_map_all_services');
+
+
+Route::get('download_excel_compliance_map/{proj_id}/{user_id}',[ComplianceMap::class,'download_excel_compliance_map']);
 
 
 // route::get('v_3_2_section1_subsections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1_subsections']);

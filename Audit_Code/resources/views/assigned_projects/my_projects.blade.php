@@ -28,7 +28,8 @@
                         <th style='text-align:center'>Risk Visuals</th>
                         <th style='text-align:center'>Risk Distribution</th> --}}
                         {{-- <th style='text-align:center'>Reports</th> --}}
-                        <th class="text-center">Compliance Status by Asset Component</th>
+                        {{-- <th class="text-center">Compliance Status by Asset Component</th> --}}
+                        <th>Compliance Map for All Services - All Controls</th>
                         <th class="text-center">Duplicate Project</th>
                     </tr>
                 </thead>
@@ -126,11 +127,20 @@
                             </a>
                         </td> --}}
 
-                        <td style='text-align:center'>
+                        {{-- <td style='text-align:center'>
+                            //compliance Status service wise
                             <a href="/compliance_status/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                data-toggle="tooltip" title="Compliance Status">
                                <img src="{{asset('compliance_report_icon.jpg')}}" style="width:30px;height:30px;"></img>
-                                {{-- <i class="fas fa-book fa-lg text-info"></i> --}}
+                             
+                            </a>
+                        </td> --}}
+
+                        <td style='text-align:center'>
+                            <a href="/compliance_map_all_services/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
+                               data-toggle="tooltip" title="Compliance Map for All Services - All Controls">
+                               <img src="{{asset('compliance_report_icon.jpg')}}" style="width:30px;height:30px;"></img>
+                             
                             </a>
                         </td>
 
