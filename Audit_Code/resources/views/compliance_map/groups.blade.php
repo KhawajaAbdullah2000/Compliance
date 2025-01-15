@@ -39,7 +39,7 @@
     </h3>
 
     <h4><span class="fw-bold">Domain {{$domain}} :</span>{{$domainName}}</h4>
-    <h4><span class="fw-bold">Service Selected :</span>{{$service}}</h4>
+    <h4><span class="fw-bold">Service Selected :</span>{{$service}} - All Controls</h4>
 
     <h5 class="fw-bold mt-4">Select one option and proceed</h5>
 

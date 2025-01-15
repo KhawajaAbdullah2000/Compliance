@@ -39,7 +39,7 @@
     </h3>
 
     <h4><span class="fw-bold">Domain {{$domain}} : </span>{{$domainName}}</h4>
-    <h4><span class="fw-bold">Service Selected : </span>{{$service}}</h4>
+    <h4><span class="fw-bold">Service Selected : </span>{{$service}} - All Controls</h4>
     <h4><span class="fw-bold">Assets Selected : </span> 
         @isset($group)
         {{$group}}

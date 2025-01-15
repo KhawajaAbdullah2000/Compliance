@@ -1,31 +1,28 @@
 <?php
 
 namespace App\Exports;
+
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromArray;
 
-class ComplianceStatusExport implements FromArray, WithHeadings
+class ComplianceStatusSubDomainExport implements FromArray, WithHeadings
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-
     protected $formattedResults;
     protected $columnTotals;
 
-   protected $domainNames;
 
-    public function __construct(array $formattedResults, array $columnTotals,array $domainNames)
+    public function __construct(array $formattedResults, array $columnTotals)
     {
         $this->formattedResults = $formattedResults;
         $this->columnTotals = $columnTotals;
-        $this->domainNames = $domainNames;
+       
     }
 
     public function headings(): array
     {
         return [
-            'Domain',
+            'Sub Domain',
             'In Place',
             'Not In Place',
             'Not Applicable',
@@ -43,7 +40,7 @@ class ComplianceStatusExport implements FromArray, WithHeadings
         foreach ($this->formattedResults as $domain => $statuses) {
          
                 $rows[] = [
-                    $this->domainNames[$domain] ?? 'Unknown Domain',
+                  (string)($domain),
                     (string) ($statuses['yes'] ?? '0'),
                 (string) ($statuses['no'] ?? '0'),
                 (string) ($statuses['not_applicable'] ?? '0'),
@@ -67,6 +64,5 @@ class ComplianceStatusExport implements FromArray, WithHeadings
 
         return $rows;
     }
-
 
 }
