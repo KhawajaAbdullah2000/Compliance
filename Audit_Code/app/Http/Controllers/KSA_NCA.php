@@ -198,6 +198,8 @@ class KSA_NCA extends Controller
                 return strval($row[2])=== $main_req_num && strval($row[4])=== $sub_req;
             })->values()->all();
 
+         
+
 
             $project=Project::join('project_types','projects.project_type','project_types.id')
                 ->where('projects.project_id',$proj_id)->first();
@@ -216,6 +218,7 @@ class KSA_NCA extends Controller
 
                 $users = User::where('privilege_id', 5)->wherein('org_id', $orgs)->get(['id', 'first_name', 'last_name']);
 
+        
 
                 return view('KSA_NCA.ksa_nca_sec_2_2_sub_reqs_form', [
                     'project_id' => $checkpermission->project_id,
@@ -227,7 +230,8 @@ class KSA_NCA extends Controller
                    'filteredData'=>$filteredData,
                    'project'=>$project,
                    'asset'=>$asset,
-                   'users'=>$users
+                   'users'=>$users,
+                   'subdomain'=>$filteredData[0][2]
                      ]);
 
             }
@@ -240,6 +244,7 @@ class KSA_NCA extends Controller
         $req->validate([
             'comp_status' => 'required'
         ]);
+
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -278,6 +283,7 @@ class KSA_NCA extends Controller
                                 'acceptance_actual_date'=>$req->acceptance_actual_date,
                                 'last_edited_by' => $user_id,
                                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+
                     ];
 
                         }
@@ -312,12 +318,15 @@ class KSA_NCA extends Controller
                                     return strval($row[0]) === $title;
                                 })->values()->all();
 
+                           
+
                             
                                 
                                     foreach ($filteredData as $innerArray) {
                                         // Access specific value from the inner array
                                         $fetch_sub_req = $innerArray['4']; 
                                         $fetch_title=$innerArray['0'];
+                                        $subdomain=$innerArray['2'];
 
                                         DB::table('iso_sec_2_2')->updateOrInsert(
                                             [
@@ -325,6 +334,7 @@ class KSA_NCA extends Controller
                                                 'asset_id' => $asset_id,
                                                 'title_num' => $fetch_title,
                                                 'sub_req' => $fetch_sub_req,
+                                                'subdomain'=>$subdomain
                                             ], 
                                             $data
                                         );
@@ -348,6 +358,7 @@ class KSA_NCA extends Controller
                                         // Access specific value from the inner array
                                         $fetch_sub_req = $innerArray2['4']; 
                                         $fetch_title=$innerArray2['0'];
+                                        $subdomain=$innerArray['2'];
 
                                         DB::table('iso_sec_2_2')->updateOrInsert(
                                             [
@@ -355,6 +366,7 @@ class KSA_NCA extends Controller
                                                 'asset_id' => $asset_id,
                                                 'title_num' => $fetch_title,
                                                 'sub_req' => $fetch_sub_req,
+                                                'subdomain'=>$subdomain
                                             ], 
                                             $data
                                         );
@@ -374,6 +386,7 @@ class KSA_NCA extends Controller
                                             'asset_id' => $asset_id,
                                             'title_num' => $title,
                                             'sub_req' => $sub_req,
+                                            'subdomain'=>$req->subdomain
                                         ], 
                                         $data
                                     );
@@ -432,13 +445,15 @@ class KSA_NCA extends Controller
                                     // Access specific value from the inner array
                                     $fetch_sub_req = $innerArray['4']; 
                                     $fetch_title = $innerArray['0']; 
+                                    $subdomain=$innerArray['2'];
                     
                                     DB::table('iso_sec_2_2')->updateOrInsert(
                                         [
                                             'project_id' => $proj_id, 
                                             'asset_id' => $ass->assessment_id, 
                                             'title_num' => $fetch_title,
-                                            'sub_req'=>$fetch_sub_req
+                                            'sub_req'=>$fetch_sub_req,
+                                            'subdomain'=>$subdomain
                                         ], 
                                         $data
                                     );
@@ -462,13 +477,15 @@ class KSA_NCA extends Controller
                                     // Access specific value from the inner array
                                     $fetch_title=$innerArray['0'];
                                     $fetch_sub_req = $innerArray['4']; 
+                                    $subdomain=$innerArray['2'];
 
                                     DB::table('iso_sec_2_2')->updateOrInsert(
                                         [
                                             'project_id' => $proj_id, 
                                             'asset_id' => $ass->assessment_id, 
                                             'sub_req' => $fetch_sub_req,
-                                            'title_num'=>$fetch_title
+                                            'title_num'=>$fetch_title,
+                                            'subdomain'=>$subdomain
 
                                         ], 
                                         $data
@@ -488,6 +505,7 @@ class KSA_NCA extends Controller
                                             'asset_id' => $ass->assessment_id, 
                                             'title_num' => $title,
                                             'sub_req' => $sub_req,
+                                            'subdomain'=>$req->subdomain
 
                                         ], 
                                         $data

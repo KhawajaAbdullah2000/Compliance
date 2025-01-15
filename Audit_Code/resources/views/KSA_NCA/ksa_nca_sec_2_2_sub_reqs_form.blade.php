@@ -105,6 +105,8 @@ $permissions=json_decode($project_permissions);
              <div class="card-body">
                  <form action="/ksa_nca_sec_2_2_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" enctype="multipart/form-data">
                      @csrf
+
+                     <input type="hidden" name="subdomain" value="{{$subdomain}}">
                    
  
                      <!-- Compliance Status -->
@@ -234,6 +236,8 @@ $permissions=json_decode($project_permissions);
                  <div class="card-body">
                      <form action="/ksa_nca_sec_2_2_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" enctype="multipart/form-data">
                          @csrf
+
+                         <input type="hidden" name="subdomain" value="{{$subdomain}}">
          
                          <!-- Compliance Status -->
                          <div class="mb-4">

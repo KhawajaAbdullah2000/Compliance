@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <h3 class="fw-bold text-center mt-4">View or Download Compliance Map for All Services-All Controls</h3>
+    <h3 class="fw-bold text-center mt-4">View or Download Compliance Map (All Domains-All Services-All Applicable Controls)</h3>
 
 
     @if(isset($formattedResults))
@@ -62,7 +62,9 @@
 
             @forelse($formattedResults as $domain => $statuses)
                 <tr>
-                    <td>{{ $domain }}- @if($domain==1) Cybersecurity Governance
+                    <td><a href="/select_assets_for_subdomain_map/{{$domain}}/{{$project->project_id}}/{{auth()->user()->id}}">
+                        
+                        {{ $domain }}- @if($domain==1) Cybersecurity Governance
 
                         @elseif($domain==2)
                         Cybersecurity Defense
@@ -77,6 +79,7 @@
                         Industrial Control Systems Cybersecurity
 
                         @endif
+                    </a>
                     </td>
                     @php
                         // Calculate row total

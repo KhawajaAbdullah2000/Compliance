@@ -370,7 +370,17 @@ route::get('compliance_map_all_services/{proj_id}/{user_id}',[ComplianceMap::cla
 
 Route::get('download_excel_compliance_map/{proj_id}/{user_id}',[ComplianceMap::class,'download_excel_compliance_map']);
 
+Route::get('select_assets_for_subdomain_map/{domain}/{proj_id}/{user_id}',[ComplianceMap::class,'select_assets_for_subdomain_map'])->name('select_assets_for_subdomain_map');
 
+Route::get('/services/{domain}/{service}/{proj_id}', [ComplianceMap::class, 'getGroups'])->name('service.groups');
+Route::get('/services/{domain}/{service}/{group}/{proj_id}', [ComplianceMap::class, 'getSubgroups'])->name('service.groups.subgroups');
+Route::get('/services/{domain}/{service}/{group?}/{subgroup?}/{proj_id}', [ComplianceMap::class, 'getComponents'])->name('service.groups.subgroups.components');
+
+Route::get('no_groups_for_compliance_map/{proj_id}/{service}/{domainName}/{domain}',[ComplianceMap::class,'no_groups_for_compliance_map'])->name('no_groups_for_compliance_map');
+
+Route::get('service_subgroups_to_components/{domain}/{domainName}/{service}/{subgroup}/{proj_id}',[ComplianceMap::class,'service_subgroups_to_components'])->name('service_subgroups_to_components');
+
+Route::get('compliance_map_subdomain/{domain}/{service}/{component}/{proj_id}',[ComplianceMap::class,'compliance_map_subdomain'])->name('compliance_map_subdomain');
 // route::get('v_3_2_section1_subsections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1_subsections']);
 // route::get('v_3_2_sections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_sections'])->name('v_3_2_sections');
 
