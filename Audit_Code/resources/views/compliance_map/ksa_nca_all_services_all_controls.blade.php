@@ -114,6 +114,16 @@
                 <th>{{ $columnTotals['partial'] }}</th>
                 <th>{{ array_sum($columnTotals) }}</th>
             </tr>
+
+            <tr>
+                <th>%</th>
+                <th>{{ ceil( ($columnTotals['yes']/array_sum($columnTotals) )*100 )}}%</th>
+                <th>{{ ceil( ($columnTotals['no']/array_sum($columnTotals) )*100 )}}%</th>
+                <th>{{ ceil( ($columnTotals['not_applicable']/array_sum($columnTotals) )*100 )}}%</th>
+                <th>{{ ceil( ($columnTotals['not_tested']/array_sum($columnTotals) )*100 )}}%</th>
+                <th>{{ ceil( ($columnTotals['partial']/array_sum($columnTotals) )*100 )}}%</th>
+                <th>100 %</th>
+            </tr>
         </tfoot>
     </table>
 

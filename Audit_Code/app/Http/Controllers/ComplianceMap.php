@@ -627,6 +627,179 @@ foreach ($formattedResults as $domain => $statuses) {
 
     }
 
+    public function compliance_map_sub_req($subdomain,$service,$component,$proj_id,Request $req){
+        $group = $req->query('group');
+        $subgroup = $req->query('subgroup');
+
+        $assetIds = DB::table('iso_sec_2_1')
+        ->where('project_id', $proj_id)
+        ->when($service != '_all', function ($query) use ($service) {
+            return $query->where('s_name', $service);
+        })
+        ->when($group, function ($query, $group) {
+            return $query->when($group != '_all', function ($query) use ($group) {
+                return $query->where('g_name', $group);
+            });
+        })
+        ->when($subgroup, function ($query, $subgroup) {
+            return $query->when($subgroup != '_all', function ($query) use ($subgroup) {
+                return $query->where('name', $subgroup);
+            });
+        })
+        ->when($component != '_all', function ($query) use ($component) {
+            return $query->where('c_name', $component);
+        })
+        ->pluck('assessment_id')->toArray();
+
+
+
+    $results = DB::table('iso_sec_2_1 AS assets')
+        ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
+        ->select(
+            'compliance.sub_req AS SubReq',
+            'compliance.comp_status',
+            DB::raw('COUNT(compliance.comp_status) AS status_count')
+        )
+        ->where('assets.project_id', $proj_id)
+        ->whereIn('compliance.asset_id', $assetIds)
+        ->where('compliance.subdomain', $subdomain)
+        ->groupBy('compliance.sub_req', 'compliance.comp_status') // Group by service, component, and comp_status
+        ->orderby('compliance.sub_req')
+        ->get();
+
+       
+
+
+    $formattedResults = [];
+    $totalCounts = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
+
+    foreach ($results as $result) {
+        $domain = $result->SubReq;
+        $status = $result->comp_status;
+        $count = $result->status_count;
+
+        // Initialize domain
+        if (!isset($formattedResults[$domain])) {
+            $formattedResults[$domain] = [];
+        }
+
+        if (!isset($formattedResults[$domain][$status])) {
+            $formattedResults[$domain][$status] = 0;
+        }
+
+        // Add the count to the respective comp_status
+        $formattedResults[$domain][$status] += $count;
+
+        // Update the grand totals for each status
+        $totalCounts[$status] += $count;
+    }
+    // Add the total for all rows
+    $totalCounts['total'] = array_sum($totalCounts);
+
+
+
+    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+
+    if ($project->project_type == 7) {
+
+        $filepath = public_path('KSA_NCA_ECC_Modified.xlsx');
+        $data = Excel::toArray([], $filepath); //with header
+        $rows = array_slice($data[0], 1); //without header(first row)
+
+        $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+            return strval($row[1]) == $subdomain;
+        })->values()->all();
+
+
+        $MainDomainNum=$filteredData[0][0];
+        $MainDomainTitle=$filteredData[0][2] ;//title
+    
+        $subdomainTitle=$filteredData[0][4];
+
+
+        $UniqueSubReqs = collect($filteredData)
+            ->mapWithKeys(function ($row) {
+                return [$row[3] => $row[5]]; 
+            })
+            ->unique() // Ensure unique keys (1st index)
+            ->toArray(); // Convert to array
+    
+
+
+        return view('compliance_map.subreq_map', [
+            'project' => $project,
+            'formattedResults' => $formattedResults,
+            'results'=>$results,
+            'UniqueSubReqs' => $UniqueSubReqs,
+            'MainDomainTitle' => $MainDomainTitle,
+            'MainDomainNum'=>$MainDomainNum,
+            'service'=>$service,
+            'component'=>$component,
+            'group'=>$group,
+            'subgroup'=>$subgroup,
+            'subdomainTitle'=>$subdomainTitle,
+            'subdomainNum'=>$subdomain
+        ]);
+
+
+
+    }
+
+
+    }
+
+    public function download_excel_compliance_map_subreq($proj_id,$user_id,Request $req){
+        $results = json_decode($req->query('formattedResult'), true);
+        $formattedResults = [];
+        $totalCounts = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
+
+        foreach ($results as $result) {
+
+            $domain = $result['SubReq'];
+            $status = $result['comp_status'];
+            $count = $result['status_count'];
+
+            // Initialize domain
+            if (!isset($formattedResults[$domain])) {
+                $formattedResults[$domain] = [];
+            }
+
+            if (!isset($formattedResults[$domain][$status])) {
+                $formattedResults[$domain][$status] = 0;
+            }
+
+            // Add the count to the respective comp_status
+            $formattedResults[$domain][$status] += $count;
+
+            // Update the grand totals for each status
+            $totalCounts[$status] += $count;
+        }
+
+            // Calculate the total for each domain
+            foreach ($formattedResults as $domain => $statuses) {
+                $formattedResults[$domain]['rowTotal'] = array_sum($statuses);
+            }
+        // Add the total for all rows
+        $totalCounts['total'] = array_sum($totalCounts);
+
+
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+
+
+
+    $projectName = $project->project_name;
+
+
+    return Excel::download(
+        new ComplianceStatusSubDomainExport($formattedResults, $totalCounts),
+        $projectName . '_compliance_map_sub_sub_domains.xlsx'
+    );
+
+        
+    }
+    
  
 
 }

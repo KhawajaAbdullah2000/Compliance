@@ -34,46 +34,56 @@
             </table>
         </div>
     </div>
-
     <h3 class="fw-bold text-center mt-4">View or Download Compliance Map (Selected Domain-Selected Service-Selected Asset-All Applicable Controls)</h3>
 
+
+    <div class="row">
+        <div class="col-md-6">
+
     
-    <h4><span class="fw-bold mt-4">Domain {{$domain}} :</span>{{$domainName}}</h4>
-    <h4><span class="fw-bold">Service Selected : </span>
-        @if($service=='_all')
-        All services - All Controls
+            <h4><span class="fw-bold mt-4">Domain {{$domain}} :</span>{{$domainName}}</h4>
+            <h4><span class="fw-bold">Service Selected : </span>
+                @if($service=='_all')
+                All services - All Controls
+                @else
+                {{$service}} - All Controls
+                @endif
+            </h4>
+        
+            <h4><span class="fw-bold">Assets Selected : </span> 
+                @isset($group)
+                @if($group=='_all')
+                All Asset Groups -
+                @else
+                {{$group}} -
+                @endif
+                @endisset
+        
+        
+            @isset($subgroup)
+            @if($subgroup=='_all')
+            All Asset Subgroups -
+            @else
+            {{$subgroup}} -
+            @endif
+            @endisset
+        
+        @if($component=='_all')
+        
+        All Asset Components 
+        
         @else
-        {{$service}} - All Controls
+        
+        {{$component}}
         @endif
-    </h4>
+        </h4>
+        </div>
 
-    <h4><span class="fw-bold">Assets Selected : </span> 
-        @isset($group)
-        @if($group=='_all')
-        All Asset Groups -
-        @else
-        {{$group}} -
-        @endif
-        @endisset
-
-
-    @isset($subgroup)
-    @if($subgroup=='_all')
-    All Asset Subgroups -
-    @else
-    {{$subgroup}} -
-    @endif
-    @endisset
-
-@if($component=='_all')
-
-All Asset Components 
-
-@else
-
-{{$component}}
-@endif
-</h4>
+        <div class="col-md-6 position-relative">
+            <a href="/compliance_map_all_services/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md position-absolute" style="right: 0;">Compliance Map - All Services - All Controls</a>
+        </div>
+    </div>
+    
 
     @if(isset($formattedResults))
 
@@ -99,7 +109,12 @@ All Asset Components
 
             @forelse($formattedResults as $domain => $statuses)
                 <tr>
-                    <td><a href="/select_assets_for_subdomain_map/{{$domain}}/{{$project->project_id}}/{{auth()->user()->id}}">
+                    <td><a href="{{ route('compliance_map_sub_req', [
+                        'domain' => $domain,
+                        'service' => $service,
+                        'component' => $component,
+                        'proj_id' => $project->project_id
+                    ]) }}?group={{ $group }}&subgroup={{ $subgroup }}">
                         
                         {{ $domain }} - {{$UniqueSubDomains[$domain]}}
                     </a>

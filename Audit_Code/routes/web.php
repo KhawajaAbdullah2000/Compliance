@@ -386,7 +386,9 @@ Route::get('compliance_map_subdomain/{domain}/{service}/{component}/{proj_id}',[
 
 Route::get('download_excel_compliance_map_subdomain/{proj_id}/{user_id}',[ComplianceMap::class,'download_excel_compliance_map_subdomain']);
 
+Route::get('compliance_map_sub_req/{domain}/{service}/{component}/{proj_id}',[ComplianceMap::class,'compliance_map_sub_req'])->name('compliance_map_sub_req');
 
+Route::get('download_excel_compliance_map_subreq/{proj_id}/{user_id}',[ComplianceMap::class,'download_excel_compliance_map_subreq']);
 
 
 
