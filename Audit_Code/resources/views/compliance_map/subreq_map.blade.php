@@ -101,13 +101,25 @@ All Asset Components
             <th>Not Tested</th>
             <th>Partial</th>
             <th>Total</th>
+            <th>%</th>
         </tr>
     </thead>
     <tbody>
         @php
+          $rowTotal2=0;
+          $grandTotal=0;
             // Initialize column totals
             $columnTotals = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
         @endphp
+
+          {{-- FOr row percentage --}}
+          @foreach($formattedResults as $statuses)
+          @php
+              // Calculate row total and add to grand total
+              $rowTotal2 = array_sum($statuses);
+              $grandTotal += $rowTotal2;
+          @endphp
+          @endforeach
 
         @forelse($formattedResults as $domain => $statuses)
             <tr>
@@ -142,6 +154,17 @@ All Asset Components
                 @endforeach
 
                 <td><strong>{{ $rowTotal }}</strong></td>
+
+                 <!-- Row Percentage -->
+                 <td>
+                    <strong>
+                    @if($grandTotal > 0)
+                        {{ ceil(($rowTotal / $grandTotal) * 100) }}%
+                    @else
+                        0%
+                    @endif
+                    </strong>
+                </td>
             </tr>
             @empty
             <tr>
@@ -159,6 +182,8 @@ All Asset Components
             <th>{{ $columnTotals['not_tested'] }}</th>
             <th>{{ $columnTotals['partial'] }}</th>
             <th>{{ array_sum($columnTotals) }}</th>
+            <th>100%</th>
+       
         </tr>
 
         <tr>
@@ -169,6 +194,7 @@ All Asset Components
             <th>{{ ceil( ($columnTotals['not_tested']/array_sum($columnTotals) )*100 )}}%</th>
             <th>{{ ceil( ($columnTotals['partial']/array_sum($columnTotals) )*100 )}}%</th>
             <th>100 %</th>
+            <th></th>
         </tr>
     </tfoot>
 </table>
