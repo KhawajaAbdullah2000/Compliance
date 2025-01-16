@@ -39,14 +39,29 @@
     </h3>
 
     <h4><span class="fw-bold">Domain {{$domain}} : </span>{{$domainName}}</h4>
-    <h4><span class="fw-bold">Service Selected : </span>{{$service}} - All Controls</h4>
+    <h4><span class="fw-bold">Service Selected : </span>
+        @if($service=='_all')
+        All services - All Controls
+        @else
+        {{$service}} - All Controls
+        @endif
+    </h4>
+
     <h4><span class="fw-bold">Assets Selected : </span> 
         @isset($group)
-        {{$group}}
+        @if($group=='_all')
+        All Asset Groups - 
+        @else
+        {{$group}} -
+        @endif
         @endisset
 
     @isset($subgroup)
+    @if($subgroup=='_all')
+    All Asset Subgroups
+    @else
     {{$subgroup}}
+    @endif
     @endisset
 </h4>
 
@@ -62,12 +77,6 @@
                     <ul class="list-group">
                         @foreach($components as $component)
                             <li class="list-group-item">
-                                {{-- <a href="{{ route('compliance_map_subdomain', [
-                                'domain'=>$domain,'service' => $service,
-                                'group' => $group ?? null,
-                                'subgroup' => $subgroup ?? null,
-                                'component'=>$component->c_name,
-                                'proj_id'=>$project->project_id]) }}"> --}}
                                 <a href="{{ route('compliance_map_subdomain', [
                                     'domain' => $domain,
                                     'service' => $service,
@@ -78,6 +87,17 @@
                             </a>
                             </li>
                         @endforeach
+
+                        <li class="list-group-item">
+                            <a href="{{ route('compliance_map_subdomain', [
+                                'domain' => $domain,
+                                'service' => $service,
+                                'component' => '_all',
+                                'proj_id' => $project->project_id
+                            ]) }}?group={{ $group }}&subgroup={{ $subgroup }}">
+                              All Asset components
+                        </a>
+                        </li>
                     </ul>
                 </div>
             </div>

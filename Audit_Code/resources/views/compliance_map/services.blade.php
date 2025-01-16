@@ -55,6 +55,12 @@
                                 </a>
                             </li>
                         @endforeach
+
+                        <li class="list-group-item">
+                            <a href="{{ route('service.groups', ['domain'=>$domain,'service' => '_all','proj_id'=>$project->project_id]) }}" class="btn btn-primary">
+                                All Services
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

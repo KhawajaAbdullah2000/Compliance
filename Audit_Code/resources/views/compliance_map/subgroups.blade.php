@@ -39,8 +39,21 @@
     </h3>
 
     <h4><span class="fw-bold">Domain {{$domain}} : </span>{{$domainName}}</h4>
-    <h4><span class="fw-bold">Service Selected : </span>{{$service}} - All Controls</h4>
-    <h4><span class="fw-bold">Assets Selected : </span>{{$group}}</h4>
+    <h4><span class="fw-bold">Service Selected : </span>
+        @if($service=='_all')
+        All services - All Controls
+        @else
+        {{$service}} - All Controls
+        @endif
+    </h4>
+
+    <h4><span class="fw-bold">Assets Selected : </span>
+        @if($group=='_all')
+        All Groups
+        @else
+        {{$group}}</h4>
+        @endif
+    </h4>
 
     <h5 class="fw-bold mt-4">Select one option and proceed</h5>
 
@@ -58,7 +71,13 @@
                                     {{ $subgroup->name }}
                                 </a>
                             </li>
+
                         @endforeach
+                        <li class="list-group-item">
+                            <a href="{{ route('service.groups.subgroups.components', ['domain'=>$domain,'service' => $service,'group'=>$group,'subgroup'=>'_all','proj_id'=>$project->project_id]) }}">
+                               All Asset Subgroups
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -39,17 +39,40 @@
 
     
     <h4><span class="fw-bold mt-4">Domain {{$domain}} :</span>{{$domainName}}</h4>
-    <h4><span class="fw-bold">Service Selected : </span>{{$service}} - All Controls</h4>
+    <h4><span class="fw-bold">Service Selected : </span>
+        @if($service=='_all')
+        All services - All Controls
+        @else
+        {{$service}} - All Controls
+        @endif
+    </h4>
+
     <h4><span class="fw-bold">Assets Selected : </span> 
         @isset($group)
-        {{$group}}
+        @if($group=='_all')
+        All Asset Groups -
+        @else
+        {{$group}} -
+        @endif
         @endisset
 
-    @isset($subgroup)
-    {{$subgroup}}
 
-    {{$component}}
+    @isset($subgroup)
+    @if($subgroup=='_all')
+    All Asset Subgroups -
+    @else
+    {{$subgroup}} -
+    @endif
     @endisset
+
+@if($component=='_all')
+
+All Asset Components 
+
+@else
+
+{{$component}}
+@endif
 </h4>
 
     @if(isset($formattedResults))
@@ -113,6 +136,16 @@
                 <th>{{ $columnTotals['not_tested'] }}</th>
                 <th>{{ $columnTotals['partial'] }}</th>
                 <th>{{ array_sum($columnTotals) }}</th>
+            </tr>
+
+            <tr>
+                <th>%</th>
+                <th>{{ ceil( ($columnTotals['yes']/array_sum($columnTotals) )*100 )}}%</th>
+                <th>{{ ceil( ($columnTotals['no']/array_sum($columnTotals) )*100 )}}%</th>
+                <th>{{ ceil( ($columnTotals['not_applicable']/array_sum($columnTotals) )*100 )}}%</th>
+                <th>{{ ceil( ($columnTotals['not_tested']/array_sum($columnTotals) )*100 )}}%</th>
+                <th>{{ ceil( ($columnTotals['partial']/array_sum($columnTotals) )*100 )}}%</th>
+                <th>100 %</th>
             </tr>
         </tfoot>
     </table>

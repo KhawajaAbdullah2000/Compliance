@@ -216,12 +216,17 @@ foreach ($formattedResults as $domain => $statuses) {
         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
             ->where('projects.project_id', $proj_id)->first();
 
-        $groups = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
-            ->where('s_name', $service)
+            $groups = DB::table('iso_sec_2_1')
+            ->where('project_id', $proj_id)
+            ->when($service != '_all', function ($query) use ($service) {
+                return $query->where('s_name', $service);
+            })
             ->whereNotNull('g_name')
             ->select('g_name')
             ->distinct()
             ->get();
+
+        
 
 
 
@@ -250,6 +255,7 @@ foreach ($formattedResults as $domain => $statuses) {
 
         }
 
+
         return view('compliance_map.groups', [
             'project' => $project,
             'groups' => $groups,
@@ -263,12 +269,17 @@ foreach ($formattedResults as $domain => $statuses) {
 
     public function getSubgroups($domain, $service, $group, $proj_id)
     {
+
         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
             ->where('projects.project_id', $proj_id)->first();
 
         $subgroups = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
-            ->where('s_name', $service)
-            ->where('g_name', $group)
+        ->when($service != '_all', function ($query) use ($service) {
+            return $query->where('s_name', $service);
+        })
+        ->when($group != '_all', function ($query) use ($group) {
+            return $query->where('g_name', $group);
+        })
             ->whereNotNull('name')
             ->select('name')
             ->distinct()
@@ -289,8 +300,12 @@ foreach ($formattedResults as $domain => $statuses) {
         if ($subgroups->count() == 0) {
 
             $components = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
-                ->where('s_name', $service)
-                ->where('g_name', $group)
+            ->when($service != '_all', function ($query) use ($service) {
+                return $query->where('s_name', $service);
+            })
+            ->when($group != '_all', function ($query) use ($group) {
+                return $query->where('g_name', $group);
+            })
                 ->whereNotNull('c_name')
                 ->select('c_name')
                 ->distinct()
@@ -307,6 +322,7 @@ foreach ($formattedResults as $domain => $statuses) {
             ]);
         }
 
+
         return view('compliance_map.subgroups', [
             'project' => $project,
             'group' => $group,
@@ -319,17 +335,25 @@ foreach ($formattedResults as $domain => $statuses) {
 
     public function getComponents($domain, $service, $group, $subgroup, $proj_id)
     {
+      
         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
             ->where('projects.project_id', $proj_id)->first();
 
         $components = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
-            ->where('s_name', $service)
-            ->where('g_name', $group)
-            ->where('name', $subgroup)
+        ->when($service != '_all', function ($query) use ($service) {
+            return $query->where('s_name', $service);
+        })
+        ->when($group != '_all', function ($query) use ($group) {
+            return $query->where('g_name', $group);
+        })
+        ->when($subgroup != '_all', function ($query) use ($subgroup) {
+            return $query->where('name', $subgroup);
+        })
             ->whereNotNull('c_name')
             ->select('c_name')
             ->distinct()
             ->get();
+
 
         if ($project->project_type == 7) {
             $domainNames = [
@@ -342,6 +366,7 @@ foreach ($formattedResults as $domain => $statuses) {
         } else {
             $domainNames = [];
         }
+
 
 
         return view('compliance_map.components', [
@@ -361,7 +386,9 @@ foreach ($formattedResults as $domain => $statuses) {
             ->where('projects.project_id', $proj_id)->first();
 
         $subgroups = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
-            ->where('s_name', $service)
+        ->when($service != '_all', function ($query) use ($service) {
+            return $query->where('s_name', $service);
+        })
             ->whereNotNull('name')
             ->select('name')
             ->distinct()
@@ -369,7 +396,9 @@ foreach ($formattedResults as $domain => $statuses) {
 
         if ($subgroups->count() == 0) {
             $components = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
-                ->where('s_name', $service)
+            ->when($service != '_all', function ($query) use ($service) {
+                return $query->where('s_name', $service);
+            })
                 ->whereNotNull('c_name')
                 ->select('c_name')
                 ->distinct()
@@ -403,8 +432,12 @@ foreach ($formattedResults as $domain => $statuses) {
             ->where('projects.project_id', $proj_id)->first();
 
         $components = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
-            ->where('s_name', $service)
-            ->where('name', $subgroup)
+        ->when($service != '_all', function ($query) use ($service) {
+            return $query->where('s_name', $service);
+        })
+        ->when($subgroup != '_all', function ($query) use ($subgroup) {
+            return $query->where('name', $subgroup);
+        })
             ->whereNotNull('c_name')
             ->select('c_name')
             ->distinct()
@@ -431,18 +464,26 @@ foreach ($formattedResults as $domain => $statuses) {
         $subgroup = $req->query('subgroup');
 
 
-
         $assetIds = DB::table('iso_sec_2_1')
             ->where('project_id', $proj_id)
-            ->where('s_name', $service)
+            ->when($service != '_all', function ($query) use ($service) {
+                return $query->where('s_name', $service);
+            })
             ->when($group, function ($query, $group) {
-                return $query->where('g_name', $group);
+                return $query->when($group != '_all', function ($query) use ($group) {
+                    return $query->where('g_name', $group);
+                });
             })
             ->when($subgroup, function ($query, $subgroup) {
-                return $query->where('name', $subgroup);
+                return $query->when($subgroup != '_all', function ($query) use ($subgroup) {
+                    return $query->where('name', $subgroup);
+                });
             })
-            ->where('c_name', $component)
+            ->when($component != '_all', function ($query) use ($component) {
+                return $query->where('c_name', $component);
+            })
             ->pluck('assessment_id')->toArray();
+
 
 
         $results = DB::table('iso_sec_2_1 AS assets')
