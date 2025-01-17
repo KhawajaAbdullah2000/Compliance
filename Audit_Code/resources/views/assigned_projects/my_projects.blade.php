@@ -22,6 +22,7 @@
                         <th style='text-align:center'>My Permissions on Project</th>
                         <th style='text-align:center'>Data</th>
                         <th style='text-align:center'>Metadata</th>
+                        <th>View Compliance Map</th>
                         <th style='text-align:center'>Risk & Compliance Heatmap</th> 
                         <th style='text-align:center'>Drill Down by Service</th> 
                         {{-- <th style='text-align:center'>Project Visuals</th>
@@ -29,7 +30,7 @@
                         <th style='text-align:center'>Risk Distribution</th> --}}
                         {{-- <th style='text-align:center'>Reports</th> --}}
                         {{-- <th class="text-center">Compliance Status by Asset Component</th> --}}
-                        <th>Compliance Map for All Services - All Controls</th>
+               
                         <th class="text-center">Duplicate Project</th>
                     </tr>
                 </thead>
@@ -77,6 +78,15 @@
 
 
                                 @endif
+                            </td>
+{{-- 
+                            Compliance Map - ALlservices all controls --}}
+                            <td style='text-align:center'>
+                                <a href="/compliance_map_dashboard_all_services/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
+                                   data-toggle="tooltip" title="Compliance Map for All Services - All Controls">
+                                   <img src="{{asset('compliance_report_icon.jpg')}}" style="width:30px;height:30px;"></img>
+                                 
+                                </a>
                             </td>
 
                              <!-- Risk and Compliance Heatmap -->
@@ -136,13 +146,7 @@
                             </a>
                         </td> --}}
 
-                        <td style='text-align:center'>
-                            <a href="/compliance_map_all_services/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
-                               data-toggle="tooltip" title="Compliance Map for All Services - All Controls">
-                               <img src="{{asset('compliance_report_icon.jpg')}}" style="width:30px;height:30px;"></img>
-                             
-                            </a>
-                        </td>
+                
 
                         <td style='text-align:center'>
                             <i 

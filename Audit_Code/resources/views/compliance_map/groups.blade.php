@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <h3 class="fw-bold text-center mt-4 mb-4">View or Download Compliance Map (Selected Domain-Selected Service-Selected Asset-All Applicable Controls)
+    <h3 class="fw-bold text-center mt-4 mb-4">View or Download Compliance Map (Selected Control Domain-Selected Service-Selected Asset-All Applicable Controls)
     </h3>
 
     <h4><span class="fw-bold">Domain {{$domain}} :</span>{{$domainName}}</h4>

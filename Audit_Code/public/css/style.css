@@ -414,7 +414,13 @@ thead.table-pointer {
     text-decoration: underline;
 }
 
+.my_card_bg1{
+    background-color: #14a214;
 
+}
+.my_card_bg2{
+    background-color: rgb(238, 162, 174);
+}
 
 
 @media only screen and (max-width: 479px) {

@@ -49,27 +49,11 @@
         </div>
     </div>
 
-    <h3 class="fw-bold text-center mt-4">View or Download Compliance Map (All Control Domains-All Services-All Applicable Controls)</h3>
+    <h3 class="fw-bold text-center mt-4">Compliance Map (All Control Domains- All Services-All Applicable Controls)</h3>
 
 
     @if(isset($formattedResults))
 
-    <a id="downloadExcelButton" href="#" class="btn btn-success btn-md float-end mb-2">Download Excel</a>
-
-    <table class="table table-bordered mt-4">
-        <thead class="table-dark">
-            <tr>
-                <th>Domain</th>
-                <th>Yes</th>
-                <th>No</th>
-                <th>Not Applicable</th>
-                <th>Not Tested</th>
-                <th>Partial</th>
-                <th>Total</th>
-                <th>%</th>
-            </tr>
-        </thead>
-        <tbody>
             @php
              $rowTotal2=0;
              $grandTotal=0;
@@ -87,26 +71,7 @@
 
 
             @forelse($formattedResults as $domain => $statuses)
-                <tr>
-                    <td><a href="/select_assets_for_subdomain_map/{{$domain}}/{{$project->project_id}}/{{auth()->user()->id}}">
-                        
-                        {{ $domain }}- @if($domain==1) Cybersecurity Governance
-
-                        @elseif($domain==2)
-                        Cybersecurity Defense
-
-                        @elseif($domain==3)
-                        Cybersecurity Resilience
-
-                        @elseif($domain==4)
-                        Third-Party and Cloud Computing Cybersecurity
-
-                        @elseif($domain==5)
-                        Industrial Control Systems Cybersecurity
-
-                        @endif
-                    </a>
-                    </td>
+            
                     @php
                         // Calculate row total
                         $rowTotal = 0;
@@ -118,42 +83,88 @@
                             $rowTotal += $count;
                             $columnTotals[$status] += $count;
                         @endphp
-                        <td>{{ $count }}</td>
                     @endforeach
 
-                    <td><strong>{{ $rowTotal }}</strong></td>
+                
 
-                     <!-- Row Percentage -->
-                 <td>
-                    <strong>
-                    @if($grandTotal > 0)
-                        {{ ceil(($rowTotal / $grandTotal) * 100) }}%
-                    @else
-                        0%
-                    @endif
-                    </strong>
-                </td>
-                </tr>
                 @empty
-                <tr>
-                    <td colspan="8" class="text-center">No data available</td>
-                </tr>
+             
             @endforelse
-           
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>Total</th>
-                <th>{{ $columnTotals['yes'] }}</th>
-                <th>{{ $columnTotals['no'] }}</th>
-                <th>{{ $columnTotals['not_applicable'] }}</th>
-                <th>{{ $columnTotals['not_tested'] }}</th>
-                <th>{{ $columnTotals['partial'] }}</th>
-                <th>{{ array_sum($columnTotals) }}</th>
-                <th>100%</th>
-            </tr>
 
-            <tr>
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-2">
+                    <div class="card shadow-lg p-4 text-center my_card_bg1 h-100 d-flex flex-column justify-content-between">
+                        <div class="body flex-grow-1 d-flex flex-column justify-content-between">
+                            <h5 class="card-title text-white">In Place</h5>
+                            <p class="text-white fw-bold mt-3 fs-4 align-self-center">
+                                {{ ceil(($columnTotals['yes'] / array_sum(array: $columnTotals)) * 100) }} %
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="card shadow-lg p-4 text-center bg-danger h-100 d-flex flex-column justify-content-between">
+                        <div class="body flex-grow-1 d-flex flex-column justify-content-between">
+                            <h5 class="card-title text-white">Not In Place</h5>
+                            <p class="text-white fw-bold mt-3 fs-4 align-self-center">
+                                {{ ceil(($columnTotals['no'] / array_sum(array: $columnTotals)) * 100) }} %
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-2">
+                    <div class="card shadow-lg p-4 text-center my_card_bg2 h-100 d-flex flex-column justify-content-between">
+                        <div class="body flex-grow-1 d-flex flex-column justify-content-between">
+                            <h5 class="card-title text-white">Partially In Place</h5>
+                            <p class="text-white fw-bold mt-3 fs-4 align-self-center">
+                                {{ ceil(($columnTotals['partial'] / array_sum(array: $columnTotals)) * 100) }} %
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+
+
+                <div class="col-md-2">
+                    <div class="card shadow-lg p-4 text-center bg-secondary h-100 d-flex flex-column justify-content-between">
+                        <div class="body flex-grow-1 d-flex flex-column justify-content-between">
+                            <h5 class="card-title text-white">Not Applicable</h5>
+                            <p class="text-white fw-bold mt-3 fs-4 align-self-center">
+                                {{ ceil(($columnTotals['not_applicable'] / array_sum(array: $columnTotals)) * 100) }} %
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+
+
+                <div class="col-md-2">
+                    <div class="card shadow-lg p-4 text-center bg-secondary h-100 d-flex flex-column justify-content-between">
+                        <div class="body flex-grow-1 d-flex flex-column justify-content-between">
+                            <h5 class="card-title text-white">Not Tested</h5>
+                            <p class="text-white fw-bold mt-3 fs-4 align-self-center">
+                                {{ ceil(($columnTotals['not_tested'] / array_sum(array: $columnTotals)) * 100) }} %
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="row mt-4">
+                <div class="d-flex justify-content-center align-content-center">
+                    <a href="/compliance_map_all_services/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-lg">View or Download Compliance Map</a>
+                </div>
+            </div>
+           
+        
+    
+      
+
+            {{-- <tr>
                 <th>%</th>
                 <th>{{ ceil( ($columnTotals['yes']/array_sum($columnTotals) )*100 )}}%</th>
                 <th>{{ ceil( ($columnTotals['no']/array_sum($columnTotals) )*100 )}}%</th>
@@ -162,9 +173,8 @@
                 <th>{{ ceil( ($columnTotals['partial']/array_sum($columnTotals) )*100 )}}%</th>
                 <th>100 %</th>
                 <th></th>
-            </tr>
-        </tfoot>
-    </table>
+            </tr> --}}
+     
 
 
 

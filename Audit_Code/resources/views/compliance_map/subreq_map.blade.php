@@ -132,13 +132,10 @@ All Asset Components
 
                     @endif
 
-           
-
                     @endforeach
-         
-                    
-               
+        
                 </td>
+
                 @php
                     // Calculate row total
                     $rowTotal = 0;

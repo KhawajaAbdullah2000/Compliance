@@ -34,7 +34,7 @@
             </table>
         </div>
     </div>
-    <h3 class="fw-bold text-center mt-4">View or Download Compliance Map (Selected Domain-Selected Service-Selected Asset-All Applicable Controls)</h3>
+    <h3 class="fw-bold text-center mt-4">View or Download Compliance Map (Selected Control Domain-Selected Service-Selected Asset-All Applicable Controls)</h3>
 
 
     <div class="row">

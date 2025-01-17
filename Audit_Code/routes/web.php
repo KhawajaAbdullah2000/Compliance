@@ -365,6 +365,9 @@ route::put('pci_merchant_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}
 
 
 //Compliance Map
+
+route::get('compliance_map_dashboard_all_services/{proj_id}/{user_id}',[ComplianceMap::class,'compliance_map_dashboard_all_services'])->name('compliance_map_dashboard_all_services');
+
 route::get('compliance_map_all_services/{proj_id}/{user_id}',[ComplianceMap::class,'compliance_map_all_services'])->name('compliance_map_all_services');
 
 
