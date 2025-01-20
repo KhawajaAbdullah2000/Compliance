@@ -44,14 +44,13 @@
         </div>
 
 
-
         <div class="row">
 
             <div class="col-lg-6">
 
 
-                <table class="table table-bordered table-warning" >
-                    <thead>
+                <table class="table table-bordered">
+                    <thead class="table-warning">
                         <tr>
 
                             <th>Service Name</th>
@@ -99,7 +98,7 @@
                     <tbody>
 
                         @for ($i = 0; $i < count($sec2_4_a5_rows); $i++)
-                            <tr style="vertical-align: middle;text-align:center">
+                            <tr style="vertical-align: middle;">
 
                                 @foreach ($sec2_4_a5_rows[$i] as $col)
                                     @if (in_array(strval($sec2_4_a5_rows[$i][0]), $controls, true))

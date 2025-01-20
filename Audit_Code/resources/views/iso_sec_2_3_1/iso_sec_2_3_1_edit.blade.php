@@ -185,7 +185,7 @@
 
 
 
-            <div class="form-group mt-4">
+            {{-- <div class="form-group mt-4">
                 <label for="risk" class="fw-bold">Types of Risk</label>
                 <br>
                 @php
@@ -203,7 +203,7 @@
 
                 <input type="checkbox" name="desc_risk[]" value="Information or Service Denial"
                     {{ is_array($selectedRisks) && in_array('Information or Service Denial', $selectedRisks) ? 'checked' : '' }}>
-                <label for="">Information or Service Denial</label><br>
+                <label for="">Denial of Data Availability</label><br>
 
                 <input type="checkbox" name="desc_risk[]" value="Other"
                     {{ is_array($selectedRisks) && in_array('Other', $selectedRisks) ? 'checked' : '' }}>
@@ -211,9 +211,58 @@
 
                 <input type="text" name="desc_risk_other" class="form-control"
                     value="{{ old('desc_risk_other', $assetData->desc_risk_other) }}">
+            </div> --}}
+
+            <div class="form-group mt-4">
+                <label for="risk" class="fw-bold">Types of Risk</label>
+                <br>
+                @php
+                    $descRisk = old('desc_risk', $assetData->desc_risk);
+                    $defaultRisks = ['Breach of data confidentiality', 'Breach of data integrity', 'Information or Service Denial'];
+
+                    if (in_array($assetData->control_num, [8.6, 8.13, 8.14])) {
+                        $defaultRisks = ['Information or Service Denial'];
+                    }
+                    else if (in_array($assetData->control_num, [6.6,8.11,8,12])){
+                        $defaultRisks = ['Breach of data confidentiality'];
+                    }
+                    
+                    else {
+                        $defaultRisks = ['Breach of data confidentiality', 'Breach of data integrity', 'Information or Service Denial'];
+                    }
+                    $selectedRisks = is_string($descRisk) ? json_decode($descRisk, true) : $descRisk;
+            
+                    // If no risks are selected, set the default values
+                    if (empty($selectedRisks)) {
+                        $selectedRisks = $defaultRisks;
+                    }
+                @endphp
+            
+                <input type="checkbox" name="desc_risk[]" value="Breach of data confidentiality"
+                    {{ is_array($selectedRisks) && in_array('Breach of data confidentiality', $selectedRisks) ? 'checked' : '' }}>
+                <label for="">Breach of data confidentiality</label><br>
+            
+                <input type="checkbox" name="desc_risk[]" value="Breach of data integrity"
+                    {{ is_array($selectedRisks) && in_array('Breach of data integrity', $selectedRisks) ? 'checked' : '' }}>
+                <label for="">Breach of data integrity</label><br>
+            
+                <input type="checkbox" name="desc_risk[]" value="Information or Service Denial"
+                    {{ is_array($selectedRisks) && in_array('Information or Service Denial', $selectedRisks) ? 'checked' : '' }}>
+                <label for="">Denial of Data Availability</label><br>
+            
+                <input type="checkbox" name="desc_risk[]" value="Other"
+                    {{ is_array($selectedRisks) && in_array('Other', $selectedRisks) ? 'checked' : '' }}>
+                <label for="">Other</label><br>
+            
+                <input type="text" name="desc_risk_other" class="form-control"
+                    value="{{ old('desc_risk_other', $assetData->desc_risk_other) }}">
             </div>
+            
 
-
+            <small class="text-danger fw-bold d-block mt-2">
+                <i class="fas fa-exclamation-triangle"></i> 
+                You must press save changes button before leaving this page
+            </small>
 
               <div class="text-center mt-3 fw-bold">
                 <button type="submit" class="btn my_bg_color btn-md mt-2 text-white">Save Changes </button>

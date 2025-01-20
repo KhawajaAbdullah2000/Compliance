@@ -54,8 +54,8 @@ $formatValues = function ($value) {
     <div class="col-md-6">
 
 
-        <table class="table table-bordered table-warning">
-            <thead>
+        <table class="table table-bordered">
+            <thead class="table-warning">
                 <tr>
                     <th>Service Name</th>
                     <th>Asset Group Name</th>

@@ -143,6 +143,9 @@ class IsoSec2_3_1 extends Controller
                         ->where('asset_id', $asset_id)->where('control_num', 'like', '6%')
                         ->get();
 
+            
+        
+
                     $a7_results = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)
                         ->where('asset_id', $asset_id)->where('control_num', 'like', '7%')
                         ->get();
@@ -290,7 +293,6 @@ class IsoSec2_3_1 extends Controller
         // try {
         foreach ($yesNoArray as $key => $value) {
 
-    
 
                  //only to this asset component
                  $risk_level=((100-$filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value;
@@ -315,28 +317,36 @@ class IsoSec2_3_1 extends Controller
 
 
 
+
            
 
                 if ($value == "yes") {
 
                 if (isset($filtered_control_compliance[$key]) && isset($filtered_threat[$key]))
                  {
-                    
-                  
+
+                    // if($numberArray[$key]=='6.6'){
+                
+                    //    dd($filtered_control_compliance[$key]);
+                    // }
+                
 
 
                     $check=Db::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
                     ->where('control_num', $numberArray[$key])->first();
 
+                
 
-                    if($check){ //if record already exists
 
+                    if($check){ 
+                        //if record already exists
 
+                    
+                
 
                         DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)->where('asset_id',$asset_id)
                         ->where('control_num', $numberArray[$key])
                         ->update([
-
                             'applicability' => "yes",
                             'control_num'=>$numberArray[$key],
                             'control_compliance' => $filtered_control_compliance[$key],
@@ -648,13 +658,6 @@ class IsoSec2_3_1 extends Controller
         }
 
 
-        // } catch (\Throwable $th) {
-        //     return redirect()->route('iso_sec_2_3_1',['asset_id'=>$asset_id,'proj_id'=>$proj_id,'user_id'=>$user_id])
-        //     ->with('error','Please insert values when selecting yes');
-
-        // }
-
-
 
 
         return redirect()->route('iso_sec_2_3_1', ['asset_id' => $asset_id, 'proj_id' => $proj_id, 'user_id' => $user_id])->with('success', 'Record Added');
@@ -731,6 +734,7 @@ class IsoSec2_3_1 extends Controller
                      $desc_risk = $req->desc_risk;
                     $desc_risk_json = json_encode($desc_risk);
 
+        
 
                      Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
                             ->where('control_num', $control_num)->update(

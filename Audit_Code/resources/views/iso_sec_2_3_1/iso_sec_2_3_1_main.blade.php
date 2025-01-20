@@ -291,20 +291,20 @@ $permissions=json_decode($project_permissions);
 
                     @if($a5->control_num===strval($sec2_4_a5_rows[$i][0]))
 
-            <input type="number" name="control_compliance[]" value={{$a5->control_compliance}} oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
+            <input type="number" name="control_compliance[]" value={{$a5->control_compliance}} oninput="validateInput(this)" min=1 max=99 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
 
                     {{-- <p>{{$a5->control_compliance}}%</p> --}}
                         @break
                     @endif
 
                     @if($loop->last)
-                    <input type="number" name="control_compliance[]" value=100 oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
+                    <input type="number" name="control_compliance[]" value=99 oninput="validateInput(this)" min=1 max=99 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
 
                     @endif
 
                     @endforeach
                     @else
-                 <input type="number" name="control_compliance[]" value=100 oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
+                 <input type="number" name="control_compliance[]" value=99 oninput="validateInput(this)" min=1 max=99 data-control-id="{{$sec2_4_a5_rows[$i][0]}}" >
 
                     @endif
                 </td>
@@ -339,19 +339,19 @@ $permissions=json_decode($project_permissions);
                         @foreach ($a5_results as $a5)
 
                             @if($a5->control_num===strval($sec2_4_a5_rows[$i][0]))
-             <input type="number" name="threat[]" value={{$a5->threat}} class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}">
+             <input type="number" name="threat[]" value={{$a5->threat}} class="form-control" min=1 max=99 data-control-id="{{$sec2_4_a5_rows[$i][0]}}">
 
                                 {{-- <p>{{$a5->threat}}%</p> --}}
                                     @break
                                 @endif
 
                                 @if($loop->last)
-             <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}">
+             <input type="number" name="threat[]" value=99 class="form-control" min=1 max=99 data-control-id="{{$sec2_4_a5_rows[$i][0]}}">
                     @endif
 
                         @endforeach
                     @else
-            <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a5_rows[$i][0]}}">
+            <input type="number" name="threat[]" value=99 class="form-control" min=1 max=99 data-control-id="{{$sec2_4_a5_rows[$i][0]}}">
 
                     @endif
 
@@ -585,18 +585,18 @@ $permissions=json_decode($project_permissions);
                 @foreach ($a6_results as $a6)
 
                     @if($a6->control_compliance!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
-                    <input type="number" name="control_compliance[]" value={{$a6->control_compliance}} oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
+                    <input type="number" name="control_compliance[]" value={{$a6->control_compliance}} oninput="validateInput(this)" min=1 max=99 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
 
                             @break
                         @endif
 
                         @if($loop->last)
-            <input type="number" name="control_compliance[]" value=100 oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
+            <input type="number" name="control_compliance[]" value=99 oninput="validateInput(this)" min=1 max=99 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
                 @endif
 
                 @endforeach
             @else
-        <input type="number" name="control_compliance[]" value=100 oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
+        <input type="number" name="control_compliance[]" value=99 oninput="validateInput(this)" min=1 max=99 data-control-id="{{$sec2_4_a6_rows[$i][0]}}" >
 
             @endif
             </td>
@@ -631,19 +631,19 @@ $permissions=json_decode($project_permissions);
                 @foreach ($a6_results as $a6)
 
                     @if($a6->threat!=null && $a6->control_num===strval($sec2_4_a6_rows[$i][0]))
-                    <input type="number" name="threat[]" value={{$a6->threat}} class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}">
+                    <input type="number" name="threat[]" value={{$a6->threat}} class="form-control" min=1 max=99 data-control-id="{{$sec2_4_a6_rows[$i][0]}}">
 
                         {{-- <p>{{$a6->threat}}%</p> --}}
                             @break
                         @endif
 
                         @if($loop->last)
-        <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}">
+        <input type="number" name="threat[]" value=99 class="form-control" min=1 max=99 data-control-id="{{$sec2_4_a6_rows[$i][0]}}">
                 @endif
 
                 @endforeach
             @else
-             <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a6_rows[$i][0]}}">
+             <input type="number" name="threat[]" value=99 class="form-control" min=1 max=99 data-control-id="{{$sec2_4_a6_rows[$i][0]}}">
 
             @endif
 
@@ -869,20 +869,20 @@ $permissions=json_decode($project_permissions);
 
                 @if($a7->control_compliance!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
 
-                <input type="number" name="control_compliance[]" value={{$a7->control_compliance}} oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
+                <input type="number" name="control_compliance[]" value={{$a7->control_compliance}} oninput="validateInput(this)" min=1 max=99 data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
 
                         @break
                     @endif
 
                     @if($loop->last)
-        <input type="number" name="control_compliance[]" value=100 min=0 max=100 oninput="validateInput(this)" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
+        <input type="number" name="control_compliance[]" value=99 min=1 max=99 oninput="validateInput(this)" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
 
 
                     @endif
 
             @endforeach
         @else
- <input type="number" name="control_compliance[]" value=100 oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
+ <input type="number" name="control_compliance[]" value=99 oninput="validateInput(this)" min=1 max=99 data-control-id="{{$sec2_4_a7_rows[$i][0]}}" >
 
         @endif
 
@@ -920,21 +920,21 @@ $permissions=json_decode($project_permissions);
             @foreach ($a7_results as $a7)
 
                 @if($a7->threat!=null && $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
-                <input type="number" name="threat[]" value={{$a7->threat}} class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}">
+                <input type="number" name="threat[]" value={{$a7->threat}} class="form-control" min=1 max=99 data-control-id="{{$sec2_4_a7_rows[$i][0]}}">
 
                     {{-- <p>{{$a7->threat}}% </p> --}}
                         @break
                     @endif
 
                     @if($loop->last)
-         <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}">
+         <input type="number" name="threat[]" value=99 class="form-control" min=1 max=99 data-control-id="{{$sec2_4_a7_rows[$i][0]}}">
 
 
                     @endif
 
             @endforeach
         @else
-         <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a7_rows[$i][0]}}">
+         <input type="number" name="threat[]" value=99 class="form-control" min=1 max=99 data-control-id="{{$sec2_4_a7_rows[$i][0]}}">
 
         @endif
 
@@ -1142,19 +1142,19 @@ $permissions=json_decode($project_permissions);
 
                 @if($a8->control_compliance!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
 
-                <input type="number" name="control_compliance[]" value={{$a8->control_compliance}} oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
+                <input type="number" name="control_compliance[]" value={{$a8->control_compliance}} oninput="validateInput(this)" min=1 max=99 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
 
                         @break
                     @endif
 
                     @if($loop->last)
-            <input type="number" name="control_compliance[]" value=100 oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
+            <input type="number" name="control_compliance[]" value=99 oninput="validateInput(this)" min=1 max=99 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
 
                       @endif
 
             @endforeach
         @else
-     <input type="number" name="control_compliance[]" value=100 oninput="validateInput(this)" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
+     <input type="number" name="control_compliance[]" value=99 oninput="validateInput(this)" min=1 max=99 data-control-id="{{$sec2_4_a8_rows[$i][0]}}" >
 
         @endif
         </td>
@@ -1188,20 +1188,20 @@ $permissions=json_decode($project_permissions);
             @foreach ($a8_results as $a8)
 
                 @if($a8->threat!=null && $a8->control_num===strval($sec2_4_a8_rows[$i][0]))
-                <input type="number" name="threat[]" value={{$a8->threat}} class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}">
+                <input type="number" name="threat[]" value={{$a8->threat}} class="form-control" min=1 max=99 data-control-id="{{$sec2_4_a8_rows[$i][0]}}">
 
                     {{-- <p>{{$a8->threat}}%</p> --}}
                         @break
                     @endif
 
                     @if($loop->last)
-         <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}">
+         <input type="number" name="threat[]" value=99 class="form-control" min=1 max=99 data-control-id="{{$sec2_4_a8_rows[$i][0]}}">
 
                       @endif
 
             @endforeach
         @else
-             <input type="number" name="threat[]" value=100 class="form-control" min=0 max=100 data-control-id="{{$sec2_4_a8_rows[$i][0]}}">
+             <input type="number" name="threat[]" value=99 class="form-control" min=1 max=99 data-control-id="{{$sec2_4_a8_rows[$i][0]}}">
         @endif
 
 
@@ -1402,7 +1402,7 @@ $permissions=json_decode($project_permissions);
     });
 </script>
 @endif
-
+{{-- 
 <script>
     $(document).ready(function () {
         console.log("Hello ")
@@ -1422,7 +1422,7 @@ console.log("rows to toggle: "+ rowsToToggle)
         }
       });
     });
-  </script>
+  </script> --}}
 
 
 
@@ -1589,6 +1589,76 @@ $(function () {
 }
 
   </script>
+
+<script>
+    $(document).ready(function () {
+        console.log("Document ready");
+
+        // List of all checkboxes and their corresponding row classes
+        const checkboxMapping = [
+            { id: 'checkbox1', className: '.control-row-5' },
+            { id: 'checkbox2', className: '.control-row-6' },
+            { id: 'checkbox3', className: '.control-row-7' },
+            { id: 'checkbox4', className: '.control-row-8' },
+        ];
+
+        // Function to save checkbox states to localStorage
+        function saveCheckboxState(id, isChecked) {
+            localStorage.setItem(id, isChecked);
+        }
+
+        // Function to load checkbox state from localStorage
+        function loadCheckboxState(id) {
+            const savedState = localStorage.getItem(id);
+            return savedState === 'true'; // Convert to boolean
+        }
+
+        // Apply filtering based on checkbox state
+        function applyFiltering() {
+            checkboxMapping.forEach(({ id, className }) => {
+                const isChecked = $(`#${id}`).is(':checked');
+                if (isChecked) {
+                    $(className).removeClass('hidden-row'); // Show the rows
+                } else {
+                    $(className).addClass('hidden-row'); // Hide the rows
+                }
+            });
+        }
+
+        // Initialize checkboxes and apply filtering on page load
+        checkboxMapping.forEach(({ id }) => {
+            const isChecked = loadCheckboxState(id);
+            if (isChecked !== null) {
+                $(`#${id}`).prop('checked', isChecked); // Set the checkbox state
+            }
+        });
+
+        // Apply initial filtering on page load
+        applyFiltering();
+
+        // Event listener for checkbox changes
+        $('.form-check-input').change(function () {
+            console.log("Change detected");
+            const controlValue = $(this).val(); // Get the checkbox value
+            console.log("Control value is: " + controlValue);
+            const rowsToToggle = `.control-row-${controlValue}`; // Build class selector
+            console.log("Rows to toggle: " + rowsToToggle);
+
+            if ($(this).is(':checked')) {
+                // Show rows when checkbox is checked
+                $(rowsToToggle).removeClass('hidden-row');
+            } else {
+                // Hide rows when checkbox is unchecked
+                $(rowsToToggle).addClass('hidden-row');
+            }
+
+            // Save state to localStorage
+            const checkboxId = $(this).attr('id');
+            saveCheckboxState(checkboxId, $(this).is(':checked'));
+        });
+    });
+</script>
+
 
 @endsection
 
