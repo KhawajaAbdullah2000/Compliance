@@ -358,7 +358,7 @@ class KSA_NCA extends Controller
                                         // Access specific value from the inner array
                                         $fetch_sub_req = $innerArray2['4']; 
                                         $fetch_title=$innerArray2['0'];
-                                        $subdomain=$innerArray['2'];
+                                        $subdomain=$innerArray2['2'];
 
                                         DB::table('iso_sec_2_2')->updateOrInsert(
                                             [

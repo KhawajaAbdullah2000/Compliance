@@ -97,7 +97,7 @@
                         <div class="body flex-grow-1 d-flex flex-column justify-content-between">
                             <h5 class="card-title text-white">In Place</h5>
                             <p class="text-white fw-bold mt-3 fs-4 align-self-center">
-                                {{ ceil(($columnTotals['yes'] / array_sum(array: $columnTotals)) * 100) }} %
+                                {{ array_sum($columnTotals) > 0 ? ceil(($columnTotals['yes'] / array_sum($columnTotals)) * 100) . ' %' : '0 %' }}
                             </p>
                         </div>
                     </div>
@@ -108,7 +108,7 @@
                         <div class="body flex-grow-1 d-flex flex-column justify-content-between">
                             <h5 class="card-title text-white">Not In Place</h5>
                             <p class="text-white fw-bold mt-3 fs-4 align-self-center">
-                                {{ ceil(($columnTotals['no'] / array_sum(array: $columnTotals)) * 100) }} %
+                                {{ array_sum($columnTotals) > 0 ? ceil(($columnTotals['no'] / array_sum($columnTotals)) * 100) . ' %' : '0 %' }}
                             </p>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
                         <div class="body flex-grow-1 d-flex flex-column justify-content-between">
                             <h5 class="card-title text-white">Partially In Place</h5>
                             <p class="text-white fw-bold mt-3 fs-4 align-self-center">
-                                {{ ceil(($columnTotals['partial'] / array_sum(array: $columnTotals)) * 100) }} %
+                                {{ array_sum($columnTotals) > 0 ? ceil(($columnTotals['partial'] / array_sum($columnTotals)) * 100) . ' %' : '0 %' }}
                             </p>
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                         <div class="body flex-grow-1 d-flex flex-column justify-content-between">
                             <h5 class="card-title text-white">Not Applicable</h5>
                             <p class="text-white fw-bold mt-3 fs-4 align-self-center">
-                                {{ ceil(($columnTotals['not_applicable'] / array_sum(array: $columnTotals)) * 100) }} %
+                                {{ array_sum($columnTotals) > 0 ? ceil(($columnTotals['not_applicable'] / array_sum($columnTotals)) * 100) . ' %' : '0 %' }}
                             </p>
                         </div>
                     </div>
@@ -146,7 +146,7 @@
                         <div class="body flex-grow-1 d-flex flex-column justify-content-between">
                             <h5 class="card-title text-white">Not Tested</h5>
                             <p class="text-white fw-bold mt-3 fs-4 align-self-center">
-                                {{ ceil(($columnTotals['not_tested'] / array_sum(array: $columnTotals)) * 100) }} %
+                                {{ array_sum($columnTotals) > 0 ? ceil(($columnTotals['not_tested'] / array_sum($columnTotals)) * 100) . ' %' : '0 %' }}
                             </p>
                         </div>
                     </div>

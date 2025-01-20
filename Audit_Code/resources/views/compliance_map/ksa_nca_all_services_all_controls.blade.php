@@ -155,12 +155,43 @@
 
             <tr>
                 <th>%</th>
-                <th>{{ ceil( ($columnTotals['yes']/array_sum($columnTotals) )*100 )}}%</th>
-                <th>{{ ceil( ($columnTotals['no']/array_sum($columnTotals) )*100 )}}%</th>
-                <th>{{ ceil( ($columnTotals['not_applicable']/array_sum($columnTotals) )*100 )}}%</th>
-                <th>{{ ceil( ($columnTotals['not_tested']/array_sum($columnTotals) )*100 )}}%</th>
-                <th>{{ ceil( ($columnTotals['partial']/array_sum($columnTotals) )*100 )}}%</th>
-                <th>100 %</th>
+                <th>
+                    @if(array_sum($columnTotals) > 0)
+                        {{ ceil(($columnTotals['yes'] / array_sum($columnTotals)) * 100) }}%
+                    @else
+                        0%
+                    @endif
+                </th>               
+                <th>
+                    @if(array_sum($columnTotals) > 0)
+                        {{ ceil(($columnTotals['no'] / array_sum($columnTotals)) * 100) }}%
+                    @else
+                        0%
+                    @endif
+                </th>                 
+                <th>
+                    @if(array_sum($columnTotals) > 0)
+                        {{ ceil(($columnTotals['not_applicable'] / array_sum($columnTotals)) * 100) }}%
+                    @else
+                        0%
+                    @endif
+                </th>                 
+                
+                <th>
+                    @if(array_sum($columnTotals) > 0)
+                        {{ ceil(($columnTotals['not_tested'] / array_sum($columnTotals)) * 100) }}%
+                    @else
+                        0%
+                    @endif
+                </th>               
+                <th>
+                    @if(array_sum($columnTotals) > 0)
+                        {{ ceil(($columnTotals['partial'] / array_sum($columnTotals)) * 100) }}%
+                    @else
+                        0%
+                    @endif
+                </th>              
+                   <th>100 %</th>
                 <th></th>
             </tr>
         </tfoot>
