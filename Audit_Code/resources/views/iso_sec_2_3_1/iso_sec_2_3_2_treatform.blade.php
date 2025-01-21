@@ -6,6 +6,8 @@
 
 @php
 $permissions = json_decode($project_permissions);
+$decodedRisks = json_decode($treatmentData->desc_risk, true);
+
 @endphp
 
 <div class="container">
@@ -66,54 +68,31 @@ $permissions = json_decode($project_permissions);
 
     <div class="col-md-6 ml-5">
 
-        <h3 class="">Severity of Adverse Impacts</h3>
+        <div class="form-group mt-4">
+            <label for="risk" class="fw-bold">Types of Risk</label>
+            <br>
+          
+            <input disabled type="checkbox" name="desc_risk[]" value="Breach of data confidentiality"
+                {{ is_array($decodedRisks) && in_array('Breach of data confidentiality', $decodedRisks) ? 'checked' : '' }}>
+            <label for="">Breach of data confidentiality</label><br>
+        
+            <input disabled type="checkbox" name="desc_risk[]" value="Breach of data integrity"
+                {{ is_array($decodedRisks) && in_array('Breach of data integrity', $decodedRisks) ? 'checked' : '' }}>
+            <label  for="">Breach of data integrity</label><br>
+        
+            <input disabled  type="checkbox" name="desc_risk[]" value="Information or Service Denial"
+                {{ is_array($decodedRisks) && in_array('Information or Service Denial', $decodedRisks) ? 'checked' : '' }}>
+            <label for="">Denial of Data Availability</label><br>
+        
+            <input disabled type="checkbox" name="desc_risk[]" value="Other"
+                {{ is_array($decodedRisks) && in_array('Other', $decodedRisks) ? 'checked' : '' }}>
+            <label for="">Other</label><br>
+        
+            <input readonly type="text" name="desc_risk_other" class="form-control"
+                value="{{ old('desc_risk_other', $treatmentData->desc_risk_other) }}">
+        </div>
+        
 
-<p><span class="fw-bold">Risk Confidentiality:</span>
-@if($assetData->risk_confidentiality==10)
-High
-@endif
-
-@if($assetData->risk_confidentiality==5)
-Medium
-@endif
-
-@if($assetData->risk_confidentiality==1)
-Low
-@endif
-</p>
-
-
-<p><span class="fw-bold">Risk Integrity:</span>
-
-    @if($assetData->risk_integrity==10)
-High
-@endif
-
-@if($assetData->risk_integrity==5)
-Medium
-@endif
-
-@if($assetData->risk_integrity==1)
-Low
-@endif
-
-</p>
-
-<p><span class="fw-bold">Risk Availability:</span>
-
-    @if($assetData->risk_availability==10)
-High
-@endif
-
-@if($assetData->risk_availability==5)
-Medium
-@endif
-
-@if($assetData->risk_availability==1)
-Low
-@endif
-
-</p>
 
 
 

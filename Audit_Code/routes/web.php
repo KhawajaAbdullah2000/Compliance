@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActionPlanController;
 use App\Http\Controllers\ComplianceMap;
 use App\Http\Controllers\CY_SAMA;
 use App\Http\Controllers\UAE_IA;
@@ -394,14 +395,29 @@ Route::get('compliance_map_sub_req/{domain}/{service}/{component}/{proj_id}',[Co
 Route::get('download_excel_compliance_map_subreq/{proj_id}/{user_id}',[ComplianceMap::class,'download_excel_compliance_map_subreq']);
 
 
+//Action Plan
+
+Route::get('action_plan/{proj_id}/{user_id}',[ActionPlanController::class,'action_plan'])->name('action_plan');
+
+Route::get('select_assets/{action_plan_type}/{proj_id}',[ActionPlanController::class,'select_assets'])->name('action_plan.select_assets');
+
+Route::get('/action_plan_services/{service}/{proj_id}', [ActionPlanController::class, 'getGroups'])->name('action_plan.service.groups');
 
 
 
+Route::get('action_plan_no_groups_for_compliance_map/{proj_id}/{service}',[ActionPlanController::class,'no_groups_for_compliance_map'])->name('action_plan_no_groups_for_compliance_map');
+
+Route::get('/action_plan_services/{service}/{group}/{proj_id}', [ActionPlanController::class, 'getSubgroups'])->name('action_plan.service.groups.subgroups');
 
 
+Route::get('action_plan_service_subgroups_to_components/{service}/{subgroup}/{proj_id}',[ActionPlanController::class,'service_subgroups_to_components'])->name('action_plan_service_subgroups_to_components');
+
+Route::get('/action_plan_services_groups_subgroups/{service}/{group?}/{subgroup?}/{proj_id}', [ActionPlanController::class, 'getComponents'])->name('action_plan.service.groups.subgroups.components');
+
+Route::get('action_plan_show/{service}/{component}/{proj_id}',[ActionPlanController::class,'action_plan_show'])->name('action_plan_show');
 
 
-
+Route::get('action_plan_download/{proj_id}/{service}/{component}',[ActionPlanController::class,'action_plan_download'])->name('action_plan_download');
 
 // route::get('v_3_2_section1_subsections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_section1_subsections']);
 // route::get('v_3_2_sections/{proj_id}/{user_id}',[ProjectController::class,'v_3_2_sections'])->name('v_3_2_sections');

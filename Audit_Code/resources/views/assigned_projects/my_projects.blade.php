@@ -23,7 +23,8 @@
                         <th style='text-align:center'>Data</th>
                         <th style='text-align:center'>Metadata</th>
                         <th>View Compliance Map</th>
-                        <th style='text-align:center'>Risk & Compliance Heatmap</th> 
+                        <th>View Action Plan</th>
+                        {{-- <th style='text-align:center'>Risk & Compliance Heatmap</th>  --}}
                         <th style='text-align:center'>Drill Down by Service</th> 
                         {{-- <th style='text-align:center'>Project Visuals</th>
                         <th style='text-align:center'>Risk Visuals</th>
@@ -89,13 +90,26 @@
                                 </a>
                             </td>
 
+
+                            {{-- Action Plan --}}
+                            <td style='text-align:center'>
+                                <a href="/action_plan/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
+                                   data-toggle="tooltip" title="Action Plan">
+                                    <i class="fas fa-book fa-lg text-warning"></i>
+                                </a>
+                            </td>
+
+
+
+
+
                              <!-- Risk and Compliance Heatmap -->
-                             <td style='text-align:center'>
+                             {{-- <td style='text-align:center'>
                                 <a href="/risk_compliance_heatmap/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                    data-toggle="tooltip" title="Risk and Compliance Heatmap">
                                     <i class="fas fa-book fa-lg text-warning"></i>
                                 </a>
-                            </td>
+                            </td> --}}
 
                                <!-- Drill down by service -->
                                <td style='text-align:center'>

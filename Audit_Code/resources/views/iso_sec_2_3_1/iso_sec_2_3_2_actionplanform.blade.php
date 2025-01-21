@@ -77,60 +77,7 @@ $formatValues = function ($value) {
 
 </div>
 
-<div class="col-md-6">
 
-    <h3 class="">Severity of Adverse Impacts</h3>
-
-    <p><span class="fw-bold">Risk Confidentiality:</span>
-    @if($assetData->risk_confidentiality==10)
-    High
-    @endif
-
-    @if($assetData->risk_confidentiality==5)
-    Medium
-    @endif
-
-    @if($assetData->risk_confidentiality==1)
-    Low
-    @endif
-    </p>
-
-
-    <p><span class="fw-bold">Risk Integrity:</span>
-
-        @if($assetData->risk_integrity==10)
-    High
-    @endif
-
-    @if($assetData->risk_integrity==5)
-    Medium
-    @endif
-
-    @if($assetData->risk_integrity==1)
-    Low
-    @endif
-
-    </p>
-
-    <p><span class="fw-bold">Risk Availability:</span>
-
-        @if($assetData->risk_availability==10)
-    High
-    @endif
-
-    @if($assetData->risk_availability==5)
-    Medium
-    @endif
-
-    @if($assetData->risk_availability==1)
-    Low
-    @endif
-
-    </p>
-
-
-
-</div>
 
 
 
@@ -142,19 +89,19 @@ $formatValues = function ($value) {
 
 <div class="col-md-6">
 
-<table class="table table-bordered table-secondary">
+<table class="table table-bordered">
     <tbody>
 
         <tr>
-            <td></td>
-            <td>Current Risk Assessment</td>
-            <td>Target Confidentiality Risk Level</td>
-            <td>Target Integrity Risk Level</td>
-            <td>Target Availability Risk Level</td>
+            <td class=""></td>
+            <td class="table-secondary">Current Risk Assessment</td>
+            <td class="table-secondary">Target Confidentiality Risk Level</td>
+            <td class="table-secondary">Target Integrity Risk Level</td>
+            <td class="table-secondary">Target Availability Risk Level</td>
         </tr>
 
         <tr>
-            <td class="fw-bold" >Control is Applicable?</td>
+            <td class="fw-bold table-secondary" >Control is Applicable?</td>
             <td>  {{$formatValues($risk_assessment->applicability)}}</td>
             <td>  {{$formatValues($treatmentData->applicability)}}</td>
             <td>  {{$formatValues($treatmentData->applicability)}}</td>
@@ -162,7 +109,7 @@ $formatValues = function ($value) {
         </tr>
 
         <tr>
-            <td class="fw-bold" >Control Compliance</td>
+            <td class="fw-bold table-secondary" >Control Compliance</td>
             <td>  {{$risk_assessment->control_compliance}}%</td>
             <td>  {{$treatmentData->control_compliance}}%</td>
             <td>  {{$treatmentData->control_compliance}}%</td>
@@ -170,7 +117,7 @@ $formatValues = function ($value) {
         </tr>
 
         <tr>
-            <td class="fw-bold" >Vulnerability</td>
+            <td class="fw-bold table-secondary" >Vulnerability</td>
             <td>  {{$risk_assessment->vulnerability}}%</td>
             <td>  {{$treatmentData->vulnerability}}%</td>
             <td>  {{$treatmentData->vulnerability}}%</td>
@@ -178,7 +125,7 @@ $formatValues = function ($value) {
         </tr>
 
         <tr>
-            <td class="fw-bold" >Threat</td>
+            <td class="fw-bold table-secondary" >Threat</td>
             <td>  {{$risk_assessment->threat}}%</td>
             <td>  {{$treatmentData->threat}}%</td>
             <td>  {{$treatmentData->threat}}%</td>
@@ -186,14 +133,14 @@ $formatValues = function ($value) {
         </tr>
 
         <tr>
-            <td class="fw-bold" >Risk Level</td>
+            <td class="fw-bold table-secondary" >Risk Level</td>
             <td>  {{$risk_assessment->risk_level}},{{$risk_assessment->risk_integrity}}, {{$risk_assessment->risk_availability}} </td>
             <td>  {{$treatmentData->risk_level}}</td>
             <td>  {{$treatmentData->risk_integrity}}</td>
             <td>  {{$treatmentData->risk_availability}}</td>
         </tr>
         <tr>
-            <td class="fw-bold" >Residual Risk Treatment</td>
+            <td class="fw-bold table-secondary" >Residual Risk Treatment</td>
             <td> - </td>
             <td>  {{$treatmentData->residual_risk_treatment}}</td>
             <td>  {{$treatmentData->residual_risk_treatment}}</td>
