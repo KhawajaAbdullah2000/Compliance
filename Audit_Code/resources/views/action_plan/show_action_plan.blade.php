@@ -4,6 +4,10 @@
 
 @include('user-nav')
 
+@php
+    $actionPlanType = Session('action_plan_type') == "Mandatory" ? 'Compliance' : Session('action_plan_type');
+@endphp
+
 <div class="container my-2">
     <div class="row mt-5">
         <div class="col-lg-12">
@@ -34,7 +38,7 @@
             </table>
         </div>
     </div>
-    <h3 class="fw-bold text-center mt-4">View or Download Action Plan</h3>
+    <h3 class="fw-bold text-center mt-4">View or Download {{$actionPlanType}} Action Plan</h3>
 
     <div class="row">
         <div class="col-md-6">
@@ -78,13 +82,22 @@
         </div>
 
         <div class="col-md-6 position-relative">
-            <a href="/action_plan/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md position-absolute" style="right: 0;">Action Plan</a>
+            <a href="/action_plan/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md position-absolute" style="right: 0;">View or Download another Action Plan</a>
         </div>
     </div>
 
 
     <a href="/action_plan_download/{{$project->project_id}}/{{$service}}/{{$component}}?group={{ $group }}&subgroup={{ $subgroup }}" class="btn btn-success float-end mb-4">Download Action Plan</a>
     
+
+    @if($action_plan_type=='Both')
+
+    <h3 class="fw-bold mt-4">View or Download Action Plan for Compliance</h3>
+
+    @endif
+
+    @if($action_plan_type=='Mandatory'|| $action_plan_type=='Both')
+
     <table class="table table-bordered mt-4">
         <thead class="table-dark">
             <tr>
@@ -100,10 +113,7 @@
 
         <tbody>
 
-            
-    @if($action_plan_type=='Mandatory'|| $action_plan_type=='Both')
-
-    @foreach ($mandatory_action_plan as $mand)
+            @foreach ($mandatory_action_plan as $mand)
 
     <tr>
         <td>{{$mand->sub_req}}</td>
@@ -116,32 +126,70 @@
     
     @endforeach
 
+        </tbody>
+
+
+    </table>
+
+    {{ $mandatory_action_plan->appends(['treatment_page' => request('treatment_page')])->links() }}
+
+
+
+    @endif
+
+    @if($action_plan_type=='Both')
+
+    <h3 class="fw-bold">View or Download Action Plan for Risk Treatment</h3>
 
     @endif
 
     @if($action_plan_type=='Treatment'|| $action_plan_type=='Both')
+    <table class="table table-bordered mt-4">
+        <thead class="table-dark">
+            <tr>
+                <th>Req No.</th>
+                <th>Action</th>
+                <th>Target Date</th>
+                <th>Completion Date</th>
+                <th>Actual Acceptance Date</th>
+                <th>Responsibility</th>
+            </tr>
 
-    @foreach ($treatment_action_plan as $treat)
+        </thead>
 
-    <tr>
-        <td>{{$treat->control_num}}</td>
-        <td>{{$treat->treatment_action}}</td>
-        <td>{{$treat->treatment_target_date}}</td>
-        <td>{{$treat->treatment_comp_date}}</td>
-        <td>{{$treat->acceptance_actual_date}}</td>
-        <td>{{$treat->first_name}} {{$treat->last_name}}</td>
-    </tr>
+        <tbody>
+
+            @foreach ($treatment_action_plan as $treat)
+
+            <tr>
+                <td>{{$treat->control_num}}</td>
+                <td>{{$treat->treatment_action}}</td>
+                <td>{{$treat->treatment_target_date}}</td>
+                <td>{{$treat->treatment_comp_date}}</td>
+                <td>{{$treat->acceptance_actual_date}}</td>
+                <td>{{$treat->first_name}} {{$treat->last_name}}</td>
+            </tr>
     
     @endforeach
+        </tbody>
+
+
+    </table>
+
+    {{ $treatment_action_plan->appends(['mandatory_page' => request('mandatory_page')])->links() }}
 
 
     @endif
 
-            
-        </tbody>
+    
 
-        </table>
 
+
+
+
+        <a href="/action_plan_download/{{$project->project_id}}/{{$service}}/{{$component}}?group={{ $group }}&subgroup={{ $subgroup }}" class="btn btn-success float-end mb-4">Download Action Plan</a>
+
+        <a href="/action_plan/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary float-end mb-4 mx-2">View or Download another Action Plan</a>
 
 
 </div>

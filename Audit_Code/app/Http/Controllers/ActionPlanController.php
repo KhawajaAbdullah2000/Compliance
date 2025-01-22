@@ -284,7 +284,7 @@ public function action_plan_show( $service, $component, $proj_id, Request $req){
           
             ->where('assets.project_id', $proj_id)
             ->whereIn('compliance.asset_id', $assetIds)
-            ->get();
+            ->paginate(10, ['*'], 'mandatory_page');
            
 
     }
@@ -295,7 +295,7 @@ public function action_plan_show( $service, $component, $proj_id, Request $req){
         ->leftJoin('users','compliance.responsibility_for_treatment','users.id')
         ->where('assets.project_id', $proj_id)
         ->whereIn('compliance.asset_id', $assetIds)
-        ->get();
+        ->paginate(10, ['*'], 'treatment_page');
     }
 
     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')

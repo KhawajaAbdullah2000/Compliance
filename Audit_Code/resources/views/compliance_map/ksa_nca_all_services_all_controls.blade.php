@@ -60,8 +60,8 @@
         <thead class="table-dark">
             <tr>
                 <th>Domain</th>
-                <th>Yes</th>
-                <th>No</th>
+                <th>In Place</th>
+                <th>Not In Place</th>
                 <th>Not Applicable</th>
                 <th>Not Tested</th>
                 <th>Partial</th>
@@ -196,6 +196,9 @@
             </tr>
         </tfoot>
     </table>
+
+    <a id="downloadExcelButton" href="#" class="btn btn-success btn-md float-end mb-2">Download Excel</a>
+
 
 
 

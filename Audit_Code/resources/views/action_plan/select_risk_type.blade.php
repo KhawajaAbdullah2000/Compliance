@@ -50,7 +50,7 @@
                 
                         <li class="list-group-item">
                             <a href="{{ route('action_plan.select_assets', ['action_plan_type'=>'Mandatory','proj_id'=>$project->project_id]) }}">
-                               Action Plan for Mandatory Controls
+                               Action Plan for Compliance
                             </a>
                         </li>
 

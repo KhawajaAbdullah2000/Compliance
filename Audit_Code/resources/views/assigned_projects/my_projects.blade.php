@@ -22,10 +22,14 @@
                         <th style='text-align:center'>My Permissions on Project</th>
                         <th style='text-align:center'>Data</th>
                         <th style='text-align:center'>Metadata</th>
-                        <th>View Compliance Map</th>
-                        <th>View Action Plan</th>
+                        <th style='text-align:center'>View Compliance Map</th>
+                        <th style='text-align:center'>View Action Plan</th>
+                        <th style='text-align:center'>View Risk Heatmap</th>
+                        <th style='text-align:center'>View Statement of Applicability</th>
+                        <th style='text-align:center'>Switch Storage Node</th>
+
                         {{-- <th style='text-align:center'>Risk & Compliance Heatmap</th>  --}}
-                        <th style='text-align:center'>Drill Down by Service</th> 
+                        {{-- <th style='text-align:center'>Drill Down by Service</th>  --}}
                         {{-- <th style='text-align:center'>Project Visuals</th>
                         <th style='text-align:center'>Risk Visuals</th>
                         <th style='text-align:center'>Risk Distribution</th> --}}
@@ -85,8 +89,8 @@
                             <td style='text-align:center'>
                                 <a href="/compliance_map_dashboard_all_services/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                    data-toggle="tooltip" title="Compliance Map for All Services - All Controls">
-                                   <img src="{{asset('compliance_report_icon.jpg')}}" style="width:30px;height:30px;"></img>
-                                 
+                                   {{-- <img src="{{asset('compliance_report_icon.jpg')}}" style="width:30px;height:30px;"></img> --}}
+                                   <i class="fas fa-cloud fa-lg" style="color: red"></i>
                                 </a>
                             </td>
 
@@ -98,6 +102,36 @@
                                     <i class="fas fa-book fa-lg text-warning"></i>
                                 </a>
                             </td>
+
+                               {{-- Risk Heatmap --}}
+                               <td style='text-align:center'>
+                                <a href="/" 
+                                   data-toggle="tooltip" title="View Risk Heatmap">
+                                   <i class="fas fa-chart-area text-success" style="font-size: 1.8em;"></i>
+
+                                </a>
+                            </td>
+
+                               {{-- Statement of Applicability --}}
+                               <td style='text-align:center'>
+                                <a href="/" 
+                                   data-toggle="tooltip" title="View Statement of Applicability">
+                                   <i class="fas fa-caret-square-up" style="font-size: 1.7em;"></i>
+
+                                </a>
+                            </td>
+
+                               {{-- Storage Node --}}
+                               <td style='text-align:center'>
+
+                                <select name="" id="">
+                                    <option value="">Storage 1</option>
+                                    <option value="">Storage 2</option>
+                                </select>
+                            </td>
+
+
+
 
 
 
@@ -112,12 +146,12 @@
                             </td> --}}
 
                                <!-- Drill down by service -->
-                               <td style='text-align:center'>
+                               {{-- <td style='text-align:center'>
                                 <a href="/drill_down_by_service/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                    data-toggle="tooltip" title="Drill down by service">
                                     <i class="fas fa-eye fa-lg" style="color: rgb(181, 48, 0)"></i>
                                 </a>
-                            </td>
+                            </td> --}}
 
                         <!-- Project Visuals -->
                         {{-- <td style='text-align:center'>

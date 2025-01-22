@@ -4,6 +4,10 @@
 
 @include('user-nav')
 
+@php
+    $actionPlanType = Session('action_plan_type') == "Mandatory" ? 'Compliance' : Session('action_plan_type');
+@endphp
+
 <div class="container my-2">
     <div class="row mt-5">
         <div class="col-lg-12">
@@ -35,8 +39,9 @@
         </div>
     </div>
 
-    <h3 class="fw-bold text-center mt-4 mb-4">View or Download Action Plan
+    <h3 class="fw-bold text-center mt-4 mb-4">View or Download {{$actionPlanType}} Action Plan
     </h3>
+
 
     <h4><span class="fw-bold">Service Selected :</span> 
         @if($service=='_all')
