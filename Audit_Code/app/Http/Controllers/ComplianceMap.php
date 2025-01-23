@@ -123,9 +123,6 @@ class ComplianceMap extends Controller
         if ($checkpermission) {
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
-
-
-
           
                 //KSA NCA
                 $results = DB::table('iso_sec_2_1 AS assets')
@@ -186,9 +183,6 @@ class ComplianceMap extends Controller
                 ->distinct()
                 ->count('c_name');
 
-      
-
-
                 //KSA
                 if ($project->project_type == 7) {
                     
@@ -209,6 +203,34 @@ class ComplianceMap extends Controller
                 if ($project->project_type == 1) {
                     
                     return view('compliance_map.pci_single_all_services_all_controls', [
+                        'project' => $project,
+                        'uniqueServicesCount' => $uniqueServicesCount,
+                        'uniqueGroupsCount'=>$uniqueGroupsCount,
+                        'uniqueSubGroupsCount'=>$uniqueSubGroupsCount,
+                        'uniqueComponentsCount'=>$uniqueComponentsCount,
+                        'formattedResults' => $formattedResults,
+                    ]);
+    
+                    }
+
+                      //PCI Multi
+                if ($project->project_type == 2) {
+                    
+                    return view('compliance_map.pci_multi_all_services_all_controls', [
+                        'project' => $project,
+                        'uniqueServicesCount' => $uniqueServicesCount,
+                        'uniqueGroupsCount'=>$uniqueGroupsCount,
+                        'uniqueSubGroupsCount'=>$uniqueSubGroupsCount,
+                        'uniqueComponentsCount'=>$uniqueComponentsCount,
+                        'formattedResults' => $formattedResults,
+                    ]);
+    
+                    }
+
+                         //PCI Merchant
+                if ($project->project_type == 3) {
+                    
+                    return view('compliance_map.pci_merchant_all_services_all_controls', [
                         'project' => $project,
                         'uniqueServicesCount' => $uniqueServicesCount,
                         'uniqueGroupsCount'=>$uniqueGroupsCount,
@@ -309,6 +331,45 @@ foreach ($formattedResults as $domain => $statuses) {
         
         }
 
+        if($project->project_type==2){
+            $domainNames = [
+                1=>'Install and Maintain Network Security Controls',
+                2=>'Apply Secure Configurations to All System Components',
+                3=>'Protect Stored Account Data',
+                4=>'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                5=>'Protect All Systems and Networks from Malicious Software',
+                6=>'Develop and Maintain Secure Systems and Software',
+                7=>'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                8=>'Identify Users and Authenticate Access to System Components',
+                9=>'Restrict Physical Access to Cardholder Data',
+                10=>'Log and Monitor All Access to System Components and Cardholder Data',
+                11=>'Test Security of Systems and Networks Regularly',
+                12=>'Support Information Security with Organizational Policies and Programs',
+                'A1'=>'Additional PCI DSS Requirements for Multi-Tenant Service Providers',
+                'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+            ];
+        
+        }
+
+        if($project->project_type==3){
+            $domainNames = [
+                1=>'Install and Maintain Network Security Controls',
+                2=>'Apply Secure Configurations to All System Components',
+                3=>'Protect Stored Account Data',
+                4=>'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                5=>'Protect All Systems and Networks from Malicious Software',
+                6=>'Develop and Maintain Secure Systems and Software',
+                7=>'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                8=>'Identify Users and Authenticate Access to System Components',
+                9=>'Restrict Physical Access to Cardholder Data',
+                10=>'Log and Monitor All Access to System Components and Cardholder Data',
+                11=>'Test Security of Systems and Networks Regularly',
+                12=>'Support Information Security with Organizational Policies and Programs',
+                'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+            ];
+        
+        }
+
 
         $projectName = $project->project_name;
   
@@ -373,6 +434,45 @@ foreach ($formattedResults as $domain => $statuses) {
                 ];
             }
 
+            if($project->project_type==2){
+                $domainNames = [
+                    1=>'Install and Maintain Network Security Controls',
+                    2=>'Apply Secure Configurations to All System Components',
+                    3=>'Protect Stored Account Data',
+                    4=>'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                    5=>'Protect All Systems and Networks from Malicious Software',
+                    6=>'Develop and Maintain Secure Systems and Software',
+                    7=>'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                    8=>'Identify Users and Authenticate Access to System Components',
+                    9=>'Restrict Physical Access to Cardholder Data',
+                    10=>'Log and Monitor All Access to System Components and Cardholder Data',
+                    11=>'Test Security of Systems and Networks Regularly',
+                    12=>'Support Information Security with Organizational Policies and Programs',
+                    'A1'=>'Additional PCI DSS Requirements for Multi-Tenant Service Providers',
+                    'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+                ];
+            
+            }
+
+            if($project->project_type==3){
+                $domainNames = [
+                    1=>'Install and Maintain Network Security Controls',
+                    2=>'Apply Secure Configurations to All System Components',
+                    3=>'Protect Stored Account Data',
+                    4=>'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                    5=>'Protect All Systems and Networks from Malicious Software',
+                    6=>'Develop and Maintain Secure Systems and Software',
+                    7=>'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                    8=>'Identify Users and Authenticate Access to System Components',
+                    9=>'Restrict Physical Access to Cardholder Data',
+                    10=>'Log and Monitor All Access to System Components and Cardholder Data',
+                    11=>'Test Security of Systems and Networks Regularly',
+                    12=>'Support Information Security with Organizational Policies and Programs',
+                    'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+                ];
+            
+            }
+
 
             return view('compliance_map.services', [
                 'project' => $project,
@@ -430,6 +530,45 @@ foreach ($formattedResults as $domain => $statuses) {
                 12=>'Support Information Security with Organizational Policies and Programs',
                 'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
             ];
+        }
+
+        if($project->project_type==2){
+            $domainNames = [
+                1=>'Install and Maintain Network Security Controls',
+                2=>'Apply Secure Configurations to All System Components',
+                3=>'Protect Stored Account Data',
+                4=>'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                5=>'Protect All Systems and Networks from Malicious Software',
+                6=>'Develop and Maintain Secure Systems and Software',
+                7=>'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                8=>'Identify Users and Authenticate Access to System Components',
+                9=>'Restrict Physical Access to Cardholder Data',
+                10=>'Log and Monitor All Access to System Components and Cardholder Data',
+                11=>'Test Security of Systems and Networks Regularly',
+                12=>'Support Information Security with Organizational Policies and Programs',
+                'A1'=>'Additional PCI DSS Requirements for Multi-Tenant Service Providers',
+                'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+            ];
+        
+        }
+
+        if($project->project_type==3){
+            $domainNames = [
+                1=>'Install and Maintain Network Security Controls',
+                2=>'Apply Secure Configurations to All System Components',
+                3=>'Protect Stored Account Data',
+                4=>'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                5=>'Protect All Systems and Networks from Malicious Software',
+                6=>'Develop and Maintain Secure Systems and Software',
+                7=>'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                8=>'Identify Users and Authenticate Access to System Components',
+                9=>'Restrict Physical Access to Cardholder Data',
+                10=>'Log and Monitor All Access to System Components and Cardholder Data',
+                11=>'Test Security of Systems and Networks Regularly',
+                12=>'Support Information Security with Organizational Policies and Programs',
+                'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+            ];
+        
         }
 
         if ($groups->count() == 0) {
@@ -501,6 +640,45 @@ foreach ($formattedResults as $domain => $statuses) {
                 12=>'Support Information Security with Organizational Policies and Programs',
                 'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
             ];
+        }
+
+        if($project->project_type==2){
+            $domainNames = [
+                1=>'Install and Maintain Network Security Controls',
+                2=>'Apply Secure Configurations to All System Components',
+                3=>'Protect Stored Account Data',
+                4=>'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                5=>'Protect All Systems and Networks from Malicious Software',
+                6=>'Develop and Maintain Secure Systems and Software',
+                7=>'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                8=>'Identify Users and Authenticate Access to System Components',
+                9=>'Restrict Physical Access to Cardholder Data',
+                10=>'Log and Monitor All Access to System Components and Cardholder Data',
+                11=>'Test Security of Systems and Networks Regularly',
+                12=>'Support Information Security with Organizational Policies and Programs',
+                'A1'=>'Additional PCI DSS Requirements for Multi-Tenant Service Providers',
+                'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+            ];
+        
+        }
+
+        if($project->project_type==3){
+            $domainNames = [
+                1=>'Install and Maintain Network Security Controls',
+                2=>'Apply Secure Configurations to All System Components',
+                3=>'Protect Stored Account Data',
+                4=>'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                5=>'Protect All Systems and Networks from Malicious Software',
+                6=>'Develop and Maintain Secure Systems and Software',
+                7=>'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                8=>'Identify Users and Authenticate Access to System Components',
+                9=>'Restrict Physical Access to Cardholder Data',
+                10=>'Log and Monitor All Access to System Components and Cardholder Data',
+                11=>'Test Security of Systems and Networks Regularly',
+                12=>'Support Information Security with Organizational Policies and Programs',
+                'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+            ];
+        
         }
 
         if ($subgroups->count() == 0) {
@@ -586,6 +764,45 @@ foreach ($formattedResults as $domain => $statuses) {
                 12=>'Support Information Security with Organizational Policies and Programs',
                 'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
             ];
+        }
+
+        if($project->project_type==2){
+            $domainNames = [
+                1=>'Install and Maintain Network Security Controls',
+                2=>'Apply Secure Configurations to All System Components',
+                3=>'Protect Stored Account Data',
+                4=>'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                5=>'Protect All Systems and Networks from Malicious Software',
+                6=>'Develop and Maintain Secure Systems and Software',
+                7=>'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                8=>'Identify Users and Authenticate Access to System Components',
+                9=>'Restrict Physical Access to Cardholder Data',
+                10=>'Log and Monitor All Access to System Components and Cardholder Data',
+                11=>'Test Security of Systems and Networks Regularly',
+                12=>'Support Information Security with Organizational Policies and Programs',
+                'A1'=>'Additional PCI DSS Requirements for Multi-Tenant Service Providers',
+                'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+            ];
+        
+        }
+
+        if($project->project_type==3){
+            $domainNames = [
+                1=>'Install and Maintain Network Security Controls',
+                2=>'Apply Secure Configurations to All System Components',
+                3=>'Protect Stored Account Data',
+                4=>'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                5=>'Protect All Systems and Networks from Malicious Software',
+                6=>'Develop and Maintain Secure Systems and Software',
+                7=>'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                8=>'Identify Users and Authenticate Access to System Components',
+                9=>'Restrict Physical Access to Cardholder Data',
+                10=>'Log and Monitor All Access to System Components and Cardholder Data',
+                11=>'Test Security of Systems and Networks Regularly',
+                12=>'Support Information Security with Organizational Policies and Programs',
+                'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+            ];
+        
         }
 
 
@@ -823,6 +1040,85 @@ foreach ($formattedResults as $domain => $statuses) {
             
         }
 
+        if($project->project_type==2){
+
+            $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+
+
+
+            $UniqueSubDomains = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [(string)$row[1] => (string)($row[2])]; 
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+
+
+                $domainNames = [
+                    1=>'Install and Maintain Network Security Controls',
+                    2=>'Apply Secure Configurations to All System Components',
+                    3=>'Protect Stored Account Data',
+                    4=>'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                    5=>'Protect All Systems and Networks from Malicious Software',
+                    6=>'Develop and Maintain Secure Systems and Software',
+                    7=>'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                    8=>'Identify Users and Authenticate Access to System Components',
+                    9=>'Restrict Physical Access to Cardholder Data',
+                    10=>'Log and Monitor All Access to System Components and Cardholder Data',
+                    11=>'Test Security of Systems and Networks Regularly',
+                    12=>'Support Information Security with Organizational Policies and Programs',
+                    'A1'=>'Additional PCI DSS Requirements for Multi-Tenant Service Providers',
+                    'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+                ];
+            
+        }
+
+        
+        if($project->project_type==3){
+
+            $filepath = public_path('PCI_DSS_4_Merchant.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+
+
+
+            $UniqueSubDomains = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [(string)$row[1] => (string)($row[2])]; 
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+
+
+                $domainNames = [
+                    1=>'Install and Maintain Network Security Controls',
+                    2=>'Apply Secure Configurations to All System Components',
+                    3=>'Protect Stored Account Data',
+                    4=>'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                    5=>'Protect All Systems and Networks from Malicious Software',
+                    6=>'Develop and Maintain Secure Systems and Software',
+                    7=>'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                    8=>'Identify Users and Authenticate Access to System Components',
+                    9=>'Restrict Physical Access to Cardholder Data',
+                    10=>'Log and Monitor All Access to System Components and Cardholder Data',
+                    11=>'Test Security of Systems and Networks Regularly',
+                    12=>'Support Information Security with Organizational Policies and Programs',
+                    'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+                ];
+            
+        }
+
+
         return view('compliance_map.subdomains_map', [
             'project' => $project,
             'formattedResults' => $formattedResults,
@@ -1033,6 +1329,95 @@ foreach ($formattedResults as $domain => $statuses) {
                 ->toArray(); // Convert to array
         
             }
+
+            if ($project->project_type == 2) {
+
+                //because we dint have title in pci single excel sheet
+                $domainNames = [
+                    1=>'Install and Maintain Network Security Controls',
+                    2=>'Apply Secure Configurations to All System Components',
+                    3=>'Protect Stored Account Data',
+                    4=>'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                    5=>'Protect All Systems and Networks from Malicious Software',
+                    6=>'Develop and Maintain Secure Systems and Software',
+                    7=>'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                    8=>'Identify Users and Authenticate Access to System Components',
+                    9=>'Restrict Physical Access to Cardholder Data',
+                    10=>'Log and Monitor All Access to System Components and Cardholder Data',
+                    11=>'Test Security of Systems and Networks Regularly',
+                    12=>'Support Information Security with Organizational Policies and Programs',
+                    'A1'=>'Additional PCI DSS Requirements for Multi-Tenant Service Providers',
+                    'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+                ];
+    
+                $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                $data = Excel::toArray([], $filepath); //with header
+                $rows = array_slice($data[0], 1); //without header(first row)
+        
+                $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+                    return strval($row[1]) == $subdomain;
+                })->values()->all();
+        
+        
+        
+                $MainDomainNum=$filteredData[0][0];
+                $MainDomainTitle=$domainNames[$filteredData[0][0]] ;// we dont have in excel
+            
+                $subdomainTitle=$filteredData[0][2];
+        
+        
+                $UniqueSubReqs = collect($filteredData)
+                    ->mapWithKeys(function ($row) {
+                        return [$row[3] => $row[4]]; 
+                    })
+                    ->unique() // Ensure unique keys (1st index)
+                    ->toArray(); // Convert to array
+            
+                }
+
+                if ($project->project_type == 3) {
+
+                    //because we dint have title in pci single excel sheet
+                    $domainNames = [
+                        1=>'Install and Maintain Network Security Controls',
+                        2=>'Apply Secure Configurations to All System Components',
+                        3=>'Protect Stored Account Data',
+                        4=>'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                        5=>'Protect All Systems and Networks from Malicious Software',
+                        6=>'Develop and Maintain Secure Systems and Software',
+                        7=>'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                        8=>'Identify Users and Authenticate Access to System Components',
+                        9=>'Restrict Physical Access to Cardholder Data',
+                        10=>'Log and Monitor All Access to System Components and Cardholder Data',
+                        11=>'Test Security of Systems and Networks Regularly',
+                        12=>'Support Information Security with Organizational Policies and Programs',
+                        'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+                    ];
+        
+                    $filepath = public_path('PCI_DSS_4_Merchant.xlsx');
+                    $data = Excel::toArray([], $filepath); //with header
+                    $rows = array_slice($data[0], 1); //without header(first row)
+            
+                    $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+                        return strval($row[1]) == $subdomain;
+                    })->values()->all();
+            
+            
+            
+                    $MainDomainNum=$filteredData[0][0];
+                    $MainDomainTitle=$domainNames[$filteredData[0][0]] ;// we dont have in excel
+                
+                    $subdomainTitle=$filteredData[0][2];
+            
+            
+                    $UniqueSubReqs = collect($filteredData)
+                        ->mapWithKeys(function ($row) {
+                            return [$row[3] => $row[4]]; 
+                        })
+                        ->unique() // Ensure unique keys (1st index)
+                        ->toArray(); // Convert to array
+                
+                    }
 
         return view('compliance_map.subreq_map', [
             'project' => $project,

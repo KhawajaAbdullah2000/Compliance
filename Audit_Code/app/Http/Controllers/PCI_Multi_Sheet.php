@@ -210,6 +210,7 @@ class PCI_Multi_Sheet extends Controller
 
 
 
+
                 return view('pci_multi_sheet.pci_sec_2_2_sub_reqs_form', [
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
@@ -220,7 +221,8 @@ class PCI_Multi_Sheet extends Controller
                     'filteredData' => $filteredData,
                     'project' => $project,
                     'asset' => $asset,
-                    'users'=>$users
+                    'users'=>$users,
+                    'subdomain'=>$filteredData[0][1]
                 ]);
 
             }
@@ -318,6 +320,7 @@ class PCI_Multi_Sheet extends Controller
                                         // Access specific value from the inner array
                                         $fetch_sub_req = $innerArray['3']; 
                                         $fetch_title=$innerArray['0'];
+                                        $subdomain=$innerArray['1'];
 
                                         DB::table('iso_sec_2_2')->updateOrInsert(
                                             [
@@ -325,6 +328,7 @@ class PCI_Multi_Sheet extends Controller
                                                 'asset_id' => $asset_id,
                                                 'title_num' => $fetch_title,
                                                 'sub_req' => $fetch_sub_req,
+                                                'subdomain'=>$subdomain
                                             ], 
                                             $data
                                         );
@@ -348,6 +352,7 @@ class PCI_Multi_Sheet extends Controller
                                         // Access specific value from the inner array
                                         $fetch_sub_req = $innerArray2['3']; 
                                         $fetch_title=$innerArray2['0'];
+                                        $subdomain=$innerArray2['1'];
 
                                         DB::table('iso_sec_2_2')->updateOrInsert(
                                             [
@@ -355,6 +360,7 @@ class PCI_Multi_Sheet extends Controller
                                                 'asset_id' => $asset_id,
                                                 'title_num' => $fetch_title,
                                                 'sub_req' => $fetch_sub_req,
+                                                'subdomain'=>$subdomain
                                             ], 
                                             $data
                                         );
@@ -374,6 +380,7 @@ class PCI_Multi_Sheet extends Controller
                                             'asset_id' => $asset_id,
                                             'title_num' => $title,
                                             'sub_req' => $sub_req,
+                                            'subdomain'=>$req->subdomain
                                         ], 
                                         $data
                                     );
@@ -432,13 +439,15 @@ class PCI_Multi_Sheet extends Controller
                                     // Access specific value from the inner array
                                     $fetch_sub_req = $innerArray['3']; 
                                     $fetch_title = $innerArray['0']; 
+                                    $subdomain=$innerArray['1'];
                     
                                     DB::table('iso_sec_2_2')->updateOrInsert(
                                         [
                                             'project_id' => $proj_id, 
                                             'asset_id' => $ass->assessment_id, 
                                             'title_num' => $fetch_title,
-                                            'sub_req'=>$fetch_sub_req
+                                            'sub_req'=>$fetch_sub_req,
+                                            'subdomain'=>$subdomain
                                         ], 
                                         $data
                                     );
@@ -462,13 +471,15 @@ class PCI_Multi_Sheet extends Controller
                                     // Access specific value from the inner array
                                     $fetch_title=$innerArray['0'];
                                     $fetch_sub_req = $innerArray['3']; 
+                                    $subdomain=$innerArray['1'];
 
                                     DB::table('iso_sec_2_2')->updateOrInsert(
                                         [
                                             'project_id' => $proj_id, 
                                             'asset_id' => $ass->assessment_id, 
                                             'sub_req' => $fetch_sub_req,
-                                            'title_num'=>$fetch_title
+                                            'title_num'=>$fetch_title,
+                                            'subdomain'=>$subdomain
 
                                         ], 
                                         $data
@@ -488,6 +499,7 @@ class PCI_Multi_Sheet extends Controller
                                             'asset_id' => $ass->assessment_id, 
                                             'title_num' => $title,
                                             'sub_req' => $sub_req,
+                                            'subdomain'=>$req->subdomain
 
                                         ], 
                                         $data
