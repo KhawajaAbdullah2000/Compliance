@@ -446,6 +446,7 @@ class KSA_NCA extends Controller
                                     $fetch_sub_req = $innerArray['4']; 
                                     $fetch_title = $innerArray['0']; 
                                     $subdomain=$innerArray['2'];
+                                    
                     
                                     DB::table('iso_sec_2_2')->updateOrInsert(
                                         [

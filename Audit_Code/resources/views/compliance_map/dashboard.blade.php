@@ -93,7 +93,7 @@
 
             <div class="row mt-4 justify-content-center">
                 <div class="col-md-2">
-                    <div class="card shadow-lg p-4 text-center my_card_bg1 h-100 d-flex flex-column justify-content-between">
+                    <div class="card shadow-lg p-4 text-center bg-success h-100 d-flex flex-column justify-content-between">
                         <div class="body flex-grow-1 d-flex flex-column justify-content-between">
                             <h5 class="card-title text-white">In Place</h5>
                             <p class="text-white fw-bold mt-3 fs-4 align-self-center">
@@ -116,7 +116,7 @@
 
 
                 <div class="col-md-2">
-                    <div class="card shadow-lg p-4 text-center my_card_bg2 h-100 d-flex flex-column justify-content-between">
+                    <div class="card shadow-lg p-4 text-center h-100 d-flex flex-column justify-content-between" style="background-color: orange">
                         <div class="body flex-grow-1 d-flex flex-column justify-content-between">
                             <h5 class="card-title text-white">Partially In Place</h5>
                             <p class="text-white fw-bold mt-3 fs-4 align-self-center">
