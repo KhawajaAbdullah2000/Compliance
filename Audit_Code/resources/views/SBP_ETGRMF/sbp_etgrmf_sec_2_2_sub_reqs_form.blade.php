@@ -106,7 +106,7 @@ $permissions=json_decode($project_permissions);
                  <form action="/sbp_etgrmf_sec_2_2_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" enctype="multipart/form-data">
                      @csrf
                    
- 
+                     <input type="hidden" name="subdomain" value="{{$subdomain}}">
                      <!-- Compliance Status -->
                      <div class="mb-4">
                          <label for="comp_status" class="form-label fw-semibold">Compliance Status</label>
@@ -234,6 +234,8 @@ $permissions=json_decode($project_permissions);
                  <div class="card-body">
                      <form action="/sbp_etgrmf_sec_2_2_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" enctype="multipart/form-data">
                          @csrf
+
+                         <input type="hidden" name="subdomain" value="{{$subdomain}}">
          
                          <!-- Compliance Status -->
                          <div class="mb-4">

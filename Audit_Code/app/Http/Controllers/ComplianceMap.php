@@ -255,6 +255,20 @@ class ComplianceMap extends Controller
         
                         }
 
+                         //SBP ETGRMF
+                     if ($project->project_type == 6) {
+                    
+                        return view('compliance_map.sbp_etgrmf_all_services_all_controls', [
+                            'project' => $project,
+                            'uniqueServicesCount' => $uniqueServicesCount,
+                            'uniqueGroupsCount'=>$uniqueGroupsCount,
+                            'uniqueSubGroupsCount'=>$uniqueSubGroupsCount,
+                            'uniqueComponentsCount'=>$uniqueComponentsCount,
+                            'formattedResults' => $formattedResults,
+                        ]);
+        
+                        }
+
                 
 
             
@@ -395,6 +409,18 @@ foreach ($formattedResults as $domain => $statuses) {
         
         }
 
+        if ($project->project_type == 6) {
+            $domainNames = [
+                1 => 'INFORMATION TECHNOLOGY GOVERNANCE IN FI(s)',
+                2 => 'INFORMATION SECURITY',
+                3 => 'IT SERVICES DELIVERY & OPERATIONS MANAGEMENT',
+                4 => 'ACQUISITION & IMPLEMENTATION OF IT SYSTEMS',
+                5 => 'BUSINESS CONTINUITY AND DISASTER RECOVERY',
+                6 => 'IT AUDIT'
+            ];
+        } 
+
+
 
         $projectName = $project->project_name;
   
@@ -508,6 +534,17 @@ foreach ($formattedResults as $domain => $statuses) {
             
             }
 
+            if ($project->project_type == 6) {
+                $domainNames = [
+                    1 => 'INFORMATION TECHNOLOGY GOVERNANCE IN FI(s)',
+                    2 => 'INFORMATION SECURITY',
+                    3 => 'IT SERVICES DELIVERY & OPERATIONS MANAGEMENT',
+                    4 => 'ACQUISITION & IMPLEMENTATION OF IT SYSTEMS',
+                    5 => 'BUSINESS CONTINUITY AND DISASTER RECOVERY',
+                    6 => 'IT AUDIT'
+                ];
+            } 
+
 
             return view('compliance_map.services', [
                 'project' => $project,
@@ -616,6 +653,17 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
         
         }
+
+        if ($project->project_type == 6) {
+            $domainNames = [
+                1 => 'INFORMATION TECHNOLOGY GOVERNANCE IN FI(s)',
+                2 => 'INFORMATION SECURITY',
+                3 => 'IT SERVICES DELIVERY & OPERATIONS MANAGEMENT',
+                4 => 'ACQUISITION & IMPLEMENTATION OF IT SYSTEMS',
+                5 => 'BUSINESS CONTINUITY AND DISASTER RECOVERY',
+                6 => 'IT AUDIT'
+            ];
+        } 
 
         if ($groups->count() == 0) {
             return redirect()->route(
@@ -737,6 +785,17 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
         
         }
+
+        if ($project->project_type == 6) {
+            $domainNames = [
+                1 => 'INFORMATION TECHNOLOGY GOVERNANCE IN FI(s)',
+                2 => 'INFORMATION SECURITY',
+                3 => 'IT SERVICES DELIVERY & OPERATIONS MANAGEMENT',
+                4 => 'ACQUISITION & IMPLEMENTATION OF IT SYSTEMS',
+                5 => 'BUSINESS CONTINUITY AND DISASTER RECOVERY',
+                6 => 'IT AUDIT'
+            ];
+        } 
 
         if ($subgroups->count() == 0) {
 
@@ -872,6 +931,17 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
         
         }
+
+        if ($project->project_type == 6) {
+            $domainNames = [
+                1 => 'INFORMATION TECHNOLOGY GOVERNANCE IN FI(s)',
+                2 => 'INFORMATION SECURITY',
+                3 => 'IT SERVICES DELIVERY & OPERATIONS MANAGEMENT',
+                4 => 'ACQUISITION & IMPLEMENTATION OF IT SYSTEMS',
+                5 => 'BUSINESS CONTINUITY AND DISASTER RECOVERY',
+                6 => 'IT AUDIT'
+            ];
+        } 
 
 
 
@@ -1214,6 +1284,34 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
         
         }
+        if($project->project_type==6){
+            $filepath = public_path('SBP_ETGRMF.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+
+
+            $UniqueSubDomains = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [(string)$row[2] => (string)$row[3]]; 
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+
+           
+                $domainNames = [
+                    1 => 'INFORMATION TECHNOLOGY GOVERNANCE IN FI(s)',
+                    2 => 'INFORMATION SECURITY',
+                    3 => 'IT SERVICES DELIVERY & OPERATIONS MANAGEMENT',
+                    4 => 'ACQUISITION & IMPLEMENTATION OF IT SYSTEMS',
+                    5 => 'BUSINESS CONTINUITY AND DISASTER RECOVERY',
+                    6 => 'IT AUDIT'
+                ];
+        
+        }
 
 
         return view('compliance_map.subdomains_map', [
@@ -1541,6 +1639,43 @@ foreach ($formattedResults as $domain => $statuses) {
             ->toArray(); // Convert to array
     
 
+        }
+
+        if($project->project_type==6){
+
+            $filepath = public_path('SBP_ETGRMF.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+    
+            $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+                return strval($row[2]) == $subdomain;
+            })->values()->all();
+    
+    
+    
+            $MainDomainNum=$filteredData[0][0];
+            $MainDomainTitle=$filteredData[0][1];// we dont have in excel
+        
+            $subdomainTitle=$filteredData[0][3];
+    
+    
+            $UniqueSubReqs = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [(string)$row[4] =>(string) $row[5]]; 
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+        
+
+
+            $domainNames = [
+                1 => 'INFORMATION TECHNOLOGY GOVERNANCE IN FI(s)',
+                2 => 'INFORMATION SECURITY',
+                3 => 'IT SERVICES DELIVERY & OPERATIONS MANAGEMENT',
+                4 => 'ACQUISITION & IMPLEMENTATION OF IT SYSTEMS',
+                5 => 'BUSINESS CONTINUITY AND DISASTER RECOVERY',
+                6 => 'IT AUDIT'
+            ];
         }
 
         return view('compliance_map.subreq_map', [

@@ -226,7 +226,8 @@ class SBP_ETGRMF extends Controller
                    'filteredData'=>$filteredData,
                    'project'=>$project,
                    'asset'=>$asset,
-                   'users'=>$users
+                   'users'=>$users,
+                   'subdomain'=>$filteredData[0][2]
                      ]);
 
             }
@@ -319,6 +320,7 @@ class SBP_ETGRMF extends Controller
                                         // Access specific value from the inner array
                                         $fetch_sub_req = $innerArray['4']; 
                                         $fetch_title=$innerArray['0'];
+                                        $subdomain=$innerArray['2'];
 
                                         DB::table('iso_sec_2_2')->updateOrInsert(
                                             [
@@ -326,6 +328,7 @@ class SBP_ETGRMF extends Controller
                                                 'asset_id' => $asset_id,
                                                 'title_num' => $fetch_title,
                                                 'sub_req' => $fetch_sub_req,
+                                                'subdomain'=>$subdomain
                                             ], 
                                             $data
                                         );
@@ -349,6 +352,7 @@ class SBP_ETGRMF extends Controller
                                         // Access specific value from the inner array
                                         $fetch_sub_req = $innerArray2['4']; 
                                         $fetch_title=$innerArray2['0'];
+                                        $subdomain=$innerArray2['2'];
 
                                         DB::table('iso_sec_2_2')->updateOrInsert(
                                             [
@@ -356,6 +360,7 @@ class SBP_ETGRMF extends Controller
                                                 'asset_id' => $asset_id,
                                                 'title_num' => $fetch_title,
                                                 'sub_req' => $fetch_sub_req,
+                                                'subdomain'=>$subdomain
                                             ], 
                                             $data
                                         );
@@ -375,6 +380,7 @@ class SBP_ETGRMF extends Controller
                                             'asset_id' => $asset_id,
                                             'title_num' => $title,
                                             'sub_req' => $sub_req,
+                                            'subdomain'=>$req->subdomain
                                         ], 
                                         $data
                                     );
@@ -433,13 +439,15 @@ class SBP_ETGRMF extends Controller
                                     // Access specific value from the inner array
                                     $fetch_sub_req = $innerArray['4']; 
                                     $fetch_title = $innerArray['0']; 
+                                    $subdomain=$innerArray['2'];
                     
                                     DB::table('iso_sec_2_2')->updateOrInsert(
                                         [
                                             'project_id' => $proj_id, 
                                             'asset_id' => $ass->assessment_id, 
                                             'title_num' => $fetch_title,
-                                            'sub_req'=>$fetch_sub_req
+                                            'sub_req'=>$fetch_sub_req,
+                                            'subdomain'=>$subdomain
                                         ], 
                                         $data
                                     );
@@ -463,13 +471,15 @@ class SBP_ETGRMF extends Controller
                                     // Access specific value from the inner array
                                     $fetch_title=$innerArray['0'];
                                     $fetch_sub_req = $innerArray['4']; 
+                                    $subdomain=$innerArray['2'];
 
                                     DB::table('iso_sec_2_2')->updateOrInsert(
                                         [
                                             'project_id' => $proj_id, 
                                             'asset_id' => $ass->assessment_id, 
                                             'sub_req' => $fetch_sub_req,
-                                            'title_num'=>$fetch_title
+                                            'title_num'=>$fetch_title,
+                                            'subdomain'=>$subdomain
 
                                         ], 
                                         $data
@@ -489,6 +499,7 @@ class SBP_ETGRMF extends Controller
                                             'asset_id' => $ass->assessment_id, 
                                             'title_num' => $title,
                                             'sub_req' => $sub_req,
+                                            'subdomain'=>$req->subdomain
 
                                         ], 
                                         $data
