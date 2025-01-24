@@ -233,8 +233,6 @@ class PCI_Multi_Sheet extends Controller
 
     public function pci_multi_sec_2_2_form(Request $req, $sub_req, $title, $proj_id, $user_id,$asset_id)
     {
-
-
         $req->validate([
             'comp_status' => 'required'
         ]);

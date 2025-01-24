@@ -90,19 +90,17 @@
                 <tr>
                     <td><a href="/select_assets_for_subdomain_map/{{$domain}}/{{$project->project_id}}/{{auth()->user()->id}}">
                         
-                        {{ $domain }}- @if($domain==1) Cybersecurity Governance
+                        {{ $domain }}- @if($domain=='3.1') Cybersecurity Leadership and Governance
 
-                        @elseif($domain==2)
-                        Cybersecurity Defense
+                        @elseif($domain=='3.2')
+                        Cybersecurity Risk Management and Compliance
 
-                        @elseif($domain==3)
-                        Cybersecurity Resilience
+                        @elseif($domain=='3.3')
+                        Cyber Security Operations and Technology
 
-                        @elseif($domain==4)
-                        Third-Party and Cloud Computing Cybersecurity
+                        @elseif($domain=='3.4')
+                        Third-Party Cybersecurity
 
-                        @elseif($domain==5)
-                        Industrial Control Systems Cybersecurity
 
                         @endif
                     </a>
@@ -197,7 +195,7 @@
         </tfoot>
     </table>
 
-    <a id="downloadExcelButton2" href="#" class="btn btn-success btn-md float-end mb-2">Download Excel</a>
+    <a id="downloadExcelButton" href="#" class="btn btn-success btn-md float-end mb-2">Download Excel</a>
 
 
 
@@ -212,7 +210,6 @@
     $(document).ready(function () {
         // Cache the button and checkboxes
         const downloadExcelButton = $('#downloadExcelButton');
-
         const projectID = {{ $project->project_id }};
         const userID = {{ auth()->user()->id }};
 

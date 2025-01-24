@@ -225,7 +225,8 @@ class CY_SAMA extends Controller
                    'filteredData'=>$filteredData,
                    'project'=>$project,
                    'asset'=>$asset,
-                   'users'=>$users
+                   'users'=>$users,
+                   'subdomain'=>$filteredData[0][2]
                      ]);
 
             }
@@ -234,11 +235,14 @@ class CY_SAMA extends Controller
 
     }
 
+    
     public function cy_sama_sec_2_2_form(Request $req, $sub_req, $title, $proj_id, $user_id,$asset_id)
     {
+        
         $req->validate([
             'comp_status' => 'required'
         ]);
+
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -255,120 +259,7 @@ class CY_SAMA extends Controller
                 $permissions = json_decode($checkpermission->project_permissions);
                 if ($checkpermission->type_id == 5) {
 
-                    $evidenceLevel = $req->session()->get('evidenceLevel');
-
-                  
-                    if (in_array('Data Inputter', $permissions)) {
-
-                        $fileName=null;
-                        if ($req->attachment != null) {
-                            $fileName = time() . '.' . $req->attachment->extension();
-                            $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
-                        }
-
-                        $data=[
-                                    'comp_status' => $req->comp_status,
-                                    'comments' => $req->comments,
-                                    'attachment' => $fileName,
-                                    'treatment_action' => $req->treatment_action,
-                                    'treatment_target_date' => $req->treatment_target_date,
-                                    'treatment_comp_date' => $req->treatment_comp_date,
-                                    'responsibility_for_treatment' => $req->responsibility_for_treatment,
-                                    'acceptance_actual_date'=>$req->acceptance_actual_date,
-                                    'last_edited_by' => $user_id,
-                                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                        ];
-
-                        if ($evidenceLevel == 'component') {
-
-                            // If evidence level is 'component', just insert or update for the specific asset
-                            DB::table('iso_sec_2_2')->updateOrInsert(
-                                [
-                                    'project_id' => $proj_id, 
-                                    'asset_id' => $asset_id,
-                                    'title_num' => $title,
-                                    'sub_req' => $sub_req,
-                                ], 
-                                $data
-                            );
-                        
-                            // Redirect after updating the specific asset
-                            $mysessionreq = $req->session()->get('main_req_num');
-                            return redirect()->route(
-                                'cy_sama_sec_2_2_req',
-                                ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                            )
-                                ->with('success', 'Record Updated Successfully');
-                        }
-                        
-
-                        $assetDetails=DB::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
-
-                        $assets=null;
-
-                        if($evidenceLevel=='name'){
-                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('name',$assetDetails->name)->get();
-                        }
-
-                        if($evidenceLevel=='group'){
-                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('g_name',$assetDetails->g_name)->get();
-                        }
-                        if($evidenceLevel=='service'){
-                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('s_name',$assetDetails->s_name)->get();
-                        }
-
-                        if($evidenceLevel=='project'){
-                            $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->get();
-                        }
-
-                
-
-                        foreach($assets as $ass){ 
-                            DB::table('iso_sec_2_2')->updateOrInsert(
-                                [
-                                    'project_id' => $proj_id, 
-                                    'asset_id' => $ass->assessment_id, 
-                                    'title_num' => $title,
-                                    'sub_req' => $sub_req,
-                                ], 
-                                $data
-                            );
-                        }
-                            
-                    }
-                        $mysessionreq = $req->session()->get('main_req_num');
-
-                        return redirect()->route(
-                            'cy_sama_sec_2_2_req',
-                            ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id,'asset_id'=>$asset_id]
-                        )
-                            ->with('success', 'Record Updated SUccessfully');
-                    
-                }
-            }
-            return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
-        }
-    }
-    public function cy_sama_sec_2_2_edit_form(Request $req, $sub_req, $title, $proj_id, $user_id,$asset_id)
-    {
-        $req->validate([
-            'comp_status' => 'required'
-        ]);
-        if ($user_id == auth()->user()->id) {
-            $checkpermission = Db::table('project_details')->select(
-                'project_types.id as type_id',
-                'project_details.project_code',
-                'project_details.project_permissions',
-                'projects.project_name',
-                'projects.project_id'
-            )
-                ->join('projects', 'project_details.project_code', 'projects.project_id')
-                ->join('project_types', 'projects.project_type', 'project_types.id')
-                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-                ->first();
-            if ($checkpermission) {
-                $permissions = json_decode($checkpermission->project_permissions);
-                if ($checkpermission->type_id == 5) {
+            
 
                     $evidenceLevel = $req->session()->get('evidenceLevel');
 
@@ -382,7 +273,6 @@ class CY_SAMA extends Controller
                             $data=[
                                 'comp_status' => $req->comp_status,
                                 'comments' => $req->comments,
-                           
                                 'attachment' => $fileName,
                                 'treatment_action' => $req->treatment_action,
                                 'treatment_target_date' => $req->treatment_target_date,
@@ -391,13 +281,15 @@ class CY_SAMA extends Controller
                                 'acceptance_actual_date'=>$req->acceptance_actual_date,
                                 'last_edited_by' => $user_id,
                                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                                ];
-                    }
-                    else{
+
+                    ];
+
+                        }
+                        else{
+
                             $data=[
                                 'comp_status' => $req->comp_status,
                                 'comments' => $req->comments,
-                        
                                 'treatment_action' => $req->treatment_action,
                                 'treatment_target_date' => $req->treatment_target_date,
                                 'treatment_comp_date' => $req->treatment_comp_date,
@@ -409,27 +301,107 @@ class CY_SAMA extends Controller
 
                         }
 
+                    
 
-                        if($evidenceLevel=='component'){
+
+                            if ($evidenceLevel == 'component') {
+
+                                if($req->action==2){
+                                    $filepath = public_path('CY_SAMA.xlsx');
+                                    $data2 = Excel::toArray([], $filepath); //with header
+                                    $rows = array_slice($data2[0], 1); //without header(first row)
+                            
+                                    //all controls in this domain
+                                     $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                                    return strval($row[0]) === $title;
+                                })->values()->all();
+
+
+                            
+                                
+                                    foreach ($filteredData as $innerArray) {
+                                        // Access specific value from the inner array
+                                        $fetch_sub_req =strval($innerArray['4']); 
+                                        $fetch_title = strval($innerArray['0']); 
+                                        $subdomain=strval($innerArray['2']); 
+
+                                        DB::table('iso_sec_2_2')->updateOrInsert(
+                                            [
+                                                'project_id' => $proj_id, 
+                                                'asset_id' => $asset_id,
+                                                'title_num' => $fetch_title,
+                                                'sub_req' => $fetch_sub_req,
+                                                'subdomain'=>$subdomain
+                                            ], 
+                                            $data
+                                        );
+                                        
+                                    }
+
+
+
+                                }
+
+                                if($req->action==3){
                            
-                            DB::table('iso_sec_2_2')->updateOrInsert(
-                                [
-                                    'project_id' => $proj_id, 
-                                    'asset_id' => $asset_id, 
-                                    'title_num' => $title,
-                                    'sub_req' => $sub_req,
-                                ], 
-                                $data
-                            );
-                        $mysessionreq = $req->session()->get('main_req_num');
+                                    $filepath = public_path('CY_SAMA.xlsx');
+                                    $data2 = Excel::toArray([], $filepath); //with header
+                                    $rows = array_slice($data2[0], 1); //without header(first row)
+                            
+                     
+                                    //all controls in this domain
+                                
+                                     foreach ($rows as $innerArray2) {
+                                        // Access specific value from the inner array
+                                        $fetch_sub_req =strval($innerArray2['4']); 
+                                        $fetch_title = strval($innerArray2['0']); 
+                                        $subdomain=strval($innerArray2['2']); 
 
-                        return redirect()->route(
-                            'cy_sama_sec_2_2_req',
-                            ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id,'asset_id'=>$asset_id]
-                        )
-                            ->with('success', 'Record Updated SUccessfully');
+                                        DB::table('iso_sec_2_2')->updateOrInsert(
+                                            [
+                                                'project_id' => $proj_id, 
+                                                'asset_id' => $asset_id,
+                                                'title_num' => $fetch_title,
+                                                'sub_req' => $fetch_sub_req,
+                                                'subdomain'=>$subdomain
+                                            ], 
+                                            $data
+                                        );
+                                        
+                                    }
 
-                        }
+
+
+                                }
+
+                                if($req->action==1){
+                       
+                                    // If evidence level is 'component', just insert or update for the specific asset
+                                    DB::table('iso_sec_2_2')->updateOrInsert(
+                                        [
+                                            'project_id' => $proj_id, 
+                                            'asset_id' => $asset_id,
+                                            'title_num' => $title,
+                                            'sub_req' => $sub_req,
+                                            'subdomain'=>$req->subdomain
+                                        ], 
+                                        $data
+                                    );
+                                }
+
+                             
+                            
+                                // Redirect after updating the specific asset
+                                $mysessionreq = $req->session()->get('main_req_num');
+                                return redirect()->route(
+                                    'cy_sama_sec_2_2_req',
+                                    ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
+                                )
+                                    ->with('success', 'Record Updated Successfully');
+                            }
+
+                    
+                        
 
                         $assetDetails=DB::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
 
@@ -453,15 +425,99 @@ class CY_SAMA extends Controller
                 
 
                         foreach($assets as $ass){ 
-                            DB::table('iso_sec_2_2')->updateOrInsert(
-                                [
-                                    'project_id' => $proj_id, 
-                                    'asset_id' => $ass->assessment_id, 
-                                    'title_num' => $title,
-                                    'sub_req' => $sub_req,
-                                ], 
-                                $data
-                            );
+                            if($req->action==2){
+                                $filepath = public_path('CY_SAMA.xlsx');
+                                $data2 = Excel::toArray([], $filepath); //with header
+                                $rows = array_slice($data2[0], 1); //without header(first row)
+                        
+                                //all controls in this domain
+                                 $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                                return strval($row[0]) === $title;
+                            })->values()->all();
+
+        
+
+    
+
+                            
+                                foreach ($filteredData as $innerArray) {
+                                    // Access specific value from the inner array
+                                    $fetch_sub_req =strval($innerArray['4']); 
+                                    $fetch_title = strval($innerArray['0']); 
+                                    $subdomain=strval($innerArray['2']); 
+                                    
+                    
+                                    DB::table('iso_sec_2_2')->updateOrInsert(
+                                        [
+                                            'project_id' => $proj_id, 
+                                            'asset_id' => $ass->assessment_id, 
+                                            'title_num' => $fetch_title,
+                                            'sub_req'=>$fetch_sub_req,
+                                            'subdomain'=>$subdomain
+                                        ], 
+                                        $data
+                                    );
+                                    
+                                }
+
+
+
+                            }
+
+                            if($req->action==3){
+                                //all controls in all  domains
+
+                                $filepath = public_path('CY_SAMA.xlsx');
+                                $data2 = Excel::toArray([], $filepath); //with header
+                                $rows = array_slice($data2[0], 1); //without header(first row)
+                        
+     
+                                foreach ($rows as $innerArray) {
+                       
+                                    // Access specific value from the inner array
+                                    $fetch_title = strval($innerArray[0]); // Ensure it's a string
+                                    $fetch_sub_req = strval($innerArray[4]); // Ensure it's a string
+                                    $subdomain = strval($innerArray[2]);
+
+                                    DB::table('iso_sec_2_2')->updateOrInsert(
+                                        [
+                                            'project_id' => $proj_id, 
+                                            'asset_id' => $ass->assessment_id, 
+                                            'sub_req' => $fetch_sub_req,
+                                            'title_num'=>$fetch_title,
+                                            'subdomain'=>$subdomain
+
+                                        ], 
+                                        $data
+                                    );
+                                    
+                                }
+
+
+
+                            }
+
+                            if($req->action==1){
+                            
+                                    DB::table('iso_sec_2_2')->updateOrInsert(
+                                        [
+                                            'project_id' => $proj_id, 
+                                            'asset_id' => $ass->assessment_id, 
+                                            'title_num' => $title,
+                                            'sub_req' => $sub_req,
+                                            'subdomain'=>$req->subdomain
+
+                                        ], 
+                                        $data
+                                    );
+                                    
+                            }
+
+
+
+                            }
+                        
+                        
                         }
                             
                     }
@@ -471,12 +527,13 @@ class CY_SAMA extends Controller
                             'cy_sama_sec_2_2_req',
                             ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id,'asset_id'=>$asset_id]
                         )
-                            ->with('success', 'Record Updated SUccessfully');
+                            ->with('success', 'Record Updated Successfully');
                     
                 }
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
         }
-    }
+    
+       
 
 }

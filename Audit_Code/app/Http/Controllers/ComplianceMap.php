@@ -241,8 +241,21 @@ class ComplianceMap extends Controller
     
                     }
 
+                     //CY SAMA
+                     if ($project->project_type == 5) {
+                    
+                        return view('compliance_map.cy_sama_all_services_all_controls', [
+                            'project' => $project,
+                            'uniqueServicesCount' => $uniqueServicesCount,
+                            'uniqueGroupsCount'=>$uniqueGroupsCount,
+                            'uniqueSubGroupsCount'=>$uniqueSubGroupsCount,
+                            'uniqueComponentsCount'=>$uniqueComponentsCount,
+                            'formattedResults' => $formattedResults,
+                        ]);
+        
+                        }
 
-
+                
 
             
 
@@ -370,10 +383,21 @@ foreach ($formattedResults as $domain => $statuses) {
         
         }
 
+    
+        if($project->project_type==5){
+            $domainNames = [
+                '3.1' => 'Cybersecurity Leadership and Governance',
+                '3.2' => 'Cybersecurity Risk Management and Compliance',
+                '3.3' => 'Cybersecurity Operations and Technology',
+                '3.4' => 'Third-Party Cybersecurity',
+
+            ];
+        
+        }
+
 
         $projectName = $project->project_name;
   
-
         return Excel::download(
             new ComplianceStatusExport($formattedResults, $totalCounts, $domainNames),
             $projectName . '_compliance_map.xlsx'
@@ -469,6 +493,17 @@ foreach ($formattedResults as $domain => $statuses) {
                     11=>'Test Security of Systems and Networks Regularly',
                     12=>'Support Information Security with Organizational Policies and Programs',
                     'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+                ];
+            
+            }
+
+            if($project->project_type==5){
+                $domainNames = [
+                    '3.1' => 'Cybersecurity Leadership and Governance',
+                    '3.2' => 'Cybersecurity Risk Management and Compliance',
+                    '3.3' => 'Cybersecurity Operations and Technology',
+                    '3.4' => 'Third-Party Cybersecurity',
+    
                 ];
             
             }
@@ -571,6 +606,17 @@ foreach ($formattedResults as $domain => $statuses) {
         
         }
 
+        if($project->project_type==5){
+            $domainNames = [
+                '3.1' => 'Cybersecurity Leadership and Governance',
+                '3.2' => 'Cybersecurity Risk Management and Compliance',
+                '3.3' => 'Cybersecurity Operations and Technology',
+                '3.4' => 'Third-Party Cybersecurity',
+
+            ];
+        
+        }
+
         if ($groups->count() == 0) {
             return redirect()->route(
                 'no_groups_for_compliance_map',
@@ -658,6 +704,17 @@ foreach ($formattedResults as $domain => $statuses) {
                 12=>'Support Information Security with Organizational Policies and Programs',
                 'A1'=>'Additional PCI DSS Requirements for Multi-Tenant Service Providers',
                 'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+            ];
+        
+        }
+
+        if($project->project_type==5){
+            $domainNames = [
+                '3.1' => 'Cybersecurity Leadership and Governance',
+                '3.2' => 'Cybersecurity Risk Management and Compliance',
+                '3.3' => 'Cybersecurity Operations and Technology',
+                '3.4' => 'Third-Party Cybersecurity',
+
             ];
         
         }
@@ -801,6 +858,17 @@ foreach ($formattedResults as $domain => $statuses) {
                 11=>'Test Security of Systems and Networks Regularly',
                 12=>'Support Information Security with Organizational Policies and Programs',
                 'A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+            ];
+        
+        }
+
+        if($project->project_type==5){
+            $domainNames = [
+                '3.1' => 'Cybersecurity Leadership and Governance',
+                '3.2' => 'Cybersecurity Risk Management and Compliance',
+                '3.3' => 'Cybersecurity Operations and Technology',
+                '3.4' => 'Third-Party Cybersecurity',
+
             ];
         
         }
@@ -1118,6 +1186,35 @@ foreach ($formattedResults as $domain => $statuses) {
             
         }
 
+        if($project->project_type==5){
+            $filepath = public_path('CY_SAMA.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+
+
+            $UniqueSubDomains = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [$row[2] => $row[3]]; // Map 1st index (key) to 4th index (value)
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+
+
+
+            $domainNames = [
+                '3.1' => 'Cybersecurity Leadership and Governance',
+                '3.2' => 'Cybersecurity Risk Management and Compliance',
+                '3.3' => 'Cybersecurity Operations and Technology',
+                '3.4' => 'Third-Party Cybersecurity',
+
+            ];
+        
+        }
+
 
         return view('compliance_map.subdomains_map', [
             'project' => $project,
@@ -1418,6 +1515,33 @@ foreach ($formattedResults as $domain => $statuses) {
                         ->toArray(); // Convert to array
                 
                     }
+
+        if($project->project_type==5){
+
+            $filepath = public_path('CY_SAMA.xlsx');
+        $data = Excel::toArray([], $filepath); //with header
+        $rows = array_slice($data[0], 1); //without header(first row)
+
+        $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+            return strval($row[2]) == $subdomain;
+        })->values()->all();
+
+
+        $MainDomainNum=$filteredData[0][0];
+        $MainDomainTitle=$filteredData[0][1] ;//title
+    
+        $subdomainTitle=$filteredData[0][3];
+
+
+        $UniqueSubReqs = collect($filteredData)
+            ->mapWithKeys(function ($row) {
+                return [$row[4] => $row[5]]; 
+            })
+            ->unique() // Ensure unique keys (1st index)
+            ->toArray(); // Convert to array
+    
+
+        }
 
         return view('compliance_map.subreq_map', [
             'project' => $project,
