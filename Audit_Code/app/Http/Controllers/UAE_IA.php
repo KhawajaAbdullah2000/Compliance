@@ -74,6 +74,7 @@ class UAE_IA extends Controller
                     $data = Excel::toArray([], $filepath); //with header
                     $rows = array_slice($data[0], 1); //without header(first row)
 
+        
                     $asset = Db::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
 
 
@@ -83,6 +84,7 @@ class UAE_IA extends Controller
                     $filteredData = collect($data[0])->filter(function ($row) use ($title_num) {
                         return strval($row[0]) === $title_num;
                     })->values()->all();
+
 
 
 
@@ -223,7 +225,8 @@ class UAE_IA extends Controller
                     'filteredData' => $filteredData,
                     'project' => $project,
                     'asset' => $asset,
-                    'users'=>$users
+                    'users'=>$users,
+                    'subdomain'=>$filteredData[0][2]
                 ]);
 
             }
@@ -254,8 +257,6 @@ class UAE_IA extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if ($checkpermission->type_id == 8) {
-
-            
 
                     $evidenceLevel = $req->session()->get('evidenceLevel');
 
@@ -317,6 +318,7 @@ class UAE_IA extends Controller
                                         // Access specific value from the inner array
                                         $fetch_sub_req = $innerArray['4']; 
                                         $fetch_title=$innerArray['0'];
+                                        $subdomain=$innerArray['2'];
 
                                         DB::table('iso_sec_2_2')->updateOrInsert(
                                             [
@@ -324,6 +326,7 @@ class UAE_IA extends Controller
                                                 'asset_id' => $asset_id,
                                                 'title_num' => $fetch_title,
                                                 'sub_req' => $fetch_sub_req,
+                                                'subdomain'=>$subdomain
                                             ], 
                                             $data
                                         );
@@ -336,7 +339,7 @@ class UAE_IA extends Controller
 
                                 if($req->action==3){
                            
-                                    $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                                    $filepath = public_path('UAE_IA.xlsx');
                                     $data2 = Excel::toArray([], $filepath); //with header
                                     $rows = array_slice($data2[0], 1); //without header(first row)
                             
@@ -347,6 +350,7 @@ class UAE_IA extends Controller
                                         // Access specific value from the inner array
                                         $fetch_sub_req = $innerArray2['4']; 
                                         $fetch_title=$innerArray2['0'];
+                                        $subdomain=$innerArray2['2'];
 
                                         DB::table('iso_sec_2_2')->updateOrInsert(
                                             [
@@ -354,6 +358,7 @@ class UAE_IA extends Controller
                                                 'asset_id' => $asset_id,
                                                 'title_num' => $fetch_title,
                                                 'sub_req' => $fetch_sub_req,
+                                                'subdomain'=>$subdomain
                                             ], 
                                             $data
                                         );
@@ -373,6 +378,7 @@ class UAE_IA extends Controller
                                             'asset_id' => $asset_id,
                                             'title_num' => $title,
                                             'sub_req' => $sub_req,
+                                            'subdomain'=>$req->subdomain
                                         ], 
                                         $data
                                     );
@@ -431,13 +437,15 @@ class UAE_IA extends Controller
                                     // Access specific value from the inner array
                                     $fetch_sub_req = $innerArray['4']; 
                                     $fetch_title = $innerArray['0']; 
+                                    $subdomain=$innerArray['2'];
                     
                                     DB::table('iso_sec_2_2')->updateOrInsert(
                                         [
                                             'project_id' => $proj_id, 
                                             'asset_id' => $ass->assessment_id, 
                                             'title_num' => $fetch_title,
-                                            'sub_req'=>$fetch_sub_req
+                                            'sub_req'=>$fetch_sub_req,
+                                            'subdomain'=>$subdomain
                                         ], 
                                         $data
                                     );
@@ -461,13 +469,15 @@ class UAE_IA extends Controller
                                     // Access specific value from the inner array
                                     $fetch_title=$innerArray['0'];
                                     $fetch_sub_req = $innerArray['4']; 
+                                    $subdomain=$innerArray['2'];
 
                                     DB::table('iso_sec_2_2')->updateOrInsert(
                                         [
                                             'project_id' => $proj_id, 
                                             'asset_id' => $ass->assessment_id, 
                                             'sub_req' => $fetch_sub_req,
-                                            'title_num'=>$fetch_title
+                                            'title_num'=>$fetch_title,
+                                            'subdomain'=>$subdomain
 
                                         ], 
                                         $data
@@ -487,6 +497,7 @@ class UAE_IA extends Controller
                                             'asset_id' => $ass->assessment_id, 
                                             'title_num' => $title,
                                             'sub_req' => $sub_req,
+                                            'sundomain'=>$req->subdomain
 
                                         ], 
                                         $data

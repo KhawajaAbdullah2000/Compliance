@@ -269,6 +269,22 @@ class ComplianceMap extends Controller
         
                         }
 
+                          //UAE IA
+                if ($project->project_type == 8) {
+
+
+                    
+                    return view('compliance_map.uae_ia_all_services_all_controls', [
+                        'project' => $project,
+                        'uniqueServicesCount' => $uniqueServicesCount,
+                        'uniqueGroupsCount'=>$uniqueGroupsCount,
+                        'uniqueSubGroupsCount'=>$uniqueSubGroupsCount,
+                        'uniqueComponentsCount'=>$uniqueComponentsCount,
+                        'formattedResults' => $formattedResults,
+                    ]);
+    
+                    }
+
                 
 
             
@@ -420,6 +436,78 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
         } 
 
+        if ($project->project_type == 8) {
+            $domainNames = [
+                'M1.1' => 'ENTITY CONTEXT AND LEADERSHIP',
+                'M1.2' => 'INFORMATION SECURITY POLICY',
+                'M1.3' => 'ORGANIZATION OF INFORMATION SECURITY',
+                'M1.4' => 'SUPPORT',
+                'M2.1' => 'INFORMATION SECURITY RISK MANAGEMENT POLICY',
+                'M2.2' => 'INFORMATION SECURITY RISK ASSESSMENT',
+                'M2.3' => 'INFORMATION SECURITY RISK TREATMENT',
+                'M2.4' => 'ONGOING INFORMATION SECURITY RISK MANAGEMENT',
+                'M3.1' => 'AWARENESS AND TRAINING POLICY',
+                'M3.2' => 'AWARENESS AND TRAINING PLANNING',
+                'M3.3' => 'SECURITY TRAINING',
+                'M3.4' => 'SECURITY AWARENESS',
+                'M4.1' => 'HUMAN RESOURCES SECURITY POLICY',
+                'M4.2' => 'PRIOR TO EMPLOYMENT',
+                'M4.3' => 'DURING EMPLOYMENT',
+                'M4.4' => 'TERMINATION OR CHANGE OF EMPLOYMENT',
+                'M5.1' => 'COMPLIANCE POLICY',
+                'M5.2' => 'COMPLIANCE WITH INFORMATION SECURITY LEGAL REQUIREMENTS',
+                'M5.3' => 'COMPLIANCE WITH NON-TECHNICAL REQUIREMENTS',
+                'M5.4' => 'COMPLIANCE WITH TECHNICAL REQUIREMENTS',
+                'M5.5' => 'INFORMATION SYSTEMS AUDIT CONSIDERATIONS',
+                'M6.1' => 'PERFORMANCE EVALUATION POLICY',
+                'M6.2' => 'PERFORMANCE EVALUATION',
+                'M6.3' => 'IMPROVEMENT',
+                'T1.1' => 'ASSET MANAGEMENT POLICY',
+                'T1.2' => 'RESPONSIBILITY FOR ASSETS',
+                'T1.3' => 'INFORMATION CLASSIFICATION',
+                'T1.4' => 'MEDIA HANDLING',
+                'T2.1' => 'PHYSICAL AND ENVIRONMENTAL SECURITY POLICY',
+                'T2.2' => 'SECURE AREAS',
+                'T2.3' => 'EQUIPMENT SECURITY',
+                'T3.1' => 'OPERATIONS MANAGEMENT POLICY',
+                'T3.2' => 'OPERATIONAL PROCEDURES AND RESPONSIBILITIES',
+                'T3.3' => 'SYSTEM PLANNING AND ACCEPTANCE',
+                'T3.4' => 'PROTECTION FROM MALWARE',
+                'T3.5' => 'BACKUP',
+                'T3.6' => 'MONITORING',
+                'T4.1' => 'COMMUNICATIONS POLICY',
+                'T4.2' => 'INFORMATION TRANSFER',
+                'T4.3' => 'ELECTRONIC COMMERCE SERVICES',
+                'T4.4' => 'INFORMATION SHARING PROTECTION',
+                'T4.5' => 'NETWORK SECURITY MANAGEMENT',
+                'T5.1' => 'ACCESS CONTROL POLICY',
+                'T5.2' => 'USER ACCESS MANAGEMENT',
+                'T5.3' => 'USER RESPONSIBILITIES',
+                'T5.4' => 'NETWORK ACCESS CONTROL',
+                'T5.5' => 'OPERATING SYSTEM ACCESS CONTROL',
+                'T5.6' => 'APPLICATION AND INFORMATION ACCESS CONTROL',
+                'T5.7' => 'MOBILE DEVICES ACCESS CONTROL',
+                'T6.1' => 'THIRD-PARTY SECURITY POLICY',
+                'T6.2' => 'THIRD-PARTY SERVICE DELIVERY MANAGEMENT',
+                'T6.3' => 'CLOUD COMPUTING',
+                'T7.1' => 'INFORMATION SYSTEMS ACQUISITION, DEVELOPMENT AND MAINTENANCE POLICY',
+                'T7.2' => 'SECURITY REQUIREMENTS OF INFORMATION SYSTEMS',
+                'T7.3' => 'CORRECT PROCESSING IN APPLICATIONS',
+                'T7.4' => 'CRYPTOGRAPHIC CONTROLS',
+                'T7.5' => 'SECURITY OF SYSTEM FILES',
+                'T7.6' => 'SECURITY IN DEVELOPMENT AND SUPPORT PROCESSES',
+                'T7.7' => 'TECHNICAL VULNERABILITY MANAGEMENT',
+                'T7.8' => 'SUPPLY CHAIN MANAGEMENT',
+                'T8.1' => 'INFORMATION SECURITY INCIDENT MANAGEMENT POLICY',
+                'T8.2' => 'MANAGEMENT OF INFORMATION SECURITY INCIDENTS AND IMPROVEMENTS',
+                'T8.3' => 'INFORMATION SECURITY EVENTS AND WEAKNESSES REPORTING',
+                'T9.1' => 'INFORMATION SYSTEMS CONTINUITY MANAGEMENT POLICY',
+                'T9.2' => 'INFORMATION SECURITY ASPECTS OF INFORMATION CONTINUITY MANAGEMENT',
+                'T9.3' => 'TESTING, MAINTAINING, AND REASSESSING PLANS'
+            ];
+            
+        } 
+
 
 
         $projectName = $project->project_name;
@@ -545,6 +633,77 @@ foreach ($formattedResults as $domain => $statuses) {
                 ];
             } 
 
+            if($project->project_type==8){
+                $domainNames = [
+                    'M1.1' => 'ENTITY CONTEXT AND LEADERSHIP',
+                    'M1.2' => 'INFORMATION SECURITY POLICY',
+                    'M1.3' => 'ORGANIZATION OF INFORMATION SECURITY',
+                    'M1.4' => 'SUPPORT',
+                    'M2.1' => 'INFORMATION SECURITY RISK MANAGEMENT POLICY',
+                    'M2.2' => 'INFORMATION SECURITY RISK ASSESSMENT',
+                    'M2.3' => 'INFORMATION SECURITY RISK TREATMENT',
+                    'M2.4' => 'ONGOING INFORMATION SECURITY RISK MANAGEMENT',
+                    'M3.1' => 'AWARENESS AND TRAINING POLICY',
+                    'M3.2' => 'AWARENESS AND TRAINING PLANNING',
+                    'M3.3' => 'SECURITY TRAINING',
+                    'M3.4' => 'SECURITY AWARENESS',
+                    'M4.1' => 'HUMAN RESOURCES SECURITY POLICY',
+                    'M4.2' => 'PRIOR TO EMPLOYMENT',
+                    'M4.3' => 'DURING EMPLOYMENT',
+                    'M4.4' => 'TERMINATION OR CHANGE OF EMPLOYMENT',
+                    'M5.1' => 'COMPLIANCE POLICY',
+                    'M5.2' => 'COMPLIANCE WITH INFORMATION SECURITY LEGAL REQUIREMENTS',
+                    'M5.3' => 'COMPLIANCE WITH NON-TECHNICAL REQUIREMENTS',
+                    'M5.4' => 'COMPLIANCE WITH TECHNICAL REQUIREMENTS',
+                    'M5.5' => 'INFORMATION SYSTEMS AUDIT CONSIDERATIONS',
+                    'M6.1' => 'PERFORMANCE EVALUATION POLICY',
+                    'M6.2' => 'PERFORMANCE EVALUATION',
+                    'M6.3' => 'IMPROVEMENT',
+                    'T1.1' => 'ASSET MANAGEMENT POLICY',
+                    'T1.2' => 'RESPONSIBILITY FOR ASSETS',
+                    'T1.3' => 'INFORMATION CLASSIFICATION',
+                    'T1.4' => 'MEDIA HANDLING',
+                    'T2.1' => 'PHYSICAL AND ENVIRONMENTAL SECURITY POLICY',
+                    'T2.2' => 'SECURE AREAS',
+                    'T2.3' => 'EQUIPMENT SECURITY',
+                    'T3.1' => 'OPERATIONS MANAGEMENT POLICY',
+                    'T3.2' => 'OPERATIONAL PROCEDURES AND RESPONSIBILITIES',
+                    'T3.3' => 'SYSTEM PLANNING AND ACCEPTANCE',
+                    'T3.4' => 'PROTECTION FROM MALWARE',
+                    'T3.5' => 'BACKUP',
+                    'T3.6' => 'MONITORING',
+                    'T4.1' => 'COMMUNICATIONS POLICY',
+                    'T4.2' => 'INFORMATION TRANSFER',
+                    'T4.3' => 'ELECTRONIC COMMERCE SERVICES',
+                    'T4.4' => 'INFORMATION SHARING PROTECTION',
+                    'T4.5' => 'NETWORK SECURITY MANAGEMENT',
+                    'T5.1' => 'ACCESS CONTROL POLICY',
+                    'T5.2' => 'USER ACCESS MANAGEMENT',
+                    'T5.3' => 'USER RESPONSIBILITIES',
+                    'T5.4' => 'NETWORK ACCESS CONTROL',
+                    'T5.5' => 'OPERATING SYSTEM ACCESS CONTROL',
+                    'T5.6' => 'APPLICATION AND INFORMATION ACCESS CONTROL',
+                    'T5.7' => 'MOBILE DEVICES ACCESS CONTROL',
+                    'T6.1' => 'THIRD-PARTY SECURITY POLICY',
+                    'T6.2' => 'THIRD-PARTY SERVICE DELIVERY MANAGEMENT',
+                    'T6.3' => 'CLOUD COMPUTING',
+                    'T7.1' => 'INFORMATION SYSTEMS ACQUISITION, DEVELOPMENT AND MAINTENANCE POLICY',
+                    'T7.2' => 'SECURITY REQUIREMENTS OF INFORMATION SYSTEMS',
+                    'T7.3' => 'CORRECT PROCESSING IN APPLICATIONS',
+                    'T7.4' => 'CRYPTOGRAPHIC CONTROLS',
+                    'T7.5' => 'SECURITY OF SYSTEM FILES',
+                    'T7.6' => 'SECURITY IN DEVELOPMENT AND SUPPORT PROCESSES',
+                    'T7.7' => 'TECHNICAL VULNERABILITY MANAGEMENT',
+                    'T7.8' => 'SUPPLY CHAIN MANAGEMENT',
+                    'T8.1' => 'INFORMATION SECURITY INCIDENT MANAGEMENT POLICY',
+                    'T8.2' => 'MANAGEMENT OF INFORMATION SECURITY INCIDENTS AND IMPROVEMENTS',
+                    'T8.3' => 'INFORMATION SECURITY EVENTS AND WEAKNESSES REPORTING',
+                    'T9.1' => 'INFORMATION SYSTEMS CONTINUITY MANAGEMENT POLICY',
+                    'T9.2' => 'INFORMATION SECURITY ASPECTS OF INFORMATION CONTINUITY MANAGEMENT',
+                    'T9.3' => 'TESTING, MAINTAINING, AND REASSESSING PLANS'
+                ];
+            }
+
 
             return view('compliance_map.services', [
                 'project' => $project,
@@ -573,6 +732,76 @@ foreach ($formattedResults as $domain => $statuses) {
             ->get();
 
         
+            if($project->project_type==8){
+                $domainNames = [
+                    'M1.1' => 'ENTITY CONTEXT AND LEADERSHIP',
+                    'M1.2' => 'INFORMATION SECURITY POLICY',
+                    'M1.3' => 'ORGANIZATION OF INFORMATION SECURITY',
+                    'M1.4' => 'SUPPORT',
+                    'M2.1' => 'INFORMATION SECURITY RISK MANAGEMENT POLICY',
+                    'M2.2' => 'INFORMATION SECURITY RISK ASSESSMENT',
+                    'M2.3' => 'INFORMATION SECURITY RISK TREATMENT',
+                    'M2.4' => 'ONGOING INFORMATION SECURITY RISK MANAGEMENT',
+                    'M3.1' => 'AWARENESS AND TRAINING POLICY',
+                    'M3.2' => 'AWARENESS AND TRAINING PLANNING',
+                    'M3.3' => 'SECURITY TRAINING',
+                    'M3.4' => 'SECURITY AWARENESS',
+                    'M4.1' => 'HUMAN RESOURCES SECURITY POLICY',
+                    'M4.2' => 'PRIOR TO EMPLOYMENT',
+                    'M4.3' => 'DURING EMPLOYMENT',
+                    'M4.4' => 'TERMINATION OR CHANGE OF EMPLOYMENT',
+                    'M5.1' => 'COMPLIANCE POLICY',
+                    'M5.2' => 'COMPLIANCE WITH INFORMATION SECURITY LEGAL REQUIREMENTS',
+                    'M5.3' => 'COMPLIANCE WITH NON-TECHNICAL REQUIREMENTS',
+                    'M5.4' => 'COMPLIANCE WITH TECHNICAL REQUIREMENTS',
+                    'M5.5' => 'INFORMATION SYSTEMS AUDIT CONSIDERATIONS',
+                    'M6.1' => 'PERFORMANCE EVALUATION POLICY',
+                    'M6.2' => 'PERFORMANCE EVALUATION',
+                    'M6.3' => 'IMPROVEMENT',
+                    'T1.1' => 'ASSET MANAGEMENT POLICY',
+                    'T1.2' => 'RESPONSIBILITY FOR ASSETS',
+                    'T1.3' => 'INFORMATION CLASSIFICATION',
+                    'T1.4' => 'MEDIA HANDLING',
+                    'T2.1' => 'PHYSICAL AND ENVIRONMENTAL SECURITY POLICY',
+                    'T2.2' => 'SECURE AREAS',
+                    'T2.3' => 'EQUIPMENT SECURITY',
+                    'T3.1' => 'OPERATIONS MANAGEMENT POLICY',
+                    'T3.2' => 'OPERATIONAL PROCEDURES AND RESPONSIBILITIES',
+                    'T3.3' => 'SYSTEM PLANNING AND ACCEPTANCE',
+                    'T3.4' => 'PROTECTION FROM MALWARE',
+                    'T3.5' => 'BACKUP',
+                    'T3.6' => 'MONITORING',
+                    'T4.1' => 'COMMUNICATIONS POLICY',
+                    'T4.2' => 'INFORMATION TRANSFER',
+                    'T4.3' => 'ELECTRONIC COMMERCE SERVICES',
+                    'T4.4' => 'INFORMATION SHARING PROTECTION',
+                    'T4.5' => 'NETWORK SECURITY MANAGEMENT',
+                    'T5.1' => 'ACCESS CONTROL POLICY',
+                    'T5.2' => 'USER ACCESS MANAGEMENT',
+                    'T5.3' => 'USER RESPONSIBILITIES',
+                    'T5.4' => 'NETWORK ACCESS CONTROL',
+                    'T5.5' => 'OPERATING SYSTEM ACCESS CONTROL',
+                    'T5.6' => 'APPLICATION AND INFORMATION ACCESS CONTROL',
+                    'T5.7' => 'MOBILE DEVICES ACCESS CONTROL',
+                    'T6.1' => 'THIRD-PARTY SECURITY POLICY',
+                    'T6.2' => 'THIRD-PARTY SERVICE DELIVERY MANAGEMENT',
+                    'T6.3' => 'CLOUD COMPUTING',
+                    'T7.1' => 'INFORMATION SYSTEMS ACQUISITION, DEVELOPMENT AND MAINTENANCE POLICY',
+                    'T7.2' => 'SECURITY REQUIREMENTS OF INFORMATION SYSTEMS',
+                    'T7.3' => 'CORRECT PROCESSING IN APPLICATIONS',
+                    'T7.4' => 'CRYPTOGRAPHIC CONTROLS',
+                    'T7.5' => 'SECURITY OF SYSTEM FILES',
+                    'T7.6' => 'SECURITY IN DEVELOPMENT AND SUPPORT PROCESSES',
+                    'T7.7' => 'TECHNICAL VULNERABILITY MANAGEMENT',
+                    'T7.8' => 'SUPPLY CHAIN MANAGEMENT',
+                    'T8.1' => 'INFORMATION SECURITY INCIDENT MANAGEMENT POLICY',
+                    'T8.2' => 'MANAGEMENT OF INFORMATION SECURITY INCIDENTS AND IMPROVEMENTS',
+                    'T8.3' => 'INFORMATION SECURITY EVENTS AND WEAKNESSES REPORTING',
+                    'T9.1' => 'INFORMATION SYSTEMS CONTINUITY MANAGEMENT POLICY',
+                    'T9.2' => 'INFORMATION SECURITY ASPECTS OF INFORMATION CONTINUITY MANAGEMENT',
+                    'T9.3' => 'TESTING, MAINTAINING, AND REASSESSING PLANS'
+                ];
+            }
 
 
 
@@ -767,6 +996,78 @@ foreach ($formattedResults as $domain => $statuses) {
         
         }
 
+        
+        if($project->project_type==8){
+            $domainNames = [
+                'M1.1' => 'ENTITY CONTEXT AND LEADERSHIP',
+                'M1.2' => 'INFORMATION SECURITY POLICY',
+                'M1.3' => 'ORGANIZATION OF INFORMATION SECURITY',
+                'M1.4' => 'SUPPORT',
+                'M2.1' => 'INFORMATION SECURITY RISK MANAGEMENT POLICY',
+                'M2.2' => 'INFORMATION SECURITY RISK ASSESSMENT',
+                'M2.3' => 'INFORMATION SECURITY RISK TREATMENT',
+                'M2.4' => 'ONGOING INFORMATION SECURITY RISK MANAGEMENT',
+                'M3.1' => 'AWARENESS AND TRAINING POLICY',
+                'M3.2' => 'AWARENESS AND TRAINING PLANNING',
+                'M3.3' => 'SECURITY TRAINING',
+                'M3.4' => 'SECURITY AWARENESS',
+                'M4.1' => 'HUMAN RESOURCES SECURITY POLICY',
+                'M4.2' => 'PRIOR TO EMPLOYMENT',
+                'M4.3' => 'DURING EMPLOYMENT',
+                'M4.4' => 'TERMINATION OR CHANGE OF EMPLOYMENT',
+                'M5.1' => 'COMPLIANCE POLICY',
+                'M5.2' => 'COMPLIANCE WITH INFORMATION SECURITY LEGAL REQUIREMENTS',
+                'M5.3' => 'COMPLIANCE WITH NON-TECHNICAL REQUIREMENTS',
+                'M5.4' => 'COMPLIANCE WITH TECHNICAL REQUIREMENTS',
+                'M5.5' => 'INFORMATION SYSTEMS AUDIT CONSIDERATIONS',
+                'M6.1' => 'PERFORMANCE EVALUATION POLICY',
+                'M6.2' => 'PERFORMANCE EVALUATION',
+                'M6.3' => 'IMPROVEMENT',
+                'T1.1' => 'ASSET MANAGEMENT POLICY',
+                'T1.2' => 'RESPONSIBILITY FOR ASSETS',
+                'T1.3' => 'INFORMATION CLASSIFICATION',
+                'T1.4' => 'MEDIA HANDLING',
+                'T2.1' => 'PHYSICAL AND ENVIRONMENTAL SECURITY POLICY',
+                'T2.2' => 'SECURE AREAS',
+                'T2.3' => 'EQUIPMENT SECURITY',
+                'T3.1' => 'OPERATIONS MANAGEMENT POLICY',
+                'T3.2' => 'OPERATIONAL PROCEDURES AND RESPONSIBILITIES',
+                'T3.3' => 'SYSTEM PLANNING AND ACCEPTANCE',
+                'T3.4' => 'PROTECTION FROM MALWARE',
+                'T3.5' => 'BACKUP',
+                'T3.6' => 'MONITORING',
+                'T4.1' => 'COMMUNICATIONS POLICY',
+                'T4.2' => 'INFORMATION TRANSFER',
+                'T4.3' => 'ELECTRONIC COMMERCE SERVICES',
+                'T4.4' => 'INFORMATION SHARING PROTECTION',
+                'T4.5' => 'NETWORK SECURITY MANAGEMENT',
+                'T5.1' => 'ACCESS CONTROL POLICY',
+                'T5.2' => 'USER ACCESS MANAGEMENT',
+                'T5.3' => 'USER RESPONSIBILITIES',
+                'T5.4' => 'NETWORK ACCESS CONTROL',
+                'T5.5' => 'OPERATING SYSTEM ACCESS CONTROL',
+                'T5.6' => 'APPLICATION AND INFORMATION ACCESS CONTROL',
+                'T5.7' => 'MOBILE DEVICES ACCESS CONTROL',
+                'T6.1' => 'THIRD-PARTY SECURITY POLICY',
+                'T6.2' => 'THIRD-PARTY SERVICE DELIVERY MANAGEMENT',
+                'T6.3' => 'CLOUD COMPUTING',
+                'T7.1' => 'INFORMATION SYSTEMS ACQUISITION, DEVELOPMENT AND MAINTENANCE POLICY',
+                'T7.2' => 'SECURITY REQUIREMENTS OF INFORMATION SYSTEMS',
+                'T7.3' => 'CORRECT PROCESSING IN APPLICATIONS',
+                'T7.4' => 'CRYPTOGRAPHIC CONTROLS',
+                'T7.5' => 'SECURITY OF SYSTEM FILES',
+                'T7.6' => 'SECURITY IN DEVELOPMENT AND SUPPORT PROCESSES',
+                'T7.7' => 'TECHNICAL VULNERABILITY MANAGEMENT',
+                'T7.8' => 'SUPPLY CHAIN MANAGEMENT',
+                'T8.1' => 'INFORMATION SECURITY INCIDENT MANAGEMENT POLICY',
+                'T8.2' => 'MANAGEMENT OF INFORMATION SECURITY INCIDENTS AND IMPROVEMENTS',
+                'T8.3' => 'INFORMATION SECURITY EVENTS AND WEAKNESSES REPORTING',
+                'T9.1' => 'INFORMATION SYSTEMS CONTINUITY MANAGEMENT POLICY',
+                'T9.2' => 'INFORMATION SECURITY ASPECTS OF INFORMATION CONTINUITY MANAGEMENT',
+                'T9.3' => 'TESTING, MAINTAINING, AND REASSESSING PLANS'
+            ];
+        }
+
         if($project->project_type==3){
             $domainNames = [
                 1=>'Install and Maintain Network Security Controls',
@@ -854,6 +1155,77 @@ foreach ($formattedResults as $domain => $statuses) {
             ->distinct()
             ->get();
 
+            
+            if($project->project_type==8){
+                $domainNames = [
+                    'M1.1' => 'ENTITY CONTEXT AND LEADERSHIP',
+                    'M1.2' => 'INFORMATION SECURITY POLICY',
+                    'M1.3' => 'ORGANIZATION OF INFORMATION SECURITY',
+                    'M1.4' => 'SUPPORT',
+                    'M2.1' => 'INFORMATION SECURITY RISK MANAGEMENT POLICY',
+                    'M2.2' => 'INFORMATION SECURITY RISK ASSESSMENT',
+                    'M2.3' => 'INFORMATION SECURITY RISK TREATMENT',
+                    'M2.4' => 'ONGOING INFORMATION SECURITY RISK MANAGEMENT',
+                    'M3.1' => 'AWARENESS AND TRAINING POLICY',
+                    'M3.2' => 'AWARENESS AND TRAINING PLANNING',
+                    'M3.3' => 'SECURITY TRAINING',
+                    'M3.4' => 'SECURITY AWARENESS',
+                    'M4.1' => 'HUMAN RESOURCES SECURITY POLICY',
+                    'M4.2' => 'PRIOR TO EMPLOYMENT',
+                    'M4.3' => 'DURING EMPLOYMENT',
+                    'M4.4' => 'TERMINATION OR CHANGE OF EMPLOYMENT',
+                    'M5.1' => 'COMPLIANCE POLICY',
+                    'M5.2' => 'COMPLIANCE WITH INFORMATION SECURITY LEGAL REQUIREMENTS',
+                    'M5.3' => 'COMPLIANCE WITH NON-TECHNICAL REQUIREMENTS',
+                    'M5.4' => 'COMPLIANCE WITH TECHNICAL REQUIREMENTS',
+                    'M5.5' => 'INFORMATION SYSTEMS AUDIT CONSIDERATIONS',
+                    'M6.1' => 'PERFORMANCE EVALUATION POLICY',
+                    'M6.2' => 'PERFORMANCE EVALUATION',
+                    'M6.3' => 'IMPROVEMENT',
+                    'T1.1' => 'ASSET MANAGEMENT POLICY',
+                    'T1.2' => 'RESPONSIBILITY FOR ASSETS',
+                    'T1.3' => 'INFORMATION CLASSIFICATION',
+                    'T1.4' => 'MEDIA HANDLING',
+                    'T2.1' => 'PHYSICAL AND ENVIRONMENTAL SECURITY POLICY',
+                    'T2.2' => 'SECURE AREAS',
+                    'T2.3' => 'EQUIPMENT SECURITY',
+                    'T3.1' => 'OPERATIONS MANAGEMENT POLICY',
+                    'T3.2' => 'OPERATIONAL PROCEDURES AND RESPONSIBILITIES',
+                    'T3.3' => 'SYSTEM PLANNING AND ACCEPTANCE',
+                    'T3.4' => 'PROTECTION FROM MALWARE',
+                    'T3.5' => 'BACKUP',
+                    'T3.6' => 'MONITORING',
+                    'T4.1' => 'COMMUNICATIONS POLICY',
+                    'T4.2' => 'INFORMATION TRANSFER',
+                    'T4.3' => 'ELECTRONIC COMMERCE SERVICES',
+                    'T4.4' => 'INFORMATION SHARING PROTECTION',
+                    'T4.5' => 'NETWORK SECURITY MANAGEMENT',
+                    'T5.1' => 'ACCESS CONTROL POLICY',
+                    'T5.2' => 'USER ACCESS MANAGEMENT',
+                    'T5.3' => 'USER RESPONSIBILITIES',
+                    'T5.4' => 'NETWORK ACCESS CONTROL',
+                    'T5.5' => 'OPERATING SYSTEM ACCESS CONTROL',
+                    'T5.6' => 'APPLICATION AND INFORMATION ACCESS CONTROL',
+                    'T5.7' => 'MOBILE DEVICES ACCESS CONTROL',
+                    'T6.1' => 'THIRD-PARTY SECURITY POLICY',
+                    'T6.2' => 'THIRD-PARTY SERVICE DELIVERY MANAGEMENT',
+                    'T6.3' => 'CLOUD COMPUTING',
+                    'T7.1' => 'INFORMATION SYSTEMS ACQUISITION, DEVELOPMENT AND MAINTENANCE POLICY',
+                    'T7.2' => 'SECURITY REQUIREMENTS OF INFORMATION SYSTEMS',
+                    'T7.3' => 'CORRECT PROCESSING IN APPLICATIONS',
+                    'T7.4' => 'CRYPTOGRAPHIC CONTROLS',
+                    'T7.5' => 'SECURITY OF SYSTEM FILES',
+                    'T7.6' => 'SECURITY IN DEVELOPMENT AND SUPPORT PROCESSES',
+                    'T7.7' => 'TECHNICAL VULNERABILITY MANAGEMENT',
+                    'T7.8' => 'SUPPLY CHAIN MANAGEMENT',
+                    'T8.1' => 'INFORMATION SECURITY INCIDENT MANAGEMENT POLICY',
+                    'T8.2' => 'MANAGEMENT OF INFORMATION SECURITY INCIDENTS AND IMPROVEMENTS',
+                    'T8.3' => 'INFORMATION SECURITY EVENTS AND WEAKNESSES REPORTING',
+                    'T9.1' => 'INFORMATION SYSTEMS CONTINUITY MANAGEMENT POLICY',
+                    'T9.2' => 'INFORMATION SECURITY ASPECTS OF INFORMATION CONTINUITY MANAGEMENT',
+                    'T9.3' => 'TESTING, MAINTAINING, AND REASSESSING PLANS'
+                ];
+            }
 
         if ($project->project_type == 7) {
             $domainNames = [
@@ -1313,6 +1685,95 @@ foreach ($formattedResults as $domain => $statuses) {
         
         }
 
+        
+        if($project->project_type==8){
+
+            $filepath = public_path('UAE_IA.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+        
+            $UniqueSubDomains = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [(string)$row[2] => (string)$row[3]]; 
+                })
+                ->unique() 
+                ->toArray();
+
+
+            $domainNames = [
+                'M1.1' => 'ENTITY CONTEXT AND LEADERSHIP',
+                'M1.2' => 'INFORMATION SECURITY POLICY',
+                'M1.3' => 'ORGANIZATION OF INFORMATION SECURITY',
+                'M1.4' => 'SUPPORT',
+                'M2.1' => 'INFORMATION SECURITY RISK MANAGEMENT POLICY',
+                'M2.2' => 'INFORMATION SECURITY RISK ASSESSMENT',
+                'M2.3' => 'INFORMATION SECURITY RISK TREATMENT',
+                'M2.4' => 'ONGOING INFORMATION SECURITY RISK MANAGEMENT',
+                'M3.1' => 'AWARENESS AND TRAINING POLICY',
+                'M3.2' => 'AWARENESS AND TRAINING PLANNING',
+                'M3.3' => 'SECURITY TRAINING',
+                'M3.4' => 'SECURITY AWARENESS',
+                'M4.1' => 'HUMAN RESOURCES SECURITY POLICY',
+                'M4.2' => 'PRIOR TO EMPLOYMENT',
+                'M4.3' => 'DURING EMPLOYMENT',
+                'M4.4' => 'TERMINATION OR CHANGE OF EMPLOYMENT',
+                'M5.1' => 'COMPLIANCE POLICY',
+                'M5.2' => 'COMPLIANCE WITH INFORMATION SECURITY LEGAL REQUIREMENTS',
+                'M5.3' => 'COMPLIANCE WITH NON-TECHNICAL REQUIREMENTS',
+                'M5.4' => 'COMPLIANCE WITH TECHNICAL REQUIREMENTS',
+                'M5.5' => 'INFORMATION SYSTEMS AUDIT CONSIDERATIONS',
+                'M6.1' => 'PERFORMANCE EVALUATION POLICY',
+                'M6.2' => 'PERFORMANCE EVALUATION',
+                'M6.3' => 'IMPROVEMENT',
+                'T1.1' => 'ASSET MANAGEMENT POLICY',
+                'T1.2' => 'RESPONSIBILITY FOR ASSETS',
+                'T1.3' => 'INFORMATION CLASSIFICATION',
+                'T1.4' => 'MEDIA HANDLING',
+                'T2.1' => 'PHYSICAL AND ENVIRONMENTAL SECURITY POLICY',
+                'T2.2' => 'SECURE AREAS',
+                'T2.3' => 'EQUIPMENT SECURITY',
+                'T3.1' => 'OPERATIONS MANAGEMENT POLICY',
+                'T3.2' => 'OPERATIONAL PROCEDURES AND RESPONSIBILITIES',
+                'T3.3' => 'SYSTEM PLANNING AND ACCEPTANCE',
+                'T3.4' => 'PROTECTION FROM MALWARE',
+                'T3.5' => 'BACKUP',
+                'T3.6' => 'MONITORING',
+                'T4.1' => 'COMMUNICATIONS POLICY',
+                'T4.2' => 'INFORMATION TRANSFER',
+                'T4.3' => 'ELECTRONIC COMMERCE SERVICES',
+                'T4.4' => 'INFORMATION SHARING PROTECTION',
+                'T4.5' => 'NETWORK SECURITY MANAGEMENT',
+                'T5.1' => 'ACCESS CONTROL POLICY',
+                'T5.2' => 'USER ACCESS MANAGEMENT',
+                'T5.3' => 'USER RESPONSIBILITIES',
+                'T5.4' => 'NETWORK ACCESS CONTROL',
+                'T5.5' => 'OPERATING SYSTEM ACCESS CONTROL',
+                'T5.6' => 'APPLICATION AND INFORMATION ACCESS CONTROL',
+                'T5.7' => 'MOBILE DEVICES ACCESS CONTROL',
+                'T6.1' => 'THIRD-PARTY SECURITY POLICY',
+                'T6.2' => 'THIRD-PARTY SERVICE DELIVERY MANAGEMENT',
+                'T6.3' => 'CLOUD COMPUTING',
+                'T7.1' => 'INFORMATION SYSTEMS ACQUISITION, DEVELOPMENT AND MAINTENANCE POLICY',
+                'T7.2' => 'SECURITY REQUIREMENTS OF INFORMATION SYSTEMS',
+                'T7.3' => 'CORRECT PROCESSING IN APPLICATIONS',
+                'T7.4' => 'CRYPTOGRAPHIC CONTROLS',
+                'T7.5' => 'SECURITY OF SYSTEM FILES',
+                'T7.6' => 'SECURITY IN DEVELOPMENT AND SUPPORT PROCESSES',
+                'T7.7' => 'TECHNICAL VULNERABILITY MANAGEMENT',
+                'T7.8' => 'SUPPLY CHAIN MANAGEMENT',
+                'T8.1' => 'INFORMATION SECURITY INCIDENT MANAGEMENT POLICY',
+                'T8.2' => 'MANAGEMENT OF INFORMATION SECURITY INCIDENTS AND IMPROVEMENTS',
+                'T8.3' => 'INFORMATION SECURITY EVENTS AND WEAKNESSES REPORTING',
+                'T9.1' => 'INFORMATION SYSTEMS CONTINUITY MANAGEMENT POLICY',
+                'T9.2' => 'INFORMATION SECURITY ASPECTS OF INFORMATION CONTINUITY MANAGEMENT',
+                'T9.3' => 'TESTING, MAINTAINING, AND REASSESSING PLANS'
+            ];
+        }
+
 
         return view('compliance_map.subdomains_map', [
             'project' => $project,
@@ -1678,6 +2139,30 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
         }
 
+        if($project->project_type==8){
+            $filepath = public_path('UAE_IA.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+    
+            $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+                return strval($row[2]) == $subdomain;
+            })->values()->all();
+    
+    
+            $MainDomainNum=$filteredData[0][0];
+            $MainDomainTitle=$filteredData[0][1] ;//title
+        
+            $subdomainTitle=$filteredData[0][3];
+    
+    
+            $UniqueSubReqs = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [$row[4] => $row[6]]; 
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+        
+        }
         return view('compliance_map.subreq_map', [
             'project' => $project,
             'formattedResults' => $formattedResults,
