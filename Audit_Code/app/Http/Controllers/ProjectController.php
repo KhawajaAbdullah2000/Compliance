@@ -87,7 +87,6 @@ class ProjectController extends Controller
 
         if ($checkpermission) {
             $permissions = json_decode($checkpermission->project_permissions);
-            if ($checkpermission->type_id == 4) {
 
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
@@ -96,75 +95,9 @@ class ProjectController extends Controller
                     'iso.iso_sections',
                     ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
                 );
-            }
+            
 
-            //pci single sheet
-            elseif ($checkpermission->type_id == 1) {
-                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
-                    ->where('projects.project_id', $proj_id)->first();
-
-                return view(
-                    '.pci_single_sheet.main_sections',
-                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
-                );
-            } elseif ($checkpermission->type_id == 2) {
-                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
-                    ->where('projects.project_id', $proj_id)->first();
-
-                return view(
-                    '.pci_multi_sheet.main_sections',
-                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
-                );
-            } elseif ($checkpermission->type_id == 3) {
-                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
-                    ->where('projects.project_id', $proj_id)->first();
-
-                return view(
-                    '.pci_merchant_sheet.main_sections',
-                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
-                );
-            } elseif ($checkpermission->type_id == 5) {
-                //Cybersecurity SAMA
-                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
-                    ->where('projects.project_id', $proj_id)->first();
-
-                return view(
-                    '.CY_SAMA.main_sections',
-                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
-                );
-            } elseif ($checkpermission->type_id == 6) {
-                //SBP ETGRMF
-                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
-                    ->where('projects.project_id', $proj_id)->first();
-
-                return view(
-                    '.SBP_ETGRMF.main_sections',
-                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
-                );
-            } elseif ($checkpermission->type_id == 7) {
-                //KSA NCA ECC
-                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
-                    ->where('projects.project_id', $proj_id)->first();
-
-                return view(
-                    '.KSA_NCA.main_sections',
-                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
-                );
-            }
-            //UAE IA
-            elseif ($checkpermission->type_id == 8) {
-                //KSA NCA ECC
-                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
-                    ->where('projects.project_id', $proj_id)->first();
-
-                return view(
-                    '.uae_ia.main_sections',
-                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
-                );
-            }
-
-
-
+            
 
 
         } else {
