@@ -492,6 +492,7 @@ class IsoSec2_2 extends Controller
                     })->values()->all();
 
 
+        
 
 
                     return view('iso_sec_2_2.iso_sec_2_2_sub_reqs_form_user_req', [
@@ -524,6 +525,8 @@ class IsoSec2_2 extends Controller
                 })->values()->all();
 
 
+                $words = explode(" ", $filteredData[0][2]);
+                $subdomain = $words[0];
 
                 return view('iso_sec_2_2.iso_sec_2_2_sub_reqs_form', [
                     'project_id' => $checkpermission->project_id,
@@ -535,7 +538,8 @@ class IsoSec2_2 extends Controller
                     'filteredData' => $filteredData,
                     'project' => $project,
                     'asset' => $asset,
-                    'users' => $users
+                    'users' => $users,
+                    'subdomain'=>$subdomain
                 ]);
             }
         }
@@ -544,8 +548,6 @@ class IsoSec2_2 extends Controller
 
     public function iso_sec_2_2_form(Request $req, $sub_req, $title, $proj_id, $user_id,$asset_id)
     {
-
-
         $req->validate([
             'comp_status' => 'required'
         ]);
@@ -626,12 +628,16 @@ class IsoSec2_2 extends Controller
                                         $fetch_sub_req = $innerArray['3']; 
                                         $fetch_title=$innerArray['0'];
 
+                                        $words = explode(" ", $innerArray[2]);
+                                        $subdomain = $words[0];
+
                                         DB::table('iso_sec_2_2')->updateOrInsert(
                                             [
                                                 'project_id' => $proj_id, 
                                                 'asset_id' => $asset_id,
                                                 'title_num' => $fetch_title,
                                                 'sub_req' => $fetch_sub_req,
+                                                'subdomain'=>$subdomain
                                             ], 
                                             $data
                                         );
@@ -655,6 +661,8 @@ class IsoSec2_2 extends Controller
                                         // Access specific value from the inner array
                                         $fetch_sub_req = $innerArray2['3']; 
                                         $fetch_title=$innerArray2['0'];
+                                        $words = explode(" ", $innerArray2[2]);
+                                        $subdomain = $words[0];
 
                                         DB::table('iso_sec_2_2')->updateOrInsert(
                                             [
@@ -662,6 +670,7 @@ class IsoSec2_2 extends Controller
                                                 'asset_id' => $asset_id,
                                                 'title_num' => $fetch_title,
                                                 'sub_req' => $fetch_sub_req,
+                                                'subdomain'=>$subdomain
                                             ], 
                                             $data
                                         );
@@ -681,6 +690,7 @@ class IsoSec2_2 extends Controller
                                             'asset_id' => $asset_id,
                                             'title_num' => $title,
                                             'sub_req' => $sub_req,
+                                            'subdomain'=>$req->subdomain
                                         ], 
                                         $data
                                     );
@@ -739,13 +749,16 @@ class IsoSec2_2 extends Controller
                                     // Access specific value from the inner array
                                     $fetch_sub_req = $innerArray['3']; 
                                     $fetch_title = $innerArray['0']; 
+                                    $words = explode(" ", $innerArray[2]);
+                                    $subdomain = $words[0];
                     
                                     DB::table('iso_sec_2_2')->updateOrInsert(
                                         [
                                             'project_id' => $proj_id, 
                                             'asset_id' => $ass->assessment_id, 
                                             'title_num' => $fetch_title,
-                                            'sub_req'=>$fetch_sub_req
+                                            'sub_req'=>$fetch_sub_req,
+                                            'subdomain'=>$subdomain
                                         ], 
                                         $data
                                     );
@@ -769,13 +782,16 @@ class IsoSec2_2 extends Controller
                                     // Access specific value from the inner array
                                     $fetch_title=$innerArray['0'];
                                     $fetch_sub_req = $innerArray['3']; 
+                                    $words = explode(" ", $innerArray[2]);
+                                    $subdomain = $words[0];
 
                                     DB::table('iso_sec_2_2')->updateOrInsert(
                                         [
                                             'project_id' => $proj_id, 
                                             'asset_id' => $ass->assessment_id, 
                                             'sub_req' => $fetch_sub_req,
-                                            'title_num'=>$fetch_title
+                                            'title_num'=>$fetch_title,
+                                            'subdomain'=>$subdomain
 
                                         ], 
                                         $data
@@ -795,6 +811,7 @@ class IsoSec2_2 extends Controller
                                             'asset_id' => $ass->assessment_id, 
                                             'title_num' => $title,
                                             'sub_req' => $sub_req,
+                                            'subdomain'=>$req->subdomain
 
                                         ], 
                                         $data

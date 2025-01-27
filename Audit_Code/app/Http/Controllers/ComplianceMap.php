@@ -270,10 +270,7 @@ class ComplianceMap extends Controller
                         }
 
                           //UAE IA
-                if ($project->project_type == 8) {
-
-
-                    
+                if ($project->project_type == 8) { 
                     return view('compliance_map.uae_ia_all_services_all_controls', [
                         'project' => $project,
                         'uniqueServicesCount' => $uniqueServicesCount,
@@ -285,6 +282,18 @@ class ComplianceMap extends Controller
     
                     }
 
+                    //ISO
+                    if ($project->project_type == 4) { 
+                        return view('compliance_map.iso_all_services_all_controls', [
+                            'project' => $project,
+                            'uniqueServicesCount' => $uniqueServicesCount,
+                            'uniqueGroupsCount'=>$uniqueGroupsCount,
+                            'uniqueSubGroupsCount'=>$uniqueSubGroupsCount,
+                            'uniqueComponentsCount'=>$uniqueComponentsCount,
+                            'formattedResults' => $formattedResults,
+                        ]);
+        
+                        }
                 
 
             
@@ -508,6 +517,18 @@ foreach ($formattedResults as $domain => $statuses) {
             
         } 
 
+        if ($project->project_type == 4) {
+            $domainNames = [
+                4 => 'Context of the Organization',
+                5 => 'Leadership',
+                6 => 'Planning',
+                7 => 'Support',
+                8 => 'Operation',
+                9 => 'Performance Evaluation',
+                10 => 'Improvement'
+            ];
+        } 
+
 
 
         $projectName = $project->project_name;
@@ -704,6 +725,19 @@ foreach ($formattedResults as $domain => $statuses) {
                 ];
             }
 
+            
+        if ($project->project_type == 4) {
+            $domainNames = [
+                4 => 'Context of the Organization',
+                5 => 'Leadership',
+                6 => 'Planning',
+                7 => 'Support',
+                8 => 'Operation',
+                9 => 'Performance Evaluation',
+                10 => 'Improvement'
+            ];
+        } 
+
 
             return view('compliance_map.services', [
                 'project' => $project,
@@ -891,6 +925,19 @@ foreach ($formattedResults as $domain => $statuses) {
                 4 => 'ACQUISITION & IMPLEMENTATION OF IT SYSTEMS',
                 5 => 'BUSINESS CONTINUITY AND DISASTER RECOVERY',
                 6 => 'IT AUDIT'
+            ];
+        } 
+
+        
+        if ($project->project_type == 4) {
+            $domainNames = [
+                4 => 'Context of the Organization',
+                5 => 'Leadership',
+                6 => 'Planning',
+                7 => 'Support',
+                8 => 'Operation',
+                9 => 'Performance Evaluation',
+                10 => 'Improvement'
             ];
         } 
 
@@ -1095,6 +1142,19 @@ foreach ($formattedResults as $domain => $statuses) {
                 4 => 'ACQUISITION & IMPLEMENTATION OF IT SYSTEMS',
                 5 => 'BUSINESS CONTINUITY AND DISASTER RECOVERY',
                 6 => 'IT AUDIT'
+            ];
+        } 
+
+        
+        if ($project->project_type == 4) {
+            $domainNames = [
+                4 => 'Context of the Organization',
+                5 => 'Leadership',
+                6 => 'Planning',
+                7 => 'Support',
+                8 => 'Operation',
+                9 => 'Performance Evaluation',
+                10 => 'Improvement'
             ];
         } 
 
@@ -1315,6 +1375,19 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
         } 
 
+        
+        if ($project->project_type == 4) {
+            $domainNames = [
+                4 => 'Context of the Organization',
+                5 => 'Leadership',
+                6 => 'Planning',
+                7 => 'Support',
+                8 => 'Operation',
+                9 => 'Performance Evaluation',
+                10 => 'Improvement'
+            ];
+        } 
+
 
 
         return view('compliance_map.components', [
@@ -1499,6 +1572,7 @@ foreach ($formattedResults as $domain => $statuses) {
                 ->toArray(); // Convert to array
 
 
+                dd($UniqueSubDomains);
       
 
             $domainNames = [
@@ -1773,6 +1847,51 @@ foreach ($formattedResults as $domain => $statuses) {
                 'T9.3' => 'TESTING, MAINTAINING, AND REASSESSING PLANS'
             ];
         }
+
+        
+        if ($project->project_type == 4) {
+
+            $filepath = public_path('ISO_SEC_2_2.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+
+
+        
+            // $UniqueSubDomains = collect($filteredData)
+            // ->pluck(2) // Pluck the 2nd index from each sub-array
+            // ->unique() // Get unique values
+            // ->values() // Reindex the collection
+            // ->all(); // Convert to an array if needed
+            // dd($UniqueSubDomains);
+
+            $UniqueSubDomains = collect($filteredData)
+            ->mapWithKeys(function ($item) {
+                $words = explode(" ", $item[2]);
+                $subdomain = array_shift($words); // Get the first word
+                $value = implode(" ", $words); // Join the remaining words
+                return [$subdomain => $value];
+            })
+            ->unique(function ($value, $key) {
+                // Ensure uniqueness based on the key
+                return $key;
+            })
+            ->all(); // Convert to array
+        
+        
+            $domainNames = [
+                4 => 'Context of the Organization',
+                5 => 'Leadership',
+                6 => 'Planning',
+                7 => 'Support',
+                8 => 'Operation',
+                9 => 'Performance Evaluation',
+                10 => 'Improvement'
+            ];
+        } 
 
 
         return view('compliance_map.subdomains_map', [
@@ -2162,6 +2281,36 @@ foreach ($formattedResults as $domain => $statuses) {
                 ->unique() // Ensure unique keys (1st index)
                 ->toArray(); // Convert to array
         
+        }
+
+        if($project->project_type==4){
+
+            $filepath = public_path('ISO_SEC_2_2.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+    
+            $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+                $my_subdomain = explode(' ', $row[2]);
+
+                return strval($my_subdomain[0]) === $subdomain;
+            })->values()->all();
+    
+
+    
+            $MainDomainNum=$filteredData[0][0];
+            $MainDomainTitle=$filteredData[0][1] ;//title
+        
+            $subdomainTitle=$filteredData[0][2];
+    
+    
+            $UniqueSubReqs = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [$row[3] => $row[4]]; 
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+
+
         }
         return view('compliance_map.subreq_map', [
             'project' => $project,

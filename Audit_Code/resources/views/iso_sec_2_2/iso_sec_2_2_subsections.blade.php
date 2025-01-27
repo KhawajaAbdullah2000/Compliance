@@ -138,11 +138,11 @@
 
 
         {{-- ISO Non Mandatory Requirements --}}
-        <div class="row mt-2 mb-2">
+        {{-- <div class="row mt-2 mb-2">
             <div class="col-12">
          <a href="/iso_section2_2/{{11}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">ISO 27001:2022 Annex A</p></a>
         </div>
-        </div>
+        </div> --}}
 
 
 
