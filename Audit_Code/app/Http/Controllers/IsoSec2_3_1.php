@@ -139,6 +139,8 @@ class IsoSec2_3_1 extends Controller
                         ->where('asset_id', $asset_id)->where('control_num', 'like', '5%')
                         ->get();
 
+    
+
                     $a6_results = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)
                         ->where('asset_id', $asset_id)->where('control_num', 'like', '6%')
                         ->get();

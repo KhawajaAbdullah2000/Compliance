@@ -37,17 +37,6 @@
 
     <h3 class="fw-bold">Severity of Adverse Impact for all services in the project</h3>
 
-    {{-- <table class="table table-bordered mt-4">
-        <thead class="table-dark">
-            <tr>
-                <th></th>
-            </tr>
-
-        </thead>
-
-
-    </table> --}}
-
     <table class="table table-bordered text-center mt-4">
         <thead>
             <tr>
@@ -127,6 +116,19 @@
             </tr>
         </tbody>
     </table>
+
+    <div class="d-flex justify-content-center" style="margin-top: 30px;">
+        <div class="row">
+            <div class="">
+                <a href="/heatmap_all_services_all_risks/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-lg">
+                    View Risk Heat Map for all Services and all types of risk
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
 </div>
 
 
