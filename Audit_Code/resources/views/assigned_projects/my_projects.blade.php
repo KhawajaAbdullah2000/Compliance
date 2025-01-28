@@ -105,7 +105,7 @@
 
                                {{-- Risk Heatmap --}}
                                <td style='text-align:center'>
-                                <a href="/" 
+                                <a href="/severity_impact/{{$pro->project_code}}/{{auth()->user()->id}}" 
                                    data-toggle="tooltip" title="View Risk Heatmap">
                                    <i class="fas fa-chart-area text-success" style="font-size: 1.8em;"></i>
 
