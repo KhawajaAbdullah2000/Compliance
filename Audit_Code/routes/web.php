@@ -439,6 +439,11 @@ Route::get('/heatmap_services_groups_subgroups/{service}/{group?}/{subgroup?}/{p
 
 Route::get('heatmap_single_risk/{service}/{component}/{proj_id}',[RiskHeatmap::class,'heatmap_single_risk'])->name('heatmap_single_risk');
 
+Route::get('risk_register_single_type/{service}/{component}/{proj_id}',[RiskHeatmap::class,'risk_register_single_type'])->name('risk_register_single_type');
+
+
+
+
 }
 
 

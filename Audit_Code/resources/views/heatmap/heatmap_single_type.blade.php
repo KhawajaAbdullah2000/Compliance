@@ -172,9 +172,13 @@
                         </tr>
                     </tfoot>
                 </table>
-                {{-- <div class="text-center">
-                    <a href="/heatmap_select_assets/{{$project->project_id}}?risk_type=risk_level" class="btn btn-warning btn-md">View Risk Heatmap by Service</a>
-                </div> --}}
+                <div class="text-center">
+                    <a href="{{ route('risk_register_single_type', [
+                        'service' => $service,
+                        'component' => '_all',
+                        'proj_id' => $project->project_id
+                    ]) }}?group={{ $group }}&subgroup={{ $subgroup }}" class="btn btn-success btn-md">View or Download Risk Register</a>
+                </div>
                
         
         </div>

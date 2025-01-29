@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Http\Request;
 use Session;
@@ -626,5 +627,65 @@ class RiskHeatmap extends Controller
             'risk_type' => $value
 
         ]);
+    }
+    public function risk_register_single_type($service, $component, $proj_id, Request $req){
+        $group = $req->query('group');
+        $subgroup = $req->query('subgroup');
+        $risk_type = Session('risk_type');
+
+        $assetIds = DB::table('iso_sec_2_1')
+            ->where('project_id', $proj_id)
+            ->when($service != '_all', function ($query) use ($service) {
+                return $query->where('s_name', $service);
+            })
+            ->when($group, function ($query, $group) {
+                return $query->when($group != '_all', function ($query) use ($group) {
+                    return $query->where('g_name', $group);
+                });
+            })
+            ->when($subgroup, function ($query, $subgroup) {
+                return $query->when($subgroup != '_all', function ($query) use ($subgroup) {
+                    return $query->where('name', $subgroup);
+                });
+            })
+            ->when($component != '_all', function ($query) use ($component) {
+                return $query->where('c_name', $component);
+            })
+            ->pluck('assessment_id')->toArray();
+
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
+
+            $results=DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)
+            ->where('iso_sec_2_3_1.project_id', $proj_id)
+            ->whereIn('iso_sec_2_3_1.asset_id', $assetIds)
+            ->get();
+
+            $files = [
+                public_path('ISO_SOA_A5.xlsx'),
+                public_path('ISO_SOA_A6.xlsx'),
+                public_path('ISO_SOA_A7.xlsx'),
+                public_path('ISO_SOA_A8.xlsx'),
+            ];
+            
+            $all_data = [];
+            
+            foreach ($files as $file) {
+                $data = Excel::toArray([], $file); // Get data with header
+                $rows = array_slice($data[0], 1); // Remove header row
+                $all_data = array_merge($all_data, $rows);
+            }
+
+   
+            return view('heatmap.risk_register_single_type',[
+                'project'=>$project,
+                'results'=>$results,
+                'risk_type'=>$risk_type,
+                'all_data'=>$all_data,
+                'service'=>$service,
+                'group'=>$group,
+                'subgroup'=>$subgroup,
+                'component'=>$component
+            ]);
     }
 }

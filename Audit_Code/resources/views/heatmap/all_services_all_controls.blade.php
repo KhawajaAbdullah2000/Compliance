@@ -175,7 +175,7 @@
         <div class="col-md-4">
             <table class="table table-responsive table-bordered">
                 <tr>
-                    <td colspan="4" class="table-primary text-center fw-bold">Risk Map of Data availability</td>
+                    <td colspan="4" class="table-primary text-center fw-bold">Risk Map of Data Availability</td>
                 </tr>
                 <tr>
                     <th>Adverse Business Impact</th>
