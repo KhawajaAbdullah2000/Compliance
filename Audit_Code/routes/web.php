@@ -422,7 +422,6 @@ Route::get('action_plan_download/{proj_id}/{service}/{component}',[ActionPlanCon
 
 
 //RIsk Heatmap
-route::get('severity_impact/{proj_id}/{user_id}',[RiskHeatmap::class,'severity_impact'])->name('severity_impact');
 route::get('heatmap_all_services_all_risks/{proj_id}/{user_id}',[RiskHeatmap::class,'heatmap_all_services_all_risks'])->name('heatmap_all_services_all_risks');
 
 }
