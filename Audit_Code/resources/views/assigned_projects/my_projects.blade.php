@@ -25,7 +25,7 @@
                         <th style='text-align:center'>View Compliance Map</th>
                         <th style='text-align:center'>View Action Plan</th>
                         <th style='text-align:center'>View Risk Heatmap</th>
-                        <th style='text-align:center'>View Statement of Applicability</th>
+                     
                         <th style='text-align:center'>Switch Storage Node</th>
 
                         {{-- <th style='text-align:center'>Risk & Compliance Heatmap</th>  --}}
@@ -113,13 +113,13 @@
                             </td>
 
                                {{-- Statement of Applicability --}}
-                               <td style='text-align:center'>
+                               {{-- <td style='text-align:center'>
                                 <a href="/" 
                                    data-toggle="tooltip" title="View Statement of Applicability">
                                    <i class="fas fa-caret-square-up" style="font-size: 1.7em;"></i>
 
                                 </a>
-                            </td>
+                            </td> --}}
 
                                {{-- Storage Node --}}
                                <td style='text-align:center'>

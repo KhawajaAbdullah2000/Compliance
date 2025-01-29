@@ -106,6 +106,10 @@
                     </tr>
                 </tfoot>
             </table>
+            <div class="text-center">
+                <a href="/heatmap_select_assets/{{$project->project_id}}?risk_type=risk_level" class="btn btn-warning btn-md">View Risk Heatmap by Service</a>
+            </div>
+           
         </div>
 
 
@@ -162,6 +166,10 @@
                     </tr>
                 </tfoot>
             </table>
+            <div class="text-center">
+                <a href="/heatmap_select_assets/{{$project->project_id}}?risk_type=risk_integrity" class="btn btn-warning btn-md">View Risk Heatmap by Service</a>
+            </div>
+           
         </div>
 
         <div class="col-md-4">
@@ -217,6 +225,10 @@
                     </tr>
                 </tfoot>
             </table>
+            <div class="text-center">
+                <a href="/heatmap_select_assets/{{$project->project_id}}?risk_type=risk_availability" class="btn btn-warning btn-md">View Risk Heatmap by Service</a>
+            </div>
+           
         </div>
     </div>
 </div>

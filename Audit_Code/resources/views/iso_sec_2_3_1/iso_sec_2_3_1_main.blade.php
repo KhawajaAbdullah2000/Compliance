@@ -62,7 +62,7 @@ $permissions=json_decode($project_permissions);
         <td>{{$assetData->s_name}}</td>
         <td class="bg-secondary text-white">Asset Group</td>
         <td>{{$assetData->g_name}}</td>
-        <td class="bg-secondary text-white">Asset</td>
+        <td class="bg-secondary text-white">Asset Subgroup</td>
         <td>{{$assetData->name}}</td>
         <td class="bg-secondary text-white">Asset Component</td>
         <td>{{$assetData->c_name}}</td>
@@ -208,9 +208,9 @@ $permissions=json_decode($project_permissions);
                 <th>Control Compliance%</th>
                 <th>Vulnerability%</th>
                 <th>Threat%</th>
-                <th>Risk Confidentiality</th>
-                <th>Risk Integrity</th>
-                <th>Risk Availability</th>
+                <th>Risk to Data Confidentiality</th>
+                <th>Risk to Data Integrity</th>
+                <th>Risk to Data Availability</th>
                <th>Edit</th>
 
               </tr>
