@@ -8,6 +8,8 @@
 @include('iso_sec_nav')
 @php
 $permissions=json_decode($project_permissions);
+$isEditable = in_array('Data Inputter', $permissions);
+$isReadOnly = in_array('Data Viewer', $permissions) || in_array('Data Approver', $permissions);
 @endphp
 
 <div class="container">
@@ -95,264 +97,129 @@ $permissions=json_decode($project_permissions);
         <p>{{$filteredData[0][5]}} </p>
 
          <!-- Form Section -->
-         @if(in_array('Data Inputter', $permissions))
-         @isset($result)
+        
          <div class="container d-flex justify-content-center">
-         <div class="card shadow-lg border-0 mt-5 mb-5" style="max-width: 1000px; width: 100%;">
-             <div class="card-header bg-success text-white text-center">
-                 <h3>Edit Status and/or assign action</h3>
-             </div>
-             <div class="card-body">
-                 <form action="/sbp_etgrmf_sec_2_2_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" enctype="multipart/form-data">
-                     @csrf
-                   
-                     <input type="hidden" name="subdomain" value="{{$subdomain}}">
-                     <!-- Compliance Status -->
-                     <div class="mb-4">
-                         <label for="comp_status" class="form-label fw-semibold">Compliance Status</label>
-                         <select name="comp_status" class="form-select rounded-pill">
-                             <option value="yes" {{ old('comp_status', $result->comp_status) == 'yes' ? 'selected' : '' }}>In place</option>
-                             <option value="no" {{ old('comp_status', $result->comp_status) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                             <option value="not_applicable" {{ old('comp_status', $result->comp_status) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                             <option value="not_tested" {{ old('comp_status', $result->comp_status) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-
-                             <option value="partial" {{ old('comp_status', $result->comp_status) == 'partial' ? 'selected' : '' }}>Partial</option>
-
+            <div class="card shadow-lg border-0 mt-5 mb-5" style="max-width: 1000px; width: 100%;">
+                <div class="card-header bg-success text-white text-center">
+                    <h3>{{ $isEditable ? 'Edit Status and/or Assign Action' : 'View Status and Action Plan' }}</h3>
+                </div>
+                <div class="card-body">
+                    <form action="{{ $isEditable ? "/sbp_etgrmf_sec_2_2_form/$sub_req/$title/$project_id/".auth()->user()->id."/$asset->assessment_id" : '#' }}" method="post" enctype="multipart/form-data">
+                        @csrf
+        
+                        <input type="hidden" name="subdomain" value="{{ $subdomain }}">
+        
+                        <!-- Compliance Status -->
+                        <div class="mb-4">
+                            <label for="comp_status" class="form-label fw-semibold">Compliance Status</label>
+                            <select name="comp_status" class="form-select rounded-pill" {{ $isReadOnly ? 'disabled' : '' }}>
+                                <option value="">Select --</option>
+                                <option value="yes" {{ old('comp_status', $result->comp_status ?? '') == 'yes' ? 'selected' : '' }}>In Place</option>
+                                <option value="no" {{ old('comp_status', $result->comp_status ?? '') == 'no' ? 'selected' : '' }}>Not in Place</option>
+                                <option value="not_applicable" {{ old('comp_status', $result->comp_status ?? '') == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                                <option value="not_tested" {{ old('comp_status', $result->comp_status ?? '') == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                                <option value="partial" {{ old('comp_status', $result->comp_status ?? '') == 'partial' ? 'selected' : '' }}>Partial</option>
                             </select>
-                         @if($errors->has('comp_status'))
-                         <div class="text-danger small mt-2">{{ $errors->first('comp_status') }}</div>
-                         @endif
-                     </div>
- 
-                     <!-- Comments -->
-                     <div class="mb-4">
-                         <label for="comments" class="form-label fw-semibold">Comments (Optional)</label>
-                         <textarea name="comments" id="comments" rows="4" class="form-control rounded">{{ old('comments', $result->comments) }}</textarea>
-                         @if($errors->has('comments'))
-                         <div class="text-danger small mt-2">{{ $errors->first('comments') }}</div>
-                         @endif
-                     </div>
- 
-                     <!-- Attachment -->
-                     <div class="mb-4">
-                         <label for="attachment" class="form-label fw-semibold">Attachment (Optional)</label>
-                         <input type="file" name="attachment" class="form-control">
-                         @if(isset($result->attachment))
-                         <p class="mt-3">Current Attachment: 
-                             <a href="{{ asset('sbp_etgrmf_sec_2_2/'.$result->attachment) }}" download>{{ $result->attachment }}</a>
-                         </p>
-                         @endif
-                     </div>
- 
-                     <h3 class="fw-bold"> Action Plan</h3>
- 
-                     <div class="form-group mb-4">
-                         <label for="">  Action</label>
-                         <textarea name="treatment_action" cols="70" rows="5" class="form-control">{{old('treatment_action',$result->treatment_action)}}</textarea>
-         
-                             @if($errors->has('treatment_action'))
-                             <div class="text-danger">{{ $errors->first('treatment_action') }}</div>
-                         @endif
-                       </div>
-         
-         
-                       <div class="form-group mb-4">
-                         <label for="">  Target Date</label>
-                         <input type="date" name="treatment_target_date" value="{{old('treatment_target_date',$result->treatment_target_date)}}">
-                             @if($errors->has('treatment_target_date'))
-                             <div class="text-danger">{{ $errors->first('treatment_target_date') }}</div>
-                         @endif
-                       </div>
-         
+                            @error('comp_status')
+                            <div class="text-danger small mt-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+        
+                        <!-- Comments -->
+                        <div class="mb-4">
+                            <label for="comments" class="form-label fw-semibold">Comments (Optional)</label>
+                            <textarea name="comments" id="comments" rows="4" class="form-control rounded" {{ $isReadOnly ? 'readonly' : '' }}>{{ old('comments', $result->comments ?? '') }}</textarea>
+                            @error('comments')
+                            <div class="text-danger small mt-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+        
+                        <!-- Attachment -->
+                        <div class="mb-4">
+                            <label for="attachment" class="form-label fw-semibold">Attachment (Optional)</label>
+                            @if($isEditable)
+                                <input type="file" name="attachment" class="form-control">
+                            @endif
+                            @if(isset($result->attachment))
+                                <p class="mt-3">Current Attachment: 
+                                    <a href="{{ asset('sbp_etgrmf_sec_2_2/'.$result->attachment) }}" download>{{ $result->attachment }}</a>
+                                </p>
+                            @endif
+                        </div>
+        
+                        <h3 class="fw-bold">Action Plan</h3>
+        
+                        <!-- Treatment Action -->
                         <div class="form-group mb-4">
-                         <label for=""> Completion Date</label>
-                         <input type="date" name="treatment_comp_date" value="{{old('treatment_comp_date',$result->treatment_comp_date)}}">
-                             @if($errors->has('treatment_comp_date'))
-                             <div class="text-danger">{{ $errors->first('treatment_comp_date') }}</div>
-                         @endif
-                       </div>
-         
-                       <div class="form-group mb-4">
-                         <label for=""> Actual Acceptane date</label>
-                         <input type="date" name="acceptance_actual_date" value="{{old('acceptance_actual_date',$result->acceptance_actual_date)}}">
-                             @if($errors->has('acceptance_actual_date'))
-                             <div class="text-danger">{{ $errors->first('acceptance_actual_date') }}</div>
-                         @endif
-                       </div>
-         
-         
-         
-         
+                            <label for="treatment_action">Action</label>
+                            <textarea name="treatment_action" cols="70" rows="5" class="form-control" {{ $isReadOnly ? 'readonly' : '' }}>{{ old('treatment_action', $result->treatment_action ?? '') }}</textarea>
+                            @error('treatment_action')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+        
+                        <!-- Target Date -->
                         <div class="form-group mb-4">
-                         <label for=""> Responsbility of:</label>
-                         <select class="boxstyling form-select" name="responsibility_for_treatment">
-                             <option value="">Select User</option>
-                              @foreach ($users as $user)
-              <option value="{{$user->id}}" {{ old('responsibility_for_treatment',$result->responsibility_for_treatment) == $user->id ? 'selected' : '' }}>
-                      {{$user->first_name}} {{$user->last_name}}</option>
-                                    @endforeach
-                             </select>
-                             @if($errors->has('responsibility_for_treatment'))
-                             <div class="text-danger">{{ $errors->first('responsibility_for_treatment') }}</div>
-                         @endif
-                       </div>
-         
-         
-         
- 
-                       <div class="row">
-                        <div class="col-md-4">
-                     <button type="submit" class="btn btn-success px-5 rounded-pill" name="action" value="1">Apply only to this control and
-                        save changes
-                        </button>
-                    </div>
+                            <label for="treatment_target_date">Target Date</label>
+                            <input type="date" name="treatment_target_date" class="form-control" value="{{ old('treatment_target_date', $result->treatment_target_date ?? '') }}" {{ $isReadOnly ? 'disabled' : '' }}>
+                            @error('treatment_target_date')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+        
+                        <!-- Completion Date -->
+                        <div class="form-group mb-4">
+                            <label for="treatment_comp_date">Completion Date</label>
+                            <input type="date" name="treatment_comp_date" class="form-control" value="{{ old('treatment_comp_date', $result->treatment_comp_date ?? '') }}" {{ $isReadOnly ? 'disabled' : '' }}>
+                            @error('treatment_comp_date')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+        
+                        <!-- Actual Acceptance Date -->
+                        <div class="form-group mb-4">
+                            <label for="acceptance_actual_date">Actual Acceptance Date</label>
+                            <input type="date" name="acceptance_actual_date" class="form-control" value="{{ old('acceptance_actual_date', $result->acceptance_actual_date ?? '') }}" {{ $isReadOnly ? 'disabled' : '' }}>
+                            @error('acceptance_actual_date')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+        
+                        <!-- Responsibility Assignment -->
+                        <div class="form-group mb-4">
+                            <label for="responsibility_for_treatment">Responsibility of:</label>
+                            <select class="boxstyling form-select" name="responsibility_for_treatment" {{ $isReadOnly ? 'disabled' : '' }}>
+                                <option value="">Select User</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}" {{ old('responsibility_for_treatment', $result->responsibility_for_treatment ?? '') == $user->id ? 'selected' : '' }}>
+                                        {{ $user->first_name }} {{ $user->last_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('responsibility_for_treatment')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+        
+                        @if($isEditable)
+                        <!-- Submit Buttons -->
+                        <div class="row">
                             <div class="col-md-4">
-                            
-                        <button type="submit" class="btn btn-success  px-5 rounded-pill" name="action" value="2">Apply to all controls in this
-                            domain and save changes
-                            </button>
-                        </div>
-
-                        <div class="col-md-4">
-                            
-                        <button type="submit" class="btn btn-success  px-5 rounded-pill" name="action" value="3">Apply to all controls in all
-                            domains and save changes
-                            </button>
-                        </div>
-                        </div>
-                 </form>
-             </div>
-         </div>
-     </div>
-         @else
-         <!-- New Compliance Status Form -->
-         <div class="container d-flex justify-content-center">
-             <div class="card shadow-lg border-0 mt-5 mb-5" style="max-width: 1000px; width: 100%;">
-                 <div class="card-header bg-success text-white text-center">
-                     <h3>Edit Status and/or assign action</h3>
-                 </div>
-                 <div class="card-body">
-                     <form action="/sbp_etgrmf_sec_2_2_form/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" enctype="multipart/form-data">
-                         @csrf
-
-                         <input type="hidden" name="subdomain" value="{{$subdomain}}">
-         
-                         <!-- Compliance Status -->
-                         <div class="mb-4">
-                             <label for="comp_status" class="form-label fw-semibold">Compliance Status</label>
-                             <select name="comp_status" class="form-select rounded-pill">
-                                 <option value="">Select --</option>
-                                 <option value="yes" {{ old('comp_status') == 'yes' ? 'selected' : '' }}>In Place</option>
-                                 <option value="no" {{ old('comp_status') == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                 <option value="not_applicable" {{ old('comp_status') == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                 <option value="not_tested" {{ old('comp_status') == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                 <option value="partial" {{ old('comp_status') == 'partial' ? 'selected' : '' }}>Partial</option>
-                                </select>
-                             @if($errors->has('comp_status'))
-                             <div class="text-danger small mt-2">{{ $errors->first('comp_status') }}</div>
-                             @endif
-                         </div>
-         
-                         <!-- Comments -->
-                         <div class="mb-4">
-                             <label for="comments" class="form-label fw-semibold">Comments (Optional)</label>
-                             <textarea name="comments" id="comments" rows="4" class="form-control rounded"></textarea>
-                             @if($errors->has('comments'))
-                             <div class="text-danger small mt-2">{{ $errors->first('comments') }}</div>
-                             @endif
-                         </div>
-         
-                         <!-- Attachment -->
-                         <div class="mb-4">
-                             <label for="attachment" class="form-label fw-semibold">Attachment (Optional)</label>
-                             <input type="file" name="attachment" class="form-control">
-                         </div>
- 
-                         <h3 class="fw-bold">Assign Action</h3>
- 
-                         <div class="form-group mb-4">
-                             <label for=""> Treatment Action</label>
-                             <textarea name="treatment_action" cols="70" rows="5" class="form-control">{{old('treatment_action')}}</textarea>
-             
-                                 @if($errors->has('treatment_action'))
-                                 <div class="text-danger">{{ $errors->first('treatment_action') }}</div>
-                             @endif
-                           </div>
-             
-             
-                           <div class="form-group mb-4">
-                             <label for=""> Treatment Target Date</label>
-                             <input type="date" name="treatment_target_date" value="{{old('treatment_target_date')}}">
-                                 @if($errors->has('treatment_target_date'))
-                                 <div class="text-danger">{{ $errors->first('treatment_target_date') }}</div>
-                             @endif
-                           </div>
-             
-                            <div class="form-group mb-4">
-                             <label for=""> Treatment Completion Date</label>
-                             <input type="date" name="treatment_comp_date" value="{{old('treatment_comp_date')}}">
-                                 @if($errors->has('treatment_comp_date'))
-                                 <div class="text-danger">{{ $errors->first('treatment_comp_date') }}</div>
-                             @endif
-                           </div>
-             
-                           <div class="form-group mb-4">
-                             <label for=""> Actual Acceptane date</label>
-                             <input type="date" name="acceptance_actual_date" value="{{old('acceptance_actual_date')}}">
-                                 @if($errors->has('acceptance_actual_date'))
-                                 <div class="text-danger">{{ $errors->first('acceptance_actual_date') }}</div>
-                             @endif
-                           </div>
-             
-             
-             
-             
-                            <div class="form-group mb-4">
-                             <label for=""> Responsbility for Treatment</label>
-                             <select class="boxstyling form-select" name="responsibility_for_treatment">
-                                 <option value="">Select User</option>
-                                  @foreach ($users as $user)
-                  <option value="{{$user->id}}" {{ old('responsibility_for_treatment') == $user->id ? 'selected' : '' }}>
-                          {{$user->first_name}} {{$user->last_name}}</option>
-                                        @endforeach
-                                 </select>
-                                 @if($errors->has('responsibility_for_treatment'))
-                                 <div class="text-danger">{{ $errors->first('responsibility_for_treatment') }}</div>
-                             @endif
-                           </div>
-             
-         
-                         <!-- Submit Button -->
-                         <div class="row">
+                                <button type="submit" class="btn btn-success px-5 rounded-pill" name="action" value="1">Apply only to this control and save changes</button>
+                            </div>
                             <div class="col-md-4">
-                         <button type="submit" class="btn btn-success px-5 rounded-pill" name="action" value="1">Apply only to this control and
-                            save changes
-                            </button>
-                        </div>
-                                <div class="col-md-4">
-                                
-                            <button type="submit" class="btn btn-success  px-5 rounded-pill" name="action" value="2">Apply to all controls in this
-                                domain and save changes
-                                </button>
+                                <button type="submit" class="btn btn-success px-5 rounded-pill" name="action" value="2">Apply to all controls in this domain and save changes</button>
                             </div>
-
                             <div class="col-md-4">
-                                
-                            <button type="submit" class="btn btn-success  px-5 rounded-pill" name="action" value="3">Apply to all controls in all
-                                domains and save changes
-                                </button>
+                                <button type="submit" class="btn btn-success px-5 rounded-pill" name="action" value="3">Apply to all controls in all domains and save changes</button>
                             </div>
-                            </div>
-
-                         
-                         </div>
-                     </form>
-                 </div>
-             </div>
-         </div>
-         
-         @endisset
-     @endif
+                        </div>
+                        @endif
+        
+                    </form>
+                </div>
+            </div>
+        </div>
 </div>
 
 
