@@ -2339,6 +2339,7 @@ $originalIsoSec2_2Rows = DB::table('iso_sec_2_2')->where('project_id', $original
 
             // Remove the `assessment_id` since it is auto-incremented
             unset($newRowData['assessment_id']);
+            unset($newRowData['risk_score']);
 
             // Replace the `project_id` with the new project ID
             $newRowData['project_id'] = $newProjectId;

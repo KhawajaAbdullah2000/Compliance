@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('org_id',true);
             $table->string('name', 100);
             $table->string('type', 100);
-            $table->string('sub_org', 100);
+            $table->string('sub_org', 100)->nullable();
             $table->string('country', 100);
             $table->string('state', 100);
             $table->string('city', 100);

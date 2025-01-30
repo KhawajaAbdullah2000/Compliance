@@ -119,6 +119,10 @@
                                @endif
                             @endforeach
 
+                            <small class="text-warning fw-bold d-block mt-2">
+                              <i class="fas fa-exclamation-triangle"></i> If the checkbox is not selected, the user will not have the rights to create any project but project-level rights can be assigned to the user if the user is added to any project
+                          </small>
+
                           </div>
 
 

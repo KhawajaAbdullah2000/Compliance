@@ -13,7 +13,7 @@ $permissions = json_decode($project_permissions);
     <!-- Project Details -->
     <div class="row mt-5 mb-4">
         <div class="col-lg-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-secondary">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -73,7 +73,7 @@ $permissions = json_decode($project_permissions);
 
                         <!-- Asset Name -->
                         <div class="mb-4">
-                            <label for="name" class="form-label fw-semibold">Asset Name</label>
+                            <label for="name" class="form-label fw-semibold">Asset Subgroup</label>
                             <input type="text" name="name" id="name" class="form-control rounded-pill" value="{{old('name')}}">
                             @if($errors->has('name'))
                             <div class="text-danger small mt-2">{{ $errors->first('name') }}</div>

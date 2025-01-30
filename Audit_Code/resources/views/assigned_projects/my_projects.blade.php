@@ -8,7 +8,11 @@
 
 <div class="container py-5">
     <!-- Page Heading -->
-    <h1 class="text-center fw-bold mb-5">Risk and Compliance Projects of Organization: {{auth()->user()->organization->name}}</h1>
+    <h1 class="text-center fw-bold mb-5">Risk and Compliance Projects of Organization: {{auth()->user()->organization->name}}
+        @if(auth()->user()->organization->sub_org)
+        
+        - {{auth()->user()->organization->sub_org}}
+    @endif</h1>
 
     <!-- Projects Table -->
     <div class="card shadow-lg border-0">

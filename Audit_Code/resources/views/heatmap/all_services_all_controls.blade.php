@@ -52,9 +52,9 @@
     <h3 class="text-center fw-bold mt-2">Risk Heatmap fpr All Services-All Controls-All three types of risk</h3>
 
 
-    <div class="row mt-4">
-        <div class="col-md-4">
-            <table class="table table-responsive table-bordered">
+    <div class="row mt-4 d-flex align-items-stretch">
+        <div class="col-md-4 d-flex flex-column">
+            <table class="table table-responsive table-bordered flex-grow-1">
                 <tr>
                     <td colspan="4" class="table-primary text-center fw-bold">Risk Map of Data Confidentiality</td>
                 </tr>
@@ -113,8 +113,8 @@
         </div>
 
 
-        <div class="col-md-4">
-            <table class="table table-responsive table-bordered">
+        <div class="col-md-4 d-flex flex-column">
+            <table class="table table-responsive table-bordered flex-grow-1">
                 <tr>
                     <td colspan="4" class="table-primary text-center fw-bold">Risk Map of Data Integrity</td>
                 </tr>
@@ -172,8 +172,8 @@
            
         </div>
 
-        <div class="col-md-4">
-            <table class="table table-responsive table-bordered">
+        <div class="col-md-4 d-flex flex-column">
+            <table class="table table-responsive table-bordered flex-grow-1">
                 <tr>
                     <td colspan="4" class="table-primary text-center fw-bold">Risk Map of Data Availability</td>
                 </tr>

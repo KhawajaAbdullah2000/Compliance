@@ -93,6 +93,14 @@
         </div>
 
 
+        <div class="float-end mb-4">
+            <a href="{{ route('download_excel_risk_register_single_type', [
+                'service' => $service,
+                'component' => $component,
+                'proj_id' => $project->project_id
+            ]) }}?group={{ $group }}&subgroup={{ $subgroup }}" class="btn btn-success btn-md">Download Risk Register</a>
+
+        </div>
 
 
         <table class="table table-primary table-responsive">
@@ -157,6 +165,11 @@
       $('[data-bs-toggle="tooltip"]').tooltip()
     })
         </script>
+
+
+
+
+
 
 
 @endsection

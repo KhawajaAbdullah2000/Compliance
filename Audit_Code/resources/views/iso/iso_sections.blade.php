@@ -11,7 +11,7 @@
 
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-secondary">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -41,13 +41,13 @@
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg my_bg_color text-white w-100"><p class="fw-bold" style="text-align:left;">Upload or Enter Services and/or Assets in the scope of this project</p></a>
+         <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg my_bg_color text-white w-100"><p class="fw-bold" style="text-align:left;">Upload or enter or view services and/or assets in the scope of this project</p></a>
         </div>
         </div>
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/iso_section2_2_from_main/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg text-white w-100" style="background-color: blue"><p class="fw-bold" style="text-align:left;">Upload or enter evidence against the mandatory requirements</p></a>
+         <a href="/iso_section2_2_from_main/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg text-white w-100" style="background-color: blue"><p class="fw-bold" style="text-align:left;">Upload or enter or view evidence against the mandatory requirements</p></a>
         </div>
         </div>
 
@@ -55,13 +55,13 @@
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-secondary text-white w-100"><p class="fw-bold" style="text-align:left;">Undertake information security risk assessment on the Services and/or Assets</p></a>
+         <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-secondary text-white w-100"><p class="fw-bold" style="text-align:left;">Undertake or view information security risk assessment on the services and/or assets</p></a>
         </div>
         </div>
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/risk_treatment/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-secondary text-white w-100"><p class="fw-bold" style="text-align:left;">Undertake information security risk treatment on the Services and/or Assets</p></a>
+         <a href="/risk_treatment/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-secondary text-white w-100"><p class="fw-bold" style="text-align:left;">Undertake or view information security risk treatment on the Services and/or assets</p></a>
         </div>
         </div>
 
@@ -69,7 +69,7 @@
 
         <div class="row mt-2 mb-2">
             <div class="col-12">
-         <a href="/iso_section2_4_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg text-white w-100" style="background-color: rgb(244, 113, 134)"><p class="fw-bold" style="text-align:left;">Create or Edit Statement of Applicability</p></a>
+         <a href="/iso_section2_4_subsections/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg text-white w-100" style="background-color: rgb(244, 113, 134)"><p class="fw-bold" style="text-align:left;">Create or edit or view statement of applicability</p></a>
         </div>
         </div>
 

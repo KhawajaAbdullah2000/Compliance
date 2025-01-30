@@ -35,7 +35,7 @@ class OrganizationController extends Controller
  
         $req->validate([
             'name'=>'required|max:100',
-            'sub_org'=>['required','max:100', Rule::unique('organizations')->where(function ($query) use ($req) {
+            'sub_org'=>['max:100', Rule::unique('organizations')->where(function ($query) use ($req) {
                 return $query->where('name', $req->input('name'));
             })],
             'type'=>'required',
@@ -49,7 +49,7 @@ class OrganizationController extends Controller
             'project_types.*' => 'exists:project_types,id',
         ],
              [           
-                'sub_org.unique'=>'The department in this organization already exists'
+                'sub_org.unique'=>'This organization already exists'
             ]
 
         );

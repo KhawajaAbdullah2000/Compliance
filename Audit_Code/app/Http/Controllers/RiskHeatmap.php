@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Http\Request;
 use Session;
+use App\Exports\RiskRegister;
 
 class RiskHeatmap extends Controller
 {
@@ -687,5 +688,71 @@ class RiskHeatmap extends Controller
                 'subgroup'=>$subgroup,
                 'component'=>$component
             ]);
+    }
+
+    public function download_excel_risk_register_single_type($service,$component,$proj_id,Request $req){
+        $group = $req->query('group');
+        $subgroup = $req->query('subgroup');
+        $risk_type = Session('risk_type');
+
+        $RiskToData=null;
+        if($risk_type=='risk_level'){
+            $RiskToData='Data Confidentiality';
+        }
+
+        if($risk_type=='risk_integrity'){
+            $RiskToData='Data Integrity';
+        }
+
+        if($risk_type=='risk_availability'){
+            $RiskToData='Data Availability';
+        }
+
+     
+
+        $assetIds = DB::table('iso_sec_2_1')
+        ->where('project_id', $proj_id)
+        ->when($service != '_all', function ($query) use ($service) {
+            return $query->where('s_name', $service);
+        })
+        ->when($group, function ($query, $group) {
+            return $query->when($group != '_all', function ($query) use ($group) {
+                return $query->where('g_name', $group);
+            });
+        })
+        ->when($subgroup, function ($query, $subgroup) {
+            return $query->when($subgroup != '_all', function ($query) use ($subgroup) {
+                return $query->where('name', $subgroup);
+            });
+        })
+        ->when($component != '_all', function ($query) use ($component) {
+            return $query->where('c_name', $component);
+        })
+        ->pluck('assessment_id')->toArray();
+
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+
+        $results=DB::table('iso_sec_2_3_1')->where('project_id',$proj_id)
+        ->where('iso_sec_2_3_1.project_id', $proj_id)
+        ->whereIn('iso_sec_2_3_1.asset_id', $assetIds)
+        ->get()->toArray();
+
+    
+
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+    
+        $projectName = $project->project_name;
+
+
+
+            return Excel::download(
+                new RiskRegister($results,$risk_type,$RiskToData),
+                $projectName . 'RiskRegister.xlsx'
+            );
+        
+
+    
     }
 }

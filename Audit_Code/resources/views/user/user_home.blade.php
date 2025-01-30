@@ -22,7 +22,7 @@
                 <div class="text-white p-4 bg-home-card rounded shadow-lg" style="max-width: 90%;">
                     <h2 class="fw-bold mb-4">Welcome, {{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</h2>
 
-                    @role('end user')
+                    @hasanyrole('end user|super user')
                     <ul class="list-unstyled">
                         <li>
                             <h4>Email: <span class="text-info">{{ auth()->user()->email }}</span></h4>
@@ -33,7 +33,9 @@
                         <li>
                             <h5>Department: <span class="text-info">{{ auth()->user()->organization->sub_org }}</span></h5>
                         </li>
+                        @can('Project Creator')
                         <li>
+                          
                             <h5 class="d-inline">Global Role:</h5>
                             <p class="d-inline">
                                 @if (auth()->user()->permissions->isEmpty())
@@ -45,6 +47,7 @@
                                 @endif
                             </p>
                         </li>
+                        @endcan
                     </ul>
 
                     @can('Project Creator')
@@ -58,7 +61,7 @@
                     
                     @endcan
 
-                    @endrole
+                    @endhasanyrole
                 </div>
             </div>
         </div>

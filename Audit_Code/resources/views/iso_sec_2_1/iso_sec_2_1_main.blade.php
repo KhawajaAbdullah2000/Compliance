@@ -71,7 +71,7 @@ $permissions = json_decode($project_permissions);
             </select>
         </div>
         <div class="col-md-3">
-            <label for="name" class="form-label fw-semibold">Select Asset</label>
+            <label for="name" class="form-label fw-semibold">Select Asset Subgroup</label>
             <select id="name" name="name" class="form-select rounded-pill">
                 <option value="">Select --</option>
                 @foreach($distinctAssets as $d)
@@ -103,7 +103,7 @@ $permissions = json_decode($project_permissions);
                     </div>
                     <div class="form-check">
                         <input class="form-check-input toggle-column" type="checkbox" id="toggleAsset" data-column="2">
-                        <label class="form-check-label" for="toggleAsset">Asset</label>
+                        <label class="form-check-label" for="toggleAsset">Asset Subgroup</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input toggle-column" type="checkbox" id="toggleOwner" data-column="4">
@@ -159,7 +159,7 @@ $permissions = json_decode($project_permissions);
             <tr style="cursor: pointer" class="text-center">
                 <th onclick="sortTable(0)">Service</th>
                     <th onclick="sortTable(1)">Asset Group</th>
-                    <th onclick="sortTable(2)">Asset</th>
+                    <th onclick="sortTable(2)">Asset Subgroup</th>
                     <th onclick="sortTable(3)">Asset Component</th>
                     <th onclick="sortTable(4)">Asset Owner Dept</th>
                     <th onclick="sortTable(5)">Asset Physical Location</th>
@@ -212,6 +212,7 @@ $permissions = json_decode($project_permissions);
     </table>
 
     <!-- Upload Section -->
+    @if (in_array('Data Inputter', $permissions))
     <div class="mt-4">
         <a href="{{ route('download_asset_template') }}" class="text-decoration-underline text-primary">Download Excel Template</a>
         <form action="/upload_assets/{{ $project_id }}/{{ auth()->user()->id }}" method="POST" enctype="multipart/form-data" class="mt-3">
@@ -226,6 +227,7 @@ $permissions = json_decode($project_permissions);
             <button type="submit" class="btn btn-success btn-sm rounded-pill mt-2">Upload</button>
         </form>
     </div>
+    @endif
 </div>
 
 @section('scripts')

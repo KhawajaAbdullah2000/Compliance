@@ -32,9 +32,9 @@
                         <li><a class="dropdown-item" href="/end_users/{{ auth()->user()->org_id }}">End Users</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="/custom_roles">Global Custom Roles</a>
-                </li>
+                </li> --}}
                 @endrole
 
                 <!-- End User Links -->

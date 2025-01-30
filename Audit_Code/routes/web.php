@@ -441,6 +441,8 @@ Route::get('heatmap_single_risk/{service}/{component}/{proj_id}',[RiskHeatmap::c
 
 Route::get('risk_register_single_type/{service}/{component}/{proj_id}',[RiskHeatmap::class,'risk_register_single_type'])->name('risk_register_single_type');
 
+Route::get('download_excel_risk_register_single_type/{service}/{component}/{proj_id}',[RiskHeatmap::class,'download_excel_risk_register_single_type'])->name('download_excel_risk_register_single_type');
+
 
 
 
