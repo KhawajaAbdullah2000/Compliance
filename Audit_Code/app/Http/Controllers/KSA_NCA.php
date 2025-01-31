@@ -550,8 +550,8 @@ class KSA_NCA extends Controller
                     ->first();
                 if ($checkpermission) {
                     $permissions = json_decode($checkpermission->project_permissions);
-                    if ($checkpermission->type_id == 7) {
-                        //ksa nca
+        
+    
                         $evidenceLevel = $req->session()->get('evidenceLevel');
                         if (in_array('Data Inputter', $permissions)) {
 
@@ -560,10 +560,20 @@ class KSA_NCA extends Controller
                                     'last_edited_by' => $user_id,
                                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                                 ];
+                                if ($checkpermission->type_id == 7) {
+                                    //ksa Nca
+                                    $filepath = public_path('KSA_NCA_ECC_Modified.xlsx');
+                                }
+
+                                if ($checkpermission->type_id == 5) {
+                                    //Cy sama
+                                    $filepath = public_path('CY_SAMA_Modified.xlsx');
+                                }
+                             
 
                                 if ($evidenceLevel == 'component') {
 
-                                        $filepath = public_path('KSA_NCA_ECC.xlsx');
+                                      
                                         $data2 = Excel::toArray([], $filepath); //with header
                                         $rows = array_slice($data2[0], 1); //without header(first row)
             
@@ -571,12 +581,14 @@ class KSA_NCA extends Controller
                                             return strval($row[0]) === $req->title;
                                         })->values()->all();
 
-                                    
+                            
+
+                        
                                          foreach ($filteredData as $innerArray) {
                                             // Access specific value from the inner array
-                                            $fetch_sub_req = $innerArray['4']; 
+                                            $fetch_sub_req = $innerArray['3']; 
                                             $fetch_title=$innerArray['0'];
-                                            $subdomain=$innerArray['2'];
+                                            $subdomain=$innerArray['1'];
 
                                             DB::table('iso_sec_2_2')->updateOrInsert(
                                                 [
@@ -591,13 +603,26 @@ class KSA_NCA extends Controller
                                             
                                         }
                                  
-                            
+                            if($checkpermission->type_id==7){
+                                return redirect()->route(
+                                    'ksa_nca_subsections',
+                                    ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
+                                )
+                                    ->with('success', 'Record Updated Successfully');
+
+                            }
+
+                            if($checkpermission->type_id==5){
+                                return redirect()->route(
+                                    'cy_sama_subsections',
+                                    ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
+                                )
+                                    ->with('success', 'Record Updated Successfully');
+
+                            }
+                         
     
-                                    return redirect()->route(
-                                        'ksa_nca_subsections',
-                                        ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                                    )
-                                        ->with('success', 'Record Updated Successfully');
+                                   
                                 }
     
                         
@@ -624,7 +649,6 @@ class KSA_NCA extends Controller
     
     
                             foreach($assets as $ass){ 
-                                    $filepath = public_path('KSA_NCA_ECC.xlsx');
                                     $data2 = Excel::toArray([], $filepath); //with header
                                     $rows = array_slice($data2[0], 1); //without header(first row)
                             
@@ -637,9 +661,9 @@ class KSA_NCA extends Controller
                             
                                     foreach ($filteredData as $innerArray) {
                                         // Access specific value from the inner array
-                                        $fetch_sub_req = $innerArray['4']; 
-                                        $fetch_title = $innerArray['0']; 
-                                        $subdomain=$innerArray['2'];
+                                        $fetch_sub_req = $innerArray['3']; 
+                                        $fetch_title=$innerArray['0'];
+                                        $subdomain=$innerArray['1'];
                                         
                         
                                         DB::table('iso_sec_2_2')->updateOrInsert(
@@ -658,12 +682,23 @@ class KSA_NCA extends Controller
                     
     
                                 }
-                                return redirect()->route(
-                                    'ksa_nca_subsections',
-                                    ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                                )
-                                    ->with('success', 'Record Updated Successfully');
+                                if($checkpermission->type_id==7){
+                                    return redirect()->route(
+                                        'ksa_nca_subsections',
+                                        ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
+                                    )
+                                        ->with('success', 'Record Updated Successfully');
     
+                                }
+    
+                                if($checkpermission->type_id==5){
+                                    return redirect()->route(
+                                        'cy_sama_subsections',
+                                        ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
+                                    )
+                                        ->with('success', 'Record Updated Successfully');
+    
+                                }
                         
                     }else{
                         return redirect()->route(
@@ -673,7 +708,7 @@ class KSA_NCA extends Controller
                             ->with('success', 'Not Allowed');
                     }
                       
-                    }
+                    
                 }
     
                       

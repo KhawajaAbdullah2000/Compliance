@@ -10,7 +10,7 @@
 
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-secondary">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -92,7 +92,6 @@
             <div class="col-md-8">
          <a href="/ksa_nca_section_2_2/{{1}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">1. Cybersecurity Governance</p></a>
         </div>
-
         <div class="col-md-4">
             <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
                 @csrf
@@ -114,26 +113,96 @@
 
 
         <div class="row mt-2">
-            <div class="col-12">
+            <div class="col-md-8">
          <a href="/ksa_nca_section_2_2/{{2}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">2. Cybersecurity Defense</p></a>
         </div>
+
+        <div class="col-md-4">
+            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+                @csrf
+                <input type="hidden" name="title" value="2">
+                <div class="d-flex align-items-center">
+                    <select name="comp_status" class="form-select rounded-pill me-2">
+                   
+                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
         </div>
 
         <div class="row mt-2">
-            <div class="col-12">
+            <div class="col-md-8">
          <a href="/ksa_nca_section_2_2/{{3}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">3. Cybersecurity Resilience</p></a>
         </div>
+
+        <div class="col-md-4">
+            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+                @csrf
+                <input type="hidden" name="title" value="3">
+                <div class="d-flex align-items-center">
+                    <select name="comp_status" class="form-select rounded-pill me-2">
+                   
+                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
         </div>
 
         <div class="row mt-2">
-            <div class="col-12">
+            <div class="col-md-8">
          <a href="/ksa_nca_section_2_2/{{4}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">4. Third-Party and Cloud Computing Cybersecurity</p></a>
         </div>
+        <div class="col-md-4">
+            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+                @csrf
+                <input type="hidden" name="title" value="4">
+                <div class="d-flex align-items-center">
+                    <select name="comp_status" class="form-select rounded-pill me-2">
+                   
+                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
         </div>
 
         <div class="row mt-2">
-            <div class="col-12">
+            <div class="col-md-8">
          <a href="/ksa_nca_section_2_2/{{5}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">5. Industrial Control Systems Cybersecurity</p></a>
+        </div>
+        <div class="col-md-4">
+            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+                @csrf
+                <input type="hidden" name="title" value="5">
+                <div class="d-flex align-items-center">
+                    <select name="comp_status" class="form-select rounded-pill me-2">
+                   
+                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                </div>
+            </form>
         </div>
         </div>
 
