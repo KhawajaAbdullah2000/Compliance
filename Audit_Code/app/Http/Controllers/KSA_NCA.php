@@ -534,6 +534,152 @@ class KSA_NCA extends Controller
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
         }
+
+        public function add_mandatory_all_title(Request $req,$proj_id,$user_id,$asset_id){
+            if ($user_id == auth()->user()->id) {
+                $checkpermission = Db::table('project_details')->select(
+                    'project_types.id as type_id',
+                    'project_details.project_code',
+                    'project_details.project_permissions',
+                    'projects.project_name',
+                    'projects.project_id'
+                )
+                    ->join('projects', 'project_details.project_code', 'projects.project_id')
+                    ->join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                    ->first();
+                if ($checkpermission) {
+                    $permissions = json_decode($checkpermission->project_permissions);
+                    if ($checkpermission->type_id == 7) {
+                        //ksa nca
+                        $evidenceLevel = $req->session()->get('evidenceLevel');
+                        if (in_array('Data Inputter', $permissions)) {
+
+                                $data=[
+                                    'comp_status' => $req->comp_status,
+                                    'last_edited_by' => $user_id,
+                                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                                ];
+
+                                if ($evidenceLevel == 'component') {
+
+                                        $filepath = public_path('KSA_NCA_ECC.xlsx');
+                                        $data2 = Excel::toArray([], $filepath); //with header
+                                        $rows = array_slice($data2[0], 1); //without header(first row)
+            
+                                        $filteredData = collect($rows)->filter(function ($row) use ($req) {
+                                            return strval($row[0]) === $req->title;
+                                        })->values()->all();
+
+                                    
+                                         foreach ($filteredData as $innerArray) {
+                                            // Access specific value from the inner array
+                                            $fetch_sub_req = $innerArray['4']; 
+                                            $fetch_title=$innerArray['0'];
+                                            $subdomain=$innerArray['2'];
+
+                                            DB::table('iso_sec_2_2')->updateOrInsert(
+                                                [
+                                                    'project_id' => $proj_id, 
+                                                    'asset_id' => $asset_id,
+                                                    'title_num' => $fetch_title,
+                                                    'sub_req' => $fetch_sub_req,
+                                                    'subdomain'=>$subdomain
+                                                ], 
+                                                $data
+                                            );
+                                            
+                                        }
+                                 
+                            
+    
+                                    return redirect()->route(
+                                        'ksa_nca_subsections',
+                                        ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
+                                    )
+                                        ->with('success', 'Record Updated Successfully');
+                                }
+    
+                        
+                            
+    
+                            $assetDetails=DB::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
+    
+                            $assets=null;
+    
+                            if($evidenceLevel=='name'){
+                                $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('name',$assetDetails->name)->get();
+                            }
+    
+                            if($evidenceLevel=='group'){
+                                $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('g_name',$assetDetails->g_name)->get();
+                            }
+                            if($evidenceLevel=='service'){
+                                $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('s_name',$assetDetails->s_name)->get();
+                            }
+    
+                            if($evidenceLevel=='project'){
+                                $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->get();
+                            }
+    
+    
+                            foreach($assets as $ass){ 
+                                    $filepath = public_path('KSA_NCA_ECC.xlsx');
+                                    $data2 = Excel::toArray([], $filepath); //with header
+                                    $rows = array_slice($data2[0], 1); //without header(first row)
+                            
+                                    //all controls in this domain
+                                     $filteredData = collect($rows)->filter(function ($row) use ($req) {
+                                    return strval($row[0]) === $req->title;
+                                })->values()->all();
+
+
+                            
+                                    foreach ($filteredData as $innerArray) {
+                                        // Access specific value from the inner array
+                                        $fetch_sub_req = $innerArray['4']; 
+                                        $fetch_title = $innerArray['0']; 
+                                        $subdomain=$innerArray['2'];
+                                        
+                        
+                                        DB::table('iso_sec_2_2')->updateOrInsert(
+                                            [
+                                                'project_id' => $proj_id, 
+                                                'asset_id' => $ass->assessment_id, 
+                                                'title_num' => $fetch_title,
+                                                'sub_req'=>$fetch_sub_req,
+                                                'subdomain'=>$subdomain
+                                            ], 
+                                            $data
+                                        );
+                                        
+                                    }
+
+                    
+    
+                                }
+                                return redirect()->route(
+                                    'ksa_nca_subsections',
+                                    ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
+                                )
+                                    ->with('success', 'Record Updated Successfully');
+    
+                        
+                    }else{
+                        return redirect()->route(
+                            'ksa_nca_subsections',
+                            ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
+                        )
+                            ->with('success', 'Not Allowed');
+                    }
+                      
+                    }
+                }
+    
+                      
+        }
   
+
+}
 
 }
