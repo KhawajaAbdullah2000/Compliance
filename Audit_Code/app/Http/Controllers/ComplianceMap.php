@@ -1572,8 +1572,7 @@ foreach ($formattedResults as $domain => $statuses) {
                 ->toArray(); // Convert to array
 
 
-                dd($UniqueSubDomains);
-      
+
 
             $domainNames = [
                 1 => 'Cybersecurity Governance',

@@ -109,12 +109,12 @@ $permissions=json_decode($project_permissions);
       </h2>
 
 
-
     <table class="table table-bordered table-responsive table-primary">
 
-        <thead>
+        <thead class="fw-bold">
             <td>Title of Mandatory Requirement</td>
             <td>Actions</td>
+            <td>Edit</td>
         </thead>
 
         <tbody>
@@ -125,7 +125,23 @@ $permissions=json_decode($project_permissions);
 
                 </td>
                 <td><a href="/ksa_nca_sec_2_2_req/{{($data[0][2]) }}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">View</a></td>
-
+                <td>
+                    <form action="/add_mandatory_all_domain/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+                        @csrf
+                        <input type="hidden" name="domain" value="{{$data[0][2]}}">
+                        <div class="d-flex align-items-center">
+                            <select name="comp_status" class="form-select rounded-pill me-2">
+                           
+                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                        </div>
+                    </form>
+                </td>
             </tr>
 
             @for ($i = 1; $i < count($data); $i++)
@@ -147,7 +163,24 @@ $permissions=json_decode($project_permissions);
                        </td>
 
                        <td><a href="/ksa_nca_sec_2_2_req/{{$my_current_main_req_num}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">View</a></td>
-                    @endif
+                       <td>
+                        <form action="/add_mandatory_all_domain/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+                            @csrf
+                            <input type="hidden" name="domain" value="{{$data[$i][2]}}">
+                            <div class="d-flex align-items-center">
+                                <select name="comp_status" class="form-select rounded-pill me-2">
+                               
+                                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                            </div>
+                        </form>
+                    </td>
+                       @endif
 
 
 
@@ -171,5 +204,18 @@ $permissions=json_decode($project_permissions);
     </table>
 
 </div>
+@section('scripts')
 
+@if(Session::has('success'))
+<script>
+    swal({
+  title: "{{Session::get('success')}}",
+  icon: "success",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script>
+@endif
+
+@endsection
 @endsection
