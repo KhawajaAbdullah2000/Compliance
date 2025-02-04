@@ -7,11 +7,17 @@
 
 @include('iso_sec_nav')
 @php
-$permissions=json_decode($project_permissions);
-$isEditable = in_array('Data Inputter', $permissions);
-$isReadOnly = in_array('Data Viewer', $permissions) || in_array('Data Approver', $permissions);
+$permissions = json_decode($project_permissions);
 
+// User is editable if they have "Data Inputter"
+$isEditable = in_array('Data Inputter', $permissions);
+
+// User is read-only ONLY IF they do NOT have "Data Inputter"
+$isReadOnly = !$isEditable && (in_array('Data Viewer', $permissions) || in_array('Data Approver', $permissions));
+
+$isApprover=in_array('Data Approver', $permissions);
 @endphp
+
 
 <div class="container">
     <div class="row mt-5">
@@ -223,6 +229,88 @@ $isReadOnly = in_array('Data Viewer', $permissions) || in_array('Data Approver',
                 </div>
             </div>
         </div>
+
+        @if($isApprover && isset($result))
+        <div class="container d-flex justify-content-center">
+            <div class="card shadow-lg border-0 mt-5 mb-5" style="max-width: 1000px; width: 100%;">
+                <div class="card-header text-white text-center" style="background-color: rgb(121, 173, 44)">
+                    <h3 class="text-center">Approve</h3>
+                </div>
+
+                <div class="card-body">
+                    
+                <p class="fw-bold">Current Status:
+                    @if(isset($result) && ($result->approved == 0 || is_null($result->approved)))
+                 Not worked on by approver
+                 @endif
+                 @if(isset($result) && ($result->approved == 1 ) )
+                Approved
+                @endif
+
+                @if(isset($result) && ($result->approved == 2 ) )
+                Not Approved
+                @endif
+                    
+                </p>
+                    <form action="/approve_sec_2_2/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" id="approvalForm">
+                        @csrf
+
+                        <input type="hidden" name="subdomain" value="{{ $subdomain }}">
+
+                        <div class="row">
+                            <div class="col-md-4 d-flex">
+                                <button type="submit" class="btn btn-success px-5 rounded-pill w-80 h-100" name="action" value="1">
+                                    Apply Approve only this control and save changes
+                                </button>
+                            </div>
+                            <div class="col-md-4 d-flex">
+                                <button type="submit" class="btn btn-success px-5 rounded-pill w-80 h-100" name="action" value="2">
+                                    Apply to Approve all controls in this domain and save changes
+                                </button>
+                            </div>
+                            <div class="col-md-4 d-flex">
+                                <button type="submit" class="btn btn-success px-5 rounded-pill w-80 h-100" name="action" value="3">
+                                    Apply to Approve all controls in all domains and save changes
+                                </button>
+                            </div>
+                        </div>
+
+                        
+                        <div class="mb-4 mt-4">
+                            <label for="approver_comments" class="form-label"> <span class=" fw-semibold">Approver Comments</span> (Comments are mandatory if not approved)</label>
+                            <textarea name="approver_comments" id="approver_comments" rows="4" class="form-control rounded">{{ old('approver_comments', $result->approver_comments ?? '') }}</textarea>
+                            <div class="text-danger small mt-2 d-none" id="commentError">Approver comments are required when rejecting.</div>
+                            @error('approver_comments')
+                            <div class="text-danger small mt-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 d-flex">
+                                <button type="submit" class="btn btn-danger px-5 rounded-pill w-80 h-100 reject-button" name="action" value="4">
+                                   Do not Approve only this control and save changes
+                                </button>
+                            </div>
+                            <div class="col-md-4 d-flex">
+                                <button type="submit" class="btn btn-danger px-5 rounded-pill w-80 h-100 reject-button" name="action" value="5">
+                                   Do not Approve all controls in this domain and save changes
+                                </button>
+                            </div>
+                            <div class="col-md-4 d-flex">
+                                <button type="submit" class="btn btn-danger px-5 rounded-pill w-80 h-100 reject-button" name="action" value="6">
+                                    Do not Approve all controls in all domains and save changes
+                                </button>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+        @endif
         
 </div>
 
@@ -240,6 +328,27 @@ $isReadOnly = in_array('Data Viewer', $permissions) || in_array('Data Approver',
     });
 </script>
 @endif
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("approvalForm");
+        const approverComments = document.getElementById("approver_comments");
+        const rejectButtons = document.querySelectorAll(".reject-button");
+        const commentError = document.getElementById("commentError");
+
+        rejectButtons.forEach(button => {
+            button.addEventListener("click", function (event) {
+                if (approverComments.value.trim() === "") {
+                    event.preventDefault(); // Prevent form submission
+                    commentError.classList.remove("d-none"); // Show error message
+                } else {
+                    commentError.classList.add("d-none"); // Hide error message if valid
+                }
+            });
+        });
+    });
+</script>
 
 @endsection
 
