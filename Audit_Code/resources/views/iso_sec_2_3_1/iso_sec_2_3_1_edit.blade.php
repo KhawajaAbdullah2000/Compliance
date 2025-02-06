@@ -5,12 +5,24 @@
 @include('user-nav')
 
 
+@php
+$permissions = json_decode($project_permissions);
+
+// User is editable if they have "Data Inputter"
+$isEditable = in_array('Data Inputter', $permissions);
+
+// User is read-only ONLY IF they do NOT have "Data Inputter"
+$isReadOnly = !$isEditable && (in_array('Data Viewer', $permissions) || in_array('Data Approver', $permissions));
+
+$isApprover=in_array('Data Approver', $permissions);
+@endphp
+
 
 
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-secondary">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -137,19 +149,19 @@
             <div class="form-group mt-4">
                 <label for="" class="fw-bold">Description of Vulnerability</label>
                 <br>
-                <input class="form-check-input" type="radio" name="desc_vulnerability" value="Description of control is fully met"
+                <input {{ $isEditable ? '' : 'disabled' }} class="form-check-input" type="radio" name="desc_vulnerability" value="Description of control is fully met"
                     {{ old('desc_vulnerability', $assetData->desc_vulnerability) == 'Description of control is fully met' ? 'checked' : '' }}>
                 <label for="">Description of control is fully met</label><br>
 
-                <input class="form-check-input" type="radio" name="desc_vulnerability" value="Description of control is partially met or not met"
+                <input {{ $isEditable ? '' : 'disabled' }} class="form-check-input" type="radio" name="desc_vulnerability" value="Description of control is partially met or not met"
                     {{ old('desc_vulnerability', $assetData->desc_vulnerability) == 'Description of control is partially met or not met' ? 'checked' : '' }}>
                 <label for="">Description of control is partially met or not met</label><br>
 
-                <input class="form-check-input" type="radio" name="desc_vulnerability" value="Other"
+                <input {{ $isEditable ? '' : 'disabled' }} class="form-check-input" type="radio" name="desc_vulnerability" value="Other"
                     {{ old('desc_vulnerability', $assetData->desc_vulnerability) == 'Other' ? 'checked' : '' }}>
                 <label for="">Other</label><br>
 
-                <input type="text" name="desc_vulnerability_other" class="form-control"
+                <input {{ $isEditable ? '' : 'disabled' }} type="text" name="desc_vulnerability_other" class="form-control"
                     value="{{ old('desc_vulnerability_other', $assetData->desc_vulnerability_other) }}">
             </div>
 
@@ -159,7 +171,7 @@
             <div class=" mt-4">
                 <label for="" class="fw-bold">Description of Threat</label>
                 <br>
-                <input class="form-check-input" type="radio" name="desc_threat" value="Asset component is directly publicly exposed"
+                <input {{ $isEditable ? '' : 'disabled' }} class="form-check-input" type="radio" name="desc_threat" value="Asset component is directly publicly exposed"
                 {{ old('desc_threat', $assetData->desc_threat) == 'Asset component is directly publicly exposed' ? 'checked' : '' }}>
                 <label for="">Asset component is directly publicly exposed</label>
 
@@ -167,19 +179,19 @@
 
 
 
-                <input class="form-check-input" type="radio" name="desc_threat" value="Asset component is NOT directly publicly exposed"
-                    {{ old('desc_threat', $assetData->desc_threat) == 'Asset component is NOT directly publicly exposed ' ? 'checked' : '' }}>
+                <input {{ $isEditable ? '' : 'disabled' }} class="form-check-input" type="radio" name="desc_threat" value="Asset component is NOT directly publicly exposed"
+                    {{ old('desc_threat', $assetData->desc_threat) == 'Asset component is NOT directly publicly exposed' ? 'checked' : '' }}>
                 <label for="">Asset component is NOT directly publicly exposed</label>
 
                 <br>
 
 
 
-                <input class="form-check-input" type="radio" name="desc_threat" value="Other"
+                <input {{ $isEditable ? '' : 'disabled' }} class="form-check-input" type="radio" name="desc_threat" value="Other"
                     {{ old('desc_threat', $assetData->desc_threat) == 'Other' ? 'checked' : '' }}>
                 <label for="">Other</label>
 
-                <input type="text" name="desc_threat_other" class="form-control"
+                <input {{ $isEditable ? '' : 'disabled' }} type="text" name="desc_threat_other" class="form-control"
                     value="{{ old('desc_threat_other', $assetData->desc_threat_other) }}">
             </div>
 
@@ -238,23 +250,23 @@
                     }
                 @endphp
             
-                <input type="checkbox" name="desc_risk[]" value="Breach of data confidentiality"
+                <input {{ $isEditable ? '' : 'disabled' }} type="checkbox" name="desc_risk[]" value="Breach of data confidentiality"
                     {{ is_array($selectedRisks) && in_array('Breach of data confidentiality', $selectedRisks) ? 'checked' : '' }}>
                 <label for="">Breach of data confidentiality</label><br>
             
-                <input type="checkbox" name="desc_risk[]" value="Breach of data integrity"
+                <input {{ $isEditable ? '' : 'disabled' }} type="checkbox" name="desc_risk[]" value="Breach of data integrity"
                     {{ is_array($selectedRisks) && in_array('Breach of data integrity', $selectedRisks) ? 'checked' : '' }}>
                 <label for="">Breach of data integrity</label><br>
             
-                <input type="checkbox" name="desc_risk[]" value="Information or Service Denial"
+                <input {{ $isEditable ? '' : 'disabled' }} type="checkbox" name="desc_risk[]" value="Information or Service Denial"
                     {{ is_array($selectedRisks) && in_array('Information or Service Denial', $selectedRisks) ? 'checked' : '' }}>
                 <label for="">Denial of Data Availability</label><br>
             
-                <input type="checkbox" name="desc_risk[]" value="Other"
+                <input {{ $isEditable ? '' : 'disabled' }} type="checkbox" name="desc_risk[]" value="Other"
                     {{ is_array($selectedRisks) && in_array('Other', $selectedRisks) ? 'checked' : '' }}>
                 <label for="">Other</label><br>
             
-                <input type="text" name="desc_risk_other" class="form-control"
+                <input {{ $isEditable ? '' : 'disabled' }} type="text" name="desc_risk_other" class="form-control"
                     value="{{ old('desc_risk_other', $assetData->desc_risk_other) }}">
             </div>
             
@@ -264,9 +276,11 @@
                 You must press save changes button before leaving this page
             </small>
 
+            @if ($isEditable)
               <div class="text-center mt-3 fw-bold">
                 <button type="submit" class="btn my_bg_color btn-md mt-2 text-white">Save Changes </button>
               </div>
+              @endif
 
 
         </form>

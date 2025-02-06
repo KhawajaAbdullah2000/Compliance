@@ -12,6 +12,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Validation\Rule;
 use Excel;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 use Illuminate\Support\Facades\Http;
 class UserController extends Controller
@@ -75,6 +76,9 @@ class UserController extends Controller
         ]);
 
         if (Auth::attempt(['email' => $req->email, 'password' => $req->password])) {
+            $user = Auth::user();
+            $user->last_logged_in_at = Carbon::now()->format('Y-m-d H:i:s');
+            $user->save();
             if(auth()->user()->privilege_id==4){
                 return redirect()->route('root_home');
             }else{

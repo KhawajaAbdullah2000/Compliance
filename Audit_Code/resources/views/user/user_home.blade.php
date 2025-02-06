@@ -47,7 +47,12 @@
                                 @endif
                             </p>
                         </li>
+
+                     
                         @endcan
+                        <li class="mt-2">
+                            <p>Last logged in at: {{date('F d, Y H:i:A', strtotime(auth()->user()->last_logged_in_at))}}</p>
+                        </li>
                     </ul>
 
                     @can('Project Creator')
