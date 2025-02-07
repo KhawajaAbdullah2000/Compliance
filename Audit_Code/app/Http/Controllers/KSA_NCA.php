@@ -816,6 +816,112 @@ class KSA_NCA extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
+    public function approve_sec_2_3_1(Request $req,$control_num,$proj_id,$user_id,$asset_id){
+
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+
+                if (in_array('Data Approver', $permissions)) {
+
+                    if($req->action==1||$req->action==2|| $req->action==3){
+
+                        $data=[
+                            'approved' => 1,
+                            'approver_comments' => $req->approver_comments,
+                            'approved_by' => $user_id,
+                            'approved_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+                ];
+            }
+
+            if($req->action==4||$req->action==5|| $req->action==6){
+
+                $data=[
+                    'approved' => 2,
+                    'approver_comments' => $req->approver_comments,
+                    'approved_by' => $user_id,
+                    'approved_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+        ];
+    }
+
+    $parts = explode('.', $control_num);
+$domain = $parts[0];
+
+
+if($req->action==1||$req->action==4){
+    DB::table('iso_sec_2_3_1')->updateOrInsert(
+        [
+            'project_id' => $proj_id, 
+            'asset_id' => $asset_id, 
+            'control_num' => $control_num,
+           
+        ], 
+        $data
+    );
+}
+
+if($req->action==2||$req->action==5){
+    DB::table('iso_sec_2_3_1')
+    ->where('project_id', $proj_id)
+    ->where('asset_id', $asset_id)
+    ->where('control_num', 'like', $domain . '%')
+
+    ->updateOrInsert(
+        [
+            'project_id' => $proj_id, 
+            'asset_id' => $asset_id, 
+            
+        ], 
+        $data
+    );
+}
+
+if($req->action==3||$req->action==6){
+    DB::table('iso_sec_2_3_1')->updateOrInsert(
+        [
+            'project_id' => $proj_id, 
+            'asset_id' => $asset_id, 
+           
+        ], 
+        $data
+    );
+}
+
+    return redirect()->back()
+    ->with('success', 'Record Updated Successfully');
+
+
+
+    
+}
+
+
+
+
+
+
+            }
+            return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+    }else{
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+    }
+
+}
+
 
 
 

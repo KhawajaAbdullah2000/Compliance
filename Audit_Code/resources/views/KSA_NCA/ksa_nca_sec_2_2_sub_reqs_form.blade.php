@@ -10,7 +10,7 @@
 $permissions = json_decode($project_permissions);
 
 // User is editable if they have "Data Inputter"
-$isEditable = in_array('Data Inputter', $permissions);
+$isEditable = in_array('Data Inputter', $permissions) && $result->approved != 1 ;
 
 // User is read-only ONLY IF they do NOT have "Data Inputter"
 $isReadOnly = !$isEditable && (in_array('Data Viewer', $permissions) || in_array('Data Approver', $permissions));
