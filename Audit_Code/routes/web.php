@@ -451,6 +451,9 @@ Route::get('risk_register_single_type/{service}/{component}/{proj_id}',[RiskHeat
 Route::get('download_excel_risk_register_single_type/{service}/{component}/{proj_id}',[RiskHeatmap::class,'download_excel_risk_register_single_type'])->name('download_excel_risk_register_single_type');
 
 
+Route::get('user_action_all_projects_in_org/{org_id}',[OrganizationController::class,'user_action_all_projects_in_org']);
+Route::get('projects_created_by/{org_id}/{user_id}',[OrganizationController::class,'projects_created_by']);
+Route::get('projects_assigned/{org_id}/{user_id}',[OrganizationController::class,'projects_assigned']);
 
 
 }

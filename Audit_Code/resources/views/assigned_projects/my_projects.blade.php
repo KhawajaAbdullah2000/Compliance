@@ -9,10 +9,12 @@
 <div class="container py-5">
     <!-- Page Heading -->
     <h1 class="text-center fw-bold mb-5">Risk and Compliance Projects of Organization: {{auth()->user()->organization->name}}
-        @if(auth()->user()->organization->sub_org)
         
-        - {{auth()->user()->organization->sub_org}}
-    @endif</h1>
+    </h1>
+
+
+    <a href="/user_action_all_projects_in_org/{{auth()->user()->organization->org_id}}" class="btn btn-primary btn-md mb-4">User Action on All Projects</a>
+
 
     <!-- Projects Table -->
     <div class="card shadow-lg border-0">
