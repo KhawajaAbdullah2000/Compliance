@@ -43,6 +43,8 @@
                         {{-- <th class="text-center">Compliance Status by Asset Component</th> --}}
                
                         <th class="text-center">Duplicate Project</th>
+                        <th class="text-center">User Actions</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -233,6 +235,13 @@
                                 </div>
                             </div>
                         </div>
+
+                         <td style='text-align:center'>
+                                <a href="/user_actions_on_project/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
+                                   data-toggle="tooltip" title="User Actions">
+                                    <i class="fas fa-eye fa-lg" style="color: rgb(235, 23, 147)"></i>
+                                </a>
+                            </td> 
                         
                     </tr>
                     @endforeach

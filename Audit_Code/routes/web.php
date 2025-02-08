@@ -27,6 +27,7 @@ use App\Http\Controllers\SBP_ETGRMF;
 use App\Http\Controllers\v3_2_s2_Controller;
 use App\Http\Controllers\v3_2_s3_Controller;
 use App\Http\Controllers\v3_2_s4_Controller;
+use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
@@ -454,6 +455,8 @@ Route::get('download_excel_risk_register_single_type/{service}/{component}/{proj
 Route::get('user_action_all_projects_in_org/{org_id}',[OrganizationController::class,'user_action_all_projects_in_org']);
 Route::get('projects_created_by/{org_id}/{user_id}',[OrganizationController::class,'projects_created_by']);
 Route::get('projects_assigned/{org_id}/{user_id}',[OrganizationController::class,'projects_assigned']);
+Route::get('user_actions_on_project/{proj_id}/{user_id}',[ProjectController::class,'user_actions_on_project']);
+
 
 
 }

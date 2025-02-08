@@ -3653,6 +3653,7 @@ foreach ($uniqueComponents as $cname) {
     }
 
 
+
     // public function risk_assessment_report($proj_id, $user_id)
     // {
     //     $checkpermission = Db::table('project_details')->select(
@@ -4685,4 +4686,50 @@ foreach ($uniqueComponents as $cname) {
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
+
+    public function user_actions_on_project($proj_id,$user_id){
+        // $users = DB::table('project_details')
+        // ->join('users', 'project_details.assigned_enduser', '=', 'users.id')
+        // ->where('project_details.project_code', $proj_id)
+        // ->select(
+        //     'users.id',
+        //     'users.first_name',
+        //     'users.last_name',
+        //     'project_details.project_permissions' // Role in the project
+        // )
+        // ->get();
+
+        $users = DB::table('project_details')
+    ->join('users', 'project_details.assigned_enduser', '=', 'users.id')
+    ->leftJoin('iso_sec_2_2', function ($join) use ($proj_id) {
+        $join->on('users.id', '=', 'iso_sec_2_2.last_edited_by')
+             ->where('iso_sec_2_2.project_id', '=', $proj_id);
+    })
+    ->leftJoin('iso_sec_2_3_1', function ($join) use ($proj_id) {
+        $join->on('users.id', '=', 'iso_sec_2_3_1.last_edited_by')
+             ->where('iso_sec_2_3_1.project_id', '=', $proj_id);
+    })
+    ->where('project_details.project_code', $proj_id)
+    ->select(
+        'users.id',
+        'users.first_name',
+        'users.last_name',
+        'project_details.project_permissions', // Role in the project
+        DB::raw('COUNT(DISTINCT iso_sec_2_2.assessment_id) as iso_sec_2_2_activities'),
+        DB::raw('COUNT(DISTINCT iso_sec_2_3_1.assessment_id) as iso_sec_2_3_1_activities'),
+        DB::raw('COUNT(DISTINCT iso_sec_2_2.assessment_id) + COUNT(DISTINCT iso_sec_2_3_1.assessment_id) as total_activities')
+    )
+    ->groupBy('users.id', 'users.first_name', 'users.last_name', 'project_details.project_permissions')
+    ->get();
+
+    
+
+
+       return view('user_actions.actions_on_a_project',[
+        'users'=>$users
+       ]);
+
+    }
 }
+
+
