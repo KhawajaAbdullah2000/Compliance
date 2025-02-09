@@ -5,8 +5,34 @@
 @include('user-nav')
 
 <div class="container">
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-secondary">
+                <tbody>
+                    <tr>
+                        <td class="fw-bold">Project Name:</td>
+                        <td>{{ $project->project_name }}</td>
+                        <td class="fw-bold">Your Email:</td>
+                        <td>{{ auth()->user()->email }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Type:</td>
+                        <td>{{ $project->type }}</td>
+                        <td class="fw-bold">Organization Name:</td>
+                        <td>{{ auth()->user()->organization->name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Status:</td>
+                        <td>{{ $project->status }}</td>
+                        <td class="fw-bold">Sub-Organization:</td>
+                        <td>{{ auth()->user()->organization->sub_org }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <h3 class="fw-bold" style='margin-top: 40px;margin-bottom:30px;'>User action on Project: </h3>
+    <h3 class="fw-bold" style='margin-top: 40px;margin-bottom:30px;'>User action on Project: {{$project->project_name}} </h3>
 
     <div class="card shadow-lg border-0 mt-4">
         <div class="card-body">
@@ -30,7 +56,12 @@
                                 {{ is_array($permissions) ? implode(', ', $permissions) : $user->project_permissions }}
                             </td>
 
-                            <td>{{$user->total_activities}}</td>
+                            <td>
+                                <a href="/total_activities_on_project/{{$project->project_id}}/{{ $user->id }}" 
+                                   class="btn btn-outline-success btn-md">
+                                   <span class="fw-bold"> {{ $user->total_activities }}</span>
+                                </a>
+                            </td>
                            
                         </tr>
                     @endforeach

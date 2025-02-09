@@ -4688,16 +4688,7 @@ foreach ($uniqueComponents as $cname) {
     }
 
     public function user_actions_on_project($proj_id,$user_id){
-        // $users = DB::table('project_details')
-        // ->join('users', 'project_details.assigned_enduser', '=', 'users.id')
-        // ->where('project_details.project_code', $proj_id)
-        // ->select(
-        //     'users.id',
-        //     'users.first_name',
-        //     'users.last_name',
-        //     'project_details.project_permissions' // Role in the project
-        // )
-        // ->get();
+    
 
         $users = DB::table('project_details')
     ->join('users', 'project_details.assigned_enduser', '=', 'users.id')
@@ -4722,13 +4713,51 @@ foreach ($uniqueComponents as $cname) {
     ->groupBy('users.id', 'users.first_name', 'users.last_name', 'project_details.project_permissions')
     ->get();
 
-    
 
+    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+    ->where('projects.project_id', $proj_id)->first();
 
        return view('user_actions.actions_on_a_project',[
-        'users'=>$users
+        'users'=>$users,
+        'project'=>$project
        ]);
 
+    }
+
+
+    public function total_activities_on_project($proj_id,$user_id){
+        $activities_2_2 = DB::table('iso_sec_2_2')
+        ->leftjoin('iso_sec_2_1','iso_sec_2_2.asset_id','iso_sec_2_1.assessment_id')
+        ->where('iso_sec_2_2.project_id', $proj_id)
+        ->where('iso_sec_2_2.last_edited_by', $user_id)
+        ->select('iso_sec_2_1.s_name','iso_sec_2_1.g_name','iso_sec_2_1.name',
+        'iso_sec_2_1.c_name','iso_sec_2_2.title_num','iso_sec_2_2.sub_req','iso_sec_2_2.last_edited_at')
+        ->orderBy('iso_sec_2_2.last_edited_at', 'desc')
+        ->get();
+
+        $activities_2_3_1 = DB::table('iso_sec_2_3_1')
+        ->leftjoin('iso_sec_2_1','iso_sec_2_3_1.asset_id','iso_sec_2_1.assessment_id')
+        ->where('iso_sec_2_3_1.project_id', $proj_id)
+        ->where('iso_sec_2_3_1.last_edited_by', $user_id)
+        ->select('iso_sec_2_1.s_name','iso_sec_2_1.g_name','iso_sec_2_1.name',
+        'iso_sec_2_1.c_name','iso_sec_2_3_1.control_num','iso_sec_2_3_1.last_edited_at')
+        ->orderBy('iso_sec_2_3_1.last_edited_at', 'desc')
+        ->get();
+
+
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+
+        $user=Db::table('users')->where('id',$user_id)->select('first_name','last_name','id')->first();
+
+      
+            return view('user_actions.activity_by_a_user_on_a_project',[
+            'user'=>$user,
+            'activities_2_2'=>$activities_2_2,
+            'project'=>$project,
+            'activities_2_3_1'=>$activities_2_3_1
+           ]);
+    
     }
 }
 

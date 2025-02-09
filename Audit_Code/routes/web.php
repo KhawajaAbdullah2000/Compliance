@@ -456,6 +456,7 @@ Route::get('user_action_all_projects_in_org/{org_id}',[OrganizationController::c
 Route::get('projects_created_by/{org_id}/{user_id}',[OrganizationController::class,'projects_created_by']);
 Route::get('projects_assigned/{org_id}/{user_id}',[OrganizationController::class,'projects_assigned']);
 Route::get('user_actions_on_project/{proj_id}/{user_id}',[ProjectController::class,'user_actions_on_project']);
+Route::get('total_activities_on_project/{proj_id}/{user_id}',[ProjectController::class,'total_activities_on_project']);
 
 
 
