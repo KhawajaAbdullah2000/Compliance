@@ -16,7 +16,7 @@
         <tr>
             <th>Name</th>
             <th>Organization</th>
-            <th>Sub-Organization</th>
+            <th>Department</th>
             <th>Email</th>
             <th>Global Roles</th>
             <th>Actions</th>
@@ -28,8 +28,9 @@
         <tr>
             <td>{{$user->first_name}} {{$user->last_name}}</td>
             <td>{{$user->name}}</td>
-            <td>{{$user->sub_org}}</td>
+            <td>{{$user->dept_name}}</td>
             <td>{{$user->email}}</td>
+          
             <td>
             @foreach ($user->permissions as $per)
            {{$per->name}}
@@ -39,8 +40,9 @@
             </td>
          
 
-     <td> <a href="/end_user/edit/{{$user->id}}" data-toggle="tooltip" data-placement="top" title="Edit"> <i class="fas fa-edit" style="color: #146e02;"></i></a>
-         <a href="" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash" style="color: #d01616;"></i></a>
+     <td>
+ <a href="/end_user/edit/{{$user->id}}" data-toggle="tooltip" data-placement="top" title="Edit"> <i class="fas fa-edit" style="color: #146e02;"></i></a>
+ <a href="" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash" style="color: #d01616;"></i></a>
      </td>
         </tr>
         @endforeach

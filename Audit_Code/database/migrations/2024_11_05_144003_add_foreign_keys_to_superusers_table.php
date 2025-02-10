@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('superusers', function (Blueprint $table) {
-            $table->foreign(['org_id'], 'orgidfk')->references(['org_id'])->on('organizations')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign(['org_id'], 'orgidfk')->references(['id'])->on('organizations')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign(['user_id'], 'useridfk')->references(['id'])->on('users')->onUpdate('CASCADE')->onDelete('CASCADE');
         });
     }

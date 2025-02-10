@@ -64,12 +64,18 @@ Route::post('add_new_org',[OrganizationController::class,'register_new_org']);
 Route::get('edit_org/{org_id}',[OrganizationController::class,'edit_org']);
 Route::put('edit_org/{org_id}',[OrganizationController::class,'update_org']);
 Route::get('delete_org/{org_id}',[OrganizationController::class,'delete_org']);
+Route::get('add_department/{id}',[OrganizationController::class,'add_department']);
+Route::post('add_new_dept/{id}',[OrganizationController::class,'add_new_dept']);
+Route::get('departments/{id}',[OrganizationController::class,'departments'])->name('departments');
+
 Route::get('add_user',[UserController::class,'add_user'])->name('add_user');
 Route::get('add_new_user/{id}',[UserController::class,'add_new_user'])->name('add_new_user');
 Route::post('add_new_user',[UserController::class,'register_new_user']);
 Route::get('users',[UserController::class,'users'])->name('users');
 Route::get('users/edit/{id}',[UserController::class,'user_edit_view']);
 Route::post('users/edit/{id}',[UserController::class,'user_edit']);
+Route::get('delete_user/{id}',[UserController::class,'delete_user']);
+
 
 }
 );

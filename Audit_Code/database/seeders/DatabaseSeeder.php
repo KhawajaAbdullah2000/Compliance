@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(GlobalRoles::class);
         $this->call(ProjectTypes::class);
         $this->call(Organization::class);
-        $this->call(SuperUser::class);
+        //$this->call(SuperUser::class);
 
 
     }

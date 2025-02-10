@@ -30,7 +30,7 @@
           <div class="card-body">
             <h3 class="card-title text-center text-bold mb-3">Edit {{$org->name}} {{$org->sub_org}}</h3>
 
-            <form class="row g-3" method="POST" action="/edit_org/{{$org->org_id}}/">
+            <form class="row g-3" method="POST" action="/edit_org/{{$org->id}}/">
               @csrf
               @method('PUT')
               <div class="col-md-6">
@@ -41,13 +41,7 @@
               <div class="text-danger">{{ $errors->first('name') }}</div>
           @endif
 
-              <div class="col-md-6">
-                <label for="sub_org" class="form-label">Sub Organization</label>
-                <input type="text" class="form-control" name="sub_org" placeholder="department" value="{{old('sub_org',$org->sub_org)}}">
-              </div>
-              @if($errors->has('sub_org'))
-              <div class="text-danger">{{ $errors->first('sub_org') }}</div>
-          @endif
+              
 
 
 

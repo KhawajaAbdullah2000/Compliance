@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
-use App\Models\User;
+use App\Models\Department;
 class OrganizationController extends Controller
 {
     public function organizations(Request $req){
@@ -17,7 +17,6 @@ class OrganizationController extends Controller
         if($req->has('search') and !empty($req->input('search'))){
             $orgs->where('name','like','%'.$req->input('search').'%')
             ->orwhere('country','like','%'.$req->input('search').'%')
-            ->orwhere('sub_org','like','%'.$req->input('search').'%')
             ->orwhere('type','like','%'.$req->input('search').'%');
         }
 
@@ -34,24 +33,12 @@ class OrganizationController extends Controller
     public function register_new_org(Request $req){
  
         $req->validate([
-            'name'=>'required|max:100',
-            'sub_org'=>['max:100', Rule::unique('organizations')->where(function ($query) use ($req) {
-                return $query->where('name', $req->input('name'));
-            })],
+            'name'=>'required|max:100|unique:organizations',
             'type'=>'required',
-            'country'=>'required|max:100',
-            'state'=>'required|max:100',
-            'city'=>'required|max:100',
-            'zip_code'=>'required|numeric',
-            'address'=>'required|max:100',
             'status'=>'required',
             'project_types' => 'required|array',
             'project_types.*' => 'exists:project_types,id',
-        ],
-             [           
-                'sub_org.unique'=>'This organization already exists'
-            ]
-
+        ]
         );
 
         $currentDateTime = now();
@@ -59,7 +46,6 @@ class OrganizationController extends Controller
         
         $org = Organization::create([
             'name' => $req->name,
-            'sub_org' => $req->sub_org,
             'type' => $req->type,
             'country' => $req->country,
             'state' => $req->state,
@@ -77,7 +63,7 @@ class OrganizationController extends Controller
         $projectTypeData = [];
         foreach ($projectTypes as $projectTypeId) {
             $projectTypeData[] = [
-                'org_id' => $org->org_id, // Assuming `org_id` is the primary key
+                'org_id' => $org->id, // Assuming `org_id` is the primary key
                 'project_type_id' => $projectTypeId,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -96,7 +82,7 @@ class OrganizationController extends Controller
     }
 
     public function edit_org($org_id){
-        $org=Organization::where('org_id',$org_id)->first();
+        $org=Organization::where('id',$org_id)->first();
         if($org){
             $proj_types=DB::table('project_types')->get();
             $selected_proj_types = DB::table('organization_project_types')
@@ -112,26 +98,23 @@ class OrganizationController extends Controller
 
     public function update_org(Request $req,$org_id){
         $req->validate([
-            'name'=>'required|max:100|',
-            'sub_org'=>'required',
+           'name' => [
+            'required',
+            'max:100',
+            Rule::unique('organizations')->ignore($org_id),
+        ],
             'type'=>'required',
-            'country'=>'required|max:100',
-            'state'=>'required|max:100',
-            'city'=>'required|max:100',
-            'zip_code'=>'required|numeric',
-            'address'=>'required|max:100',
             'status'=>'required',
             'project_types' => 'required|array',
             'project_types.*' => 'exists:project_types,id',
         ]
         );
-        $org= DB::table('organizations')->where('org_id',$org_id)->first();
+
 
             try{
-                DB::table('organizations')->where('org_id',$org_id)->
+                DB::table('organizations')->where('id',$org_id)->
                 update([
                 'name'=>$req->name,
-                'sub_org'=>$req->sub_org,
                 'type'=>$req->type,
                 'country'=>$req->country,
                 'city'=>$req->city,
@@ -166,8 +149,46 @@ class OrganizationController extends Controller
     }
 
     public function delete_org($org_id){
-        Db::table('organizations')->where('org_id',$org_id)->delete();
+        Db::table('organizations')->where('id',$org_id)->delete();
         return redirect()->route('organizations')->withSuccess('Organization deleted');
 
+    }
+
+    public function add_department($org_id){
+        $org=Organization::where('id',$org_id)->first();
+        if($org){
+            
+            return view('root_user.add_department',['org'=>$org]);
+        }
+        else{
+            return redirect()->route('organizations')->with('error','Organization not found');
+        }
+    }
+
+    public function add_new_dept(Request $req,$org_id){
+        $req->validate([
+            'name' => [
+                'required',
+                Rule::unique('departments')->where(function ($query) use ($org_id) {
+                    return $query->where('org_id', $org_id);
+                }),
+            ],
+        ]);
+    
+        $department = new Department();
+        $department->org_id = $org_id;
+        $department->name = $req->name;
+        $department->save();
+
+        return redirect()->route('organizations')->with('success','Department added successfully');
+    }
+
+    public function departments($org_id){
+        $org=DB::table('organizations')->where('id',$org_id)->first();
+        $departments=Db::table('departments')->where('org_id',$org_id)->get();
+        return view('root_user.departments',[
+            'org'=>$org,
+            'departments'=>$departments
+        ]);
     }
 }

@@ -9,12 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 class Organization extends Model
 {
 
-    protected $primaryKey = 'org_id';
  public $incrementing = true;
     use HasFactory;
     protected $fillable = [
         'name',
-        'sub_org',
         'type',
         'country',
         'state',
@@ -26,4 +24,14 @@ class Organization extends Model
         'record_creation_date',
         'record_creation_time',
     ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'org_id');
+    }
+
+    public function departments()
+    {
+        return $this->hasMany(Department::class, 'org_id');
+    }
 }

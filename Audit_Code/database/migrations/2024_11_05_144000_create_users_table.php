@@ -15,19 +15,20 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('org_id')->nullable()->index('org_id');
+            $table->unsignedBigInteger('org_id')->nullable()->index();
+            $table->unsignedBigInteger('department_id')->nullable()->index();
             $table->string('first_name', 100);
             $table->string('last_name', 100);
             $table->string('national_id')->nullable();
             $table->string('email')->unique();
-            $table->string('telephone', 100);
-            $table->string('address', 100);
-            $table->string('city', 100);
-            $table->string('state', 100);
-            $table->string('country', 100);
-            $table->integer('zip_code');
+            $table->string('telephone', 100)->nullable();
+            $table->string('address', 100)->nullable();
+            $table->string('city', 100)->nullable();
+            $table->string('state', 100)->nullable();
+            $table->string('country', 100)->nullable();
+            $table->integer('zip_code')->nullable();
             $table->string('password');
-            $table->string('2FA', 3);
+            $table->string('2FA', 3)->nullable();
             $table->unsignedBigInteger('privilege_id')->nullable();
             $table->string('status', 20);
             $table->timestamp('email_verified_at')->nullable();

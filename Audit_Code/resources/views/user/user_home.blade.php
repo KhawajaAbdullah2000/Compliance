@@ -31,7 +31,7 @@
                             <h5>Organization: <span class="text-info">{{ auth()->user()->organization->name }}</span></h5>
                         </li>
                         <li>
-                            <h5>Department: <span class="text-info">{{ auth()->user()->organization->sub_org }}</span></h5>
+                            <h5>Department: <span class="text-info">{{ optional(auth()->user()->department)->name ?? 'Not Assigned' }}</span></h5>
                         </li>
                         @can('Project Creator')
                         <li>

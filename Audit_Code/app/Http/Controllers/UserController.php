@@ -128,10 +128,11 @@ public function add_user(){
 }
 
 public function add_new_user($id){
-    $org=Organization::select('org_id','name','sub_org')->where('org_id',$id)->first();
+    $org=Organization::select('id','name')->where('id',$id)->first();
     $privileges=Privilege::where('privilege_name','!=','Root Admin')->where('privilege_name','!=','End User')->get();
+   $departments=DB::table('departments')->where('org_id',$id)->get();
     if($org){
-        return view('root_user.add_new_user_form',['org'=>$org,'privilege'=>$privileges]);
+        return view('root_user.add_new_user_form',['org'=>$org,'privilege'=>$privileges,'departments'=>$departments]);
     }
     else{
         return redirect()->route('add_user')->with('status','No such organization found');
@@ -144,21 +145,19 @@ $req->validate(
         'first_name'=>'required|max:100',
         'last_name'=>'required|max:100',
         'email'=>'required|email|unique:users',
-        'telephone'=>'required|numeric',
-        'address'=>'required|max:100',
-        'city'=>'required|max:100',
-        'state'=>'required|max:100',
-        'country'=>'required|max:100',
-        'zip_code'=>'required|numeric',
-        'password'=>'required|max:30',
+'password' => 'required|min:12|max:30|regex:/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+$/',
         'privilege_id'=>'required',
         'status'=>'required'
+    ],
+    [
+        'password.regex' => 'The password must be alphanumeric and include at least one letter and one number.',
     ]
 
     );
     $data=$req->only( ['first_name',
     'last_name',
     'email',
+    'department_id',
     'national_id',
     'telephone',
     'password',
@@ -201,10 +200,10 @@ $req->validate(
 
 public function users(){
     $users=User::select('users.id','users.first_name','users.last_name',
-    'users.email','users.privilege_id','privileges.privilege_name','organizations.name',
-    'organizations.sub_org')
-    ->join('organizations','users.org_id','organizations.org_id')
+    'users.email','users.privilege_id','privileges.privilege_name','organizations.name','departments.name as dept_name')
+    ->join('organizations','users.org_id','organizations.id')
     ->join('privileges','users.privilege_id','privileges.id')
+    ->leftjoin('departments','users.department_id','departments.id')
     ->where('users.privilege_id','!=',4)->get();
     return view('root_user.users',['users'=>$users]);
     
@@ -214,8 +213,9 @@ public function user_edit_view($id){
     $privileges=Privilege::where('privilege_name','!=','Root Admin')
     ->where('privilege_name','!=','End User')->get();
     $user=User::where('id',$id)->first();
+    $departments=DB::table('departments')->where('org_id',$user->org_id)->get();
     if($user){
-        return view('root_user.edit_user',['user'=>$user,'privileges'=>$privileges]);
+        return view('root_user.edit_user',['user'=>$user,'privileges'=>$privileges,'departments'=>$departments]);
     }
     else{
         return redirect()->route('users')->with('error','Student not found');
@@ -231,12 +231,6 @@ public function user_edit(Request $req,$id){
             'first_name'=>'required|max:100',
             'last_name'=>'required|max:100',
             'email' => ['required',Rule::unique('users')->ignore($id,'id')],
-            'telephone'=>'required|numeric',
-            'address'=>'required|max:100',
-            'city'=>'required|max:100',
-            'state'=>'required|max:100',
-            'country'=>'required|max:100',
-            'zip_code'=>'required|numeric',
             'privilege_id'=>'required',
             'status'=>'required'
         ]
@@ -293,6 +287,7 @@ if($req->privilege_id==1){
  $user->zip_code=$req->zip_code;
  $user->privilege_id=$req->privilege_id;
  $user->status=$req->status;
+ $user->department_id=$req->department_id;
 
 
 if($req->privilege_id==1){
@@ -310,6 +305,11 @@ if($req->privilege_id==1){
    return redirect()->route('users')->with('success','Record Updated Successfully');
 
 
+}
+
+public function delete_user($id){
+    DB::table('users')->where('id',$id)->delete();
+    return redirect()->route('users');
 }
 
 // public function excel(){

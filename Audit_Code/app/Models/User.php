@@ -35,6 +35,7 @@ class User extends Authenticatable implements CanResetPassword
         '2FA',
         'status',
         'privilege_id',
+        'department_id'
 
 
 
@@ -62,6 +63,11 @@ class User extends Authenticatable implements CanResetPassword
 
     public function organization()
     {
-        return $this->belongsTo(Organization::class, 'org_id', 'org_id');
+        return $this->belongsTo(Organization::class, 'org_id');
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id');
     }
 }

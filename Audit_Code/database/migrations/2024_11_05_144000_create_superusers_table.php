@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('superusers', function (Blueprint $table) {
             $table->integer('id', true);
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->integer('org_id')->nullable()->index('orgidfk');
+            $table->unsignedBigInteger('org_id')->nullable()->index('orgidfk');
 
             $table->index(['user_id', 'org_id'], 'user_id');
         });

@@ -39,13 +39,7 @@
             <div class="text-danger">{{ $errors->first('name') }}</div>
         @endif
 
-            <div class="col-md-6">
-              <label for="sub_org" class="form-label">Sub Organization</label>
-              <input type="text" class="form-control" name="sub_org" placeholder="department" value="{{old('sub_org')}}">
-            </div>
-            @if($errors->has('sub_org'))
-            <div class="text-danger">{{ $errors->first('sub_org') }}</div>
-        @endif
+           
 
 
 

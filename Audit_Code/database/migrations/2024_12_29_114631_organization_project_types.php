@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('organization_project_types', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('org_id');
+            $table->unsignedBigInteger('org_id');
 
             $table->unsignedBigInteger('project_type_id');
             $table->timestamps();
 
             // Foreign key constraints
-            $table->foreign('org_id')->references('org_id')->on('organizations')->onDelete('cascade');
+            $table->foreign('org_id')->references('id')->on('organizations')->onDelete('cascade');
             $table->foreign('project_type_id')->references('id')->on('project_types')->onDelete('cascade');
 
             // Prevent duplicate entries for the same organization and project type

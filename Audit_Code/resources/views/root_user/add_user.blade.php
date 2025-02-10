@@ -21,12 +21,16 @@
 
       </div>
     </nav>
+
+    {{-- <div class="mt-4">
+
+
     
-    <table class="table table-responsive table-hover mt-4" id="myTable">
+    <table class="table table-responsive table-hover" id="myTable" style="">
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Sub-org</th>
+            
                 <th>Actions</th>
             </tr>
         </thead>
@@ -36,14 +40,50 @@
    
             <tr>
                 <td>{{$org->name}}</td>
-                <td>{{$org->sub_org}}</td>
+
         
- <td> <a class="btn btn-warning btn-md" href="{{route('add_new_user',['id'=>$org->org_id])}}">Add a user  </a>  </td>
+ <td> <a class="btn btn-warning btn-md" href="{{route('add_new_user',['id'=>$org->id])}}">Add a user  </a>  </td>
             </tr>
             @endforeach
    
         </tbody>
     </table>
+
+  </div> --}}
+
+  <div class=" mt-4">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white text-center py-3">
+            <h3 class="mb-0 fw-bold">Organizations List</h3>
+        </div>
+
+        <div class="card-body p-4">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered text-center align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="py-3">Organization Name</th>
+                            <th class="py-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($orgs as $org)
+                        <tr>
+                            <td class="fw-semibold">{{ $org->name }}</td>
+                            <td>
+                                <a class="btn btn-warning btn-sm fw-bold px-3 py-2 shadow-sm" href="{{ route('add_new_user', ['id' => $org->id]) }}">
+                                    <i class="fas fa-user-plus"></i> Add a User
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 </div>

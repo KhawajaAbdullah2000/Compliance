@@ -16,9 +16,8 @@ class Organization extends Seeder
         DB::table('organizations')->insert(
 
             [
-                'name'=>'Bank',
+                'name'=>'Askari Bank',
                 'type'=>'guest',
-                'sub_org'=>'Information Security',
                 'city'=>'karachi',
                 'state'=>'Sindh',
                 'country'=>'country',

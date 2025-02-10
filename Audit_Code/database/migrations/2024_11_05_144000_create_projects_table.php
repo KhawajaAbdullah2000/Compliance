@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->integer('project_id', true);
             $table->string('project_name', 100);
-            $table->integer('org_id')->nullable()->index('org_id');
+            $table->unsignedBigInteger('org_id')->nullable()->index('org_id');
             $table->unsignedBigInteger('created_by')->nullable()->index('created_by');
             $table->date('project_creation_date');
             $table->time('project_creation_time');
