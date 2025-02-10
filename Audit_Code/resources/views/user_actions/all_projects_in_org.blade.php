@@ -28,13 +28,13 @@
                         <tr>
                             <td>{{ $user->first_name }} {{ $user->last_name }}</td>
                             <td>
-                                <a href="/projects_created_by/{{ auth()->user()->organization->org_id }}/{{ $user->id }}" 
+                                <a href="/projects_created_by/{{ auth()->user()->organization->id }}/{{ $user->id }}" 
                                    class="btn btn-outline-primary btn-md">
                                   <span class="fw-bold"> {{ $user->created_projects }}</span>
                                 </a>
                             </td>
                             <td>
-                                <a href="/projects_assigned/{{ auth()->user()->organization->org_id }}/{{ $user->id }}" 
+                                <a href="/projects_assigned/{{ auth()->user()->organization->id }}/{{ $user->id }}" 
                                    class="btn btn-outline-success btn-md">
                                    <span class="fw-bold"> {{ $user->assigned_projects }}</span>
                                 </a>

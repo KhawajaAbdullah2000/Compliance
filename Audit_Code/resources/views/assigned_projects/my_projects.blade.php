@@ -13,7 +13,7 @@
     </h1>
 
 
-    <a href="/user_action_all_projects_in_org/{{auth()->user()->organization->org_id}}" class="btn btn-primary btn-md mb-4">User Action on All Projects</a>
+    <a href="/user_action_all_projects_in_org/{{auth()->user()->organization->id}}" class="btn btn-primary btn-md mb-4">User Action on All Projects</a>
 
 
     <!-- Projects Table -->

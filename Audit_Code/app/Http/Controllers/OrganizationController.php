@@ -154,44 +154,6 @@ class OrganizationController extends Controller
 
     }
 
-<<<<<<< HEAD
-    public function add_department($org_id){
-        $org=Organization::where('id',$org_id)->first();
-        if($org){
-            
-            return view('root_user.add_department',['org'=>$org]);
-        }
-        else{
-            return redirect()->route('organizations')->with('error','Organization not found');
-        }
-    }
-
-    public function add_new_dept(Request $req,$org_id){
-        $req->validate([
-            'name' => [
-                'required',
-                Rule::unique('departments')->where(function ($query) use ($org_id) {
-                    return $query->where('org_id', $org_id);
-                }),
-            ],
-        ]);
-    
-        $department = new Department();
-        $department->org_id = $org_id;
-        $department->name = $req->name;
-        $department->save();
-
-        return redirect()->route('organizations')->with('success','Department added successfully');
-    }
-
-    public function departments($org_id){
-        $org=DB::table('organizations')->where('id',$org_id)->first();
-        $departments=Db::table('departments')->where('org_id',$org_id)->get();
-        return view('root_user.departments',[
-            'org'=>$org,
-            'departments'=>$departments
-        ]);
-=======
     public function user_action_all_projects_in_org($org_id){
     
 
@@ -278,6 +240,5 @@ class OrganizationController extends Controller
             'user'=>$user
         ]);
 
->>>>>>> 65f4e75436718b7804ea021c8b84b4ef56d8c261
     }
 }
