@@ -9,10 +9,12 @@
 <div class="container py-5">
     <!-- Page Heading -->
     <h1 class="text-center fw-bold mb-5">Risk and Compliance Projects of Organization: {{auth()->user()->organization->name}}
-        @if(auth()->user()->organization->sub_org)
         
-        - {{auth()->user()->organization->sub_org}}
-    @endif</h1>
+    </h1>
+
+
+    <a href="/user_action_all_projects_in_org/{{auth()->user()->organization->org_id}}" class="btn btn-primary btn-md mb-4">User Action on All Projects</a>
+
 
     <!-- Projects Table -->
     <div class="card shadow-lg border-0">
@@ -41,6 +43,8 @@
                         {{-- <th class="text-center">Compliance Status by Asset Component</th> --}}
                
                         <th class="text-center">Duplicate Project</th>
+                        <th class="text-center">User Actions</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -231,6 +235,13 @@
                                 </div>
                             </div>
                         </div>
+
+                         <td style='text-align:center'>
+                                <a href="/user_actions_on_project/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
+                                   data-toggle="tooltip" title="User Actions">
+                                    <i class="fas fa-eye fa-lg" style="color: rgb(235, 23, 147)"></i>
+                                </a>
+                            </td> 
                         
                     </tr>
                     @endforeach

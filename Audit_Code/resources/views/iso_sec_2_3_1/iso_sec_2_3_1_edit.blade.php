@@ -49,6 +49,29 @@ $isApprover=in_array('Data Approver', $permissions);
         </div>
     </div>
 
+    <div class="row d-flex justify-content-between align-items-start">
+
+    <div class="col-md-6 mt-4">
+        <table class="table table-bordered table-responsive">
+            <tr>
+                <td class="bg-secondary text-white">Service</td>
+                <td>{{$riskData->s_name}}</td>
+                <td class="bg-secondary text-white">Asset Group</td>
+                <td>{{$riskData->g_name}}</td>
+                <td class="bg-secondary text-white">Asset Subgroup</td>
+                <td>{{$riskData->name}}</td>
+                <td class="bg-secondary text-white">Asset Component</td>
+                <td>{{$riskData->c_name}}</td>
+            </tr>
+        </table>
+        </div>
+
+        <div class="col-md-6 mt-4 text-end">
+           <a href="/iso_sec_2_3_1/{{$assetData->asset_id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-md btn-warning">Go back to RIsk Assessment</a>
+        </div>
+
+    </div>
+
 
     @if ($errors->any())
     <div class="alert alert-danger">
@@ -59,6 +82,7 @@ $isApprover=in_array('Data Approver', $permissions);
         </ul>
     </div>
 @endif
+
 
 
 <div class="row justify-content-center">

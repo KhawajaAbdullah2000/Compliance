@@ -154,6 +154,7 @@ class OrganizationController extends Controller
 
     }
 
+<<<<<<< HEAD
     public function add_department($org_id){
         $org=Organization::where('id',$org_id)->first();
         if($org){
@@ -190,5 +191,93 @@ class OrganizationController extends Controller
             'org'=>$org,
             'departments'=>$departments
         ]);
+=======
+    public function user_action_all_projects_in_org($org_id){
+    
+
+        $users = DB::table('users')
+        ->leftJoin('projects', 'users.id', '=', 'projects.created_by')
+        ->leftJoin('project_details', 'users.id', '=', 'project_details.assigned_enduser')
+        ->select(
+            'users.id',
+            'users.first_name',
+            'users.last_name',
+            'users.privilege_id',
+       
+            DB::raw('COUNT(DISTINCT projects.project_id) as created_projects'),
+            DB::raw('COUNT(DISTINCT project_details.project_code) as assigned_projects')
+        )
+        ->where('users.org_id', $org_id)
+        ->groupBy('users.id', 'users.first_name', 'users.last_name', 'users.privilege_id')
+        ->get();
+
+    
+
+        return view('user_actions.all_projects_in_org',[
+            'users'=>$users
+        ]);
+
+    }
+
+    public function projects_created_by($org_id,$user_id){
+        $projects = DB::table('projects')
+    ->join('project_types', 'projects.project_type', '=', 'project_types.id')
+    ->leftJoin('project_details', 'projects.project_id', '=', 'project_details.project_code')
+    ->where('projects.org_id', $org_id)
+    ->where('projects.created_by', $user_id)
+    ->select(
+        'projects.*',
+        'project_types.type as project_type_name', // Adjust column name based on your schema
+        DB::raw('GROUP_CONCAT(DISTINCT project_details.assigned_enduser) as assigned_users') // Ensure distinct users
+    )
+    ->groupBy(
+        'projects.project_id',
+        'project_types.type'  // Add all non-aggregated columns used in SELECT to GROUP BY
+        
+    )
+    ->get();
+
+      
+
+        $user=Db::table('users')->where('id',$user_id)
+        ->select('first_name','last_name')
+        ->first();
+     
+        return view('user_actions.projects_created_by',[
+            'projects'=>$projects,
+            'user'=>$user
+        ]);
+
+    }
+
+    public function projects_assigned($org_id,$user_id){
+        $projects = DB::table('projects')
+        ->join('project_details', 'projects.project_id', '=', 'project_details.project_code')
+        ->join('project_types', 'projects.project_type', '=', 'project_types.id')
+        ->where('project_details.assigned_enduser', $user_id) // Filter by assigned end user
+        ->select(
+            'projects.*',
+            'project_types.type as project_type_name',
+            DB::raw('GROUP_CONCAT(DISTINCT project_details.assigned_enduser) as assigned_users')
+        )
+        ->groupBy(
+            'projects.project_id',
+            'project_types.type',
+       
+        )
+        ->get();
+
+
+
+        $user=Db::table('users')->where('id',$user_id)
+        ->select('first_name','last_name')
+        ->first();
+     
+        return view('user_actions.projects_assigned',[
+            'projects'=>$projects,
+            'user'=>$user
+        ]);
+
+>>>>>>> 65f4e75436718b7804ea021c8b84b4ef56d8c261
     }
 }

@@ -616,14 +616,13 @@ class KSA_NCA extends Controller
                                     $fetch_title=$innerArray['0'];
                                     $subdomain=$innerArray['1'];
 
-                                    DB::table('iso_sec_2_2')->updateOrInsert(
-                                        [
-                                            'project_id' => $proj_id, 
-                                            'asset_id' => $asset_id,
-                                            'title_num' => $fetch_title,
-                                            'sub_req' => $fetch_sub_req,
-                                            'subdomain'=>$subdomain
-                                        ], 
+                                    DB::table('iso_sec_2_2')
+                                    ->where('project_id',$proj_id)
+                                    ->where('asset_id',$asset_id)
+                                    ->where('title_num',$fetch_title)
+                                    ->where('sub_req',$fetch_sub_req)
+                                    ->where('subdomain',$subdomain)
+                                    ->update(
                                         $data
                                     );
                                     
@@ -638,8 +637,7 @@ class KSA_NCA extends Controller
                                 $data2 = Excel::toArray([], $filepath); //with header
                                 $rows = array_slice($data2[0], 1); //without header(first row)
                         
-                 
-                                //all controls in this domain
+                
                             
                                  foreach ($rows as $innerArray2) {
                                     // Access specific value from the inner array
@@ -647,14 +645,13 @@ class KSA_NCA extends Controller
                                     $fetch_title=$innerArray2['0'];
                                     $subdomain=$innerArray2['1'];
 
-                                    DB::table('iso_sec_2_2')->updateOrInsert(
-                                        [
-                                            'project_id' => $proj_id, 
-                                            'asset_id' => $asset_id,
-                                            'title_num' => $fetch_title,
-                                            'sub_req' => $fetch_sub_req,
-                                            'subdomain'=>$subdomain
-                                        ], 
+                                    DB::table('iso_sec_2_2')
+                                    ->where('project_id',$proj_id)
+                                    ->where('asset_id',$asset_id)
+                                    ->where('title_num',$fetch_title)
+                                    ->where('sub_req',$fetch_sub_req)
+                                    ->where('subdomain',$subdomain)
+                                    ->update(
                                         $data
                                     );
                                     
@@ -667,16 +664,17 @@ class KSA_NCA extends Controller
                             if($req->action==1||$req->action==4){
                    
                                 // If evidence level is 'component', just insert or update for the specific asset
-                                DB::table('iso_sec_2_2')->updateOrInsert(
-                                    [
-                                        'project_id' => $proj_id, 
-                                        'asset_id' => $asset_id,
-                                        'title_num' => $title,
-                                        'sub_req' => $sub_req,
-                                        'subdomain'=>$req->subdomain
-                                    ], 
-                                    $data
-                                );
+                                DB::table('iso_sec_2_2')
+                                    ->where('project_id',$proj_id)
+                                    ->where('asset_id',$asset_id)
+                                    ->where('title_num',$title)
+                                    ->where('sub_req',$sub_req)
+                                    ->where('subdomain',$req->subdomain)
+                                    ->update(
+                                        $data
+                                    );
+                               
+                          
                             }
 
                          
@@ -733,17 +731,16 @@ class KSA_NCA extends Controller
                                 $fetch_title = $innerArray['0']; 
                                 $subdomain=$innerArray['1'];
                                 
-                
-                                DB::table('iso_sec_2_2')->updateOrInsert(
-                                    [
-                                        'project_id' => $proj_id, 
-                                        'asset_id' => $ass->assessment_id, 
-                                        'title_num' => $fetch_title,
-                                        'sub_req'=>$fetch_sub_req,
-                                        'subdomain'=>$subdomain
-                                    ], 
+                                DB::table('iso_sec_2_2')
+                                ->where('project_id',$proj_id)
+                                ->where('asset_id',$ass->assessment_id)
+                                ->where('title_num',$fetch_title)
+                                ->where('sub_req',$fetch_sub_req)
+                                ->where('subdomain',$subdomain)
+                                ->update(
                                     $data
                                 );
+                          
                                 
                             }
 
@@ -764,15 +761,13 @@ class KSA_NCA extends Controller
                                 $fetch_sub_req = $innerArray['3']; 
                                 $subdomain=$innerArray['1'];
 
-                                DB::table('iso_sec_2_2')->updateOrInsert(
-                                    [
-                                        'project_id' => $proj_id, 
-                                        'asset_id' => $ass->assessment_id, 
-                                        'sub_req' => $fetch_sub_req,
-                                        'title_num'=>$fetch_title,
-                                        'subdomain'=>$subdomain
-
-                                    ], 
+                                DB::table('iso_sec_2_2')
+                                ->where('project_id',$proj_id)
+                                ->where('asset_id',$ass->assessment_id)
+                                ->where('title_num',$fetch_title)
+                                ->where('sub_req',$fetch_sub_req)
+                                ->where('subdomain',$subdomain)
+                                ->update(
                                     $data
                                 );
                                 
@@ -783,18 +778,18 @@ class KSA_NCA extends Controller
                         }
 
                         if($req->action==1||$req->action==4){
-                        
-                                DB::table('iso_sec_2_2')->updateOrInsert(
-                                    [
-                                        'project_id' => $proj_id, 
-                                        'asset_id' => $ass->assessment_id, 
-                                        'title_num' => $title,
-                                        'sub_req' => $sub_req,
-                                        'subdomain'=>$req->subdomain
 
-                                    ], 
-                                    $data
-                                );
+                            DB::table('iso_sec_2_2')
+                            ->where('project_id',$proj_id)
+                            ->where('asset_id',$ass->assessment_id)
+                            ->where('title_num',$title)
+                            ->where('sub_req',$sub_req)
+                            ->where('subdomain',$req->subdomain)
+                            ->update(
+                                $data
+                            );
+                        
+                             
                                 
                         }
 
@@ -818,6 +813,7 @@ class KSA_NCA extends Controller
 
     public function approve_sec_2_3_1(Request $req,$control_num,$proj_id,$user_id,$asset_id){
 
+      
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -862,14 +858,13 @@ $domain = $parts[0];
 
 
 if($req->action==1||$req->action==4){
-    DB::table('iso_sec_2_3_1')->updateOrInsert(
-        [
-            'project_id' => $proj_id, 
-            'asset_id' => $asset_id, 
-            'control_num' => $control_num,
-           
-        ], 
+    DB::table('iso_sec_2_3_1')
+    ->where('project_id',$proj_id)
+    ->where('asset_id',$asset_id)
+    ->where('control_num',$control_num)
+    ->update(
         $data
+       
     );
 }
 
@@ -878,25 +873,19 @@ if($req->action==2||$req->action==5){
     ->where('project_id', $proj_id)
     ->where('asset_id', $asset_id)
     ->where('control_num', 'like', $domain . '%')
-
-    ->updateOrInsert(
-        [
-            'project_id' => $proj_id, 
-            'asset_id' => $asset_id, 
-            
-        ], 
+    ->update(
         $data
+     
     );
 }
 
 if($req->action==3||$req->action==6){
-    DB::table('iso_sec_2_3_1')->updateOrInsert(
-        [
-            'project_id' => $proj_id, 
-            'asset_id' => $asset_id, 
-           
-        ], 
+    DB::table('iso_sec_2_3_1')
+    ->where('project_id', $proj_id)
+    ->where('asset_id', $asset_id)
+    ->update(
         $data
+     
     );
 }
 

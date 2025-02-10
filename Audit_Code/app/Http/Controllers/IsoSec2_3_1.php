@@ -695,6 +695,8 @@ class IsoSec2_3_1 extends Controller
                         $riskData=Db::table('iso_sec_2_1')->where('project_id',$proj_id)
                         ->where('assessment_id',$asset_id)->first();
 
+          
+
 
                     return view('iso_sec_2_3_1.iso_sec_2_3_1_edit', [
                         'project' => $project,
