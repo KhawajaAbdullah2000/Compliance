@@ -6,6 +6,12 @@
 
 @php
 $permissions=json_decode($project_permissions);
+$isEditable = in_array('Data Inputter', $permissions) && $after_risk_treatment->approved != 1;
+
+// User is read-only ONLY IF they do NOT have "Data Inputter"
+$isReadOnly = !$isEditable && (in_array('Data Viewer', $permissions) || in_array('Data Approver', $permissions));
+
+$isApprover=in_array('Data Approver', $permissions);
 @endphp
 
 
@@ -118,7 +124,7 @@ $permissions=json_decode($project_permissions);
 
 
 
-<div class="row d-flex">
+{{-- <div class="row d-flex">
 
     <div class="col-md-6">
 
@@ -204,8 +210,94 @@ $permissions=json_decode($project_permissions);
 
 
     </div>
-</div>
+</div> --}}
+<div class="row d-flex">
+    <div class="col-md-6">
+        <div class="card mt-2">
+            <div class="card-header my_bg_color text-white text-center">
+                <h3>Justification For Risk Acceptance</h3>
+            </div>
 
+            <div class="card-body">
+                <form action="/iso_sec_2_3_2_justification_form_submit/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" 
+                      method="post">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="control_num" value="{{$control_num}}">
+
+                    <label for="">Justification for Risk Acceptance</label>
+                    <input type="text" name="acceptance_justification" class="form-control" 
+                           value="{{old('acceptance_justification', $after_risk_treatment->acceptance_justification)}}" 
+                           {{ $isEditable ? '' : 'disabled' }}>
+                    @if($errors->has('acceptance_justification'))
+                        <div class="text-danger">{{ $errors->first('acceptance_justification') }}</div>
+                    @endif
+
+                    <div class="form-group mt-4">
+                        <label for="">Acceptance Target Date</label>
+                        <input type="date" name="acceptance_target_date" 
+                               value="{{old('acceptance_target_date', $after_risk_treatment->acceptance_target_date)}}" 
+                               {{ $isEditable ? '' : 'disabled' }}>
+                        @if($errors->has('acceptance_target_date'))
+                            <div class="text-danger">{{ $errors->first('acceptance_target_date') }}</div>
+                        @endif
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <label for="">Actual Acceptance Date</label>
+                        <input type="date" name="acceptance_actual_date" 
+                               value="{{old('acceptance_actual_date', $after_risk_treatment->acceptance_actual_date)}}" 
+                               {{ $isEditable ? '' : 'disabled' }}>
+                        @if($errors->has('acceptance_actual_date'))
+                            <div class="text-danger">{{ $errors->first('acceptance_actual_date') }}</div>
+                        @endif
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <label for="">Proposed Responsibility for Acceptance</label>
+                        <select class="boxstyling form-select" name="acceptance_proposed_responsibility" 
+                                {{ $isEditable ? '' : 'disabled' }}>
+                            <option value="">Select User</option>
+                            @foreach ($users as $user)
+                                <option value="{{$user->id}}" 
+                                        {{ old('acceptance_proposed_responsibility', $after_risk_treatment->acceptance_proposed_responsibility) == $user->id ? 'selected' : '' }}>
+                                    {{$user->first_name}} {{$user->last_name}}
+                                </option>
+                            @endforeach
+                        </select>
+                        @if($errors->has('acceptance_proposed_responsibility'))
+                            <div class="text-danger">{{ $errors->first('acceptance_proposed_responsibility') }}</div>
+                        @endif
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <label for="">Accepted By</label>
+                        <select class="boxstyling form-select" name="accepted_by" 
+                                {{ $isEditable ? '' : 'disabled' }}>
+                            <option value="">Select User</option>
+                            @foreach ($users as $user)
+                                <option value="{{$user->id}}" 
+                                        {{ old('accepted_by', $after_risk_treatment->accepted_by) == $user->id ? 'selected' : '' }}>
+                                    {{$user->first_name}} {{$user->last_name}}
+                                </option>
+                            @endforeach
+                        </select>
+                        @if($errors->has('accepted_by'))
+                            <div class="text-danger">{{ $errors->first('accepted_by') }}</div>
+                        @endif
+                    </div>
+
+                    @if($isEditable)
+                        <div class="text-center">
+                            <button type="submit" class="btn my_bg_color text-white btn-md mt-3">Save Changes</button>
+                        </div>
+                    @endif
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

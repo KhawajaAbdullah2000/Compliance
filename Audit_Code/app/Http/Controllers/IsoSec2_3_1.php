@@ -934,7 +934,7 @@ class IsoSec2_3_1 extends Controller
                 ->first();
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
-                if (in_array('Data Inputter', $permissions)) {
+    
                     if ($checkpermission->type_id) {
 
                         $asset_risk_assess = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
@@ -963,6 +963,7 @@ class IsoSec2_3_1 extends Controller
                             ->where('projects.project_id', $proj_id)->first();
 
 
+                            //dd($after_risk_treatment);
                     
 
                         return view('iso_sec_2_3_1.iso_sec_2_3_2_treatform', [
@@ -980,7 +981,7 @@ class IsoSec2_3_1 extends Controller
 
                         ]);
                     }
-                }
+                
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
         }
@@ -1277,7 +1278,7 @@ class IsoSec2_3_1 extends Controller
                 ->first();
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
-                if (in_array('Data Inputter', $permissions)) {
+              
                     if ($checkpermission->type_id ) {
 
                         $asset_risk_assess = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
@@ -1319,7 +1320,7 @@ class IsoSec2_3_1 extends Controller
 
                         ]);
                     }
-                }
+                
             }
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
         }

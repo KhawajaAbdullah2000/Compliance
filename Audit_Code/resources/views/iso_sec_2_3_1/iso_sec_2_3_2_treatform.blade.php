@@ -7,7 +7,12 @@
 @php
 $permissions = json_decode($project_permissions);
 $decodedRisks = json_decode($treatmentData->desc_risk, true);
+$isEditable = in_array('Data Inputter', $permissions) && $after_risk_treatment->approved != 1;
 
+// User is read-only ONLY IF they do NOT have "Data Inputter"
+$isReadOnly = !$isEditable && (in_array('Data Viewer', $permissions) || in_array('Data Approver', $permissions));
+
+$isApprover=in_array('Data Approver', $permissions);
 @endphp
 
 <div class="container">
@@ -115,43 +120,56 @@ $decodedRisks = json_decode($treatmentData->desc_risk, true);
     </div>
     @endif
 
+
+
     <div class="row">
         <div class="col-lg-12">
             <div class="row">
                 <div class="col-lg-12">
-                    <form action="/iso_sec_2_3_2_treat_form1_submit/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" method="post">
+                    <form action="/iso_sec_2_3_2_treat_form1_submit/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" 
+                          method="post">
                         @csrf
                         @method('PUT')
-
+    
                         <div class="mb-4">
                             <div class="form-group mt-4">
-
                                 <div class="d-flex justify-content-end">
                                     <label for="residual_risk_treatment" class="fs-5">Residual Risk Treatment</label>
-                                    <select name="residual_risk_treatment" class="boxstyling2 mx-2" id="residual_risk_treatment">
-                                        <option value="modify risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment) == 'modify risk' ? 'selected' : ''}}>Modify Risk</option>
-                                        <option value="retain and accept risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment) == 'retain and accept risk' ? 'selected' : ''}}>Retain and Accept Risk</option>
-                                        <option value="share risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment) == 'share risk' ? 'selected' : ''}}>Share Risk</option>
-                                        <option value="avoid risk" {{old('residual_risk_treatment',$after_risk_treatment->residual_risk_treatment) == 'avoid risk' ? 'selected' : ''}}>Avoid Risk</option>
+                                    <select name="residual_risk_treatment" class="boxstyling2 mx-2" id="residual_risk_treatment" 
+                                            {{ $isEditable ? '' : 'disabled' }}>
+                                        <option value="modify risk" {{ old('residual_risk_treatment', $after_risk_treatment->residual_risk_treatment) == 'modify risk' ? 'selected' : '' }}>Modify Risk</option>
+                                        <option value="retain and accept risk" {{ old('residual_risk_treatment', $after_risk_treatment->residual_risk_treatment) == 'retain and accept risk' ? 'selected' : '' }}>Retain and Accept Risk</option>
+                                        <option value="share risk" {{ old('residual_risk_treatment', $after_risk_treatment->residual_risk_treatment) == 'share risk' ? 'selected' : '' }}>Share Risk</option>
+                                        <option value="avoid risk" {{ old('residual_risk_treatment', $after_risk_treatment->residual_risk_treatment) == 'avoid risk' ? 'selected' : '' }}>Avoid Risk</option>
                                     </select>
-                                    <button type="submit" class="btn fs-6 my_bg_color fw-bold text-white btn-sm">Save Changes and go to Action Plan</button>
-
+    
+                                    @if($isEditable)
+                                        <button type="submit" class="btn fs-6 my_bg_color fw-bold text-white btn-sm">
+                                            Save Changes and go to Action Plan
+                                        </button>
+                                        @else
+                                        <a href="/risk_treatment_edit_action_plan_form/{{$after_risk_treatment->asset_id}}/{{$after_risk_treatment->control_num}}/{{$project_id}}/{{auth()->user()->id}}" class="btn fs-6 my_bg_color fw-bold text-white btn-sm">
+                                           go to Action Plan
+                                        </a>
+                                    @endif
+    
                                     @if($after_risk_treatment->residual_risk_treatment == "retain and accept risk")
-                                    <a href="/risk_treatment_justification/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" class="btn my_bg_color text-white fw-bold mx-1">Create Justification</a>
+                                        <a href="/risk_treatment_justification/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" 
+                                           class="btn my_bg_color text-white fw-bold mx-1">
+                                            Create Justification
+                                        </a>
                                     @endif
                                 </div>
-
+    
                                 @if($errors->has('residual_risk_treatment'))
-                                <div class="text-danger">{{ $errors->first('residual_risk_treatment') }}</div>
+                                    <div class="text-danger">{{ $errors->first('residual_risk_treatment') }}</div>
                                 @endif
                             </div>
-
-
                         </div>
-
+    
                         <input type="hidden" name="control_num" value="{{$control_num}}">
                         <input type="hidden" name="applicability" value="{{$treatmentData->applicability}}">
-
+    
                         <table class="table table-bordered table-primary">
                             <tbody>
                                 <tr>
@@ -165,72 +183,57 @@ $decodedRisks = json_decode($treatmentData->desc_risk, true);
                                     <td>{{$after_risk_treatment->control_num}}</td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-bold">Control is Applicable?</td>
-                                    <td>  @if($treatmentData->applicability=='yes')
-                                        Only to this asset component
-                                        @endif
-
-                                        @if($treatmentData->applicability=='yes_to_all')
-                                        To all asset components in this project
-                                        @endif
-
-                                        @if($treatmentData->applicability=='no')
-                                        Not to this asset component
-                                        @endif
-</td>
-                                    <td>@if($after_risk_treatment->applicability=='yes')
-                                        Only to this asset component
-                                        @endif
-
-                                        @if($after_risk_treatment->applicability=='yes_to_all')
-                                        To all asset components in this project
-                                        @endif
-
-                                        @if($after_risk_treatment->applicability=='no')
-                                        Not to this asset component
-                                        @endif</td>
-                                </tr>
-                                <tr>
                                     <td class="fw-bold">Control Compliance</td>
                                     <td>{{$treatmentData->control_compliance}}%</td>
                                     <td>
-                                        <input type="number" name="control_compliance" oninput="validateInput(this)" class="form-control make-readonly" min=0 max=100 data-control-id="{{$after_risk_treatment->control_num}}" value="{{old('control_compliance',$after_risk_treatment->control_compliance)}}">
+                                        <input type="number" name="control_compliance" 
+                                               class="form-control {{ !$isEditable ? 'readonly' : '' }}" 
+                                               min="0" max="100" 
+                                               value="{{ old('control_compliance', $after_risk_treatment->control_compliance) }}"
+                                               {{ $isEditable ? '' : 'readonly' }}>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="fw-bold">Vulnerability</td>
                                     <td>{{$treatmentData->vulnerability}}%</td>
                                     <td>
-                                        <input type="number" name="vulnerability" class="form-control" data-control-id="{{$after_risk_treatment->control_num}}" readonly value="{{old('vulnerability',$after_risk_treatment->vulnerability)}}">
+                                        <input type="number" name="vulnerability" class="form-control" 
+                                               value="{{ old('vulnerability', $after_risk_treatment->vulnerability) }}" readonly>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="fw-bold">Threat</td>
                                     <td>{{$treatmentData->threat}}%</td>
                                     <td>
-                                        <input type="number" name="threat" class="form-control make-readonly" min=0 max=100 data-control-id="{{$after_risk_treatment->control_num}}" value="{{old('threat',$after_risk_treatment->threat)}}">
+                                        <input type="number" name="threat" 
+                                               class="form-control {{ !$isEditable ? 'readonly' : '' }}" 
+                                               min="0" max="100" 
+                                               value="{{ old('threat', $after_risk_treatment->threat) }}"
+                                               {{ $isEditable ? '' : 'readonly' }}>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="fw-bold">Risk Confidentiality</td>
                                     <td>{{$treatmentData->risk_level}}</td>
                                     <td>
-                                        <input type="number" name="risk_level" class="form-control" data-control-id="{{$after_risk_treatment->control_num}}" value="{{old('risk_level',$after_risk_treatment->risk_level)}}" readonly>
+                                        <input type="number" name="risk_level" class="form-control" 
+                                               value="{{ old('risk_level', $after_risk_treatment->risk_level) }}" readonly>
                                     </td>
                                 </tr>
-
                                 <tr>
                                     <td class="fw-bold">Risk Integrity</td>
                                     <td>{{$treatmentData->risk_integrity}}</td>
                                     <td>
-                                        <input type="number" name="risk_integrity" class="form-control" data-control-id="{{$after_risk_treatment->control_num}}" value="{{old('risk_integrity',$after_risk_treatment->risk_integrity)}}" readonly>
+                                        <input type="number" name="risk_integrity" class="form-control" 
+                                               value="{{ old('risk_integrity', $after_risk_treatment->risk_integrity) }}" readonly>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="fw-bold">Risk Availability</td>
                                     <td>{{$treatmentData->risk_availability}}</td>
                                     <td>
-                                        <input type="number" name="risk_availability" class="form-control" data-control-id="{{$after_risk_treatment->control_num}}" value="{{old('risk_availability',$after_risk_treatment->risk_availability)}}" readonly>
+                                        <input type="number" name="risk_availability" class="form-control" 
+                                               value="{{ old('risk_availability', $after_risk_treatment->risk_availability) }}" readonly>
                                     </td>
                                 </tr>
                             </tbody>
@@ -239,9 +242,89 @@ $decodedRisks = json_decode($treatmentData->desc_risk, true);
                 </div>
             </div>
         </div>
+    </div>
 
+    @if($isApprover && isset($after_risk_treatment))
+<div class="container d-flex justify-content-center">
+    <div class="card shadow-lg border-0 mt-5 mb-5" style="max-width: 1000px; width: 100%;">
+        <div class="card-header text-white text-center" style="background-color: rgb(121, 173, 44)">
+            <h3 class="text-center">Approve</h3>
+        </div>
+
+        <div class="card-body">
+            
+        <p class="fw-bold">Current Status:
+            @if(isset($after_risk_treatment) && ($after_risk_treatment->approved == 0 || is_null($after_risk_treatment->approved)))
+         Not worked on by approver
+         @endif
+         @if(isset($after_risk_treatment) && ($after_risk_treatment->approved == 1 ) )
+        Approved
+        @endif
+
+        @if(isset($after_risk_treatment) && ($after_risk_treatment->approved == 2 ) )
+        Not Approved
+        @endif
+            
+        </p>
+            <form action="/approve_risk_treatment/{{$after_risk_treatment->control_num}}/{{$project->project_id}}/{{auth()->user()->id}}/{{$after_risk_treatment->asset_id}}" method="post" id="approvalForm">
+                @csrf
+
+
+                <div class="row">
+                    <div class="col-md-4 d-flex">
+                        <button type="submit" class="btn btn-success px-5 rounded-pill w-80 h-100" name="action" value="1">
+                            Apply Approve only this control and save changes
+                        </button>
+                    </div>
+                    <div class="col-md-4 d-flex">
+                        <button type="submit" class="btn btn-success px-5 rounded-pill w-80 h-100" name="action" value="2">
+                            Apply to Approve all controls in this domain and save changes
+                        </button>
+                    </div>
+                    <div class="col-md-4 d-flex">
+                        <button type="submit" class="btn btn-success px-5 rounded-pill w-80 h-100" name="action" value="3">
+                            Apply to Approve all controls in all domains and save changes
+                        </button>
+                    </div>
+                </div>
+
+                
+                <div class="mb-4 mt-4">
+                    <label for="approver_comments" class="form-label"> <span class=" fw-semibold">Approver Comments</span> (Comments are mandatory if not approved)</label>
+                    <textarea name="approver_comments" id="approver_comments" rows="4" class="form-control rounded">{{ old('approver_comments', $after_risk_treatment->approver_comments ?? '') }}</textarea>
+                    <div class="text-danger small mt-2 d-none" id="commentError">Approver comments are required when rejecting.</div>
+                    @error('approver_comments')
+                    <div class="text-danger small mt-2">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 d-flex">
+                        <button type="submit" class="btn btn-danger px-5 rounded-pill w-80 h-100 reject-button" name="action" value="4">
+                           Do not Approve only this control and save changes
+                        </button>
+                    </div>
+                    <div class="col-md-4 d-flex">
+                        <button type="submit" class="btn btn-danger px-5 rounded-pill w-80 h-100 reject-button" name="action" value="5">
+                           Do not Approve all controls in this domain and save changes
+                        </button>
+                    </div>
+                    <div class="col-md-4 d-flex">
+                        <button type="submit" class="btn btn-danger px-5 rounded-pill w-80 h-100 reject-button" name="action" value="6">
+                            Do not Approve all controls in all domains and save changes
+                        </button>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
 
     </div>
+</div>
+
+@endif
+  
 </div>
 
 @section('scripts')
@@ -323,6 +406,27 @@ $decodedRisks = json_decode($treatmentData->desc_risk, true);
         timer: 3000,
     });
     @endif
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("approvalForm");
+        const approverComments = document.getElementById("approver_comments");
+        const rejectButtons = document.querySelectorAll(".reject-button");
+        const commentError = document.getElementById("commentError");
+
+        rejectButtons.forEach(button => {
+            button.addEventListener("click", function (event) {
+                if (approverComments.value.trim() === "") {
+                    event.preventDefault(); // Prevent form submission
+                    commentError.classList.remove("d-none"); // Show error message
+                } else {
+                    commentError.classList.add("d-none"); // Hide error message if valid
+                }
+            });
+        });
+    });
 </script>
 @endsection
 

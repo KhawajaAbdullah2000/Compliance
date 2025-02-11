@@ -150,12 +150,10 @@
 
                                 @if (in_array(strval($sec2_4_a5_rows[$i][0]), $controls, true))
                                     <td>
-                                        @if (in_array('Data Inputter', $permissions))
+                                      
                                             <a href="/iso_sec_2_3_2_risk_treat_form/{{ $sec2_4_a5_rows[$i][0] }}/{{ $assetData->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}"
                                                 class="btn my_bg_color text-white">Treat Risk </a>
-                                        @else
-                                            <p>Not allowed</p>
-                                        @endif
+                                      
                                     </td>
                                 @endif
 

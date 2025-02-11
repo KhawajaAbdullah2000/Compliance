@@ -6,6 +6,12 @@
 
 @php
 $permissions=json_decode($project_permissions);
+$isEditable = in_array('Data Inputter', $permissions) && $treatmentData->approved != 1;
+
+// User is read-only ONLY IF they do NOT have "Data Inputter"
+$isReadOnly = !$isEditable && (in_array('Data Viewer', $permissions) || in_array('Data Approver', $permissions));
+
+$isApprover=in_array('Data Approver', $permissions);
 
 $formatValues = function ($value) {
     return $value === 'yes_to_all' ? 'yes' : $value;
@@ -17,9 +23,10 @@ $formatValues = function ($value) {
 <div class="container">
 
 
+
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-secondary">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -164,7 +171,7 @@ $formatValues = function ($value) {
 
 
 
-<div class="row d-flex">
+{{-- <div class="row d-flex">
 
     <div class="col-md-6">
 
@@ -245,8 +252,90 @@ $formatValues = function ($value) {
 
 
     </div>
-</div>
+</div> --}}
+<div class="row d-flex">
+    <div class="col-md-6">
+        <div class="card mt-2">
+            <div class="card-header my_bg_color text-white text-center">
+                <h3>Treatment Action Plan</h3>
+            </div>
 
+            <div class="card-body">
+                <form action="/iso_sec_2_3_2_treat_form_submit/{{$asset_id}}/{{$control_num}}/{{$project_id}}/{{auth()->user()->id}}" 
+                      method="post">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="control_num" value="{{$control_num}}">
+
+                    <div class="form-group mt-4">
+                        <label for=""> Treatment Action</label>
+                        <textarea name="treatment_action" cols="70" rows="10" 
+                                  class="form-control" 
+                                  {{ $isEditable ? '' : 'disabled' }}>{{ old('treatment_action', $treatmentData->treatment_action) }}</textarea>
+
+                        @if($errors->has('treatment_action'))
+                            <div class="text-danger">{{ $errors->first('treatment_action') }}</div>
+                        @endif
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <label for=""> Treatment Target Date</label>
+                        <input type="date" name="treatment_target_date" 
+                               value="{{ old('treatment_target_date', $treatmentData->treatment_target_date) }}" 
+                               {{ $isEditable ? '' : 'disabled' }}>
+                        @if($errors->has('treatment_target_date'))
+                            <div class="text-danger">{{ $errors->first('treatment_target_date') }}</div>
+                        @endif
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <label for=""> Treatment Completion Date</label>
+                        <input type="date" name="treatment_comp_date" 
+                               value="{{ old('treatment_comp_date', $treatmentData->treatment_comp_date) }}" 
+                               {{ $isEditable ? '' : 'disabled' }}>
+                        @if($errors->has('treatment_comp_date'))
+                            <div class="text-danger">{{ $errors->first('treatment_comp_date') }}</div>
+                        @endif
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <label for=""> Actual Acceptance Date</label>
+                        <input type="date" name="acceptance_actual_date" 
+                               value="{{ old('acceptance_actual_date', $treatmentData->acceptance_actual_date) }}" 
+                               {{ $isEditable ? '' : 'disabled' }}>
+                        @if($errors->has('acceptance_actual_date'))
+                            <div class="text-danger">{{ $errors->first('acceptance_actual_date') }}</div>
+                        @endif
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <label for=""> Responsibility for Treatment</label>
+                        <select class="boxstyling form-select" name="responsibility_for_treatment" 
+                                {{ $isEditable ? '' : 'disabled' }}>
+                            <option value="">Select User</option>
+                            @foreach ($users as $user)
+                                <option value="{{$user->id}}" 
+                                        {{ old('responsibility_for_treatment', $treatmentData->responsibility_for_treatment) == $user->id ? 'selected' : '' }}>
+                                    {{$user->first_name}} {{$user->last_name}}
+                                </option>
+                            @endforeach
+                        </select>
+                        @if($errors->has('responsibility_for_treatment'))
+                            <div class="text-danger">{{ $errors->first('responsibility_for_treatment') }}</div>
+                        @endif
+                    </div>
+
+                    @if($isEditable)
+                        <div class="text-center">
+                            <button type="submit" class="btn my_bg_color text-white btn-md mt-3">Save Changes</button>
+                        </div>
+                    @endif
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
