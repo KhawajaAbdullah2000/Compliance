@@ -6,7 +6,7 @@
 @include('user-nav')
 
 <div class="container py-5">
-    <h2 class="text-center fw-bold mb-4">Projects Created By Me</h2>
+    <h2 class="text-center fw-bold mb-4">Projects Created By {{auth()->user()->email}}</h2>
 
     <div class="card shadow-lg border-0">
         <div class="card-body">
@@ -19,8 +19,8 @@
                         <th class="text-center">Type</th>
                         <th class="text-center">Status</th>
                         <th class="text-center">Metadata</th>
-                        <th class="text-center">Dashboard</th>
-                        <th class="text-center">Reports</th>
+                        {{-- <th class="text-center">Dashboard</th>
+                        <th class="text-center">Reports</th> --}}
                         <th class="text-center">Delete</th>
                     </tr>
                 </thead>
@@ -32,22 +32,24 @@
                       <td style="text-align: initial;">{{ $pro->project_name }}</td>
                         <td style="text-align: initial;">{{ $pro->project_creation_date }}</td>
                         <td style="text-align: initial;">{{ $pro->type }}</td>
-                        <td style="text-align: initial;">{{ $pro->status }}</td>
+                             <!-- Project Status -->
+                             <td style="text-align: center"> <p data-bs-toggle="tooltip" title="{{$pro->status}}">
+                                <i style="color: blueviolet;" class="fas fa-inbox fa-lg"></i> </p></td>
                         <td class="align-middle text-center">
                             <a href="/edit_project/{{ $pro->project_id }}" data-toggle="tooltip" data-placement="top" title="Edit Project">
                                 <i class="fas fa-edit fa-lg text-success"></i>
                             </a>
                         </td>
-                        <td class="text-center align-middle">
+                        {{-- <td class="text-center align-middle">
                             <a href="/dashboard/{{ $pro->project_id }}/{{ auth()->user()->id }}" data-toggle="tooltip" data-placement="top" title="View Project Dashboard">
                                 <i class="fas fa-tachometer-alt fa-lg text-primary"></i>
                             </a>
-                        </td>
-                        <td class="text-center align-middle">
+                        </td> --}}
+                        {{-- <td class="text-center align-middle">
                             <a href="/reports/{{ $pro->project_id }}/{{ auth()->user()->id }}" data-toggle="tooltip" data-placement="top" title="Project Report">
                                 <i class="fas fa-copy fa-lg text-warning"></i>
                             </a>
-                        </td>
+                        </td> --}}
                         <td class="text-center align-middle">
                             <a href="/delete_my_project/{{ $pro->project_id }}/{{ auth()->user()->id }}" data-toggle="tooltip" data-placement="top" title="Delete Project">
                                 <i class="fas fa-trash fa-lg text-danger"></i>
@@ -102,6 +104,14 @@
     // Initialize tooltips
     $('[data-toggle="tooltip"]').tooltip();
 });
+
+</script>
+
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
 
 </script>
 

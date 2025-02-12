@@ -33,13 +33,13 @@
                         <li>
                             <h5>Department: <span class="text-info">{{ optional(auth()->user()->department)->name ?? 'Not Assigned' }}</span></h5>
                         </li>
-                        @can('Project Creator')
+                        @role('end user')
                         <li>
                           
                             <h5 class="d-inline">Global Role:</h5>
                             <p class="d-inline">
                                 @if (auth()->user()->permissions->isEmpty())
-                                    <span class="text-warning">None</span>
+                                    <span class="text-warning">End User</span>
                                 @else
                                     @foreach (auth()->user()->permissions as $per)
                                         <span class="badge bg-success fs-6">{{ $per->name }}</span>
@@ -47,24 +47,37 @@
                                 @endif
                             </p>
                         </li>
+                        @endrole
 
-                     
-                        @endcan
+                        @role('super user')
+                        <li>
+                          
+                            <h5 class="d-inline">Global Role:</h5>
+                            <p class="d-inline">
+                            
+                         <span class="badge bg-success fs-6">Super User</span>
+                                  
+                            </p>
+                        </li>
+                        @endrole
                         <li class="mt-2">
                             <p>Last logged in at: {{date('F d, Y H:i:A', strtotime(auth()->user()->last_logged_in_at))}}</p>
                         </li>
                     </ul>
 
-                    @can('Project Creator')
+               @role('end user')
                     <div class="d-grid gap-3">
+                        @can('Project Creator')
                         <a href="/create_project/{{ auth()->user()->id }}" class="btn btn-outline-light btn-lg">Create New Project</a>
+                        @endcan
                         <a href="/assigned_projects/{{ auth()->user()->id }}" class="btn btn-outline-info btn-lg">Go to Dashboard</a>
 
                         {{-- <a href="/my_personal_dashboard/{{ auth()->user()->id }}" class="btn btn-outline-info btn-lg">Visual and AI Dashboard</a> --}}
                     </div>
+                    @endrole
 
                     
-                    @endcan
+                  
 
                     @endhasanyrole
                 </div>

@@ -15,10 +15,10 @@
                 <thead class="table-dark">
                     <tr>
                         <th>User</th>
-                    
                         <th>Created Projects</th>
-                        <th>Assigned Projects</th>
-                        <th>Super User </th>
+                        <th>Assigned as user or projects</th>
+                        <th>Organization Super User (Note 1)</th>
+                        <th>Organization Project Creator (Note 2) </th>
                        
 
                     </tr>
@@ -46,6 +46,27 @@
                             <td></td>
                             @endif
 
+                            
+                           <td>
+                            @php
+                                $isProjectCreator = false;
+                            @endphp
+        
+                            @foreach ($user->permissions as $per)
+                                @if ($per->name == 'Project Creator')
+                                    @php
+                                        $isProjectCreator = true;
+                                    @endphp
+                                    @break
+                                @endif
+                            @endforeach
+        
+                            @if ($isProjectCreator)
+                                Yes
+                            @endif
+                        </td>
+                          
+
                         </tr>
                     @endforeach
                 </tbody>
@@ -55,6 +76,12 @@
 
     </div>
 
+<div class="mt-4">
+    <p>Note 1: An organization Super User can create organization's end-users and assign roles to end users</p>
+    <p>Note 2: An organization Project Creator end-user can create the organization's projects, add other end-users to the project and assign roles to the end users added to the projects </p>
+
+
+</div>
 
 
 </div>

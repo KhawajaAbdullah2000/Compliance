@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
-use App\Models\Department;
+use App\Models\User;
 class OrganizationController extends Controller
 {
     public function organizations(Request $req){
@@ -157,7 +157,7 @@ class OrganizationController extends Controller
     public function user_action_all_projects_in_org($org_id){
     
 
-        $users = DB::table('users')
+        $users =User::with(['permissions'])
         ->leftJoin('projects', 'users.id', '=', 'projects.created_by')
         ->leftJoin('project_details', 'users.id', '=', 'project_details.assigned_enduser')
         ->select(
