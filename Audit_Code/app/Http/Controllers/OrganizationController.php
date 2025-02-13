@@ -241,4 +241,35 @@ class OrganizationController extends Controller
         ]);
 
     }
+
+    public function add_department($org_id){
+        $org=Db::table('organizations')->where('id',$org_id)->first();
+        return view('root_user.add_department',[
+            'org'=>$org
+        ]);
+
+    }
+
+    public function add_new_dept(Request $req,$org_id){
+        $req->validate([
+            'name'=>'required|string'
+        ]);
+
+        DB::table('departments')->insert([
+            'org_id'=>$org_id,
+            'name'=>$req->name
+        ]);
+
+        return redirect()->route('organizations')->with('success','Department added');
+    }
+
+    public function departments($org_id){
+        $departments=DB::table('departments')->where('org_id',$org_id)->get();
+        $org=Db::table('organizations')->where('id',$org_id)->first();
+        return view('root_user.departments',
+    [
+        'departments'=>$departments,
+        'org'=>$org
+    ]);
+    }
 }
