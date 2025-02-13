@@ -10,7 +10,7 @@
 
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-secondary">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -38,7 +38,7 @@
     </div>
 
 @if(Session('evidenceLevel')!='project')
-<table  class="table table-bordered table-hover text-center align-middle">
+<table  class="table table-bordered table-hover text-center table-secondary align-middle">
     <thead class="table-dark ">
         <tr>
             <th>Service</th>
@@ -78,13 +78,13 @@
 
 
 
-<h3>Select From below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
+<h4>Select one {{$project->type}} mandatory compliance domain from below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
     @if(Session('evidenceLevel')=='service') All Assets in the service: {{$asset->s_name}} @endif
     @if(Session('evidenceLevel')=='group') All Assets in the group: {{$asset->g_name}} @endif
     @if(Session('evidenceLevel')=='name') All Assets in: {{$asset->name}} @endif
     @if(Session('evidenceLevel')=='component') the Component: {{$asset->c_name}} @endif
 
-</h3>
+</h4>
 
 
  
@@ -93,46 +93,46 @@
         <div class="row mt-2" >
             <div class="col-12">
 
-         <a href="/iso_section2_2/{{4}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">ISO 27001:2022 Clause 4- Context Of The Organization</p></a>
+         <a href="/iso_section2_2/{{4}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;"> Clause 4- Context Of The Organization</p></a>
         </div>
         </div>
 
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/iso_section2_2/{{5}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">ISO 27001:2022 Clause 5- Leadership</p></a>
+         <a href="/iso_section2_2/{{5}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;"> Clause 5- Leadership</p></a>
         </div>
         </div>
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/iso_section2_2/{{6}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">ISO 27001:2022 Clause 6- Planning</p></a>
+         <a href="/iso_section2_2/{{6}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;"> Clause 6- Planning</p></a>
         </div>
         </div>
 
         <div class="row mt-2">
             <div class="col-12">
-         <a href="/iso_section2_2/{{7}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">ISO 27001:2022 Clause 7- Support</p></a>
+         <a href="/iso_section2_2/{{7}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;"> Clause 7- Support</p></a>
         </div>
         </div>
 
         <div class="row mt-2 mb-2">
             <div class="col-12">
-         <a href="/iso_section2_2/{{8}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning  w-100"><p class="fw-bold " style="text-align: left;">ISO 27001:2022 Clause 8- Operation</p></a>
-        </div>
-        </div>
-
-
-        <div class="row mt-2 mb-2">
-            <div class="col-12">
-         <a href="/iso_section2_2/{{9}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning  w-100"><p class="fw-bold " style="text-align: left;">ISO 27001:2022 Clause 9- Performance Evaluation</p></a>
+         <a href="/iso_section2_2/{{8}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning  w-100"><p class="fw-bold " style="text-align: left;"> Clause 8- Operation</p></a>
         </div>
         </div>
 
 
         <div class="row mt-2 mb-2">
             <div class="col-12">
-         <a href="/iso_section2_2/{{10}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">ISO 27001:2022 Clause 10- Improvement</p></a>
+         <a href="/iso_section2_2/{{9}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning  w-100"><p class="fw-bold " style="text-align: left;"> Clause 9- Performance Evaluation</p></a>
+        </div>
+        </div>
+
+
+        <div class="row mt-2 mb-2">
+            <div class="col-12">
+         <a href="/iso_section2_2/{{10}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;"> Clause 10- Improvement</p></a>
         </div>
         </div>
 
@@ -140,7 +140,7 @@
         {{-- ISO Non Mandatory Requirements --}}
         {{-- <div class="row mt-2 mb-2">
             <div class="col-12">
-         <a href="/iso_section2_2/{{11}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">ISO 27001:2022 Annex A</p></a>
+         <a href="/iso_section2_2/{{11}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;"> Annex A</p></a>
         </div>
         </div> --}}
 

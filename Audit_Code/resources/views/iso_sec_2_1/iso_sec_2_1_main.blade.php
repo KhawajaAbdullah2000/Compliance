@@ -91,6 +91,7 @@ $permissions = json_decode($project_permissions);
     </div>
 
     <!-- Table with Toggle Columns -->
+    <div class="border p-3" style="border: 1px solid #ccc; border-radius: 5px;background-color: #f3f3f3">
     <div class="row">
             <h5 class="fw-bold">Table Columns View:</h5>
         <div class="col-md-6">
@@ -146,6 +147,7 @@ $permissions = json_decode($project_permissions);
  
     @endif 
     </div>
+</div>
 
     @if (in_array('Data Inputter', $permissions))
     <a class="btn btn-success btn-md float-end mb-2"
@@ -154,7 +156,7 @@ $permissions = json_decode($project_permissions);
 @endif
 
     <!-- Data Table -->
-    <table id="myTable2" class="table table-bordered table-hover  align-middle">
+    <table id="myTable2" class="table table-bordered table-hover table-striped align-middle">
         <thead class="table-dark ">
             <tr style="cursor: pointer" class="text-center">
                 <th onclick="sortTable(0)">Service</th>

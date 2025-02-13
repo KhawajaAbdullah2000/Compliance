@@ -13,7 +13,7 @@ $permissions=json_decode($project_permissions);
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-secondary">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -41,7 +41,7 @@ $permissions=json_decode($project_permissions);
     </div>
 
     @if(session('evidenceLevel')!='project')
-    <table class="table table-bordered table-hover text-center align-middle">
+    <table class="table table-bordered table-hover text-center align-middle table-secondary" >
         <thead class="table-dark ">
             <tr>
                 <th>Service</th>
@@ -92,7 +92,7 @@ $permissions=json_decode($project_permissions);
     </h4>
 
 
-    <table class="table table-bordered table-responsive table-primary">
+    <table class="table table-bordered table-responsive table-primary" class="table-dark">
 
         <thead style="vertical-align: middle;text-align:center;">
             <td class="fw-bold" style="width:10%">Req. No</td>

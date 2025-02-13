@@ -12,7 +12,7 @@ $permissions=json_decode($project_permissions);
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-secondary">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -40,7 +40,7 @@ $permissions=json_decode($project_permissions);
     </div>
 
     @if(Session('evidenceLevel')!='project')
-    <table  class="table table-bordered table-hover text-center align-middle">
+    <table  class="table table-bordered table-hover text-center table-secondary align-middle">
         <thead class="table-dark ">
             <tr>
                 <th>Service</th>
@@ -78,18 +78,8 @@ $permissions=json_decode($project_permissions);
     
     @endif
     
-    
-    
-    <h3>Select From below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
-        @if(Session('evidenceLevel')=='service') All Assets in the service: {{$asset->s_name}} @endif
-        @if(Session('evidenceLevel')=='group') All Assets in the group: {{$asset->g_name}} @endif
-        @if(Session('evidenceLevel')=='name') All Assets in: {{$asset->name}} @endif
-        @if(Session('evidenceLevel')=='component') the Component: {{$asset->c_name}} @endif
-    
-    </h3>
 
-
-      <h2 class="text-center fw-bold mt-4 mb-4">
+      <h2 class="fw-bold mt-4 mb-4">
         @if($title==3.1)
       3.1: Cyber Security Leadership and Governance
 
@@ -104,12 +94,21 @@ $permissions=json_decode($project_permissions);
         @endif
       </h2>
 
+      
+      <h4>Select one {{$project->type}}  subdomain from below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
+        @if(Session('evidenceLevel')=='service') All Assets in the service: {{$asset->s_name}} @endif
+        @if(Session('evidenceLevel')=='group') All Assets in the group: {{$asset->g_name}} @endif
+        @if(Session('evidenceLevel')=='name') All Assets in: {{$asset->name}} @endif
+        @if(Session('evidenceLevel')=='component') the Component: {{$asset->c_name}} @endif
+    
+    </h4>
+
 
 
     <table class="table table-bordered table-responsive table-primary">
 
         <thead>
-            <td>Title of Mandatory Requirement</td>
+            <td>Subdomain</td>
             <td>Actions</td>
         </thead>
 
@@ -120,7 +119,7 @@ $permissions=json_decode($project_permissions);
                 <p>{!! nl2br($data[0][2]) !!} {!! nl2br($data[0][3]) !!}</p>
 
                 </td>
-                <td><a href="/cy_sama_sec_2_2_req/{{($data[0][2]) }}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">View</a></td>
+                <td><a href="/cy_sama_sec_2_2_req/{{($data[0][2]) }}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
 
             </tr>
 
@@ -142,7 +141,7 @@ $permissions=json_decode($project_permissions);
 
                        </td>
 
-                       <td><a href="/cy_sama_sec_2_2_req/{{$my_current_main_req_num}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">View</a></td>
+                       <td><a href="/cy_sama_sec_2_2_req/{{$my_current_main_req_num}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
                     @endif
 
 

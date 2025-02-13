@@ -39,7 +39,7 @@
 
     
     @if(Session('evidenceLevel')!='project')
-    <table  class="table table-bordered table-hover text-center align-middle">
+    <table  class="table table-bordered table-hover text-center table-secondary align-middle">
         <thead class="table-dark ">
             <tr>
                 <th>Service</th>
@@ -79,13 +79,13 @@
     
     
     
-    <h3>Select From below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
+    <h4>Select one {{$project->type}} mandatory compliance domain from below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
         @if(Session('evidenceLevel')=='service') All Assets in the service: {{$asset->s_name}} @endif
         @if(Session('evidenceLevel')=='group') All Assets in the group: {{$asset->g_name}} @endif
         @if(Session('evidenceLevel')=='name') All Assets in: {{$asset->name}} @endif
         @if(Session('evidenceLevel')=='component') the Component: {{$asset->c_name}} @endif
     
-    </h3>
+    </h4>
 
     <div class="row h-100 w-75">
         <div class="row mt-2" >

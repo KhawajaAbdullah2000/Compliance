@@ -12,7 +12,7 @@ $permissions=json_decode($project_permissions);
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-secondary">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -41,7 +41,7 @@ $permissions=json_decode($project_permissions);
 
     @if(session('evidenceLevel')!='project')
 
-    <table  class="table table-bordered table-hover text-center align-middle">
+    <table  class="table table-bordered table-hover text-center align-middle table-secondary">
         <thead class="table-dark ">
             <tr>
                 <th>Service</th>
@@ -78,14 +78,8 @@ $permissions=json_decode($project_permissions);
 
 
 
-<h3>Selet From below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
-    @if(Session('evidenceLevel')=='service') All Assets in the service: {{$asset->s_name}} @endif
-    @if(Session('evidenceLevel')=='group') All Assets in the group: {{$asset->g_name}} @endif
-    @if(Session('evidenceLevel')=='name') All Assets in: {{$asset->name}} @endif
-    @if(Session('evidenceLevel')=='component') the Component: {{$asset->c_name}} @endif
 
-
-    <h2 class="text-center fw-bold mt-4 mb-4">
+    <h2 class="fw-bold mt-4 mb-4">
         @if($title==1)
         PCI-DSS v4.0 Requirement 1: Install and Maintain Network Security Controls
         @elseif ($title==2)
@@ -114,10 +108,18 @@ $permissions=json_decode($project_permissions);
        Appendix A2: Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections        @endif
     </h2>
 
+    <h4>Select one {{$project->type}}  subdomain from below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
+        @if(Session('evidenceLevel')=='service') All Assets in the service: {{$asset->s_name}} @endif
+        @if(Session('evidenceLevel')=='group') All Assets in the group: {{$asset->g_name}} @endif
+        @if(Session('evidenceLevel')=='name') All Assets in: {{$asset->name}} @endif
+        @if(Session('evidenceLevel')=='component') the Component: {{$asset->c_name}} @endif
+    
+    </h4>
+
     <table class="table table-bordered table-responsive table-primary">
 
         <thead>
-            <td>Title of Mandatory Requirement</td>
+            <td>Subdomain</td>
             <td>Actions</td>
         </thead>
 
@@ -128,7 +130,7 @@ $permissions=json_decode($project_permissions);
                 <p>{!! nl2br($data[0][1]) !!} {!! nl2br($data[0][2]) !!}</p>
 
                 </td>
-                <td><a href="/pci_merchant_sec_2_2_req/{{($data[0][1]) }}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">View</a></td>
+                <td><a href="/pci_merchant_sec_2_2_req/{{($data[0][1]) }}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
 
             </tr>
 
@@ -150,7 +152,7 @@ $permissions=json_decode($project_permissions);
 
                        </td>
 
-                       <td><a href="/pci_merchant_sec_2_2_req/{{$my_current_main_req_num}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">View</a></td>
+                       <td><a href="/pci_merchant_sec_2_2_req/{{$my_current_main_req_num}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
                     @endif
 
 

@@ -12,7 +12,7 @@ $permissions=json_decode($project_permissions);
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-secondary">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -41,7 +41,7 @@ $permissions=json_decode($project_permissions);
 
     @if(session('evidenceLevel')!='project')
 
-    <table  class="table table-bordered table-hover text-center align-middle">
+    <table  class="table table-bordered table-hover text-center table-se align-middle">
         <thead class="table-dark ">
             <tr>
                 <th>Service</th>
@@ -78,6 +78,14 @@ $permissions=json_decode($project_permissions);
 
 
 
+
+
+      <h2 class="fw-bold mt-4 mb-4">
+        {{$data[0][1]}}
+        
+    </h2>
+
+    
 <h3>Selet From below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
     @if(Session('evidenceLevel')=='service') All Assets in the service: {{$asset->s_name}} @endif
     @if(Session('evidenceLevel')=='group') All Assets in the group: {{$asset->g_name}} @endif
@@ -85,16 +93,10 @@ $permissions=json_decode($project_permissions);
     @if(Session('evidenceLevel')=='component') the Component: {{$asset->c_name}} @endif
 
 
-      <h2 class="text-center fw-bold mt-4 mb-4">
-        {{$data[0][1]}}
-        
-    </h2>
-
-
     <table class="table table-bordered table-responsive table-primary">
 
         <thead>
-            <td>Title of Mandatory Requirement</td>
+            <td>Subdomain</td>
             <td>Actions</td>
         </thead>
 
@@ -105,7 +107,7 @@ $permissions=json_decode($project_permissions);
                 <p>{!! nl2br($data[0][2]) !!} {!! nl2br($data[0][3]) !!}</p>
 
                 </td>
-                <td><a href="/uae_ia_sec_2_2_req/{{($data[0][2]) }}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">View</a></td>
+                <td><a href="/uae_ia_sec_2_2_req/{{($data[0][2]) }}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
 
             </tr>
 
@@ -127,7 +129,7 @@ $permissions=json_decode($project_permissions);
 
                        </td>
 
-                       <td><a href="/uae_ia_sec_2_2_req/{{$my_current_main_req_num}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">View</a></td>
+                       <td><a href="/uae_ia_sec_2_2_req/{{$my_current_main_req_num}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
                     @endif
 
 

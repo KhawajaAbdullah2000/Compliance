@@ -10,7 +10,7 @@
 
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-secondary">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <table  class="table table-bordered table-hover text-center align-middle">
+    <table  class="table table-bordered table-hover text-center table-secondary align-middle">
         <thead class="table-dark ">
             <tr>
                 <th>Service</th>
@@ -66,6 +66,8 @@
     </table>
 
 
+
+ <div class="border p-3 col-md-6" style="border: 1px solid #ccc; border-radius: 5px;background-color: #f3f3f3">
     <div class="row">
         <h5 class="fw-bold">Select the level at which to apply the evidence by selecting from the 
             selections below:</h5>
@@ -105,6 +107,7 @@
             </div>
         </div>
     </div>
+</div>
     
 
     <div class="row h-100 w-75">

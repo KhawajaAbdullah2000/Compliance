@@ -43,7 +43,7 @@ $isReadOnly = in_array('Data Viewer', $permissions) || in_array('Data Approver',
     </div>
 
     @if(session('evidenceLevel')!='project')
-    <table class="table table-bordered table-hover text-center align-middle">
+    <table class="table table-bordered table-hover table-secondary text-center align-middle">
         <thead class="table-dark ">
             <tr>
                 <th>Service</th>
@@ -88,16 +88,18 @@ $isReadOnly = in_array('Data Viewer', $permissions) || in_array('Data Approver',
     @if(Session('evidenceLevel')=='group') All Assets in the group: {{$asset->g_name}} @endif
     @if(Session('evidenceLevel')=='name') All Assets in: {{$asset->name}} @endif
     @if(Session('evidenceLevel')=='component') the Component: {{$asset->c_name}} @endif
+</h3>
 
-
-    <h2 class="text-center fw-bold mt-4 mb-4">
+    <p class="fw-bold mt-4 mb-4">
     Req No. {{$filteredData[0][3]}}
-         </h2>
+    </p>
+
+    <hr style="width: 50%;">
 
         <p>{{$filteredData[0][4]}} </p>
 
          <!-- Form Section -->
-         <div class="container d-flex justify-content-center">
+         <div class="container d-flex">
             <div class="card shadow-lg border-0 mt-5 mb-5" style="max-width: 1000px; width: 100%;">
                 <div class="card-header bg-success text-white text-center">
                     <h3>{{ $isEditable ? 'Edit Status and/or Assign Action' : 'View Status and Action Plan' }}</h3>
@@ -204,13 +206,13 @@ $isReadOnly = in_array('Data Viewer', $permissions) || in_array('Data Approver',
                         <!-- Submit Buttons -->
                         <div class="row">
                             <div class="col-md-4">
-                                <button type="submit" class="btn btn-success px-5 rounded-pill" name="action" value="1">Apply only to this control and save changes</button>
+                                <button type="submit" class="btn btn-success px-5 rounded-pill h-100" name="action" value="1">Apply only to this mandatory requirement and save changes</button>
                             </div>
                             <div class="col-md-4">
-                                <button type="submit" class="btn btn-success px-5 rounded-pill" name="action" value="2">Apply to all controls in this domain and save changes</button>
+                                <button type="submit" class="btn btn-success px-5 rounded-pill h-100" name="action" value="2">Apply to all mandatory requirements in the sub-domain of which this requirement is part of and save changes</button>
                             </div>
                             <div class="col-md-4">
-                                <button type="submit" class="btn btn-success px-5 rounded-pill" name="action" value="3">Apply to all controls in all domains and save changes</button>
+                                <button type="submit" class="btn btn-success px-5 rounded-pill h-100" name="action" value="3">Apply to all mandatory requirements in the domain holding the sub-domain of which this requirement is a part and save changes</button>
                             </div>
                         </div>
                         @endif
