@@ -40,6 +40,7 @@
                 <thead class="bg-primary text-white">
                     <tr>
                         <th>Name</th>
+                        <th>Last Status</th>
                         <th>Role in Project</th>
                         <th>Last Activity </th>
                     </tr>
@@ -47,7 +48,8 @@
                 <tbody>
                     @foreach ($users as $user)
                         <tr>
-                            <td>{{ $user->first_name }} {{ $user->last_name }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td class="text-capitalize">{{$user->status}}</td>
                             <td>
                                 @php
                                     // Decode the JSON string properly
@@ -57,10 +59,17 @@
                             </td>
 
                             <td>
+                                @if( $user->total_activities!=0)
                                 <a href="/total_activities_on_project/{{$project->project_id}}/{{ $user->id }}" 
                                    class="btn btn-outline-success btn-md">
                                    <span class="fw-bold"> {{ $user->total_activities }}</span>
                                 </a>
+                                @else
+                                <a href="" 
+                                    class="btn btn-outline-success btn-md">
+                                    <span class="fw-bold"> {{ $user->total_activities }}</span>
+                                 </a>
+                                @endif
                             </td>
                            
                         </tr>

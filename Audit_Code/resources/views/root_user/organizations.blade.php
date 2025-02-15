@@ -38,7 +38,7 @@
                 <th>Name</th>
                 <th>Type</th>
                 <th>Country</th>
-                <th>Departments</th>
+                <th>Sub-Organizations</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -53,7 +53,7 @@
                 <td>{{$org->country}}</td>
 
                 <td> 
-                    <a href="/departments/{{$org->id}}" data-toggle="tooltip" data-placement="top" title="Departments"><i class="fas fa-eye" style="color: rgb(255, 174, 0);"></i></a>
+                    <a href="/departments/{{$org->id}}" data-toggle="tooltip" data-placement="top" title="Sub-Organizations"><i class="fas fa-eye" style="color: rgb(255, 174, 0);"></i></a>
                     <a href="/add_department/{{$org->id}}" data-toggle="tooltip" data-placement="top" title="Add department in {{$org->name}}"> <i class="fas fa-plus" style="color: #146e02;"></i></a>
                             
                     </td>

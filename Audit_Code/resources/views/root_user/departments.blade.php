@@ -22,12 +22,12 @@
       </div>
     </nav>
 
-<h3 class="fw-bold mt-4">Departments in {{$org->name}}</h3>
+<h3 class="fw-bold mt-4">Sub-Organizations in {{$org->name}}</h3>
  
 <table class="table table-responsive table-striped border rounded">
     <thead class="table-dark">
         <tr>
-            <th>Department Name</th>
+            <th>Sub-Organization Name</th>
             <th class="text-center">Actions</th>
         </tr>
     </thead>

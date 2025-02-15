@@ -4705,13 +4705,16 @@ foreach ($uniqueComponents as $cname) {
         'users.id',
         'users.first_name',
         'users.last_name',
+        'users.email',
+        'users.status',
         'project_details.project_permissions', // Role in the project
         DB::raw('COUNT(DISTINCT iso_sec_2_2.assessment_id) as iso_sec_2_2_activities'),
         DB::raw('COUNT(DISTINCT iso_sec_2_3_1.assessment_id) as iso_sec_2_3_1_activities'),
         DB::raw('COUNT(DISTINCT iso_sec_2_2.assessment_id) + COUNT(DISTINCT iso_sec_2_3_1.assessment_id) as total_activities')
     )
-    ->groupBy('users.id', 'users.first_name', 'users.last_name', 'project_details.project_permissions')
+    ->groupBy('users.id', 'users.first_name', 'users.last_name', 'users.status','project_details.project_permissions')
     ->get();
+
 
 
     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
@@ -4750,6 +4753,7 @@ foreach ($uniqueComponents as $cname) {
 
         $user=Db::table('users')->where('id',$user_id)->select('first_name','last_name','id')->first();
 
+        
       
             return view('user_actions.activity_by_a_user_on_a_project',[
             'user'=>$user,

@@ -31,7 +31,7 @@ $permissions=json_decode($project_permissions);
       <label>Asset Component Name</label>
       <p><span class="fw-bold">Answer: </span>{{$data->c_name}}</p>
 
-      <label>Asset Owner Department</label>
+      <label>Asset Owner Sub-Organization</label>
       <p><span class="fw-bold">Answer: </span>{{$data->owner_dept}}</p>
 
       <label>Asset Physical Location</label>

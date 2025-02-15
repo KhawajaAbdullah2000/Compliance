@@ -29,7 +29,7 @@
                 <h5 class="fw-bold">Your Details</h5>
                 <p><span class="fw-semibold">Your Email: </span>{{ auth()->user()->email }}</p>
                 <p><span class="fw-semibold">Organization Name: </span>{{ auth()->user()->organization->name }}</p>
-                <p><span class="fw-semibold">Sub-Organization: </span>{{ auth()->user()->organization->sub_org }}</p>
+                <p><span class="fw-semibold">Sub-Organization: </span>{{ optional(auth()->user()->department)->name ?? 'Not Assigned' }}</p>
             </div>
         </div>
     </div>

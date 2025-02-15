@@ -92,9 +92,9 @@ $permissions = json_decode($project_permissions);
                             @endif
                         </div>
 
-                        <!-- Asset Owner Department -->
+                        <!-- Asset Owner Sub-Organization -->
                         <div class="mb-4">
-                            <label for="owner_dept" class="form-label fw-semibold">Asset Owner Department</label>
+                            <label for="owner_dept" class="form-label fw-semibold">Asset Owner Dept</label>
                             <input type="text" name="owner_dept" id="owner_dept" class="form-control rounded-pill" value="{{ old('owner_dept', $data->owner_dept) }}">
                             @if($errors->has('owner_dept'))
                             <div class="text-danger small mt-2">{{ $errors->first('owner_dept') }}</div>

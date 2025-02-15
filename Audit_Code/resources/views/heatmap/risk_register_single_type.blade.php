@@ -28,7 +28,7 @@
                         <td class="fw-bold">Project Status:</td>
                         <td>{{ $project->status }}</td>
                         <td class="fw-bold">Sub-Organization:</td>
-                        <td>{{ auth()->user()->organization->sub_org }}</td>
+                        <td>{{ optional(auth()->user()->department)->name ?? 'Not Assigned' }}</td>
                     </tr>
                 </tbody>
             </table>

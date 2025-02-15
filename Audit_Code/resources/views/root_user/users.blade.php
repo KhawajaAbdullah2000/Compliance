@@ -29,7 +29,7 @@
             <tr>
                 <th>Name</th>
                 <th>Organization</th>
-                <th>Department</th>
+                <th>Sub-Organization</th>
                 <th>Email</th>
                 <th>Role</th>
                 <th>Actions</th>

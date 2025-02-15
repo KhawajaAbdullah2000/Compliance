@@ -58,11 +58,11 @@
                       <input type="text" class="form-control rounded-3 shadow-sm" name='last_name' value="{{ old('last_name', $user->last_name) }}">
                   </div>
 
-                  {{-- Department --}}
+                  {{-- Sub-Organization --}}
                   <div class="mb-3">
-                      <label class="form-label fw-bold">Department</label>
+                      <label class="form-label fw-bold">Sub-Organization</label>
                       <select class="form-select rounded-3 shadow-sm" name="department_id">
-                          <option value="">Select Department (Optional)</option>
+                          <option value="">Select Sub-Organization (Optional)</option>
                           @foreach ($departments as $d)
                               <option value="{{$d->id}}" {{ old('department_id', $user->department_id) == $d->id ? 'selected' : '' }}>
                                   {{$d->name}}

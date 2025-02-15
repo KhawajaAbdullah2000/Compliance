@@ -164,9 +164,9 @@
                           </div>
 
                           <div class="mb-3">
-                            <label class="form-label fw-bold">Department</label>
+                            <label class="form-label fw-bold">Sub-Organization</label>
                             <select class="form-select rounded-3 shadow-sm" name="department_id">
-                                <option value="">Select Department (Optional)</option>
+                                <option value="">Select Sub-Organization (Optional)</option>
                                 @foreach ($departments as $d)
                                     <option value="{{ $d->id }}" {{ old('department_id',$user->department_id) == $d->id ? 'selected' : '' }}>
                                         {{ $d->name }}

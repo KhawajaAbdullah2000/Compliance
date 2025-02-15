@@ -16,7 +16,7 @@
         <tr>
             <th>Name</th>
             <th>Organization</th>
-            <th>Department</th>
+            <th>Sub-Organization</th>
             <th>Email</th>
             <th>Global Roles</th>
             <th>Actions</th>

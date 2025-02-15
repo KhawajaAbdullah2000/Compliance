@@ -24,17 +24,17 @@
 
     <div class="card mt-4 shadow-lg border-0 rounded-3">
         <div class="card-body p-4">
-            <h3 class="card-title text-center fw-bold mb-4">Add New Department in {{$org->name}}</h3>
+            <h3 class="card-title text-center fw-bold mb-4">Add New Sub-Organization in {{$org->name}}</h3>
     
             <form class="row g-4" method="POST" action="/add_new_dept/{{$org->id}}">
                 @csrf
     
-                <!-- Department Name Input -->
+                <!-- Sub-Organization Name Input -->
                 <div class="col-md-12">
                     <div class="form-floating">
                         <input type="text" class="form-control" 
                                name="name" id="name" placeholder="Enter department name" value="{{old('name')}}" required>
-                        <label for="name">Department Name</label>
+                        <label for="name">Sub-Organization Name</label>
                     </div>
                     @if($errors->has('name'))
                         <div class="text-danger mt-2 small">{{ $errors->first('name') }}</div>
@@ -43,7 +43,7 @@
     
                 <!-- Submit Button -->
                 <div class="col-12 text-center">
-                    <button type="submit" class="btn btn-primary btn-lg px-5 py-2 fw-semibold">Add Department</button>
+                    <button type="submit" class="btn btn-primary btn-lg px-5 py-2 fw-semibold">Add Sub-Organization</button>
                 </div>
             </form>
         </div>

@@ -162,15 +162,17 @@ class OrganizationController extends Controller
         ->leftJoin('project_details', 'users.id', '=', 'project_details.assigned_enduser')
         ->select(
             'users.id',
+            'users.email',
             'users.first_name',
             'users.last_name',
             'users.privilege_id',
+            'users.status',
        
             DB::raw('COUNT(DISTINCT projects.project_id) as created_projects'),
             DB::raw('COUNT(DISTINCT project_details.project_code) as assigned_projects')
         )
         ->where('users.org_id', $org_id)
-        ->groupBy('users.id', 'users.first_name', 'users.last_name', 'users.privilege_id')
+        ->groupBy('users.id', 'users.first_name', 'users.last_name', 'users.privilege_id','users.status')
         ->get();
 
     
@@ -189,15 +191,17 @@ class OrganizationController extends Controller
     ->where('projects.created_by', $user_id)
     ->select(
         'projects.*',
-        'project_types.type as project_type_name', // Adjust column name based on your schema
+        'project_types.type as project_type_name', 
+        'project_details.project_permissions',
         DB::raw('GROUP_CONCAT(DISTINCT project_details.assigned_enduser) as assigned_users') // Ensure distinct users
     )
     ->groupBy(
         'projects.project_id',
-        'project_types.type'  // Add all non-aggregated columns used in SELECT to GROUP BY
-        
+         'project_details.project_permissions',
+        'project_types.type' 
     )
     ->get();
+
 
       
 
@@ -220,19 +224,21 @@ class OrganizationController extends Controller
         ->select(
             'projects.*',
             'project_types.type as project_type_name',
+            'project_details.project_permissions',
             DB::raw('GROUP_CONCAT(DISTINCT project_details.assigned_enduser) as assigned_users')
         )
         ->groupBy(
             'projects.project_id',
             'project_types.type',
+            'project_details.project_permissions',
        
         )
         ->get();
 
-
+    
 
         $user=Db::table('users')->where('id',$user_id)
-        ->select('first_name','last_name')
+        ->select('first_name','last_name','email')
         ->first();
      
         return view('user_actions.projects_assigned',[

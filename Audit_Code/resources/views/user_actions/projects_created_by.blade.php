@@ -18,6 +18,7 @@
                         <th>Creation Date</th>
                         <th>Type</th>
                         <th>Status </th>
+                        <td>Last User Role</td>
                        
 
                     </tr>
@@ -29,6 +30,7 @@
                             <td>{{ $project->project_creation_date}}</td>
                             <td>{{ $project->project_type_name}}</td>
                             <td>{{ $project->status}}</td>
+                            <td>{{ implode(', ', json_decode($project->project_permissions, true)) }}</td>
                             
 
                         </tr>
