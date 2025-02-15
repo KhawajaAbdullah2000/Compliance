@@ -42,7 +42,7 @@
                         <th>Name</th>
                         <th>Last Status</th>
                         <th>Role in Project</th>
-                        <th>Last Activity </th>
+                        <th>Total Activities </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,15 +59,15 @@
                             </td>
 
                             <td>
-                                @if( $user->total_activities!=0)
+                                @if( $user->asset_activities!=0)
                                 <a href="/total_activities_on_project/{{$project->project_id}}/{{ $user->id }}" 
                                    class="btn btn-outline-success btn-md">
-                                   <span class="fw-bold"> {{ $user->total_activities }}</span>
+                                   <span class="fw-bold"> {{ $user->asset_activities }}</span>
                                 </a>
                                 @else
                                 <a href="" 
                                     class="btn btn-outline-success btn-md">
-                                    <span class="fw-bold"> {{ $user->total_activities }}</span>
+                                    <span class="fw-bold"> {{ $user->asset_activities }}</span>
                                  </a>
                                 @endif
                             </td>

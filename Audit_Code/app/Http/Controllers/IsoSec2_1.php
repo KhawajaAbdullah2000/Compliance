@@ -215,7 +215,6 @@ class IsoSec2_1 extends Controller
 
     public function new_iso_sec_2_1(Request $req, $proj_id, $user_id)
     {
-    
 
         $req->validate(
             [
@@ -253,7 +252,7 @@ class IsoSec2_1 extends Controller
 
                             foreach ($req->c_name as $component) {
 
-                            Db::table('iso_sec_2_1')->insert([
+                                $assessment_id = Db::table('iso_sec_2_1')->insertGetId([
                                 'project_id' => $proj_id,
                                 'g_name' => $req->g_name,
                                 'name' => $req->name,
@@ -264,6 +263,24 @@ class IsoSec2_1 extends Controller
                                 's_name' => $req->s_name,
                                 'last_edited_by' => $user_id,
                                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                            ]);
+
+                            Db::table('audit_trail_for_services')->insert([
+                                'asset_id' => $assessment_id,
+                                'project_id' => $proj_id,
+                                'last_edited_by' => $user_id,
+                                'operation_type' => 'insert',
+                                'g_name' => $req->g_name,
+                                'name' => $req->name,
+                                'c_name' => $component,
+                                's_name' => $req->s_name,
+                                'owner_dept' => $req->owner_dept,
+                                'physical_loc' => $req->physical_loc,
+                                'logical_loc' => $req->logical_loc,
+                                'risk_confidentiality' => 10,
+                                'risk_integrity' => 10,
+                                'risk_availability' => 10,
+                                'performed_at' => Carbon::now()->format('Y-m-d H:i:s')
                             ]);
 
                         }
@@ -414,6 +431,25 @@ class IsoSec2_1 extends Controller
                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                         ]);
 
+                        Db::table('audit_trail_for_services')->insert([
+                            'asset_id' => $assessment_id,
+                            'project_id' => $proj_id,
+                            'last_edited_by' => $user_id,
+                            'operation_type' => 'update',
+                            'g_name' => $req->g_name,
+                            'name' => $req->name,
+                            'c_name' => $req->c_name,
+                            's_name' => $req->s_name,
+                            'owner_dept' => $req->owner_dept,
+                            'physical_loc' => $req->physical_loc,
+                            'logical_loc' => $req->logical_loc,
+                            'risk_confidentiality' => 10,
+                            'risk_integrity' => 10,
+                            'risk_availability' => 10,
+                            'performed_at' => Carbon::now()->format('Y-m-d H:i:s')
+                        ]);
+
+
                         return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                             ->with('success', 'Record Updated successfully');
                     }catch (\Exception $e) {
@@ -444,6 +480,29 @@ class IsoSec2_1 extends Controller
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
+
+                    $asset=Db::table('iso_sec_2_1')->where('assessment_id',$assessment_id)->where('project_id',$proj_id)
+                    ->first();
+                    
+                    
+                    Db::table('audit_trail_for_services')->insert([
+                        'asset_id' => $assessment_id,
+                        'project_id' => $proj_id,
+                        'last_edited_by' => $user_id,
+                        'operation_type' => 'delete',
+                        'g_name' => $asset->g_name,
+                        'name' => $asset->name,
+                        'c_name' => $asset->c_name,
+                        's_name' => $asset->s_name,
+                        'owner_dept' => $asset->owner_dept,
+                        'physical_loc' => $asset->physical_loc,
+                        'logical_loc' => $asset->logical_loc,
+                        'risk_confidentiality' => $asset->risk_confidentiality,
+                        'risk_integrity' => $asset->risk_integrity,
+                        'risk_availability' => $asset->risk_availability,
+                        'performed_at' => Carbon::now()->format('Y-m-d H:i:s')
+                    ]);
+
                     
                         Db::table('iso_sec_2_1')->where('assessment_id',$assessment_id)->where('project_id',$proj_id)
                         ->delete();
@@ -559,7 +618,7 @@ class IsoSec2_1 extends Controller
 
                         try {
                             for($i=0;$i<count($rows);$i++){
-                                DB::table('iso_sec_2_1')->insert([
+                                $asset_id_inserting=DB::table('iso_sec_2_1')->insertGetId([
                                     'project_id'=>$proj_id,
                                     'g_name'=>$g_name[$i],
                                     'name'=>$name[$i],
@@ -570,6 +629,25 @@ class IsoSec2_1 extends Controller
                                     's_name'=>$s_name[$i],
                                     'last_edited_by'=>$user_id,
                                     'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+                                ]);
+
+                                $asset = DB::table('iso_sec_2_1')->where('assessment_id', $asset_id_inserting)->first();
+                                Db::table('audit_trail_for_services')->insert([
+                                    'asset_id' => $asset->assessment_id,
+                                    'project_id' => $proj_id,
+                                    'last_edited_by' => $user_id,
+                                    'operation_type' => 'insert',
+                                    'g_name' => $asset->g_name,
+                                    'name' => $asset->name,
+                                    'c_name' => $asset->c_name,
+                                    's_name' => $asset->s_name,
+                                    'owner_dept' => $asset->owner_dept,
+                                    'physical_loc' => $asset->physical_loc,
+                                    'logical_loc' => $asset->logical_loc,
+                                    'risk_confidentiality' => $asset->risk_confidentiality,
+                                    'risk_integrity' => $asset->risk_integrity,
+                                    'risk_availability' => $asset->risk_availability,
+                                    'performed_at' => Carbon::now()->format('Y-m-d H:i:s')
                                 ]);
                             }
 

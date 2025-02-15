@@ -32,8 +32,11 @@
         </div>
     </div>
 
-    <h3 class="fw-bold" style='margin-top: 40px;margin-bottom:30px;'>User actions audit trail on Project: {{$project->project_name}} for {{$user->first_name}} {{$user->last_name}}</h3>
+    <h4 class="fw-bold" style='margin-top: 40px;margin-bottom:30px;'>User actions audit trail on Project: {{$project->project_name}} for {{$user->email}} </h4>
 
+    <div class="badge text-bg-primary fs-4">
+     Audit trail for Assets
+      </div>
     <div class="card shadow-lg border-0 mt-4">
         <div class="card-body">
             <table class="table table-bordered table-striped">
@@ -43,23 +46,36 @@
                         <th>Group</th>
                         <th>Sub Group </th>
                         <th>Component </th>
-                        <th>Control Number </th>
+                        <th>Owner Dept</th>
+                        <th>Physical Location</th>
+                        <th>Logical Location</th>
+                        <th>Operation type</th>
                         <th>Updated </th>
                         
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($activities_2_2 as $activity)
+                    @foreach ($asset_activities as $activity)
                         <tr>
                             <td>{{ $activity->s_name }} </td>
                             <td>{{ $activity->g_name }} </td>
                             <td>{{ $activity->name }} </td>
                             <td>{{ $activity->c_name }} </td>
-                            <td>{{ $activity->sub_req }} </td>
+                            <td>{{ $activity->owner_dept }} </td>
+                            <td>{{ $activity->physical_loc }} </td>
+                            <td>{{ $activity->logical_loc }} </td>
+                            <td> <span class="badge @if($activity->operation_type == 'insert') text-bg-success 
+                            @elseif($activity->operation_type == 'update') text-bg-warning 
+                            @elseif($activity->operation_type == 'delete') text-bg-danger 
+                            @endif fs-6 text-center"
+                                style="min-width: 100px;">
+                                {{ $activity->operation_type }} 
+                            </span>
+                        </td>
                             <td>
-                                <span class="badge text-bg-warning">
+                                <span class="badge text-bg-secondary fs-6 text-center">
                                 
-                                {{ date('d M Y, h:i A', strtotime($activity->last_edited_at)) }}</td>
+                                {{ date('d M Y, h:i A', strtotime($activity->performed_at)) }}</td>
                                 </span>
 
                     
@@ -67,23 +83,7 @@
                         </tr>
                     @endforeach
 
-                    @foreach ($activities_2_3_1 as $activity)
-                        <tr>
-                            <td>{{ $activity->s_name }} </td>
-                            <td>{{ $activity->g_name }} </td>
-                            <td>{{ $activity->name }} </td>
-                            <td>{{ $activity->c_name }} </td>
-                            <td>{{ $activity->control_num }} </td>
-                            <td>
-                                <span class="badge text-bg-warning">
-                                
-                                {{ date('d M Y, h:i A', strtotime($activity->last_edited_at)) }}</td>
-                                </span>
-
-                    
-                           
-                        </tr>
-                    @endforeach
+                   
                 </tbody>
             </table>
 

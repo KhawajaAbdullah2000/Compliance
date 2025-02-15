@@ -4690,15 +4690,38 @@ foreach ($uniqueComponents as $cname) {
     public function user_actions_on_project($proj_id,$user_id){
     
 
-        $users = DB::table('project_details')
+    //  $users = DB::table('project_details')
+    // ->join('users', 'project_details.assigned_enduser', '=', 'users.id')
+    // ->leftJoin('iso_sec_2_2', function ($join) use ($proj_id) {
+    //     $join->on('users.id', '=', 'iso_sec_2_2.last_edited_by')
+    //          ->where('iso_sec_2_2.project_id', '=', $proj_id);
+    // })
+    // ->leftJoin('iso_sec_2_3_1', function ($join) use ($proj_id) {
+    //     $join->on('users.id', '=', 'iso_sec_2_3_1.last_edited_by')
+    //          ->where('iso_sec_2_3_1.project_id', '=', $proj_id);
+    // })
+    // ->where('project_details.project_code', $proj_id)
+    // ->select(
+    //     'users.id',
+    //     'users.first_name',
+    //     'users.last_name',
+    //     'users.email',
+    //     'users.status',
+    //     'project_details.project_permissions', // Role in the project
+    //     DB::raw('COUNT(DISTINCT iso_sec_2_2.assessment_id) as iso_sec_2_2_activities'),
+    //     DB::raw('COUNT(DISTINCT iso_sec_2_3_1.assessment_id) as iso_sec_2_3_1_activities'),
+    //     DB::raw('COUNT(DISTINCT iso_sec_2_2.assessment_id) + COUNT(DISTINCT iso_sec_2_3_1.assessment_id) as total_activities')
+    // )
+    // ->groupBy('users.id', 'users.first_name', 'users.last_name', 'users.status','project_details.project_permissions')
+    // ->get();
+
+
+   $users = DB::table('project_details')
     ->join('users', 'project_details.assigned_enduser', '=', 'users.id')
-    ->leftJoin('iso_sec_2_2', function ($join) use ($proj_id) {
-        $join->on('users.id', '=', 'iso_sec_2_2.last_edited_by')
-             ->where('iso_sec_2_2.project_id', '=', $proj_id);
-    })
-    ->leftJoin('iso_sec_2_3_1', function ($join) use ($proj_id) {
-        $join->on('users.id', '=', 'iso_sec_2_3_1.last_edited_by')
-             ->where('iso_sec_2_3_1.project_id', '=', $proj_id);
+
+    ->leftJoin('audit_trail_for_services', function ($join) use ($proj_id) {
+        $join->on('users.id', '=', 'audit_trail_for_services.last_edited_by')
+             ->where('audit_trail_for_services.project_id', '=', $proj_id);
     })
     ->where('project_details.project_code', $proj_id)
     ->select(
@@ -4708,12 +4731,12 @@ foreach ($uniqueComponents as $cname) {
         'users.email',
         'users.status',
         'project_details.project_permissions', // Role in the project
-        DB::raw('COUNT(DISTINCT iso_sec_2_2.assessment_id) as iso_sec_2_2_activities'),
-        DB::raw('COUNT(DISTINCT iso_sec_2_3_1.assessment_id) as iso_sec_2_3_1_activities'),
-        DB::raw('COUNT(DISTINCT iso_sec_2_2.assessment_id) + COUNT(DISTINCT iso_sec_2_3_1.assessment_id) as total_activities')
+        DB::raw('COUNT(DISTINCT audit_trail_for_services.id) as asset_activities'),
+       
     )
     ->groupBy('users.id', 'users.first_name', 'users.last_name', 'users.status','project_details.project_permissions')
     ->get();
+
 
 
 
@@ -4729,37 +4752,40 @@ foreach ($uniqueComponents as $cname) {
 
 
     public function total_activities_on_project($proj_id,$user_id){
-        $activities_2_2 = DB::table('iso_sec_2_2')
-        ->leftjoin('iso_sec_2_1','iso_sec_2_2.asset_id','iso_sec_2_1.assessment_id')
-        ->where('iso_sec_2_2.project_id', $proj_id)
-        ->where('iso_sec_2_2.last_edited_by', $user_id)
-        ->select('iso_sec_2_1.s_name','iso_sec_2_1.g_name','iso_sec_2_1.name',
-        'iso_sec_2_1.c_name','iso_sec_2_2.title_num','iso_sec_2_2.sub_req','iso_sec_2_2.last_edited_at')
-        ->orderBy('iso_sec_2_2.last_edited_at', 'desc')
-        ->get();
+        // $activities_2_2 = DB::table('iso_sec_2_2')
+        // ->leftjoin('iso_sec_2_1','iso_sec_2_2.asset_id','iso_sec_2_1.assessment_id')
+        // ->where('iso_sec_2_2.project_id', $proj_id)
+        // ->where('iso_sec_2_2.last_edited_by', $user_id)
+        // ->select('iso_sec_2_1.s_name','iso_sec_2_1.g_name','iso_sec_2_1.name',
+        // 'iso_sec_2_1.c_name','iso_sec_2_2.title_num','iso_sec_2_2.sub_req','iso_sec_2_2.last_edited_at')
+        // ->orderBy('iso_sec_2_2.last_edited_at', 'desc')
+        // ->get();
 
-        $activities_2_3_1 = DB::table('iso_sec_2_3_1')
-        ->leftjoin('iso_sec_2_1','iso_sec_2_3_1.asset_id','iso_sec_2_1.assessment_id')
-        ->where('iso_sec_2_3_1.project_id', $proj_id)
-        ->where('iso_sec_2_3_1.last_edited_by', $user_id)
-        ->select('iso_sec_2_1.s_name','iso_sec_2_1.g_name','iso_sec_2_1.name',
-        'iso_sec_2_1.c_name','iso_sec_2_3_1.control_num','iso_sec_2_3_1.last_edited_at')
-        ->orderBy('iso_sec_2_3_1.last_edited_at', 'desc')
-        ->get();
+        // $activities_2_3_1 = DB::table('iso_sec_2_3_1')
+        // ->leftjoin('iso_sec_2_1','iso_sec_2_3_1.asset_id','iso_sec_2_1.assessment_id')
+        // ->where('iso_sec_2_3_1.project_id', $proj_id)
+        // ->where('iso_sec_2_3_1.last_edited_by', $user_id)
+        // ->select('iso_sec_2_1.s_name','iso_sec_2_1.g_name','iso_sec_2_1.name',
+        // 'iso_sec_2_1.c_name','iso_sec_2_3_1.control_num','iso_sec_2_3_1.last_edited_at')
+        // ->orderBy('iso_sec_2_3_1.last_edited_at', 'desc')
+        // ->get();
 
+        $asset_activities=Db::table('audit_trail_for_services')->where('project_id',$proj_id)
+        ->where('last_edited_by',$user_id)
+        ->get();
+     
 
         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
         ->where('projects.project_id', $proj_id)->first();
 
-        $user=Db::table('users')->where('id',$user_id)->select('first_name','last_name','id')->first();
+        $user=Db::table('users')->where('id',$user_id)->select('first_name','last_name','id','email')->first();
 
         
-      
             return view('user_actions.activity_by_a_user_on_a_project',[
             'user'=>$user,
-            'activities_2_2'=>$activities_2_2,
             'project'=>$project,
-            'activities_2_3_1'=>$activities_2_3_1
+            'asset_activities'=>$asset_activities
+          
            ]);
     
     }
