@@ -18,7 +18,9 @@
             <th>Organization</th>
             <th>Sub-Organization</th>
             <th>Email</th>
-            <th>Global Roles</th>
+            <th>Status</th>
+            <th>Last Role</th>
+            <th>Last Edit Date</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -30,6 +32,7 @@
             <td>{{$user->name}}</td>
             <td>{{$user->dept_name}}</td>
             <td>{{$user->email}}</td>
+            <td class="text-capitalize">{{$user->status}}</td>
           
             <td>
             @foreach ($user->permissions as $per)
@@ -38,6 +41,8 @@
                 
             @endforeach
             </td>
+
+            <td>{{ \Carbon\Carbon::parse($user->updated_at)->format('d-m-y H:i A') }}</td>
          
 
      <td>

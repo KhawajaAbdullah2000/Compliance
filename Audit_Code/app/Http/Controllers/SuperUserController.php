@@ -115,7 +115,7 @@ public function end_users($org_id){
          $end_users=User::join('organizations','users.org_id','organizations.id')
          ->leftJoin('departments','users.department_id','departments.id')
          ->where('users.privilege_id',5)->whereIn('users.org_id',$orgs)
-         ->select('users.id','users.first_name','users.last_name','organizations.name','users.email',
+         ->select('users.id','users.first_name','users.last_name','organizations.name','users.email','users.status','users.updated_at',
           'departments.name as dept_name')
          ->get();
    
@@ -128,7 +128,7 @@ public function end_users($org_id){
          ->leftjoin('departments','users.department_id','departments.id')
          ->where('users.org_id',$org_id)
           ->where('privilege_id',5)
-          ->select('users.id','users.first_name','users.last_name','organizations.name','users.email',
+          ->select('users.id','users.first_name','users.last_name','organizations.name','users.email','users.status','users.updated_at',
           'departments.name as dept_name')
           ->get();
 
