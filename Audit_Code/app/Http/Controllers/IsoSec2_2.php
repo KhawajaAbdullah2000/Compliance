@@ -205,6 +205,18 @@ class IsoSec2_2 extends Controller
                     ]);
                 }
 
+                //ISa 62443 3-2
+                if ($checkpermission->type_id == 10) {
+                    return view('isa.isa_2_1_sec_2_2_evidence_selection', [
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project' => $project,
+                        'asset' => $asset,
+                        'project_type'=>10
+
+                    ]);
+                }
+
 
 
 

@@ -22,7 +22,10 @@ class ProjectTypes extends Seeder
             ['id'=>5,'type'=>'Cyber Security Framework - SAMA'],
              ['id'=>6,'type'=>'SBP ETGRMF'],
              ['id'=>7,'type'=>'KSA NCA ECC'],
-             ['id'=>8,'type'=>'UAE Information Assurance']
+             ['id'=>8,'type'=>'UAE Information Assurance'],
+             ['id' => 9,'type'=>'ISA 62443 Part 4-1'],
+             ['id'=>10,'type'=>'ISA 62443 Part 3-2'],
+            ['id'=>11,'type'=>'ISA 62443 Part 2-1']
 
         ]);
     }

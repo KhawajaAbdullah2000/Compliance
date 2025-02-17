@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\SuperUserController;
 use App\Http\Controllers\EndUserController;
+use App\Http\Controllers\ISAController;
 use App\Http\Controllers\IsoSec2_1;
 use App\Http\Controllers\IsoSec2_2;
 use App\Http\Controllers\IsoSec2_3;
@@ -359,6 +360,14 @@ route::post('add_mandatory_all_sub_req/{proj_id}/{user_id}/{asset_id}',[KSA_NCA:
 route::post('approve_sec_2_2/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'approve_sec_2_2']);
 route::post('approve_sec_2_3_1/{control_num}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'approve_sec_2_3_1']);
 route::post('approve_risk_treatment/{control_num}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'approve_risk_treatment']);
+
+
+//ISA 62443
+route::get("isa_sec_2_2_subsections/{proj_id}/{user_id}/{asset_id}",[ISAController::class,'isa_subsections'])->name('isa_subsections');
+route::get("isa_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[ISAController::class,'isa_section_2_2'])->name('isa_section_2_2');
+route::get("isa_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[ISAController::class,'isa_sec_2_2_req'])->name('isa_sec_2_2_req');
+route::get('isa_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[ISAController::class,'isa_sec2_2_sub_req_edit'])->name('isa_sec2_2_sub_req_edit');
+route::post('isa_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[ISAController::class,'isa_sec_2_2_form']);
 
 
 
