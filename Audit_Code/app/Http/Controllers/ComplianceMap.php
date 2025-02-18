@@ -294,6 +294,19 @@ class ComplianceMap extends Controller
                         ]);
         
                         }
+
+                         //IS part 3-2
+                    if ($project->project_type == 10) { 
+                        return view('compliance_map.isa_3_2_all_services_all_controls', [
+                            'project' => $project,
+                            'uniqueServicesCount' => $uniqueServicesCount,
+                            'uniqueGroupsCount'=>$uniqueGroupsCount,
+                            'uniqueSubGroupsCount'=>$uniqueSubGroupsCount,
+                            'uniqueComponentsCount'=>$uniqueComponentsCount,
+                            'formattedResults' => $formattedResults,
+                        ]);
+        
+                        }
                 
 
             
@@ -529,6 +542,20 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
         } 
 
+        if($project->project_type==10){
+            $domainNames = [
+                '4.2' => 'ZCR 1: Identify the SUC',
+                '4.3' => 'ZCR 2: Initial Cyber Security Risk Assessment',
+                '4.4' => 'ZCR 3: Partition the SUC into Zones and Conduits',
+                '4.5' => 'ZCR 4: Risk Comparison',
+                '4.6' => 'ZCR 5: Perform a Detailed Cyber Security Risk Assessment',
+                '4.7' => 'ZCR 6: Document Cyber Security Requirements, Assumptions, and Constraints',
+                '4.8' => 'ZCR 7: Asset Owner Approval',
+
+            ];
+        
+        }
+
 
 
         $projectName = $project->project_name;
@@ -738,6 +765,20 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
         } 
 
+        if($project->project_type==10){
+            $domainNames = [
+                '4.2' => 'ZCR 1: Identify the SUC',
+                '4.3' => 'ZCR 2: Initial Cyber Security Risk Assessment',
+                '4.4' => 'ZCR 3: Partition the SUC into Zones and Conduits',
+                '4.5' => 'ZCR 4: Risk Comparison',
+                '4.6' => 'ZCR 5: Perform a Detailed Cyber Security Risk Assessment',
+                '4.7' => 'ZCR 6: Document Cyber Security Requirements, Assumptions, and Constraints',
+                '4.8' => 'ZCR 7: Asset Owner Approval',
+
+            ];
+        
+        }
+
 
             return view('compliance_map.services', [
                 'project' => $project,
@@ -940,6 +981,20 @@ foreach ($formattedResults as $domain => $statuses) {
                 10 => 'Improvement'
             ];
         } 
+
+        if($project->project_type==10){
+            $domainNames = [
+                '4.2' => 'ZCR 1: Identify the SUC',
+                '4.3' => 'ZCR 2: Initial Cyber Security Risk Assessment',
+                '4.4' => 'ZCR 3: Partition the SUC into Zones and Conduits',
+                '4.5' => 'ZCR 4: Risk Comparison',
+                '4.6' => 'ZCR 5: Perform a Detailed Cyber Security Risk Assessment',
+                '4.7' => 'ZCR 6: Document Cyber Security Requirements, Assumptions, and Constraints',
+                '4.8' => 'ZCR 7: Asset Owner Approval',
+
+            ];
+        
+        }
 
         if ($groups->count() == 0) {
             return redirect()->route(
@@ -1158,6 +1213,20 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
         } 
 
+        if($project->project_type==10){
+            $domainNames = [
+                '4.2' => 'ZCR 1: Identify the SUC',
+                '4.3' => 'ZCR 2: Initial Cyber Security Risk Assessment',
+                '4.4' => 'ZCR 3: Partition the SUC into Zones and Conduits',
+                '4.5' => 'ZCR 4: Risk Comparison',
+                '4.6' => 'ZCR 5: Perform a Detailed Cyber Security Risk Assessment',
+                '4.7' => 'ZCR 6: Document Cyber Security Requirements, Assumptions, and Constraints',
+                '4.8' => 'ZCR 7: Asset Owner Approval',
+
+            ];
+        
+        }
+
         if ($subgroups->count() == 0) {
 
             $components = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
@@ -1375,6 +1444,19 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
         } 
 
+        if($project->project_type==10){
+            $domainNames = [
+                '4.2' => 'ZCR 1: Identify the SUC',
+                '4.3' => 'ZCR 2: Initial Cyber Security Risk Assessment',
+                '4.4' => 'ZCR 3: Partition the SUC into Zones and Conduits',
+                '4.5' => 'ZCR 4: Risk Comparison',
+                '4.6' => 'ZCR 5: Perform a Detailed Cyber Security Risk Assessment',
+                '4.7' => 'ZCR 6: Document Cyber Security Requirements, Assumptions, and Constraints',
+                '4.8' => 'ZCR 7: Asset Owner Approval',
+
+            ];
+        
+        }
         
         if ($project->project_type == 4) {
             $domainNames = [
@@ -1847,6 +1929,37 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
         }
 
+        //ISA part3-2
+        if($project->project_type==10){
+
+            $filepath = public_path('ISA 62443 Part 3-2.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+        
+            $UniqueSubDomains = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [(string)$row[2] => (string)$row[3]]; 
+                })
+                ->unique() 
+                ->toArray();
+
+                $domainNames = [
+                    '4.2' => 'ZCR 1: Identify the SUC',
+                    '4.3' => 'ZCR 2: Initial Cyber Security Risk Assessment',
+                    '4.4' => 'ZCR 3: Partition the SUC into Zones and Conduits',
+                    '4.5' => 'ZCR 4: Risk Comparison',
+                    '4.6' => 'ZCR 5: Perform a Detailed Cyber Security Risk Assessment',
+                    '4.7' => 'ZCR 6: Document Cyber Security Requirements, Assumptions, and Constraints',
+                    '4.8' => 'ZCR 7: Asset Owner Approval',
+                ];
+
+          
+        }
+
         
         if ($project->project_type == 4) {
 
@@ -2259,6 +2372,31 @@ foreach ($formattedResults as $domain => $statuses) {
 
         if($project->project_type==8){
             $filepath = public_path('UAE_IA.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+    
+            $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+                return strval($row[2]) == $subdomain;
+            })->values()->all();
+    
+    
+            $MainDomainNum=$filteredData[0][0];
+            $MainDomainTitle=$filteredData[0][1] ;//title
+        
+            $subdomainTitle=$filteredData[0][3];
+    
+    
+            $UniqueSubReqs = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [$row[4] => $row[6]]; 
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+        
+        }
+
+        if($project->project_type==10){
+            $filepath = public_path('ISA 62443 Part 3-2.xlsx');
             $data = Excel::toArray([], $filepath); //with header
             $rows = array_slice($data[0], 1); //without header(first row)
     
