@@ -1061,16 +1061,22 @@ class KSA_NCA extends Controller
                         
                     }
 
+                    if ($checkpermission->type_id == 12) {
+                        $filepath = public_path('ISA 62443 Part 4-2 -Modified.xlsx');
+                       
+                    }
+
+
 
                     if ($evidenceLevel == 'component') {
 
 
                         $data2 = Excel::toArray([], $filepath); //with header
                         $rows = array_slice($data2[0], 1); //without header(first row)
-
                         $filteredData = collect($rows)->filter(function ($row) use ($req) {
                             return strval($row[0]) === $req->title;
                         })->values()->all();
+
 
 
 
@@ -1112,7 +1118,7 @@ class KSA_NCA extends Controller
 
                         }
 
-                        if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 9 ) {
+                        if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 12 ) {
                             return redirect()->route(
                                 'isa_subsections',
                                 ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
@@ -1200,7 +1206,7 @@ class KSA_NCA extends Controller
 
                     }
 
-                    if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 9 ) {
+                    if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 12 ) {
                         return redirect()->route(
                             'isa_subsections',
                             ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
@@ -1264,6 +1270,12 @@ class KSA_NCA extends Controller
                      $filepath=public_path('ISA_62443_Part 3-2_Modified.xlsx');
                     }
 
+                    //ISa part4-2
+                    if ($checkpermission->type_id == 12) {
+               
+                        $filepath = public_path('ISA 62443 Part 4-2 -Modified.xlsx');
+                    }
+
 
                     if ($evidenceLevel == 'component') {
 
@@ -1315,7 +1327,7 @@ class KSA_NCA extends Controller
 
                         }
 
-                        if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 9 ) {
+                        if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 12 ) {
                             return redirect()->route(
                                 'isa_subsections',
                                 ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
@@ -1336,6 +1348,8 @@ class KSA_NCA extends Controller
                     $assetDetails = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
 
                     $assets = null;
+
+             
 
                     if ($evidenceLevel == 'name') {
                         $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('name', $assetDetails->name)->get();
@@ -1405,10 +1419,9 @@ class KSA_NCA extends Controller
 
                     }
 
-                    if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 9 ) {
-                        return redirect()->route(
-                            'isa_subsections',
-                            ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
+                    if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 12 ) {
+                        return redirect()->back(
+                           
                         )
                             ->with('success', 'Record Updated Successfully');
 
@@ -1470,6 +1483,11 @@ class KSA_NCA extends Controller
                               //ISA part 3-2
                      if($checkpermission->type_id==10){
                         $filepath=public_path('ISA_62443_Part 3-2_Modified.xlsx');
+                    }
+
+                    //ISa part4-2
+                    if($checkpermission->type_id==12){
+                        $filepath=public_path('ISA 62443 Part 4-2 -Modified.xlsx');
                     }
 
 
