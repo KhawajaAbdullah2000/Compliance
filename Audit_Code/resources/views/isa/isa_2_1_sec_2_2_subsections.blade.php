@@ -90,12 +90,13 @@
     <div class="row h-100 w-75">
         <div class="row mt-2" >
             <div class="col-md-8">
-         <a href="/isa_section_2_2/{{1}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">1. Cybersecurity Governance</p></a>
+         <a href="/isa_section_2_2/4.2.2/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">4.2.2 Business Rationale 
+        </p></a>
         </div>
         <div class="col-md-4">
             <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
                 @csrf
-                <input type="hidden" name="title" value="1">
+                <input type="hidden" name="title" value="4.2.2">
                 <div class="d-flex align-items-center">
                     <select name="comp_status" class="form-select rounded-pill me-2">
                    
@@ -114,13 +115,14 @@
 
         <div class="row mt-2">
             <div class="col-md-8">
-         <a href="/ksa_nca_section_2_2/{{2}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">2. Cybersecurity Defense</p></a>
+         <a href="/isa_section_2_2/4.2.3/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">4.2.3 Risk Identification, Classification, and Assessment 
+        </p></a>
         </div>
 
         <div class="col-md-4">
             <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
                 @csrf
-                <input type="hidden" name="title" value="2">
+                <input type="hidden" name="title" value="4.2.3">
                 <div class="d-flex align-items-center">
                     <select name="comp_status" class="form-select rounded-pill me-2">
                    
@@ -138,13 +140,14 @@
 
         <div class="row mt-2">
             <div class="col-md-8">
-         <a href="/ksa_nca_section_2_2/{{3}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">3. Cybersecurity Resilience</p></a>
+         <a href="/isa_section_2_2/4.3.2/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">4.3.2 Security Policy, Organization, and Awareness
+        </p></a>
         </div>
 
         <div class="col-md-4">
             <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
                 @csrf
-                <input type="hidden" name="title" value="3">
+                <input type="hidden" name="title" value="4.3.2">
                 <div class="d-flex align-items-center">
                     <select name="comp_status" class="form-select rounded-pill me-2">
                    
@@ -162,12 +165,13 @@
 
         <div class="row mt-2">
             <div class="col-md-8">
-         <a href="/ksa_nca_section_2_2/{{4}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">4. Third-Party and Cloud Computing Cybersecurity</p></a>
+         <a href="/isa_section_2_2/4.3.3/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">4.3.3 Selected Security Countermeasures
+        </p></a>
         </div>
         <div class="col-md-4">
             <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
                 @csrf
-                <input type="hidden" name="title" value="4">
+                <input type="hidden" name="title" value="4.3.3">
                 <div class="d-flex align-items-center">
                     <select name="comp_status" class="form-select rounded-pill me-2">
                    
@@ -185,12 +189,13 @@
 
         <div class="row mt-2">
             <div class="col-md-8">
-         <a href="/ksa_nca_section_2_2/{{5}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">5. Industrial Control Systems Cybersecurity</p></a>
+         <a href="/isa_section_2_2/4.3.4/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">4.3.4 Implementation
+        </p></a>
         </div>
         <div class="col-md-4">
             <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
                 @csrf
-                <input type="hidden" name="title" value="5">
+                <input type="hidden" name="title" value="4.3.4">
                 <div class="d-flex align-items-center">
                     <select name="comp_status" class="form-select rounded-pill me-2">
                    
@@ -205,6 +210,59 @@
             </form>
         </div>
         </div>
+
+        <div class="row mt-2">
+            <div class="col-md-8">
+         <a href="/isa_section_2_2/4.4.2/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">4.4.2 Conformance
+        </p></a>
+        </div>
+        <div class="col-md-4">
+            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+                @csrf
+                <input type="hidden" name="title" value="4.4.2">
+                <div class="d-flex align-items-center">
+                    <select name="comp_status" class="form-select rounded-pill me-2">
+                   
+                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-md-8">
+         <a href="/isa_section_2_2/4.4.3/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">4.4.3 Review, Improve, and Maintain the CSMS
+        </p></a>
+        </div>
+        <div class="col-md-4">
+            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+                @csrf
+                <input type="hidden" name="title" value="4.4.3">
+                <div class="d-flex align-items-center">
+                    <select name="comp_status" class="form-select rounded-pill me-2">
+                   
+                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+        </div>
+
+
+
+        
+
 
 
 

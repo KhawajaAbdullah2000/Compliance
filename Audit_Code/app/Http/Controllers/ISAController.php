@@ -115,6 +115,10 @@ class ISAController extends Controller
                     $filepath = public_path('ISA 62443 Part 3-3.xlsx');
                 }
 
+                if ($checkpermission->type_id ==11) {
+                    $filepath = public_path('ISA 62443 Part 2-1.xlsx');
+                }
+
 
                     $data = Excel::toArray([], $filepath); //with header
                  
@@ -183,6 +187,10 @@ class ISAController extends Controller
                     $filepath = public_path('ISA 62443 Part 3-3.xlsx');
                 }
 
+                if ($checkpermission->type_id ==11) {
+                    $filepath = public_path('ISA 62443 Part 2-1.xlsx');
+                }
+
 
 
                     $data = Excel::toArray([], $filepath); //with header
@@ -249,6 +257,10 @@ class ISAController extends Controller
 
                         if ($checkpermission->type_id ==13) {
                             $filepath = public_path('ISA 62443 Part 3-3.xlsx');
+                        }
+
+                        if ($checkpermission->type_id ==11) {
+                            $filepath = public_path('ISA 62443 Part 2-1.xlsx');
                         }
                 $data = Excel::toArray([], $filepath); //with header
                 $rows = array_slice($data[0], 1); //without header(first row)
@@ -373,6 +385,10 @@ class ISAController extends Controller
 
                         if ($checkpermission->type_id ==13) {
                             $filepath = public_path('ISA 62443 Part 3-3.xlsx');
+                        }
+
+                        if ($checkpermission->type_id ==11) {
+                            $filepath = public_path('ISA 62443 Part 2-1.xlsx');
                         }
 
 

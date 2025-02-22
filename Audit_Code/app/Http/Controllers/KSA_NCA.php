@@ -1070,6 +1070,13 @@ class KSA_NCA extends Controller
                         $filepath = public_path('ISA 62443 Part 3-3 - Modified.xlsx');
                     }
 
+                    if ($checkpermission->type_id ==11) {
+                        $filepath = public_path('ISA 62443 Part 2-1 - Modified.xlsx');
+                    }
+
+
+                    
+
 
 
                     if ($evidenceLevel == 'component') {
@@ -1283,6 +1290,10 @@ class KSA_NCA extends Controller
 
                     if ($checkpermission->type_id ==13) {
                         $filepath = public_path('ISA 62443 Part 3-3 - Modified.xlsx');
+                    }
+
+                    if ($checkpermission->type_id ==11) {
+                        $filepath = public_path('ISA 62443 Part 2-1 - Modified.xlsx');
                     }
 
 
@@ -1501,6 +1512,10 @@ class KSA_NCA extends Controller
 
                     if ($checkpermission->type_id ==13) {
                         $filepath = public_path('ISA 62443 Part 3-3 - Modified.xlsx');
+                    }
+
+                    if ($checkpermission->type_id ==11) {
+                        $filepath = public_path('ISA 62443 Part 2-1 - Modified.xlsx');
                     }
 
 
