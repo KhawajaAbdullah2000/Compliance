@@ -197,6 +197,14 @@ public function edit_enduser_form_submit(Request $req,$id){
     
 }
 
+public function delete_enduser($id){
+    $user=User::where('id',$id)->delete();
+    return redirect()->route('end_users',
+    ['org_id'=>auth()->user()->org_id]
+     )->with('success','User Deleted Successfully');
+     
+
+}
 public function custom_roles(){
     $permissions=Permission::all();
     return view('user.global_roles',['permissions'=>$permissions]);

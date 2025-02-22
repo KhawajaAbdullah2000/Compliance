@@ -47,7 +47,7 @@
 
      <td>
  <a href="/end_user/edit/{{$user->id}}" data-toggle="tooltip" data-placement="top" title="Edit"> <i class="fas fa-edit" style="color: #146e02;"></i></a>
- <a href="" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash" style="color: #d01616;"></i></a>
+ <a href="/end_user/delete/{{$user->id}}" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash" style="color: #d01616;"></i></a>
      </td>
         </tr>
         @endforeach

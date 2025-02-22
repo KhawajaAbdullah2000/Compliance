@@ -320,6 +320,20 @@ class ComplianceMap extends Controller
                         ]);
         
                         }
+
+                        //ISA part 3-3
+                        if ($project->project_type == 13) { 
+                            return view('compliance_map.isa_3_3_all_services_all_controls', [
+                                'project' => $project,
+                                'uniqueServicesCount' => $uniqueServicesCount,
+                                'uniqueGroupsCount'=>$uniqueGroupsCount,
+                                'uniqueSubGroupsCount'=>$uniqueSubGroupsCount,
+                                'uniqueComponentsCount'=>$uniqueComponentsCount,
+                                'formattedResults' => $formattedResults,
+                            ]);
+            
+                            }
+                    
                 
 
             
@@ -587,6 +601,20 @@ foreach ($formattedResults as $domain => $statuses) {
     
         }
 
+        if($project->project_type==13){
+            $domainNames = [
+                '5' => 'FR 1 – Identification and authentication control',
+                '6' => 'FR 2 – Use control',
+                '7' => 'FR 3 – System integrity',
+                '8' => 'FR 4 – Data confidentiality',
+                '9' => 'FR 5 – Restricted data flow',
+                '10' => 'FR 6 – Timely response to events',
+                '11' => 'FR 7 – Resource availability',
+             
+            ];
+    
+        }
+
 
 
         $projectName = $project->project_name;
@@ -828,6 +856,21 @@ foreach ($formattedResults as $domain => $statuses) {
     
         }
 
+        if($project->project_type==13){
+            $domainNames = [
+                '5' => 'FR 1 – Identification and authentication control',
+                '6' => 'FR 2 – Use control',
+                '7' => 'FR 3 – System integrity',
+                '8' => 'FR 4 – Data confidentiality',
+                '9' => 'FR 5 – Restricted data flow',
+                '10' => 'FR 6 – Timely response to events',
+                '11' => 'FR 7 – Resource availability',
+             
+            ];
+    
+        }
+
+
 
             return view('compliance_map.services', [
                 'project' => $project,
@@ -1062,6 +1105,21 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
     
         }
+
+        if($project->project_type==13){
+            $domainNames = [
+                '5' => 'FR 1 – Identification and authentication control',
+                '6' => 'FR 2 – Use control',
+                '7' => 'FR 3 – System integrity',
+                '8' => 'FR 4 – Data confidentiality',
+                '9' => 'FR 5 – Restricted data flow',
+                '10' => 'FR 6 – Timely response to events',
+                '11' => 'FR 7 – Resource availability',
+             
+            ];
+    
+        }
+
 
         if ($groups->count() == 0) {
             return redirect()->route(
@@ -1312,6 +1370,21 @@ foreach ($formattedResults as $domain => $statuses) {
     
         }
 
+        if($project->project_type==13){
+            $domainNames = [
+                '5' => 'FR 1 – Identification and authentication control',
+                '6' => 'FR 2 – Use control',
+                '7' => 'FR 3 – System integrity',
+                '8' => 'FR 4 – Data confidentiality',
+                '9' => 'FR 5 – Restricted data flow',
+                '10' => 'FR 6 – Timely response to events',
+                '11' => 'FR 7 – Resource availability',
+             
+            ];
+    
+        }
+
+
         if ($subgroups->count() == 0) {
 
             $components = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
@@ -1560,6 +1633,21 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
     
         }
+
+        if($project->project_type==13){
+            $domainNames = [
+                '5' => 'FR 1 – Identification and authentication control',
+                '6' => 'FR 2 – Use control',
+                '7' => 'FR 3 – System integrity',
+                '8' => 'FR 4 – Data confidentiality',
+                '9' => 'FR 5 – Restricted data flow',
+                '10' => 'FR 6 – Timely response to events',
+                '11' => 'FR 7 – Resource availability',
+             
+            ];
+    
+        }
+
         
         if ($project->project_type == 4) {
             $domainNames = [
@@ -2095,6 +2183,34 @@ foreach ($formattedResults as $domain => $statuses) {
     
         }
 
+        if($project->project_type==13){
+            $filepath = public_path('ISA 62443 Part 3-3.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+        
+            $UniqueSubDomains = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [(string)$row[2] => (string)$row[3]]; 
+                })
+                ->unique() 
+                ->toArray();
+            $domainNames = [
+                '5' => 'FR 1 – Identification and authentication control',
+                '6' => 'FR 2 – Use control',
+                '7' => 'FR 3 – System integrity',
+                '8' => 'FR 4 – Data confidentiality',
+                '9' => 'FR 5 – Restricted data flow',
+                '10' => 'FR 6 – Timely response to events',
+                '11' => 'FR 7 – Resource availability',
+         
+            ];
+    
+        }
+
         
         if ($project->project_type == 4) {
 
@@ -2548,7 +2664,7 @@ foreach ($formattedResults as $domain => $statuses) {
     
             $UniqueSubReqs = collect($filteredData)
                 ->mapWithKeys(function ($row) {
-                    return [$row[4] => $row[6]]; 
+                    return [$row[4] => $row[5]]; 
                 })
                 ->unique() // Ensure unique keys (1st index)
                 ->toArray(); // Convert to array
@@ -2573,13 +2689,38 @@ foreach ($formattedResults as $domain => $statuses) {
     
             $UniqueSubReqs = collect($filteredData)
                 ->mapWithKeys(function ($row) {
-                    return [$row[4] => $row[6]]; 
+                    return [$row[4] => $row[5]]; 
                 })
                 ->unique() // Ensure unique keys (1st index)
                 ->toArray(); // Convert to array
         
         }
 
+        if($project->project_type==13){
+            $filepath = public_path('ISA 62443 Part 3-3.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+    
+            $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+                return strval($row[2]) == $subdomain;
+            })->values()->all();
+    
+    
+            $MainDomainNum=$filteredData[0][0];
+            $MainDomainTitle=$filteredData[0][1] ;//title
+        
+            $subdomainTitle=$filteredData[0][3];
+    
+    
+            $UniqueSubReqs = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [$row[4] => $row[5]]; 
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+        
+               
+        }
       
 
 

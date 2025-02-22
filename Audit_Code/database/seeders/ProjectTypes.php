@@ -26,7 +26,8 @@ class ProjectTypes extends Seeder
              ['id' => 9,'type'=>'ISA 62443 Part 4-1'],
              ['id'=>10,'type'=>'ISA 62443 Part 3-2'],
             ['id'=>11,'type'=>'ISA 62443 Part 2-1'],
-            ['id'=>12,'type'=>'ISA 62443 Part 4-2']
+            ['id'=>12,'type'=>'ISA 62443 Part 4-2'],
+            ['id'=>13,'type'=>'ISA 62443 Part 3-3'],
 
         ]);
     }

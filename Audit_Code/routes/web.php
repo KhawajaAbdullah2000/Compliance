@@ -98,6 +98,8 @@ Route::get('/add_end_user/{org_id}',[SuperUserController::class,'add_end_user'])
 Route::post('/add_new_end_user',[SuperUserController::class,'add_end_user_form']);
 Route::get('/end_users/{org_id}',[SuperUserController::class,'end_users'])->name('end_users');
 Route::get('/end_user/edit/{id}',[SuperUserController::class,'edit_enduser']);
+Route::get('/end_user/delete/{id}',[SuperUserController::class,'delete_enduser']);
+
 route::put('/edit_enduser/{id}',[SuperUserController::class,'edit_enduser_form_submit']);
 route::get('/custom_roles',[SuperUserController::class,'custom_roles'])->name('custom_roles');
 route::get('add_global_role',function(){

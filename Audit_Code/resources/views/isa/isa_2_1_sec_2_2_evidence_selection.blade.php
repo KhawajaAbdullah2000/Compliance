@@ -113,14 +113,23 @@
             <div class="col-12">
 
          <a href="/isa_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Upload or enter evidence against the mandatory requirements of 
+            @if($project_type==9)
+            ISA 62443 Part 4-1</p>
+            @endif
+
             @if($project_type==10)
             ISA 62443 Part 3-2</p>
             @endif
             @if($project_type==11)
             ISA 62443 Part 2-1</p>
             @endif
-            @if($project_type==9)
-            ISA 62443 Part 4-1</p>
+
+            @if($project_type==12)
+            ISA 62443 Part 4-2</p>
+            @endif
+
+            @if($project_type==13)
+            ISA 62443 Part 3-3</p>
             @endif
         </a>
         </div>
