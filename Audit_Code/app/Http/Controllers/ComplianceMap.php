@@ -345,6 +345,19 @@ class ComplianceMap extends Controller
                             ]);
             
                             }
+
+                                       //ISA part 4-1
+                        if ($project->project_type == 9) { 
+                            return view('compliance_map.isa_4_1_all_services_all_controls', [
+                                'project' => $project,
+                                'uniqueServicesCount' => $uniqueServicesCount,
+                                'uniqueGroupsCount'=>$uniqueGroupsCount,
+                                'uniqueSubGroupsCount'=>$uniqueSubGroupsCount,
+                                'uniqueComponentsCount'=>$uniqueComponentsCount,
+                                'formattedResults' => $formattedResults,
+                            ]);
+            
+                            }
                     
                 
 
@@ -641,6 +654,62 @@ foreach ($formattedResults as $domain => $statuses) {
     
         }
 
+        
+        if($project->project_type==9){
+            $domainNames = [
+                '5.2' => 'SM-1: Development process',
+                '5.3' => 'SM-2: Identification of responsibilities',
+                '5.4' => 'SM-3: Identification of applicability',
+                '5.5' => 'SM-4: Security expertise',
+                '5.6' => 'SM-5: Process scoping',
+                '5.7' => 'SM-6: File integrity',
+                '5.8' => 'SM-7: Development environment security',
+                '5.9' => 'SM-8: Controls for private keys',
+                '5.10' => 'SM-9: Security requirements for externally provided components',
+                '5.11' => 'SM-10: Custom developed components from third-party suppliers',
+                '5.12' => 'SM-11: Assessing and addressing security-related issues',
+                '5.13' => 'SM-12: Process verification',
+                '5.14' => 'SM-13: Continuous improvement',
+                '6.2' => 'SR-1: Product security context',
+                '6.3' => 'SR-2: Threat model',
+                '6.4' => 'SR-3: Product security requirements',
+                '6.5' => 'SR-4: Product security requirements content',
+                '6.6' => 'SR-5: Security requirements review',
+                '7.2' => 'SD-1: Secure design principles',
+                '7.3' => 'SD-2: Defense in depth design',
+                '7.4' => 'SD-3: Security design review',
+                '7.5' => 'SD-4: Secure design best practices',
+                '8.3' => 'SI-1: Security implementation review',
+                '8.4' => 'SI-2: Secure coding standards',
+                '9.2' => 'SVV-1: Security requirements testing',
+                '9.3' => 'SVV-2: Threat mitigation testing',
+                '9.4' => 'SVV-3: Vulnerability testing',
+                '9.5' => 'SVV-4: Penetration testing',
+                '9.6' => 'SVV-5: Independence of testers',
+                '10.2' => 'DM-1: Receiving notifications of security-related issues',
+                '10.3' => 'DM-2: Reviewing security-related issues',
+                '10.4' => 'DM-3: Assessing security-related issues',
+                '10.5' => 'DM-4: Addressing security-related issues',
+                '10.6' => 'DM-5: Disclosing security-related issues',
+                '10.7' => 'DM-6: Periodic review of security defect management practice',
+                '11.2' => 'SUM-1: Security update qualification',
+                '11.3' => 'SUM-2: Security update documentation',
+                '11.4' => 'SUM-3: Dependent component or operating system security update documentation',
+                '11.5' => 'SUM-4: Security update delivery',
+                '11.6' => 'SUM-5: Timely delivery of security patches',
+                '12.2' => 'SG-1: Product defense in depth',
+                '12.3' => 'SG-2: Defense in depth measures expected in the environment',
+                '12.4' => 'SG-3: Security hardening guidelines',
+                '12.5' => 'SG-4: Secure disposal guidelines',
+                '12.6' => 'SG-5: Secure operation guidelines',
+                '12.7' => 'SG-6: Account management guidelines',
+                '12.8' => 'SG-7: Documentation review',
+            ];
+            
+    
+        }
+
+
 
 
         $projectName = $project->project_name;
@@ -909,6 +978,60 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
     
         }
+
+        if($project->project_type==9){
+            $domainNames = [
+                '5.2' => 'SM-1: Development process',
+                '5.3' => 'SM-2: Identification of responsibilities',
+                '5.4' => 'SM-3: Identification of applicability',
+                '5.5' => 'SM-4: Security expertise',
+                '5.6' => 'SM-5: Process scoping',
+                '5.7' => 'SM-6: File integrity',
+                '5.8' => 'SM-7: Development environment security',
+                '5.9' => 'SM-8: Controls for private keys',
+                '5.10' => 'SM-9: Security requirements for externally provided components',
+                '5.11' => 'SM-10: Custom developed components from third-party suppliers',
+                '5.12' => 'SM-11: Assessing and addressing security-related issues',
+                '5.13' => 'SM-12: Process verification',
+                '5.14' => 'SM-13: Continuous improvement',
+                '6.2' => 'SR-1: Product security context',
+                '6.3' => 'SR-2: Threat model',
+                '6.4' => 'SR-3: Product security requirements',
+                '6.5' => 'SR-4: Product security requirements content',
+                '6.6' => 'SR-5: Security requirements review',
+                '7.2' => 'SD-1: Secure design principles',
+                '7.3' => 'SD-2: Defense in depth design',
+                '7.4' => 'SD-3: Security design review',
+                '7.5' => 'SD-4: Secure design best practices',
+                '8.3' => 'SI-1: Security implementation review',
+                '8.4' => 'SI-2: Secure coding standards',
+                '9.2' => 'SVV-1: Security requirements testing',
+                '9.3' => 'SVV-2: Threat mitigation testing',
+                '9.4' => 'SVV-3: Vulnerability testing',
+                '9.5' => 'SVV-4: Penetration testing',
+                '9.6' => 'SVV-5: Independence of testers',
+                '10.2' => 'DM-1: Receiving notifications of security-related issues',
+                '10.3' => 'DM-2: Reviewing security-related issues',
+                '10.4' => 'DM-3: Assessing security-related issues',
+                '10.5' => 'DM-4: Addressing security-related issues',
+                '10.6' => 'DM-5: Disclosing security-related issues',
+                '10.7' => 'DM-6: Periodic review of security defect management practice',
+                '11.2' => 'SUM-1: Security update qualification',
+                '11.3' => 'SUM-2: Security update documentation',
+                '11.4' => 'SUM-3: Dependent component or operating system security update documentation',
+                '11.5' => 'SUM-4: Security update delivery',
+                '11.6' => 'SUM-5: Timely delivery of security patches',
+                '12.2' => 'SG-1: Product defense in depth',
+                '12.3' => 'SG-2: Defense in depth measures expected in the environment',
+                '12.4' => 'SG-3: Security hardening guidelines',
+                '12.5' => 'SG-4: Secure disposal guidelines',
+                '12.6' => 'SG-5: Secure operation guidelines',
+                '12.7' => 'SG-6: Account management guidelines',
+                '12.8' => 'SG-7: Documentation review',
+            ];
+            
+    
+        }
         
 
 
@@ -1171,6 +1294,60 @@ foreach ($formattedResults as $domain => $statuses) {
                 '4.4.2' => 'Conformance',
                 '4.4.3' => 'Review, Improve, and Maintain the CSMS',
             ];
+    
+        }
+
+        if($project->project_type==9){
+            $domainNames = [
+                '5.2' => 'SM-1: Development process',
+                '5.3' => 'SM-2: Identification of responsibilities',
+                '5.4' => 'SM-3: Identification of applicability',
+                '5.5' => 'SM-4: Security expertise',
+                '5.6' => 'SM-5: Process scoping',
+                '5.7' => 'SM-6: File integrity',
+                '5.8' => 'SM-7: Development environment security',
+                '5.9' => 'SM-8: Controls for private keys',
+                '5.10' => 'SM-9: Security requirements for externally provided components',
+                '5.11' => 'SM-10: Custom developed components from third-party suppliers',
+                '5.12' => 'SM-11: Assessing and addressing security-related issues',
+                '5.13' => 'SM-12: Process verification',
+                '5.14' => 'SM-13: Continuous improvement',
+                '6.2' => 'SR-1: Product security context',
+                '6.3' => 'SR-2: Threat model',
+                '6.4' => 'SR-3: Product security requirements',
+                '6.5' => 'SR-4: Product security requirements content',
+                '6.6' => 'SR-5: Security requirements review',
+                '7.2' => 'SD-1: Secure design principles',
+                '7.3' => 'SD-2: Defense in depth design',
+                '7.4' => 'SD-3: Security design review',
+                '7.5' => 'SD-4: Secure design best practices',
+                '8.3' => 'SI-1: Security implementation review',
+                '8.4' => 'SI-2: Secure coding standards',
+                '9.2' => 'SVV-1: Security requirements testing',
+                '9.3' => 'SVV-2: Threat mitigation testing',
+                '9.4' => 'SVV-3: Vulnerability testing',
+                '9.5' => 'SVV-4: Penetration testing',
+                '9.6' => 'SVV-5: Independence of testers',
+                '10.2' => 'DM-1: Receiving notifications of security-related issues',
+                '10.3' => 'DM-2: Reviewing security-related issues',
+                '10.4' => 'DM-3: Assessing security-related issues',
+                '10.5' => 'DM-4: Addressing security-related issues',
+                '10.6' => 'DM-5: Disclosing security-related issues',
+                '10.7' => 'DM-6: Periodic review of security defect management practice',
+                '11.2' => 'SUM-1: Security update qualification',
+                '11.3' => 'SUM-2: Security update documentation',
+                '11.4' => 'SUM-3: Dependent component or operating system security update documentation',
+                '11.5' => 'SUM-4: Security update delivery',
+                '11.6' => 'SUM-5: Timely delivery of security patches',
+                '12.2' => 'SG-1: Product defense in depth',
+                '12.3' => 'SG-2: Defense in depth measures expected in the environment',
+                '12.4' => 'SG-3: Security hardening guidelines',
+                '12.5' => 'SG-4: Secure disposal guidelines',
+                '12.6' => 'SG-5: Secure operation guidelines',
+                '12.7' => 'SG-6: Account management guidelines',
+                '12.8' => 'SG-7: Documentation review',
+            ];
+            
     
         }
 
@@ -1451,6 +1628,60 @@ foreach ($formattedResults as $domain => $statuses) {
     
         }
 
+        if($project->project_type==9){
+            $domainNames = [
+                '5.2' => 'SM-1: Development process',
+                '5.3' => 'SM-2: Identification of responsibilities',
+                '5.4' => 'SM-3: Identification of applicability',
+                '5.5' => 'SM-4: Security expertise',
+                '5.6' => 'SM-5: Process scoping',
+                '5.7' => 'SM-6: File integrity',
+                '5.8' => 'SM-7: Development environment security',
+                '5.9' => 'SM-8: Controls for private keys',
+                '5.10' => 'SM-9: Security requirements for externally provided components',
+                '5.11' => 'SM-10: Custom developed components from third-party suppliers',
+                '5.12' => 'SM-11: Assessing and addressing security-related issues',
+                '5.13' => 'SM-12: Process verification',
+                '5.14' => 'SM-13: Continuous improvement',
+                '6.2' => 'SR-1: Product security context',
+                '6.3' => 'SR-2: Threat model',
+                '6.4' => 'SR-3: Product security requirements',
+                '6.5' => 'SR-4: Product security requirements content',
+                '6.6' => 'SR-5: Security requirements review',
+                '7.2' => 'SD-1: Secure design principles',
+                '7.3' => 'SD-2: Defense in depth design',
+                '7.4' => 'SD-3: Security design review',
+                '7.5' => 'SD-4: Secure design best practices',
+                '8.3' => 'SI-1: Security implementation review',
+                '8.4' => 'SI-2: Secure coding standards',
+                '9.2' => 'SVV-1: Security requirements testing',
+                '9.3' => 'SVV-2: Threat mitigation testing',
+                '9.4' => 'SVV-3: Vulnerability testing',
+                '9.5' => 'SVV-4: Penetration testing',
+                '9.6' => 'SVV-5: Independence of testers',
+                '10.2' => 'DM-1: Receiving notifications of security-related issues',
+                '10.3' => 'DM-2: Reviewing security-related issues',
+                '10.4' => 'DM-3: Assessing security-related issues',
+                '10.5' => 'DM-4: Addressing security-related issues',
+                '10.6' => 'DM-5: Disclosing security-related issues',
+                '10.7' => 'DM-6: Periodic review of security defect management practice',
+                '11.2' => 'SUM-1: Security update qualification',
+                '11.3' => 'SUM-2: Security update documentation',
+                '11.4' => 'SUM-3: Dependent component or operating system security update documentation',
+                '11.5' => 'SUM-4: Security update delivery',
+                '11.6' => 'SUM-5: Timely delivery of security patches',
+                '12.2' => 'SG-1: Product defense in depth',
+                '12.3' => 'SG-2: Defense in depth measures expected in the environment',
+                '12.4' => 'SG-3: Security hardening guidelines',
+                '12.5' => 'SG-4: Secure disposal guidelines',
+                '12.6' => 'SG-5: Secure operation guidelines',
+                '12.7' => 'SG-6: Account management guidelines',
+                '12.8' => 'SG-7: Documentation review',
+            ];
+            
+    
+        }
+
 
         if ($subgroups->count() == 0) {
 
@@ -1711,6 +1942,60 @@ foreach ($formattedResults as $domain => $statuses) {
                 '4.4.2' => 'Conformance',
                 '4.4.3' => 'Review, Improve, and Maintain the CSMS',
             ];
+    
+        }
+
+        if($project->project_type==9){
+            $domainNames = [
+                '5.2' => 'SM-1: Development process',
+                '5.3' => 'SM-2: Identification of responsibilities',
+                '5.4' => 'SM-3: Identification of applicability',
+                '5.5' => 'SM-4: Security expertise',
+                '5.6' => 'SM-5: Process scoping',
+                '5.7' => 'SM-6: File integrity',
+                '5.8' => 'SM-7: Development environment security',
+                '5.9' => 'SM-8: Controls for private keys',
+                '5.10' => 'SM-9: Security requirements for externally provided components',
+                '5.11' => 'SM-10: Custom developed components from third-party suppliers',
+                '5.12' => 'SM-11: Assessing and addressing security-related issues',
+                '5.13' => 'SM-12: Process verification',
+                '5.14' => 'SM-13: Continuous improvement',
+                '6.2' => 'SR-1: Product security context',
+                '6.3' => 'SR-2: Threat model',
+                '6.4' => 'SR-3: Product security requirements',
+                '6.5' => 'SR-4: Product security requirements content',
+                '6.6' => 'SR-5: Security requirements review',
+                '7.2' => 'SD-1: Secure design principles',
+                '7.3' => 'SD-2: Defense in depth design',
+                '7.4' => 'SD-3: Security design review',
+                '7.5' => 'SD-4: Secure design best practices',
+                '8.3' => 'SI-1: Security implementation review',
+                '8.4' => 'SI-2: Secure coding standards',
+                '9.2' => 'SVV-1: Security requirements testing',
+                '9.3' => 'SVV-2: Threat mitigation testing',
+                '9.4' => 'SVV-3: Vulnerability testing',
+                '9.5' => 'SVV-4: Penetration testing',
+                '9.6' => 'SVV-5: Independence of testers',
+                '10.2' => 'DM-1: Receiving notifications of security-related issues',
+                '10.3' => 'DM-2: Reviewing security-related issues',
+                '10.4' => 'DM-3: Assessing security-related issues',
+                '10.5' => 'DM-4: Addressing security-related issues',
+                '10.6' => 'DM-5: Disclosing security-related issues',
+                '10.7' => 'DM-6: Periodic review of security defect management practice',
+                '11.2' => 'SUM-1: Security update qualification',
+                '11.3' => 'SUM-2: Security update documentation',
+                '11.4' => 'SUM-3: Dependent component or operating system security update documentation',
+                '11.5' => 'SUM-4: Security update delivery',
+                '11.6' => 'SUM-5: Timely delivery of security patches',
+                '12.2' => 'SG-1: Product defense in depth',
+                '12.3' => 'SG-2: Defense in depth measures expected in the environment',
+                '12.4' => 'SG-3: Security hardening guidelines',
+                '12.5' => 'SG-4: Secure disposal guidelines',
+                '12.6' => 'SG-5: Secure operation guidelines',
+                '12.7' => 'SG-6: Account management guidelines',
+                '12.8' => 'SG-7: Documentation review',
+            ];
+            
     
         }
 
@@ -2319,6 +2604,74 @@ foreach ($formattedResults as $domain => $statuses) {
     
         }
 
+        if($project->project_type==9){
+            $filepath = public_path('ISA 62443 Part 4-1.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+        
+            $UniqueSubDomains = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [(string)$row[2] => (string)$row[3]]; 
+                })
+                ->unique() 
+                ->toArray();
+            $domainNames = [
+                '5.2' => 'SM-1: Development process',
+                '5.3' => 'SM-2: Identification of responsibilities',
+                '5.4' => 'SM-3: Identification of applicability',
+                '5.5' => 'SM-4: Security expertise',
+                '5.6' => 'SM-5: Process scoping',
+                '5.7' => 'SM-6: File integrity',
+                '5.8' => 'SM-7: Development environment security',
+                '5.9' => 'SM-8: Controls for private keys',
+                '5.10' => 'SM-9: Security requirements for externally provided components',
+                '5.11' => 'SM-10: Custom developed components from third-party suppliers',
+                '5.12' => 'SM-11: Assessing and addressing security-related issues',
+                '5.13' => 'SM-12: Process verification',
+                '5.14' => 'SM-13: Continuous improvement',
+                '6.2' => 'SR-1: Product security context',
+                '6.3' => 'SR-2: Threat model',
+                '6.4' => 'SR-3: Product security requirements',
+                '6.5' => 'SR-4: Product security requirements content',
+                '6.6' => 'SR-5: Security requirements review',
+                '7.2' => 'SD-1: Secure design principles',
+                '7.3' => 'SD-2: Defense in depth design',
+                '7.4' => 'SD-3: Security design review',
+                '7.5' => 'SD-4: Secure design best practices',
+                '8.3' => 'SI-1: Security implementation review',
+                '8.4' => 'SI-2: Secure coding standards',
+                '9.2' => 'SVV-1: Security requirements testing',
+                '9.3' => 'SVV-2: Threat mitigation testing',
+                '9.4' => 'SVV-3: Vulnerability testing',
+                '9.5' => 'SVV-4: Penetration testing',
+                '9.6' => 'SVV-5: Independence of testers',
+                '10.2' => 'DM-1: Receiving notifications of security-related issues',
+                '10.3' => 'DM-2: Reviewing security-related issues',
+                '10.4' => 'DM-3: Assessing security-related issues',
+                '10.5' => 'DM-4: Addressing security-related issues',
+                '10.6' => 'DM-5: Disclosing security-related issues',
+                '10.7' => 'DM-6: Periodic review of security defect management practice',
+                '11.2' => 'SUM-1: Security update qualification',
+                '11.3' => 'SUM-2: Security update documentation',
+                '11.4' => 'SUM-3: Dependent component or operating system security update documentation',
+                '11.5' => 'SUM-4: Security update delivery',
+                '11.6' => 'SUM-5: Timely delivery of security patches',
+                '12.2' => 'SG-1: Product defense in depth',
+                '12.3' => 'SG-2: Defense in depth measures expected in the environment',
+                '12.4' => 'SG-3: Security hardening guidelines',
+                '12.5' => 'SG-4: Secure disposal guidelines',
+                '12.6' => 'SG-5: Secure operation guidelines',
+                '12.7' => 'SG-6: Account management guidelines',
+                '12.8' => 'SG-7: Documentation review',
+            ];
+            
+    
+        }
+
         
         if ($project->project_type == 4) {
 
@@ -2855,6 +3208,36 @@ foreach ($formattedResults as $domain => $statuses) {
         
                
         }
+
+        if($project->project_type==9){
+            $filepath = public_path('ISA 62443 Part 4-1.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+    
+            $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+                return strval($row[2]) == $subdomain;
+            })->values()->all();
+    
+    
+            $MainDomainNum=$filteredData[0][0];
+            $MainDomainTitle=$filteredData[0][1] ;//title
+        
+            $subdomainTitle=$filteredData[0][3];
+    
+    
+            $UniqueSubReqs = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [$row[4] => $row[5]]; 
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+        
+               
+        }
+
+       
+        
+
 
       
 

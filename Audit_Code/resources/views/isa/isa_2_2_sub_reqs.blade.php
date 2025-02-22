@@ -93,8 +93,17 @@ $permissions=json_decode($project_permissions);
     <a href="/isa_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary btn-md float-end">Go to All Requirements</a>
 
       <h4 class="text-center fw-bold mt-4 mb-4">
-    {{$main_req_num}}  {{$data[0][3]}}
+    {{$main_req_num}} 
+    @if($project->project_type!=9)
+     {{$data[0][3]}}
+     @endif
     </h4>
+
+    <p>
+        @if($project->project_type==9)
+        {{$data[0][3]}}
+        @endif
+    </p>
 
     <table class="table table-bordered table-responsive table-primary">
 

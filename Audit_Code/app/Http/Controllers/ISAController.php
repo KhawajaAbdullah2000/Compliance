@@ -80,6 +80,16 @@ class ISAController extends Controller
                     ]);
                 }
 
+                     //ISa part 4-1
+                     if ($checkpermission->type_id == 9) {
+                        return view('isa.isa_4_1_sec_2_2_subsections', [
+                            'project_id' => $checkpermission->project_id,
+                            'project_name' => $checkpermission->project_name,
+                            'project' => $project,
+                            'asset' => $asset
+                        ]);
+                    }
+
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
@@ -117,6 +127,10 @@ class ISAController extends Controller
 
                 if ($checkpermission->type_id ==11) {
                     $filepath = public_path('ISA 62443 Part 2-1.xlsx');
+                }
+
+                if ($checkpermission->type_id ==9) {
+                    $filepath = public_path('ISA 62443 Part 4-1.xlsx');
                 }
 
 
@@ -191,6 +205,10 @@ class ISAController extends Controller
                     $filepath = public_path('ISA 62443 Part 2-1.xlsx');
                 }
 
+                if ($checkpermission->type_id ==9) {
+                    $filepath = public_path('ISA 62443 Part 4-1.xlsx');
+                }
+
 
 
                     $data = Excel::toArray([], $filepath); //with header
@@ -205,7 +223,6 @@ class ISAController extends Controller
                         ->where('projects.project_id', $proj_id)->first();
 
                     $asset = Db::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
-
 
 
 
@@ -262,6 +279,10 @@ class ISAController extends Controller
                         if ($checkpermission->type_id ==11) {
                             $filepath = public_path('ISA 62443 Part 2-1.xlsx');
                         }
+
+                        if ($checkpermission->type_id ==9) {
+                            $filepath = public_path('ISA 62443 Part 4-1.xlsx');
+                        }
                 $data = Excel::toArray([], $filepath); //with header
                 $rows = array_slice($data[0], 1); //without header(first row)
 
@@ -293,6 +314,7 @@ class ISAController extends Controller
                 $users = User::where('privilege_id', 5)->wherein('org_id', $orgs)->get(['id', 'first_name', 'last_name']);
 
 
+            
 
                 return view('isa.isa_sec_2_2_sub_reqs_form', [
                     'project_id' => $checkpermission->project_id,
@@ -389,6 +411,10 @@ class ISAController extends Controller
 
                         if ($checkpermission->type_id ==11) {
                             $filepath = public_path('ISA 62443 Part 2-1.xlsx');
+                        }
+
+                        if ($checkpermission->type_id ==9) {
+                            $filepath = public_path('ISA 62443 Part 4-1.xlsx');
                         }
 
 

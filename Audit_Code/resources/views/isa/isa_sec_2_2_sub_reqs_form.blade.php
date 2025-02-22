@@ -139,8 +139,7 @@ $isApprover=in_array('Data Approver', $permissions);
                         <!-- Comments -->
                         <div class="mb-4">
                             <label for="comments" class="form-label fw-semibold">Comments (Optional)</label>
-                            <textarea name="comments" id="comments" rows="4" class="form-control rounded" {{ $isReadOnly ? 'readonly' : '' }}>{{ old('comments', $result->comments ?? '') }}
-                            </textarea>
+                            <textarea name="comments" id="comments" rows="4" class="form-control rounded" {{ $isReadOnly ? 'readonly' : '' }}>{{ old('comments', $result->comments ?? '') }}</textarea>
                             @error('comments')
                             <div class="text-danger small mt-2">{{ $message }}</div>
                             @enderror

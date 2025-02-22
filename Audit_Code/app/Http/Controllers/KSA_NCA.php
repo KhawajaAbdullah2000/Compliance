@@ -1021,6 +1021,7 @@ class KSA_NCA extends Controller
 
     public function add_mandatory_all_title(Request $req, $proj_id, $user_id, $asset_id)
     {
+ 
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -1074,14 +1075,19 @@ class KSA_NCA extends Controller
                         $filepath = public_path('ISA 62443 Part 2-1 - Modified.xlsx');
                     }
 
+                    if ($checkpermission->type_id ==9) {
+                     
+                        $filepath = public_path('ISA 62443 Part 4-1 - Modified.xlsx');
+                        
+                    }
 
-                    
 
+                
 
 
                     if ($evidenceLevel == 'component') {
 
-
+                
                         $data2 = Excel::toArray([], $filepath); //with header
                         $rows = array_slice($data2[0], 1); //without header(first row)
                         $filteredData = collect($rows)->filter(function ($row) use ($req) {
@@ -1129,7 +1135,7 @@ class KSA_NCA extends Controller
 
                         }
 
-                        if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 12 ||  $checkpermission->type_id == 13  ) {
+                        if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 12 ||  $checkpermission->type_id == 13 ||  $checkpermission->type_id == 9   ) {
                             return redirect()->route(
                                 'isa_subsections',
                                 ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
@@ -1217,7 +1223,7 @@ class KSA_NCA extends Controller
 
                     }
 
-                    if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 12 || $checkpermission->type_id == 13 ) {
+                    if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 12 || $checkpermission->type_id == 13 || $checkpermission->type_id == 9) {
                         return redirect()->route(
                             'isa_subsections',
                             ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
@@ -1296,6 +1302,10 @@ class KSA_NCA extends Controller
                         $filepath = public_path('ISA 62443 Part 2-1 - Modified.xlsx');
                     }
 
+                    if ($checkpermission->type_id ==9) {
+                        $filepath = public_path('ISA 62443 Part 4-1 - Modified.xlsx');
+                    }
+
 
                     if ($evidenceLevel == 'component') {
 
@@ -1329,32 +1339,18 @@ class KSA_NCA extends Controller
 
                         }
 
-                        if ($checkpermission->type_id == 7) {
-                            return redirect()->route(
-                                'ksa_nca_section_2_2',
-                                ['title_num' => $filteredData[0][0], 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                            )
-                                ->with('success', 'Record Updated Successfully');
+                     
+                        return redirect()->back()->with('success', 'Record Updated Successfully');
 
-                        }
-
-                        if ($checkpermission->type_id == 5) {
-                            return redirect()->route(
-                                'cy_sama_section_2_2',
-                                ['title_num' => $filteredData[0][0], 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                            )
-                                ->with('success', 'Record Updated Successfully');
-
-                        }
-
-                        if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 12 || $checkpermission->type_id==13 ) {
-                            return redirect()->route(
-                                'isa_subsections',
-                                ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                            )
-                                ->with('success', 'Record Updated Successfully');
+                      
+                        // if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 12 || $checkpermission->type_id==13 ) {
+                        //     return redirect()->route(
+                        //         'isa_subsections',
+                        //         ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
+                        //     )
+                        //         ->with('success', 'Record Updated Successfully');
     
-                        }
+                        // }
 
                        
 
@@ -1421,31 +1417,11 @@ class KSA_NCA extends Controller
 
 
                     }
-                    if ($checkpermission->type_id == 7) {
-                        return redirect()->route(
-                            'ksa_nca_section_2_2',
-                            ['title_num' => $filteredData[0][0], 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                        )
-                            ->with('success', 'Record Updated Successfully');
+                   
 
-                    }
-
-                    if ($checkpermission->type_id == 5) {
-                        return redirect()->route(
-                            'cy_sama_section_2_2',
-                            ['title_num' => $filteredData[0][0], 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                        )
-                            ->with('success', 'Record Updated Successfully');
-
-                    }
-
-                    if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 12 || $checkpermission->type_id==13 ) {
-                        return redirect()->back(
-                           
-                        )
-                            ->with('success', 'Record Updated Successfully');
-
-                    }
+                    
+                        
+                    return redirect()->back()->with('success', 'Record Updated Successfully');
 
                 } else {
                     return redirect()->route(
@@ -1516,6 +1492,10 @@ class KSA_NCA extends Controller
 
                     if ($checkpermission->type_id ==11) {
                         $filepath = public_path('ISA 62443 Part 2-1 - Modified.xlsx');
+                    }
+
+                    if ($checkpermission->type_id ==9) {
+                        $filepath = public_path('ISA 62443 Part 4-1 - Modified.xlsx');
                     }
 
 
