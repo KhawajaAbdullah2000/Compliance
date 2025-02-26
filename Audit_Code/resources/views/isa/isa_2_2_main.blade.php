@@ -82,7 +82,7 @@ $permissions=json_decode($project_permissions);
 
 
       <h2 class="fw-bold mt-4 mb-4">
-        {{$data[0][1]}}
+      {{$title}}:  {{$data[0][1]}}
       </h2>
 
         
