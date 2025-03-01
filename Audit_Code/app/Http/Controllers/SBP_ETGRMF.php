@@ -215,6 +215,7 @@ class SBP_ETGRMF extends Controller
 
                 $users = User::where('privilege_id', 5)->wherein('org_id', $orgs)->get(['id', 'first_name', 'last_name']);
 
+             
 
                 return view('SBP_ETGRMF.sbp_etgrmf_sec_2_2_sub_reqs_form', [
                     'project_id' => $checkpermission->project_id,
