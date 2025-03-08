@@ -561,7 +561,7 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
-                if ($checkpermission->type_id == 7) {
+           
 
 
 
@@ -595,6 +595,18 @@ class KSA_NCA extends Controller
                         if ($checkpermission->type_id == 7) {
                             //ksa Nca
                             $filepath = public_path('KSA_NCA_ECC_Modified.xlsx');
+                        }
+
+                        if ($checkpermission->type_id == 1) {
+                            $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
+                        }
+
+                        if ($checkpermission->type_id == 2) {
+                            $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                        }
+
+                        if ($checkpermission->type_id == 3) {
+                            $filepath = public_path('PCI_DSS_4_Merchant.xlsx');
                         }
 
 
@@ -681,14 +693,10 @@ class KSA_NCA extends Controller
                             }
 
 
-                            if ($checkpermission->type_id == 7) {
-
-
-                                // Redirect after updating the specific asset
-                                $mysessionreq = $req->session()->get('main_req_num');
+                               
                                 return redirect()->back()
                                     ->with('success', 'Record Updated Successfully');
-                            }
+                            
                         }
 
 
@@ -803,8 +811,8 @@ class KSA_NCA extends Controller
 
                     }
 
-                }
-                $mysessionreq = $req->session()->get('main_req_num');
+                
+               
 
                 return redirect()->back()
                     ->with('success', 'Record Updated Successfully');
@@ -1051,6 +1059,21 @@ class KSA_NCA extends Controller
                         $filepath = public_path('KSA_NCA_ECC_Modified.xlsx');
                     }
 
+                    if ($checkpermission->type_id == 1) {
+                        //PCI SIngle
+                        $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 2) {
+                        //PCI MUlti
+                        $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 3) {
+                        //PCI Merchant
+                        $filepath = public_path('PCI_DSS_4_Merchant.xlsx');
+                    }
+
                     if ($checkpermission->type_id == 5) {
                         //Cy sama
                         $filepath = public_path('CY_SAMA_Modified.xlsx');
@@ -1144,6 +1167,12 @@ class KSA_NCA extends Controller
 
                         }
 
+                        //PCI
+                        if ($checkpermission->type_id == 1||$checkpermission->type_id == 2 || $checkpermission->type_id == 3 ) {
+                            return redirect()->back()->with('success', 'Record Updated Successfully');
+
+                        }
+
 
 
                     }
@@ -1231,6 +1260,14 @@ class KSA_NCA extends Controller
                             ->with('success', 'Record Updated Successfully');
 
                     }
+
+                              //PCI
+                              if ($checkpermission->type_id == 1||$checkpermission->type_id == 2 || $checkpermission->type_id == 3 ) {
+                                return redirect()->back()->with('success', 'Record Updated Successfully');
+    
+                            }
+
+                    
           
 
                 } else {
@@ -1281,6 +1318,20 @@ class KSA_NCA extends Controller
                     if ($checkpermission->type_id == 5) {
                         //Cy sama
                         $filepath = public_path('CY_SAMA_Modified.xlsx');
+                    }
+                    if ($checkpermission->type_id == 1) {
+                        //PCI SIngle
+                        $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 2) {
+                        //PCI MUlti
+                        $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 3) {
+                        //PCI MUlti
+                        $filepath = public_path('PCI_DSS_4_Merchant.xlsx');
                     }
 
                             //ISA part 3-2
@@ -1474,6 +1525,21 @@ class KSA_NCA extends Controller
                     if ($checkpermission->type_id == 5) {
                         //Cy sama
                         $filepath = public_path('CY_SAMA_Modified.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 1) {
+                        //PCI SIngle
+                        $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 2) {
+                        //PCI Multi
+                        $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 3) {
+                        //PCI Merchant
+                        $filepath = public_path('PCI_DSS_4_Merchant.xlsx');
                     }
 
                               //ISA part 3-2

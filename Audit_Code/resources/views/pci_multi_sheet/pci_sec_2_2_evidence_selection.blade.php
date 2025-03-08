@@ -100,7 +100,7 @@
                     @endif
     
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="evidenceLevel" value="component">
+                        <input class="form-check-input" type="radio" name="evidenceLevel" value="component" checked>
                         <label class="form-check-label" for="assetComponent">Asset Component</label>
                     </div>
                 </div>

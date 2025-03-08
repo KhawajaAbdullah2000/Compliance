@@ -88,93 +88,358 @@
 
 <div class="row h-100 w-75">
     <div class="row mt-2" >
-        <div class="col-12">
+        <div class="col-md-8">
 
      <a href="/pci_multi_section_2_2/{{1}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">PCI-DSS v4.0 Requirement 1: Install and Maintain Network Security Controls</p></a>
     </div>
+    <div class="col-md-4">
+        
+        <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            @csrf
+            <input type="hidden" name="title" value="1">
+            <div class="d-flex align-items-center">
+                <select name="comp_status" class="form-select rounded-pill me-2">
+               
+                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+            </div>
+        </form>
+    
+</div>
     </div>
 
 
     <div class="row mt-2">
-        <div class="col-12">
+        <div class="col-md-8">
      <a href="/pci_multi_section_2_2/{{2}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0 Requirement 2: Apply Secure Configurations to All System Components</p></a>
     </div>
+    <div class="col-md-4">
+        
+        <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            @csrf
+            <input type="hidden" name="title" value="2">
+            <div class="d-flex align-items-center">
+                <select name="comp_status" class="form-select rounded-pill me-2">
+               
+                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+            </div>
+        </form>
+    
+</div>
     </div>
 
     <div class="row mt-2">
-        <div class="col-12">
+        <div class="col-md-8">
      <a href="/pci_multi_section_2_2/{{3}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0 Requirement 3: Protect Stored Account Data</p></a>
     </div>
+    <div class="col-md-4">
+        <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            @csrf
+            <input type="hidden" name="title" value="3">
+            <div class="d-flex align-items-center">
+                <select name="comp_status" class="form-select rounded-pill me-2">
+               
+                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+            </div>
+        </form>
+    
+</div>
     </div>
 
     <div class="row mt-2">
-        <div class="col-12">
+        <div class="col-md-8">
      <a href="/pci_multi_section_2_2/{{4}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0 Requirement 4: Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks</p></a>
     </div>
+    <div class="col-md-4">
+        
+        <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            @csrf
+            <input type="hidden" name="title" value="4">
+            <div class="d-flex align-items-center">
+                <select name="comp_status" class="form-select rounded-pill me-2">
+               
+                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+            </div>
+        </form>
+    
+</div>
     </div>
 
     <div class="row mt-2 mb-2">
-        <div class="col-12">
+        <div class="col-md-8">
      <a href="/pci_multi_section_2_2/{{5}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning  w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0 Requirement 5: Protect All Systems and Networks from Malicious Software</p></a>
     </div>
+    <div class="col-md-4">
+        
+        <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            @csrf
+            <input type="hidden" name="title" value="5">
+            <div class="d-flex align-items-center">
+                <select name="comp_status" class="form-select rounded-pill me-2">
+               
+                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+            </div>
+        </form>
+    
+</div>
     </div>
 
 
     <div class="row mt-2 mb-2">
-        <div class="col-12">
+        <div class="col-md-8">
      <a href="/pci_multi_section_2_2/{{6}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning  w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0 Requirement 6: Develop and Maintain Secure Systems and Software</p></a>
     </div>
+    <div class="col-md-4">
+        
+        <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            @csrf
+            <input type="hidden" name="title" value="6">
+            <div class="d-flex align-items-center">
+                <select name="comp_status" class="form-select rounded-pill me-2">
+               
+                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+            </div>
+        </form>
+    
+</div>
     </div>
 
 
     <div class="row mt-2 mb-2">
-        <div class="col-12">
+        <div class="col-md-8">
      <a href="/pci_multi_section_2_2/{{7}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0 Requirement 7: Restrict Access to System Components and Cardholder Data by Business Need to Know</p></a>
     </div>
+    <div class="col-md-4">
+        
+        <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            @csrf
+            <input type="hidden" name="title" value="7">
+            <div class="d-flex align-items-center">
+                <select name="comp_status" class="form-select rounded-pill me-2">
+               
+                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+            </div>
+        </form>
+    
+</div>
     </div>
 
     <div class="row mt-2 mb-2">
-        <div class="col-12">
+        <div class="col-md-8">
      <a href="/pci_multi_section_2_2/{{8}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0 Requirement 8: Identify Users and Authenticate Access to System Components</p></a>
     </div>
+    <div class="col-md-4">
+        
+        <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            @csrf
+            <input type="hidden" name="title" value="8">
+            <div class="d-flex align-items-center">
+                <select name="comp_status" class="form-select rounded-pill me-2">
+               
+                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+            </div>
+        </form>
+    
+</div>
     </div>
 
     <div class="row mt-2 mb-2">
-        <div class="col-12">
+        <div class="col-md-8">
      <a href="/pci_multi_section_2_2/{{9}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0 Requirement 9: Restrict Physical Access to Cardholder Data</p></a>
     </div>
+    <div class="col-md-4">
+        
+        <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            @csrf
+            <input type="hidden" name="title" value="9">
+            <div class="d-flex align-items-center">
+                <select name="comp_status" class="form-select rounded-pill me-2">
+               
+                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+            </div>
+        </form>
+    
+</div>
     </div>
 
     <div class="row mt-2 mb-2">
-        <div class="col-12">
+        <div class="col-md-8">
      <a href="/pci_multi_section_2_2/{{10}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0 Requirement 10: Log and Monitor All Access to System Components and Cardholder Data</p></a>
     </div>
+    <div class="col-md-4">
+        
+        <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            @csrf
+            <input type="hidden" name="title" value="10">
+            <div class="d-flex align-items-center">
+                <select name="comp_status" class="form-select rounded-pill me-2">
+               
+                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+            </div>
+        </form>
+    
+</div>
     </div>
 
     <div class="row mt-2 mb-2">
-        <div class="col-12">
+        <div class="col-md-8">
      <a href="/pci_multi_section_2_2/{{11}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0 Requirement 11: Test Security of Systems and Networks Regularly</p></a>
     </div>
+    <div class="col-md-4">
+        
+        <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            @csrf
+            <input type="hidden" name="title" value="11">
+            <div class="d-flex align-items-center">
+                <select name="comp_status" class="form-select rounded-pill me-2">
+               
+                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+            </div>
+        </form>
+    
+</div>
     </div>
 
     <div class="row mt-2 mb-2">
-        <div class="col-12">
+        <div class="col-md-8">
      <a href="/pci_multi_section_2_2/{{12}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0 Requirement 12: Support Information Security with Organizational Policies and Programs</p></a>
     </div>
+    <div class="col-md-4">
+        
+        <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            @csrf
+            <input type="hidden" name="title" value="12">
+            <div class="d-flex align-items-center">
+                <select name="comp_status" class="form-select rounded-pill me-2">
+               
+                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+            </div>
+        </form>
+    
+</div>
     </div>
 
     <div class="row mt-2 mb-2">
-        <div class="col-12">
+        <div class="col-md-8">
      <a href="/pci_multi_section_2_2/A1/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">Appendix A1: Additional PCI DSS Requirements for Multi-Tenant Service Providers</p></a>
     </div>
+    <div class="col-md-4">
+        
+        <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            @csrf
+            <input type="hidden" name="title" value="A1">
+            <div class="d-flex align-items-center">
+                <select name="comp_status" class="form-select rounded-pill me-2">
+               
+                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+            </div>
+        </form>
+    
+</div>
     </div>
 
 
 
     <div class="row mt-2 mb-2">
-        <div class="col-12">
+        <div class="col-md-8">
      <a href="/pci_multi_section_2_2/A2/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">Appendix A2: Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections</p></a>
     </div>
+    <div class="col-md-4">
+        
+        <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            @csrf
+            <input type="hidden" name="title" value="A2">
+            <div class="d-flex align-items-center">
+                <select name="comp_status" class="form-select rounded-pill me-2">
+               
+                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+            </div>
+        </form>
+    
+</div>
     </div>
         {{-- <a href="/v_3_2_section1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning">Section1</a> --}}
 
@@ -189,7 +454,21 @@
     
 </div>
 
+@section('scripts')
 
+@if(Session::has('success'))
+<script>
+    swal({
+  title: "{{Session::get('success')}}",
+  icon: "success",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script> 
+@endif
+
+
+@endsection
 
 
 @endsection
