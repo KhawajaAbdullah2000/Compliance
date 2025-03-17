@@ -254,7 +254,7 @@ route::get('iso_sec_2_1_delete/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::
 //copy assets gage to open the services of the selected project
 route::get("copy_assets/{proj_id}/{user_id}",[IsoSec2_1::class,'ShowServices'])->name('services');
 //show asset groups of those services
-route::get('show_groups/{proj_id}/{user_id}/{proj_to_copy}/{servicename}',[IsoSec2_1::class,'ShowGroups']);
+route::post('show_groups',[IsoSec2_1::class,'ShowGroups'])->name('show_groups');
 route::post('copy_groups/{proj_id}/{user_id}/{proj_to_copy}/{servicename}',[IsoSec2_1::class,'CopyGroups']);
 //download exceltemplate
 route::get('/download_asset_template',[IsoSec2_1::class,'download_asset_template'])->name('download_asset_template');

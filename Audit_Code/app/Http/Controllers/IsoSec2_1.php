@@ -725,128 +725,204 @@ class IsoSec2_1 extends Controller
 
     }
 
-    public function ShowGroups($proj_id,$user_id,$proj_to_copy,$servicename){
-        if ($user_id == auth()->user()->id) {
-            $checkpermission = Db::table('project_details')->select(
-                'project_types.id as type_id',
-                'project_details.project_code',
-                'project_details.project_permissions',
-                'projects.project_name',
-                'projects.project_id'
-            )
-                ->join('projects', 'project_details.project_code', 'projects.project_id')
-                ->join('project_types', 'projects.project_type', 'project_types.id')
-                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-                ->first();
-            if ($checkpermission) {
-                $permissions = json_decode($checkpermission->project_permissions);
-                if (in_array('Data Inputter', $permissions)) {
+    public function ShowGroups(Request $request){
+        // if ($user_id == auth()->user()->id) {
+        //     $checkpermission = Db::table('project_details')->select(
+        //         'project_types.id as type_id',
+        //         'project_details.project_code',
+        //         'project_details.project_permissions',
+        //         'projects.project_name',
+        //         'projects.project_id'
+        //     )
+        //         ->join('projects', 'project_details.project_code', 'projects.project_id')
+        //         ->join('project_types', 'projects.project_type', 'project_types.id')
+        //         ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        //         ->first();
+        //     if ($checkpermission) {
+        //         $permissions = json_decode($checkpermission->project_permissions);
+        //         if (in_array('Data Inputter', $permissions)) {
 
 
-                        $project=Project::join('project_types','projects.project_type','project_types.id')
-                        ->where('projects.project_id',$proj_id)->first();
+        //                 $project=Project::join('project_types','projects.project_type','project_types.id')
+        //                 ->where('projects.project_id',$proj_id)->first();
 
-                        // $groups=Db::table('iso_sec_2_1')->where('project_id',$proj_to_copy)
-                        // ->where('s_name',$servicename)
-                        // ->distinct('g_name')->get();
-
-
-
-                       $groups = DB::table('iso_sec_2_1')
-           ->where('project_id', $proj_to_copy)->where('s_name',$servicename)
-            ->select('g_name')
-             ->distinct('g_name')
-              ->get();
-
-                        $project_to_copy=Project::where('project_id',$proj_to_copy)->first();
+                     
+        //                 $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_to_copy)->where('s_name',$servicename)
+        //             ->get();
+                    
+        //             try {
+        //                 foreach($assets as $ass){
 
 
+        //                 Db::table('iso_sec_2_1')->insert([
+        //                     'project_id' => $proj_id,
+        //                     'g_name' => $ass->g_name,
+        //                     'name' => $ass->name,
+        //                     'c_name' => $ass->c_name,
+        //                     'owner_dept' => $ass->owner_dept,
+        //                     'physical_loc' => $ass->physical_loc,
+        //                     'logical_loc' => $ass->logical_loc,
+        //                     's_name' => $ass->s_name,
+        //                     'last_edited_by' => $user_id,
+        //                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+        //                 ]);
 
-                        return view('iso_sec_2_1.groups_to_copy',[
-                            'groups'=>$groups,
-                            'project'=>$project,
-                            'project_to_copy'=>$project_to_copy,
-                            'servicename'=>$servicename
+        //                 }
 
-                        ]);
-
-
-
-                }
-            }
-        }
-        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
-
-    }
-
-    public function CopyGroups(Request $req,$proj_id,$user_id,$proj_to_copy,$servicename){
-        $req->validate([
-            'group_to_copy'=>'required'
-        ],[
-            'required'=>"Please select atleast one group"
-        ]);
-
-
-        if ($user_id == auth()->user()->id) {
-            $checkpermission = Db::table('project_details')->select(
-                'project_types.id as type_id',
-                'project_details.project_code',
-                'project_details.project_permissions',
-                'projects.project_name',
-                'projects.project_id'
-            )
-                ->join('projects', 'project_details.project_code', 'projects.project_id')
-                ->join('project_types', 'projects.project_type', 'project_types.id')
-                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-                ->first();
-            if ($checkpermission) {
-                $permissions = json_decode($checkpermission->project_permissions);
-                if (in_array('Data Inputter', $permissions)) {
-
-
-                    $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_to_copy)->where('s_name',$servicename)
-                    ->whereIn('g_name',$req->group_to_copy)->get();
-
-                    try {
-                        foreach($assets as $ass){
-
-
-                        Db::table('iso_sec_2_1')->insert([
-                            'project_id' => $proj_id,
-                            'g_name' => $ass->g_name,
-                            'name' => $ass->name,
-                            'c_name' => $ass->c_name,
-                            'owner_dept' => $ass->owner_dept,
-                            'physical_loc' => $ass->physical_loc,
-                            'logical_loc' => $ass->logical_loc,
-                            's_name' => $ass->s_name,
-                            'last_edited_by' => $user_id,
-                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                        ]);
-
-                        }
-
-                    } catch (\Exception $e) {
+        //             } catch (\Exception $e) {
                        
-                        $error=$e->getCode();
+        //                 $error=$e->getCode();
                         
-                        return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
-                    ->with('error', $error);
+        //                 return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
+        //             ->with('error', $error);
+        //             }
+
+        //             return redirect()->route('iso_section2_1',[
+        //                 'proj_id'=>$proj_id,
+        //                 'user_id'=>auth()->user()->id
+
+        //             ])->with('success','Assets copied successfully');
+
+
+
+        //         }
+        //     }
+        // }
+        // return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+        $proj_id = $request->proj_id;
+        $user_id = $request->user_id;
+        $proj_to_copy = $request->proj_to_copy;
+        $services = $request->services; // Array of selected services
+    
+        if (!$services || count($services) == 0) {
+            return redirect()->back()->with('error', 'No services selected.');
+        }
+    
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = DB::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)
+            ->where('assigned_enduser', $user_id)
+            ->first();
+    
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+                if (in_array('Data Inputter', $permissions)) {
+                    try {
+                        foreach ($services as $servicename) {
+                            $assets = DB::table('iso_sec_2_1')
+                                ->where('project_id', $proj_to_copy)
+                                ->where('s_name', $servicename)
+                                ->get();
+    
+                            foreach ($assets as $ass) {
+                                DB::table('iso_sec_2_1')->insert([
+                                    'project_id' => $proj_id,
+                                    'g_name' => $ass->g_name,
+                                    'name' => $ass->name,
+                                    'c_name' => $ass->c_name,
+                                    'owner_dept' => $ass->owner_dept,
+                                    'physical_loc' => $ass->physical_loc,
+                                    'logical_loc' => $ass->logical_loc,
+                                    's_name' => $ass->s_name,
+                                    'last_edited_by' => $user_id,
+                                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                                ]);
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        return redirect()->route('iso_section2_1', [
+                            'proj_id' => $proj_id,
+                            'user_id' => $user_id
+                        ])->with('error', 'Error copying assets: ' . $e->getMessage());
                     }
-
-                    return redirect()->route('iso_section2_1',[
-                        'proj_id'=>$proj_id,
-                        'user_id'=>$user_id
-                    ])->with('success','Record Added successfully');
-
-
-
-
+    
+                    return redirect()->route('iso_section2_1', [
+                        'proj_id' => $proj_id,
+                        'user_id' => auth()->user()->id
+                    ])->with('success', 'Selected services copied successfully.');
                 }
             }
         }
+    
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
+
+    // public function CopyGroups(Request $req,$proj_id,$user_id,$proj_to_copy,$servicename){
+    //     $req->validate([
+    //         'group_to_copy'=>'required'
+    //     ],[
+    //         'required'=>"Please select atleast one group"
+    //     ]);
+
+
+    //     if ($user_id == auth()->user()->id) {
+    //         $checkpermission = Db::table('project_details')->select(
+    //             'project_types.id as type_id',
+    //             'project_details.project_code',
+    //             'project_details.project_permissions',
+    //             'projects.project_name',
+    //             'projects.project_id'
+    //         )
+    //             ->join('projects', 'project_details.project_code', 'projects.project_id')
+    //             ->join('project_types', 'projects.project_type', 'project_types.id')
+    //             ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+    //             ->first();
+    //         if ($checkpermission) {
+    //             $permissions = json_decode($checkpermission->project_permissions);
+    //             if (in_array('Data Inputter', $permissions)) {
+
+
+    //                 $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_to_copy)->where('s_name',$servicename)
+    //                 ->whereIn('g_name',$req->group_to_copy)->get();
+
+    //                 try {
+    //                     foreach($assets as $ass){
+
+
+    //                     Db::table('iso_sec_2_1')->insert([
+    //                         'project_id' => $proj_id,
+    //                         'g_name' => $ass->g_name,
+    //                         'name' => $ass->name,
+    //                         'c_name' => $ass->c_name,
+    //                         'owner_dept' => $ass->owner_dept,
+    //                         'physical_loc' => $ass->physical_loc,
+    //                         'logical_loc' => $ass->logical_loc,
+    //                         's_name' => $ass->s_name,
+    //                         'last_edited_by' => $user_id,
+    //                         'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+    //                     ]);
+
+    //                     }
+
+    //                 } catch (\Exception $e) {
+                       
+    //                     $error=$e->getCode();
+                        
+    //                     return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
+    //                 ->with('error', $error);
+    //                 }
+
+    //                 return redirect()->route('iso_section2_1',[
+    //                     'proj_id'=>$proj_id,
+    //                     'user_id'=>$user_id
+    //                 ])->with('success','Record Added successfully');
+
+
+
+
+    //             }
+    //         }
+    //     }
+    //     return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+    // }
 
 
 
