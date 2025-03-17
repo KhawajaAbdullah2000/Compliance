@@ -145,7 +145,7 @@ $req->validate(
         'first_name'=>'required|max:100',
         'last_name'=>'required|max:100',
         'email'=>'required|email|unique:users',
-'password' => 'required|min:12|max:30|regex:/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+$/',
+'password' => 'required|min:12|max:30|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]+$/',
         'privilege_id'=>'required',
         'status'=>'required'
     ],

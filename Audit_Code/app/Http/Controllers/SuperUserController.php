@@ -38,7 +38,7 @@ public function add_end_user_form(Request $req){
             'first_name'=>'required|max:100',
             'last_name'=>'required|max:100',
             'org_id'=>'required',
-    'password' => 'required|min:12|max:30|regex:/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+$/',
+    'password' => 'required|min:12|max:30|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]+$/',
         'privilege_id'=>'required',
         'status'=>'required'
             // 'roles'=>'required'

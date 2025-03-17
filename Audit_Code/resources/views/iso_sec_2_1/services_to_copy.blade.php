@@ -170,7 +170,7 @@
             </tbody>
         </table>
 
-        <button type="submit" class="btn btn-md btn-success mt-3">Copy Selected</button>
+        <button type="submit" class="btn btn-md btn-success mt-3">Copy Assets in the Selected Service</button>
     </form>
 </div>
 
