@@ -37,6 +37,13 @@ class ActionPlanController extends Controller
 
     }
 
+  
+}
+
+public function action_plan_all_projects_in_org($org){
+
+    return view('action_plan.all_projects_select_risk_type');
+
 }
 
 public function select_assets($action_plan_type,$proj_id){
@@ -318,6 +325,46 @@ public function action_plan_show( $service, $component, $proj_id, Request $req){
 
 }
 
+public function all_projects_action_plan($action_plan_type,$org_id){
+    $projects=DB::table("projects")->where('org_id',$org_id)
+    ->pluck('project_id')->toArray();
+
+
+    $assetIds = DB::table('iso_sec_2_1')
+    ->wherein('project_id',$projects)
+    ->pluck('assessment_id')->toArray();
+
+    $mandatory_action_plan=null;
+    $treatment_action_plan=null;
+
+if($action_plan_type=='Mandatory' ||$action_plan_type=='Both'  ){
+//iso_sec_2_2
+$mandatory_action_plan = DB::table('iso_sec_2_1 AS assets')
+    ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
+    ->leftJoin('users','compliance.responsibility_for_treatment','users.id')
+    ->whereIn('compliance.asset_id', $assetIds)
+    ->paginate(10, ['*'], 'mandatory_page');
+   
+
+}
+
+if($action_plan_type=='Treatment'||$action_plan_type=='Both' ){
+$treatment_action_plan = DB::table('iso_sec_2_1 AS assets')
+->join('iso_risk_treatment AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
+->leftJoin('users','compliance.responsibility_for_treatment','users.id')
+->whereIn('compliance.asset_id', $assetIds)
+->paginate(10, ['*'], 'treatment_page');
+}
+
+return view('action_plan.all_projects_show_action_plan',[
+    'treatment_action_plan'=>$treatment_action_plan,
+    'mandatory_action_plan'=>$mandatory_action_plan,
+    'action_plan_type'=>$action_plan_type
+
+]);
+
+}
+
 public function action_plan_download($proj_id,$service,$component,Request $req){
 
     $group = $req->query('group');
@@ -404,6 +451,58 @@ public function action_plan_download($proj_id,$service,$component,Request $req){
 
 
    
+}
+
+public function all_projects_action_plan_download($action_plan_type,$org_id){
+    $projects=DB::table("projects")->where('org_id',$org_id)
+    ->pluck('project_id')->toArray();
+
+    $assetIds = DB::table('iso_sec_2_1')
+    ->wherein('project_id',$projects)
+    ->pluck('assessment_id')->toArray();
+
+    if($action_plan_type=='Mandatory' ||$action_plan_type=='Both'){
+        //iso_sec_2_2
+        $mandatory_action_plan = DB::table('iso_sec_2_1 AS assets')
+            ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
+            ->leftJoin('users','compliance.responsibility_for_treatment','users.id')
+            ->whereIn('compliance.asset_id', $assetIds)
+            ->get();
+           
+
+    }
+
+    if($action_plan_type=='Treatment'||$action_plan_type=='Both' ){
+        $treatment_action_plan = DB::table('iso_sec_2_1 AS assets')
+        ->join('iso_risk_treatment AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
+        ->leftJoin('users','compliance.responsibility_for_treatment','users.id')
+        ->whereIn('compliance.asset_id', $assetIds)
+        ->get();
+    }
+
+    
+
+    if($action_plan_type=='Mandatory'){
+        return Excel::download(
+            new MandatoryActionPlan($mandatory_action_plan),
+            'AllProjects_mandatoryActionPlan.xlsx'
+        );
+    }
+
+    if($action_plan_type=='Treatment'){
+        return Excel::download(
+            new TreatmentActionPlan($treatment_action_plan),
+            'AllProjects_treatmentActionPlan.xlsx'
+        );
+    }
+
+    if($action_plan_type=='Both'){
+        return Excel::download(
+            new BothActionPlan($mandatory_action_plan,$treatment_action_plan),
+            'AllProjects_ActionPlan.xlsx'
+        );
+    }
+
 }
 
 }

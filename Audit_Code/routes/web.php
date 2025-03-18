@@ -480,6 +480,12 @@ Route::get('total_activities_on_project_sec_2_3_1/{proj_id}/{user_id}',[ProjectC
 
 Route::get('compliances_all_projects_in_org/{org_id}',[ComplianceMap::class,'compliances_all_projects_in_org']);
 
+Route::get('action_plan_all_projects_in_org/{org_id}',[ActionPlanController::class,'action_plan_all_projects_in_org']);
+Route::get('all_projects_action_plan/{risk_type}/{org_id}',[ActionPlanController::class,'all_projects_action_plan']);
+Route::get('all_projects_action_plan_download/{risk_type}/{org_id}',[ActionPlanController::class,'all_projects_action_plan_download']);
+
+
+
 
 }
 
