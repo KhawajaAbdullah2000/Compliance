@@ -107,8 +107,78 @@ class ComplianceMap extends Controller
         }
 
     }
+
+
+    public function compliances_all_projects_in_org($org_id){
+        $projects = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.org_id', $org_id)->get();
+        
+        $allProjectsResults = [];
+
+        foreach ($projects as $project) {
+            $proj_id = $project->project_id;
+   
+                $results = DB::table('iso_sec_2_1 AS assets')
+                    ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
+                    ->select(
+                        'compliance.title_num AS Domain',
+                        'compliance.comp_status',
+                        DB::raw('COUNT(compliance.comp_status) AS status_count')
+                    )
+                    ->where('assets.project_id', $proj_id)
+                    ->groupBy('compliance.title_num', 'compliance.comp_status') // Group by service, component, and comp_status
+                    ->orderBy('compliance.title_num') // Optional: Order by service name
+                    ->get();
+
+                $formattedResults = [];
+                $totalCounts = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
+
+                foreach ($results as $result) {
+                    $domain = $result->Domain;
+                    $status = $result->comp_status;
+                    $count = $result->status_count;
+
+                    // Initialize domain
+                    if (!isset($formattedResults[$domain])) {
+                        $formattedResults[$domain] = [];
+                    }
+
+                    if (!isset($formattedResults[$domain][$status])) {
+                        $formattedResults[$domain][$status] = 0;
+                    }
+
+                    // Add the count to the respective comp_status
+                    $formattedResults[$domain][$status] += $count;
+
+                    // Update the grand totals for each status
+                    $totalCounts[$status] += $count;
+                }
+                // Add the total for all rows
+                $totalCounts['total'] = array_sum($totalCounts);
+
+
+                $allProjectsResults[$proj_id] = [
+                    'project_name' => $project->project_name, // Assuming the project has a 'name' field
+                    'compliance_results' => $formattedResults,
+                    'total_counts' => $totalCounts,
+                ];
+        
+
+            }
+
+
+            return view('compliance_map.projects_in_org_dashboard', [
+                'project' => $project,
+                'formattedResults' => $allProjectsResults,
+            ]);
+    }
+
+
+
     public function compliance_map_all_services($proj_id, $user_id)
     {
+      
+     
         $checkpermission = Db::table('project_details')->select(
             'project_types.id as type_id',
             'project_details.project_code',
@@ -348,6 +418,7 @@ class ComplianceMap extends Controller
 
                                        //ISA part 4-1
                         if ($project->project_type == 9) { 
+                       
                             return view('compliance_map.isa_4_1_all_services_all_controls', [
                                 'project' => $project,
                                 'uniqueServicesCount' => $uniqueServicesCount,
@@ -363,6 +434,8 @@ class ComplianceMap extends Controller
 
             
 
+        }else{
+            return redirect()->back()->with('error',"You are not assigned as an end user on this project");
         }
 
     }

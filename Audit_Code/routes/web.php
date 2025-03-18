@@ -478,6 +478,7 @@ Route::get('total_activities_on_project_sec_2_2/{proj_id}/{user_id}',[ProjectCon
 Route::get('total_activities_on_project/{proj_id}/{user_id}',[ProjectController::class,'total_activities_on_project']);
 Route::get('total_activities_on_project_sec_2_3_1/{proj_id}/{user_id}',[ProjectController::class,'total_activities_on_project_sec_2_3_1']);
 
+Route::get('compliances_all_projects_in_org/{org_id}',[ComplianceMap::class,'compliances_all_projects_in_org']);
 
 
 }

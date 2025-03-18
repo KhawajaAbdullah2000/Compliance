@@ -13,7 +13,8 @@
     </h1>
 
 
-    <a href="/user_action_all_projects_in_org/{{auth()->user()->organization->id}}" class="btn btn-primary btn-md mb-4">User Action on All Projects</a>
+    <a href="/user_action_all_projects_in_org/{{auth()->user()->organization->id}}" class="btn btn-primary btn-md mb-4">View User Action on All Projects</a>
+    <a href="/compliances_all_projects_in_org/{{auth()->user()->organization->id}}" class="btn btn-primary btn-md mb-4">View Compliances on All Projects</a>
 
 
     <!-- Projects Table -->
@@ -28,9 +29,10 @@
                         <th style='text-align:center'>My Permissions on Project</th>
                         <th style='text-align:center'>Data</th>
                         <th style='text-align:center'>Metadata</th>
-                        <th style='text-align:center'>View Compliance Map</th>
-                        <th style='text-align:center'>View Action Plan</th>
+                        <th style='text-align:center'>View Compliance</th>
                         <th style='text-align:center'>View Risk Heatmap</th>
+                        <th style='text-align:center'>View Action Plan</th>
+
                      
                         <th style='text-align:center'>Switch Storage Node</th>
 
@@ -102,6 +104,14 @@
                                 </a>
                             </td>
 
+                                 {{-- Risk Heatmap --}}
+                                 <td style='text-align:center'>
+                                    <a href="/heatmap_all_services_all_risks/{{$pro->project_code}}/{{auth()->user()->id}}" 
+                                       data-toggle="tooltip" title="View Risk Heatmap">
+                                       <i class="fas fa-chart-area text-success" style="font-size: 1.8em;"></i>
+    
+                                    </a>
+                                </td>
 
                             {{-- Action Plan --}}
                             <td style='text-align:center'>
@@ -111,14 +121,7 @@
                                 </a>
                             </td>
 
-                               {{-- Risk Heatmap --}}
-                               <td style='text-align:center'>
-                                <a href="/heatmap_all_services_all_risks/{{$pro->project_code}}/{{auth()->user()->id}}" 
-                                   data-toggle="tooltip" title="View Risk Heatmap">
-                                   <i class="fas fa-chart-area text-success" style="font-size: 1.8em;"></i>
-
-                                </a>
-                            </td>
+                          
 
                                {{-- Statement of Applicability --}}
                                {{-- <td style='text-align:center'>
