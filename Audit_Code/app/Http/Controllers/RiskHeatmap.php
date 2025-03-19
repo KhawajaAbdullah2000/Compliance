@@ -17,6 +17,7 @@ class RiskHeatmap extends Controller
 
     public function heatmap_all_services_all_risks($proj_id, $user_id)
     {
+
         $checkpermission = Db::table('project_details')->select(
             'project_types.id as type_id',
             'project_details.project_code',
@@ -258,101 +259,243 @@ class RiskHeatmap extends Controller
         }
     }
 
-    public function heatmap_single_risk($service, $component, $proj_id, Request $req)
-    {
-        $group = $req->query('group');
-        $subgroup = $req->query('subgroup');
-        $risk_type = Session('risk_type');
+    public function heatmap_select_services_and_risks($proj_id,$user_id){
+        $uniqueServices = DB::table('iso_sec_2_1')
+        ->where('project_id', $proj_id)
+        ->select('s_name') // Select only the column you want to be distinct
+        ->distinct()
+        ->get();
+    
+        
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+        $uniqueServicesCount = DB::table('iso_sec_2_1')
+        ->where('project_id', $proj_id)
+        ->distinct()
+        ->count('s_name');
 
+    $uniqueGroupsCount = DB::table('iso_sec_2_1')
+        ->where('project_id', $proj_id)
+        ->distinct()
+        ->count('g_name');
+
+    $uniqueSubGroupsCount = DB::table('iso_sec_2_1')
+        ->where('project_id', $proj_id)
+        ->distinct()
+        ->count('name');
+
+    $uniqueComponentsCount = DB::table('iso_sec_2_1')
+        ->where('project_id', $proj_id)
+        ->distinct()
+        ->count('c_name');
+
+        return view('heatmap.select_service_and_risk_type',[
+            'uniqueServices'=>$uniqueServices,
+            'project'=>$project,
+            'uniqueServicesCount' => $uniqueServicesCount,
+            'uniqueGroupsCount' => $uniqueGroupsCount,
+            'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+            'uniqueComponentsCount' => $uniqueComponentsCount
+        ]);
+
+ 
+    }
+
+    // public function heatmap_single_risk($proj_id, Request $req)
+    // {
+      
+    //     //$group = $req->query('group');
+    //     //$subgroup = $req->query('subgroup');
+    //     $risk_type = $req->selected_risk;
+    //     $service=$req->selected_service;
+
+       
+    //     $assetIds = DB::table('iso_sec_2_1')
+    //         ->where('project_id', $proj_id)
+    //         ->when($service != '_all', function ($query) use ($service) {
+    //             return $query->where('s_name', $service);
+    //         })
+    //         // ->when($group, function ($query, $group) {
+    //         //     return $query->when($group != '_all', function ($query) use ($group) {
+    //         //         return $query->where('g_name', $group);
+    //         //     });
+    //         // })
+    //         // ->when($subgroup, function ($query, $subgroup) {
+    //         //     return $query->when($subgroup != '_all', function ($query) use ($subgroup) {
+    //         //         return $query->where('name', $subgroup);
+    //         //     });
+    //         // })
+    //         // ->when($component != '_all', function ($query) use ($component) {
+    //         //     return $query->where('c_name', $component);
+    //         // })
+    //         ->pluck('assessment_id')->toArray();
+
+         
+
+    //         $risk_adverse_value=$req->selected_risk;
+        
+    //         if($risk_type=='risk_level'){
+    //             $risk_adverse_value='risk_confidentiality';
+    //         }
+
+    //         $results = DB::table('iso_sec_2_3_1')
+    //         ->join('iso_sec_2_1', 'iso_sec_2_3_1.asset_id', '=', 'iso_sec_2_1.assessment_id')
+    //         ->where('iso_sec_2_3_1.project_id', $proj_id)
+    //         ->whereIn('iso_sec_2_3_1.asset_id', $assetIds)
+    //         ->selectRaw("
+    //             iso_sec_2_1.{$risk_adverse_value} AS risk_value,
+    //             CASE 
+    //                 WHEN iso_sec_2_3_1.{$risk_type} >= 0.0 AND iso_sec_2_3_1.{$risk_type} < 0.9999 THEN 'low'
+    //                 WHEN iso_sec_2_3_1.{$risk_type} >= 0.999 AND iso_sec_2_3_1.{$risk_type} < 7.2 THEN 'medium'
+    //                 WHEN iso_sec_2_3_1.{$risk_type} >= 7.2 AND iso_sec_2_3_1.{$risk_type} <= 10.0 THEN 'high'
+    //             END AS risk_category,
+    //             COUNT(*) as count,
+    //             MIN(iso_sec_2_3_1.risk_score) as min_risk_score,
+    //             MAX(iso_sec_2_3_1.risk_score) as max_risk_score
+    //         ")
+    //         ->groupBy("iso_sec_2_1.{$risk_adverse_value}", 'risk_category')
+    //         ->get();
+
+    //         dd($results);
+
+    //         $impactLevels = [
+    //             10 => 'High',
+    //             5 => 'Medium',
+    //             1 => 'Low',
+    //         ];
+
+
+    //         $data = $results->groupBy('risk_value')->mapWithKeys(function ($items, $value) use ($impactLevels) {
+    //             $mappedImpact = $impactLevels[$value] ?? $value; // Default to original value if not mapped
+    //             $row = [
+    //                 'low' => ['count' => 0, 'range' => ''],
+    //                 'medium' => ['count' => 0, 'range' => ''],
+    //                 'high' => ['count' => 0, 'range' => ''],
+    //             ];
+    //             foreach ($items as $item) {
+    //                 $row[$item->risk_category] = [
+    //                     'count' => $item->count,
+    //                     'range' => $item->min_risk_score . ' - ' . $item->max_risk_score,
+    //                 ];
+    //             }
+    //             return [$mappedImpact => $row];
+    //         });
+
+
+    //         $overallRanges = $results->groupBy('risk_category')->mapWithKeys(function ($items, $riskCategory) use ($impactLevels) {
+    //             $mappedCategory = $impactLevels[$riskCategory] ?? $riskCategory; // Map numerical values to labels
+    //             return [
+    //                 $mappedCategory => [
+    //                     'min' => $items->min('min_risk_score'),
+    //                     'max' => $items->max('max_risk_score'),
+    //                 ],
+    //             ];
+    //         });
+            
+    //         // Ensure all categories are present (Low, Medium, High) even if some are missing
+    //         $defaultCategories = ['low', 'medium', 'high'];
+            
+    //         foreach ($defaultCategories as $category) {
+    //             if (!isset($overallRanges[$category])) {
+    //                 $overallRanges[$category] = ['min' => '-', 'max' => '-']; // Set default values
+    //             }
+    //         }
+            
+         
+          
+    //         $totalCount = $results->sum('count');
+
+    //         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+    //         ->where('projects.project_id', $proj_id)->first();
+
+    //         $uniqueServicesCount = DB::table('iso_sec_2_1')
+    //         ->where('project_id', $proj_id)
+    //         ->distinct()
+    //         ->count('s_name');
+
+    //     $uniqueGroupsCount = DB::table('iso_sec_2_1')
+    //         ->where('project_id', $proj_id)
+    //         ->distinct()
+    //         ->count('g_name');
+
+    //     $uniqueSubGroupsCount = DB::table('iso_sec_2_1')
+    //         ->where('project_id', $proj_id)
+    //         ->distinct()
+    //         ->count('name');
+
+    //     $uniqueComponentsCount = DB::table('iso_sec_2_1')
+    //         ->where('project_id', $proj_id)
+    //         ->distinct()
+    //         ->count('c_name');
+           
+           
+     
+    //         return view('heatmap.heatmap_single_type',
+    //         [
+    //             'project'=>$project,
+    //             'data'=>$data,
+    //             'totalCount'=>$totalCount,
+    //             'overallRanges'=>$overallRanges,
+    //             'risk_type'=>$risk_type,
+    //             'uniqueServicesCount' => $uniqueServicesCount,
+    //             'uniqueGroupsCount' => $uniqueGroupsCount,
+    //             'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //             'uniqueComponentsCount' => $uniqueComponentsCount,
+    //             'service'=>$service,
+    //             'group'=>$group,
+    //             'subgroup'=>$subgroup,
+    //             'component'=>$component,
+
+    //         ]);
+
+
+
+    // }
+
+    public function heatmap_single_risk($proj_id, Request $req)
+    {
+      
+        $risk_type = $req->selected_risk;
+        $service=$req->selected_service;
+
+       
         $assetIds = DB::table('iso_sec_2_1')
             ->where('project_id', $proj_id)
             ->when($service != '_all', function ($query) use ($service) {
                 return $query->where('s_name', $service);
             })
-            ->when($group, function ($query, $group) {
-                return $query->when($group != '_all', function ($query) use ($group) {
-                    return $query->where('g_name', $group);
-                });
-            })
-            ->when($subgroup, function ($query, $subgroup) {
-                return $query->when($subgroup != '_all', function ($query) use ($subgroup) {
-                    return $query->where('name', $subgroup);
-                });
-            })
-            ->when($component != '_all', function ($query) use ($component) {
-                return $query->where('c_name', $component);
-            })
             ->pluck('assessment_id')->toArray();
 
-            $risk_adverse_value=$risk_type;
-            if($risk_type=='risk_level'){
-                $risk_adverse_value='risk_confidentiality';
-            }
+        
+        
 
             $results = DB::table('iso_sec_2_3_1')
             ->join('iso_sec_2_1', 'iso_sec_2_3_1.asset_id', '=', 'iso_sec_2_1.assessment_id')
             ->where('iso_sec_2_3_1.project_id', $proj_id)
             ->whereIn('iso_sec_2_3_1.asset_id', $assetIds)
+            ->selectRaw("FLOOR(control_num) as category, MAX(iso_sec_2_3_1.$risk_type) as max_risk, 
+                         MIN(iso_sec_2_3_1.$risk_type) as min_risk, AVG(iso_sec_2_3_1.$risk_type) as mean_risk")
+            ->groupBy('category')
+            ->orderBy('category')
+            ->get();
+         
+
+            $likelihood_of_exploit = DB::table('iso_sec_2_3_1')
+            ->join('iso_sec_2_1', 'iso_sec_2_3_1.asset_id', '=', 'iso_sec_2_1.assessment_id')
+            ->where('iso_sec_2_3_1.project_id', $proj_id)
+            ->whereIn('iso_sec_2_3_1.asset_id', $assetIds)
             ->selectRaw("
-                iso_sec_2_1.{$risk_adverse_value} AS risk_value,
-                CASE 
-                    WHEN iso_sec_2_3_1.{$risk_type} >= 0.0 AND iso_sec_2_3_1.{$risk_type} < 0.9999 THEN 'low'
-                    WHEN iso_sec_2_3_1.{$risk_type} >= 0.999 AND iso_sec_2_3_1.{$risk_type} < 7.2 THEN 'medium'
-                    WHEN iso_sec_2_3_1.{$risk_type} >= 7.2 AND iso_sec_2_3_1.{$risk_type} <= 10.0 THEN 'high'
-                END AS risk_category,
-                COUNT(*) as count,
-                MIN(iso_sec_2_3_1.risk_score) as min_risk_score,
-                MAX(iso_sec_2_3_1.risk_score) as max_risk_score
+                FLOOR(control_num) as category, 
+               MAX((vulnerability * threat) /100) as max_likelihood, 
+                MIN((vulnerability * threat) / 100) as min_likelihood, 
+                AVG((vulnerability * threat) / 100) as mean_likelihood
             ")
-            ->groupBy("iso_sec_2_1.{$risk_adverse_value}", 'risk_category')
+            ->groupBy('category')
+            ->orderBy('category')
             ->get();
 
-            $impactLevels = [
-                10 => 'High',
-                5 => 'Medium',
-                1 => 'Low',
-            ];
 
 
-            $data = $results->groupBy('risk_value')->mapWithKeys(function ($items, $value) use ($impactLevels) {
-                $mappedImpact = $impactLevels[$value] ?? $value; // Default to original value if not mapped
-                $row = [
-                    'low' => ['count' => 0, 'range' => ''],
-                    'medium' => ['count' => 0, 'range' => ''],
-                    'high' => ['count' => 0, 'range' => ''],
-                ];
-                foreach ($items as $item) {
-                    $row[$item->risk_category] = [
-                        'count' => $item->count,
-                        'range' => $item->min_risk_score . ' - ' . $item->max_risk_score,
-                    ];
-                }
-                return [$mappedImpact => $row];
-            });
-
-
-            $overallRanges = $results->groupBy('risk_category')->mapWithKeys(function ($items, $riskCategory) use ($impactLevels) {
-                $mappedCategory = $impactLevels[$riskCategory] ?? $riskCategory; // Map numerical values to labels
-                return [
-                    $mappedCategory => [
-                        'min' => $items->min('min_risk_score'),
-                        'max' => $items->max('max_risk_score'),
-                    ],
-                ];
-            });
-            
-            // Ensure all categories are present (Low, Medium, High) even if some are missing
-            $defaultCategories = ['low', 'medium', 'high'];
-            
-            foreach ($defaultCategories as $category) {
-                if (!isset($overallRanges[$category])) {
-                    $overallRanges[$category] = ['min' => '-', 'max' => '-']; // Set default values
-                }
-            }
-            
-         
-          
-            $totalCount = $results->sum('count');
 
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
             ->where('projects.project_id', $proj_id)->first();
@@ -376,30 +519,30 @@ class RiskHeatmap extends Controller
             ->where('project_id', $proj_id)
             ->distinct()
             ->count('c_name');
+        
+            $serviceDetails=DB::table('iso_sec_2_1')->where('project_id',$proj_id)
+            ->where('s_name',$service)->first();
+            
            
-           
-     
+        
             return view('heatmap.heatmap_single_type',
             [
                 'project'=>$project,
-                'data'=>$data,
-                'totalCount'=>$totalCount,
-                'overallRanges'=>$overallRanges,
                 'risk_type'=>$risk_type,
                 'uniqueServicesCount' => $uniqueServicesCount,
                 'uniqueGroupsCount' => $uniqueGroupsCount,
                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
                 'uniqueComponentsCount' => $uniqueComponentsCount,
                 'service'=>$service,
-                'group'=>$group,
-                'subgroup'=>$subgroup,
-                'component'=>$component,
+                'serviceDetails'=>$serviceDetails,
+                'results'=>$results,
+                'likelihood_of_exploit'=>$likelihood_of_exploit
+        
+        
 
             ]);
-
-
-
-    }
+        
+        }
 
 
     public function select_assets($proj_id, Request $req)

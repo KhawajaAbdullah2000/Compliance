@@ -107,12 +107,19 @@
 
                                  {{-- Risk Heatmap --}}
                                  <td style='text-align:center'>
-                                    <a href="/heatmap_all_services_all_risks/{{$pro->project_code}}/{{auth()->user()->id}}" 
+                                    <a href="/heatmap_select_services_and_risks/{{$pro->project_code}}/{{auth()->user()->id}}" 
                                        data-toggle="tooltip" title="View Risk Heatmap">
                                        <i class="fas fa-chart-area text-success" style="font-size: 1.8em;"></i>
     
                                     </a>
                                 </td>
+                                 {{-- <td style='text-align:center'>
+                                    <a href="/heatmap_all_services_all_risks/{{$pro->project_code}}/{{auth()->user()->id}}" 
+                                       data-toggle="tooltip" title="View Risk Heatmap">
+                                       <i class="fas fa-chart-area text-success" style="font-size: 1.8em;"></i>
+    
+                                    </a>
+                                </td> --}}
 
                             {{-- Action Plan --}}
                             <td style='text-align:center'>

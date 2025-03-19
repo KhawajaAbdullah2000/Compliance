@@ -448,6 +448,8 @@ Route::get('action_plan_download/{proj_id}/{service}/{component}',[ActionPlanCon
 
 
 //RIsk Heatmap
+
+route::get('heatmap_select_services_and_risks/{proj_id}/{user_id}',[RiskHeatmap::class,'heatmap_select_services_and_risks'])->name('heatmap_select_services_and_risks');
 route::get('heatmap_all_services_all_risks/{proj_id}/{user_id}',[RiskHeatmap::class,'heatmap_all_services_all_risks'])->name('heatmap_all_services_all_risks');
 Route::get('heatmap_select_assets/{proj_id}',[RiskHeatmap::class,'select_assets'])->name('heatmap.select_assets');
 
@@ -463,7 +465,8 @@ Route::get('heatmap_service_subgroups_to_components/{service}/{subgroup}/{proj_i
 
 Route::get('/heatmap_services_groups_subgroups/{service}/{group?}/{subgroup?}/{proj_id}', [RiskHeatmap::class, 'getComponents'])->name('heatmap.service.groups.subgroups.components');
 
-Route::get('heatmap_single_risk/{service}/{component}/{proj_id}',[RiskHeatmap::class,'heatmap_single_risk'])->name('heatmap_single_risk');
+// Route::get('heatmap_single_risk/{service}/{component}/{proj_id}',[RiskHeatmap::class,'heatmap_single_risk'])->name('heatmap_single_risk');
+Route::get('heatmap_single_risk/{proj_id}',[RiskHeatmap::class,'heatmap_single_risk'])->name('heatmap_single_risk');
 
 Route::get('risk_register_single_type/{service}/{component}/{proj_id}',[RiskHeatmap::class,'risk_register_single_type'])->name('risk_register_single_type');
 
