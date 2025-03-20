@@ -97,9 +97,10 @@ $permissions=json_decode($project_permissions);
     <table class="table table-bordered table-responsive table-primary">
 
         <thead style="vertical-align: middle;text-align:center;" class="table-dark">
-            <td class="fw-bold" style="width:10%">Req. No</td>
-            <td class="fw-bold" style="width:80%">Mandatory Requirement</td>
+            <td class="fw-bold" style="width:10%">Control No.</td>
+            <td class="fw-bold" style="width:60%">Mandatory Requirement</td>
             <td class="fw-bold" style="width:10%">Actions</td>
+            <td class="fw-bold" style="width:20%">Edit</td>
         </thead>
 
         <tbody>
@@ -113,6 +114,22 @@ $permissions=json_decode($project_permissions);
                     <i class="fas fa-edit fa-lg" style="color: #114a1d;"></i>
                 </a>
             </td>
+
+            <td>     <form action="/add_mandatory_all_sub_req/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+                @csrf
+                <input type="hidden" name="sub_req" value="{{$d[3]}}">
+                <div class="d-flex align-items-center">
+                    <select name="comp_status" class="form-select rounded-pill me-2">
+                   
+                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
+                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
+                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                </div>
+            </form></td>
 
              </tr>
 

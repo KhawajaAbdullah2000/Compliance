@@ -1030,6 +1030,7 @@ class KSA_NCA extends Controller
     public function add_mandatory_all_title(Request $req, $proj_id, $user_id, $asset_id)
     {
  
+    
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -1104,6 +1105,13 @@ class KSA_NCA extends Controller
                         
                     }
 
+                    //ISO
+                    if ($checkpermission->type_id ==4) {
+                  
+                        $filepath = public_path('ISO_SEC_2_2 - Modified.xlsx');
+                        
+                    }
+
 
                 
 
@@ -1167,18 +1175,24 @@ class KSA_NCA extends Controller
 
                         }
 
+                    
                         //PCI
-                        if ($checkpermission->type_id == 1||$checkpermission->type_id == 2 || $checkpermission->type_id == 3 ) {
+                        if ($checkpermission->type_id == 1||$checkpermission->type_id == 2 || $checkpermission->type_id == 3  ) {
                             return redirect()->back()->with('success', 'Record Updated Successfully');
 
                         }
 
 
+                        if($checkpermission->type_id == 4 ){
+                            dd("GHello");
+                            return redirect()->back()->with('success', 'Record Updated Successfully');
+
+                        }
 
                     }
 
 
-
+                 
 
                     $assetDetails = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
 
@@ -1234,6 +1248,7 @@ class KSA_NCA extends Controller
 
 
                     }
+                
                     if ($checkpermission->type_id == 7) {
                         return redirect()->route(
                             'ksa_nca_subsections',
@@ -1267,7 +1282,11 @@ class KSA_NCA extends Controller
     
                             }
 
-                    
+                       //ISO
+                       if ($checkpermission->type_id == 4 ) {
+                        return redirect()->back()->with('success', 'Record Updated Successfully');
+
+                    }
           
 
                 } else {
@@ -1355,6 +1374,10 @@ class KSA_NCA extends Controller
 
                     if ($checkpermission->type_id ==9) {
                         $filepath = public_path('ISA 62443 Part 4-1 - Modified.xlsx');
+                    }
+
+                    if ($checkpermission->type_id ==4) {
+                        $filepath = public_path('ISO_SEC_2_2 - Modified.xlsx');
                     }
 
 
@@ -1562,6 +1585,10 @@ class KSA_NCA extends Controller
 
                     if ($checkpermission->type_id ==9) {
                         $filepath = public_path('ISA 62443 Part 4-1 - Modified.xlsx');
+                    }
+
+                    if ($checkpermission->type_id ==4) {
+                        $filepath = public_path('ISO_SEC_2_2 - Modified.xlsx');
                     }
 
 
