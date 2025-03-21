@@ -24,6 +24,7 @@ use App\Http\Controllers\PCI_Merchant_Sheet;
 use App\Http\Controllers\PCI_Multi_Sheet;
 use App\Http\Controllers\PCI_Single_Sheet;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RiskManagementFramework;
 use App\Http\Controllers\SBP_ETGRMF;
 use App\Http\Controllers\v3_2_s2_Controller;
 use App\Http\Controllers\v3_2_s3_Controller;
@@ -108,6 +109,10 @@ route::get('add_global_role',function(){
 route::post('add_new_role',[SuperUserController::class,'add_new_role'])->name('add_new_role');
 route::get('/edit_global_role/{id}',[SuperUserController::class,'edit_global_role']);
 route::put('edit_globalrole/{id}',[SuperUserController::class,'edit_globalrole']);
+
+route::get('select_projects_for_framework/{org_id}',[RiskManagementFramework::class,'select_projects_for_framework']);
+route::get('selected_projects_for_framework/{org_id}',[RiskManagementFramework::class,'selected_projects_for_framework']);
+route::post('selected_project_and_framework/{org_id}',[RiskManagementFramework::class,'selected_project_and_framework']);
 
 
 } );
