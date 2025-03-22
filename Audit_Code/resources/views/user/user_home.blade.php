@@ -1,5 +1,5 @@
 
- @extends('master')
+@extends('master')
 
 @section('content')
 
@@ -77,22 +77,26 @@
                     @endrole
 
                     @role('super user')
-                    <a href="/select_projects_for_framework/{{auth()->user()->organization->id}}" class="btn btn-md btn-primary">Set up information security risk management
-                        methodology by project type</a>
-                    @endrole
-
-                    @role('super user')
-                    <a href="/select_assets/{{auth()->user()->organization->id}}" class="btn btn-md btn-primary mt-4">Set up asset categories and
+                    <a href="/select_assets/{{auth()->user()->organization->id}}" class="btn btn-md btn-primary" style="max-width:70%;">Set up asset categories and
                         asset types for each asset
                         category</a>
                     @endrole
+
+                    @role('super user')
+                    <a href="/select_projects_for_framework/{{auth()->user()->organization->id}}" class="btn btn-md btn-primary mt-4" style="max-width:70%;">Set up information security risk management
+                        methodology by project type</a>
+                    @endrole
+
+             
                 
+                   
                     
                     @endhasanyrole
                 </div>
            
              
             </div>
+            
 
         
           
@@ -127,4 +131,3 @@
 @endsection
 
 @endsection
-

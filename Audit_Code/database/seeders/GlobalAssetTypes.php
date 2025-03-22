@@ -29,6 +29,7 @@ class GlobalAssetTypes extends Seeder
         ['asset_category' => 2,'is_manual'=>'no','asset_type'=>'Storage Device'],
         ['asset_category' => 2,'is_manual'=>'no','asset_type'=>'Network Device'],
         ['asset_category' => 2,'is_manual'=>'no','asset_type'=>'Security Device'],
+        ['asset_category' => 2,'is_manual'=>'no','asset_type'=>'IT System'],
         ['asset_category' => 2,'is_manual'=>'no','asset_type'=>'Other Technology'],
 
         ['asset_category' => 3,'is_manual'=>'no','asset_type'=>'Policy Document'],

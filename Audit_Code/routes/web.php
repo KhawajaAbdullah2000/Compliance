@@ -122,6 +122,16 @@ route::get('edit_custom_category/{category_id}',[OrgAssets::class,'edit_custom_c
 route::put('update_asset_category/{category_id}',[OrgAssets::class,'update_asset_category']);
 route::delete('delete_custom_category/{category_id}',[OrgAssets::class,'delete_custom_category']);
 
+route::get('select_asset_types_for_category/{category_id}',[OrgAssets::class,'select_asset_types_for_category'])->name('select_asset_types_for_category');
+route::get('add_new_asset_type_in_org/{org_id}/{category_id}',[OrgAssets::class,'add_new_asset_type_in_org']);
+route::post('add_new_asset_type/{org_id}/{category_id}',[OrgAssets::class,'add_new_asset_type']);
+route::post('add_asset_types_in_org/{org_id}/{category_id}',[OrgAssets::class,'add_asset_types_in_org']);
+route::get('edit_custom_asset_type/{category_id}',[OrgAssets::class,'edit_custom_asset_type']);
+route::put('update_asset_type/{category_id}',[OrgAssets::class,'update_asset_type']);
+
+route::delete('delete_custom_asset_type/{category_id}',[OrgAssets::class,'delete_custom_asset_type']);
+
+
 
 
 
