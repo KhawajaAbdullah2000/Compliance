@@ -85,8 +85,33 @@ class OrgAssets extends Controller
 
     public function delete_custom_category($category_id)
     {
-        DB::table('global_asset_categories')->where('asset_category_id', $category_id)
-            ->delete();
+        // DB::table('global_asset_categories')->where('asset_category_id', $category_id)
+        //     ->delete();
+
+        $assetTypeIds = DB::table('global_asset_types')
+        ->where('asset_category', $category_id)
+        ->pluck('asset_type_id');
+
+    // Step 2: Delete related org asset types
+    DB::table('org_assets_types')
+        ->whereIn('asset_type_selected', $assetTypeIds)
+        ->delete();
+
+    // Step 3: Delete global asset types under this category
+    DB::table('global_asset_types')
+        ->where('asset_category', $category_id)
+        ->delete();
+
+    // Step 4: Delete related org asset categories
+    DB::table('org_assets_categories')
+        ->where('asset_category_selected', $category_id)
+        ->delete();
+
+    // Step 5: Delete the global asset category
+    DB::table('global_asset_categories')
+        ->where('asset_category_id', $category_id)
+        ->delete();
+
 
         return redirect()->route('select_assets', [
             'org_id' => auth()->user()->organization->id
@@ -101,10 +126,33 @@ class OrgAssets extends Controller
         ]);
 
 
-        DB::table('org_assets_categories')->join('global_asset_categories', 'org_assets_categories.asset_category_selected', 'global_asset_categories.asset_category_id')
-            ->where('org_id', $org_id)
-            ->where('is_manual', 'no')
-            ->delete();
+        // DB::table('org_assets_categories')->join('global_asset_categories', 'org_assets_categories.asset_category_selected', 'global_asset_categories.asset_category_id')
+        //     ->where('org_id', $org_id)
+        //     ->where('is_manual', 'no')
+        //     ->delete();
+       
+        $categoryIds = DB::table('org_assets_categories')
+        ->join('global_asset_categories', 'org_assets_categories.asset_category_selected', '=', 'global_asset_categories.asset_category_id')
+        ->where('org_assets_categories.org_id', $org_id)
+        ->where('global_asset_categories.is_manual', 'no')
+        ->pluck('global_asset_categories.asset_category_id');
+    
+    // Step 2: Get all asset type IDs under those categories
+    $assetTypeIds = DB::table('global_asset_types')
+        ->whereIn('asset_category', $categoryIds)
+        ->pluck('asset_type_id');
+    
+    // Step 3: Delete related org asset types
+    DB::table('org_assets_types')->whereIn('asset_type_selected', $assetTypeIds)->delete();
+    
+
+    
+    // Step 5: Delete org asset categories
+    DB::table('org_assets_categories')
+        ->where('org_id', $org_id)
+        ->whereIn('asset_category_selected', $categoryIds)
+        ->delete();
+    
 
 
         foreach ($req->asset_categories as $category) {
@@ -136,7 +184,7 @@ class OrgAssets extends Controller
         $custom_org_types = DB::table('org_assets_types')->join('global_asset_types', 'org_assets_types.asset_type_selected', 'global_asset_types.asset_type_id')
             ->where("org_id", auth()->user()->organization->id)
             ->where('global_asset_types.is_manual', 'yes')
-            ->where('global_asset_types.asset_categoy',$category_id)
+            ->where('global_asset_types.asset_category',$category_id)
             ->get();
 
 
