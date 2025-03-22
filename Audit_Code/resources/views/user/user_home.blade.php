@@ -80,6 +80,12 @@
                     <a href="/select_projects_for_framework/{{auth()->user()->organization->id}}" class="btn btn-md btn-primary">Set up information security risk management
                         methodology by project type</a>
                     @endrole
+
+                    @role('super user')
+                    <a href="/select_assets/{{auth()->user()->organization->id}}" class="btn btn-md btn-primary mt-4">Set up asset categories and
+                        asset types for each asset
+                        category</a>
+                    @endrole
                 
                     
                     @endhasanyrole

@@ -20,6 +20,7 @@ use App\Http\Controllers\IsoSec2_4_A6;
 use App\Http\Controllers\IsoSec2_4_A7;
 use App\Http\Controllers\IsoSec2_4_A8;
 use App\Http\Controllers\KSA_NCA;
+use App\Http\Controllers\OrgAssets;
 use App\Http\Controllers\PCI_Merchant_Sheet;
 use App\Http\Controllers\PCI_Multi_Sheet;
 use App\Http\Controllers\PCI_Single_Sheet;
@@ -113,6 +114,16 @@ route::put('edit_globalrole/{id}',[SuperUserController::class,'edit_globalrole']
 route::get('select_projects_for_framework/{org_id}',[RiskManagementFramework::class,'select_projects_for_framework']);
 route::get('selected_projects_for_framework/{org_id}',[RiskManagementFramework::class,'selected_projects_for_framework']);
 route::post('selected_project_and_framework/{org_id}',[RiskManagementFramework::class,'selected_project_and_framework']);
+route::get('select_assets/{org_id}',[OrgAssets::class,'select_assets'])->name('select_assets');
+route::get('add_new_category_in_org/{org_id}',[OrgAssets::class,'add_new_category_in_org']);
+route::post('add_new_asset_category/{org_id}',[OrgAssets::class,'add_new_asset_category']);
+route::post('add_asset_categories_in_org/{org_id}',[OrgAssets::class,'add_asset_categories_in_org']);
+route::get('edit_custom_category/{category_id}',[OrgAssets::class,'edit_custom_category']);
+route::put('update_asset_category/{category_id}',[OrgAssets::class,'update_asset_category']);
+route::delete('delete_custom_category/{category_id}',[OrgAssets::class,'delete_custom_category']);
+
+
+
 
 
 } );
