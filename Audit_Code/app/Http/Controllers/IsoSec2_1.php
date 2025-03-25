@@ -328,11 +328,18 @@ class IsoSec2_1 extends Controller
                         ->where('projects.project_id',$proj_id)->first();
 
 
+                        $selectedCategories=DB::table('org_assets_categories')
+                        ->join('global_asset_categories','org_assets_categories.asset_category_selected','global_asset_categories.asset_category_id')
+                        ->where('org_assets_categories.org_id',auth()->user()->organization->id)
+                        ->get();
+                       // dd($selectedCategories);
+
                         return view('iso_sec_2_1.iso_sec_2_1_new', [
                             'project_id' => $checkpermission->project_id,
                             'project_name' => $checkpermission->project_name,
                             'project_permissions' => $checkpermission->project_permissions,
-                            'project'=>$project
+                            'project'=>$project,
+                            'selectedCategories'=>$selectedCategories
                         ]);
 
                 }
@@ -341,6 +348,17 @@ class IsoSec2_1 extends Controller
         }
     }
 
+    public function getAssetTypes($category_id)
+{
+    $types = DB::table('global_asset_types')
+    ->join('org_assets_types','global_asset_types.asset_type_id','org_assets_types.asset_type_selected')
+    ->where('org_assets_types.org_id',auth()->user()->organization->id)
+        ->where('global_asset_types.asset_category', $category_id)
+        ->get();
+
+
+    return response()->json($types);
+}
 
 
     public function iso_sec_2_1_edit($assessment_id, $proj_id, $user_id)

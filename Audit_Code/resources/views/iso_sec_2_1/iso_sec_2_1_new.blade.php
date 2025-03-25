@@ -62,23 +62,24 @@ $permissions = json_decode($project_permissions);
                             @endif
                         </div>
 
-                        <!-- Asset Group Name -->
-                        <div class="mb-4">
-                            <label for="g_name" class="form-label fw-semibold">Asset Group Name</label>
-                            <input type="text" name="g_name" id="g_name" class="form-control rounded-pill" value="{{old('g_name')}}">
-                            @if($errors->has('g_name'))
-                            <div class="text-danger small mt-2">{{ $errors->first('g_name') }}</div>
-                            @endif
-                        </div>
+                     <!-- Asset Category -->
+                    <div class="mb-4">
+                        <label for="asset_category" class="form-label fw-semibold">Asset Category</label>
+                        <select name="asset_category" id="asset_category" class="form-control">
+                            <option value="">Select Category</option>
+                            @foreach($selectedCategories as $category)
+                                <option value="{{ $category->asset_category_id }}">{{ $category->asset_category }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                        <!-- Asset Name -->
-                        <div class="mb-4">
-                            <label for="name" class="form-label fw-semibold">Asset Subgroup</label>
-                            <input type="text" name="name" id="name" class="form-control rounded-pill" value="{{old('name')}}">
-                            @if($errors->has('name'))
-                            <div class="text-danger small mt-2">{{ $errors->first('name') }}</div>
-                            @endif
-                        </div>
+                    <!-- Asset Type -->
+                    <div class="mb-4">
+                        <label for="asset_type" class="form-label fw-semibold">Asset Type</label>
+                        <select name="asset_type" id="asset_type" class="form-control">
+                            <option value="">Select Asset Type</option>
+                        </select>
+                    </div>
 
         
                     <div class="mb-4">
@@ -140,6 +141,37 @@ $permissions = json_decode($project_permissions);
 </div>
 
 @section('scripts')
+
+<script>
+    $(document).ready(function () {
+        $('#asset_category').on('change', function () {
+            const categoryId = $(this).val();
+            console.log("CategoryId ",categoryId);
+            const assetTypeDropdown = $('#asset_type');
+            assetTypeDropdown.empty(); // clear previous options
+
+            if (categoryId) {
+                $.ajax({
+                    url: '/get-asset-types/' + categoryId,
+                    type: 'GET',
+                    success: function (data) {
+                        assetTypeDropdown.append('<option value="">Select Asset Type</option>');
+                        data.forEach(function (type) {
+                            assetTypeDropdown.append('<option value="' + type.asset_type_id + '">' + type.asset_type + '</option>');
+                        });
+                    },
+                    error: function () {
+                        assetTypeDropdown.append('<option value="">Error loading types test</option>');
+                    }
+                });
+            } else {
+                assetTypeDropdown.append('<option value="">Select Asset Type</option>');
+            }
+        });
+    });
+</script>
+
+
 <script>
     $(document).ready(function () {
         // Add a new component field

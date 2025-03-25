@@ -77,9 +77,9 @@
                     @endrole
 
                     @role('super user')
-                    <a href="/select_assets/{{auth()->user()->organization->id}}" class="btn btn-md btn-primary" style="max-width:70%;">Set up asset categories and
-                        asset types for each asset
-                        category</a>
+                    <a href="/select_assets/{{auth()->user()->organization->id}}" class="btn btn-md btn-primary" style="max-width:70%;">Set up asset types and
+                        asset subtypes
+                        </a>
                     @endrole
 
                     @role('super user')

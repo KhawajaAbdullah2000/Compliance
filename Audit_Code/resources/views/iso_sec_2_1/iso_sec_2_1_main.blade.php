@@ -62,7 +62,7 @@ $permissions = json_decode($project_permissions);
             </select>
         </div>
         <div class="col-md-3">
-            <label for="g_name" class="form-label fw-semibold">Select Group</label>
+            <label for="g_name" class="form-label fw-semibold">Select Asset Type</label>
             <select id="g_name" name="g_name" class="form-select rounded-pill">
                 <option value="">Select --</option>
                 @foreach($distinctGroups as $d)
@@ -71,7 +71,7 @@ $permissions = json_decode($project_permissions);
             </select>
         </div>
         <div class="col-md-3">
-            <label for="name" class="form-label fw-semibold">Select Asset Subgroup</label>
+            <label for="name" class="form-label fw-semibold">Select Asset Subtype</label>
             <select id="name" name="name" class="form-select rounded-pill">
                 <option value="">Select --</option>
                 @foreach($distinctAssets as $d)
@@ -100,11 +100,11 @@ $permissions = json_decode($project_permissions);
                 <div class="d-flex flex-column">
                     <div class="form-check">
                         <input class="form-check-input toggle-column" type="checkbox" id="toggleGroup" data-column="1">
-                        <label class="form-check-label" for="toggleGroup">Asset Group</label>
+                        <label class="form-check-label" for="toggleGroup">Asset Type</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input toggle-column" type="checkbox" id="toggleAsset" data-column="2">
-                        <label class="form-check-label" for="toggleAsset">Asset Subgroup</label>
+                        <label class="form-check-label" for="toggleAsset">Asset Subtype</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input toggle-column" type="checkbox" id="toggleOwner" data-column="4">
@@ -160,8 +160,8 @@ $permissions = json_decode($project_permissions);
         <thead class="table-dark ">
             <tr style="cursor: pointer" class="text-center">
                 <th onclick="sortTable(0)">Service</th>
-                    <th onclick="sortTable(1)">Asset Group</th>
-                    <th onclick="sortTable(2)">Asset Subgroup</th>
+                    <th onclick="sortTable(1)">Asset Type</th>
+                    <th onclick="sortTable(2)">Asset Subtype</th>
                     <th onclick="sortTable(3)">Asset Component</th>
                     <th onclick="sortTable(4)">Asset Owner Dept</th>
                     <th onclick="sortTable(5)">Asset Physical Location</th>

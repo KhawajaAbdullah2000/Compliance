@@ -276,6 +276,7 @@ route::get('iso_sec_2_1_new/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_
 route::get('iso_sec_2_1_edit/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_edit']);
 route::put('iso_sec_2_1_submit_edit/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_submit_edit']);
 route::get('iso_sec_2_1_delete/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_delete']);
+Route::get('/get-asset-types/{category_id}', [IsoSec2_1::class, 'getAssetTypes']);
 
 //copy assets gage to open the services of the selected project
 route::get("copy_assets/{proj_id}/{user_id}",[IsoSec2_1::class,'ShowServices'])->name('services');

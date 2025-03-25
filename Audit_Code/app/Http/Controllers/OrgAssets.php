@@ -59,7 +59,7 @@ class OrgAssets extends Controller
 
         return redirect()->route("select_assets", [
             'org_id' => $org_id
-        ])->with('success', "New Asset Category Added Successfully");
+        ])->with('success', "New Asset Type Added Successfully");
     }
 
     public function edit_custom_category($category_id)
@@ -80,7 +80,7 @@ class OrgAssets extends Controller
 
         return redirect()->route('select_assets', [
             'org_id' => auth()->user()->organization->id
-        ])->with("success", "Asset Category Updated");
+        ])->with("success", "Asset Type Updated");
     }
 
     public function delete_custom_category($category_id)
@@ -115,7 +115,7 @@ class OrgAssets extends Controller
 
         return redirect()->route('select_assets', [
             'org_id' => auth()->user()->organization->id
-        ])->with('success', "Asset Category deleted from the Organization successfully");
+        ])->with('success', "Asset Type deleted from the Organization successfully");
     }
 
     public function add_asset_categories_in_org($org_id, Request $req)
@@ -164,7 +164,7 @@ class OrgAssets extends Controller
 
         return redirect()->route('select_assets', [
             'org_id' => $org_id
-        ])->with('success', "Asset Categories added to the ORganization successfully");
+        ])->with('success', "Asset Types added to the Organization successfully");
     }
 
     public function select_asset_types_for_category($category_id)
@@ -224,7 +224,7 @@ class OrgAssets extends Controller
 
         return redirect()->route("select_asset_types_for_category", [
             'category_id' => $category_id
-        ])->with('success', "New Asset Type Added Successfully");
+        ])->with('success', "New Asset Subtype Added Successfully");
     }
 
     public function add_asset_types_in_org($org_id,$category_id,Request $req)
@@ -251,7 +251,7 @@ class OrgAssets extends Controller
 
         return redirect()->route('select_asset_types_for_category', [
             'category_id' => $category_id
-        ])->with('success', "Asset Type added to the Organization successfully");
+        ])->with('success', "Asset Subtype added to the Organization successfully");
     }
 
     public function edit_custom_asset_type($category_id)
@@ -276,7 +276,7 @@ class OrgAssets extends Controller
         return redirect()->route('select_asset_types_for_category', [
             'category_id'=>$asset_category->asset_category
 
-        ])->with("success", "Asset Category Updated");
+        ])->with("success", "Asset SubType Updated");
     }
 
     public function delete_custom_asset_type($category_id)
@@ -290,7 +290,7 @@ class OrgAssets extends Controller
 
         return redirect()->route('select_asset_types_for_category', [
             'category_id' =>$asset_category->asset_category
-        ])->with('success', "Asset Type deleted from the Organization successfully");
+        ])->with('success', "Asset SubType deleted from the Organization successfully");
     }
 
     

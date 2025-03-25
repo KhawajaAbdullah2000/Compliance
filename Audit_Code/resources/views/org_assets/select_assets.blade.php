@@ -8,16 +8,16 @@
 <section class="min-h-100">
     <div class="container py-5">
        <h4 class="fw-bold">Organization: {{auth()->user()->organization->name}}</h4>
-       <h2 class="fw-bold">Set up asset categories</h2>
+       <h2 class="fw-bold">Set up Asset Types</h2>
     
        <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-sm border-1 rounded-3">
                 <div class="card-body">
-                    <h4 class="fw-bold mb-3 text-dark">Select Asset Categories</h4>
+                    <h4 class="fw-bold mb-3 text-dark">Select Asset Types</h4>
                     <p class="text-primary small">
                         <i class="fa fa-bullhorn me-2"></i>
-                        Asset categories are mandatory to assign to asset components, as they determine which controls are applicable. You can make any control non-applicable at any time.
+                        Asset types are mandatory to assign to asset components, as they determine which controls are applicable. You can make any control non-applicable at any time.
                     </p>
 
                     <form action="/add_asset_categories_in_org/{{ auth()->user()->organization->id }}" method="POST">
@@ -46,24 +46,24 @@
                     
                                     @if ($show_btn)
                                         <a href="{{ url('/select_asset_types_for_category/' . $category->asset_category_id) }}" class="btn btn-sm btn-outline-success">
-                                            Select Asset Types
+                                            Select Asset Subtypes
                                         </a>
                                     @endif
                                 </div>
                             @endforeach
                         </div>
                     
-                        <button type="submit" class="btn btn-primary mt-3">Save Categories</button>
+                        <button type="submit" class="btn btn-primary mt-3">Save Asset Types</button>
                     </form>
                     
 
                                 <!-- Custom Asset Categories Section -->
 <div class="card mt-4 shadow-sm border-1 rounded-3">
     <div class="card-body">
-        <h5 class="card-title fw-bold text-dark mb-3">Custom Asset Categories</h5>
+        <h5 class="card-title fw-bold text-dark mb-3">Custom Asset Types</h5>
 
         @if($custom_org_categories->isEmpty())
-            <p class="text-muted">No custom asset categories added yet.</p>
+            <p class="text-muted">No custom asset types added yet.</p>
         @else
             <ul class="list-group list-group-flush">
                 @foreach ($custom_org_categories as $category)
@@ -72,7 +72,7 @@
                         <div>
 
                              <a href="{{ url('/select_asset_types_for_category/' . $category->asset_category_id) }}" class="btn btn-sm btn-outline-success">
-                                            Select Asset Types
+                                            Select Asset Subtypes
                                         </a>
 
 
@@ -101,7 +101,7 @@
                 </div>
             </div>
             <div class="mt-2">
-            <a href="/add_new_category_in_org/{{auth()->user()->organization->id}}" class="btn btn-success btn-md">Add new Category</a>
+            <a href="/add_new_category_in_org/{{auth()->user()->organization->id}}" class="btn btn-success btn-md">Add new Asset Type</a>
         </div>
         </div>
     </div>
