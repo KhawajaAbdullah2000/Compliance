@@ -65,23 +65,31 @@ $permissions = json_decode($project_permissions);
                             @endif
                         </div>
 
-                        <!-- Asset Group Name -->
-                        <div class="mb-4">
-                            <label for="g_name" class="form-label fw-semibold">Asset Group Name</label>
-                            <input type="text" name="g_name" id="g_name" class="form-control rounded-pill" value="{{ old('g_name', $data->g_name) }}">
-                            @if($errors->has('g_name'))
-                            <div class="text-danger small mt-2">{{ $errors->first('g_name') }}</div>
-                            @endif
-                        </div>
+             
+                        
+<!-- Asset Category -->
+<div class="mb-4">
+    <label for="asset_category" class="form-label fw-semibold">Asset Type</label>
+    <select name="g_name" id="asset_category" class="form-control">
+        <option value="None">None</option>
+        @foreach($selectedCategories as $category)
+            <option value="{{ $category->asset_category }}" 
+                {{ $category->asset_category == $selected_category ? 'selected' : '' }}>
+                {{ $category->asset_category }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
-                        <!-- Asset Name -->
-                        <div class="mb-4">
-                            <label for="name" class="form-label fw-semibold">Asset Subgroup</label>
-                            <input type="text" name="name" id="name" class="form-control rounded-pill" value="{{ old('name', $data->name) }}">
-                            @if($errors->has('name'))
-                            <div class="text-danger small mt-2">{{ $errors->first('name') }}</div>
-                            @endif
-                        </div>
+<!-- Asset SubType -->
+<div class="mb-4">
+    <label for="asset_type" class="form-label fw-semibold">Asset SubType</label>
+    <select name="name" id="asset_type" class="form-control">
+        <option value="None">None</option> <!-- default -->
+        <!-- Options will be dynamically loaded -->
+    </select>
+</div>
+                    
 
                         <!-- Asset Component Name -->
                         <div class="mb-4">
@@ -129,6 +137,53 @@ $permissions = json_decode($project_permissions);
         </div>
     </div>
 </div>
+
+@section('scripts')
+
+<script>
+    $(document).ready(function () {
+        const assetTypeDropdown = $('#asset_type');
+        const selectedCategory = $('#asset_category').val();
+        const selectedType = "{{ $selected_type ?? '' }}"; // comes from controller
+
+        function loadAssetTypes(categoryName, preselect = null) {
+            assetTypeDropdown.empty();
+            assetTypeDropdown.append('<option value="None">None</option>');
+
+            if (categoryName && categoryName !== "None") {
+                $.ajax({
+                    url: '/get-asset-types/' + categoryName,
+                    type: 'GET',
+                    success: function (data) {
+                        data.forEach(function (type) {
+                            const isSelected = type.asset_type === preselect ? 'selected' : '';
+                            assetTypeDropdown.append(
+                                `<option value="${type.asset_type}" ${isSelected}>${type.asset_type}</option>`
+                            );
+                        });
+                    },
+                    error: function () {
+                        assetTypeDropdown.append('<option value="">Error loading types</option>');
+                    }
+                });
+            }
+        }
+
+        // On category change
+        $('#asset_category').on('change', function () {
+            const categoryId = $(this).val();
+            loadAssetTypes(categoryId);
+        });
+
+        // On page load (for edit form only)
+        @if(isset($selected_category) && isset($selected_type))
+            loadAssetTypes("{{ $selected_category }}", "{{ $selected_type }}");
+        @endif
+    });
+</script>
+
+
+@endsection
 
 @endsection
 

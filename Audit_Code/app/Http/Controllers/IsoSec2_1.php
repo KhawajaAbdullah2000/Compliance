@@ -215,9 +215,11 @@ class IsoSec2_1 extends Controller
 
     public function new_iso_sec_2_1(Request $req, $proj_id, $user_id)
     {
-
+      
         $req->validate(
             [
+                'g_name'=>'required',
+                'name'=>'required',
                 's_name' => 'required|string',
                'c_name' => 'required|array|min:1',
                'c_name.*' => 'required|string|max:255'
@@ -352,8 +354,9 @@ class IsoSec2_1 extends Controller
 {
     $types = DB::table('global_asset_types')
     ->join('org_assets_types','global_asset_types.asset_type_id','org_assets_types.asset_type_selected')
+    ->join('global_asset_categories','global_asset_types.asset_category','global_asset_categories.asset_category_id')
     ->where('org_assets_types.org_id',auth()->user()->organization->id)
-        ->where('global_asset_types.asset_category', $category_id)
+        ->where('global_asset_categories.asset_category', $category_id)
         ->get();
 
 
@@ -386,12 +389,23 @@ class IsoSec2_1 extends Controller
                         $project=Project::join('project_types','projects.project_type','project_types.id')
                         ->where('projects.project_id',$proj_id)->first();
 
+                        $selectedCategories=DB::table('org_assets_categories')
+                        ->join('global_asset_categories','org_assets_categories.asset_category_selected','global_asset_categories.asset_category_id')
+                        ->where('org_assets_categories.org_id',auth()->user()->organization->id)
+                        ->get();
+
+                        $selected_type= Db::table('iso_sec_2_1')->where('assessment_id', $assessment_id)->where('project_id', $proj_id)->first();
+
+                       
                         return view('iso_sec_2_1.iso_sec_2_1_edit', [
                             'data' => $data,
                             'project_id' => $checkpermission->project_id,
                             'project_name' => $checkpermission->project_name,
                             'project_permissions' => $checkpermission->project_permissions,
-                            'project'=>$project
+                            'project'=>$project,
+                            'selectedCategories'=>$selectedCategories,
+                            'selected_type'=>$selected_type->name,
+                            'selected_category'=>$selected_type->g_name
                         ]);
                     
                 }

@@ -64,20 +64,20 @@ $permissions = json_decode($project_permissions);
 
                      <!-- Asset Category -->
                     <div class="mb-4">
-                        <label for="asset_category" class="form-label fw-semibold">Asset Category</label>
-                        <select name="asset_category" id="asset_category" class="form-control">
-                            <option value="">Select Category</option>
+                        <label for="asset_category" class="form-label fw-semibold">Asset Type</label>
+                        <select name="g_name" id="asset_category" class="form-control">
+                            <option value="None">None</option>
                             @foreach($selectedCategories as $category)
-                                <option value="{{ $category->asset_category_id }}">{{ $category->asset_category }}</option>
+                                <option value="{{ $category->asset_category }}">{{ $category->asset_category }}</option>
                             @endforeach
                         </select>
                     </div>
 
-                    <!-- Asset Type -->
+                    <!-- Asset SUb Type -->
                     <div class="mb-4">
-                        <label for="asset_type" class="form-label fw-semibold">Asset Type</label>
-                        <select name="asset_type" id="asset_type" class="form-control">
-                            <option value="">Select Asset Type</option>
+                        <label for="asset_type" class="form-label fw-semibold">Asset SubType</label>
+                        <select name="name" id="asset_type" class="form-control">
+                  
                         </select>
                     </div>
 
@@ -149,15 +149,14 @@ $permissions = json_decode($project_permissions);
             console.log("CategoryId ",categoryId);
             const assetTypeDropdown = $('#asset_type');
             assetTypeDropdown.empty(); // clear previous options
-
+            assetTypeDropdown.append('<option value="None">None</option>');
             if (categoryId) {
                 $.ajax({
                     url: '/get-asset-types/' + categoryId,
                     type: 'GET',
                     success: function (data) {
-                        assetTypeDropdown.append('<option value="">Select Asset Type</option>');
                         data.forEach(function (type) {
-                            assetTypeDropdown.append('<option value="' + type.asset_type_id + '">' + type.asset_type + '</option>');
+                            assetTypeDropdown.append('<option value="' + type.asset_type + '">' + type.asset_type + '</option>');
                         });
                     },
                     error: function () {
