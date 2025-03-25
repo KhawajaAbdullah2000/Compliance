@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(Risk_Management_Frameworks::class);
         $this->call(GlobalAssetCategories::class);
         $this->call(GlobalAssetTypes::class);
+        $this->call(frameworkApproachTypes::class);
         //$this->call(SuperUser::class);
 
 

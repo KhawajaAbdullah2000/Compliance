@@ -59,7 +59,63 @@ class RiskManagementFramework extends Controller
     );
          }
 
-         dd("DOne");
+    $projects=DB::table('project_types')->whereIn("id",$req->selected_projects)->get();
+
+    $risk_management_framework=DB::table('org_projects_framework_selected')
+    ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
+    'risk_management_framework.framework_id')
+    ->where('org_id',$org_id)->first();
+ 
+    
+$framework_approaches=DB::table('framework_approach_types')->get();
+
+      return view("risk_management.choose_framework_approach",[
+        'projects'=>$projects,
+        'framework_approaches'=>$framework_approaches,
+        'framework_name'=>$risk_management_framework->framework_name
+
+      ]);
+
+    }
+
+    public function selected_framework_approach($org_id,Request $req){
+        $req->validate([
+            'framework_approach'=>'required'
+        ]);
+
+        foreach($req->selected_projects as $proj){
+            DB::table('org_framework_approach_selected')
+            ->updateOrInsert([
+                'org_projects_framework_selected'=>$proj,
+                'framework_approach_types'=>$req->framework_approach,
+            ],
+        [
+            'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
+        ]
+    );
+         }
+
+         $projects=DB::table('project_types')->whereIn("id",$req->selected_projects)->get();
+
+         $risk_management_framework=DB::table('org_projects_framework_selected')
+         ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
+         'risk_management_framework.framework_id')
+         ->where('org_id',$org_id)->first();
+
+            $framework_approach=Db::table('framework_approach_types')
+            ->where('framework_approach_types_id',$req->framework_approach)
+            ->first();
+         //Qualitative
+         if($req->framework_approach==1){
+         
+            return view('risk_management.consequence_scale_qualitative',[
+                'projects'=>$projects,
+                'framework_name'=>$risk_management_framework->framework_name,
+                'framework_approach'=>$framework_approach->approach_name
+            ]);
+
+         }
 
     }
 }
