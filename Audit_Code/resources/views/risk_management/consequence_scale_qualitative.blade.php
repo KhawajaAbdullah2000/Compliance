@@ -101,7 +101,17 @@
                     </tbody>
                 </table>
 
-                <button class="btn btn-primary btn-lg">Accept</button>
+                <form action="/qualititave_likelihood_scale/{{auth()->user()->organization->id}}" method="get">
+                    @foreach ($projects as $proj)
+                    <input type="hidden" name="selected_projects[]" value="{{ $proj->id }}">
+                @endforeach
+
+                <input type="hidden" name="framework_approach" value="{{ $framework_approach }}">
+
+
+                <button type="submit" class="btn btn-primary btn-lg">Accept</button>
+
+                </form>
                 
         </div>
 

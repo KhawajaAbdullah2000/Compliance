@@ -118,4 +118,27 @@ $framework_approaches=DB::table('framework_approach_types')->get();
          }
 
     }
+
+    public function qualititave_likelihood_scale($org_id,Request $req){
+ 
+        $projects=DB::table('project_types')->whereIn("id",$req->selected_projects)->get();
+
+        $risk_management_framework=DB::table('org_projects_framework_selected')
+        ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
+        'risk_management_framework.framework_id')
+        ->where('org_id',$org_id)->first();
+
+           $framework_approach=Db::table('framework_approach_types')
+           ->where('approach_name',$req->framework_approach)
+           ->first();
+         
+        //Qualitative
+           return view('risk_management.likelihood_scale_qualitative',[
+               'projects'=>$projects,
+               'framework_name'=>$risk_management_framework->framework_name,
+               'framework_approach'=>$framework_approach->approach_name
+           ]);
+
+        
+    }
 }
