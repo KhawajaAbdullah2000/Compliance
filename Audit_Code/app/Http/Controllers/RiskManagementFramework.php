@@ -86,10 +86,12 @@ $framework_approaches=DB::table('framework_approach_types')->get();
         foreach($req->selected_projects as $proj){
             DB::table('org_framework_approach_selected')
             ->updateOrInsert([
-                'org_projects_framework_selected'=>$proj,
-                'framework_approach_types'=>$req->framework_approach,
+                'project_type_id'=>$proj,
+                'org_id'=>auth()->user()->organization->id,
+                
             ],
         [
+            'framework_approach_types'=>$req->framework_approach,
             'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
         ]
@@ -140,5 +142,132 @@ $framework_approaches=DB::table('framework_approach_types')->get();
            ]);
 
         
+    }
+
+    public function qualitative_info_security_risk_criteria($org_id,Request $req){
+        $projects=DB::table('project_types')->whereIn("id",$req->selected_projects)->get();
+
+        $risk_management_framework=DB::table('org_projects_framework_selected')
+        ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
+        'risk_management_framework.framework_id')
+        ->where('org_id',$org_id)->first();
+
+           $framework_approach=Db::table('framework_approach_types')
+           ->where('approach_name',$req->framework_approach)
+           ->first();
+         
+        //Qualitative
+           return view('risk_management.qualitative_info_security_risk_criteria',[
+               'projects'=>$projects,
+               'framework_name'=>$risk_management_framework->framework_name,
+               'framework_approach'=>$framework_approach->approach_name
+           ]);
+    }
+
+    public function qualitative_risk_acceptance_criteria($org_id,Request $req){
+        $req->validate([
+            'risk_acceptance_criteria'=>'required'
+        ]);
+
+        foreach($req->selected_projects as $proj){
+            DB::table('qualitative_risk_acceptance_criteria')
+            ->updateOrInsert([
+                'project_type_id'=>$proj,
+                'org_id'=>auth()->user()->organization->id,
+                
+            ],
+        [
+            'criteria_selected'=>$req->risk_acceptance_criteria,
+            'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
+        ]
+    );
+         }
+
+         $projects=DB::table('project_types')->whereIn("id",$req->selected_projects)->get();
+
+         $risk_management_framework=DB::table('org_projects_framework_selected')
+         ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
+         'risk_management_framework.framework_id')
+         ->where('org_id',$org_id)->first();
+
+         $framework_approach=Db::table('framework_approach_types')
+         ->where('approach_name',$req->framework_approach)
+         ->first();
+
+         $risk_acceptance_criteria=DB::table('qualitative_risk_acceptance_criteria')
+         ->where('org_id',$org_id)->first();
+         //Qualitative
+
+         $global_risk_assessment_approaches=DB::table('global_risk_assessment_approach')->get();
+       
+         
+         
+            return view('risk_management.risk_assessment_approach',[
+                'projects'=>$projects,
+                'framework_name'=>$risk_management_framework->framework_name,
+                'framework_approach'=>$framework_approach->approach_name,
+                'risk_acceptance_criteria'=>$risk_acceptance_criteria->criteria_selected,
+                'global_risk_assessment_approaches'=>$global_risk_assessment_approaches
+               
+            ]);
+
+        
+    }
+
+    public function risk_assessment_approach($org_id,Request $req){
+        $req->validate([
+            'risk_assessment_approach'=>'required'
+        ]);
+
+        foreach($req->selected_projects as $proj){
+            DB::table('org_risk_assessment_approach')
+            ->updateOrInsert([
+                'project_type_id'=>$proj,
+                'org_id'=>auth()->user()->organization->id,
+                
+            ],
+        [
+            'assessment_approach_selected'=>$req->risk_assessment_approach,
+            'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
+        ]
+    );
+         }
+
+         $projects=DB::table('project_types')->whereIn("id",$req->selected_projects)->get();
+
+         $risk_management_framework=DB::table('org_projects_framework_selected')
+         ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
+         'risk_management_framework.framework_id')
+         ->where('org_id',$org_id)->first();
+
+         $framework_approach=Db::table('framework_approach_types')
+         ->where('approach_name',$req->framework_approach)
+         ->first();
+
+         $risk_acceptance_criteria=DB::table('qualitative_risk_acceptance_criteria')
+         ->where('org_id',$org_id)->first();
+         //Qualitative
+
+         $risk_assessment_approach = DB::table('org_risk_assessment_approach')
+         ->join('global_risk_assessment_approach', 
+             'org_risk_assessment_approach.assessment_approach_selected', 
+             'global_risk_assessment_approach.global_risk_assessment_approach_id')
+         ->where('org_risk_assessment_approach.org_id', $org_id)
+         ->first();
+     
+       
+         
+         
+            return view('risk_management.qualitative_assessment_methodology_summary',[
+                'projects'=>$projects,
+                'framework_name'=>$risk_management_framework->framework_name,
+                'framework_approach'=>$framework_approach->approach_name,
+                'risk_acceptance_criteria'=>$risk_acceptance_criteria->criteria_selected,
+                'risk_assessment_approaches'=>$risk_assessment_approach->global_assessment_approach
+               
+            ]);
+   
     }
 }

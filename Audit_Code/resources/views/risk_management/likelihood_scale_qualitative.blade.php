@@ -99,11 +99,13 @@
                   </table>
              
 
-                <form action="/" method="get">
+                <form action="/qualitative_info_security_risk_criteria/{{auth()->user()->org_id}}" method="get">
                     @foreach ($projects as $proj)
                     <input type="hidden" name="selected_projects[]" value="{{ $proj->id }}">
 
                 @endforeach
+                <input type="hidden" name="framework_approach" value="{{ $framework_approach }}">
+
 
                 <button type="submit" class="btn btn-primary btn-lg">Accept</button>
 

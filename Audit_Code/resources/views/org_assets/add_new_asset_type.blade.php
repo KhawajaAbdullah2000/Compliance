@@ -7,7 +7,7 @@
 
 <section class="min-h-100">
     <div class="container py-5">
-       <h2 class="fw-bold">Add a new Asset SubType for your Organization:{{auth()->user()->organization->name}} </h2>
+       <h2 class="fw-bold">Add a Custom Asset SubType for your Organization:{{auth()->user()->organization->name}} </h2>
        <h3 class="fw-bold">Asset Type: {{$categoryDetails->asset_category}} </h3>
     
        <div class="card mt-4 shadow-lg border-0 rounded-3">

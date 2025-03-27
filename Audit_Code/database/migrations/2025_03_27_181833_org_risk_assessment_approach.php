@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('org_framework_approach_selected', function (Blueprint $table) {
-            $table->id('org_framework_approach_selected_id');
+        Schema::create('org_risk_assessment_approach', function (Blueprint $table) {
+            $table->id('org_risk_assessment_approach_id');
             $table->unsignedBigInteger('org_id');
             $table->unsignedBigInteger('project_type_id');
-             $table->unsignedBigInteger('framework_approach_types');
+             $table->unsignedBigInteger('assessment_approach_selected');
              $table->foreign('org_id')->references('id')->on('organizations')->onDelete('cascade');
              $table->foreign('project_type_id')->references('id')->on('project_types')->onDelete('cascade');
+             $table->foreign('assessment_approach_selected','org_ass_app_fk')->references('global_risk_assessment_approach_id')->on('global_risk_assessment_approach')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->foreign('framework_approach_types')->references('framework_approach_types_id')->on('framework_approach_types')->onDelete('cascade')->onUpdate('cascade');
-            $table->timestamps();
+             $table->unique(['org_id','project_type_id']);
+
+             $table->timestamps();
         });
     }
 

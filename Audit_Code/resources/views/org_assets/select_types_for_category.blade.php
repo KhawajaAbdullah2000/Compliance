@@ -14,12 +14,12 @@
         </div>
 
         <div class="col-md-4 text-end">
-          <a href="/select_assets/{{auth()->user()->organization->id}}" class="btn btn-success btn-md">GO back to All Asset Categories</a>
+          <a href="/select_assets/{{auth()->user()->organization->id}}" class="btn btn-success btn-md">GO back to All Asset Types</a>
         </div>
       </div>
     
        <div class="row justify-content-center mt-4">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card shadow-sm border-1 rounded-3">
                 <div class="card-body">
                     <h4 class="fw-bold mb-3 text-dark text-center">Select Asset SubTypes</h4>
@@ -61,14 +61,16 @@
                         @endif
 
                      </form>
-                                                     <!-- Custom Asset Types Section -->
+                      
+                     <!-- Custom Asset Types Section -->
+                     @if($custom_org_types->isEmpty())
+               
+                 @else
 <div class="card mt-4 shadow-sm border-1 rounded-3 mb-2">
     <div class="card-body">
         <h5 class="card-title fw-bold text-dark mb-3">Custom Asset SubTypes</h5>
 
-        @if($custom_org_types->isEmpty())
-            <p class="text-muted">No custom asset subtypes added yet.</p>
-        @else
+       
             <ul class="list-group list-group-flush">
                 @foreach ($custom_org_types as $category)
                     <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -100,7 +102,7 @@
                 </div>
             </div>
             <div class="mt-2">
-            <a href="/add_new_asset_type_in_org/{{auth()->user()->organization->id}}/{{$categoryDetails->asset_category_id}}" class="btn btn-success btn-md">Add new Asset SubType</a>
+            <a href="/add_new_asset_type_in_org/{{auth()->user()->organization->id}}/{{$categoryDetails->asset_category_id}}" class="btn btn-success btn-md">Add a Custom Asset SubType</a>
             </div>
         </div>
     </div>

@@ -117,6 +117,12 @@ route::post('selected_project_and_framework/{org_id}',[RiskManagementFramework::
 route::post('selected_framework_approach/{org_id}',[RiskManagementFramework::class,'selected_framework_approach']);
 
 route::get('qualititave_likelihood_scale/{org_id}',[RiskManagementFramework::class,'qualititave_likelihood_scale']);
+route::get('qualitative_info_security_risk_criteria/{org_id}',[RiskManagementFramework::class,'qualitative_info_security_risk_criteria']);
+route::post('qualitative_risk_acceptance_criteria/{org_id}',[RiskManagementFramework::class,'qualitative_risk_acceptance_criteria']);
+route::post('risk_assessment_approach/{org_id}',[RiskManagementFramework::class,'risk_assessment_approach']);
+
+
+
 
 
 route::get('select_assets/{org_id}',[OrgAssets::class,'select_assets'])->name('select_assets');

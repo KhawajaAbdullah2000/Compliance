@@ -422,6 +422,20 @@ thead.table-pointer {
     background-color: orange;
 }
 
+.subtype-tooltip {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    min-width: 200px;
+    display: none;
+    z-index: 100;
+    background-color: rgb(218, 210, 210);
+    border: 1px solid #222222;
+}
+
+.position-relative:hover .subtype-tooltip {
+    display: block;
+}
 
 
 

@@ -11,18 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('org_framework_approach_selected', function (Blueprint $table) {
-            $table->id('org_framework_approach_selected_id');
+        Schema::create('qualitative_risk_acceptance_criteria', function (Blueprint $table) {
+            $table->id('qualitative_risk_acceptance_criteria_id');
             $table->unsignedBigInteger('org_id');
             $table->unsignedBigInteger('project_type_id');
-             $table->unsignedBigInteger('framework_approach_types');
+             $table->string('criteria_selected');
              $table->foreign('org_id')->references('id')->on('organizations')->onDelete('cascade');
              $table->foreign('project_type_id')->references('id')->on('project_types')->onDelete('cascade');
-
-            $table->foreign('framework_approach_types')->references('framework_approach_types_id')->on('framework_approach_types')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
