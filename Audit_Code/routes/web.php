@@ -120,6 +120,7 @@ route::get('qualititave_likelihood_scale/{org_id}',[RiskManagementFramework::cla
 route::get('qualitative_info_security_risk_criteria/{org_id}',[RiskManagementFramework::class,'qualitative_info_security_risk_criteria']);
 route::post('qualitative_risk_acceptance_criteria/{org_id}',[RiskManagementFramework::class,'qualitative_risk_acceptance_criteria']);
 route::post('risk_assessment_approach/{org_id}',[RiskManagementFramework::class,'risk_assessment_approach']);
+route::post('quantitave_consequence_scale/{org_id}',[RiskManagementFramework::class,'quantitave_consequence_scale']);
 
 
 

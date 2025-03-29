@@ -16,7 +16,7 @@
             
             <ul class="list-group shadow-sm rounded">
                 @forelse ($projects as $proj)
-                    <li class="list-group-item d-flex align-items-center">
+                    <li class="list-group-item d-flex align-items-center bg-light">
                         <i class="bi bi-check-circle-fill text-success me-2"></i>
                         {{$proj->type}}
                     </li>
@@ -29,6 +29,7 @@
         </div>
 
         <div class="col-md-8">
+            <h2 class="fw-bold">Summary of Information Security Risk Management methodology selected</h2>
             <h4 class="mt-4">Information Security Risk
                 Management Framework selected:</h4>
                 <p class="fw-bold fs-5">{{$framework_name}}</p>

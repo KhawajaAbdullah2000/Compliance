@@ -77,7 +77,7 @@ $permissions = json_decode($project_permissions);
                     <div class="mb-4">
                         <label for="asset_type" class="form-label fw-semibold">Asset SubType</label>
                         <select name="name" id="asset_type" class="form-control">
-                  
+                            <option value="None">None</option>
                         </select>
                     </div>
 

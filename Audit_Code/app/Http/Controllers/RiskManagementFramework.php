@@ -83,6 +83,7 @@ $framework_approaches=DB::table('framework_approach_types')->get();
             'framework_approach'=>'required'
         ]);
 
+
         foreach($req->selected_projects as $proj){
             DB::table('org_framework_approach_selected')
             ->updateOrInsert([
@@ -115,6 +116,20 @@ $framework_approaches=DB::table('framework_approach_types')->get();
                 'projects'=>$projects,
                 'framework_name'=>$risk_management_framework->framework_name,
                 'framework_approach'=>$framework_approach->approach_name
+            ]);
+
+         }
+
+         //Quantitative
+         if($req->framework_approach==2){
+
+            $global_currency=DB::table("global_currency")->get();
+         
+            return view('risk_management.consequence_scale_quantitave',[
+                'projects'=>$projects,
+                'framework_name'=>$risk_management_framework->framework_name,
+                'framework_approach'=>$framework_approach->approach_name,
+                'global_currency'=>$global_currency
             ]);
 
          }
@@ -269,5 +284,50 @@ $framework_approaches=DB::table('framework_approach_types')->get();
                
             ]);
    
+    }
+
+    public function quantitave_consequence_scale($org_id,Request $req){
+        $projectTypeIds = $req->selected_projects;
+        $currencies = $req->currency_selected;
+        $logExpressions = $req->log_expression;
+        $scales = $req->scale;
+        
+        foreach ($projectTypeIds as $projectTypeId) {
+            foreach ($scales as $i => $scale) {
+                DB::table('org_quantitavie_consequence_scale')->updateOrInsert(
+                    [
+                        'org_id' => $org_id,
+                        'project_type_id' => $projectTypeId,
+                        'scale' => $scale,
+                        'log_expression' => $logExpressions[$i],
+                    ],
+                    [
+                        'currency_selected' => $currencies[$i],
+                        'updated_at' =>  Carbon::now()->format('Y-m-d H:i:s'),
+                        'created_at' =>  Carbon::now()->format('Y-m-d H:i:s'),
+                    ]
+                );
+            }
+        }
+
+        $projects=DB::table('project_types')->whereIn("id",$req->selected_projects)->get();
+
+        $risk_management_framework=DB::table('org_projects_framework_selected')
+        ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
+        'risk_management_framework.framework_id')
+        ->where('org_id',$org_id)->first();
+
+           $framework_approach=Db::table('framework_approach_types')
+           ->where('approach_name',$req->framework_approach)
+           ->first();
+
+
+        
+        return view('risk_management.likelihood_scale_quantitative',[
+            'projects'=>$projects,
+            'framework_name'=>$risk_management_framework->framework_name,
+            'framework_approach'=>$framework_approach->approach_name
+           
+        ]);
     }
 }

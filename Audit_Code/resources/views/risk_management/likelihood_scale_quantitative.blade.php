@@ -37,6 +37,9 @@
            Management Approach selected:</h4>
                     <p class="fw-bold fs-5">{{$framework_approach}}</p>
 
+                    <h4 class="mt-4">Consequences Scale</h4>
+                                 <p class="fw-bold fs-5">Quantitative</p>
+
                     <div class="mt-4">
                     
                             <a href="/select_projects_for_framework/{{auth()->user()->organization->id}}" class="btn btn-primary btn-md">Back
@@ -48,58 +51,53 @@
         </div>
 
         <div class="col-md-8">
-            <h4 class="fw-bold">Accept Likelihood Scale: Probabilistic</h4>
-            <p class="fs-5">(Probability of an event occurring within a given timeframe)
+            <h4 class="fw-bold">Accept Likelihood Scale: Frequentist </h4>
+            <p class="fs-5">(Frequency of an event occurring within a given timeframe)
                 </p>
 
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped text-center">
                     <thead class="table-dark">
-                      <tr>
-                        <th>Likelihood</th>
-                        <th>Description</th>
-                      </tr>
+                        <tr>
+                            <th>Approximate average frequency</th>
+                            <th>Log expression</th>
+                            <th>Scale value</th>
+                        </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td><strong>5 - Almost certain</strong></td>
-                        <td>
-                          The risk source will most certainly reach its objective by using one of the considered methods of attack.<br>
-                          The likelihood of the risk scenario is very high.
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><strong>4 - Very likely</strong></td>
-                        <td>
-                          The risk source will probably reach its objective by using one of the considered methods of attack.<br>
-                          The likelihood of the risk scenario is high.
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><strong>3 - Likely</strong></td>
-                        <td>
-                          The risk source is able to reach its objective by using one of the considered methods of attack.<br>
-                          The likelihood of the risk scenario is significant.
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><strong>2 - Rather unlikely</strong></td>
-                        <td>
-                          The risk source has relatively little chance of reaching its objective by using one of the considered methods of attack.<br>
-                          The likelihood of the risk scenario is low.
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><strong>1 - Unlikely</strong></td>
-                        <td>
-                          The risk source has very little chance of reaching its objective by using one of the considered methods of attack.<br>
-                          The likelihood of the risk scenario is very low.
-                        </td>
-                      </tr>
+                        <tr>
+                            <td>Every hour</td>
+                            <td>(approximately 10<sup>5</sup>)</td>
+                            <td>6</td>
+                        </tr>
+                        <tr>
+                            <td>Every 8 hours</td>
+                            <td>(approximately 10<sup>4</sup>)</td>
+                            <td>5</td>
+                        </tr>
+                        <tr>
+                            <td>Twice a week</td>
+                            <td>(approximately 10<sup>3</sup>)</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td>Once a month</td>
+                            <td>(approximately 10<sup>3</sup>)</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>Once a year</td>
+                            <td>(10<sup>1</sup>)</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>Once a decade</td>
+                            <td>(10<sup>0</sup>)</td>
+                            <td>1</td>
+                        </tr>
                     </tbody>
-                  </table>
-             
+                </table>
 
-                <form action="/qualitative_info_security_risk_criteria/{{auth()->user()->org_id}}" method="get">
+                <form action="" method="get">
                     @foreach ($projects as $proj)
                     <input type="hidden" name="selected_projects[]" value="{{ $proj->id }}">
 
@@ -107,12 +105,13 @@
                 <input type="hidden" name="framework_approach" value="{{ $framework_approach }}">
 
 
-                <button type="submit" class="btn btn-primary btn-lg">Accept</button>
+                <button type="submit" class="btn btn-primary btn-lg">Save</button>
 
                 </form>
                 
         </div>
 
+       
 
     
 

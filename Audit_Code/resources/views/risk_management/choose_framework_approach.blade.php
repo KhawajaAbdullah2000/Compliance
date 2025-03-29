@@ -16,7 +16,7 @@
             
             <ul class="list-group shadow-sm rounded">
                 @forelse ($projects as $proj)
-                    <li class="list-group-item d-flex align-items-center">
+                    <li class="list-group-item d-flex align-items-center bg-light">
                         <i class="bi bi-check-circle-fill text-success me-2"></i>
                         {{$proj->type}}
                     </li>

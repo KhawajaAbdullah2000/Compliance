@@ -16,7 +16,7 @@
             
             <ul class="list-group shadow-sm rounded">
                 @forelse ($projects as $proj)
-                    <li class="list-group-item d-flex align-items-center">
+                    <li class="list-group-item d-flex align-items-center bg-light">
                         <i class="bi bi-check-circle-fill text-success me-2"></i>
                         {{$proj->type}}
                     </li>
@@ -42,7 +42,7 @@
 
                     <div class="mt-4">
                     
-                        <form action="/qualitative_info_security_risk_criteria/{{auth()->user()->org_id}}" method="get">
+                        <form action="/qualititave_likelihood_scale/{{auth()->user()->org_id}}" method="get">
                             @foreach ($projects as $proj)
                             <input type="hidden" name="selected_projects[]" value="{{ $proj->id }}">
                             <input type="hidden" name="framework_approach" value="{{ $framework_approach }}">

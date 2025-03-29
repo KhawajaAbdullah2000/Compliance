@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(GlobalAssetTypes::class);
         $this->call(frameworkApproachTypes::class);
         $this->call(global_risk_assessment_approach::class);
+        $this->call(globalCurrency::class);
         //$this->call(SuperUser::class);
 
 
