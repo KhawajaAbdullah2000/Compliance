@@ -15,7 +15,7 @@ class frameworkApproachTypes extends Seeder
     {
         DB::table('framework_approach_types')->insert([
             ['approach_name' => 'Qualitative'],
-            ['approach_name' => 'Quantitave'],
+            ['approach_name' => 'Quantitative'],
            
           
         ]);

@@ -97,7 +97,7 @@
                     </tbody>
                 </table>
 
-                <form action="" method="get">
+                <form action="/quantitative_risk_acceptance/{{auth()->user()->organization->id}}" method="get">
                     @foreach ($projects as $proj)
                     <input type="hidden" name="selected_projects[]" value="{{ $proj->id }}">
 

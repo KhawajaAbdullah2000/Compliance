@@ -99,7 +99,7 @@
                   </table>
              
 
-                <form action="/qualitative_info_security_risk_criteria/{{auth()->user()->org_id}}" method="get">
+                <form action="/qualitative_info_security_risk_criteria/{{auth()->user()->organization->id}}" method="get">
                     @foreach ($projects as $proj)
                     <input type="hidden" name="selected_projects[]" value="{{ $proj->id }}">
 

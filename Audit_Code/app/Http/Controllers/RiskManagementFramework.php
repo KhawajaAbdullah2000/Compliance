@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use APP\Models\User;
+use PhpParser\Node\Expr\FuncCall;
 
 class RiskManagementFramework extends Controller
 {
@@ -231,6 +232,7 @@ $framework_approaches=DB::table('framework_approach_types')->get();
     }
 
     public function risk_assessment_approach($org_id,Request $req){
+
         $req->validate([
             'risk_assessment_approach'=>'required'
         ]);
@@ -261,28 +263,44 @@ $framework_approaches=DB::table('framework_approach_types')->get();
          ->where('approach_name',$req->framework_approach)
          ->first();
 
-         $risk_acceptance_criteria=DB::table('qualitative_risk_acceptance_criteria')
-         ->where('org_id',$org_id)->first();
-         //Qualitative
-
          $risk_assessment_approach = DB::table('org_risk_assessment_approach')
          ->join('global_risk_assessment_approach', 
              'org_risk_assessment_approach.assessment_approach_selected', 
              'global_risk_assessment_approach.global_risk_assessment_approach_id')
          ->where('org_risk_assessment_approach.org_id', $org_id)
          ->first();
-     
-       
-         
-         
-            return view('risk_management.qualitative_assessment_methodology_summary',[
-                'projects'=>$projects,
-                'framework_name'=>$risk_management_framework->framework_name,
-                'framework_approach'=>$framework_approach->approach_name,
-                'risk_acceptance_criteria'=>$risk_acceptance_criteria->criteria_selected,
-                'risk_assessment_approaches'=>$risk_assessment_approach->global_assessment_approach
-               
-            ]);
+
+
+         if($framework_approach->approach_name=="Qualitative"){
+            $risk_acceptance_criteria=DB::table('qualitative_risk_acceptance_criteria')
+            ->where('org_id',$org_id)->first();
+               return view('risk_management.qualitative_assessment_methodology_summary',[
+                   'projects'=>$projects,
+                   'framework_name'=>$risk_management_framework->framework_name,
+                   'framework_approach'=>$framework_approach->approach_name,
+                   'risk_acceptance_criteria'=>$risk_acceptance_criteria->criteria_selected,
+                   'risk_assessment_approaches'=>$risk_assessment_approach->global_assessment_approach
+                  
+               ]);
+
+         }
+
+         if($framework_approach->approach_name=="Quantitative"){
+            $risk_acceptance_criteria=DB::table('org_risk_acceptance_quantitative')
+            ->where('org_id',$org_id)->first();
+               return view('risk_management.quantitative_assessment_methodology_summary',[
+                   'projects'=>$projects,
+                   'framework_name'=>$risk_management_framework->framework_name,
+                   'framework_approach'=>$framework_approach->approach_name,
+                   'risk_acceptance_criteria'=>$risk_acceptance_criteria->threshold_risk_acceptance_value,
+                   'risk_assessment_approaches'=>$risk_assessment_approach->global_assessment_approach
+                  
+               ]);
+
+         }
+
+
+        
    
     }
 
@@ -329,5 +347,76 @@ $framework_approaches=DB::table('framework_approach_types')->get();
             'framework_approach'=>$framework_approach->approach_name
            
         ]);
+    }
+
+    public function quantitative_risk_acceptance($org_id,Request $req){
+        $projects=DB::table('project_types')->whereIn("id",$req->selected_projects)->get();
+
+        $risk_management_framework=DB::table('org_projects_framework_selected')
+        ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
+        'risk_management_framework.framework_id')
+        ->where('org_id',$org_id)->first();
+
+           $framework_approach=Db::table('framework_approach_types')
+           ->where('approach_name',$req->framework_approach)
+           ->first();
+
+           return view('risk_management.risk_acceptance_quantitative',[
+            'projects'=>$projects,
+            'framework_name'=>$risk_management_framework->framework_name,
+            'framework_approach'=>$framework_approach->approach_name
+           
+        ]);
+
+
+    }
+
+    public function save_risk_acceptance_quantitative($org_id,Request $req){
+        $req->validate([
+            'risk_acceptance_quantitative'=>'required'
+        ]);
+
+        foreach($req->selected_projects as $proj){
+            DB::table('org_risk_acceptance_quantitative')
+            ->updateOrInsert([
+                'project_type_id'=>$proj,
+                'org_id'=>auth()->user()->organization->id,
+                
+            ],
+        [
+            'threshold_risk_acceptance_value'=>$req->risk_acceptance_quantitative,
+            'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
+        ]
+    );
+         }
+
+         $projects=DB::table('project_types')->whereIn("id",$req->selected_projects)->get();
+
+         $risk_management_framework=DB::table('org_projects_framework_selected')
+         ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
+         'risk_management_framework.framework_id')
+         ->where('org_id',$org_id)->first();
+
+         $framework_approach=Db::table('framework_approach_types')
+         ->where('approach_name',$req->framework_approach)
+         ->first();
+
+         $risk_acceptance_criteria=DB::table('org_risk_acceptance_quantitative')
+         ->where('org_id',$org_id)->first();
+
+         $global_risk_assessment_approaches=DB::table('global_risk_assessment_approach')->get();
+
+
+      
+            return view('risk_management.quantitative_risk_assessment_approach',[
+                'projects'=>$projects,
+                'framework_name'=>$risk_management_framework->framework_name,
+                'framework_approach'=>$framework_approach->approach_name,
+                'risk_acceptance_criteria'=>$risk_acceptance_criteria->threshold_risk_acceptance_value,
+               'global_risk_assessment_approaches'=>$global_risk_assessment_approaches
+            ]);
+
+
     }
 }
