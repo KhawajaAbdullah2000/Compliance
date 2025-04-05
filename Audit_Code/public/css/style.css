@@ -393,6 +393,29 @@ input::-webkit-inner-spin-button {
     height: 300px;
 }
 
+.score-cell {
+    position: relative;
+    cursor: help;
+}
+.hover-desc {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #f8f9fa;
+    color: #000;
+    padding: 8px;
+    width: 300px;
+    z-index: 10;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    font-size: 0.85rem;
+}
+.score-cell:hover .hover-desc {
+    display: block;
+}
+
 .section3_subsections {
     background-image: url("../subsection.jpg");
     background-position: right;

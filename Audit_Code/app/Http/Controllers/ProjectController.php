@@ -91,9 +91,43 @@ class ProjectController extends Controller
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
 
+
+            $complianceFramework=DB::table('org_projects_framework_selected')
+            ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
+            'risk_management_framework.framework_id')
+            ->where('org_id',auth()->user()->organization->id)
+            ->where('project_type_id',$project->project_type)
+            ->first();
+
+            $risk_assessment_approach = DB::table('org_risk_assessment_approach')
+         ->join('global_risk_assessment_approach', 
+             'org_risk_assessment_approach.assessment_approach_selected', 
+             'global_risk_assessment_approach.global_risk_assessment_approach_id')
+         ->where('org_risk_assessment_approach.org_id', auth()->user()->organization->id)
+         ->where('org_id',auth()->user()->organization->id)
+        ->where('project_type_id',$project->project_type)
+           ->first();
+
+           $framework_approach = DB::table('org_framework_approach_selected')
+           ->join('framework_approach_types', 
+               'org_framework_approach_selected.framework_approach_types', 
+               'framework_approach_types.framework_approach_types_id')
+           ->where('org_framework_approach_selected.org_id', auth()->user()->organization->id)
+           ->where('org_id',auth()->user()->organization->id)
+          ->where('project_type_id',$project->project_type)
+             ->first();
+
+
+         
+
                 return view(
                     'iso.iso_sections',
-                    ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project]
+                    [
+                    'project_id' => $proj_id, 'project_name' => $checkpermission->project_name, 'project' => $project,
+                    'complianceFramework'=>$complianceFramework,
+                    'risk_assessment_approach'=>$risk_assessment_approach,
+                    'framework_approach'=>$framework_approach
+                    ]
                 );
             
 

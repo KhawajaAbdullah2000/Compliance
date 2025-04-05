@@ -28,13 +28,32 @@ class IsoSec2_3_1 extends Controller
                 ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
                 ->first();
             if ($checkpermission) {
-
-
+                $asset=Db::table('iso_sec_2_1')->where('assessment_id',$asset_id)->first();
 
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
 
-                    $asset=Db::table('iso_sec_2_1')->where('assessment_id',$asset_id)->first();
+                    $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                    if($frameworkDetails['complianceFramework']->framework_selected==2 
+                     && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+                    ){
+                        //ISo 27005:2022 Qualitative Asset based
+                        return view("iso_27005.consequence_on_service",[
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project' => $project,
+                        'asset'=>$asset,
+                        'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                        'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                        'framework_approach'=>$frameworkDetails['framework_approach']
+                        ]);
+
+                     }
+
+
                     return view('iso_sec_2_3_1.iso_sec_2_3_1_risk_selection', [
 
                         'project_id' => $checkpermission->project_id,
@@ -65,7 +84,8 @@ class IsoSec2_3_1 extends Controller
                 ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
                 ->first();
             if ($checkpermission) {
-
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
 
                     $service=  Db::table('iso_sec_2_1')
                     ->where('assessment_id',$asset_id)->first();
@@ -82,6 +102,36 @@ class IsoSec2_3_1 extends Controller
 
                     ]
                     );
+
+                    if ($req->input('action') === 'save_and_stay') {
+                        return redirect()->route('iso_sec_2_3_1_risk_selection',[
+                            'asset_id'=>$asset_id,
+                        'proj_id'=>$proj_id,
+                        'user_id'=>$user_id
+                        ])->with('success', 'Data saved. Proceed to the next step.');
+                                         
+                    }
+
+                    $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                    if($frameworkDetails['complianceFramework']->framework_selected==2 
+                     && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+                    ){
+                        //ISo 27005:2022 Qualitative Asset based
+                        return view("iso_27005.risk_sources",[
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project' => $project,
+                        'asset'=>$service,
+                        'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                        'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                        'framework_approach'=>$frameworkDetails['framework_approach']
+                        ]);
+
+                     }
+                
 
                     return redirect()->route('iso_sec_2_3_1',[
                         'asset_id'=>$asset_id,
@@ -1325,4 +1375,30 @@ class IsoSec2_3_1 extends Controller
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
         }
     }
+
+    function getProjectFrameworkDetails($project)
+{
+    $orgId = auth()->user()->organization->id;
+
+    $complianceFramework = DB::table('org_projects_framework_selected')
+        ->join('risk_management_framework','org_projects_framework_selected.framework_selected', '=', 'risk_management_framework.framework_id')
+        ->where('org_id', $orgId)
+        ->where('project_type_id', $project->project_type)
+        ->first();
+
+    $risk_assessment_approach = DB::table('org_risk_assessment_approach')
+        ->join('global_risk_assessment_approach', 'org_risk_assessment_approach.assessment_approach_selected', '=', 'global_risk_assessment_approach.global_risk_assessment_approach_id')
+        ->where('org_risk_assessment_approach.org_id', $orgId)
+        ->where('project_type_id', $project->project_type)
+        ->first();
+
+    $framework_approach = DB::table('org_framework_approach_selected')
+        ->join('framework_approach_types', 'org_framework_approach_selected.framework_approach_types', '=', 'framework_approach_types.framework_approach_types_id')
+        ->where('org_framework_approach_selected.org_id', $orgId)
+        ->where('project_type_id', $project->project_type)
+        ->first();
+
+    return compact('complianceFramework', 'risk_assessment_approach', 'framework_approach');
+}
+
 }
