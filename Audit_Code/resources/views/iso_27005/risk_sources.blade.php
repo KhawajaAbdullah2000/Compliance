@@ -5,45 +5,6 @@
 @include('user-nav')
 
 
-@php
-function getRiskLevelLabel($value)
-{
-    return match ($value) {
-        5 => ['label' => 'Catastrophic', 'class' => 'text-danger'],
-        4 => ['label' => 'Critical', 'class' => 'text-warning'],
-        3 => ['label' => 'Serious', 'class' => 'text-success'],
-        2 => ['label' => 'Significant', 'class' => 'text-success'],
-        1 => ['label' => 'Minor', 'class' => 'text-success'],
-        default => ['label' => 'Unknown', 'class' => 'text-muted'],
-    };
-}
-    
-@endphp
-
-@php
-    $riskDescriptions = [
-        5 => 'Sector or regulatory consequences beyond the organization
-Substantially impacted sector ecosystem(s), with consequences that can be long lasting.
-
-And/or: difficulty for the State, and even an incapacity, to ensure a regulatory function or one of its missions of vital importance.
-
-And/or: critical consequences on the safety of persons and property (health crisis, major environmental pollution, destruction of essential infrastructures, etc.).',
-
-        4 => 'Disastrous consequences for the organization
-Incapacity for the organization to ensure all or a portion of its activity, with possible serious consequences on the safety of persons and property. The organization will most likely not overcome the situation (its survival is threatened), the activity sectors or state sectors in which it operates will likely be affected slightly, without any long-lasting consequences',
-
-        3 => 'Substantial consequences for the organization
-High degradation in the performance of the activity, with possible significant consequences on the safety of persons and property. The organization will overcome the situation with serious difficulties (operation in a highly degraded mode), without any sector or state impact.',
-
-        2 => 'Significant but limited consequences for the organization
-Degradation in the performance of the activity with no consequences on the safety of persons and property. The organization will overcome the situation despite a few difficulties (operation in degraded mode).',
-        1 => 'Negligible consequences for the organization
-
-No consequences on operations or the performance of the activity or on the safety of persons and property.
-
-The organization will overcome the situation without too much difficulty (margins will be consumed).'
-    ];
-@endphp
 
 
 <div class="container">
@@ -88,7 +49,65 @@ The organization will overcome the situation without too much difficulty (margin
         
         <h4 class="fw-bold mt-4">Identify which risk sources could exploit vulnerabilities in the asset component 
         </h4>
-        <div class="col-md-8">
+        <div class="col-md-8 mb-4">
+
+            <table class="table table-bordered align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Risk Source</th>
+                        <th scope="col">Target Objective of Risk Source</th>
+                        <th scope="col">Threat Posed by Risk Source</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($global_risk_sources as $risk_source)
+                        <tr>
+                            <td>{{ $risk_source->global_risk_source }}</td>
+            
+                            <td class='text-center'>
+                                <a href="/target_objective_of_risk_source/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}/{{$risk_source->qualitative_asset_based_risk_sources_id}}" title="Edit Target Objective">
+                                    <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
+                                </a>
+                            </td>
+            
+                            <td class='text-center'>
+                                <a href="#" title="Edit Threat Posed">
+                                    <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+
+            <h5 class="fw-bold">Consolidated Level of Threats</h5>
+
+            <form action="/proj_assets_level_of_threat/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            @csrf
+            <select name="threat_level" class="form-select">
+                @foreach($global_level_of_threats as $threat)
+                    <option value="{{ $threat->global_level_of_threats_id }}"
+                        {{ $threat->global_level_of_threats_id == $selected_level_of_threat ? 'selected' : '' }}>
+                        {{ $threat->global_threat }}
+                    </option>
+                @endforeach
+            </select>
+            
+
+            <div class="mt-4 mb-4 d-flex justify-content-end gap-2">
+                
+                <a href="/iso_sec_2_3_1_risk_selection/{{$asset->assessment_id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-secondary">Back</a>
+                <button type="submit" name="action" value="save_and_stay" class="btn btn-primary">
+                    Save & Stay
+                </button>
+                <button type="submit" name="action" value="save_and_next" class="btn btn-primary">
+                    Save & go to next step
+                </button>
+
+            </div>
+            </form>
+            
         
         
         </div>

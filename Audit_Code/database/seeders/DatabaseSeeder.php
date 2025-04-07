@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(globalCurrency::class);
         $this->call(QualitativeAssetRiskSourcesGLobal::class);
         $this->call(QualitativeAssetTargetObjectRiskSource::class);
+        $this->call(GlobalLevelofThreats::class);
         //$this->call(SuperUser::class);
 
 
