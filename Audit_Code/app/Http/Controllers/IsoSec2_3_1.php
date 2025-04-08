@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Project;
 use App\Models\Risk;
 use App\Models\ProjAssetsSelectedRiskSourceAndTarget;
+use Illuminate\Support\Facades\File;
 
 
 class IsoSec2_3_1 extends Controller
@@ -312,23 +313,57 @@ class IsoSec2_3_1 extends Controller
     }
 
     public function proj_assets_level_of_threat ($proj_id,$user_id,$asset_id,Request $req){
-        //dd($req->all());
-        DB::table('proj_asset_selected_level_of_threat')
-        ->updateOrInsert([
-            'project_id'=>$proj_id,
-            'asset_id'=>$asset_id,
-        ],
-    [
-        'threat_selected'=>$req->threat_level,
-        'last_edited_by'=>$user_id,
-        'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
-        'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
-    ]
-);
-        if ($req->input('action') === 'save_and_next') {
-                dd("Dont know yet");
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
+
+                $asset=  Db::table('iso_sec_2_1')
+                ->where('assessment_id',$asset_id)->first();
+
+          
+                $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                if($frameworkDetails['complianceFramework']->framework_selected==2 
+                 && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                 && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+                ){
+                    //ISo 27005:2022 Qualitative Asset based
+                    DB::table('proj_asset_selected_level_of_threat')
+                            ->updateOrInsert([
+                                'project_id'=>$proj_id,
+                                'asset_id'=>$asset_id,
+                            ],
+                        [
+                            'threat_selected'=>$req->threat_level,
+                            'last_edited_by'=>$user_id,
+                            'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+                            'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
+                        ]
+                    );
+        
+                    if ($req->input('action') === 'save_and_next') {
+                         return redirect()->route("iso_27005_risk_assessment",[
+                    'proj_id' => $checkpermission->project_id,
+                    'user_id'=>$user_id,
+                    'asset_id'=>$asset->assessment_id
+                    ]);
+
+                    }
+    
+                
                                          
-        }
+        
         if ($req->input('action') === 'save_and_stay') {
              return redirect()->route('route_for_risk_source',[
                 'proj_id'=>$proj_id,
@@ -338,6 +373,25 @@ class IsoSec2_3_1 extends Controller
         
                                      
             }
+                   
+
+                   
+
+                 }
+            
+
+                return redirect()->route('iso_sec_2_3_1',[
+                    'asset_id'=>$asset_id,
+                    'proj_id'=>$proj_id,
+                    'user_id'=>$user_id
+                ]);
+
+            
+        }
+    
+    return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+        
     }
 
     public function route_for_risk_source($proj_id,$user_id,$asset_id){
@@ -407,6 +461,123 @@ class IsoSec2_3_1 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
 
     }
+
+    public function iso_27005_submit_risk_assessment($proj_id,$user_id,$asset_id,Request $req){
+        
+        foreach($req->control_num as $key=>$value){
+            DB::table('iso27005_risk_assessment')->updateOrInsert(
+                [
+                    'project_id' => $proj_id,
+                    'asset_id' => $asset_id,
+                    'control_num' => $value,
+                ],
+                [
+                    'vulnerability_due_to' => $req->vulnerability_due_to[$key],
+                    'last_edited_by'=>$user_id,
+                    'updated_at' =>  Carbon::now()->format('Y-m-d H:i:s'),
+                    'created_at' =>  Carbon::now()->format('Y-m-d H:i:s'),
+                ]
+            );
+      
+
+        }
+        dd("DOne");
+
+       
+    }
+
+    public function iso_27005_risk_assessment($proj_id,$user_id,$asset_id){
+        //route for risk assesment quality asset based with controls
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
+
+                $asset=  Db::table('iso_sec_2_1')
+                ->where('assessment_id',$asset_id)->first();
+
+          
+                $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                if($frameworkDetails['complianceFramework']->framework_selected==2 
+                 && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                 && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+                ){
+                    //ISo 27005:2022 Qualitative Asset based
+                    $filename = 'ISO27K1_2022_' . $asset->g_name . '.xlsx';
+                    $filepath = public_path($filename);
+                    
+                    // Fallback to 'None' file if original doesn't exist
+                    if (!File::exists($filepath)) {
+                        $filename = 'ISO27K1_2022_None.xlsx';
+                        $filepath = public_path($filename);
+                    }
+                    
+                    $data2 = Excel::toArray([], $filepath); // Load Excel with header
+                    $rows = array_slice($data2[0], 1); // Remove header row
+
+                    foreach ($rows as &$row) {
+                        if (isset($row[0])) {
+                            $row[0] = trim((string) $row[0]); // keep it as-is
+                        }
+                
+                    }
+                    //dd($rows[0][0]);
+                     
+
+                
+                    $savedDataRaw = DB::Table('iso27005_risk_assessment')
+                    ->where('project_id', $project->project_id)
+                    ->where('asset_id', $asset->assessment_id)
+                    ->pluck('vulnerability_due_to', 'control_num');
+                
+                $savedData = [];
+                foreach ($savedDataRaw as $key => $value) {
+                    $normalizedKey = trim((string) $key); // only trim, no number_format
+                    $savedData[$normalizedKey] = $value;
+                }
+            //dd($savedData);
+           //dd($savedData[$rows[0][0]]);
+
+       
+    
+                     return view("iso_27005.risk_assessment",[
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'project' => $project,
+                    'asset'=>$asset,
+                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                    'framework_approach'=>$frameworkDetails['framework_approach'],
+                    'controls'=>$rows,
+                    'savedData'=>$savedData
+                
+                    ]);
+
+                    
+                 }
+            
+
+                return redirect()->route('iso_sec_2_3_1',[
+                    'asset_id'=>$asset_id,
+                    'proj_id'=>$proj_id,
+                    'user_id'=>$user_id
+                ]);
+
+
+    }
+}
 
 
     public function iso_sec_2_3_1($asset_id, $proj_id, $user_id)
