@@ -71,7 +71,7 @@
                             </td>
             
                             <td class='text-center'>
-                                <a href="#" title="Edit Threat Posed">
+                                <a href="/threat_posed_by_risk_source/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}/{{$risk_source->qualitative_asset_based_risk_sources_id}}" title="Edit Target Objective">
                                     <i class="fas fa-edit fa-lg" style="color: #124903;"></i>
                                 </a>
                             </td>

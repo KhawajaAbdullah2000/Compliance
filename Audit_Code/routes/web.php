@@ -313,6 +313,10 @@ route::Post('iso_sec2_3_1_initial_add/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3
 route::get("iso_27005_risk_assessment/{proj_id}/{user_id}/{asset_id}",[IsoSec2_3_1::class,'iso_27005_risk_assessment'])->name('iso_27005_risk_assessment');
 //IOS 27005 quality Asset based
 route::get("target_objective_of_risk_source/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}",[IsoSec2_3_1::class,'target_objective_of_risk_source']);
+route::get("threat_posed_by_risk_source/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}",[IsoSec2_3_1::class,'threat_posed_by_risk_source']);
+
+
+
 route::post('proj_assets_selected_risk_source_and_target/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}',[IsoSec2_3_1::class,'proj_assets_selected_risk_source_and_target']);
 route::post('proj_assets_level_of_threat/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'proj_assets_level_of_threat']);
 route::get('route_for_risk_source/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'route_for_risk_source'])->name('route_for_risk_source');
