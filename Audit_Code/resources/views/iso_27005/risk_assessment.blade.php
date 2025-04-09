@@ -140,6 +140,35 @@ The organization will overcome the situation without too much difficulty (margin
 </div>
 
 
+<h5 class="fw-bold">Consolidated Level of Vulnerability</h5>
+
+<form action="/proj_asset_selected_level_of_vulnerability/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+@csrf
+<select name="vulnerability_level" class="form-select">
+    @foreach($global_level_of_vulnerabilities as $vulnerability)
+        <option value="{{ $vulnerability->global_level_of_vulnerability_id }}"
+            {{ $vulnerability->global_level_of_vulnerability_id == $selected_level_of_vulnerability ? 'selected' : '' }}>
+            {{ $vulnerability->global_vulnerability }}
+        </option>
+    @endforeach
+</select>
+
+
+<div class="mt-4 mb-4 d-flex justify-content-end gap-2">
+    
+    <a href="/iso_sec_2_3_1_risk_selection/{{$asset->assessment_id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-secondary">Back</a>
+    <button type="submit" name="action" value="save_and_stay" class="btn btn-primary">
+        Save & Stay
+    </button>
+    <button type="submit" name="action" value="save_and_next" class="btn btn-primary">
+        Save & go to next step
+    </button>
+
+</div>
+</form>
+
+
+
 
 
 

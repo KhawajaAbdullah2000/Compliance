@@ -546,10 +546,17 @@ class IsoSec2_3_1 extends Controller
                     $normalizedKey = trim((string) $key); // only trim, no number_format
                     $savedData[$normalizedKey] = $value;
                 }
-            //dd($savedData);
-           //dd($savedData[$rows[0][0]]);
 
-       
+                $global_level_of_vulnerabilities=DB::table('global_level_of_vulnerability')
+                ->orderBy('global_level_of_vulnerability_id','desc')->get();
+
+                $selected_level_of_vulnerability=DB::table('proj_asset_selected_level_of_vulnerability')
+                ->where('project_id', $proj_id)
+                ->where('asset_id', $asset_id)
+                ->value('vulnerability_selected');
+               
+              
+         
     
                      return view("iso_27005.risk_assessment",[
                     'project_id' => $checkpermission->project_id,
@@ -561,7 +568,9 @@ class IsoSec2_3_1 extends Controller
                     'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
                     'framework_approach'=>$frameworkDetails['framework_approach'],
                     'controls'=>$rows,
-                    'savedData'=>$savedData
+                    'savedData'=>$savedData,
+                    'global_level_of_vulnerabilities'=>$global_level_of_vulnerabilities,
+                    'selected_level_of_vulnerability'=>$selected_level_of_vulnerability
                 
                     ]);
 
@@ -577,6 +586,85 @@ class IsoSec2_3_1 extends Controller
 
 
     }
+
+    
+}
+
+public function proj_asset_selected_level_of_vulnerability($proj_id,$user_id,$asset_id,Request $req){
+    $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+
+            $asset=  Db::table('iso_sec_2_1')
+            ->where('assessment_id',$asset_id)->first();
+
+      
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+            if($frameworkDetails['complianceFramework']->framework_selected==2 
+             && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+            ){
+                //ISo 27005:2022 Qualitative Asset based
+                DB::table('proj_asset_selected_level_of_vulnerability')
+                        ->updateOrInsert([
+                            'project_id'=>$proj_id,
+                            'asset_id'=>$asset_id,
+                        ],
+                    [
+                        'vulnerability_selected'=>$req->vulnerability_level,
+                        'last_edited_by'=>$user_id,
+                        'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+                        'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
+                    ]
+                );
+    
+                if ($req->input('action') === 'save_and_stay') {
+                     return redirect()->route("iso_27005_risk_assessment",[
+                'proj_id' => $checkpermission->project_id,
+                'user_id'=>$user_id,
+                'asset_id'=>$asset->assessment_id
+                ])->with('success','Data Saved Successfully');
+
+                }
+
+            
+                                     
+    
+    if ($req->input('action') === 'save_and_next') {
+        dd("DOne and not know next");
+                                 
+        }
+               
+
+               
+
+             }
+        
+
+            return redirect()->route('iso_sec_2_3_1',[
+                'asset_id'=>$asset_id,
+                'proj_id'=>$proj_id,
+                'user_id'=>$user_id
+            ]);
+
+        
+    }
+
+return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
 }
 
 
