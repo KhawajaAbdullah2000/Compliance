@@ -244,8 +244,7 @@ class IsoSec2_3_1 extends Controller
             ->first();
         if ($checkpermission) {
             $permissions = json_decode($checkpermission->project_permissions);
-            if (in_array('Data Inputter', $permissions)) {
-
+    
                 $asset=  Db::table('iso_sec_2_1')
                 ->where('assessment_id',$asset_id)->first();
 
@@ -267,14 +266,20 @@ class IsoSec2_3_1 extends Controller
                         ->select(
                             'global_threat_posed_by_risk_source.global_threat_posed_by_risk_source_id',
                             'global_threat_posed_by_risk_source.global_threat_posed',
+                            'threat_desc_for_global_threats.threat_desc_for_global_threats_id',
                             'threat_desc_for_global_threats.threat_description'
                         )
                         ->get()
                         ->groupBy('global_threat_posed_by_risk_source_id');
 
-           // dd($global_threat_and_descs);
-                   
-         
+                        $selected_threat_ids=DB::table('proj_asset_threat_desc_selected')
+                        ->where('project_id',$proj_id)
+                        ->where('asset_id',$asset_id)
+                        ->where('g_risk_source_num',$g_risk_source_num)
+                        ->pluck('threat_desc_selected')->toArray();
+
+            
+                       
                        
                         return view("iso_27005.threat_desc_selected",[
                         'project_id' => $checkpermission->project_id,
@@ -286,9 +291,85 @@ class IsoSec2_3_1 extends Controller
                         'framework_approach'=>$frameworkDetails['framework_approach'],
                         'global_risk_source'=>$global_risk_source,
                         'asset'=>$asset,
-                        'global_threat_and_descs'=>$global_threat_and_descs
+                        'global_threat_and_descs'=>$global_threat_and_descs,
+                        'selected_threat_ids'=>$selected_threat_ids
         
                         ]);
+
+                     }
+                
+
+
+
+            
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+    }
+
+    public function proj_asset_threat_desc_selected($proj_id,$user_id,$asset_id,$g_risk_source_num,Request $req){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+            if (in_array('Data Inputter', $permissions)) {
+
+                $asset=  Db::table('iso_sec_2_1')
+                ->where('assessment_id',$asset_id)->first();
+
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+                $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                    if($frameworkDetails['complianceFramework']->framework_selected==2 
+                     && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+                    ){
+                        //ISo 27005:2022 Qualitative Asset based
+                        $selectedThreats = $req->input('selected', []); // Default to empty array if nothing selected
+
+                        if (empty($selectedThreats)) {
+                            // Optional: Flash a message if nothing was selected
+                            return redirect()->back()->with('success', 'No threats were selected. Form submitted without changes.');
+                        }
+
+                        DB::table('proj_asset_threat_desc_selected')->where('project_id',$proj_id)
+                        ->where('asset_id',$asset_id)
+                        ->where('g_risk_source_num',$g_risk_source_num)
+                        ->delete();
+
+                        foreach ($selectedThreats as $groupId => $threats) {
+                            foreach ($threats as $threatId) {
+
+                                DB::table('proj_asset_threat_desc_selected')->insert([
+                                    'project_id'=>$proj_id,
+                                    'asset_id'=>$asset_id,
+                                    'threat_desc_selected'=>$threatId,
+                                    'last_edited_by'=>$user_id,
+                                    'g_risk_source_num'=>$g_risk_source_num,
+                                    'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+                                    'updated_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+                                    
+                                ]);
+                               
+                            }
+                        }
+
+                        
+                        return redirect()->back()->with('success', 'Threats posed by risk source saved successfully');
+
+
+
 
                      }
                 
@@ -299,8 +380,8 @@ class IsoSec2_3_1 extends Controller
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
 
-
     }
+
 
     public function proj_assets_selected_risk_source_and_target($proj_id,$user_id,$asset_id,$g_risk_source_num,Request $req){
         //dd($proj_id,$user_id,$asset_id,$g_risk_source_num, $req->all());

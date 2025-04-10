@@ -314,7 +314,7 @@ route::get("iso_27005_risk_assessment/{proj_id}/{user_id}/{asset_id}",[IsoSec2_3
 //IOS 27005 quality Asset based
 route::get("target_objective_of_risk_source/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}",[IsoSec2_3_1::class,'target_objective_of_risk_source']);
 route::get("threat_posed_by_risk_source/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}",[IsoSec2_3_1::class,'threat_posed_by_risk_source']);
-
+route::post('proj_asset_threat_desc_selected/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}',[IsoSec2_3_1::class,'proj_asset_threat_desc_selected']);
 
 
 route::post('proj_assets_selected_risk_source_and_target/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}',[IsoSec2_3_1::class,'proj_assets_selected_risk_source_and_target']);

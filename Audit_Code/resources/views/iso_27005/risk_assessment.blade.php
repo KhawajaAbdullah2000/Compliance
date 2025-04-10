@@ -156,8 +156,11 @@ The organization will overcome the situation without too much difficulty (margin
 
 <div class="mt-4 mb-4 d-flex justify-content-end gap-2">
     
-    <a href="/iso_sec_2_3_1_risk_selection/{{$asset->assessment_id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-secondary">Back</a>
-    <button type="submit" name="action" value="save_and_stay" class="btn btn-primary">
+    <a href="{{route('route_for_risk_source',[
+        'proj_id'=>$project->project_id,
+        'user_id'=>auth()->user()->id,
+        'asset_id'=>$asset->assessment_id
+        ])}}" class="btn btn-secondary">Back</a>    <button type="submit" name="action" value="save_and_stay" class="btn btn-primary">
         Save & Stay
     </button>
     <button type="submit" name="action" value="save_and_next" class="btn btn-primary">

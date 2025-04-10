@@ -18,6 +18,7 @@ return new class extends Migration
 
             $table->integer('project_id')->nullable()->index('projid_sec2_3_1_qa2');
             $table->integer('asset_id')->nullable()->index('asset_id_sec2_3_1_qa2');
+            $table->unsignedBigInteger('g_risk_source_num');
             $table->unsignedBigInteger('last_edited_by')->nullable()->index('last_edited_by');
            
             $table->foreign(['asset_id'], 'ass_id__thr_fk_2_1')->references(['assessment_id'])->on('iso_sec_2_1')->onUpdate('CASCADE')->onDelete('CASCADE');
@@ -28,6 +29,7 @@ return new class extends Migration
 
             $table->foreign('threat_desc_selected','vuln_as_fk1_th_se')->references('threat_desc_for_global_threats_id')->on('threat_desc_for_global_threats')->onDelete('cascade')->onUpdate('cascade');
 
+            $table->foreign('g_risk_source_num','g_riskfk1_th')->references('qualitative_asset_based_risk_sources_id')->on('qualitative_asset_based_risk_sources')->onDelete('cascade')->onUpdate('cascade');
              $table->timestamps();
     });
         
