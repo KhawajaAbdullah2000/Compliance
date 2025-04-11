@@ -322,6 +322,10 @@ route::post('proj_assets_level_of_threat/{proj_id}/{user_id}/{asset_id}',[IsoSec
 route::get('route_for_risk_source/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'route_for_risk_source'])->name('route_for_risk_source');
 route::post('iso_27005_submit_risk_assessment/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'iso_27005_submit_risk_assessment']);
 route::post('proj_asset_selected_level_of_vulnerability/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'proj_asset_selected_level_of_vulnerability']);
+route::get('add_scenario_form/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'add_scenario_form'])->name('add_scenario_form');
+route::get('add_risk_scenario/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'add_risk_scenario']);
+route::post('proj_asset_risk_scenario/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'proj_asset_risk_scenario']);
+
 
 
 
