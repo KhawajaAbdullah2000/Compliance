@@ -1,0 +1,41 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('proj_asset_likelihood_value', function (Blueprint $table) {
+            $table->id('proj_asset_likelihood_value_id');
+            $table->unsignedBigInteger('likelihood_selected');
+
+            $table->integer('project_id')->nullable()->index('projid_sec2_3_1_qa33');
+            $table->integer('asset_id')->nullable()->index('asset_id_sec2_3_1_qa32');
+            $table->unsignedBigInteger('last_edited_by')->nullable()->index('last_edited_by');
+           
+            $table->foreign(['asset_id'], 'likefk4')->references(['assessment_id'])->on('iso_sec_2_1')->onUpdate('CASCADE')->onDelete('CASCADE');
+
+            $table->foreign(['last_edited_by'], 'likefk3')->references(['id'])->on('users')->onUpdate('CASCADE')->onDelete('SET NULL');
+
+            $table->foreign(['project_id'], 'likefk2')->references(['project_id'])->on('projects')->onUpdate('CASCADE')->onDelete('CASCADE');
+
+            $table->foreign(['likelihood_selected'], 'likefk1')->references(['global_likelihood_value_id'])->on('global_likelihood_value')->onUpdate('CASCADE')->onDelete('CASCADE');
+
+             $table->timestamps();
+            });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('proj_asset_likelihood_value');
+    }
+};

@@ -1,0 +1,194 @@
+@extends('master')
+
+@section('content')
+
+@include('user-nav')
+@php
+$permissions = json_decode($project_permissions);
+
+// User can edit data if they have "Data Inputter"
+$isEditable = in_array('Data Inputter', $permissions);
+@endphp
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="fw-bold">Project Name:</td>
+                        <td> <a href="/iso_sections/{{$project->project_id}}/{{auth()->user()->id}}"> {{$project->project_name}}
+                        </a>
+                        </td>
+                        <td class="fw-bold">Your Email:</td>
+                        <td>{{auth()->user()->email}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Type:</td>
+                        <td>{{$project->type}}</td>
+                        <td class="fw-bold">Organization Name:</td>
+                        <td>{{auth()->user()->organization->name}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Project Status:</td>
+                        <td>{{$project->status}}</td>
+                        <td class="fw-bold">Sub-Organization:</td>
+                        <td>{{auth()->user()->organization->sub_org}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Compliance Framework:</td>
+                        <td>{{$complianceFramework->framework_name}}</td>
+                        <td class="fw-bold">Information Security Risk Management Methodology:</td>
+                        <td>{{$framework_approach->approach_name}} - {{$risk_assessment_approach->global_assessment_approach}} </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <h3 class="fw-bold mt-2">Information Security Risk Assessment for</h3>
+
+    @include('components.asset-summary', ['asset' => $asset])
+    
+    <p class="fs-6 mt-2">By considering both the threats in the environment of an asset component and the vulnerabilities of the asset component, evaluate the likelihood that a DATA CONFIDENTIALITY exploit will occur in a finite timeframe
+    </p>
+
+    <div class="col-md-6">
+
+    <div class="card mt-4">
+        <div class="card-body">
+          <div class="row mb-2">
+            <div class="col-md-6">
+              <p class="mb-0 text-muted">Consolidated Level of Threats</p>
+              <h5 class="fw-bold text-danger">{{$threat}}</h5>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-0 text-muted">Consolidated Vulnerability Level</p>
+              <h5 class="fw-bold text-warning">{{$vulnerability}}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+              
+    </div>
+
+    <div class="col-md-6 mt-4">
+        <form action="/qualitative_asset_likelihood_confidentiality_timeframe/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="POST">
+
+            @csrf
+            <label for="timeframe" class="form-label fw-semibold">
+                Likelihood that a DATA CONFIDENTIALITY exploit will occur in a finite timeframe
+            </label>
+    
+            <div class="input-group">
+                <input 
+                    type="number" 
+                    name="timeframe" 
+                    class="form-control" 
+                    placeholder="Enter Number of Days"
+                    value="{{ $likelihood_timeframe }}"
+                    {{ !$isEditable ? 'disabled' : '' }}
+                >
+                @if($isEditable)
+                    <button type="submit" class="btn btn-primary">Save</button>
+                @endif
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-8 mt-4 mb-2">
+        <form action="/save_likelihood_value/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="POST">
+            @csrf
+            <label class="form-label fw-semibold mb-3">
+                Select Likelihood That a DATA CONFIDENTIALITY Exploit Will Occur:
+            </label>
+    
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Likelihood</th>
+                            <th>Description</th>
+                            <th>Select</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                        $likelihoodOptions = [
+                            5 => [
+                                'title' => 'Almost certain',
+                                'desc' => 'The risk source will most certainly reach its objective by using one of the considered methods of attack. The likelihood of the risk scenario is very high.'
+                            ],
+                            4 => [
+                                'title' => 'Very likely',
+                                'desc' => 'The risk source will probably reach its objective by using one of the considered methods of attack. The likelihood of the risk scenario is high.'
+                            ],
+                            3 => [
+                                'title' => 'Likely',
+                                'desc' => 'The risk source is able to reach its objective by using one of the considered methods of attack. The likelihood of the risk scenario is significant.'
+                            ],
+                            2 => [
+                                'title' => 'Rather unlikely',
+                                'desc' => 'The risk source has relatively little chance of reaching its objective by using one of the considered methods of attack. The likelihood of the risk scenario is low.'
+                            ],
+                            1 => [
+                                'title' => 'Unlikely',
+                                'desc' => 'The risk source has very little chance of reaching its objective by using one of the considered methods of attack. The likelihood of the risk scenario is very low.'
+                            ],
+                        ];
+                    @endphp
+                    
+    
+                        @foreach($likelihoodOptions as $value => $info)
+                            <tr>
+                                <td><strong>{{ $value }} - {{ $info['title'] }}</strong></td>
+                                <td>{{ $info['desc'] }}</td>
+                                <td class="text-center">
+                                    <input type="radio" name="likelihood_value" value="{{ $value }}"
+                                        {{ (isset($likelihood_value) && $likelihood_value == $value) ? 'checked' : '' }}
+                                        {{ !$isEditable ? 'disabled' : '' }}>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+    
+            @if($isEditable)
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            @endif
+        </form>
+    </div>
+    
+      
+
+        
+    
+
+
+
+
+</div>
+
+@section('scripts')
+
+
+@if(Session::has('success'))
+<script>
+    swal({
+  title: "{{Session::get('success')}}",
+  icon: "success",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script>
+@endif
+
+
+
+@endsection
+
+@endsection

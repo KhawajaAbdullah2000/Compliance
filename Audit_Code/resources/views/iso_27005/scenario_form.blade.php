@@ -40,14 +40,23 @@
                     </tr>
                 </tbody>
             </table>
+      
         </div>
     </div>
     <h3 class="fw-bold mt-2">Information Security Risk Assessment for</h3>
 
     @include('components.asset-summary_component', ['asset' => $asset])
+
+    <div class="text-end mb-3">
+        <a href="{{route('iso_27005_risk_assessment',[
+        'proj_id'=>$project->project_id,
+        'user_id'=>auth()->user()->id,
+        'asset_id'=>$asset->assessment_id])}}" class="btn btn-md btn-secondary">
+         Back
+        </a>
+    </div>
     
 <div class="row">
-
 
     <div class="col-md-6 mt-4">
         <div class="card shadow-sm">

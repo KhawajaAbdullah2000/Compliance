@@ -963,7 +963,12 @@ public function proj_asset_selected_level_of_vulnerability($proj_id,$user_id,$as
                                      
     
     if ($req->input('action') === 'save_and_next') {
-        dd("DOne and not know next");
+    
+        return redirect()->route("iso_27005_likelihood_value",[
+            'proj_id' => $checkpermission->project_id,
+            'user_id'=>$user_id,
+            'asset_id'=>$asset->assessment_id
+            ])->with('success','Data Saved Successfully');
                                  
         }
                
@@ -985,6 +990,127 @@ public function proj_asset_selected_level_of_vulnerability($proj_id,$user_id,$as
 return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
 
 
+}
+
+public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id){
+    $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+
+            $asset=  Db::table('iso_sec_2_1')
+            ->where('assessment_id',$asset_id)->first();
+
+      
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+            if($frameworkDetails['complianceFramework']->framework_selected==2 
+             && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+            ){
+
+               //ISo 27005:2022 Qualitative Asset based
+                $threat=DB::table('proj_asset_selected_level_of_threat')
+                ->join('global_level_of_threats','proj_asset_selected_level_of_threat.threat_selected','global_level_of_threats.global_level_of_threats_id')
+                ->where('project_id',$proj_id)
+                ->where('asset_id',$asset_id)
+                ->value('global_threat');
+
+                $vulnerability=DB::table('proj_asset_selected_level_of_vulnerability')
+                ->join('global_level_of_vulnerability','proj_asset_selected_level_of_vulnerability.vulnerability_selected','global_level_of_vulnerability.global_level_of_vulnerability_id')
+                ->where('project_id',$proj_id)
+                ->where('asset_id',$asset_id)
+                ->value('global_vulnerability');
+
+                $likelihood_timeframe=DB::table('proj_asset_likelihood_confidentiality_timeframe')
+                ->where('project_id',$proj_id)
+                ->where('asset_id',$asset_id)
+                ->value('timeframe');
+              
+
+                $likelihood_value=DB::table('proj_asset_likelihood_value')
+                ->where('project_id',$proj_id)
+                ->where('asset_id',$asset_id)
+                ->value('likelihood_selected');
+
+        
+ 
+                return view("iso_27005.likelihood_value",[
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'project' => $project,
+                    'asset'=>$asset,
+                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                    'framework_approach'=>$frameworkDetails['framework_approach'],
+                    'threat'=>$threat,
+                    'vulnerability'=>$vulnerability,
+                    'likelihood_timeframe'=>$likelihood_timeframe,
+                    'likelihood_value'=>$likelihood_value
+                    ]);
+
+            }
+        }
+
+    
+}
+
+public function qualitative_asset_likelihood_confidentiality_timeframe($proj_id,$user_id,$asset_id,Request $req){
+    $req->validate([
+        'timeframe'=>'required'
+    ]);
+
+    DB::table('proj_asset_likelihood_confidentiality_timeframe')->updateOrInsert([
+        'project_id'=>$proj_id,
+        'asset_id'=>$asset_id
+    ],
+    [
+        'timeframe'=>$req->timeframe,
+        'last_edited_by'=>$user_id,
+        'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+        'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
+
+    ]);
+
+    return redirect()->route('iso_27005_likelihood_value',[
+        'proj_id'=>$proj_id,
+        'user_id'=>$user_id,
+        'asset_id'=>$asset_id
+    ])->with('success','Data Saved Successfully');
+    
+}
+
+public function save_likelihood_value($proj_id,$user_id,$asset_id,Request $req){
+    $req->validate([
+        'likelihood_value'=>'required'
+    ]);
+
+    DB::table('proj_asset_likelihood_value')->updateOrInsert([
+        'project_id'=>$proj_id,
+        'asset_id'=>$asset_id
+    ],[
+        'likelihood_selected'=>$req->likelihood_value,
+        'last_edited_by'=>$user_id,
+         'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+         'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
+    ]);
+
+    return redirect()->route('iso_27005_likelihood_value',[
+        'proj_id'=>$proj_id,
+        'user_id'=>$user_id,
+        'asset_id'=>$asset_id
+    ])->with('success','Data Saved Successfully');
 }
 
 
