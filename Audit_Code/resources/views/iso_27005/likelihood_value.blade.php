@@ -49,7 +49,16 @@ $isEditable = in_array('Data Inputter', $permissions);
 
             @csrf
             <label for="timeframe" class="form-label fw-semibold">
-                Likelihood that a DATA CONFIDENTIALITY exploit will occur in a finite timeframe
+                Likelihood that a 
+                @if($risk_type=='risk_confidentiality')
+                DATA CONFIDENTIALITY 
+                @elseif($risk_type=='risk_integrity')
+                DATA INTEGRITY
+                @else
+                DATA AVAILABILITY
+                @endif
+
+                exploit will occur in a finite timeframe
             </label>
     
             <div class="input-group">
@@ -61,18 +70,27 @@ $isEditable = in_array('Data Inputter', $permissions);
                     value="{{ $likelihood_timeframe }}"
                     {{ !$isEditable ? 'disabled' : '' }}
                 >
+                <input type="hidden" name="risk_type_input" value="{{$risk_type}}">
                 @if($isEditable)
                     <button type="submit" class="btn btn-primary">Save</button>
                 @endif
             </div>
         </form>
     </div>
-
     <div class="col-md-8 mt-4 mb-2">
         <form action="/save_likelihood_value/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="POST">
             @csrf
             <label class="form-label fw-semibold mb-3">
-                Select Likelihood That a DATA CONFIDENTIALITY Exploit Will Occur:
+                Select Likelihood That a 
+                @if($risk_type=='risk_confidentiality')
+                DATA CONFIDENTIALITY 
+                @elseif($risk_type=='risk_integrity')
+                DATA INTEGRITY
+                @else
+                DATA AVAILABILITY
+                @endif
+                
+                Exploit Will Occur:
             </label>
     
             <div class="table-responsive">
@@ -128,13 +146,15 @@ $isEditable = in_array('Data Inputter', $permissions);
                     </tbody>
                 </table>
             </div>
+
+            <input type="hidden" name="risk_type_input" value="{{$risk_type}}">
     
-            @if($isEditable)
+         
                 <div class="text-end">
                     <button type="submit" class="btn btn-primary">Save</button>
-                    <a href="/likelihood_and_consequence/risk_confidentiality/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary">Next</a>
+                    <a href="/likelihood_and_consequence/{{$risk_type}}/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary">Next</a>
                 </div>
-            @endif
+          
         </form>
     </div>
     

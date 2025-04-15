@@ -37,36 +37,7 @@
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="fw-bold">Project Name:</td>
-                        <td> <a href="/iso_sections/{{$project->project_id}}/{{auth()->user()->id}}"> {{$project->project_name}}
-                        </a>
-                        </td>
-                        <td class="fw-bold">Your Email:</td>
-                        <td>{{auth()->user()->email}}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Project Type:</td>
-                        <td>{{$project->type}}</td>
-                        <td class="fw-bold">Organization Name:</td>
-                        <td>{{auth()->user()->organization->name}}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Project Status:</td>
-                        <td>{{$project->status}}</td>
-                        <td class="fw-bold">Sub-Organization:</td>
-                        <td>{{auth()->user()->organization->sub_org}}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Compliance Framework:</td>
-                        <td>{{$complianceFramework->framework_name}}</td>
-                        <td class="fw-bold">Information Security Risk Management Methodology:</td>
-                        <td>{{$framework_approach->approach_name}} - {{$risk_assessment_approach->global_assessment_approach}} </td>
-                    </tr>
-                </tbody>
-            </table>
+            @include('components.topTable')
         </div>
     </div>
     <h3 class="fw-bold mt-2">Information Security Risk Assessment for</h3>
@@ -76,8 +47,11 @@
     <h4 class="fw-bold mt-4">Assessment of Risk to 
         @if($risk_type=='risk_confidentiality')
      Risk Confidentiality
-     @else        
-        {{$risk_type}}
+     @elseif($risk_type=='risk_integrity')
+     Risk Integrity 
+     @else
+     Risk Availability       
+        
         @endif
     
     </h4>
@@ -115,6 +89,18 @@
         
 
     </div>
+
+    @if($risk_type=="risk_confidentiality")
+    <div class="text-center">
+        <a href="/iso_27005_likelihood_value/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}/risk_integrity" class="btn btn-primary">Next</a>
+    </div>
+    @endif
+
+    @if($risk_type=="risk_integrity")
+    <div class="text-center">
+        <a href="/iso_27005_likelihood_value/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}/risk_availability" class="btn btn-primary">Next</a>
+    </div>
+    @endif
 
     
 

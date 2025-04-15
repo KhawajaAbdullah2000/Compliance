@@ -971,7 +971,8 @@ public function proj_asset_selected_level_of_vulnerability($proj_id,$user_id,$as
         return redirect()->route("iso_27005_likelihood_value",[
             'proj_id' => $checkpermission->project_id,
             'user_id'=>$user_id,
-            'asset_id'=>$asset->assessment_id
+            'asset_id'=>$asset->assessment_id,
+            'risk_type'=>'risk_confidentiality'
             ])->with('success','Data Saved Successfully');
                                  
         }
@@ -996,7 +997,8 @@ return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id])
 
 }
 
-public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id){
+public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id,$risk_type=''){
+
     $checkpermission = Db::table('project_details')->select(
         'project_types.id as type_id',
         'project_details.project_code',
@@ -1036,18 +1038,19 @@ public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id){
                 ->where('asset_id',$asset_id)
                 ->value('global_vulnerability');
 
-                $likelihood_timeframe=DB::table('proj_asset_likelihood_confidentiality_timeframe')
+                $likelihood_timeframe=DB::table('proj_asset_likelihood_timeframe')
                 ->where('project_id',$proj_id)
                 ->where('asset_id',$asset_id)
-                ->value('timeframe');
-              
+                ->value('timeframe_'.$risk_type);
+
+        
 
                 $likelihood_value=DB::table('proj_asset_likelihood_value')
                 ->where('project_id',$proj_id)
                 ->where('asset_id',$asset_id)
-                ->value('likelihood_selected');
+                ->value('likelihood_'.$risk_type.'_selected');
 
-        
+
  
                 return view("iso_27005.likelihood_value",[
                     'project_id' => $checkpermission->project_id,
@@ -1061,7 +1064,8 @@ public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id){
                     'threat'=>$threat,
                     'vulnerability'=>$vulnerability,
                     'likelihood_timeframe'=>$likelihood_timeframe,
-                    'likelihood_value'=>$likelihood_value
+                    'likelihood_value'=>$likelihood_value,
+                    'risk_type'=>$risk_type
                     ]);
 
             }
@@ -1075,23 +1079,28 @@ public function qualitative_asset_likelihood_confidentiality_timeframe($proj_id,
         'timeframe'=>'required'
     ]);
 
-    DB::table('proj_asset_likelihood_confidentiality_timeframe')->updateOrInsert([
+    DB::table('proj_asset_likelihood_timeframe')->updateOrInsert([
         'project_id'=>$proj_id,
         'asset_id'=>$asset_id
     ],
     [
-        'timeframe'=>$req->timeframe,
+        'timeframe_'.$req->risk_type_input=>$req->timeframe,
         'last_edited_by'=>$user_id,
         'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
         'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
 
     ]);
 
-    return redirect()->route('iso_27005_likelihood_value',[
-        'proj_id'=>$proj_id,
-        'user_id'=>$user_id,
-        'asset_id'=>$asset_id
-    ])->with('success','Data Saved Successfully');
+    
+        return redirect()->route('iso_27005_likelihood_value',[
+            'proj_id'=>$proj_id,
+            'user_id'=>$user_id,
+            'asset_id'=>$asset_id,
+            'risk_type'=>$req->risk_type_input
+        ])->with('success','Data Saved Successfully');
+
+    
+    
     
 }
 
@@ -1100,21 +1109,26 @@ public function save_likelihood_value($proj_id,$user_id,$asset_id,Request $req){
         'likelihood_value'=>'required'
     ]);
 
+
     DB::table('proj_asset_likelihood_value')->updateOrInsert([
         'project_id'=>$proj_id,
         'asset_id'=>$asset_id
     ],[
-        'likelihood_selected'=>$req->likelihood_value,
+        'likelihood_'.$req->risk_type_input.'_selected'=>$req->likelihood_value,
         'last_edited_by'=>$user_id,
          'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
          'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
     ]);
 
-    return redirect()->route('iso_27005_likelihood_value',[
-        'proj_id'=>$proj_id,
-        'user_id'=>$user_id,
-        'asset_id'=>$asset_id
-    ])->with('success','Data Saved Successfully');
+ 
+        return redirect()->route('iso_27005_likelihood_value',[
+            'proj_id'=>$proj_id,
+            'user_id'=>$user_id,
+            'asset_id'=>$asset_id,
+            'risk_type'=>$req->risk_type_input
+        ])->with('success','Data Saved Successfully');
+    
+   
 }
 
 public function likelihood_and_consequence($risk_type,$proj_id,$user_id,$asset_id){
@@ -1146,7 +1160,7 @@ public function likelihood_and_consequence($risk_type,$proj_id,$user_id,$asset_i
 
                 $consequence_value=DB::table('iso_sec_2_1')->where('assessment_id',$asset_id)->value($risk_type);
 
-                $likelihood_value=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('likelihood_selected');
+                $likelihood_value=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('likelihood_'.$risk_type.'_selected');
                
                 return view("iso_27005.likelihood_and_consequence_value",[
                     'project_id' => $checkpermission->project_id,

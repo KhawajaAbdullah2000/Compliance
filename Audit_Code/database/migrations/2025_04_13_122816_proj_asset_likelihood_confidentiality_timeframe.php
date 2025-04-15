@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('proj_asset_likelihood_confidentiality_timeframe', function (Blueprint $table) {
-            $table->id('proj_asset_likelihood_confidentiality_timeframe_id');
-            $table->integer('timeframe');
+        Schema::create('proj_asset_likelihood_timeframe', function (Blueprint $table) {
+            $table->id('proj_asset_likelihood_timeframe');
+            $table->integer('timeframe_risk_confidentiality')->nullable();
+            $table->integer('timeframe_risk_integrity')->nullable();
+            $table->integer('timeframe_risk_availability')->nullable();
 
             $table->integer('project_id')->nullable()->index('projid_sec2_3_1_qa2');
             $table->integer('asset_id')->nullable()->index('asset_id_sec2_3_1_qa2');
@@ -25,6 +27,7 @@ return new class extends Migration
 
             $table->foreign(['project_id'], 'projid_qa_a_rsltf3')->references(['project_id'])->on('projects')->onUpdate('CASCADE')->onDelete('CASCADE');
 
+            $table->unique(['project_id','asset_id'],'unifk1_timef');
              $table->timestamps();
             });
     }

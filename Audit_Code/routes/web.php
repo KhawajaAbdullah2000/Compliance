@@ -325,7 +325,7 @@ route::post('proj_asset_selected_level_of_vulnerability/{proj_id}/{user_id}/{ass
 route::get('add_scenario_form/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'add_scenario_form'])->name('add_scenario_form');
 route::get('add_risk_scenario/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'add_risk_scenario']);
 route::post('proj_asset_risk_scenario/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'proj_asset_risk_scenario']);
-route::get('iso_27005_likelihood_value/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'iso_27005_likelihood_value'])->name('iso_27005_likelihood_value');
+route::get('iso_27005_likelihood_value/{proj_id}/{user_id}/{asset_id}/{risk_type?}',[IsoSec2_3_1::class,'iso_27005_likelihood_value'])->name('iso_27005_likelihood_value');
 route::post('qualitative_asset_likelihood_confidentiality_timeframe/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'qualitative_asset_likelihood_confidentiality_timeframe']);
 route::post('save_likelihood_value/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'save_likelihood_value']);
 
