@@ -38,7 +38,7 @@ class IsoSec2_1 extends Controller
                  $project=Project::join('project_types','projects.project_type','project_types.id')
                         ->where('projects.project_id',$proj_id)->first();
 
-
+                $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
 
                     $org_projects=Db::table('projects')->where('org_id',auth()->user()->org_id)
@@ -84,7 +84,10 @@ class IsoSec2_1 extends Controller
                         'distinctServices'=>$distinctServices,
                         'distinctGroups'=>$distinctGroups,
                         'distinctAssets'=>$distinctAssets,
-                        'distinctComponents'=>$distinctComponents
+                        'distinctComponents'=>$distinctComponents,
+                        'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                        'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                        'framework_approach'=>$frameworkDetails['framework_approach'],
                     ]);
 
             }
@@ -955,7 +958,30 @@ class IsoSec2_1 extends Controller
     //     }
     //     return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     // }
-
+    function getProjectFrameworkDetails($project)
+    {
+        $orgId = auth()->user()->organization->id;
+    
+        $complianceFramework = DB::table('org_projects_framework_selected')
+            ->join('risk_management_framework','org_projects_framework_selected.framework_selected', '=', 'risk_management_framework.framework_id')
+            ->where('org_id', $orgId)
+            ->where('project_type_id', $project->project_type)
+            ->first();
+    
+        $risk_assessment_approach = DB::table('org_risk_assessment_approach')
+            ->join('global_risk_assessment_approach', 'org_risk_assessment_approach.assessment_approach_selected', '=', 'global_risk_assessment_approach.global_risk_assessment_approach_id')
+            ->where('org_risk_assessment_approach.org_id', $orgId)
+            ->where('project_type_id', $project->project_type)
+            ->first();
+    
+        $framework_approach = DB::table('org_framework_approach_selected')
+            ->join('framework_approach_types', 'org_framework_approach_selected.framework_approach_types', '=', 'framework_approach_types.framework_approach_types_id')
+            ->where('org_framework_approach_selected.org_id', $orgId)
+            ->where('project_type_id', $project->project_type)
+            ->first();
+    
+        return compact('complianceFramework', 'risk_assessment_approach', 'framework_approach');
+    }
 
 
 }

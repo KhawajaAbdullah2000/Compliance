@@ -330,6 +330,7 @@ route::post('qualitative_asset_likelihood_confidentiality_timeframe/{proj_id}/{u
 route::post('save_likelihood_value/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'save_likelihood_value']);
 
 
+route::get('likelihood_and_consequence/{risk_type}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'likelihood_and_consequence'])->name('likelihood_and_consequence');
 
 
 

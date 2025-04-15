@@ -340,7 +340,7 @@ class IsoSec2_3_1 extends Controller
 
                         if (empty($selectedThreats)) {
                             // Optional: Flash a message if nothing was selected
-                            return redirect()->back()->with('success', 'No threats were selected. Form submitted without changes.');
+                            return redirect()->back()->with('success', 'No threats were selected. No Risk Source and its Threat Description added');
                         }
 
                         DB::table('proj_asset_threat_desc_selected')->where('project_id',$proj_id)
@@ -434,7 +434,7 @@ class IsoSec2_3_1 extends Controller
                             ]);
                         }
                     }else{
-                        dd("No chekcbox found");
+                        return redirect()->back()->with('error',"Select atleast 1 checkbox");
                     }
 
                    
@@ -654,7 +654,11 @@ class IsoSec2_3_1 extends Controller
              && $frameworkDetails['framework_approach']->framework_approach_types_id==1
              && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
             ){
-                dd("Now what");
+               return redirect()->route('iso_27005_risk_assessment',[
+                'proj_id'=>$proj_id,
+                'user_id'=>$user_id,
+                'asset_id'=>$asset_id
+               ])->with('success','Data Saved Successfully');
             }
       
 
@@ -1111,6 +1115,57 @@ public function save_likelihood_value($proj_id,$user_id,$asset_id,Request $req){
         'user_id'=>$user_id,
         'asset_id'=>$asset_id
     ])->with('success','Data Saved Successfully');
+}
+
+public function likelihood_and_consequence($risk_type,$proj_id,$user_id,$asset_id){
+    $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+
+            $asset=  Db::table('iso_sec_2_1')
+            ->where('assessment_id',$asset_id)->first();
+
+      
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+            if($frameworkDetails['complianceFramework']->framework_selected==2 
+             && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+            ){
+
+                $consequence_value=DB::table('iso_sec_2_1')->where('assessment_id',$asset_id)->value($risk_type);
+
+                $likelihood_value=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('likelihood_selected');
+               
+                return view("iso_27005.likelihood_and_consequence_value",[
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'project' => $project,
+                    'asset'=>$asset,
+                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                    'framework_approach'=>$frameworkDetails['framework_approach'],
+                    'consequence_value'=>$consequence_value,
+                    'likelihood_value'=>$likelihood_value,
+                    'risk_type'=>$risk_type
+                    ]);
+
+
+            }
+
+        }
 }
 
 

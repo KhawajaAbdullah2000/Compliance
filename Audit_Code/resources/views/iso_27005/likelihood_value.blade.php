@@ -13,36 +13,7 @@ $isEditable = in_array('Data Inputter', $permissions);
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="fw-bold">Project Name:</td>
-                        <td> <a href="/iso_sections/{{$project->project_id}}/{{auth()->user()->id}}"> {{$project->project_name}}
-                        </a>
-                        </td>
-                        <td class="fw-bold">Your Email:</td>
-                        <td>{{auth()->user()->email}}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Project Type:</td>
-                        <td>{{$project->type}}</td>
-                        <td class="fw-bold">Organization Name:</td>
-                        <td>{{auth()->user()->organization->name}}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Project Status:</td>
-                        <td>{{$project->status}}</td>
-                        <td class="fw-bold">Sub-Organization:</td>
-                        <td>{{auth()->user()->organization->sub_org}}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Compliance Framework:</td>
-                        <td>{{$complianceFramework->framework_name}}</td>
-                        <td class="fw-bold">Information Security Risk Management Methodology:</td>
-                        <td>{{$framework_approach->approach_name}} - {{$risk_assessment_approach->global_assessment_approach}} </td>
-                    </tr>
-                </tbody>
-            </table>
+            @include('components.topTable')
         </div>
     </div>
     <h3 class="fw-bold mt-2">Information Security Risk Assessment for</h3>
@@ -145,9 +116,12 @@ $isEditable = in_array('Data Inputter', $permissions);
                                 <td><strong>{{ $value }} - {{ $info['title'] }}</strong></td>
                                 <td>{{ $info['desc'] }}</td>
                                 <td class="text-center">
-                                    <input type="radio" name="likelihood_value" value="{{ $value }}"
-                                        {{ (isset($likelihood_value) && $likelihood_value == $value) ? 'checked' : '' }}
-                                        {{ !$isEditable ? 'disabled' : '' }}>
+                                    <div class="form-check d-flex justify-content-center">
+                                        <input class="form-check-input" type="radio" name="likelihood_value" value="{{ $value }}"
+                                               id="likelihood_{{ $value }}"
+                                               {{ (isset($likelihood_value) && $likelihood_value == $value) ? 'checked' : '' }}
+                                               {{ !$isEditable ? 'disabled' : '' }}>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -158,6 +132,7 @@ $isEditable = in_array('Data Inputter', $permissions);
             @if($isEditable)
                 <div class="text-end">
                     <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="/likelihood_and_consequence/risk_confidentiality/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary">Next</a>
                 </div>
             @endif
         </form>

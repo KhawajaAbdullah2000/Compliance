@@ -9,7 +9,13 @@ body {
 .navbar-brand img:hover {
     transform: scale(1.6);
 }
+.bg-light_blue{
+    background-color: rgb(122, 206, 233) !important;
+}
 
+.bg-light_green{
+    background-color: #58e858 !important;
+}
 .navbar-light .nav-link {
     color: #333;
     font-size: medium;

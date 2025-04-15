@@ -49,7 +49,7 @@ The organization will overcome the situation without too much difficulty (margin
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered">
+            {{-- <table class="table table-bordered">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -73,21 +73,23 @@ The organization will overcome the situation without too much difficulty (margin
                     </tr>
                     <tr>
                         <td class="fw-bold">Compliance Framework:</td>
-                        <td>{{$complianceFramework->framework_name}}</td>
+                        <td>{{$project->type}}</td>
                         <td class="fw-bold">Information Security Risk Management Methodology:</td>
-                        <td>{{$framework_approach->approach_name}} - {{$risk_assessment_approach->global_assessment_approach}} </td>
+                        <td>{{$complianceFramework->framework_name}} {{$framework_approach->approach_name}} - {{$risk_assessment_approach->global_assessment_approach}} </td>
                     </tr>
                 </tbody>
-            </table>
+            </table> --}}
+            @include('components.topTable')
+
         </div>
     </div>
-    <h3 class="fw-bold mt-2">Information Security Risk Assessment for</h3>
+    <h3 class="fw-bold mt-2">Information Security Risk Assessment for:</h3>
 
     @include('components.asset-summary', ['asset' => $asset])
     
         
-        <h3 class="fw-bold mt-2">Select the consequence on this serive in case of: </h3>
-        <div class="col-md-8">
+        <h3 class="fw-bold mt-4">Select the consequence on this service in case of: </h3>
+        {{-- <div class="col-md-8">
         <table class="table mt-2 table-bordered table-responsive">
             <tr>
                 <td class="bg-secondary text-white">Risk to Data Confidentiality</td>
@@ -105,7 +107,7 @@ The organization will overcome the situation without too much difficulty (margin
             </tr>
         </table>
         
-        </div>
+        </div> --}}
 
 
 

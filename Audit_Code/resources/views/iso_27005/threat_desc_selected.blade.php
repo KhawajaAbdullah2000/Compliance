@@ -10,36 +10,7 @@
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="fw-bold">Project Name:</td>
-                        <td> <a href="/iso_sections/{{$project->project_id}}/{{auth()->user()->id}}"> {{$project->project_name}}
-                        </a>
-                        </td>
-                        <td class="fw-bold">Your Email:</td>
-                        <td>{{auth()->user()->email}}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Project Type:</td>
-                        <td>{{$project->type}}</td>
-                        <td class="fw-bold">Organization Name:</td>
-                        <td>{{auth()->user()->organization->name}}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Project Status:</td>
-                        <td>{{$project->status}}</td>
-                        <td class="fw-bold">Sub-Organization:</td>
-                        <td>{{auth()->user()->organization->sub_org}}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Compliance Framework:</td>
-                        <td>{{$complianceFramework->framework_name}}</td>
-                        <td class="fw-bold">Information Security Risk Management Methodology:</td>
-                        <td>{{$framework_approach->approach_name}} - {{$risk_assessment_approach->global_assessment_approach}} </td>
-                    </tr>
-                </tbody>
-            </table>
+            @include('components.topTable')
         </div>
     </div>
     <h3 class="fw-bold mt-2">Information Security Risk Assessment for</h3>
@@ -85,13 +56,19 @@
             'user_id'=>auth()->user()->id,
             'asset_id'=>$asset->assessment_id
             ])}}" class="btn btn-secondary">Back</a>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Save</button>
     </div>
     <table class="table table-responsive table-bordered table-hover">
         <thead class="table-dark">
             <tr>
-                @foreach($headers as $header)
-                    <th>{{ $header }}</th>
+                @foreach($headers as $groupId => $header)
+                    <th class="text-center">
+                        {{ $header }}
+                        <div class="form-check mt-2">
+                            <input class="form-check-input select-all-checkbox" type="checkbox" data-group="{{ $groupId }}" id="select_all_{{ $groupId }}">
+                          
+                        </div>
+                    </th>
                 @endforeach
             </tr>
         </thead>
@@ -103,7 +80,7 @@
                             @if(isset($group[$i]))
                                 <div class="form-check">
                                     <input 
-                                    class="form-check-input" 
+                                    class="form-check-input group-checkbox-{{ $groupId }}" 
                                     type="checkbox" 
                                     name="selected[{{ $groupId }}][]" 
                                     value="{{ $group[$i]->threat_desc_for_global_threats_id }}" 
@@ -130,7 +107,7 @@
         'user_id'=>auth()->user()->id,
         'asset_id'=>$asset->assessment_id
         ])}}" class="btn mt-3 btn-secondary">Back</a>
-    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    <button type="submit" class="btn btn-primary mt-3">Save</button>
     </div>
 </form>
 
@@ -156,6 +133,15 @@
 
 @section('scripts')
 
+<script>
+    document.querySelectorAll('.select-all-checkbox').forEach(selectAll => {
+        selectAll.addEventListener('change', function () {
+            const groupId = this.getAttribute('data-group');
+            const checkboxes = document.querySelectorAll(`.group-checkbox-${groupId}`);
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
+    });
+</script>
 
 @if(Session::has('success'))
 <script>
