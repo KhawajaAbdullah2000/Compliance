@@ -89,7 +89,7 @@ The organization will overcome the situation without too much difficulty (margin
             <td>{{ $controlNum }}</td>
             <td>{{ $control[1] }}</td>
             <td class="text-center">
-                <a href="" title="Vulnerabilities"><i class="fas fa-edit fa-lg" style="color: #124903;"></i></a>
+                <a href="/select_vul_for_control/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}/{{$controlNum}}" title="Vulnerabilities"><i class="fas fa-edit fa-lg" style="color: #124903;"></i></a>
             </td>
             <input type="hidden" name="control_num[]" value="{{ $controlNum }}">
             <td>

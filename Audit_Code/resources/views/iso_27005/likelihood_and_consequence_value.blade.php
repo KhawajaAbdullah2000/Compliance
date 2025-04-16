@@ -102,6 +102,12 @@
     </div>
     @endif
 
+    @if($risk_type=="risk_availability")
+    <div class="text-center">
+        <a href="/iso_27005_likelihood_value_all/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary">Next</a>
+    </div>
+    @endif
+
     
 
         

@@ -1,4 +1,4 @@
-<div class="col-md-8 mt-4">
+<div class="col-md-10 mt-4">
     <div class="table-responsive">
         <table class="table table-bordered text-nowrap align-middle mb-0">
             <tbody>

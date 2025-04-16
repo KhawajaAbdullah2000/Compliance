@@ -315,6 +315,9 @@ route::get("iso_27005_risk_assessment/{proj_id}/{user_id}/{asset_id}",[IsoSec2_3
 route::get("target_objective_of_risk_source/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}",[IsoSec2_3_1::class,'target_objective_of_risk_source']);
 route::get("threat_posed_by_risk_source/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}",[IsoSec2_3_1::class,'threat_posed_by_risk_source']);
 route::post('proj_asset_threat_desc_selected/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}',[IsoSec2_3_1::class,'proj_asset_threat_desc_selected']);
+route::get("select_vul_for_control/{proj_id}/{user_id}/{asset_id}/{control_num}",[IsoSec2_3_1::class,'select_vul_for_control'])->name('select_vul_for_control');
+route::post('proj_asset_selected_vulnerability_descriptions/{proj_id}/{user_id}/{asset_id}/{control_num}',[IsoSec2_3_1::class,'proj_asset_selected_vulnerability_descriptions']);
+
 
 
 route::post('proj_assets_selected_risk_source_and_target/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}',[IsoSec2_3_1::class,'proj_assets_selected_risk_source_and_target']);
@@ -332,6 +335,7 @@ route::post('save_likelihood_value/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1:
 
 route::get('likelihood_and_consequence/{risk_type}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'likelihood_and_consequence'])->name('likelihood_and_consequence');
 
+route::get('iso_27005_likelihood_value_all/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'iso_27005_likelihood_value_all'])->name('iso_27005_likelihood_value_all');
 
 
 

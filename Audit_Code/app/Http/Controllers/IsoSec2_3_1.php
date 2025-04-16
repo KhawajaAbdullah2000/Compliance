@@ -308,6 +308,161 @@ class IsoSec2_3_1 extends Controller
 
     }
 
+
+    public function select_vul_for_control($proj_id,$user_id,$asset_id,$control_num){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+    
+                $asset=  Db::table('iso_sec_2_1')
+                ->where('assessment_id',$asset_id)->first();
+
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+                $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                    if($frameworkDetails['complianceFramework']->framework_selected==2 
+                     && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+                    ){
+                        //ISo 27005:2022 Qualitative Asset based
+
+                 
+                   
+                        $global_vul_and_descs = DB::table('global_vulnerability_risk_assessment')
+                        ->join('vul_desc_for_global_vul', 'global_vulnerability_risk_assessment.global_vulnerability_risk_assessment_id', '=', 'vul_desc_for_global_vul.global_vulnerability')
+                        ->select(
+                            'global_vulnerability_risk_assessment.global_vulnerability_risk_assessment_id',
+                            'global_vulnerability_risk_assessment.global_vulnerability',
+                            'vul_desc_for_global_vul.vul_desc_for_global_vul_id',
+                            'vul_desc_for_global_vul.vulnerability_description'
+                        )
+                        ->get()
+                        ->groupBy('global_vulnerability_risk_assessment_id');
+
+                        //dd($global_vul_and_descs);
+
+                        $selected_vul_ids=DB::table('proj_asset_control_vul_selected')
+                        ->where('project_id',$proj_id)
+                        ->where('asset_id',$asset_id)
+                        ->where('control_num',$control_num)
+                        ->pluck('vul_desc_selected')->toArray();
+
+                       
+
+            
+                       
+                       
+                        return view("iso_27005.vulnerability_desc_selected",[
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project' => $project,
+                        'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                        'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                        'framework_approach'=>$frameworkDetails['framework_approach'],
+                        'asset'=>$asset,
+                        'global_vul_and_descs'=>$global_vul_and_descs,
+                        'control_num'=>$control_num,
+                        'selected_vul_ids'=>$selected_vul_ids
+              
+        
+                        ]);
+
+                     }
+                
+
+
+
+            
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+    }
+
+    public function proj_asset_selected_vulnerability_descriptions($proj_id,$user_id,$asset_id,$control_num,Request $req){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+            if (in_array('Data Inputter', $permissions)) {
+
+                $asset=  Db::table('iso_sec_2_1')
+                ->where('assessment_id',$asset_id)->first();
+
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+                $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                    if($frameworkDetails['complianceFramework']->framework_selected==2 
+                     && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+                    ){
+                        //ISo 27005:2022 Qualitative Asset based
+                        $selectedVulnerabilities = $req->input('selected', []); // Default to empty array if nothing selected
+
+                        if (empty($selectedVulnerabilities)) {
+                            // Optional: Flash a message if nothing was selected
+                            return redirect()->back()->with('success', 'No Vulnerabilities were selected for this Control Number');
+                        }
+
+                        DB::table('proj_asset_control_vul_selected')->where('project_id',$proj_id)
+                        ->where('asset_id',$asset_id)
+                        ->where('control_num',$control_num)
+                        ->delete();
+
+                        foreach ($selectedVulnerabilities as $groupId => $vulnerabilities) {
+                            foreach ($vulnerabilities as $vulId) {
+
+                                DB::table('proj_asset_control_vul_selected')->insert([
+                                    'project_id'=>$proj_id,
+                                    'asset_id'=>$asset_id,
+                                    'vul_desc_selected'=>$vulId,
+                                    'last_edited_by'=>$user_id,
+                                    'control_num'=>$control_num,
+                                    'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+                                    'updated_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+                                    
+                                ]);
+                               
+                            }
+                        }
+
+                        
+                        return redirect()->back()->with('success', 'Vulnerabilities saved successfully');
+
+
+
+
+                     }
+                
+
+
+
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+    }
+
     public function proj_asset_threat_desc_selected($proj_id,$user_id,$asset_id,$g_risk_source_num,Request $req){
         $checkpermission = Db::table('project_details')->select(
             'project_types.id as type_id',
@@ -1072,6 +1227,73 @@ public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id,$risk_typ
         }
 
     
+}
+
+public function iso_27005_likelihood_value_all($proj_id,$user_id,$asset_id){
+    $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+
+            $asset=  Db::table('iso_sec_2_1')
+            ->where('assessment_id',$asset_id)->first();
+
+      
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+            if($frameworkDetails['complianceFramework']->framework_selected==2 
+             && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+            ){
+
+                $consequence_value_confidentiality=DB::table('iso_sec_2_1')->where('assessment_id',$asset_id)->value('risk_confidentiality');
+
+                
+                $consequence_value_integrity=DB::table('iso_sec_2_1')->where('assessment_id',$asset_id)->value('risk_integrity');
+
+                
+                $consequence_value_availability=DB::table('iso_sec_2_1')->where('assessment_id',$asset_id)->value('risk_availability');
+
+                $likelihood_value_confidentiality=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('likelihood_risk_confidentiality_selected');
+
+                
+                $likelihood_value_integrity=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('likelihood_risk_integrity_selected');
+
+                
+                $likelihood_value_availability=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('likelihood_risk_availability_selected');
+               
+                return view("iso_27005.all_likelihood_and_consequence_value",[
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'project' => $project,
+                    'asset'=>$asset,
+                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                    'framework_approach'=>$frameworkDetails['framework_approach'],
+                    'consequence_value_confidentiality'=>$consequence_value_confidentiality,
+                    'consequence_value_integrity'=>$consequence_value_integrity,
+                    'consequence_value_availability'=>$consequence_value_availability,
+                    'likelihood_value_confidentiality'=>$likelihood_value_confidentiality,
+                    'likelihood_value_integrity'=>$likelihood_value_integrity,
+                    'likelihood_value_availability'=>$likelihood_value_availability
+                
+                    ]);
+
+
+            }
+
+        }
 }
 
 public function qualitative_asset_likelihood_confidentiality_timeframe($proj_id,$user_id,$asset_id,Request $req){
