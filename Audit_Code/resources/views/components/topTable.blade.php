@@ -1,4 +1,4 @@
-<table class="table table-bordered">
+<table class="table table-bordered table-secondary">
     <tbody>
         <tr>
             <td class="fw-bold">Project Name:</td>
@@ -22,9 +22,13 @@
         </tr>
         <tr>
             <td class="fw-bold">Compliance Framework:</td>
-            <td>{{$project->type}}</td>
+            <td>{{ $project->type }}</td>
+            
             <td class="fw-bold">Information Security Risk Management Methodology:</td>
-            <td>{{$complianceFramework->framework_name}} {{$framework_approach->approach_name}} - {{$risk_assessment_approach->global_assessment_approach}} </td>
+            <td>
+                {{ $framework_approach->approach_name ?? 'Default Vanilla' }} -
+                {{ $risk_assessment_approach->global_assessment_approach ?? '' }}
+            </td>
         </tr>
     </tbody>
 </table>

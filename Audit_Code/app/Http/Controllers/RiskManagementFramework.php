@@ -66,6 +66,11 @@ class RiskManagementFramework extends Controller
     ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
     'risk_management_framework.framework_id')
     ->where('org_id',$org_id)->first();
+
+    if($req->framework==1){
+        //default vanilla
+        return redirect()->route('user_home')->with('success',"Default Vanilla Framework selected successfully");
+    }
  
     
 $framework_approaches=DB::table('framework_approach_types')->get();

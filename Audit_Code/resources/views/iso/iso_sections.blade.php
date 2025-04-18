@@ -11,36 +11,7 @@
 
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered table-secondary">
-                <tbody>
-                    <tr>
-                        <td class="fw-bold">Project Name:</td>
-                        <td>  {{$project->project_name}}
-                        </td>
-                        <td class="fw-bold">Your Email:</td>
-                        <td>{{auth()->user()->email}}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Project Type:</td>
-                        <td>{{$project->type}}</td>
-                        <td class="fw-bold">Organization Name:</td>
-                        <td>{{auth()->user()->organization->name}}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Project Status:</td>
-                        <td>{{$project->status}}</td>
-                        <td class="fw-bold">Sub-Organization:</td>
-                        <td>{{ optional(auth()->user()->department)->name ?? 'Not Assigned' }}</td>
-                    </tr>
-
-                    <tr>
-                        <td class="fw-bold">Compliance Framework:</td>
-                        <td>{{$complianceFramework->framework_name}}</td>
-                        <td class="fw-bold">Information Security Risk Management Methodology:</td>
-                        <td>{{$framework_approach->approach_name}} - {{$risk_assessment_approach->global_assessment_approach}} </td>
-                    </tr>
-                </tbody>
-            </table>
+            @include('components.topTable')
         </div>
     </div>
 

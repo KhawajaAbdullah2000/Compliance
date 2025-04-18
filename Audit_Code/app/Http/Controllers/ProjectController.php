@@ -99,6 +99,8 @@ class ProjectController extends Controller
             ->where('project_type_id',$project->project_type)
             ->first();
 
+            //dd($complianceFramework);
+
             $risk_assessment_approach = DB::table('org_risk_assessment_approach')
          ->join('global_risk_assessment_approach', 
              'org_risk_assessment_approach.assessment_approach_selected', 
@@ -108,6 +110,7 @@ class ProjectController extends Controller
         ->where('project_type_id',$project->project_type)
            ->first();
 
+        
            $framework_approach = DB::table('org_framework_approach_selected')
            ->join('framework_approach_types', 
                'org_framework_approach_selected.framework_approach_types', 
