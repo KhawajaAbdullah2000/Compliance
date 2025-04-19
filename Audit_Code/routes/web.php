@@ -338,6 +338,8 @@ route::get('likelihood_and_consequence/{risk_type}/{proj_id}/{user_id}/{asset_id
 route::get('iso_27005_likelihood_value_all/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'iso_27005_likelihood_value_all'])->name('iso_27005_likelihood_value_all');
 
 
+route::Post('quantitave_consequence_scale_amount_entered/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'quantitave_consequence_scale_amount_entered']);
+
 
 //editing risk assesment view
 route::get("edit_risk_assessment/{proj_id}/{user_id}/{asset_id}/{control_num}",[IsoSec2_3_1::class,'edit_risk_assessment']);

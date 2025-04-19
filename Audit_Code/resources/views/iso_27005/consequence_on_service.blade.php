@@ -49,36 +49,7 @@ The organization will overcome the situation without too much difficulty (margin
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
-            {{-- <table class="table table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="fw-bold">Project Name:</td>
-                        <td> <a href="/iso_sections/{{$project->project_id}}/{{auth()->user()->id}}"> {{$project->project_name}}
-                        </a>
-                        </td>
-                        <td class="fw-bold">Your Email:</td>
-                        <td>{{auth()->user()->email}}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Project Type:</td>
-                        <td>{{$project->type}}</td>
-                        <td class="fw-bold">Organization Name:</td>
-                        <td>{{auth()->user()->organization->name}}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Project Status:</td>
-                        <td>{{$project->status}}</td>
-                        <td class="fw-bold">Sub-Organization:</td>
-                        <td>{{auth()->user()->organization->sub_org}}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Compliance Framework:</td>
-                        <td>{{$project->type}}</td>
-                        <td class="fw-bold">Information Security Risk Management Methodology:</td>
-                        <td>{{$complianceFramework->framework_name}} {{$framework_approach->approach_name}} - {{$risk_assessment_approach->global_assessment_approach}} </td>
-                    </tr>
-                </tbody>
-            </table> --}}
+          
             @include('components.topTable')
 
         </div>
@@ -111,8 +82,13 @@ The organization will overcome the situation without too much difficulty (margin
 
 
 
+        <div class="row">
 
-<div class="col-md-8">
+            @if($framework_approach->framework_approach_types_id==2)
+<div class="col-md-6">
+    @else
+    <div class="col-md-8">
+        @endif
 
 <form action="/iso_sec2_3_1_risk_selection/{{$asset->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" method="POST">
     @csrf
@@ -194,6 +170,75 @@ The organization will overcome the situation without too much difficulty (margin
 </form>
 
     
+</div>
+
+@if($framework_approach->framework_approach_types_id==2)
+{{-- Quantitative Asset Based --}}
+<div class="col-md-6">
+    <form action="/quantitave_consequence_scale_amount_entered/{{$asset->assessment_id}}/{{$project->project_id}}/{{auth()->user()->id}}" method="POST">
+        @csrf
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Consequence ( a loss of)</th>
+                    <th>Currency</th>
+                    <th>Log Expression</th>
+                    <th>Scale Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $rows = [
+                        ['log' => '10^6', 'scale' => 6],
+                        ['log' => '10^5', 'scale' => 5],
+                        ['log' => '10^4', 'scale' => 4],
+                        ['log' => '10^3', 'scale' => 3],
+                        ['log' => '10^2', 'scale' => 2],
+                        ['log' => '10^1', 'scale' => 1],
+                    ];
+    
+                @endphp
+    
+                @foreach ($rows as $index => $row)
+                    <tr>
+                      <td>
+                        <input type="number" step="any" name="consequence_amount[{{ $index }}]" class="form-control"
+    value="{{ $consequence_scale[$index]->consequence_amount ?? '' }}" placeholder="Enter amount" required>
+
+                      </td>
+                        <td>
+                            <select disabled name="currency_selected[{{ $index }}]" required class="form-select">
+                                <option value="">Select</option>
+                                @foreach ($global_currency as $currency)
+                                    <option value="{{ $currency->global_currency_id }}"
+                                        @if(isset($consequence_scale[$index]) && $consequence_scale[$index]->currency_selected == $currency->global_currency_id) selected @endif>
+                                        {{ $currency->currency }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td>
+                            {{ $row['log'] }}
+                            <input type="hidden" name="log_expression[{{ $index }}]" value="{{ $row['log'] }}">
+                        </td>
+                        <td>
+                            {{ $row['scale'] }}
+                            <input type="hidden" name="scale[{{ $index }}]" value="{{ $row['scale'] }}">
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <button class="btn btn-primary btn-md mb-2" type="submit">Submit</button>
+
+
+    </form>
+</div>
+
+@endif
+
 </div>
 
 

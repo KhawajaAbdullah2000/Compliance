@@ -32,7 +32,9 @@
             <tr>
                 <th>No.</th>
                 <th>Controls (as per ISO 27001:2022 Annex A)</th>
+                @if($framework_approach->framework_approach_types_id==1)
                 <th>Vulnerabilities</th>
+                @endif
                 <th>Vulnerability Level due to </th>
                 <th>Risk Scenarios (Optional)</th>
            
@@ -47,9 +49,11 @@
         <tr>
             <td>{{ $controlNum }}</td>
             <td>{{ $control[1] }}</td>
+            @if($framework_approach->framework_approach_types_id==1)
             <td class="text-center">
                 <a href="/select_vul_for_control/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}/{{$controlNum}}" title="Vulnerabilities"><i class="fas fa-edit fa-lg" style="color: #124903;"></i></a>
             </td>
+            @endif
             <input type="hidden" name="control_num[]" value="{{ $controlNum }}">
             <td>
                 <select class="form-select" name="vulnerability_due_to[]">

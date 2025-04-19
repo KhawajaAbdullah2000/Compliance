@@ -55,6 +55,36 @@ class IsoSec2_3_1 extends Controller
 
                      }
 
+                     if($frameworkDetails['complianceFramework']->framework_selected==2 
+                     && $frameworkDetails['framework_approach']->framework_approach_types_id==2
+                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+                    ){
+                        //ISo 27005:2022 Quantitative Asset based
+
+                        $consequence_scale=DB::table('org_quantitavie_consequence_scale')
+                        ->join('global_currency','org_quantitavie_consequence_scale.currency_selected','global_currency.global_currency_id')
+                        ->where('project_type_id',$project->project_type)
+                        ->orderBy('org_quantitavie_consequence_scale.scale','desc')
+                        ->get();
+
+                        $global_currency=DB::table('global_currency')->get();
+               
+                        return view("iso_27005.consequence_on_service",[
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project' => $project,
+                        'asset'=>$asset,
+                        'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                        'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                        'framework_approach'=>$frameworkDetails['framework_approach'],
+                        'consequence_scale'=>$consequence_scale,
+                        'global_currency'=>$global_currency
+                        ]);
+
+                     }
+
+
 
                     return view('iso_sec_2_3_1.iso_sec_2_3_1_risk_selection', [
 
@@ -118,7 +148,7 @@ class IsoSec2_3_1 extends Controller
                     $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
                     if($frameworkDetails['complianceFramework']->framework_selected==2 
-                     && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                     && ($frameworkDetails['framework_approach']->framework_approach_types_id==1)
                      && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
                     ){
                         //ISo 27005:2022 Qualitative Asset based
@@ -148,6 +178,42 @@ class IsoSec2_3_1 extends Controller
                         ]);
 
                      }
+
+                     if($frameworkDetails['complianceFramework']->framework_selected==2 
+                     && ($frameworkDetails['framework_approach']->framework_approach_types_id==2)
+                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+                    ){
+                        //ISo 27005:2022 Quanitative Asset based
+                    
+                        $global_risk_sources=DB::table('qualitative_asset_based_risk_sources')->get();
+                        $global_level_of_threats=DB::table('global_level_of_threats')
+                        ->orderBy('global_level_of_threats_id','desc')
+                        ->get();
+
+                        $selected_level_of_threat=DB::table('proj_asset_selected_level_of_threat')
+                        ->where('project_id',$proj_id)
+                        ->where('asset_id',$asset_id)
+                        ->value('threat_selected');
+
+
+                        return view("iso_27005.risk_sources",[
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project' => $project,
+                        'asset'=>$service,
+                        'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                        'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                        'framework_approach'=>$frameworkDetails['framework_approach'],
+                        'global_risk_sources'=>$global_risk_sources,
+                        'global_level_of_threats'=>$global_level_of_threats,
+                        'selected_level_of_threat'=>$selected_level_of_threat
+                        ]);
+
+                     }
+
+
+                
                 
 
                     return redirect()->route('iso_sec_2_3_1',[
@@ -178,8 +244,7 @@ class IsoSec2_3_1 extends Controller
             ->first();
         if ($checkpermission) {
             $permissions = json_decode($checkpermission->project_permissions);
-            if (in_array('Data Inputter', $permissions)) {
-
+    
                 $asset=  Db::table('iso_sec_2_1')
                 ->where('assessment_id',$asset_id)->first();
 
@@ -188,7 +253,7 @@ class IsoSec2_3_1 extends Controller
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
                     if($frameworkDetails['complianceFramework']->framework_selected==2 
-                     && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                     && (($frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2))
                      && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
                     ){
                         //ISo 27005:2022 Qualitative Asset based
@@ -223,7 +288,7 @@ class IsoSec2_3_1 extends Controller
 
 
 
-            }
+            
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
 
@@ -253,7 +318,7 @@ class IsoSec2_3_1 extends Controller
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
                     if($frameworkDetails['complianceFramework']->framework_selected==2 
-                     && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                     && ($frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
                      && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
                     ){
                         //ISo 27005:2022 Qualitative Asset based
@@ -487,7 +552,7 @@ class IsoSec2_3_1 extends Controller
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
                     if($frameworkDetails['complianceFramework']->framework_selected==2 
-                     && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                     && ($frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
                      && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
                     ){
                         //ISo 27005:2022 Qualitative Asset based
@@ -563,7 +628,7 @@ class IsoSec2_3_1 extends Controller
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
                     if($frameworkDetails['complianceFramework']->framework_selected==2 
-                     && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                     &&( $frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
                      && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
                     ){
                         //ISo 27005:2022 Qualitative Asset based
@@ -649,7 +714,7 @@ class IsoSec2_3_1 extends Controller
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
                 if($frameworkDetails['complianceFramework']->framework_selected==2 
-                 && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                 && ($frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
                  && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
                 ){
                     //ISo 27005:2022 Qualitative Asset based
@@ -731,7 +796,7 @@ class IsoSec2_3_1 extends Controller
                     $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
                     if($frameworkDetails['complianceFramework']->framework_selected==2 
-                     && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                     &&( $frameworkDetails['framework_approach']->framework_approach_types_id==1 ||  $frameworkDetails['framework_approach']->framework_approach_types_id==2)
                      && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
                     ){
                         //ISo 27005:2022 Qualitative Asset based
@@ -806,7 +871,7 @@ class IsoSec2_3_1 extends Controller
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
             if($frameworkDetails['complianceFramework']->framework_selected==2 
-             && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+             &&( $frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
              && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
             ){
                return redirect()->route('iso_27005_risk_assessment',[
@@ -845,7 +910,7 @@ class IsoSec2_3_1 extends Controller
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
                 if($frameworkDetails['complianceFramework']->framework_selected==2 
-                 && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                 && ($frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
                  && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
                 ){
                     //ISo 27005:2022 Qualitative Asset based
@@ -949,7 +1014,7 @@ public function add_scenario_form($proj_id,$user_id,$asset_id){
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
             if($frameworkDetails['complianceFramework']->framework_selected==2 
-             && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+             && ($frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
              && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
             ){
             
@@ -1051,22 +1116,42 @@ public function add_risk_scenario($proj_id,$user_id,$asset_id){
 }
 
 public function proj_asset_risk_scenario($proj_id,$user_id,$asset_id,Request $req){
-    $req->validate([
-        'scenario'=>'required'
-    ]);
-    DB::table('proj_asset_risk_scenario')->insert([
-        'project_id'=>$proj_id,
-        'asset_id'=>$asset_id,
-        'scenario'=>$req->scenario,
-        'last_edited_by'=>$user_id,
-        'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
-        'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
-    ]);
-    return redirect()->route('add_scenario_form',[
-        'proj_id'=>$proj_id,
-        'user_id'=>$user_id,
-        'asset_id'=>$asset_id
-    ])->with('success','Scenario Added Successfully');
+
+    $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+    
+        $permissions = json_decode($checkpermission->project_permissions);
+            if (in_array('Data Inputter', $permissions)) {
+                $req->validate([
+                    'scenario'=>'required'
+                ]);
+                DB::table('proj_asset_risk_scenario')->insert([
+                    'project_id'=>$proj_id,
+                    'asset_id'=>$asset_id,
+                    'scenario'=>$req->scenario,
+                    'last_edited_by'=>$user_id,
+                    'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+                    'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
+                ]);
+                return redirect()->route('add_scenario_form',[
+                    'proj_id'=>$proj_id,
+                    'user_id'=>$user_id,
+                    'asset_id'=>$asset_id
+                ])->with('success','Scenario Added Successfully');
+            }
+            return redirect()->back()->with('error','Not Allowed');
+        }
+   
 }
 
 public function proj_asset_selected_level_of_vulnerability($proj_id,$user_id,$asset_id,Request $req){
@@ -1092,10 +1177,10 @@ public function proj_asset_selected_level_of_vulnerability($proj_id,$user_id,$as
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
             if($frameworkDetails['complianceFramework']->framework_selected==2 
-             && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+             &&( $frameworkDetails['framework_approach']->framework_approach_types_id==1 ||  $frameworkDetails['framework_approach']->framework_approach_types_id==2)
              && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
             ){
-                //ISo 27005:2022 Qualitative Asset based
+                
                 DB::table('proj_asset_selected_level_of_vulnerability')
                         ->updateOrInsert([
                             'project_id'=>$proj_id,
@@ -1175,11 +1260,7 @@ public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id,$risk_typ
       
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
-            if($frameworkDetails['complianceFramework']->framework_selected==2 
-             && $frameworkDetails['framework_approach']->framework_approach_types_id==1
-             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
-            ){
-
+    
                //ISo 27005:2022 Qualitative Asset based
                 $threat=DB::table('proj_asset_selected_level_of_threat')
                 ->join('global_level_of_threats','proj_asset_selected_level_of_threat.threat_selected','global_level_of_threats.global_level_of_threats_id')
@@ -1205,6 +1286,10 @@ public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id,$risk_typ
                 ->where('asset_id',$asset_id)
                 ->value('likelihood_'.$risk_type.'_selected');
 
+                if($frameworkDetails['complianceFramework']->framework_selected==2 
+                && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+               ){
 
  
                 return view("iso_27005.likelihood_value",[
@@ -1224,6 +1309,29 @@ public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id,$risk_typ
                     ]);
 
             }
+
+            if($frameworkDetails['complianceFramework']->framework_selected==2 
+            && $frameworkDetails['framework_approach']->framework_approach_types_id==2
+            && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+           ){
+            return view("iso_27005.quantitative_likelihood_value",[
+                'project_id' => $checkpermission->project_id,
+                'project_name' => $checkpermission->project_name,
+                'project_permissions' => $checkpermission->project_permissions,
+                'project' => $project,
+                'asset'=>$asset,
+                'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                'framework_approach'=>$frameworkDetails['framework_approach'],
+                'threat'=>$threat,
+                'vulnerability'=>$vulnerability,
+                'likelihood_timeframe'=>$likelihood_timeframe,
+                'likelihood_value'=>$likelihood_value,
+                'risk_type'=>$risk_type
+                ]);
+
+            
+           }
         }
 
     
@@ -1294,6 +1402,66 @@ public function iso_27005_likelihood_value_all($proj_id,$user_id,$asset_id){
             }
 
         }
+}
+
+public function quantitave_consequence_scale_amount_entered($asset_id,$proj_id,$user_id,Request $req){
+
+    if ($user_id == auth()->user()->id) {
+       
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+        
+            $permissions = json_decode($checkpermission->project_permissions);
+                if (in_array('Data Inputter', $permissions)) {
+                    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+
+                    $currency_selected = $req->input('currency_selected');
+                    $log_expressions = $req->input('log_expression');
+                    $scales = $req->input('scale');
+                    $amounts = $req->input('consequence_amount');
+                
+                    foreach ($scales as $index => $scale) {
+                        DB::table('org_quantitavie_consequence_scale')->updateOrInsert(
+                            [
+                                'org_id' => auth()->user()->organization->id,
+                                'project_type_id' => $project->project_type,
+                                'scale' => $scale,
+                                'log_expression' => $log_expressions[$index],
+                            ],
+                            [
+                                'consequence_amount' => $amounts[$index],
+                                'updated_at' =>  Carbon::now()->format('Y-m-d H:i:s'),
+                            
+                            ]
+                        );
+                    }
+
+                    return redirect()->route('iso_sec_2_3_1_risk_selection',[
+                        'asset_id'=>$asset_id,
+                        'proj_id'=>$proj_id,
+                        'user_id'=>$user_id
+                    ])->with('success','Consequence Scale updated Successfully');
+
+                }
+          
+        }
+    }
+
+    return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+
 }
 
 public function qualitative_asset_likelihood_confidentiality_timeframe($proj_id,$user_id,$asset_id,Request $req){
@@ -1375,15 +1543,15 @@ public function likelihood_and_consequence($risk_type,$proj_id,$user_id,$asset_i
       
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
-            if($frameworkDetails['complianceFramework']->framework_selected==2 
-             && $frameworkDetails['framework_approach']->framework_approach_types_id==1
-             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
-            ){
+      
 
                 $consequence_value=DB::table('iso_sec_2_1')->where('assessment_id',$asset_id)->value($risk_type);
 
                 $likelihood_value=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('likelihood_'.$risk_type.'_selected');
-               
+                     if($frameworkDetails['complianceFramework']->framework_selected==2 
+             && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+            ){
                 return view("iso_27005.likelihood_and_consequence_value",[
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
@@ -1398,6 +1566,25 @@ public function likelihood_and_consequence($risk_type,$proj_id,$user_id,$asset_i
                     'risk_type'=>$risk_type
                     ]);
 
+            }
+
+            if($frameworkDetails['complianceFramework']->framework_selected==2 
+             && $frameworkDetails['framework_approach']->framework_approach_types_id==2
+             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+            ){
+                return view("iso_27005.quantitative_likelihood_and_consequence_value",[
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'project' => $project,
+                    'asset'=>$asset,
+                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                    'framework_approach'=>$frameworkDetails['framework_approach'],
+                    'consequence_value'=>$consequence_value,
+                    'likelihood_value'=>$likelihood_value,
+                    'risk_type'=>$risk_type
+                    ]);
 
             }
 
