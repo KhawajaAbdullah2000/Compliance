@@ -56,32 +56,39 @@
             <div class="text-center mb-2">
                 <h5 class="fw-bold">Data Confidentiality</h5>
             </div>
-            <table class="table table-bordered text-center align-middle" style="width: auto; margin: 0 auto;">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Likelihood \ Consequence</th>
-                        @foreach ($consequences as $c_key => $c_label)
-                            <th>{{ $c_label }}</th>
-                        @endforeach
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($likelihoods as $l_key => $l_label)
+            <div class="table-responsive">
+                <table class="table risk-table">
+                    <thead>
                         <tr>
-                            <th class="table-dark">{{ $l_label }}</th>
-                            @foreach ($consequences as $c_key => $c_label)
-                                @php
-                                    $cellValue = $riskMatrix[$l_key][$c_key];
-                                    $isHighlighted = $l_key == $likelihood_value_confidentiality_numeric && $c_key == $consequence_value_confidentiality_numeric;
-                                @endphp
-                                <td style="{{ $isHighlighted ? 'border: 2px solid red; font-weight: bold; background-color: rgba(255, 99, 71, 0.6);' : '' }}">
-                                    {{ $cellValue }}
-                                </td>
+                            <th class="header-left"></th> <!-- Empty corner -->
+                            <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood</th> <!-- Likelihood label spanning across -->
+                        </tr>
+                        <tr>
+                            <th class="header-left">Consequence</th> <!-- Consequence label on the Y-axis -->
+                            @foreach ($likelihoods as $l_key => $l_label)
+                                <th class="header-top">{{ $l_label }}</th> <!-- Likelihood values across top -->
                             @endforeach
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($consequences as $c_key => $c_label)
+                            <tr>
+                                <th class="header-left">{{ $c_label }}</th> <!-- Consequence values along the Y-axis -->
+                                @foreach ($likelihoods as $l_key => $l_label)
+                                    @php
+                                        $cellValue = $riskMatrix[$l_key][$c_key]; // Note: matrix remains [likelihood][consequence]
+                                        $isHighlighted = $l_key == $likelihood_value_confidentiality_numeric && $c_key == $consequence_value_confidentiality_numeric;
+                                    @endphp
+                                    <td style="{{ $isHighlighted ? 'border: 2px solid red; font-weight: bold; background-color:rgba(255, 99, 71, 0.6);' : '' }}">
+                                        {{ $cellValue }}
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            
         </div>
     </div>
     
@@ -90,32 +97,39 @@
             <div class="text-center mb-2">
                 <h5 class="fw-bold">Data Integrity</h5>
             </div>
-            <table class="table table-bordered text-center align-middle" style="width: auto; margin: 0 auto;">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Likelihood \ Consequence</th>
-                        @foreach ($consequences as $c_key => $c_label)
-                            <th>{{ $c_label }}</th>
-                        @endforeach
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($likelihoods as $l_key => $l_label)
+            <div class="table-responsive">
+                <table class="table risk-table">
+                    <thead>
                         <tr>
-                            <th class="table-dark">{{ $l_label }}</th>
-                            @foreach ($consequences as $c_key => $c_label)
-                                @php
-                                    $cellValue = $riskMatrix[$l_key][$c_key];
-                                    $isHighlighted = $l_key == $likelihood_value_integrity_numeric && $c_key == $consequence_value_integrity_numeric;
-                                @endphp
-                                <td style="{{ $isHighlighted ? 'border: 2px solid red; font-weight: bold; background-color: rgba(255, 99, 71, 0.6);' : '' }}">
-                                    {{ $cellValue }}
-                                </td>
+                            <th class="header-left"></th> <!-- Empty corner -->
+                            <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood</th> <!-- Likelihood label spanning across -->
+                        </tr>
+                        <tr>
+                            <th class="header-left">Consequence</th> <!-- Consequence label on the Y-axis -->
+                            @foreach ($likelihoods as $l_key => $l_label)
+                                <th class="header-top">{{ $l_label }}</th> <!-- Likelihood values across top -->
                             @endforeach
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($consequences as $c_key => $c_label)
+                            <tr>
+                                <th class="header-left">{{ $c_label }}</th> <!-- Consequence values along the Y-axis -->
+                                @foreach ($likelihoods as $l_key => $l_label)
+                                    @php
+                                        $cellValue = $riskMatrix[$l_key][$c_key]; // Note: matrix remains [likelihood][consequence]
+                                        $isHighlighted = $l_key == $likelihood_value_integrity_numeric && $c_key == $consequence_value_integrity_numeric;
+                                    @endphp
+                                    <td style="{{ $isHighlighted ? 'border: 2px solid red; font-weight: bold; background-color:rgba(255, 99, 71, 0.6);' : '' }}">
+                                        {{ $cellValue }}
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            
         </div>
     </div>
 
@@ -124,32 +138,39 @@
             <div class="text-center mb-2">
                 <h5 class="fw-bold">Data Availability</h5>
             </div>
-            <table class="table table-bordered text-center align-middle" style="width: auto; margin: 0 auto;">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Likelihood \ Consequence</th>
-                        @foreach ($consequences as $c_key => $c_label)
-                            <th>{{ $c_label }}</th>
-                        @endforeach
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($likelihoods as $l_key => $l_label)
+            <div class="table-responsive">
+                <table class="table risk-table">
+                    <thead>
                         <tr>
-                            <th class="table-dark">{{ $l_label }}</th>
-                            @foreach ($consequences as $c_key => $c_label)
-                                @php
-                                    $cellValue = $riskMatrix[$l_key][$c_key];
-                                    $isHighlighted = $l_key == $likelihood_value_availability_numeric && $c_key == $consequence_value_availability_numeric;
-                                @endphp
-                                <td style="{{ $isHighlighted ? 'border: 2px solid red; font-weight: bold; background-color: rgba(255, 99, 71, 0.6);' : '' }}">
-                                    {{ $cellValue }}
-                                </td>
+                            <th class="header-left"></th> <!-- Empty corner -->
+                            <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood</th> <!-- Likelihood label spanning across -->
+                        </tr>
+                        <tr>
+                            <th class="header-left">Consequence</th> <!-- Consequence label on the Y-axis -->
+                            @foreach ($likelihoods as $l_key => $l_label)
+                                <th class="header-top">{{ $l_label }}</th> <!-- Likelihood values across top -->
                             @endforeach
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($consequences as $c_key => $c_label)
+                            <tr>
+                                <th class="header-left">{{ $c_label }}</th> <!-- Consequence values along the Y-axis -->
+                                @foreach ($likelihoods as $l_key => $l_label)
+                                    @php
+                                        $cellValue = $riskMatrix[$l_key][$c_key]; // Note: matrix remains [likelihood][consequence]
+                                        $isHighlighted = $l_key == $likelihood_value_availability_numeric && $c_key == $consequence_value_availability_numeric;
+                                    @endphp
+                                    <td style="{{ $isHighlighted ? 'border: 2px solid red; font-weight: bold; background-color:rgba(255, 99, 71, 0.6);' : '' }}">
+                                        {{ $cellValue }}
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            
         </div>
     </div>
     

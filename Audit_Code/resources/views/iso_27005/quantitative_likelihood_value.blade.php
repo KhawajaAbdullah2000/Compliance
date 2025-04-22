@@ -249,6 +249,7 @@ $isEditable = in_array('Data Inputter', $permissions);
             </div>
 
             <input type="hidden" name="risk_type_input" value="{{$risk_type}}">
+            <input type="hidden" name="approach_type" value="{{"quantitative"}}">
     
          
                 <div class="text-end">

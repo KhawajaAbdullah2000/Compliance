@@ -1238,7 +1238,6 @@ return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id])
 }
 
 public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id,$risk_type=''){
-
     $checkpermission = Db::table('project_details')->select(
         'project_types.id as type_id',
         'project_details.project_code',
@@ -1257,11 +1256,23 @@ public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id,$risk_typ
             $asset=  Db::table('iso_sec_2_1')
             ->where('assessment_id',$asset_id)->first();
 
-      
+    
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
+        
+            if($frameworkDetails['complianceFramework']->framework_selected==2 
+            &&( $frameworkDetails['framework_approach']->framework_approach_types_id==1)
+            && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+           ){
+            //Qualitative Asset Based
+            $likelihood_value=DB::table('proj_asset_likelihood_value')
+            ->where('project_id',$proj_id)
+            ->where('asset_id',$asset_id)
+            ->value('qualitative_likelihood_'.$risk_type.'_selected');
+           }
+        
     
-               //ISo 27005:2022 Qualitative Asset based
+               //ISo 27005:2022 Qualitative and Quantitiave Asset based
                 $threat=DB::table('proj_asset_selected_level_of_threat')
                 ->join('global_level_of_threats','proj_asset_selected_level_of_threat.threat_selected','global_level_of_threats.global_level_of_threats_id')
                 ->where('project_id',$proj_id)
@@ -1281,10 +1292,6 @@ public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id,$risk_typ
 
         
 
-                $likelihood_value=DB::table('proj_asset_likelihood_value')
-                ->where('project_id',$proj_id)
-                ->where('asset_id',$asset_id)
-                ->value('likelihood_'.$risk_type.'_selected');
 
                 if($frameworkDetails['complianceFramework']->framework_selected==2 
                 && $frameworkDetails['framework_approach']->framework_approach_types_id==1
@@ -1312,6 +1319,12 @@ public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id,$risk_typ
             && $frameworkDetails['framework_approach']->framework_approach_types_id==2
             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
            ){
+            //Quantitative Asset based
+            $likelihood_value=DB::table('proj_asset_likelihood_value')
+            ->where('project_id',$proj_id)
+            ->where('asset_id',$asset_id)
+            ->value('quantitative_likelihood_'.$risk_type.'_selected');
+        
             return view("iso_27005.quantitative_likelihood_value",[
                 'project_id' => $checkpermission->project_id,
                 'project_name' => $checkpermission->project_name,
@@ -1336,6 +1349,7 @@ public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id,$risk_typ
 }
 
 public function iso_27005_likelihood_value_all($proj_id,$user_id,$asset_id){
+    
     $checkpermission = Db::table('project_details')->select(
         'project_types.id as type_id',
         'project_details.project_code',
@@ -1361,6 +1375,7 @@ public function iso_27005_likelihood_value_all($proj_id,$user_id,$asset_id){
              && $frameworkDetails['framework_approach']->framework_approach_types_id==1
              && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
             ){
+                //QUalitative Asset based
 
                 $consequence_value_confidentiality=DB::table('iso_sec_2_1')->where('assessment_id',$asset_id)->value('risk_confidentiality');
 
@@ -1370,13 +1385,13 @@ public function iso_27005_likelihood_value_all($proj_id,$user_id,$asset_id){
                 
                 $consequence_value_availability=DB::table('iso_sec_2_1')->where('assessment_id',$asset_id)->value('risk_availability');
 
-                $likelihood_value_confidentiality=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('likelihood_risk_confidentiality_selected');
+                $likelihood_value_confidentiality=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('qualitative_likelihood_risk_confidentiality_selected');
 
                 
-                $likelihood_value_integrity=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('likelihood_risk_integrity_selected');
+                $likelihood_value_integrity=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('qualitative_likelihood_risk_integrity_selected');
 
                 
-                $likelihood_value_availability=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('likelihood_risk_availability_selected');
+                $likelihood_value_availability=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('qualitative_likelihood_risk_availability_selected');
                
                 return view("iso_27005.all_likelihood_and_consequence_value",[
                     'project_id' => $checkpermission->project_id,
@@ -1398,6 +1413,49 @@ public function iso_27005_likelihood_value_all($proj_id,$user_id,$asset_id){
 
 
             }
+
+            if($frameworkDetails['complianceFramework']->framework_selected==2 
+            && $frameworkDetails['framework_approach']->framework_approach_types_id==2
+            && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+           ){
+               //Quantitatve Asset based
+
+               $consequence_value_confidentiality=DB::table('iso_sec_2_1')->where('assessment_id',$asset_id)->value('risk_confidentiality');
+
+               
+               $consequence_value_integrity=DB::table('iso_sec_2_1')->where('assessment_id',$asset_id)->value('risk_integrity');
+
+               
+               $consequence_value_availability=DB::table('iso_sec_2_1')->where('assessment_id',$asset_id)->value('risk_availability');
+
+               $likelihood_value_confidentiality=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('quantitative_likelihood_risk_confidentiality_selected');
+
+               
+               $likelihood_value_integrity=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('quantitative_likelihood_risk_integrity_selected');
+
+               
+               $likelihood_value_availability=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('quantitative_likelihood_risk_availability_selected');
+              
+               return view("iso_27005.quantitative_all_likelihood_and_consequence_value",[
+                   'project_id' => $checkpermission->project_id,
+                   'project_name' => $checkpermission->project_name,
+                   'project_permissions' => $checkpermission->project_permissions,
+                   'project' => $project,
+                   'asset'=>$asset,
+                   'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                   'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                   'framework_approach'=>$frameworkDetails['framework_approach'],
+                   'consequence_value_confidentiality'=>$consequence_value_confidentiality,
+                   'consequence_value_integrity'=>$consequence_value_integrity,
+                   'consequence_value_availability'=>$consequence_value_availability,
+                   'likelihood_value_confidentiality'=>$likelihood_value_confidentiality,
+                   'likelihood_value_integrity'=>$likelihood_value_integrity,
+                   'likelihood_value_availability'=>$likelihood_value_availability
+               
+                   ]);
+
+
+           }
 
         }
 }
@@ -1502,7 +1560,7 @@ public function save_likelihood_value($proj_id,$user_id,$asset_id,Request $req){
         'project_id'=>$proj_id,
         'asset_id'=>$asset_id
     ],[
-        'likelihood_'.$req->risk_type_input.'_selected'=>$req->likelihood_value,
+        $req->approach_type.'_likelihood_'.$req->risk_type_input.'_selected'=>$req->likelihood_value,
         'last_edited_by'=>$user_id,
          'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
          'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
@@ -1545,11 +1603,13 @@ public function likelihood_and_consequence($risk_type,$proj_id,$user_id,$asset_i
 
                 $consequence_value=DB::table('iso_sec_2_1')->where('assessment_id',$asset_id)->value($risk_type);
 
-                $likelihood_value=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('likelihood_'.$risk_type.'_selected');
                      if($frameworkDetails['complianceFramework']->framework_selected==2 
              && $frameworkDetails['framework_approach']->framework_approach_types_id==1
              && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
             ){
+                //QUalitative asset based
+                $likelihood_value=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('qualitative_likelihood_'.$risk_type.'_selected');
+
                 return view("iso_27005.likelihood_and_consequence_value",[
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
@@ -1570,6 +1630,9 @@ public function likelihood_and_consequence($risk_type,$proj_id,$user_id,$asset_i
              && $frameworkDetails['framework_approach']->framework_approach_types_id==2
              && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
             ){
+                //Quantitative Asset based
+                $likelihood_value=DB::table('proj_asset_likelihood_value')->where('asset_id',$asset_id)->value('quantitative_likelihood_'.$risk_type.'_selected');
+
                 return view("iso_27005.quantitative_likelihood_and_consequence_value",[
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,

@@ -5,6 +5,22 @@
 @include('user-nav')
 @php
     $highlight_value = $likelihood_value * $consequence_value;
+    $likelihoods = [
+        6=>'Every hour',
+        5 => 'Every 8 hours', 
+        4 => 'Twice a week', 
+        3 => 'Once a year', 
+        2 => 'Once a month', 
+        1 => 'Once a decade',
+    ];
+
+    $consequences = [
+        5 => 'Catastrophic',
+        4 => 'Critical',
+        3 => 'Serious',
+        2 => 'Significant',
+        1 => 'Minor',
+    ];
 @endphp
 
 
@@ -30,42 +46,42 @@
     
     </h4>
 
-    <h2>Likelihood: {{$likelihood_value}} COnsequenceVal: {{$consequence_value}}</h2>
 
     <div class="col-md-6 mt-4">
       
-    <div class="table-responsive">
-        <table class="table risk-table">
-            <thead>
-                <tr>
-                    <th class="header-left"></th> <!-- Empty corner cell -->
-                    <th colspan="6" class="header-top">Likelihood</th>
-                </tr>
-                <tr>
-                    <th class="header-left">Consequence</th> <!-- Consequence label -->
-                    @for ($likelihood = 6; $likelihood >= 1; $likelihood--)
-                        <th class="header-top">{{ $likelihood }}</th>
-                    @endfor
-                </tr>
-            </thead>
-            <tbody>
-                @for ($consequence = 5; $consequence >= 1; $consequence--)
+        <div class="table-responsive">
+            <table class="table risk-table">
+                <thead>
                     <tr>
-                        <th class="header-left">{{ $consequence }}</th> <!-- Consequence values -->
-                        @for ($likelihood = 6; $likelihood >= 1; $likelihood--)
-                            @php
-                                $cell_value = $likelihood * $consequence;
-                                $is_highlighted = $consequence == $consequence_value && $likelihood == $likelihood_value;
-                            @endphp
-                            <td style="{{ $is_highlighted ? 'border: 2px solid red; font-weight: bold; background-color:rgba(255, 99, 71, 0.6);' : '' }}">
-                                {{ $cell_value }}
-                            </td>
-                        @endfor
+                        <th class="header-left"></th> <!-- Empty corner cell -->
+                        <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood</th>
                     </tr>
-                @endfor
-            </tbody>
-        </table>
-    </div>
+                    <tr>
+                        <th class="header-left">Consequence</th> <!-- Consequence label -->
+                        @foreach ($likelihoods as $likelihood_key => $likelihood_label)
+                            <th class="header-top">{{ $likelihood_label }}</th> <!-- Likelihood labels -->
+                        @endforeach
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($consequences as $consequence_key => $consequence_label)
+                        <tr>
+                            <th class="header-left">{{ $consequence_label }}</th> <!-- Consequence labels -->
+                            @foreach ($likelihoods as $likelihood_key => $likelihood_label)
+                                @php
+                                    $cell_value = $likelihood_key * $consequence_key;
+                                    $is_highlighted = $consequence_key == $consequence_value && $likelihood_key == $likelihood_value;
+                                @endphp
+                                <td style="{{ $is_highlighted ? 'border: 2px solid red; font-weight: bold; background-color:rgba(255, 99, 71, 0.6);' : '' }}">
+                                    {{ $cell_value }}
+                                </td>
+                            @endforeach
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        
     
     </div>
 

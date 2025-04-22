@@ -13,9 +13,14 @@ return new class extends Migration
     {
         Schema::create('proj_asset_likelihood_value', function (Blueprint $table) {
             $table->id('proj_asset_likelihood_value_id');
-            $table->unsignedBigInteger('likelihood_risk_confidentiality_selected')->nullable();
-            $table->unsignedBigInteger('likelihood_risk_integrity_selected')->nullable();
-            $table->unsignedBigInteger('likelihood_risk_availability_selected')->nullable();
+            $table->unsignedBigInteger('qualitative_likelihood_risk_confidentiality_selected')->nullable();
+            $table->unsignedBigInteger('qualitative_likelihood_risk_integrity_selected')->nullable();
+            $table->unsignedBigInteger('qualitative_likelihood_risk_availability_selected')->nullable();
+
+            $table->unsignedBigInteger('quantitative_likelihood_risk_confidentiality_selected')->nullable();
+            $table->unsignedBigInteger('quantitative_likelihood_risk_integrity_selected')->nullable();
+            $table->unsignedBigInteger('quantitative_likelihood_risk_availability_selected')->nullable();
+
 
 
             $table->integer('project_id')->nullable()->index('projid_sec2_3_1_qa33');
@@ -28,11 +33,19 @@ return new class extends Migration
 
             $table->foreign(['project_id'], 'likefk2')->references(['project_id'])->on('projects')->onUpdate('CASCADE')->onDelete('CASCADE');
 
-            $table->foreign(['likelihood_risk_confidentiality_selected'], 'likefk1')->references(['global_likelihood_value_id'])->on('global_likelihood_value')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign(['qualitative_likelihood_risk_confidentiality_selected'], 'likefk1')->references(['global_likelihood_value_id'])->on('global_likelihood_value')->onUpdate('CASCADE')->onDelete('CASCADE');
 
-            $table->foreign(['likelihood_risk_integrity_selected'], 'fk2likefk2')->references(['global_likelihood_value_id'])->on('global_likelihood_value')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign(['qualitative_likelihood_risk_integrity_selected'], 'fk2likefk2')->references(['global_likelihood_value_id'])->on('global_likelihood_value')->onUpdate('CASCADE')->onDelete('CASCADE');
 
-            $table->foreign(['likelihood_risk_availability_selected'], 'fk3likefk3')->references(['global_likelihood_value_id'])->on('global_likelihood_value')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign(['qualitative_likelihood_risk_availability_selected'], 'fk3likefk3')->references(['global_likelihood_value_id'])->on('global_likelihood_value')->onUpdate('CASCADE')->onDelete('CASCADE');
+
+            $table->foreign(['quantitative_likelihood_risk_confidentiality_selected'], 'likefk2qu')->references(['id'])->on('global_quantitative_likelihood_scale')->onUpdate('CASCADE')->onDelete('CASCADE');
+
+            $table->foreign(['quantitative_likelihood_risk_integrity_selected'], 'likefk3qu')->references(['id'])->on('global_quantitative_likelihood_scale')->onUpdate('CASCADE')->onDelete('CASCADE');
+
+            $table->foreign(['quantitative_likelihood_risk_availability_selected'], 'likefk4qu')->references(['id'])->on('global_quantitative_likelihood_scale')->onUpdate('CASCADE')->onDelete('CASCADE');
+
+
 
              $table->timestamps();
             });
