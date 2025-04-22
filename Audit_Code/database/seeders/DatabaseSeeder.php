@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call(GlobalLikelihoodValue::class);
         $this->call(GlobalVulnerabilityRiskAssessment::class);
         $this->call(VulnerabilityDescForGlobalVul::class);
+        $this->call(QuantitativeGlobalLikelihoodScale::class);
 
         //$this->call(SuperUser::class);
 

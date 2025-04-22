@@ -4,33 +4,7 @@
 
 @include('user-nav')
 @php
-    $likelihoods = [
-        5 => 'Almost certain',
-        4 => 'Very likely',
-        3 => 'Likely',
-        2 => 'Rather unlikely',
-        1 => 'Unlikely',
-    ];
-
-    $consequences = [
-        5 => 'Catastrophic',
-        4 => 'Critical',
-        3 => 'Serious',
-        2 => 'Significant',
-        1 => 'Minor',
-    ];
-
-    $riskMatrix = [
-        5 => [5 => 'Very high', 4 => 'Very high', 3 => 'High',      2 => 'High',     1 => 'Medium'],
-        4 => [5 => 'Very high', 4 => 'High',      3 => 'High',      2 => 'Medium',   1 => 'Low'],
-        3 => [5 => 'High',      4 => 'High',      3 => 'Medium',    2 => 'Low',      1 => 'Low'],
-        2 => [5 => 'Medium',    4 => 'Medium',    3 => 'Low',       2 => 'Low',      1 => 'Very low'],
-        1 => [5 => 'Low',       4 => 'Low',       3 => 'Low',       2 => 'Very low', 1 => 'Very low'],
-    ];
-
-    // Convert IDs to levels if necessary
-    $likelihood_value_numeric = $likelihood_value ?? null;
-    $consequence_value_numeric = $consequence_value ?? null;
+    $highlight_value = $likelihood_value * $consequence_value;
 @endphp
 
 
@@ -56,38 +30,44 @@
     
     </h4>
 
-{{-- 
-    <div class="col-md-6 mt-4">
+    <h2>Likelihood: {{$likelihood_value}} COnsequenceVal: {{$consequence_value}}</h2>
 
-        <table class="table table-bordered text-center align-middle" style="width: auto;">
-            <thead class="table-dark">
+    <div class="col-md-6 mt-4">
+      
+    <div class="table-responsive">
+        <table class="table risk-table">
+            <thead>
                 <tr>
-                    <th>Likelihood \ Consequence</th>
-                    @foreach ($consequences as $c_key => $c_label)
-                        <th>{{ $c_label }}</th>
-                    @endforeach
+                    <th class="header-left"></th> <!-- Empty corner cell -->
+                    <th colspan="6" class="header-top">Likelihood</th>
+                </tr>
+                <tr>
+                    <th class="header-left">Consequence</th> <!-- Consequence label -->
+                    @for ($likelihood = 6; $likelihood >= 1; $likelihood--)
+                        <th class="header-top">{{ $likelihood }}</th>
+                    @endfor
                 </tr>
             </thead>
             <tbody>
-                @foreach ($likelihoods as $l_key => $l_label)
+                @for ($consequence = 5; $consequence >= 1; $consequence--)
                     <tr>
-                        <th class="table-dark">{{ $l_label }}</th>
-                        @foreach ($consequences as $c_key => $c_label)
+                        <th class="header-left">{{ $consequence }}</th> <!-- Consequence values -->
+                        @for ($likelihood = 6; $likelihood >= 1; $likelihood--)
                             @php
-                                $cellValue = $riskMatrix[$l_key][$c_key];
-                                $isHighlighted = $l_key == $likelihood_value_numeric && $c_key == $consequence_value_numeric;
+                                $cell_value = $likelihood * $consequence;
+                                $is_highlighted = $consequence == $consequence_value && $likelihood == $likelihood_value;
                             @endphp
-                            <td style="{{ $isHighlighted ? 'border: 2px solid red; font-weight: bold; background-color:rgba(255, 99, 71, 0.6);' : '' }}">
-                                {{ $cellValue }}
+                            <td style="{{ $is_highlighted ? 'border: 2px solid red; font-weight: bold; background-color:rgba(255, 99, 71, 0.6);' : '' }}">
+                                {{ $cell_value }}
                             </td>
-                        @endforeach
+                        @endfor
                     </tr>
-                @endforeach
+                @endfor
             </tbody>
         </table>
-        
-
-    </div> --}}
+    </div>
+    
+    </div>
 
     @if($risk_type=="risk_confidentiality")
     <div class="text-center">

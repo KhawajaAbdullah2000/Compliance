@@ -1290,8 +1290,6 @@ public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id,$risk_typ
                 && $frameworkDetails['framework_approach']->framework_approach_types_id==1
                 && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
                ){
-
- 
                 return view("iso_27005.likelihood_value",[
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
@@ -1510,7 +1508,7 @@ public function save_likelihood_value($proj_id,$user_id,$asset_id,Request $req){
          'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
     ]);
 
- 
+
         return redirect()->route('iso_27005_likelihood_value',[
             'proj_id'=>$proj_id,
             'user_id'=>$user_id,
