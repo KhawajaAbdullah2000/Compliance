@@ -4,12 +4,12 @@
 
 @include('user-nav')
 @php
-     $likelihoods = [
+      $likelihoods = [
         6=>'Every hour',
         5 => 'Every 8 hours', 
         4 => 'Twice a week', 
-        3 => 'Once a year', 
-        2 => 'Once a month', 
+        3 => 'Once a month', 
+        2 => 'Once a year', 
         1 => 'Once a decade',
     ];
     $consequences = [
