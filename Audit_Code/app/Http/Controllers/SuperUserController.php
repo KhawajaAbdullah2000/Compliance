@@ -45,8 +45,11 @@ public function add_end_user_form(Request $req){
         ],
         [
             'org_id.required'=>'Select an organization',
-            'password.regex' => 'The password must be alphanumeric and include at least one letter and one number.',
-        ]
+            'password.required' => 'Please enter a password.',
+            'password.min' => 'Password must be at least 12 characters.',
+            'password.max' => 'Password cannot exceed 30 characters.',
+            'password.regex' => 'Password must include at least one letter, one number, and one special character (@, $, !, %, *, ?, &, .), and must contain only allowed characters.'
+            ]
 
  );
         $data=$req->only(['first_name',

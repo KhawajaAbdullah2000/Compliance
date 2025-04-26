@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActionPlanController;
 use App\Http\Controllers\ComplianceMap;
 use App\Http\Controllers\CY_SAMA;
+use App\Http\Controllers\DataGovernanceController;
 use App\Http\Controllers\RiskHeatmap;
 use App\Http\Controllers\UAE_IA;
 use App\Http\Controllers\UserController;
@@ -239,6 +240,12 @@ route::get("risk_computation/{proj_id}/{user_id}",[ProjectController::class,'ris
 
 
 route::get('iso_section2_4_subsections/{proj_id}/{user_id}',[ProjectController::class,'iso_section2_4_subsections']);
+
+
+//Data GOvernance
+route::get('data_catalog_sections/{proj_id}/{user_id}',[DataGovernanceController::class,'data_catalog_sections'])->name('data_catalog_sections');
+
+route::get('data_catalog_list/{proj_id}/{user_id}',[DataGovernanceController::class,'data_catalog_list'])->name('data_catalog_list');
 
 
 

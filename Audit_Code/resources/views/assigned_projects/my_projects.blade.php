@@ -8,7 +8,7 @@
 
 <div class="container py-5">
     <!-- Page Heading -->
-    <h1 class="text-center fw-bold mb-5">Risk and Compliance Projects of Organization: {{auth()->user()->organization->name}}
+    <h1 class="text-center fw-bold mb-5">Projects of Organization: {{auth()->user()->organization->name}}
         
     </h1>
 
@@ -33,10 +33,7 @@
                         <th style='text-align:center'>View Compliance</th>
                         <th style='text-align:center'>View Risk Heatmap</th>
                         <th style='text-align:center'>View Action Plan</th>
-
-                     
-                        <th style='text-align:center'>Switch Storage Node</th>
-
+        
                         {{-- <th style='text-align:center'>Risk & Compliance Heatmap</th>  --}}
                         {{-- <th style='text-align:center'>Drill Down by Service</th>  --}}
                         {{-- <th style='text-align:center'>Project Visuals</th>
@@ -47,6 +44,7 @@
                
                         <th class="text-center">Duplicate Project</th>
                         <th class="text-center">User Actions</th>
+                        <th>Data Governance</th>
 
                     </tr>
                 </thead>
@@ -141,18 +139,7 @@
                             </td> --}}
 
                                {{-- Storage Node --}}
-                               <td style='text-align:center'>
-
-                                <select name="" id="">
-                                    <option value="">Storage 1</option>
-                                    <option value="">Storage 2</option>
-                                </select>
-                            </td>
-
-
-
-
-
+                   
 
 
 
@@ -253,6 +240,20 @@
                                     <i class="fas fa-eye fa-lg" style="color: rgb(235, 23, 147)"></i>
                                 </a>
                             </td> 
+
+                            <td style='text-align:center'>
+                                <a href="/data_catalog_sections/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
+                                >
+                                    @if($pro->type_id ==14 ||$pro->type_id ==15 )
+                                    <i class="fas fa-address-card fa-lg" style="color: rgb(71, 16, 173)"> </i>
+                                    @else
+                                    <i class="fas fa-lock fa-lg" style="color:red;"> </i>
+                                    @endif
+                                </a>
+                               
+
+                        
+                            </td>
                         
                     </tr>
                     @endforeach

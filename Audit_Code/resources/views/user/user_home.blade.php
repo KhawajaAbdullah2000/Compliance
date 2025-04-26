@@ -83,8 +83,7 @@
                     @endrole
 
                     @role('super user')
-                    <a href="/select_projects_for_framework/{{auth()->user()->organization->id}}" class="btn btn-md btn-primary mt-4" style="max-width:70%;">Set up information security risk management
-                        methodology by project type</a>
+                    <a href="/select_projects_for_framework/{{auth()->user()->organization->id}}" class="btn btn-md btn-primary mt-4" style="max-width:70%;">Set up project types</a>
                     @endrole
 
              

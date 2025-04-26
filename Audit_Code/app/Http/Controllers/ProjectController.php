@@ -23,7 +23,6 @@ class ProjectController extends Controller
         $projects = Project::join('project_details', 'projects.project_id', 'project_details.project_code')
             ->join('project_types', 'projects.project_type', 'project_types.id')
             ->where('project_details.assigned_enduser', $user_id)->orderBy('projects.project_creation_date','desc')
-         
             ->get(
                 [
                     'project_details.project_code',
@@ -36,7 +35,8 @@ class ProjectController extends Controller
 
                 ]
             );
-         
+
+
         return view('assigned_projects.my_projects', ['projects' => $projects]);
     }
 
