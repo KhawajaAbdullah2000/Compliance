@@ -21,29 +21,55 @@ $isEditable = in_array('Data Inputter', $permissions);
 
  
     <div class="mt-4">
-        <table id="" class="table table-bordered table-hover table-striped">
-            <thead class="table-dark">
-                <tr style="cursor: pointer" class="text-center">
-                    <th>Dataset ID/Name</th>
-                    <th>Datasource</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if(!empty($data_catalog) && count($data_catalog) > 0)
+        @if ($isEditable)
+        <a class="btn btn-success btn-md float-end mb-2"
+            href="/data_catalog_new/{{ $project->project_id }}/{{ auth()->user()->id }}" role="button">Enter Service or Asset
+            <i class="fas fa-plus"></i></a>
+    @endif
 
-                    @foreach($data_catalog as $catalog)
-                        <tr class="">
-                            <td>{{ $catalog->dataset_id ?? 'N/A' }}</td>
-                            <td>{{ $catalog->datasource ?? 'N/A' }}</td>
-                        </tr>
-                    @endforeach
-                @else
-                    <tr>
-                        <td colspan="2" class="fw-bold fs-6">Data not present</td>
-                    </tr>
-                @endif
-            </tbody>
-        </table>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Data Source</th>
+                <th>Data Type</th>
+                <th>Data Definition</th>
+                <th>Owner Dept</th>
+                <th>User Dept</th>
+                <th>Governance Policy</th>
+                <th>Confidentiality Tag</th>
+                <th>Integrity Tag</th>
+                <th>Availability Tag</th>
+                <th>Quality Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($data_catalog as $item)
+            <tr>
+                <td>{{ $item->name }}</td>
+                <td>{{ $item->data_source }}</td>
+                <td>{{ $item->data_type }}</td>
+                <td>{{ $item->data_definition }}</td>
+                <td>{{ $item->owner_dept }}</td>
+                <td>{{ $item->user_dept }}</td>
+                <td>
+                    @if($item->governance_policy)
+                        <a href="{{ asset('data_catalog/' . $item->governance_policy) }}" target="_blank">
+                            {{ $item->governance_policy }}
+                        </a>
+                    @else
+                        N/A
+                    @endif
+                </td>
+                <td>{{ $item->confidentiality_tag }}</td>
+                <td>{{ $item->integrity_tag }}</td>
+                <td>{{ $item->availability_tag }}</td>
+                <td>{{ $item->quality_score ?? 'N/A' }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    
         
     </div>
     

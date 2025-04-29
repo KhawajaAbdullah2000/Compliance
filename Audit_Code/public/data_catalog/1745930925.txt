@@ -1,0 +1,25 @@
+Exception Message: Operation not allowed: Updates or creations are restricted when the Credit Application Status Reason is 'Pending Preliminary Credit Committee Approval'. - (20250429110207172).
+
+ErrorCode: -2147220891
+HexErrorCode: 0x80040265
+
+ErrorDetails: 
+	OperationStatus: 0
+	SubErrorCode: -2146233088
+
+HelpLink: http://go.microsoft.com/fwlink/?LinkID=398563&error=Microsoft.Crm.CrmException%3a80040265&client=platform
+
+TraceText: 
+	[GBR.VeriLoan.CLOSMerged: GBR.VeriLoan.CLOS.Plugins.CreditApplication.HardStopper.Plugin]
+	[b0895d5f-59fe-ef11-a7b0-00505687c3e4: GBR.VeriLoan.CLOS.Plugins.CreditApplication.HardStopper.Plugin: Update of vrp_creditapplication]
+	
+	2025-04-29T08:02:07.1719776Z  Execute
+	2025-04-29T08:02:07.1719776Z  Entered
+	2025-04-29T08:02:07.1719776Z  OnValidate method in progress
+	2025-04-29T08:02:07.1719776Z  OnValidate method completed
+	2025-04-29T08:02:07.1729939Z  Executing method in progress
+	2025-04-29T08:02:07.1729939Z  Starting DoesAnyCreditApplicationHaveStatus method.
+	2025-04-29T08:02:07.1729939Z  Match found for Status Code PendingPreCreditCommitteeApproval.
+	2025-04-29T08:02:07.1729939Z  Existing
+
+Activity Id: 3b663eea-b814-4c1e-ac15-ef8d18157383

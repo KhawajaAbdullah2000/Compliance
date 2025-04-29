@@ -22,12 +22,13 @@
                 </div>
             
                 @foreach ($org_projects as $proj)
+                @if($proj->project_type_id!=14 && $proj->project_type_id!=15 )
                 <div class="form-check">
                     <input class="form-check-input project-checkbox" value="{{$proj->project_type_id}}" type="checkbox" name="risk_management_methodology[]">
                     <label class="form-check-label">
                       {{$proj->type}}
                     </label>
-                </div>
+                </div>@endif
                 @endforeach
 
                 <button type="submit" class="btn btn-primary btn-md">Select Information Security Risk

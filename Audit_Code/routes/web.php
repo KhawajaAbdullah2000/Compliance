@@ -246,8 +246,8 @@ route::get('iso_section2_4_subsections/{proj_id}/{user_id}',[ProjectController::
 route::get('data_catalog_sections/{proj_id}/{user_id}',[DataGovernanceController::class,'data_catalog_sections'])->name('data_catalog_sections');
 
 route::get('data_catalog_list/{proj_id}/{user_id}',[DataGovernanceController::class,'data_catalog_list'])->name('data_catalog_list');
-
-
+route::get('data_catalog_new/{proj_id}/{user_id}',[DataGovernanceController::class,'data_catalog_new']);
+route::post('new_data_catalog_submit/{proj_id}/{user_id}',[DataGovernanceController::class,'new_data_catalog_submit']);
 
 //Iso sec2.4 A5 Organzation
 //assets
