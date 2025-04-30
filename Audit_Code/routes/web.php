@@ -248,6 +248,10 @@ route::get('data_catalog_sections/{proj_id}/{user_id}',[DataGovernanceController
 route::get('data_catalog_list/{proj_id}/{user_id}',[DataGovernanceController::class,'data_catalog_list'])->name('data_catalog_list');
 route::get('data_catalog_new/{proj_id}/{user_id}',[DataGovernanceController::class,'data_catalog_new']);
 route::post('new_data_catalog_submit/{proj_id}/{user_id}',[DataGovernanceController::class,'new_data_catalog_submit']);
+route::get('datasets_list/{catalog_id}/{proj_id}/{user_id}',[DataGovernanceController::class,'datasets_list'])->name('datasets_list');
+route::get('dataset_attributes/{catalog_id}/{proj_id}/{user_id}',[DataGovernanceController::class,'dataset_attributes']);
+
+route::post('dataset_attributes_submit/{proj_id}/{user_id}',[DataGovernanceController::class,'dataset_attributes_submit']);
 
 //Iso sec2.4 A5 Organzation
 //assets
