@@ -47,6 +47,7 @@ $isEditable = in_array('Data Inputter', $permissions);
                 <th>Availability Tag</th>
                 <th>Quality Score</th>
                 <th>Enter , Import or Upload Dataset</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -70,7 +71,7 @@ $isEditable = in_array('Data Inputter', $permissions);
                 <td>{{ $item->confidentiality_tag }}</td>
                 <td>{{ $item->integrity_tag }}</td>
                 <td>{{ $item->availability_tag }}</td>
-                <td>{{ $item->quality_score ?? 'N/A' }}</td>
+                <td><a href="/calculate_quality_score/{{$item->id}}/{{$project->project_id}}/{{auth()->user()->id}}">Quality Score</a></td>
                 <td class="text-center"> @if (in_array('Data Inputter', $permissions))
                     <a href="/datasets_list/{{ $item->id }}/{{ $item->project_id }}/{{ auth()->user()->id }}">
                         <i class="fas fa-edit fa-lg text-success"></i>
@@ -79,6 +80,15 @@ $isEditable = in_array('Data Inputter', $permissions);
                     @else
                     <i class="fas fa-lock text-secondary"></i>
                     @endif</td>
+
+                    <td class="text-center"> @if (in_array('Data Inputter', $permissions))
+                        <a href="/delete_data_catalog/{{ $item->id }}/{{ $item->project_id }}/{{ auth()->user()->id }}">
+                            <i class="fas fa-trash fa-lg text-danger"></i>
+                        </a>
+                     
+                        @else
+                        <i class="fas fa-lock text-secondary"></i>
+                        @endif</td>
             </tr>
             @endforeach
         </tbody>

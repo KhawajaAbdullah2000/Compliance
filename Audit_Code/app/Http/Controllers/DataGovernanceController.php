@@ -164,6 +164,14 @@ class DataGovernanceController extends Controller
         ])->with('success','Data Added Successfully');
     }
 
+    public function delete_data_catalog($catalog_id,$proj_id,$user_id){
+        DB::table('data_catalog')->where('id',$catalog_id)->delete();
+        return redirect()->route('data_catalog_list',[
+            'proj_id'=>$proj_id,
+            'user_id'=>$user_id
+        ])->with('success','Data Catalog Deleted Successfully');
+    }
+
     public function datasets_list($catalog_id,$proj_id,$user_id){
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -200,8 +208,16 @@ class DataGovernanceController extends Controller
         
                 $dataset->attributes = $attributes;
                 return $dataset;
-            });               
-              
+            });    
+            
+            $columnCount_for_catalog = DB::table('dataset_attributes')
+            ->join('datasets', 'datasets.id', '=', 'dataset_attributes.dataset_id')
+            ->where('datasets.data_catalog_id', $catalog_id)
+            ->distinct('dataset_attributes.attribute_name')
+            ->count('dataset_attributes.attribute_name');
+
+          //  dd($columnCount_for_catalog);
+           
             
                 return view("data_governance.datasets",[
                  
@@ -211,7 +227,8 @@ class DataGovernanceController extends Controller
                     'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
                     'framework_approach'=>$frameworkDetails['framework_approach'],
                     'datasets' => $datasetsWithAttributes,
-                    'data_catalog'=>$data_catalog
+                    'data_catalog'=>$data_catalog,
+                    'columnCount_for_catalog'=>$columnCount_for_catalog
                     
                     ]);
             
@@ -220,6 +237,8 @@ class DataGovernanceController extends Controller
 
         }
     }
+
+
     
     public function dataset_attributes($catalog_id,$proj_id,$user_id){
         if ($user_id == auth()->user()->id) {
@@ -280,118 +299,419 @@ class DataGovernanceController extends Controller
         }
     }
 
-    public function dataset_attributes_submit($proj_id,$user_id,Request $req){
-        $req->validate([
-            'data_catalog_id' => 'required|exists:data_catalog,id',
-            'attributes' => 'required|array|min:1|max:30',
-            'attributes.*.name' => 'required|string|max:100',
-            'attributes.*.type' => 'required|in:string,date',
-            'attributes.*.value' => 'nullable|string', // validated as string, can parse if date
-        ]);
+    // public function dataset_attributes_submit($proj_id,$user_id,Request $req){
+    //     $req->validate([
+    //         'data_catalog_id' => 'required|exists:data_catalog,id',
+    //         'attributes' => 'required|array|min:1|max:30',
+    //         'attributes.*.name' => 'required|string|max:100',
+    //         'attributes.*.type' => 'required|in:string,date',
+    //         'attributes.*.value' => 'nullable|string', // validated as string, can parse if date
+    //     ]);
 
 
 
-        // $datasetId = DB::table('datasets')->insertGetId([
-        //     'data_catalog_id' => $req->data_catalog_id,
-        //     'created_at' => now(),
-        //     'updated_at' => now(),
-        // ]);
+    //     // $datasetId = DB::table('datasets')->insertGetId([
+    //     //     'data_catalog_id' => $req->data_catalog_id,
+    //     //     'created_at' => now(),
+    //     //     'updated_at' => now(),
+    //     // ]);
     
-        // // Confirm dataset inserted
-        // if (!$datasetId) {
-        //     return response()->json(['error' => 'Failed to insert dataset.'], 500);
-        // }
+    //     // // Confirm dataset inserted
+    //     // if (!$datasetId) {
+    //     //     return response()->json(['error' => 'Failed to insert dataset.'], 500);
+    //     // }
     
-        // // Prepare attributes
-        // $attributes = [];
-        // foreach ($req->input('attributes') as $attr) {
-        //     $attributes[] = [
-        //         'dataset_id' => $datasetId,
-        //         'attribute_name' => $attr['name'],
-        //         'attribute_type' => $attr['type'],
-        //         'attribute_value' => $attr['value'],
-        //     ];
-        // }
+    //     // // Prepare attributes
+    //     // $attributes = [];
+    //     // foreach ($req->input('attributes') as $attr) {
+    //     //     $attributes[] = [
+    //     //         'dataset_id' => $datasetId,
+    //     //         'attribute_name' => $attr['name'],
+    //     //         'attribute_type' => $attr['type'],
+    //     //         'attribute_value' => $attr['value'],
+    //     //     ];
+    //     // }
 
-        // // Insert attributes
-        // if (!empty($attributes)) {
-        //     try {
-        //         DB::table('dataset_attributes')->insert($attributes);
-        //     } catch (\Exception $e) {
-        //         return response()->json(['error' => 'Attribute insert failed: ' . $e->getMessage()], 500);
-        //     }
-        // }
+    //     // // Insert attributes
+    //     // if (!empty($attributes)) {
+    //     //     try {
+    //     //         DB::table('dataset_attributes')->insert($attributes);
+    //     //     } catch (\Exception $e) {
+    //     //         return response()->json(['error' => 'Attribute insert failed: ' . $e->getMessage()], 500);
+    //     //     }
+    //     // }
 
-        $catalogId = $req->input('data_catalog_id');
-        $submittedAttributes = collect($req->input('attributes'))->map(function ($attr) {
-            return ['name' => $attr['name'], 'type' => $attr['type']];
-        });
+    //     $catalogId = $req->input('data_catalog_id');
+    //     $submittedAttributes = collect($req->input('attributes'))->map(function ($attr) {
+    //         return ['name' => $attr['name'], 'type' => $attr['type']];
+    //     });
     
-        // Check if this catalog already has datasets
-        $firstDataset = DB::table('datasets')
-            ->where('data_catalog_id', $catalogId)
-            ->orderBy('id')
-            ->first();
+    //     // Check if this catalog already has datasets
+    //     $firstDataset = DB::table('datasets')
+    //         ->where('data_catalog_id', $catalogId)
+    //         ->orderBy('id')
+    //         ->first();
     
-        if ($firstDataset) {
-            // Fetch the attributes of the first dataset as the template
-            $template = DB::table('dataset_attributes')
-                ->where('dataset_id', $firstDataset->id)
-                ->orderBy('id') // Ensure consistent order
-                ->get()
-                ->map(function ($row) {
-                    return ['name' => $row->attribute_name, 'type' => $row->attribute_type];
-                });
+    //     if ($firstDataset) {
+    //         // Fetch the attributes of the first dataset as the template
+    //         $template = DB::table('dataset_attributes')
+    //             ->where('dataset_id', $firstDataset->id)
+    //             ->orderBy('id') // Ensure consistent order
+    //             ->get()
+    //             ->map(function ($row) {
+    //                 return ['name' => $row->attribute_name, 'type' => $row->attribute_type];
+    //             });
     
-            // Validation: count
-            if ($submittedAttributes->count() !== $template->count()) {
-                return back()->withErrors(['attributes' => 'Attribute count must match existing datasets in this catalog.']);
-            }
+    //         // Validation: count
+    //         if ($submittedAttributes->count() !== $template->count()) {
+    //             return back()->withErrors(['attributes' => 'Attribute count must match existing datasets in this catalog.']);
+    //         }
     
-            // Validation: name and type (case-insensitive)
-            foreach ($template->values() as $i => $expected) {
-                $submitted = $submittedAttributes[$i];
-                if (
-                    strtolower($submitted['name']) !== strtolower($expected['name']) ||
-                    $submitted['type'] !== $expected['type']
-                ) {
-                    return back()->withErrors(['attributes' => 'Attribute names and types must match existing datasets.']);
-                }
-            }
-        }
+    //         // Validation: name and type (case-insensitive)
+    //         foreach ($template->values() as $i => $expected) {
+    //             $submitted = $submittedAttributes[$i];
+    //             if (
+    //                 strtolower($submitted['name']) !== strtolower($expected['name']) ||
+    //                 $submitted['type'] !== $expected['type']
+    //             ) {
+    //                 return back()->withErrors(['attributes' => 'Attribute names and types must match existing datasets.']);
+    //             }
+    //         }
+    //     }
     
-        // Insert new dataset
-        $datasetId = DB::table('datasets')->insertGetId([
-            'data_catalog_id' => $catalogId,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+    //     // Insert new dataset
+    //     $datasetId = DB::table('datasets')->insertGetId([
+    //         'data_catalog_id' => $catalogId,
+    //         'created_at' => now(),
+    //         'updated_at' => now(),
+    //     ]);
     
-        // Prepare attribute rows
-        $attributes = [];
-        foreach ($req->input('attributes') as $attr) {
-            $attributes[] = [
-                'dataset_id' => $datasetId,
-                'attribute_name' => $attr['name'],
-                'attribute_type' => $attr['type'],
-                'attribute_value' => $attr['value'],
-            ];
-        }
+    //     // Prepare attribute rows
+    //     $attributes = [];
+    //     foreach ($req->input('attributes') as $attr) {
+    //         $attributes[] = [
+    //             'dataset_id' => $datasetId,
+    //             'attribute_name' => $attr['name'],
+    //             'attribute_type' => $attr['type'],
+    //             'attribute_value' => $attr['value'],
+    //         ];
+    //     }
     
-        DB::table('dataset_attributes')->insert($attributes);
+    //     DB::table('dataset_attributes')->insert($attributes);
     
  
 
      
-        return redirect()->route('datasets_list',[
-            'catalog_id'=>$req->data_catalog_id,
-            'proj_id'=>$proj_id,
-            'user_id'=>$user_id
-        ])->with('success','Dataset Added successfully');
+    //     return redirect()->route('datasets_list',[
+    //         'catalog_id'=>$req->data_catalog_id,
+    //         'proj_id'=>$proj_id,
+    //         'user_id'=>$user_id
+    //     ])->with('success','Dataset Added successfully');
   
 
         
+    // }
+
+
+public function dataset_attributes_submit($proj_id, $user_id, Request $req)
+{
+    $req->validate([
+        'data_catalog_id' => 'required|exists:data_catalog,id',
+        'attributes' => 'required|array|min:1|max:30',
+        'attributes.*.name' => 'required|string|max:100',
+        'attributes.*.type' => 'required|in:string,date',
+        'attributes.*.value' => 'nullable|string',
+    ]);
+
+    $catalogId = $req->input('data_catalog_id');
+    $newAttributes = collect($req->input('attributes'));
+
+    // Get all existing dataset IDs for this catalog
+    $existingDatasets = DB::table('datasets')
+        ->where('data_catalog_id', $catalogId)
+        ->pluck('id');
+
+    if ($existingDatasets->isNotEmpty()) {
+        // Get all current attribute names in those datasets
+        $existingFields = DB::table('dataset_attributes')
+            ->whereIn('dataset_id', $existingDatasets)
+            ->select('attribute_name')
+            ->distinct()
+            ->pluck('attribute_name')
+            ->map(fn($name) => strtolower($name));
+
+        $newFields = $newAttributes->pluck('name')->map(fn($name) => strtolower($name));
+
+        // Fields to add
+        $fieldsToAdd = $newFields->diff($existingFields);
+        // Fields to remove
+        $fieldsToRemove = $existingFields->diff($newFields);
+
+        // 1️⃣ Add missing fields to all old datasets
+        if ($fieldsToAdd->isNotEmpty()) {
+            foreach ($existingDatasets as $datasetId) {
+                foreach ($fieldsToAdd as $fieldName) {
+                    $attr = $newAttributes->first(fn($a) => strtolower($a['name']) === $fieldName);
+                    if ($attr) {
+                        DB::table('dataset_attributes')->insert([
+                            'dataset_id' => $datasetId,
+                            'attribute_name' => $attr['name'],
+                            'attribute_type' => $attr['type'],
+                            'attribute_value' => null,
+                        ]);
+                    }
+                }
+            }
+        }
+
+        // 2️⃣ Remove fields from all old datasets
+        if ($fieldsToRemove->isNotEmpty()) {
+            DB::table('dataset_attributes')
+                ->whereIn('dataset_id', $existingDatasets)
+                ->whereIn(DB::raw('LOWER(attribute_name)'), $fieldsToRemove->toArray())
+                ->delete();
+        }
     }
+
+    // Now insert the new dataset
+    $datasetId = DB::table('datasets')->insertGetId([
+        'data_catalog_id' => $catalogId,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    // Insert submitted attributes
+    $attributes = $newAttributes->map(function ($attr) use ($datasetId) {
+        return [
+            'dataset_id' => $datasetId,
+            'attribute_name' => $attr['name'],
+            'attribute_type' => $attr['type'],
+            'attribute_value' => $attr['value'],
+        ];
+    });
+
+    DB::table('dataset_attributes')->insert($attributes->toArray());
+
+    return redirect()->route('datasets_list', [
+        'catalog_id' => $catalogId,
+        'proj_id' => $proj_id,
+        'user_id' => $user_id,
+    ])->with('success', 'Dataset added with schema changes successfully.');
+}
+
+public function delete_dataset($dataset_id,$catalog_id,$proj_id,$user_id){
+    if ($user_id == auth()->user()->id) {
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+            if (in_array('Data Inputter', $permissions)) {
+
+                DB::table('datasets')->where('id',$dataset_id)->delete();
+                return redirect()->route('datasets_list',[
+                    'catalog_id'=>$catalog_id,
+                    'proj_id'=>$proj_id,
+                    'user_id'=>$user_id
+                ])->with('success','Dataset deleted successfully');
+            }
+
+
+        }
+
+    }
+    return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+}
+
+
+public function edit_dataset_form($dataset_id, $catalog_id, $proj_id, $user_id)
+{
+    $dataset = DB::table('datasets')->find($dataset_id);
+    $attributes = DB::table('dataset_attributes')
+        ->where('dataset_id', $dataset_id)
+        ->orderBy('id')
+        ->get();
+
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+    $data_catalog = DB::table('data_catalog')->find($catalog_id);
+
+    return view('data_governance.edit_dataset', [
+        'dataset' => $dataset,
+        'attributes' => $attributes,
+        'project' => $project,
+        'data_catalog' => $data_catalog,
+        'user_id' => $user_id
+    ]);
+}
+
+public function update_dataset($dataset_id,$proj_id,$user_id,Request $req){
+    $req->validate([
+        'data_catalog_id' => 'required|exists:data_catalog,id',
+        'attributes' => 'required|array|min:1|max:30',
+        'attributes.*.name' => 'required|string|max:100',
+        'attributes.*.type' => 'required|in:string,date',
+        'attributes.*.value' => 'nullable|string',
+    ]);
+
+    $catalogId = $req->input('data_catalog_id');
+    $newAttributes = collect($req->input('attributes'));
+
+    // 🔄 Get all dataset IDs for this catalog
+    $existingDatasets = DB::table('datasets')
+        ->where('data_catalog_id', $catalogId)
+        ->pluck('id');
+
+    if ($existingDatasets->isNotEmpty()) {
+        // 🔍 Get all existing field names across the datasets
+        $existingFields = DB::table('dataset_attributes')
+            ->whereIn('dataset_id', $existingDatasets)
+            ->select('attribute_name')
+            ->distinct()
+            ->pluck('attribute_name')
+            ->map(fn($name) => strtolower($name));
+
+        $newFields = $newAttributes->pluck('name')->map(fn($name) => strtolower($name));
+
+        // ➕ Fields added in update
+        $fieldsToAdd = $newFields->diff($existingFields);
+        // ➖ Fields removed in update
+        $fieldsToRemove = $existingFields->diff($newFields);
+
+        // 1️⃣ Add missing fields to all datasets (except current)
+        if ($fieldsToAdd->isNotEmpty()) {
+            foreach ($existingDatasets as $id) {
+                foreach ($fieldsToAdd as $fieldName) {
+                    $attr = $newAttributes->first(fn($a) => strtolower($a['name']) === $fieldName);
+                    if ($attr) {
+                        DB::table('dataset_attributes')->insert([
+                            'dataset_id' => $id,
+                            'attribute_name' => $attr['name'],
+                            'attribute_type' => $attr['type'],
+                            'attribute_value' => $id == $dataset_id ? $attr['value'] : null, // set value only for current
+                        ]);
+                    }
+                }
+            }
+        }
+
+        // 2️⃣ Remove fields from all datasets if removed in update
+        if ($fieldsToRemove->isNotEmpty()) {
+            DB::table('dataset_attributes')
+                ->whereIn('dataset_id', $existingDatasets)
+                ->whereIn(DB::raw('LOWER(attribute_name)'), $fieldsToRemove->toArray())
+                ->delete();
+        }
+    }
+
+    // 3️⃣ Update the current dataset’s values
+    foreach ($newAttributes as $attr) {
+        DB::table('dataset_attributes')
+            ->updateOrInsert(
+                [
+                    'dataset_id' => $dataset_id,
+                    'attribute_name' => $attr['name'],
+                ],
+                [
+                    'attribute_type' => $attr['type'],
+                    'attribute_value' => $attr['value'],
+                ]
+            );
+    }
+
+    return redirect()->route('datasets_list',[
+        'catalog_id'=>$req->data_catalog_id,
+        'proj_id'=>$proj_id,
+        'user_id'=>$user_id
+    ])->with('success', 'Dataset updated and template synced successfully.');
+}
+
+public function calculate_quality_score($catalog_id,$proj_id,$user_id){
+    if ($user_id == auth()->user()->id) {
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+          
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
+
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+            $data_catalog=DB::table('data_catalog')->find($catalog_id);
+    
+      
+            $datasets = DB::table('datasets')
+            ->where('data_catalog_id', $catalog_id)
+            ->orderBy('id', 'asc')
+            ->get();
+    
+   
+            $totalDatasets = DB::table('datasets')
+            ->where('data_catalog_id', $catalog_id)
+            ->count();
+
+    // Completeness % = (Total Non-Null Attribute Values) / (Total Datasets × Max Template Fields) × 100
+
+        $totalColumns = DB::table('dataset_attributes')
+        ->join('datasets', 'datasets.id', '=', 'dataset_attributes.dataset_id')
+        ->where('datasets.data_catalog_id', $catalog_id)
+        ->distinct('dataset_attributes.attribute_name')
+        ->count('dataset_attributes.attribute_name');
+
+        $totalFilled = DB::table('dataset_attributes')
+        ->join('datasets', 'datasets.id', '=', 'dataset_attributes.dataset_id')
+        ->where('datasets.data_catalog_id', $catalog_id)
+        ->whereNotNull('dataset_attributes.attribute_value')
+        ->count();
+    
+        $totalPossible = $totalDatasets * $totalColumns;
+
+         $completeness = $totalPossible > 0
+            ? round(($totalFilled / $totalPossible) * 100, 2)
+            : 0;
+
+        
+       
+        
+            return view("data_governance.quality_score",[
+             
+                'project_permissions' => $checkpermission->project_permissions,
+                'project' => $project,
+                'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                'framework_approach'=>$frameworkDetails['framework_approach'],
+                'data_catalog'=>$data_catalog,
+                'completeness'=>$completeness,
+                'datasets'=>$datasets
+                
+                ]);
+        
+
+    }
+
+    }
+
+}
+
 
 
     function getProjectFrameworkDetails($project)

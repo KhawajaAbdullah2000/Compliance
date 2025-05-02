@@ -32,7 +32,7 @@ $isEditable = in_array('Data Inputter', $permissions);
                         <!-- Service Name -->
                         <div class="mb-4">
                             <label for="dataset_id" class="form-label fw-semibold">Data Set Id/Name</label>
-                            <input type="text" name="name" id="name" class="form-control rounded-pill" value="{{old('name')}}">
+                            <input required type="text" name="name" id="name" class="form-control rounded-pill" value="{{old('name')}}">
                             @if($errors->has('name'))
                             <div class="text-danger small mt-2">{{ $errors->first('name') }}</div>
                             @endif

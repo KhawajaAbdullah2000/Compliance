@@ -80,6 +80,8 @@ $isEditable = in_array('Data Inputter', $permissions);
                 @foreach($datasets->first()->attributes as $attribute)
                     <th>{{ $attribute->attribute_name }}</th>
                 @endforeach
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody class="text-center">
@@ -92,6 +94,13 @@ $isEditable = in_array('Data Inputter', $permissions);
                                 : $attribute->attribute_value }}
                         </td>
                     @endforeach
+                    <td>    
+                    <a href="/edit_dataset/{{ $dataset->id }}/{{$data_catalog->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="text-success">
+                        <i class="fa fa-edit fa-lg"></i>
+                    </a></td>
+                    <td>    <a href="/delete_dataset/{{ $dataset->id }}/{{$data_catalog->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="text-danger">
+                        <i class="fa fa-trash fa-lg"></i>
+                    </a></td>
                 </tr>
             @endforeach
         </tbody>
@@ -99,6 +108,8 @@ $isEditable = in_array('Data Inputter', $permissions);
 @else
     <div class="alert alert-warning">No datasets found.</div>
 @endif
+
+<a href="/calculate_quality_score/{{$data_catalog->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-success btn-md mt-4 mb-2 float-end">Calculate Quality Score</a>
 
     </div>
     

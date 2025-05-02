@@ -4,11 +4,6 @@
 
 @include('user-nav')
 
-@php
-$permissions = json_decode($project_permissions);
-$isEditable = in_array('Data Inputter', $permissions);
-@endphp
-
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
@@ -16,7 +11,7 @@ $isEditable = in_array('Data Inputter', $permissions);
         </div>
     </div>
 
-    <h4 class="fw-bold">Enter Data for {{ $data_catalog->name }}</h4>
+    <h4 class="fw-bold">Edit Dataset for {{ $data_catalog->name }}</h4>
 
     @if ($errors->any())
     <div class="alert alert-danger">
@@ -28,65 +23,43 @@ $isEditable = in_array('Data Inputter', $permissions);
     </div>
     @endif
 
-    <form method="POST" action="/dataset_attributes_submit/{{ $data_catalog->project_id }}/{{ auth()->user()->id }}">
+    <form method="POST" action="/update_dataset/{{ $dataset->id }}/{{$project->project_id}}/{{auth()->user()->id}}">
         @csrf
         <input type="hidden" name="data_catalog_id" value="{{ $data_catalog->id }}">
 
         <div id="field-group">
-            @if(count($template_attributes))
-                @foreach($template_attributes as $index => $attr)
-                    <div class="row mb-3 field-set" data-index="{{ $index }}">
-                        <div class="col-md-4">
-                            <input type="text" name="attributes[{{ $index }}][name]" value="{{ $attr->attribute_name }}" class="form-control" required>
-                        </div>
-                        <div class="col-md-3">
-                            <select name="attributes[{{ $index }}][type]" class="form-control type-select" data-index="{{ $index }}" required>
-                                <option value="string" {{ $attr->attribute_type === 'string' ? 'selected' : '' }}>Text</option>
-                                <option value="date" {{ $attr->attribute_type === 'date' ? 'selected' : '' }}>Date</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="{{ $attr->attribute_type === 'date' ? 'date' : 'text' }}"
-                                name="attributes[{{ $index }}][value]"
-                                placeholder="Enter value"
-                                class="form-control value-input"
-                                id="input-{{ $index }}"
-                                required>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-danger remove-field w-100">Remove</button>
-                        </div>
-                    </div>
-                @endforeach
-                <script>var fieldIndex = {{ count($template_attributes) }};</script>
-            @else
-                <div class="row mb-3 field-set" data-index="0">
-                    <div class="col-md-4">
-                        <input type="text" name="attributes[0][name]" placeholder="Field Name" class="form-control" required>
-                    </div>
-                    <div class="col-md-3">
-                        <select name="attributes[0][type]" class="form-control type-select" data-index="0" required>
-                            <option value="string">Text</option>
-                            <option value="date">Date</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <input type="text" name="attributes[0][value]" placeholder="Value" class="form-control value-input" id="input-0" required>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-danger remove-field w-100">Remove</button>
-                    </div>
+            @foreach($attributes as $index => $attr)
+            <div class="row mb-3 field-set" data-index="{{ $index }}">
+                <div class="col-md-4">
+                    <input type="text" name="attributes[{{ $index }}][name]" value="{{ $attr->attribute_name }}" class="form-control" required>
                 </div>
-                <script>var fieldIndex = 1;</script>
-            @endif
+                <div class="col-md-3">
+                    <select name="attributes[{{ $index }}][type]" class="form-control type-select" data-index="{{ $index }}" required>
+                        <option value="string" {{ $attr->attribute_type === 'string' ? 'selected' : '' }}>Text</option>
+                        <option value="date" {{ $attr->attribute_type === 'date' ? 'selected' : '' }}>Date</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="{{ $attr->attribute_type === 'date' ? 'date' : 'text' }}"
+                        name="attributes[{{ $index }}][value]"
+                        value="{{ $attr->attribute_value }}"
+                        class="form-control value-input"
+                        id="input-{{ $index }}"
+                        required>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger remove-field w-100">Remove</button>
+                </div>
+            </div>
+            @endforeach
+            <script>var fieldIndex = {{ count($attributes) }};</script>
         </div>
 
         <button type="button" id="add-field" class="btn btn-sm btn-secondary mb-3">+ Add Field</button>
-        <button type="submit" class="btn btn-primary mb-3">Save Dataset</button>
+        <button type="submit" class="btn btn-primary mb-3">Update Dataset</button>
     </form>
 </div>
 
-@endsection
 
 @section('scripts')
 
@@ -162,5 +135,7 @@ $isEditable = in_array('Data Inputter', $permissions);
         }
     });
 </script>
+
+@endsection
 
 @endsection
