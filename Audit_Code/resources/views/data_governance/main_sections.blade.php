@@ -28,6 +28,17 @@ $isEditable = in_array('Data Inputter', $permissions);
                  </a>
             </div>
         </div>
+
+
+        <div class="row mt-4">
+            <div class="col-lg-12">
+                <a href="/dama_main_policies/{{$project->project_id}}/{{auth()->user()->id}}" 
+                    class="btn btn-lg btn-outline-light my_bg_color w-50" style="text-align: start">
+                    DAMA DMBOK Policy Enforcement
+
+                 </a>
+            </div>
+        </div>
     
     
         

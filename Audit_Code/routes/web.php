@@ -256,8 +256,9 @@ route::get('delete_dataset/{dataset_id}/{catalog_id}/{proj_id}/{user_id}',[DataG
 Route::get('/edit_dataset/{dataset_id}/{catalog_id}/{project_id}/{user_id}', [DataGovernanceController::class, 'edit_dataset_form']);
 route::post('update_dataset/{dataset_id}/{proj_id}/{user_id}',[DataGovernanceController::class,'update_dataset']);
 route::get('calculate_quality_score/{catalog_id}/{proj_id}/{user_id}',[DataGovernanceController::class,'calculate_quality_score']);
-
-
+route::get('dama_main_policies/{proj_id}/{user_id}',[DataGovernanceController::class,'dama_main_policies'])->name('dama_main_policies');
+route::get('dama_main_section/{policy_num}/{proj_id}/{user_id}',[DataGovernanceController::class,'dama_main_section'])->name('dama_main_section');
+route::post('dama_kpi_submit/{proj_id}/{user_id}',[DataGovernanceController::class,'dama_kpi_submit']);
 //Iso sec2.4 A5 Organzation
 //assets
 route::get('iso_sec2_4_a5_assets/{proj_id}/{user_id}',[IsoSec2_4_A5::class,'iso_sec2_4_a5_assets'])->name('iso_sec2_4_a5_assets');

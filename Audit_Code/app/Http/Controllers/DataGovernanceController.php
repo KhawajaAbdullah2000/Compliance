@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Project;
-
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
-
+use App\Models\User;
 class DataGovernanceController extends Controller
 {
     public function data_catalog_sections($proj_id,$user_id){
@@ -712,7 +712,165 @@ public function calculate_quality_score($catalog_id,$proj_id,$user_id){
 
 }
 
+public function dama_main_policies($proj_id,$user_id){
+    if ($user_id == auth()->user()->id) {
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
 
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+          
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
+
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+        
+
+        
+            return view("data_governance.dama_main_policies",[
+             
+                'project_permissions' => $checkpermission->project_permissions,
+                'project' => $project,
+                'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                'framework_approach'=>$frameworkDetails['framework_approach'],
+    
+                ]);
+        
+
+    }
+
+    }
+}
+
+public function dama_main_section($policy_num,$proj_id,$user_id){
+    if ($user_id == auth()->user()->id) {
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+          
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
+
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+            $filepath = public_path('Data_Governance_sheet.xlsx');
+            $data2 = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data2[0], 1); //without header(first row)
+    
+        
+
+            $filteredData = collect($rows)->filter(function ($row) use ($policy_num) {
+                return strval($row[0]) === $policy_num;
+            })->values()->all();
+
+          //  dd($filteredData);
+
+          $super = Db::table('users')->where('privilege_id', 1)->pluck('id')->toArray();
+
+          //superusers of that organization
+          $superusers_of_that_org = DB::table('superusers')->wherein('user_id', $super)
+              ->where('org_id', auth()->user()->organization->id)->pluck('user_id')->toArray();
+
+
+          $orgs = Db::table('users')->wherein('id', $superusers_of_that_org)->pluck('org_id')->toArray();
+
+          $users = User::where('privilege_id', 5)->wherein('org_id', $orgs)->get(['id', 'first_name', 'last_name']);
+
+
+          $savedData = DB::table('dama_kpi')
+          ->where('project_id', $proj_id)
+          ->where('policy_num', $policy_num)
+          ->get()
+          ->keyBy('kpi_num');
+      
+        
+            return view("data_governance.dama_main_section_form",[
+             
+                'project_permissions' => $checkpermission->project_permissions,
+                'project' => $project,
+                'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                'framework_approach'=>$frameworkDetails['framework_approach'],
+                'policyDetails'=>$filteredData,
+                'policy_num'=>$policy_num,
+                'users'=>$users,
+                'savedData' => $savedData
+    
+                ]);
+        
+
+    }
+
+    }
+
+}
+
+public function dama_kpi_submit($proj_id,$user_id,Request $req){
+    if ($user_id == auth()->user()->id) {
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+            if (in_array('Data Inputter', $permissions)) {
+             DB::table('dama_kpi')->updateOrInsert([
+                'project_id'=>$proj_id,
+                'kpi_num'=>$req->kpi_num,
+                'policy_num'=>$req->policy_num
+             ],
+             [
+                'measured_value'=>$req->measured_value,
+                'measurement_date'=>$req->measurement_date,
+                'target_value'=>$req->target_value,
+                'target_date'=>$req->target_date,
+                'responsible'=>$req->responsible,
+                'last_edited_by'=>$user_id,
+                'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+             ]);
+
+             return redirect()->route('dama_main_section',[
+                'policy_num'=>$req->policy_num,
+                'proj_id'=>$proj_id,
+                'user_id'=>$user_id
+             ])->with('success','Data Added Successfully');
+                
+            }
+
+
+        }
+
+    }
+    return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+}
 
     function getProjectFrameworkDetails($project)
     {
