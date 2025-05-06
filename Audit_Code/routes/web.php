@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActionPlanController;
+use App\Http\Controllers\Cobit;
 use App\Http\Controllers\ComplianceMap;
 use App\Http\Controllers\CY_SAMA;
 use App\Http\Controllers\DataGovernanceController;
@@ -407,6 +408,13 @@ route::get("pci_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id
 route::get('pci_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Single_Sheet::class,'pci_sec2_2_sub_req_edit'])->name('pci_sec2_2_sub_req_edit');
 route::post('pci_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Single_Sheet::class,'pci_sec_2_2_form']);
 route::put('pci_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[PCI_Single_Sheet::class,'pci_sec_2_2_edit_form']);
+
+//COBIT
+route::get("cobit_subsections/{proj_id}/{user_id}/{asset_id}",[Cobit::class,'cobit_subsections'])->name('cobit_subsections');
+route::get("cobit_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[Cobit::class,'cobit_section_2_2'])->name('cobit_section_2_2');
+route::get("cobit_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[Cobit::class,'cobit_sec_2_2_req'])->name('cobit_sec_2_2_req');
+route::get('cobit_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[Cobit::class,'cobit_sec2_2_sub_req_edit'])->name('cobit_sec2_2_sub_req_edit');
+route::post('cobit_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[Cobit::class,'cobit_sec_2_2_form']);
 
 
 //PCI Multi sheet

@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(GlobalRoles::class);
         $this->call(ProjectTypes::class);
         $this->call(ProjectTypes2::class);
+        $this->call(CobitProjectType::class);
         $this->call(Organization::class);
         $this->call(Risk_Management_Frameworks::class);
         $this->call(GlobalAssetCategories::class);

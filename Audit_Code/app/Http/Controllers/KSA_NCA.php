@@ -1065,6 +1065,11 @@ class KSA_NCA extends Controller
                         $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
                     }
 
+                    if ($checkpermission->type_id == 16) {
+                       //cobit 2019
+                        $filepath = public_path('COBIT_2019.xlsx');
+                    }
+
                     if ($checkpermission->type_id == 2) {
                         //PCI MUlti
                         $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
@@ -1157,6 +1162,15 @@ class KSA_NCA extends Controller
 
                         }
 
+                        if ($checkpermission->type_id == 16) {
+                            return redirect()->route(
+                                'cobit_subsections',
+                                ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
+                            )
+                                ->with('success', 'Record Updated Successfully');
+
+                        }
+
                         if ($checkpermission->type_id == 5) {
                             return redirect()->route(
                                 'cy_sama_subsections',
@@ -1184,7 +1198,7 @@ class KSA_NCA extends Controller
 
 
                         if($checkpermission->type_id == 4 ){
-                            dd("GHello");
+                            
                             return redirect()->back()->with('success', 'Record Updated Successfully');
 
                         }
@@ -1342,6 +1356,11 @@ class KSA_NCA extends Controller
                         //PCI SIngle
                         $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
                     }
+
+                    if ($checkpermission->type_id == 16) {
+                        //cobit 2019
+                         $filepath = public_path('COBIT_2019.xlsx');
+                     }
 
                     if ($checkpermission->type_id == 2) {
                         //PCI MUlti
@@ -1554,6 +1573,11 @@ class KSA_NCA extends Controller
                         //PCI SIngle
                         $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
                     }
+
+                    if ($checkpermission->type_id == 16) {
+                        //cobit 2019
+                         $filepath = public_path('COBIT_2019.xlsx');
+                     }
 
                     if ($checkpermission->type_id == 2) {
                         //PCI Multi

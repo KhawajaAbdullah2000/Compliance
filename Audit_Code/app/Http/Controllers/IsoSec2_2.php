@@ -218,6 +218,19 @@ class IsoSec2_2 extends Controller
                     ]);
                 }
 
+                      //CObit 2019
+                      if ($checkpermission->type_id == 16) {
+
+                        return view('cobit.cobit_sec_2_2_evidence_selection', [
+                            'project_id' => $checkpermission->project_id,
+                            'project_name' => $checkpermission->project_name,
+                            'project' => $project,
+                            'asset' => $asset
+    
+                        ]);
+                    }
+    
+
                 
            
 
