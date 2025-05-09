@@ -586,7 +586,11 @@ class IsoSec2_3_1 extends Controller
                         }
 
                         
-                        return redirect()->back()->with('success', 'Threats posed by risk source saved successfully');
+             return redirect()->route('route_for_risk_source',[
+                'proj_id'=>$proj_id,
+                'user_id'=>$user_id,
+                'asset_id'=>$asset_id
+             ])->with('success', 'Threats posed by risk source saved successfully');
 
 
 
@@ -1319,6 +1323,7 @@ public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id,$risk_typ
             && $frameworkDetails['framework_approach']->framework_approach_types_id==2
             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
            ){
+           
             //Quantitative Asset based
             $likelihood_value=DB::table('proj_asset_likelihood_value')
             ->where('project_id',$proj_id)

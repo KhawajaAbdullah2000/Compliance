@@ -18,7 +18,7 @@
     @include('components.asset-summary_component', ['asset' => $asset])
     
         
-        <h5 class="fw-bold mt-4">Risk Source</h5>
+        <h5 class="fw-bold mt-4">Risk Source (Threat)</h5>
         <p class="fs-5">{{$global_risk_source->global_risk_source}}</p>
      
 
@@ -56,7 +56,7 @@
             'user_id'=>auth()->user()->id,
             'asset_id'=>$asset->assessment_id
             ])}}" class="btn btn-secondary">Back</a>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button id="confirmSaveBtn" type="submit" class="btn btn-primary">Save</button>
     </div>
     <table class="table table-responsive table-bordered table-hover">
         <thead class="table-dark">
@@ -107,7 +107,7 @@
         'user_id'=>auth()->user()->id,
         'asset_id'=>$asset->assessment_id
         ])}}" class="btn mt-3 btn-secondary">Back</a>
-    <button type="submit" class="btn btn-primary mt-3">Save</button>
+    <button id="confirmSaveBtn2" type="submit" class="btn btn-primary mt-3">Save</button>
     </div>
 </form>
 
@@ -157,5 +157,39 @@
 
 
 @endsection
+
+<script>
+    document.getElementById('confirmSaveBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        swal({
+            title: "Are you sure you want to save?",
+            text: "Please confirm your action.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willSave) => {
+            if (willSave) {
+                this.closest('form').submit();
+            }
+        });
+    });
+</script>
+
+<script>
+    document.getElementById('confirmSaveBtn2').addEventListener('click', function (e) {
+        e.preventDefault();
+        swal({
+            title: "Are you sure you want to save?",
+            text: "Please confirm your action.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willSave) => {
+            if (willSave) {
+                this.closest('form').submit();
+            }
+        });
+    });
+</script>
 
 @endsection

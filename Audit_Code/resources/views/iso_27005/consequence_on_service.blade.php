@@ -60,25 +60,7 @@ The organization will overcome the situation without too much difficulty (margin
     
         
         <h3 class="fw-bold mt-4">Select the consequence on this service in case of: </h3>
-        {{-- <div class="col-md-8">
-        <table class="table mt-2 table-bordered table-responsive">
-            <tr>
-                <td class="bg-secondary text-white">Risk to Data Confidentiality</td>
-                @php $conf = getRiskLevelLabel($asset->risk_confidentiality); @endphp
-                <td><span class="{{ $conf['class'] }}">{{ $conf['label'] }}</span></td>
-                
-                <td class="bg-secondary text-white">Risk to Data Integrity</td>
-                @php $integ = getRiskLevelLabel($asset->risk_integrity); @endphp
-                <td><span class="{{ $integ['class'] }}">{{ $integ['label'] }}</span></td>
-                
-                <td class="bg-secondary text-white">Risk to Data Availability</td>
-                @php $avail = getRiskLevelLabel($asset->risk_availability); @endphp
-                <td><span class="{{ $avail['class'] }}">{{ $avail['label'] }}</span></td>
-                
-            </tr>
-        </table>
-        
-        </div> --}}
+   
 
 
 
@@ -204,7 +186,7 @@ The organization will overcome the situation without too much difficulty (margin
                     <tr>
                       <td>
                         <input type="number" step="any" name="consequence_amount[{{ $index }}]" class="form-control"
-    value="{{ $consequence_scale[$index]->consequence_amount ?? '' }}" placeholder="Enter amount" required>
+    value="{{ $consequence_scale[$index]->consequence_amount ?? '' }}" placeholder="Enter amount">
 
                       </td>
                         <td>

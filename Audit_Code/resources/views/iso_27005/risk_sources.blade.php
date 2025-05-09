@@ -18,7 +18,7 @@
     @include('components.asset-summary_component', ['asset' => $asset])
     
         
-        <h4 class="fw-bold mt-4">Identify which risk sources could exploit vulnerabilities in the asset component 
+        <h4 class="fw-bold mt-4">Identify which risk sources (threats) could exploit vulnerabilities in the asset component 
         </h4>
 
         <small class="text-warning fw-bold d-block mt-2 mb-2">
@@ -29,7 +29,7 @@
             <table class="table table-bordered align-middle">
                 <thead class="table-dark">
                     <tr>
-                        <th scope="col">Risk Source</th>
+                        <th scope="col">Risk Source (Threats)</th>
                         <th scope="col">Target Objective of Risk Source</th>
                         <th scope="col">Threat Posed by Risk Source</th>
                     </tr>

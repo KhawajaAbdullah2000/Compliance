@@ -18,7 +18,7 @@
     @include('components.asset-summary_component', ['asset' => $asset])
     
         
-        <h5 class="fw-bold mt-4">Risk Source</h5>
+        <h5 class="fw-bold mt-4">Risk Source (Threat)</h5>
         <p class="fs-5">{{$global_risk_source->global_risk_source}}</p>
 
         <h5 class="fw-bold mt-4">Target Objective of the Risk Source</h5>
@@ -26,33 +26,7 @@
 
             <form action="/proj_assets_selected_risk_source_and_target/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}/{{$global_risk_source->qualitative_asset_based_risk_sources_id}}" method="post">
             @csrf
-            {{-- <table class="table table-bordered align-middle table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>
-                        Select
-                        </th>
-                        <th scope="col">Target Objective</th>
-                        <th scope="col">Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($global_target_objects as $target_object)
-                        <tr>
-                            <td>
-                                <input class="form-check-input"
-                                       type="checkbox"
-                                       name="target_object[]"
-                                       value="{{ $target_object->qualitative_asset_global_target_object_risk_source_id }}"
-                                       {{ in_array($target_object->qualitative_asset_global_target_object_risk_source_id, $selected_target_object_ids) ? 'checked' : '' }}>
-                            </td>
-                            <td>{{ $target_object->target_objective }}</td>
-                            <td>{{$target_object->description}}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table> --}}
-
+            
             <table class="table table-bordered align-middle table-hover">
                 <thead class="table-dark">
                     <tr>
@@ -84,7 +58,8 @@
 
             <div class="text-end">
                 <a href="/route_for_risk_source/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-secondary btn-md mb-4">Back</a>
-                <button type="submit" class="btn btn-primary btn-md mb-4">Save</button>
+              <button type="button" id="confirmSaveBtn" class="btn btn-primary btn-md mb-4">Save</button>
+
             </div>
 
             </form>
@@ -148,7 +123,22 @@
 @endif
 
 
-
+<script>
+    document.getElementById('confirmSaveBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        swal({
+            title: "Are you sure you want to save?",
+            text: "Please confirm your action.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willSave) => {
+            if (willSave) {
+                this.closest('form').submit();
+            }
+        });
+    });
+</script>
 
 
 

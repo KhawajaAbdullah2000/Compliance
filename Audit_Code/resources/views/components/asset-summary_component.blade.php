@@ -7,7 +7,7 @@
                     <td class=" w-15">{{$asset->s_name}}</td>
                     <td class="bg-light_blue">Asset Group</td>
                     <td class="bg-light w-15">{{$asset->g_name}}</td>
-                    <td class="bg-light_blue">Asset</td>
+                    <td class="bg-light_blue">Asset Category</td>
                     <td class="bg-light">{{$asset->name}}</td>
                     <td class="bg-light_blue">Asset Component</td>
                     <td class="bg-light_green">{{$asset->c_name}}</td>

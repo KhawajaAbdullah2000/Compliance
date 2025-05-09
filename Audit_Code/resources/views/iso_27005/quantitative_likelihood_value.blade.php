@@ -58,7 +58,7 @@ $isEditable = in_array('Data Inputter', $permissions);
                 DATA AVAILABILITY
                 @endif
 
-                exploit will occur in a finite timeframe
+                exploit will occur in a finite timeframe (days)
             </label>
     
             <div class="input-group">
@@ -84,16 +84,8 @@ $isEditable = in_array('Data Inputter', $permissions);
         <form action="/save_likelihood_value/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="POST">
             @csrf
             <label class="form-label fw-semibold mb-3">
-                Select Likelihood That a 
-                @if($risk_type=='risk_confidentiality')
-                DATA CONFIDENTIALITY 
-                @elseif($risk_type=='risk_integrity')
-                DATA INTEGRITY
-                @else
-                DATA AVAILABILITY
-                @endif
+                Select Likelihood Value
                 
-                Exploit Will Occur:
             </label>
     
             <div class="table-responsive">
@@ -169,16 +161,8 @@ $isEditable = in_array('Data Inputter', $permissions);
         <form action="/save_likelihood_value/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="POST">
             @csrf
             <label class="form-label fw-semibold mb-3">
-                Select Likelihood That a 
-                @if($risk_type=='risk_confidentiality')
-                DATA CONFIDENTIALITY 
-                @elseif($risk_type=='risk_integrity')
-                DATA INTEGRITY
-                @else
-                DATA AVAILABILITY
-                @endif
+                Select Likelihood Value
                 
-                Exploit Will Occur:
             </label>
     
             <div class="table-responsive">

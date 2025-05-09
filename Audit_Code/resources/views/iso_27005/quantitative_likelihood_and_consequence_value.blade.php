@@ -36,11 +36,11 @@
 
     <h4 class="fw-bold mt-4">Assessment of Risk to 
         @if($risk_type=='risk_confidentiality')
-     Risk Confidentiality
+     Data Confidentiality
      @elseif($risk_type=='risk_integrity')
-     Risk Integrity 
+     Data Integrity 
      @else
-     Risk Availability       
+     Data Availability       
         
         @endif
     
