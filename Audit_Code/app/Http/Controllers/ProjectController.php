@@ -120,7 +120,9 @@ class ProjectController extends Controller
           ->where('project_type_id',$project->project_type)
              ->first();
 
+         
 
+    //  dd($framework_approach,$risk_assessment_approach,$complianceFramework);
          
 
                 return view(

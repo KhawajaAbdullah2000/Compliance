@@ -1657,6 +1657,178 @@ public function likelihood_and_consequence($risk_type,$proj_id,$user_id,$asset_i
         }
 }
 
+public function initiaite_risk_assessment_qual_event($proj_id,$user_id){
+    $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+
+
+            $party=DB::table('party')->where('project_id',$proj_id)->get();
+        
+
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+            return view('iso_27005.initiate_risk_qual_event',[
+               'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'project' => $project,
+                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                    'framework_approach'=>$frameworkDetails['framework_approach'],
+                    'party'=>$party
+                   
+            ]);
+    }
+
+
+}
+
+public function new_party($proj_id,$user_id){
+    $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+
+      
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+            return view('iso_27005.add_new_party',[
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'project' => $project,
+                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                    'framework_approach'=>$frameworkDetails['framework_approach'],
+           
+                   
+            ]);
+    }
+
+}
+
+public function submit_new_party($proj_id,$user_id,Request $req){
+
+        DB::table('party')->insert([
+            'project_id'=>$proj_id,
+            'party_name'=>$req->party_name,
+            'party_type'=>$req->party_type,
+            'party_category'=>$req->party_category,
+            'last_edited_by'=>$user_id,
+            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+
+        return redirect()->route('initiaite_risk_assessment_qual_event',[
+            'proj_id'=>$proj_id,
+            'user_id'=>$user_id
+        ])->with('success','Party Added Successfully');
+
+      
+          
+}
+
+public function edit_party($party_id,$proj_id,$user_id){
+     $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+
+        $party=DB::table('party')->where('id',$party_id)->first();
+    
+      
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+            return view('iso_27005.edit_form_party',[
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'project' => $project,
+                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                    'framework_approach'=>$frameworkDetails['framework_approach'],
+                    'party'=>$party
+           
+                   
+            ]);
+    }
+
+}
+
+public function edit_party_submit($party_id,$proj_id,$user_id,Request $req){
+    DB::table('party')->where('id',$party_id)->update([
+        'party_name'=>$req->party_name,
+         'party_type'=>$req->party_type,
+          'party_category'=>$req->party_category,
+          'last_edited_by'=>$user_id,
+          'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+    ]);
+           return redirect()->route('initiaite_risk_assessment_qual_event',[
+            'proj_id'=>$proj_id,
+            'user_id'=>$user_id
+        ])->with('success','Party Details Edited Successfully');
+}
+
+
+public function delete_party($party_id,$proj_id,$user_id){
+     $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+           $permissions = json_decode($checkpermission->project_permissions);
+                if (in_array('Data Inputter', $permissions)) {
+             DB::table('party')->where('id',$party_id)->delete();
+return redirect()->route('initiaite_risk_assessment_qual_event',[
+            'proj_id'=>$proj_id,
+            'user_id'=>$user_id
+        ])->with('success','Party Deleted Successfully');
+                }
+
+          
+    }
+
+            return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+    
+
+}
 
     public function iso_sec_2_3_1($asset_id, $proj_id, $user_id)
     {

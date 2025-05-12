@@ -336,6 +336,15 @@ route::post('proj_asset_threat_desc_selected/{proj_id}/{user_id}/{asset_id}/{g_r
 route::get("select_vul_for_control/{proj_id}/{user_id}/{asset_id}/{control_num}",[IsoSec2_3_1::class,'select_vul_for_control'])->name('select_vul_for_control');
 route::post('proj_asset_selected_vulnerability_descriptions/{proj_id}/{user_id}/{asset_id}/{control_num}',[IsoSec2_3_1::class,'proj_asset_selected_vulnerability_descriptions']);
 
+//ISO 27005 Qualitative Event based
+route::get('initiaite_risk_assessment_qual_event/{proj_id}/{user_id}',[IsoSec2_3_1::class,'initiaite_risk_assessment_qual_event'])->name('initiaite_risk_assessment_qual_event');
+
+route::get('new_party/{proj_id}/{user_id}',[IsoSec2_3_1::class,'new_party']);
+route::post('submit_new_party/{proj_id}/{user_id}',[IsoSec2_3_1::class,'submit_new_party']);
+route::get('edit_party/{party_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'edit_party']);
+route::put('edit_party_submit/{party_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'edit_party_submit']);
+route::get('delete_party/{party_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'delete_party']);
+
 
 
 route::post('proj_assets_selected_risk_source_and_target/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}',[IsoSec2_3_1::class,'proj_assets_selected_risk_source_and_target']);
