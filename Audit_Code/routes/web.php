@@ -344,8 +344,9 @@ route::post('submit_new_party/{proj_id}/{user_id}',[IsoSec2_3_1::class,'submit_n
 route::get('edit_party/{party_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'edit_party']);
 route::put('edit_party_submit/{party_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'edit_party_submit']);
 route::get('delete_party/{party_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'delete_party']);
-
-
+route::get('strategic_scenarios/{party_id}/{risk_type}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'strategic_scenarios'])->name('strategic_scenarios');
+route::post('party_strategic_scenario_submit/{proj_id}/{user_id}',[IsoSec2_3_1::class,'party_strategic_scenario_submit']);
+route::get('delete_strategic_scenario/{scenario_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'delete_strategic_scenario']);
 
 route::post('proj_assets_selected_risk_source_and_target/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}',[IsoSec2_3_1::class,'proj_assets_selected_risk_source_and_target']);
 route::post('proj_assets_level_of_threat/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'proj_assets_level_of_threat']);

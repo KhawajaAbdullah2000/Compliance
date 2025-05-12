@@ -1830,6 +1830,119 @@ return redirect()->route('initiaite_risk_assessment_qual_event',[
 
 }
 
+public function strategic_scenarios($party_id,$risk_type,$proj_id,$user_id){
+    $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+
+        $party=DB::table('party')->where('id',$party_id)->first();
+
+   
+        $scenarios=DB::table('party_scenarios')->where('party_type',$party_id)
+        ->where('risk_type',$risk_type)
+        ->get();
+    
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+           
+            return view('iso_27005.strategic_scenarios',[
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'project' => $project,
+                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                    'framework_approach'=>$frameworkDetails['framework_approach'],
+                    'party'=>$party,
+                    'risk_type_selected'=>$risk_type,
+                    'scenarios'=>$scenarios
+           
+                   
+            ]);
+    }
+}
+
+public function party_strategic_scenario_submit($proj_id,$user_id,Request $req){
+     $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+           $permissions = json_decode($checkpermission->project_permissions);
+        if (in_array('Data Inputter', $permissions)) {
+             
+            DB::table('party_scenarios')->insert([
+                'party_type'=>$req->party_type,
+                'risk_type'=>$req->risk_type,
+                'scenario'=>$req->scenario
+            ]);
+
+            return redirect()->route('strategic_scenarios',[
+                'party_id'=>$req->party_type,
+                'risk_type'=>$req->risk_type,
+                'proj_id'=>$proj_id,
+                'user_id'=>$user_id
+            ])->with('success','Scenario Added Successfully');
+
+          
+        }
+
+
+    }
+    
+    return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+    
+}
+
+public function delete_strategic_scenario($scenario_id,$proj_id,$user_id){
+      $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+           $permissions = json_decode($checkpermission->project_permissions);
+        if (in_array('Data Inputter', $permissions)) {
+             
+            DB::table('party_scenarios')->where('id',$scenario_id)->delete();
+            return redirect()->back()->with('success','Deleted Successfully');
+        
+
+           
+          
+        }
+
+
+    }
+    
+    return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+}
+
     public function iso_sec_2_3_1($asset_id, $proj_id, $user_id)
     {
         if ($user_id == auth()->user()->id) {

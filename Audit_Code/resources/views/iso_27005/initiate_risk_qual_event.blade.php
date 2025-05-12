@@ -36,6 +36,9 @@ $permissions = json_decode($project_permissions);
         <th>Party Category</th>
         <th>Edit</th>
         <th>Delete</th>
+        <th>Data Confidentiality</th>
+        <th>Data Integrity</th>
+        <th>Data Availability</th>
     </tr>
 
     <tbody>
@@ -66,6 +69,21 @@ $permissions = json_decode($project_permissions);
                  <i class="fas fa-lock text-secondary"></i>
 
             @endif
+            </td>
+
+         <td class="text-center">       
+        <a href="/strategic_scenarios/{{$p->id}}/risk_confidentiality/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-warning btn-md mb-2" role="button">
+            <i class="fas fa-address-book"></i></a>         
+            </td>
+
+                 <td class="text-center">       
+        <a href="/strategic_scenarios/{{$p->id}}/risk_integrity/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md mb-2" role="button">
+            <i class="fas fa-address-book"></i></a>         
+            </td>
+
+                 <td class="text-center">       
+        <a href="/strategic_scenarios/{{$p->id}}/risk_availability/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-secondary btn-md mb-2" role="button">
+            <i class="fas fa-address-book"></i></a>         
             </td>
            
         </tr>
