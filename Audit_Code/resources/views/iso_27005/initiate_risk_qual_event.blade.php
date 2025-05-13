@@ -19,7 +19,7 @@ $permissions = json_decode($project_permissions);
 
 
     
-    <h4 class="">Identify parties and the adverse impacts they can have on the organization’s information assets
+    <h4 class="">(Optional)Identify parties and the adverse impacts they can have on the organization’s information services and assets
 </h4>
 
 
@@ -30,16 +30,14 @@ $permissions = json_decode($project_permissions);
 
 
 <table class=" mt-4 table table-bordered table-responsive table">
-    <tr class="table-dark text-center">
-        <th>Party Name</th>
-        <th>Party Type</th>
-        <th>Party Category</th>
-        <th>Edit</th>
-        <th>Delete</th>
-        <th>Data Confidentiality</th>
-        <th>Data Integrity</th>
-        <th>Data Availability</th>
+   <tr class="table-dark text-center">
+        <th rowspan="2">Party Name</th>
+        <th rowspan="2">Party Type</th>
+        <th rowspan="2">Party Category</th>
+        <th rowspan="2">Edit</th>
+        <th rowspan="2">Delete</th>
     </tr>
+
 
     <tbody>
         @foreach ($party as $p)
@@ -71,20 +69,7 @@ $permissions = json_decode($project_permissions);
             @endif
             </td>
 
-         <td class="text-center">       
-        <a href="/strategic_scenarios/{{$p->id}}/risk_confidentiality/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-warning btn-md mb-2" role="button">
-            <i class="fas fa-address-book"></i></a>         
-            </td>
-
-                 <td class="text-center">       
-        <a href="/strategic_scenarios/{{$p->id}}/risk_integrity/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md mb-2" role="button">
-            <i class="fas fa-address-book"></i></a>         
-            </td>
-
-                 <td class="text-center">       
-        <a href="/strategic_scenarios/{{$p->id}}/risk_availability/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-secondary btn-md mb-2" role="button">
-            <i class="fas fa-address-book"></i></a>         
-            </td>
+       
            
         </tr>
             
@@ -93,9 +78,9 @@ $permissions = json_decode($project_permissions);
 </table>
 
 
+<a href="/iso_sec_2_3_1_qual_event_scenarios/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-primary float-end mb-2">Go to Next</a>
 
-
-   
+{{-- <a href="/iso_sec_2_3_1_risk_selection_qual_event/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-primary float-end mb-2">Go to Next</a> --}}
 
         
     

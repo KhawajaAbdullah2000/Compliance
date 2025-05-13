@@ -55,6 +55,31 @@ class EndUserController extends Controller
         $project->project_type = $req->project_type;
         $project->status_last_changed_by = $user_id;
         $project->save();
+
+        $projectId = $project->project_id;
+
+        DB::table('party')->insert([
+              'project_id'=>$projectId,
+            'party_name'=>'All',
+            'party_type'=>'None',
+            'party_category'=>'None',
+            'last_edited_by'=>$user_id,
+            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+        ],
+        );
+
+        DB::table('party')->insert(
+            [
+            'project_id'=>$projectId,
+            'party_name'=>'None',
+            'party_type'=>'None',
+            'party_category'=>'None',
+            'last_edited_by'=>$user_id,
+            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+
+        ]
+            );
+
         return redirect()->route('projects', ['user_id' => $user_id])->with('success', 'Project Created Successfully');
 
     }

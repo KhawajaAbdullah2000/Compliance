@@ -133,8 +133,6 @@ $permissions = json_decode($project_permissions);
         <i class="fas fa-plus"></i></a>
 @endif
 
-   
-
     <!-- Data Table -->
     <table id="myTable2" class="table table-bordered table-hover table-striped align-middle">
         <thead class="table-dark ">
@@ -146,11 +144,11 @@ $permissions = json_decode($project_permissions);
                     <th onclick="sortTable(4)">Asset Owner Dept</th>
                     <th onclick="sortTable(5)">Asset Physical Location</th>
                     <th onclick="sortTable(6)">Asset Logical Location</th>
-                       @if($complianceFramework->framework_id!=2 && $framework_approach->framework_approach_types_id!=1 && $risk_assessment_approach->global_risk_assessment_approach_id!=1 )
-
-                         <th>Risk Assessment</th>
-                            @endif
-             
+      @if(!($complianceFramework->framework_id == 2 && 
+      $framework_approach->framework_approach_types_id == 1 && 
+      $risk_assessment_approach->global_risk_assessment_approach_id == 1))
+    <th>Risk Assessment</th>
+@endif
 
 
                
@@ -170,9 +168,11 @@ $permissions = json_decode($project_permissions);
                 <td>{{ $d->owner_dept }}</td>
                 <td>{{ $d->physical_loc }}</td>
                 <td>{{ $d->logical_loc }}</td>
-               @if($complianceFramework->framework_id!=2 && $framework_approach->framework_approach_types_id!=1 && $risk_assessment_approach->global_risk_assessment_approach_id!=1 )
-   <td class="text-center">
-                    <a href="/iso_sec_2_3_1_risk_selection/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}" class="btn btn-primary btn-sm rounded-pill">Initiate</a>
+               @if(!($complianceFramework->framework_id == 2 && 
+      $framework_approach->framework_approach_types_id == 1 && 
+      $risk_assessment_approach->global_risk_assessment_approach_id == 1))
+      <td class="text-center">
+      <a href="/iso_sec_2_3_1_risk_selection/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}" class="btn btn-primary btn-sm rounded-pill">Initiate</a>
                 </td>
         
                 @endif

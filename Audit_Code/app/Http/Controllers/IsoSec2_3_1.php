@@ -17,6 +17,7 @@ class IsoSec2_3_1 extends Controller
 {
 
     public function iso_sec_2_3_1_risk_selection($asset_id,$proj_id,$user_id){
+    
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -101,6 +102,82 @@ class IsoSec2_3_1 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
 
     }
+
+    public function iso_sec_2_3_1_risk_selection_qual_event($proj_id,$user_id){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                 ->where('projects.project_id', $proj_id)->first();
+
+                    $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                    if($frameworkDetails['complianceFramework']->framework_selected==2 
+                     && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
+                    ){
+                        //ISo 27005:2022 Qualitative Event based
+                         
+                    $services = DB::table('iso_sec_2_1')
+                        ->where('project_id', $proj_id)
+                        ->select('s_name')
+                        ->distinct()
+                        ->get();
+
+                        $global_risk_sources=DB::table('qualitative_asset_based_risk_sources')->get();
+                        $global_level_of_threats=DB::table('global_level_of_threats')
+                        ->orderBy('global_level_of_threats_id','desc')
+                        ->get();
+
+                        $selected_level_of_threat=DB::table('proj_asset_selected_level_of_threat')
+                        ->where('project_id',$proj_id)
+                        ->value('threat_selected');
+
+
+                        return view("iso_27005.risk_sources_qual_event",[
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project' => $project,
+                        'services'=>$services,
+                        'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                        'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                        'framework_approach'=>$frameworkDetails['framework_approach'],
+                        'global_risk_sources'=>$global_risk_sources,
+                        'global_level_of_threats'=>$global_level_of_threats,
+                        'selected_level_of_threat'=>$selected_level_of_threat
+                        ]);
+
+
+            
+                      
+                       
+                     }
+
+                   
+
+                  
+
+                
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+    }
+
+
+    
 
     public function Risk_Selection_form_Submit(Request $req,$asset_id,$proj_id,$user_id){
         if ($user_id == auth()->user()->id) {
@@ -295,6 +372,75 @@ class IsoSec2_3_1 extends Controller
 
     }
 
+    
+    public function target_objective_of_risk_source_qual_event($proj_id,$user_id,$g_risk_source_num){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+    
+            $services = DB::table('iso_sec_2_1')
+            ->where('project_id', $proj_id)
+            ->select('s_name')
+            ->distinct()
+            ->get();
+                    
+
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+                $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                    if($frameworkDetails['complianceFramework']->framework_selected==2 
+                     && (($frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2))
+                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
+                    ){
+                        //ISo 27005:2022 Qualitative Event based
+                        $global_risk_source=DB::table('qualitative_asset_based_risk_sources')
+                        ->where('qualitative_asset_based_risk_sources_id',$g_risk_source_num)->first();
+                        
+                        $global_target_objects=DB::table('qualitative_asset_global_target_object_risk_source')->get();
+
+                        $selected_target_object_ids = ProjAssetsSelectedRiskSourceAndTarget::where('project_id', $proj_id)
+                        ->where('risk_source_foreign', $g_risk_source_num)
+                        ->pluck('target_object_foreign')
+                        ->toArray();
+
+                       
+                        return view("iso_27005.target_objective_risk_source_qual_event",[
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project' => $project,
+                        'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                        'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                        'framework_approach'=>$frameworkDetails['framework_approach'],
+                        'global_risk_source'=>$global_risk_source,
+                        'global_target_objects'=>$global_target_objects,
+                        'services'=>$services,
+                        'selected_target_object_ids'=>$selected_target_object_ids
+                        ]);
+
+                     }
+                
+
+
+
+            
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+    }
+
     public function threat_posed_by_risk_source($proj_id,$user_id,$asset_id,$g_risk_source_num){
         $checkpermission = Db::table('project_details')->select(
             'project_types.id as type_id',
@@ -356,6 +502,86 @@ class IsoSec2_3_1 extends Controller
                         'framework_approach'=>$frameworkDetails['framework_approach'],
                         'global_risk_source'=>$global_risk_source,
                         'asset'=>$asset,
+                        'global_threat_and_descs'=>$global_threat_and_descs,
+                        'selected_threat_ids'=>$selected_threat_ids
+        
+                        ]);
+
+                     }
+                
+
+
+
+            
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+    }
+
+      public function threat_posed_by_risk_source_qual_event($proj_id,$user_id,$g_risk_source_num){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+    
+            $services = DB::table('iso_sec_2_1')
+                ->where('project_id', $proj_id)
+                ->select('s_name')
+                ->distinct()
+                ->get();
+
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+                $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                    if($frameworkDetails['complianceFramework']->framework_selected==2 
+                     && ($frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
+                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
+                    ){
+                        //ISo 27005:2022 Qualitative Event based
+
+                        $global_risk_source=DB::table('qualitative_asset_based_risk_sources')
+                        ->where('qualitative_asset_based_risk_sources_id',$g_risk_source_num)->first();
+                   
+                        $global_threat_and_descs = DB::table('global_threat_posed_by_risk_source')
+                        ->join('threat_desc_for_global_threats', 'global_threat_posed_by_risk_source.global_threat_posed_by_risk_source_id', '=', 'threat_desc_for_global_threats.global_threat')
+                        ->select(
+                            'global_threat_posed_by_risk_source.global_threat_posed_by_risk_source_id',
+                            'global_threat_posed_by_risk_source.global_threat_posed',
+                            'threat_desc_for_global_threats.threat_desc_for_global_threats_id',
+                            'threat_desc_for_global_threats.threat_description'
+                        )
+                        ->get()
+                        ->groupBy('global_threat_posed_by_risk_source_id');
+
+                        $selected_threat_ids=DB::table('proj_asset_threat_desc_selected')
+                        ->where('project_id',$proj_id)
+                        ->where('g_risk_source_num',$g_risk_source_num)
+                        ->pluck('threat_desc_selected')->toArray();
+
+            
+                       
+                       
+                        return view("iso_27005.threat_desc_selected_qual_event",[
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project' => $project,
+                        'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                        'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                        'framework_approach'=>$frameworkDetails['framework_approach'],
+                        'global_risk_source'=>$global_risk_source,
+                        'services'=>$services,
                         'global_threat_and_descs'=>$global_threat_and_descs,
                         'selected_threat_ids'=>$selected_threat_ids
         
@@ -454,6 +680,8 @@ class IsoSec2_3_1 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
 
     }
+
+   
 
     public function proj_asset_selected_vulnerability_descriptions($proj_id,$user_id,$asset_id,$control_num,Request $req){
         $checkpermission = Db::table('project_details')->select(
@@ -606,6 +834,82 @@ class IsoSec2_3_1 extends Controller
 
     }
 
+    
+    public function proj_asset_threat_desc_selected_qual_event($proj_id,$user_id,$g_risk_source_num,Request $req){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+            if (in_array('Data Inputter', $permissions)) {
+
+        
+
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+                $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                    if($frameworkDetails['complianceFramework']->framework_selected==2 
+                     && ($frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
+                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
+                    ){
+                        //ISo 27005:2022 Qualitative Event based
+                        $selectedThreats = $req->input('selected', []); // Default to empty array if nothing selected
+
+                        if (empty($selectedThreats)) {
+                            // Optional: Flash a message if nothing was selected
+                            return redirect()->back()->with('success', 'No threats were selected. No Risk Source and its Threat Description added');
+                        }
+
+                        DB::table('proj_asset_threat_desc_selected')->where('project_id',$proj_id)
+                        ->where('g_risk_source_num',$g_risk_source_num)
+                        ->delete();
+
+                        foreach ($selectedThreats as $groupId => $threats) {
+                            foreach ($threats as $threatId) {
+
+                                DB::table('proj_asset_threat_desc_selected')->insert([
+                                    'project_id'=>$proj_id,
+                                    'threat_desc_selected'=>$threatId,
+                                    'last_edited_by'=>$user_id,
+                                    'g_risk_source_num'=>$g_risk_source_num,
+                                    'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+                                    'updated_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+                                    
+                                ]);
+                               
+                            }
+                        }
+
+                        
+             return redirect()->route('route_for_risk_source_qual_event',[
+                'proj_id'=>$proj_id,
+                'user_id'=>$user_id,
+             
+             ])->with('success', 'Threats posed by risk source saved successfully');
+
+
+
+
+                     }
+                
+
+
+
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+    }
+
 
     public function proj_assets_selected_risk_source_and_target($proj_id,$user_id,$asset_id,$g_risk_source_num,Request $req){
         //dd($proj_id,$user_id,$asset_id,$g_risk_source_num, $req->all());
@@ -670,19 +974,6 @@ class IsoSec2_3_1 extends Controller
                     ])->with('success','Target objectives of risk source added successfully');
                      
                        
-                        // return view("iso_27005.target_objective_risk_source",[
-                        // 'project_id' => $checkpermission->project_id,
-                        // 'project_name' => $checkpermission->project_name,
-                        // 'project_permissions' => $checkpermission->project_permissions,
-                        // 'project' => $project,
-                        // 'complianceFramework'=>$frameworkDetails['complianceFramework'],
-                        // 'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
-                        // 'framework_approach'=>$frameworkDetails['framework_approach'],
-                        // 'global_risk_source'=>$global_risk_source,
-                        // 'global_target_objects'=>$global_target_objects,
-                        // 'asset'=>$asset
-                        // ]);
-
                      }
                 
 
@@ -693,6 +984,79 @@ class IsoSec2_3_1 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
 
 
+    }
+
+    public function proj_selected_risk_source_and_target_qual_event($proj_id,$user_id,$g_risk_source_num,Request $req){
+  $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+            if (in_array('Data Inputter', $permissions)) {
+
+                $services = DB::table('iso_sec_2_1')
+            ->where('project_id', $proj_id)
+            ->select('s_name')
+            ->distinct()
+            ->get();
+
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+                $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                    if($frameworkDetails['complianceFramework']->framework_selected==2 
+                     &&( $frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
+                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
+                    ){
+                        //ISo 27005:2022 Qualitative Event based
+                      
+                        //delete the old ones
+                    DB::table('proj_assets_selected_risk_source_and_target')
+                    ->where('project_id',$proj_id)
+                    ->where('risk_source_foreign',$g_risk_source_num)
+                    ->delete();
+
+                    if($req->target_object){
+                        foreach($req->target_object as $target_object_num){
+                            DB::table('proj_assets_selected_risk_source_and_target')
+                            ->insert([
+                                'project_id'=>$proj_id,
+                                'risk_source_foreign'=>$g_risk_source_num,
+                                'target_object_foreign'=>$target_object_num,
+                                'last_edited_by' => $user_id,
+                                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                            ]);
+                        }
+                    }else{
+                        return redirect()->back()->with('error',"Select atleast 1 checkbox");
+                    }
+
+                   
+
+                    return redirect()->route('route_for_risk_source_qual_event',[
+                        'proj_id'=>$proj_id,
+                        'user_id'=>$user_id,
+                        
+                    ])->with('success','Target objectives of risk source added successfully');
+                     
+                       
+                     }
+                
+
+
+
+            }
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
     public function proj_assets_level_of_threat ($proj_id,$user_id,$asset_id,Request $req){
@@ -777,6 +1141,77 @@ class IsoSec2_3_1 extends Controller
         
     }
 
+        public function proj_assets_level_of_threat_qual_event ($proj_id,$user_id,Request $req){
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
+
+          
+                $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                if($frameworkDetails['complianceFramework']->framework_selected==2 
+                 && ($frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
+                 && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
+                ){
+                    //ISo 27005:2022 Qualitative Event based
+                    DB::table('proj_asset_selected_level_of_threat')
+                            ->updateOrInsert([
+                                'project_id'=>$proj_id,
+                            ],
+                        [
+                            'threat_selected'=>$req->threat_level,
+                            'last_edited_by'=>$user_id,
+                            'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+                            'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
+                        ]
+                    );
+        
+                    if ($req->input('action') === 'save_and_next') {
+                         return redirect()->route("iso_27005_risk_assessment_qual_event",[
+                    'proj_id' => $checkpermission->project_id,
+                    'user_id'=>$user_id,
+                    ]);
+
+                    }
+    
+                
+                                         
+        
+        if ($req->input('action') === 'save_and_stay') {
+             return redirect()->route('route_for_risk_source_qual_event',[
+                'proj_id'=>$proj_id,
+                'user_id'=>$user_id,
+        
+             ])->with("success","Threat Level saved Successfully");
+        
+                                     
+            }
+                   
+
+                   
+
+                 }
+            
+        return redirect()->back();
+            
+        }
+    
+    return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+        
+    }
+
     public function route_for_risk_source($proj_id,$user_id,$asset_id){
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -845,6 +1280,72 @@ class IsoSec2_3_1 extends Controller
 
     }
 
+      public function route_for_risk_source_qual_event($proj_id,$user_id){
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+
+            $services = DB::table('iso_sec_2_1')
+            ->where('project_id', $proj_id)
+            ->select('s_name')
+            ->distinct()
+            ->get();
+
+              
+                    $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                    if($frameworkDetails['complianceFramework']->framework_selected==2 
+                     &&( $frameworkDetails['framework_approach']->framework_approach_types_id==1 ||  $frameworkDetails['framework_approach']->framework_approach_types_id==2)
+                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
+                    ){
+                        //ISo 27005:2022 Qualitative Event based
+                        $global_risk_sources=DB::table('qualitative_asset_based_risk_sources')->get();
+                        $global_level_of_threats=DB::table('global_level_of_threats')
+                        ->orderBy('global_level_of_threats_id','desc')
+                        ->get();
+
+                        $selected_level_of_threat=DB::table('proj_asset_selected_level_of_threat')
+                        ->where('project_id', $proj_id)
+                        ->value('threat_selected');
+
+
+                        return view("iso_27005.risk_sources_qual_event",[
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project' => $project,
+                        'services'=>$services,
+                        'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                        'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                        'framework_approach'=>$frameworkDetails['framework_approach'],
+                        'global_risk_sources'=>$global_risk_sources,
+                        'global_level_of_threats'=>$global_level_of_threats,
+                        'selected_level_of_threat'=>$selected_level_of_threat
+                        ]);
+
+                     }
+                
+
+               return redirect()->back();
+
+                
+            }
+        
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+    }
+
     public function iso_27005_submit_risk_assessment($proj_id,$user_id,$asset_id,Request $req){
         //dd($req->all());
         foreach($req->control_num as $key=>$value){
@@ -882,6 +1383,46 @@ class IsoSec2_3_1 extends Controller
                 'proj_id'=>$proj_id,
                 'user_id'=>$user_id,
                 'asset_id'=>$asset_id
+               ])->with('success','Data Saved Successfully');
+            }
+      
+
+
+       
+    }
+
+    public function iso_27005_submit_risk_assessment_qual_event($proj_id,$user_id,Request $req){
+        //dd($req->all());
+        foreach($req->control_num as $key=>$value){
+            DB::table('iso27005_risk_assessment')->updateOrInsert(
+                [
+                    'project_id' => $proj_id,
+                    'control_num' => $value,
+                ],
+                [
+                    'vulnerability_due_to' => $req->vulnerability_due_to[$key],
+                    'last_edited_by'=>$user_id,
+                    'updated_at' =>  Carbon::now()->format('Y-m-d H:i:s'),
+                    'created_at' =>  Carbon::now()->format('Y-m-d H:i:s'),
+                ]
+            );
+      
+
+        }
+
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+      
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+            if($frameworkDetails['complianceFramework']->framework_selected==2 
+             &&( $frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
+             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
+            ){
+               return redirect()->route('iso_27005_risk_assessment_qual_event',[
+                'proj_id'=>$proj_id,
+                'user_id'=>$user_id,
+                
                ])->with('success','Data Saved Successfully');
             }
       
@@ -994,6 +1535,111 @@ class IsoSec2_3_1 extends Controller
     
 }
 
+    public function iso_27005_risk_assessment_qual_event($proj_id,$user_id){
+        //route for risk assesment quality asset based with controls
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
+
+                $services = DB::table('iso_sec_2_1')
+            ->where('project_id', $proj_id)
+            ->select('s_name')
+            ->distinct()
+            ->get();
+
+          
+                $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                if($frameworkDetails['complianceFramework']->framework_selected==2 
+                 && ($frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
+                 && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
+                ){
+                    //ISo 27005:2022 Qualitative Event based
+                    $filename = 'ISO27K1_2022_Other.xlsx';
+                    $filepath = public_path($filename);
+                    
+                    // Fallback to 'None' file if original doesn't exist
+                    if (!File::exists($filepath)) {
+                        $filename = 'ISO27K1_2022_None.xlsx';
+                        $filepath = public_path($filename);
+                    }
+                    
+                    $data2 = Excel::toArray([], $filepath); // Load Excel with header
+                    $rows = array_slice($data2[0], 1); // Remove header row
+
+                    foreach ($rows as &$row) {
+                        if (isset($row[0])) {
+                            $row[0] = trim((string) $row[0]); // keep it as-is
+                        }
+                
+                    }
+                    //dd($rows[0][0]);
+                     
+
+                
+                    $savedDataRaw = DB::Table('iso27005_risk_assessment')
+                    ->where('project_id', $project->project_id)
+                    ->pluck('vulnerability_due_to', 'control_num');
+                
+                $savedData = [];
+                foreach ($savedDataRaw as $key => $value) {
+                    $normalizedKey = trim((string) $key); // only trim, no number_format
+                    $savedData[$normalizedKey] = $value;
+                }
+
+                $global_level_of_vulnerabilities=DB::table('global_level_of_vulnerability')
+                ->orderBy('global_level_of_vulnerability_id','desc')->get();
+
+                $selected_level_of_vulnerability=DB::table('proj_asset_selected_level_of_vulnerability')
+                ->where('project_id', $proj_id)
+              
+                ->value('vulnerability_selected');
+               
+              
+         
+    
+                     return view("iso_27005.risk_assessment_qual_event",[
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'project' => $project,
+                    'services'=>$services,
+                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                    'framework_approach'=>$frameworkDetails['framework_approach'],
+                    'controls'=>$rows,
+                    'savedData'=>$savedData,
+                    'global_level_of_vulnerabilities'=>$global_level_of_vulnerabilities,
+                    'selected_level_of_vulnerability'=>$selected_level_of_vulnerability
+                
+                    ]);
+
+                    
+                 }
+            
+
+             return redirect()->back();
+
+
+    }
+
+    
+}
+
+
+
+
 public function add_scenario_form($proj_id,$user_id,$asset_id){
     $checkpermission = Db::table('project_details')->select(
         'project_types.id as type_id',
@@ -1079,6 +1725,96 @@ public function add_scenario_form($proj_id,$user_id,$asset_id){
         }
     
 }
+
+
+// public function add_scenario_form_qual_event($proj_id,$user_id,$asset_id){
+//     $checkpermission = Db::table('project_details')->select(
+//         'project_types.id as type_id',
+//         'project_details.project_code',
+//         'project_details.project_permissions',
+//         'projects.project_name',
+//         'projects.project_id'
+//     )
+//         ->join('projects', 'project_details.project_code', 'projects.project_id')
+//         ->join('project_types', 'projects.project_type', 'project_types.id')
+//         ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+//         ->first();
+//     if ($checkpermission) {
+      
+//         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+//         ->where('projects.project_id', $proj_id)->first();
+
+//        $services = DB::table('iso_sec_2_1')
+//         ->where('project_id', $proj_id)
+//         ->select('s_name')
+//         ->distinct()
+//         ->get();
+
+      
+//             $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+//             if($frameworkDetails['complianceFramework']->framework_selected==2 
+//              && ($frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
+//              && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
+//             ){
+            
+//                 $riskSources = DB::table('proj_assets_selected_risk_source_and_target as ps')
+//                 ->join('qualitative_asset_based_risk_sources as rs', 'ps.risk_source_foreign', '=', 'rs.qualitative_asset_based_risk_sources_id')
+//                 ->where('ps.project_id', $proj_id)
+       
+//                 ->select('rs.qualitative_asset_based_risk_sources_id', 'rs.global_risk_source')
+//                 ->distinct()
+//                 ->get();
+    
+
+//                 $targetObjectives = DB::table('proj_assets_selected_risk_source_and_target as ps')
+//                 ->join('qualitative_asset_global_target_object_risk_source as to', 'ps.target_object_foreign', '=', 'to.qualitative_asset_global_target_object_risk_source_id')
+//                 ->where('ps.project_id', $proj_id)
+            
+//                 ->select('to.qualitative_asset_global_target_object_risk_source_id', 'to.target_objective', 'to.description')
+//                 ->distinct()
+//                 ->get();
+
+//                 $threats = DB::table('proj_asset_threat_desc_selected')
+//                 ->join('threat_desc_for_global_threats', 'proj_asset_threat_desc_selected.threat_desc_selected', '=', 'threat_desc_for_global_threats.threat_desc_for_global_threats_id')
+//                 ->where('proj_asset_threat_desc_selected.project_id', $proj_id)
+         
+//                 ->select('proj_asset_threat_desc_selected.threat_desc_selected', 'threat_desc_for_global_threats.threat_description')
+//                 ->distinct()
+//                 ->get();
+
+//                 $risk_scenarios=DB::table('proj_asset_risk_scenario')
+//                 ->where('project_id',$proj_id)
+//                 ->where('asset_id',$asset_id)
+//                 ->get();
+
+
+         
+
+//                 return view("iso_27005.scenario_form",[
+//                     'project_id' => $checkpermission->project_id,
+//                     'project_name' => $checkpermission->project_name,
+//                     'project_permissions' => $checkpermission->project_permissions,
+//                     'project' => $project,
+//                     'complianceFramework'=>$frameworkDetails['complianceFramework'],
+//                     'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+//                     'framework_approach'=>$frameworkDetails['framework_approach'],
+//                     'riskSources'=>$riskSources,
+//                     'asset'=>$asset,
+//                     'targetObjectives'=>$targetObjectives,
+//                     'threats'=>$threats,
+//                     'risk_scenarios'=>$risk_scenarios
+    
+//                     ]);
+
+                
+
+                
+
+//             }
+//         }
+    
+// }
 
 public function add_risk_scenario($proj_id,$user_id,$asset_id){
     $checkpermission = Db::table('project_details')->select(
@@ -1241,6 +1977,84 @@ return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id])
 
 }
 
+public function proj_asset_selected_level_of_vulnerability_qual_event($proj_id,$user_id,Request $req){
+    $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+
+          $services = DB::table('iso_sec_2_1')
+        ->where('project_id', $proj_id)
+        ->select('s_name')
+        ->distinct()
+        ->get();
+
+      
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+            if($frameworkDetails['complianceFramework']->framework_selected==2 
+             &&( $frameworkDetails['framework_approach']->framework_approach_types_id==1 ||  $frameworkDetails['framework_approach']->framework_approach_types_id==2)
+             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
+            ){
+                
+                DB::table('proj_asset_selected_level_of_vulnerability')
+                        ->updateOrInsert([
+                            'project_id'=>$proj_id,
+                        ],
+                    [
+                        'vulnerability_selected'=>$req->vulnerability_level,
+                        'last_edited_by'=>$user_id,
+                        'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+                        'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
+                    ]
+                );
+    
+                if ($req->input('action') === 'save_and_stay') {
+                     return redirect()->route("iso_27005_risk_assessment_qual_event",[
+                'proj_id' => $checkpermission->project_id,
+                'user_id'=>$user_id,
+                ])->with('success','Data Saved Successfully');
+
+                }
+
+            
+                                     
+    
+    if ($req->input('action') === 'save_and_next') {
+    
+        return redirect()->route("iso_27005_likelihood_value_qual_event",[
+            'proj_id' => $checkpermission->project_id,
+            'user_id'=>$user_id,
+            'risk_type'=>'risk_confidentiality'
+            ])->with('success','Data Saved Successfully');
+                                 
+        }
+               
+
+               
+
+             }
+        
+return redirect()->back();
+
+        
+    }
+
+return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+}
+
 public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id,$risk_type=''){
     $checkpermission = Db::table('project_details')->select(
         'project_types.id as type_id',
@@ -1292,6 +2106,118 @@ public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id,$risk_typ
                 $likelihood_timeframe=DB::table('proj_asset_likelihood_timeframe')
                 ->where('project_id',$proj_id)
                 ->where('asset_id',$asset_id)
+                ->value('timeframe_'.$risk_type);
+
+        
+
+
+                if($frameworkDetails['complianceFramework']->framework_selected==2 
+                && $frameworkDetails['framework_approach']->framework_approach_types_id==1
+                && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+               ){
+                return view("iso_27005.likelihood_value",[
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'project' => $project,
+                    'asset'=>$asset,
+                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                    'framework_approach'=>$frameworkDetails['framework_approach'],
+                    'threat'=>$threat,
+                    'vulnerability'=>$vulnerability,
+                    'likelihood_timeframe'=>$likelihood_timeframe,
+                    'likelihood_value'=>$likelihood_value,
+                    'risk_type'=>$risk_type
+                    ]);
+
+            }
+
+            if($frameworkDetails['complianceFramework']->framework_selected==2 
+            && $frameworkDetails['framework_approach']->framework_approach_types_id==2
+            && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+           ){
+           
+            //Quantitative Asset based
+            $likelihood_value=DB::table('proj_asset_likelihood_value')
+            ->where('project_id',$proj_id)
+            ->where('asset_id',$asset_id)
+            ->value('quantitative_likelihood_'.$risk_type.'_selected');
+        
+            return view("iso_27005.quantitative_likelihood_value",[
+                'project_id' => $checkpermission->project_id,
+                'project_name' => $checkpermission->project_name,
+                'project_permissions' => $checkpermission->project_permissions,
+                'project' => $project,
+                'asset'=>$asset,
+                'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                'framework_approach'=>$frameworkDetails['framework_approach'],
+                'threat'=>$threat,
+                'vulnerability'=>$vulnerability,
+                'likelihood_timeframe'=>$likelihood_timeframe,
+                'likelihood_value'=>$likelihood_value,
+                'risk_type'=>$risk_type
+                ]);
+
+            
+           }
+        }
+
+    
+}
+
+public function iso_27005_likelihood_value_qual_event($proj_id,$user_id,$asset_id,$risk_type=''){
+    $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+
+            $asset=  Db::table('iso_sec_2_1')
+            ->where('assessment_id',$asset_id)->first();
+
+    
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+        
+            if($frameworkDetails['complianceFramework']->framework_selected==2 
+            &&( $frameworkDetails['framework_approach']->framework_approach_types_id==1)
+            && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
+           ){
+            //Qualitative Event Based
+            $likelihood_value=DB::table('proj_asset_likelihood_value')
+            ->where('project_id',$proj_id)
+         
+            ->value('qualitative_likelihood_'.$risk_type.'_selected');
+           }
+        
+
+               //ISo 27005:2022 Qualitative and Quantitiave Event based
+                $threat=DB::table('proj_asset_selected_level_of_threat')
+                ->join('global_level_of_threats','proj_asset_selected_level_of_threat.threat_selected','global_level_of_threats.global_level_of_threats_id')
+                ->where('project_id',$proj_id)
+              
+                ->value('global_threat');
+
+                $vulnerability=DB::table('proj_asset_selected_level_of_vulnerability')
+                ->join('global_level_of_vulnerability','proj_asset_selected_level_of_vulnerability.vulnerability_selected','global_level_of_vulnerability.global_level_of_vulnerability_id')
+                ->where('project_id',$proj_id)
+             
+                ->value('global_vulnerability');
+
+                $likelihood_timeframe=DB::table('proj_asset_likelihood_timeframe')
+                ->where('project_id',$proj_id)
+             
                 ->value('timeframe_'.$risk_type);
 
         
@@ -1674,7 +2600,9 @@ public function initiaite_risk_assessment_qual_event($proj_id,$user_id){
         ->where('projects.project_id', $proj_id)->first();
 
 
-            $party=DB::table('party')->where('project_id',$proj_id)->get();
+            $party=DB::table('party')->where('project_id',$proj_id)
+            ->where('party_name','!=','None')->where('party_name','!=','All')
+            ->get();
         
 
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
@@ -1870,6 +2798,143 @@ public function strategic_scenarios($party_id,$risk_type,$proj_id,$user_id){
                    
             ]);
     }
+}
+
+public function iso_sec_2_3_1_qual_event_scenarios($proj_id,$user_id){
+     $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+
+              $scenarios = DB::table('party_scenarios')
+            ->join('party', 'party_scenarios.party_type', '=', 'party.id')
+            ->where('party_scenarios.project_id', $proj_id)
+            ->select(
+                'party_scenarios.id as scenario_id',
+                'party_scenarios.*',
+                'party.party_name' ,
+                'party.party_type as party_type_party',
+                'party.party_category'
+            )
+            ->get();
+
+                  //  dd($scenarios);
+             
+
+       
+       
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+            $services = DB::table('iso_sec_2_1')
+            ->where('project_id', $proj_id)
+            ->select('s_name')
+            ->distinct()
+            ->get();
+           
+            return view('iso_27005.qual_event_strategic_scenarios',[
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'project' => $project,
+                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                    'framework_approach'=>$frameworkDetails['framework_approach'],
+                    'services'=>$services,
+                    'scenarios'=>$scenarios
+                   
+            ]);
+    }
+}
+
+public function qual_event_add_scenario_form($proj_id,$user_id){
+      $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('projects.project_id', $proj_id)->first();
+   
+        $party=DB::table('party')->where('project_id',$proj_id)
+        ->get();
+
+    
+            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+            $services = DB::table('iso_sec_2_1')
+            ->where('project_id', $proj_id)
+            ->select('s_name')
+            ->distinct()
+            ->get();
+           
+            return view('iso_27005.qual_event_add_form_strategic_scenarios',[
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'project' => $project,
+                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                    'framework_approach'=>$frameworkDetails['framework_approach'],
+                    'services'=>$services,
+                    'party'=>$party
+                   
+            ]);
+    }
+
+}
+
+public function submit_new_scenario($proj_id,$user_id,Request $req){
+
+     $checkpermission = Db::table('project_details')->select(
+        'project_types.id as type_id',
+        'project_details.project_code',
+        'project_details.project_permissions',
+        'projects.project_name',
+        'projects.project_id'
+    )
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+        ->first();
+    if ($checkpermission) {
+       Db::table('party_scenarios')->insert([
+            'title'=>$req->title,
+            'risk_type'=>$req->risk_type,
+            'party_type'=>$req->party_type,
+            'last_edited_by'=>$user_id,
+            'project_id'=>$proj_id,
+            'scenario'=>$req->scenario
+            // 'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+       ]);
+
+       return redirect()->route('iso_sec_2_3_1_qual_event_scenarios',[
+        'proj_id'=>$proj_id,
+        'user_id'=>$user_id
+       ])->with('success','Scenario Added Successfully');
+       
+
+    
+
+         
+    }
+
 }
 
 public function party_strategic_scenario_submit($proj_id,$user_id,Request $req){
