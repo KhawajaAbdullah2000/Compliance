@@ -330,7 +330,7 @@ route::get('iso_sec_2_3_1/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'i
 route::Post('iso_sec2_3_1_initial_add/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec2_3_1_initial_add']);
 route::get("iso_27005_risk_assessment/{proj_id}/{user_id}/{asset_id}",[IsoSec2_3_1::class,'iso_27005_risk_assessment'])->name('iso_27005_risk_assessment');
 route::get("iso_27005_risk_assessment_qual_event/{proj_id}/{user_id}",[IsoSec2_3_1::class,'iso_27005_risk_assessment_qual_event'])->name('iso_27005_risk_assessment_qual_event');
-
+route::post('save_likelihood_qual_event_form/{proj_id}/{user_id}',[IsoSec2_3_1::class,'save_likelihood_qual_event_form']);
 
 //IOS 27005 quality Asset based
 route::get("target_objective_of_risk_source/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}",[IsoSec2_3_1::class,'target_objective_of_risk_source']);
@@ -386,7 +386,7 @@ route::get('add_scenario_form_qual_event/{proj_id}/{user_id}/{risk_type}',[IsoSe
 route::get('add_risk_scenario/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'add_risk_scenario']);
 route::post('proj_asset_risk_scenario/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'proj_asset_risk_scenario']);
 route::get('iso_27005_likelihood_value/{proj_id}/{user_id}/{asset_id}/{risk_type?}',[IsoSec2_3_1::class,'iso_27005_likelihood_value'])->name('iso_27005_likelihood_value');
-route::get('iso_27005_likelihood_value_qual_event/{proj_id}/{user_id}/{risk_type?}',[IsoSec2_3_1::class,'iso_27005_likelihood_value_qual_event'])->name('iso_27005_likelihood_value_qual_event');
+route::get('iso_27005_likelihood_value_qual_event/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_27005_likelihood_value_qual_event'])->name('iso_27005_likelihood_value_qual_event');
 
 
 route::post('qualitative_asset_likelihood_confidentiality_timeframe/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'qualitative_asset_likelihood_confidentiality_timeframe']);

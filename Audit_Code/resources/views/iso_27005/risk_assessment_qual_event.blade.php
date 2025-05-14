@@ -16,7 +16,7 @@
    <span class="fw-bold">Services: </span> {{ $services->pluck('s_name')->implode(', ') }}
     
         
-        <h5 class="fw-bold mt-4">By evaluating gaps in applicable controls, evaluate how vulnerable the asset component is to actions by risk sources in the environment 
+        <h5 class="fw-bold mt-4">Evaluate gaps in applicable controls 
         </h5>
         
 
@@ -33,7 +33,7 @@
                 <th>No.</th>
                 <th>Controls (as per ISO 27001:2022 Annex A)</th>
                 <th>Vulnerability Level due to </th>
-                <th>Data Confidentiality</th>
+                
            
             </tr>
         </thead>
@@ -56,13 +56,13 @@
                 </select>
             </td>
 
-            @if ($loop->first)
+            {{-- @if ($loop->first)
             <td class="text-center" rowspan="{{ count($controls) }}">
                 <a href="/add_scenario_form_qual_event/{{$project->project_id}}/{{auth()->user()->id}}/risk_confidentiality" title="Edit Target Objective">
                     <i class="fas fa-address-book fa-2x" style="color: #e2850a;"></i>
                 </a>
             </td>
-            @endif
+            @endif --}}
          
         </tr>
             @endforeach
@@ -92,7 +92,7 @@
 
 <div class="mt-4 mb-4 d-flex justify-content-end gap-2">
     
-    <a href="{{route('route_for_risk_source_qual_event',[
+    <a href="{{route('iso_sec_2_3_1_qual_event_scenarios',[
         'proj_id'=>$project->project_id,
         'user_id'=>auth()->user()->id,
    

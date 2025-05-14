@@ -73,6 +73,7 @@
                 <th>party Type</th>
                 <th>Party Category</th>
                 <th>Adverse Impact on</th>
+              <th>Description</th>
                 <th>Delete</th>
             </tr>
         </thead>
@@ -84,6 +85,15 @@
               <td>{{$s->party_name}}</td>
               <td>{{$s->party_type_party}}</td>
               <td>{{$s->party_category}}</td>
+              <td>
+                @if($s->risk_type=='risk_confidentiality')
+                Data Confidentiality
+                @elseif($s->risk_type=='risk_integrity')
+                Data Integrity
+                @elseif($s->risk_type=='risk_availability')
+                Data Availability
+                @endif
+              </td>
               <td>{{$s->scenario}}</td>
               <td>
                 @if (in_array('Data Inputter', $permissions))
@@ -102,6 +112,11 @@
             @endforeach
         </tbody>
     </table>
+
+
+    <a href="{{route('iso_27005_risk_assessment_qual_event',[
+    'proj_id'=>$project->project_id,
+    'user_id'=>auth()->user()->id])}}" class="btn btn-primary btn-md float-end">Go to Next</a>
 
 
 </div>

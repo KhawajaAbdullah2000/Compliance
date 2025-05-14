@@ -1591,6 +1591,8 @@ class IsoSec2_3_1 extends Controller
                     $savedDataRaw = DB::Table('iso27005_risk_assessment')
                     ->where('project_id', $project->project_id)
                     ->pluck('vulnerability_due_to', 'control_num');
+
+            
                 
                 $savedData = [];
                 foreach ($savedDataRaw as $key => $value) {
@@ -1606,7 +1608,7 @@ class IsoSec2_3_1 extends Controller
               
                 ->value('vulnerability_selected');
                
-              
+            
          
     
                      return view("iso_27005.risk_assessment_qual_event",[
@@ -2034,8 +2036,7 @@ public function proj_asset_selected_level_of_vulnerability_qual_event($proj_id,$
     
         return redirect()->route("iso_27005_likelihood_value_qual_event",[
             'proj_id' => $checkpermission->project_id,
-            'user_id'=>$user_id,
-            'risk_type'=>'risk_confidentiality'
+            'user_id'=>$user_id
             ])->with('success','Data Saved Successfully');
                                  
         }
@@ -2167,7 +2168,9 @@ public function iso_27005_likelihood_value($proj_id,$user_id,$asset_id,$risk_typ
     
 }
 
-public function iso_27005_likelihood_value_qual_event($proj_id,$user_id,$asset_id,$risk_type=''){
+public function iso_27005_likelihood_value_qual_event($proj_id,$user_id){
+
+
     $checkpermission = Db::table('project_details')->select(
         'project_types.id as type_id',
         'project_details.project_code',
@@ -2182,10 +2185,6 @@ public function iso_27005_likelihood_value_qual_event($proj_id,$user_id,$asset_i
     if ($checkpermission) {
         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
         ->where('projects.project_id', $proj_id)->first();
-
-            $asset=  Db::table('iso_sec_2_1')
-            ->where('assessment_id',$asset_id)->first();
-
     
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
@@ -2195,13 +2194,11 @@ public function iso_27005_likelihood_value_qual_event($proj_id,$user_id,$asset_i
             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
            ){
             //Qualitative Event Based
-            $likelihood_value=DB::table('proj_asset_likelihood_value')
-            ->where('project_id',$proj_id)
-         
-            ->value('qualitative_likelihood_'.$risk_type.'_selected');
-           }
+        //     $likelihood_value=DB::table('proj_asset_likelihood_value')
+        //     ->where('project_id',$proj_id)
+        //     ->value('qualitative_likelihood_'.$risk_type.'_selected');
+        //    }
         
-
                //ISo 27005:2022 Qualitative and Quantitiave Event based
                 $threat=DB::table('proj_asset_selected_level_of_threat')
                 ->join('global_level_of_threats','proj_asset_selected_level_of_threat.threat_selected','global_level_of_threats.global_level_of_threats_id')
@@ -2209,74 +2206,58 @@ public function iso_27005_likelihood_value_qual_event($proj_id,$user_id,$asset_i
               
                 ->value('global_threat');
 
+                
+
                 $vulnerability=DB::table('proj_asset_selected_level_of_vulnerability')
                 ->join('global_level_of_vulnerability','proj_asset_selected_level_of_vulnerability.vulnerability_selected','global_level_of_vulnerability.global_level_of_vulnerability_id')
                 ->where('project_id',$proj_id)
-             
                 ->value('global_vulnerability');
 
-                $likelihood_timeframe=DB::table('proj_asset_likelihood_timeframe')
-                ->where('project_id',$proj_id)
-             
-                ->value('timeframe_'.$risk_type);
-
-        
 
 
                 if($frameworkDetails['complianceFramework']->framework_selected==2 
                 && $frameworkDetails['framework_approach']->framework_approach_types_id==1
-                && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
+                && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
                ){
-                return view("iso_27005.likelihood_value",[
+
+                $scenarios = DB::table('party_scenarios')
+            ->join('party', 'party_scenarios.party_type', '=', 'party.id')
+            ->leftjoin('proj_scenario_likelihood_value','party_scenarios.id','proj_scenario_likelihood_value.scenario')
+            ->where('party_scenarios.project_id', $proj_id)
+            ->select(
+                'party_scenarios.id as scenario_id',
+                'party_scenarios.*',
+                'party.party_name' ,
+                'party.party_type as party_type_party',
+                'party.party_category',
+                'proj_scenario_likelihood_value.likelihood_selected'
+            )
+            ->get();
+
+   
+
+                return view("iso_27005.likelihood_value_qual_event",[
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
                     'project_permissions' => $checkpermission->project_permissions,
                     'project' => $project,
-                    'asset'=>$asset,
                     'complianceFramework'=>$frameworkDetails['complianceFramework'],
                     'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
                     'framework_approach'=>$frameworkDetails['framework_approach'],
                     'threat'=>$threat,
                     'vulnerability'=>$vulnerability,
-                    'likelihood_timeframe'=>$likelihood_timeframe,
-                    'likelihood_value'=>$likelihood_value,
-                    'risk_type'=>$risk_type
+                    'scenarios'=>$scenarios
+       
                     ]);
 
             }
 
-            if($frameworkDetails['complianceFramework']->framework_selected==2 
-            && $frameworkDetails['framework_approach']->framework_approach_types_id==2
-            && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
-           ){
-           
-            //Quantitative Asset based
-            $likelihood_value=DB::table('proj_asset_likelihood_value')
-            ->where('project_id',$proj_id)
-            ->where('asset_id',$asset_id)
-            ->value('quantitative_likelihood_'.$risk_type.'_selected');
         
-            return view("iso_27005.quantitative_likelihood_value",[
-                'project_id' => $checkpermission->project_id,
-                'project_name' => $checkpermission->project_name,
-                'project_permissions' => $checkpermission->project_permissions,
-                'project' => $project,
-                'asset'=>$asset,
-                'complianceFramework'=>$frameworkDetails['complianceFramework'],
-                'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
-                'framework_approach'=>$frameworkDetails['framework_approach'],
-                'threat'=>$threat,
-                'vulnerability'=>$vulnerability,
-                'likelihood_timeframe'=>$likelihood_timeframe,
-                'likelihood_value'=>$likelihood_value,
-                'risk_type'=>$risk_type
-                ]);
-
-            
-           }
         }
 
     
+    }
+
 }
 
 public function iso_27005_likelihood_value_all($proj_id,$user_id,$asset_id){
@@ -2506,6 +2487,26 @@ public function save_likelihood_value($proj_id,$user_id,$asset_id,Request $req){
         ])->with('success','Data Saved Successfully');
     
    
+}
+
+public function save_likelihood_qual_event_form($proj_id,$user_id,Request $req){
+    $req->validate([
+        'likelihood'=>'required'
+    ]);
+
+    DB::table('proj_scenario_likelihood_value')->updateOrInsert([
+        'project_id'=>$proj_id,
+        'scenario'=>$req->scenario
+    ],[
+        'likelihood_selected'=>$req->likelihood,
+        'last_edited_by'=>$user_id
+     
+    ]);
+
+    return redirect()->route('iso_27005_likelihood_value_qual_event',[
+        'proj_id'=>$proj_id,
+        'user_id'=>$user_id
+    ])->with('success','Likelihood value saved successfully');
 }
 
 public function likelihood_and_consequence($risk_type,$proj_id,$user_id,$asset_id){
@@ -2920,8 +2921,8 @@ public function submit_new_scenario($proj_id,$user_id,Request $req){
             'party_type'=>$req->party_type,
             'last_edited_by'=>$user_id,
             'project_id'=>$proj_id,
-            'scenario'=>$req->scenario
-            // 'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+            'scenario'=>$req->scenario,
+            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
        ]);
 
        return redirect()->route('iso_sec_2_3_1_qual_event_scenarios',[
