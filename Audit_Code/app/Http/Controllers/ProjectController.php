@@ -88,8 +88,23 @@ class ProjectController extends Controller
         if ($checkpermission) {
             $permissions = json_decode($checkpermission->project_permissions);
 
+         
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
+
+
+                     if($project->project_type==17){
+
+                            //Internal Audit
+                        return view('internal_audit.main_level1', [
+                        'project_id' => $checkpermission->project_code,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project'=>$project
+                     
+                    ]);
+                        }
+
 
 
             $complianceFramework=DB::table('org_projects_framework_selected')

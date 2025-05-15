@@ -14,6 +14,7 @@ class IsoSec2_1 extends Controller
 {
     public function iso_section2_1($proj_id, $user_id)
     {
+        
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -37,6 +38,10 @@ class IsoSec2_1 extends Controller
 
                  $project=Project::join('project_types','projects.project_type','project_types.id')
                         ->where('projects.project_id',$proj_id)->first();
+            
+
+    
+
 
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
 

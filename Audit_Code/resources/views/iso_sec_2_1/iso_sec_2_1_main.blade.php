@@ -144,9 +144,9 @@ $permissions = json_decode($project_permissions);
                     <th onclick="sortTable(4)">Asset Owner Dept</th>
                     <th onclick="sortTable(5)">Asset Physical Location</th>
                     <th onclick="sortTable(6)">Asset Logical Location</th>
-      @if(!($complianceFramework->framework_id == 2 && 
-      $framework_approach->framework_approach_types_id == 1 && 
-      $risk_assessment_approach->global_risk_assessment_approach_id == 1))
+ @if(!(optional($complianceFramework)->framework_id == 2 && 
+      optional($framework_approach)->framework_approach_types_id == 1 && 
+      optional($risk_assessment_approach)->global_risk_assessment_approach_id == 1))
     <th>Risk Assessment</th>
 @endif
 
@@ -168,9 +168,9 @@ $permissions = json_decode($project_permissions);
                 <td>{{ $d->owner_dept }}</td>
                 <td>{{ $d->physical_loc }}</td>
                 <td>{{ $d->logical_loc }}</td>
-               @if(!($complianceFramework->framework_id == 2 && 
-      $framework_approach->framework_approach_types_id == 1 && 
-      $risk_assessment_approach->global_risk_assessment_approach_id == 1))
+            @if(!(optional($complianceFramework)->framework_id == 2 && 
+      optional($framework_approach)->framework_approach_types_id == 1 && 
+      optional($risk_assessment_approach)->global_risk_assessment_approach_id == 1))
       <td class="text-center">
       <a href="/iso_sec_2_3_1_risk_selection/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}" class="btn btn-primary btn-sm rounded-pill">Initiate</a>
                 </td>
@@ -200,8 +200,9 @@ $permissions = json_decode($project_permissions);
         </tbody>
     </table>
 
-         @if($complianceFramework->framework_id==2 && $framework_approach->framework_approach_types_id==1 && $risk_assessment_approach->global_risk_assessment_approach_id==1 )
-
+@if(optional($complianceFramework)->framework_id == 2 && 
+    optional($framework_approach)->framework_approach_types_id == 1 && 
+    optional($risk_assessment_approach)->global_risk_assessment_approach_id == 1)
          <a href="/initiaite_risk_assessment_qual_event/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md float-end">GO to Risk Assessment</a>
 
          @endif

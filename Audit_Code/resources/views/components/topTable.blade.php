@@ -20,15 +20,18 @@
             <td class="fw-bold">Sub-Organization:</td>
             <td>{{auth()->user()->organization->sub_org}}</td>
         </tr>
+        @if($project->project_type!=17)
+        {{-- Not Internal audit, then only visible --}}
         <tr>
             <td class="fw-bold">Compliance Framework:</td>
             <td>{{ $project->type }}</td>
             
             <td class="fw-bold">Information Security Risk Management Methodology:</td>
             <td>
-                {{ $framework_approach->approach_name ?? 'Default Vanilla' }} -
+                {{ $framework_approach->approach_name ?? '' }} -
                 {{ $risk_assessment_approach->global_assessment_approach ?? '' }}
             </td>
         </tr>
+        @endif
     </tbody>
 </table>
