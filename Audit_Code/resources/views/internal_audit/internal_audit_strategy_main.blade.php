@@ -50,6 +50,7 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
 <h3 class="fw-bold mt-2 text-center">Audit Strategy and Processes</h3>
 <h4 class="fw-bold mt-2 text-center text-primary">Internal Audit Strategy</h3>
 
+ 
 
 
 <h3 class="fw-bold text-center mt-4 mb-2">Scope of Audit</h3>
@@ -58,6 +59,7 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
         @php
             $strategy = $existingStrategies[$d->id] ?? null;
         @endphp
+     
         <div class="card mb-3 shadow-sm">
             <div class="card-body">
                 <h5 class="card-title mb-3 fw-bold" style="text-decoration: underline">
@@ -207,6 +209,12 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
                         <button type="submit" class="float-end btn btn-success btn-md mt-2">Save Changes</button>
                     @endif
                 </form>
+
+                @if($strategy)
+    <a href="/select_internal_audit_fields_for_report/{{$strategy->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-outline-primary btn-sm mt-2">
+        Select Fields for Reporting
+    </a>
+@endif
             </div>
         </div>
     @endforeach
