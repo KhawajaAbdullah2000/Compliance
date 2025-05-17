@@ -188,10 +188,13 @@ route::get("/reports/{proj_id}/{user_id}",[ProjectController::class,'reports'])-
 route::get("/assets_in_scope/{proj_id}/{user_id}",[ProjectController::class,'assets_in_scope'])->name('assets_in_scope');
 route::get("/mandatory_and_nonmandatory_controls/{proj_id}/{user_id}",[ProjectController::class,'mandatory_and_nonmandatory_controls'])->name('mandatory_and_nonmandatory_controls');
 
+route::get('generate_pdf',[InternalAudit::class,'generate_pdf']);
 
 //Internal Audit
 route::get('internal_audit_level_1/{level_num}/{proj_id}/{user_id}',[InternalAudit::class,'internal_audit_level_1'])->name('internal_audit_level_1');
-route::get('internal_audit_level_2/{level1_num}/{level2_num}/{proj_id}/{user_id}',[InternalAudit::class,'internal_audit_level_2'])->name('internal_audit_level_2');
+//route::get('internal_audit_level_2/{level1_num}/{level2_num}/{proj_id}/{user_id}',[InternalAudit::class,'internal_audit_level_2'])->name('internal_audit_level_2');
+route::post('audit_strategy_department/{proj_id}/{user_id}',[InternalAudit::class,'audit_strategy_department']);
+
 
 route::get("/risk_assessment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_assessment_report']);
 route::get("/risk_treatment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_treatment']);

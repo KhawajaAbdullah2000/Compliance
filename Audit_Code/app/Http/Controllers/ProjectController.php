@@ -36,6 +36,8 @@ class ProjectController extends Controller
                 ]
             );
 
+ 
+
 
         return view('assigned_projects.my_projects', ['projects' => $projects]);
     }

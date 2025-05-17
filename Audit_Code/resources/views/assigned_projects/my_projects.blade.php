@@ -75,10 +75,19 @@
 
                         <!-- Edit Project -->
                         <td style='text-align:center'>
+                            @if($pro->type_id==17)
+                        
+                            <a href="/internal_audit_level_1/1/{{$pro->project_code}}/{{auth()->user()->id}}" 
+                               data-toggle="tooltip" title="Internal Audit">
+                                <i class="fas fa-edit fa-lg text-success"></i>
+                            </a>
+
+                            @else
                             <a href="/iso_sections/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
                                data-toggle="tooltip" title="Edit Project Data">
                                 <i class="fas fa-edit fa-lg text-success"></i>
                             </a>
+                            @endif
                         </td>
 
                             <!-- Edit Project Metadata-->
