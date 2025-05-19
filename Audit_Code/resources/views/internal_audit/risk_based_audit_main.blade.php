@@ -47,7 +47,7 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
 
         <div class="accordion-item mb-3">
             <h2 class="accordion-header" id="heading{{ $index }}">
-                <button style="border: 0.2px solid rgb(127, 124, 124);" class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $index }}" aria-expanded="false" aria-controls="collapse{{ $index }}">
+                <button style="" class="accordion-button collapsed fw-bold elevation-effect" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $index }}" aria-expanded="false" aria-controls="collapse{{ $index }}">
                     Sub Organization: {{ $d->name }}
                 </button>
             </h2>
@@ -92,10 +92,16 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
                             <div class="col-auto"><label for="sampling_methodology_{{ $d->id }}" class="fw-semibold">Sampling Methodology:</label></div>
                             <div class="col-md-4">
                                 <select {{ $canEdit ? '' : 'disabled' }} name="sampling_methodology" class="form-select">
-                                    <option value="Random Selection" {{ optional($strategy)->sampling_methodology == 'Random Selection' ? 'selected' : '' }}>Random Selection</option>
-                                    <option value="Systematic Selection" {{ optional($strategy)->sampling_methodology == 'Systematic Selection' ? 'selected' : '' }}>Systematic Selection</option>
-                                    <option value="Haphazard Selection" {{ optional($strategy)->sampling_methodology == 'Haphazard Selection' ? 'selected' : '' }}>Haphazard Selection</option>
-                                    <option value="Block Selection" {{ optional($strategy)->sampling_methodology == 'Block Selection' ? 'selected' : '' }}>Block Selection</option>
+                   
+                                    <option value="Random Selection" {{ optional($strategy)->audit_approach == 'Random Selection' ? 'selected' : '' }}>Random Selection</option>
+
+                                    <option value="Systematic Selection" {{ optional($strategy)->audit_approach == 'Systematic Selection' ? 'selected' : '' }}>Systematic Selection</option>
+
+                                    <option value="Monetary Unit Sampling" {{ optional($strategy)->audit_approach == 'Monetary Unit Sampling' ? 'selected' : '' }}>Monetary Unit Sampling</option>
+
+                                    <option value="Haphazard Selection" {{ optional($strategy)->audit_approach == 'Haphazard Selection' ? 'selected' : '' }}>Haphazard Selection</option>
+
+                                    <option value="Block Selection" {{ optional($strategy)->audit_approach == 'Block Selection' ? 'selected' : '' }}>Block Selection</option>
                                 </select>
                             </div>
                         </div>
@@ -136,6 +142,17 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
                             Select Fields for Reporting
                         </a>
                     @endif
+
+                <div class="mt-2">
+                @if($strategy)
+                    <a href="/audit_universe/{{$strategy->id}}/{{$project->project_id}}/{{auth()->user()->id}}" 
+                    class="btn btn-success btn-md">
+                        <i class="fa fa-globe"></i> Audit Universe
+                    </a>
+                @endif
+            </div>
+
+         
 
                 </div>
             </div>

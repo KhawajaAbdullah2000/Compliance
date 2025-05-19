@@ -180,6 +180,24 @@ th.rotate {
     transition: all 0.3s ease;
 }
 
+  .elevation-effect {
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(0);
+        border: 1px solid #e0e0e0;
+    }
+
+    .elevation-effect:hover {
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        transform: translateY(-5px);
+        background-color: #f8f9fa;
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: #007bff !important;
+        color: #fff !important;
+    }
+
 /* Hover State */
 #sidebar ul li a:hover {
     background: rgba(255, 255, 255, 0.1);

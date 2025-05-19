@@ -201,6 +201,15 @@ route::post('select_fields_generate_report/{strategy_id}/{proj_id}/{user_id}',[I
 route::post('submit_strategy_time_period/{proj_id}/{user_id}',[InternalAudit::class,'submit_strategy_time_period']);
 route::post('submit_risk_based_plan_audit/{proj_id}/{user_id}',[InternalAudit::class,'submit_risk_based_plan_audit']);
 
+route::get('audit_universe/{risk_based_plan_id}/{proj_id}/{user_id}',[InternalAudit::class,'audit_universe'])->name('audit_universe');
+route::get('add_new_audit_universe_form/{risk_based_plan_id}/{proj_id}/{user_id}',[InternalAudit::class,'add_new_audit_universe_form']);
+route::post('save_audit_universe/{risk_based_plan_id}/{proj_id}/{user_id}',[InternalAudit::class,'save_audit_universe']);
+route::get('edit_audit_universe/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'edit_audit_universe']);
+route::post('submit_audit_universe_edit/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'submit_audit_universe_edit']);
+route::get('delete_audit_universe/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'delete_audit_universe']);
+
+
+
 route::get("/risk_assessment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_assessment_report']);
 route::get("/risk_treatment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_treatment']);
 route::get("/dashboard/{proj_id}/{user_id}",[ProjectController::class,'dashBoard'])->name('dashboard');

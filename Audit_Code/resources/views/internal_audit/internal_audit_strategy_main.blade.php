@@ -72,7 +72,7 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
 
         <div class="accordion-item mb-3">
             <h2 class="accordion-header" id="heading{{ $index }}">
-                <button style="border: 0.2px solid rgb(127, 124, 124);" class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $index }}" aria-expanded="false" aria-controls="collapse{{ $index }}">
+                <button class="accordion-button collapsed fw-bold elevation-effect" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $index }}" aria-expanded="false" aria-controls="collapse{{ $index }}">
                     Sub Organization: {{ $d->name }}
                 </button>
             </h2>
