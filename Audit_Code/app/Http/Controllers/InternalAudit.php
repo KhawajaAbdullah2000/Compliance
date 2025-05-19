@@ -34,11 +34,11 @@ class InternalAudit extends Controller
 
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
+
+                $organization = Organization::with('departments')->findOrFail(auth()->user()->organization->id);
+                $departments = $organization->departments;
                 if ($level_num == 1) {
                     //INTERNAL AUDIT STRATEGY
-                    $organization = Organization::with('departments')->findOrFail(auth()->user()->organization->id);
-                    $departments = $organization->departments;
-
                     $existingStrategies = DB::table('internal_audit_strategy')
                         ->where('project_id', $proj_id)
                         ->get()
@@ -59,6 +59,25 @@ class InternalAudit extends Controller
                         'level_num' => $level_num,
                         'existingStrategies' => $existingStrategies,
                         'time_period_selected'=>$time_period_selected
+
+                    ]);
+                }
+
+                if ($level_num == 2) {
+                    //RIsk Based Audit Plan
+
+                      $existingStrategies = DB::table('risk_based_plan_audit')
+                        ->where('project_id', $proj_id)
+                        ->get()
+                        ->keyBy('department_id'); // Key by department_id for easy lookup
+
+
+                    return view('internal_audit.risk_based_audit_main', [
+                        'project' => $project,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'departments' => $departments,
+                        'level_num' => $level_num,
+                        'existingStrategies' => $existingStrategies,
 
                     ]);
                 }
@@ -188,6 +207,55 @@ class InternalAudit extends Controller
 
     }
 
+        public function select_risk_based_plan_audit_for_report($role_based_plan_id, $proj_id, $user_id)
+    {
+
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+                $strategy = DB::table('risk_based_plan_audit')->find($role_based_plan_id);
+
+                if (!$strategy) {
+                    return redirect()->back()->with('error', 'Strategy not found.');
+                } else {
+
+                    $organization = DB::table('organizations')->find($strategy->organization_id);
+                    $department = DB::table('departments')->find($strategy->department_id);
+
+
+                    return view('internal_audit.select_fields_risk_based_plan_audit', [
+                        'project' => $project,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'organization' => $organization,
+                        'department' => $department,
+                        'strategy' => $strategy
+
+
+                    ]);
+                }
+
+
+
+
+
+            }
+            return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+        }
+
+    }
+
 
     public function select_fields_generate_report($internal_audit_strategy_id, $proj_id, $user_id, Request $req)
     {
@@ -211,7 +279,13 @@ class InternalAudit extends Controller
                     return back()->with('error', 'Please select at least one field.');
                 }
 
-                $strategy = DB::table('internal_audit_strategy')->find($internal_audit_strategy_id);
+                if($req->level_num==2){
+               $strategy = DB::table('risk_based_plan_audit')->find($internal_audit_strategy_id);
+                }else{
+               $strategy = DB::table('internal_audit_strategy')->find($internal_audit_strategy_id);
+                }
+ 
+
                 $organization = Organization::find($strategy->organization_id);
                 $department = Department::find($strategy->department_id);
 
@@ -228,12 +302,19 @@ class InternalAudit extends Controller
                     'organization' => $organization,
                     'department' => $department,
                     'project' => $checkpermission,
-                    'reportData' => $reportData
+                    'reportData' => $reportData,
+                    'level_num'=>$req->level_num
                 ]);
 
-                return $pdf->download('Internal_Audit_Report_' . $organization->name . '_' . $department->name . '.pdf');
+                if($req->level_num==2){
+                return $pdf->download('RIsk_Based_Audit_Plan_Report_' . $organization->name . '_' . $department->name . '.pdf');
+                }else{
+                     return $pdf->download('Internal_Audit_Report_' . $organization->name . '_' . $department->name . '.pdf');
 
 
+                }
+
+               
             }
 
 
@@ -284,6 +365,71 @@ class InternalAudit extends Controller
             }
         }
           return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+    }
+
+
+    
+    public function submit_risk_based_plan_audit($proj_id, $user_id, Request $req)
+    {
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+
+
+                if (in_array('Data Inputter', $permissions)) {
+
+                    DB::table('risk_based_plan_audit')->updateOrInsert([
+                        'organization_id' => $req->organization_id,
+                        'department_id' => $req->department_id,
+                        'project_id' => $proj_id
+                    ], [
+                        'audit_approach' => $req->audit_approach,
+                        'sampling_methodology' => $req->sampling_methodology,
+                        'risk_affecting' => $req->risk_affecting,
+                        'risk_mitigation' => $req->risk_mitigation,
+                        'audit_started' => $req->audit_started,
+                        'audit_ended' => $req->audit_ended,
+                        'inclusions_in_scope' => $req->inclusions_in_scope,
+                        'exclusions_in_scope' => $req->exclusions_in_scope,
+                        'persons_interviewed' => $req->persons_interviewed,
+                        'documents_reviewed' => $req->documents_reviewed,
+                        'processes_observed' => $req->processes_observed,
+                        'artefacts_examined' => $req->artefacts_examined,
+                        'requirements_status_compliance' => $req->requirements_status_compliance,
+                        'last_edited_by' => $user_id,
+                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+
+                    ]);
+
+                    return redirect()->route('internal_audit_level_1', [
+                        'level_num' => $req->level_num, //2
+                        'proj_id' => $proj_id,
+                        'user_id' => $user_id
+                    ])->with('success', 'Saved Changes Successfully');
+
+
+                }
+
+
+
+
+            }
+
+        }
+
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
 
     }
 

@@ -48,7 +48,7 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
    </div> --}}
 
 <h3 class="fw-bold mt-2 text-center">Audit Strategy and Processes</h3>
-<h4 class="fw-bold mt-2 text-center text-primary">Internal Audit Strategy</h3>
+<h4 class="fw-bold mt-2 text-center text-primary">Risk based Audit Plan</h3>
 
  
 <h3 class="fw-bold text-center mt-4 mb-2">Reporting Framework</h3>
@@ -60,7 +60,8 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
     <form method="POST" action="/select_fields_generate_report/{{$strategy->id}}/{{$project->project_id}}/{{auth()->user()->id}}">
         @csrf
 
-                <input type="hidden" name="level_num" value="1">
+        <input type="hidden" name="level_num" value="2">
+
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                 <strong>Select Fields for Reporting</strong>
@@ -110,7 +111,7 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
         </div>
 
         <div class="mt-3">
-            <a href="/internal_audit_level_1/1/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-secondary">Back</a>
+            <a href="/internal_audit_level_1/2/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-secondary">Back</a>
             <button type="submit" class="btn btn-primary">Generate Report</button>
         </div>
     </form>

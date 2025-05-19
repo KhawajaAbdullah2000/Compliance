@@ -25,8 +25,6 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
 
-     
-    
         <button type="button" id="sidebarCollapse" class="btn btn-primary">
           <i class="fa fa-bars"></i>
           <span class="sr-only">Toggle Menu</span>
@@ -38,31 +36,8 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
 
 
 <h3 class="fw-bold mt-2 text-center">Audit Strategy and Processes</h3>
-<h4 class="fw-bold mt-2 text-center text-primary">Internal Audit Strategy</h3>
+<h4 class="fw-bold mt-2 text-center text-primary">Risk Based Audit Plan</h4>
 
- 
-
-
-
-
-<div class="col-md-6">
-<form action="/submit_strategy_time_period/{{$project->project_id}}/{{auth()->user()->id}}" method="POST" class="d-flex align-items-center gap-2 mb-2">
-    @csrf
-
-    <label for="time_period" class="form-label mb-0 fw-semibold">Strategy Time Period:</label>
-    <select {{ $canEdit ? '' : 'disabled' }} name="time_period" id="time_period" class="form-select w-50">
-        @for ($i = 1; $i <= 10; $i++)
-           <option value="{{ $i }}" {{ isset($time_period_selected) && $time_period_selected == $i ? 'selected' : '' }}>
-                {{ $i }}
-            </option>
-        @endfor
-    </select>
-
-    <button {{ $canEdit ? '' : 'disabled' }} type="submit" class="btn btn-success btn-sm">Submit</button>
-</form>
-</div>
-
-<h3 class="fw-bold text-center mt-4 mb-2">Scope of Audit</h3>
 
 <div class="accordion mt-4" id="departmentAccordion">
     @foreach ($departments as $index => $d)
@@ -81,11 +56,24 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
                 <div class="accordion-body">
 
                     {{-- Start of the Full Form --}}
-                    <form action="/audit_strategy_department/{{$project->project_id}}/{{auth()->user()->id}}" method="POST">
+                    <form action="/submit_risk_based_plan_audit/{{$project->project_id}}/{{auth()->user()->id}}" method="POST">
                         @csrf
                         <input type="hidden" name="organization_id" value="{{ $d->org_id }}">
                         <input type="hidden" name="department_id" value="{{ $d->id }}">
                         <input type="hidden" name="level_num" value="{{ $level_num }}">
+
+                        
+                        {{-- Audit Period --}}
+                        <div class="row align-items-center mb-4">
+                            <div class="col-md-3">
+                                <label class="fw-semibold">Audit Started:</label>
+                                <input {{ $canEdit ? '' : 'disabled' }} type="date" name="audit_started" value="{{ optional($strategy)->audit_started }}" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="fw-semibold">Audit Ended:</label>
+                                <input {{ $canEdit ? '' : 'disabled' }} type="date" name="audit_ended" value="{{ optional($strategy)->audit_ended }}" class="form-control">
+                            </div>
+                        </div>
 
                         {{-- Audit Approach --}}
                         <div class="row align-items-center mb-2">
@@ -112,17 +100,6 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
                             </div>
                         </div>
 
-                        {{-- Audit Period --}}
-                        <div class="row align-items-center mb-4">
-                            <div class="col-md-3">
-                                <label class="fw-semibold">Audit Started:</label>
-                                <input {{ $canEdit ? '' : 'disabled' }} type="date" name="audit_started" value="{{ optional($strategy)->audit_started }}" class="form-control">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="fw-semibold">Audit Ended:</label>
-                                <input {{ $canEdit ? '' : 'disabled' }} type="date" name="audit_ended" value="{{ optional($strategy)->audit_ended }}" class="form-control">
-                            </div>
-                        </div>
 
                         {{-- Textareas --}}
                         @foreach ([
@@ -146,7 +123,7 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
 
                         {{-- Save Button --}}
                         @if($canEdit)
-                                  <div class="text-end mt-2">
+                          <div class="text-end mt-2">
                             <button type="submit" class="btn btn-success btn-md">Save Changes</button>
                         </div>
                         @endif
@@ -155,7 +132,7 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
 
                     {{-- Optional: Select Fields for Reporting --}}
                     @if($strategy)
-                        <a href="/select_internal_audit_fields_for_report/{{$strategy->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-outline-primary btn-sm mt-2">
+                        <a href="/select_risk_based_plan_audit_for_report/{{$strategy->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-outline-primary btn-sm mt-2">
                             Select Fields for Reporting
                         </a>
                     @endif
@@ -169,9 +146,6 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
 
 
 
-
-
-
   </div>
  
 
@@ -180,7 +154,7 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
 
 </div>
 
-</div>
+
 
 
 

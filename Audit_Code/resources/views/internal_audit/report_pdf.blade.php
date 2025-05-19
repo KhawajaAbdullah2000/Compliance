@@ -32,7 +32,12 @@
 <body>
     <div class="container">
     <div class="report-header">
+        @if($level_num==1)
         <h1>Internal Audit Report</h1>
+        @elseif($level_num==2)
+          <h1>Risk Based Audit Plan Report</h1>
+          @endif
+
     </div>
 
     <div class="mb-4">
