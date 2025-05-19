@@ -53,172 +53,127 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
  
 
 
+
+
+<div class="col-md-6">
+<form action="/submit_strategy_time_period/{{$project->project_id}}/{{auth()->user()->id}}" method="POST" class="d-flex align-items-center gap-2 mb-2">
+    @csrf
+
+    <label for="time_period" class="form-label mb-0 fw-semibold">Strategy Time Period:</label>
+    <select {{ $canEdit ? '' : 'disabled' }} name="time_period" id="time_period" class="form-select w-50">
+        @for ($i = 1; $i <= 10; $i++)
+           <option value="{{ $i }}" {{ isset($time_period_selected) && $time_period_selected == $i ? 'selected' : '' }}>
+                {{ $i }}
+            </option>
+        @endfor
+    </select>
+
+    <button {{ $canEdit ? '' : 'disabled' }} type="submit" class="btn btn-success btn-sm">Submit</button>
+</form>
+</div>
+
 <h3 class="fw-bold text-center mt-4 mb-2">Scope of Audit</h3>
-<div class="col-md-12">
-    @foreach ($departments as $d)
+
+<div class="accordion mt-4" id="departmentAccordion">
+    @foreach ($departments as $index => $d)
         @php
             $strategy = $existingStrategies[$d->id] ?? null;
         @endphp
-     
-        <div class="card mb-3 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title mb-3 fw-bold" style="text-decoration: underline">
+
+        <div class="accordion-item mb-3">
+            <h2 class="accordion-header" id="heading{{ $index }}">
+                <button style="border: 0.2px solid rgb(127, 124, 124);" class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $index }}" aria-expanded="false" aria-controls="collapse{{ $index }}">
                     Sub Organization: {{ $d->name }}
-                </h5>
+                </button>
+            </h2>
 
-                <form action="/audit_strategy_department/{{$project->project_id}}/{{auth()->user()->id}}" method="POST">
-                    @csrf
-                    <input type="hidden" name="organization_id" value="{{$d->org_id}}">
-                    <input type="hidden" name="department_id" value="{{$d->id}}">
-                    <input type="hidden" name="level_num" value="{{$level_num}}">
+            <div id="collapse{{ $index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $index }}" data-bs-parent="#departmentAccordion">
+                <div class="accordion-body">
 
-                    {{-- Audit Approach --}}
-                    <div class="row align-items-center mb-2">
-                        <div class="col-auto">
-                            <label for="audit_approach_{{ $d->id }}" class="col-form-label fw-semibold">Audit Approach:</label>
+                    {{-- Start of the Full Form --}}
+                    <form action="/audit_strategy_department/{{$project->project_id}}/{{auth()->user()->id}}" method="POST">
+                        @csrf
+                        <input type="hidden" name="organization_id" value="{{ $d->org_id }}">
+                        <input type="hidden" name="department_id" value="{{ $d->id }}">
+                        <input type="hidden" name="level_num" value="{{ $level_num }}">
+
+                        {{-- Audit Approach --}}
+                        <div class="row align-items-center mb-2">
+                            <div class="col-auto"><label for="audit_approach_{{ $d->id }}" class="fw-semibold">Audit Approach:</label></div>
+                            <div class="col-md-4">
+                                <select {{ $canEdit ? '' : 'disabled' }} name="audit_approach" class="form-select">
+                                    <option value="Substantive Testing" {{ optional($strategy)->audit_approach == 'Substantive Testing' ? 'selected' : '' }}>Substantive Testing</option>
+                                    <option value="Risk-Based" {{ optional($strategy)->audit_approach == 'Risk-Based' ? 'selected' : '' }}>Risk-Based</option>
+                                    <option value="Hybrid" {{ optional($strategy)->audit_approach == 'Hybrid' ? 'selected' : '' }}>Hybrid</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <select {{ $canEdit ? '' : 'disabled' }} id="audit_approach_{{ $d->id }}" name="audit_approach" class="form-select">
-                                <option value="Substantive Testing" {{ (optional($strategy)->audit_approach == 'Substantive Testing') ? 'selected' : '' }}>Substantive Testing</option>
-                                <option value="Risk-Based" {{ (optional($strategy)->audit_approach == 'Risk-Based') ? 'selected' : '' }}>Risk-Based</option>
-                                <option value="Hybrid" {{ (optional($strategy)->audit_approach == 'Hybrid') ? 'selected' : '' }}>Hybrid</option>
-                            </select>
+
+                        {{-- Sampling Methodology --}}
+                        <div class="row align-items-center mb-2">
+                            <div class="col-auto"><label for="sampling_methodology_{{ $d->id }}" class="fw-semibold">Sampling Methodology:</label></div>
+                            <div class="col-md-4">
+                                <select {{ $canEdit ? '' : 'disabled' }} name="sampling_methodology" class="form-select">
+                                    <option value="Random Selection" {{ optional($strategy)->sampling_methodology == 'Random Selection' ? 'selected' : '' }}>Random Selection</option>
+                                    <option value="Systematic Selection" {{ optional($strategy)->sampling_methodology == 'Systematic Selection' ? 'selected' : '' }}>Systematic Selection</option>
+                                    <option value="Haphazard Selection" {{ optional($strategy)->sampling_methodology == 'Haphazard Selection' ? 'selected' : '' }}>Haphazard Selection</option>
+                                    <option value="Block Selection" {{ optional($strategy)->sampling_methodology == 'Block Selection' ? 'selected' : '' }}>Block Selection</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    {{-- Sampling Methodology --}}
-                    <div class="row align-items-center mb-2">
-                        <div class="col-auto">
-                            <label for="sampling_methodology_{{ $d->id }}" class="col-form-label fw-semibold">Sampling Methodology:</label>
+                        {{-- Audit Period --}}
+                        <div class="row align-items-center mb-4">
+                            <div class="col-md-3">
+                                <label class="fw-semibold">Audit Started:</label>
+                                <input {{ $canEdit ? '' : 'disabled' }} type="date" name="audit_started" value="{{ optional($strategy)->audit_started }}" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="fw-semibold">Audit Ended:</label>
+                                <input {{ $canEdit ? '' : 'disabled' }} type="date" name="audit_ended" value="{{ optional($strategy)->audit_ended }}" class="form-control">
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <select {{ $canEdit ? '' : 'disabled' }} id="sampling_methodology_{{ $d->id }}" name="sampling_methodology" class="form-select">
-                                <option value="Random Selection" {{ (optional($strategy)->sampling_methodology == 'Random Selection') ? 'selected' : '' }}>Random Selection</option>
-                                <option value="Systematic Selection" {{ (optional($strategy)->sampling_methodology == 'Systematic Selection') ? 'selected' : '' }}>Systematic Selection</option>
-                                <option value="Haphazard Selection" {{ (optional($strategy)->sampling_methodology == 'Haphazard Selection') ? 'selected' : '' }}>Haphazard Selection</option>
-                                <option value="Block Selection" {{ (optional($strategy)->sampling_methodology == 'Block Selection') ? 'selected' : '' }}>Block Selection</option>
-                            </select>
-                        </div>
-                    </div>
 
-                    {{-- Audit Period --}}
-                    <div class="row align-items-center mb-4 mt-4">
-                        <div class="col-md-3">
-                            <label class="fw-semibold">Audit Started:</label>
-                            <input {{ $canEdit ? '' : 'disabled' }} type="date" name="audit_started" value="{{ optional($strategy)->audit_started }}" class="form-control">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="fw-semibold">Audit Ended:</label>
-                            <input {{ $canEdit ? '' : 'disabled' }} type="date" name="audit_ended" value="{{ optional($strategy)->audit_ended }}" class="form-control">
-                        </div>
-                    </div>
+                        {{-- Textareas --}}
+                        @foreach ([
+                            'risk_affecting' => 'Risks Affecting the Audit Processes',
+                            'risk_mitigation' => 'Risk Mitigation Approaches',
+                            'inclusions_in_scope' => 'Inclusions in Scope',
+                            'exclusions_in_scope' => 'Exclusions in Scope',
+                            'persons_interviewed' => 'Persons Interviewed',
+                            'documents_reviewed' => 'Documents Reviewed',
+                            'processes_observed' => 'Processes Observed',
+                            'artefacts_examined' => 'Artefacts Examined',
+                            'requirements_status_compliance' => 'Requirements Status & Compliance'
+                        ] as $field => $label)
+                            <div class="row align-items-center mb-2">
+                                <div class="col-auto"><label class="fw-semibold">{{ $label }}:</label></div>
+                                <div class="col">
+                                    <textarea {{ $canEdit ? '' : 'disabled' }} class="form-control" name="{{ $field }}" rows="2">{{ optional($strategy)->$field }}</textarea>
+                                </div>
+                            </div>
+                        @endforeach
 
-                    {{-- Risk Affecting --}}
-                    <div class="row align-items-center mb-2">
-                        <div class="col-auto">
-                            <label for="risk_affecting_{{ $d->id }}" class="col-form-label fw-semibold">Risks Affecting the Audit Processes:</label>
-                        </div>
-                        <div class="col">
-                            <textarea {{ $canEdit ? '' : 'disabled' }} class="form-control" name="risk_affecting" id="risk_affecting_{{$d->id}}" rows="2">{{ optional($strategy)->risk_affecting }}</textarea>
-                        </div>
-                    </div>
+                        {{-- Save Button --}}
+                        @if($canEdit)
+                            <button type="submit" class="float-end btn btn-success btn-md mt-2">Save Changes</button>
+                        @endif
+                    </form>
+                    {{-- End of the Full Form --}}
 
-                    {{-- Risk Mitigation --}}
-                    <div class="row align-items-center mb-2">
-                        <div class="col-auto">
-                            <label for="risk_mitigation_{{ $d->id }}" class="col-form-label fw-semibold">Risk Mitigation Approaches:</label>
-                        </div>
-                        <div class="col">
-                            <textarea {{ $canEdit ? '' : 'disabled' }} class="form-control" name="risk_mitigation" id="risk_mitigation_{{$d->id}}" rows="2">{{ optional($strategy)->risk_mitigation }}</textarea>
-                        </div>
-                    </div>
-
-                   {{-- Inclusions in Scope --}}
-<div class="row align-items-center mb-2">
-    <div class="col-auto">
-        <label class="fw-semibold">Inclusions in Scope:</label>
-    </div>
-    <div class="col">
-        <textarea {{ $canEdit ? '' : 'disabled' }} class="form-control" name="inclusions_in_scope" rows="2">{{ optional($strategy)->inclusions_in_scope }}</textarea>
-    </div>
-</div>
-
-{{-- Exclusions in Scope --}}
-<div class="row align-items-center mb-2">
-    <div class="col-auto">
-        <label class="fw-semibold">Exclusions in Scope:</label>
-    </div>
-    <div class="col">
-        <textarea {{ $canEdit ? '' : 'disabled' }} class="form-control" name="exclusions_in_scope" rows="2">{{ optional($strategy)->exclusions_in_scope }}</textarea>
-    </div>
-</div>
-
-{{-- Persons Interviewed --}}
-<div class="row align-items-center mb-2">
-    <div class="col-auto">
-        <label class="fw-semibold">Persons Interviewed:</label>
-    </div>
-    <div class="col">
-        <textarea {{ $canEdit ? '' : 'disabled' }} class="form-control" name="persons_interviewed" rows="2">{{ optional($strategy)->persons_interviewed }}</textarea>
-    </div>
-</div>
-
-{{-- Documents Reviewed --}}
-<div class="row align-items-center mb-2">
-    <div class="col-auto">
-        <label class="fw-semibold">Documents Reviewed:</label>
-    </div>
-    <div class="col">
-        <textarea {{ $canEdit ? '' : 'disabled' }} class="form-control" name="documents_reviewed" rows="2">{{ optional($strategy)->documents_reviewed }}</textarea>
-    </div>
-</div>
-
-{{-- Processes Observed --}}
-<div class="row align-items-center mb-2">
-    <div class="col-auto">
-        <label class="fw-semibold">Processes Observed:</label>
-    </div>
-    <div class="col">
-        <textarea {{ $canEdit ? '' : 'disabled' }} class="form-control" name="processes_observed" rows="2">{{ optional($strategy)->processes_observed }}</textarea>
-    </div>
-</div>
-
-{{-- Artefacts Examined --}}
-<div class="row align-items-center mb-2">
-    <div class="col-auto">
-        <label class="fw-semibold">Artefacts Examined:</label>
-    </div>
-    <div class="col">
-        <textarea {{ $canEdit ? '' : 'disabled' }} class="form-control" name="artefacts_examined" rows="2">{{ optional($strategy)->artefacts_examined }}</textarea>
-    </div>
-</div>
-
-{{-- Requirements Status Compliance --}}
-<div class="row align-items-center mb-2">
-    <div class="col-auto">
-        <label class="fw-semibold">Requirements Status & Compliance:</label>
-    </div>
-    <div class="col">
-        <textarea {{ $canEdit ? '' : 'disabled' }} class="form-control" name="requirements_status_compliance" rows="2">{{ optional($strategy)->requirements_status_compliance }}</textarea>
-    </div>
-</div>
-
-
-                    {{-- Save Button --}}
-                    @if($canEdit)
-                        <button type="submit" class="float-end btn btn-success btn-md mt-2">Save Changes</button>
+                    {{-- Optional: Select Fields for Reporting --}}
+                    @if($strategy)
+                        <a href="/select_internal_audit_fields_for_report/{{$strategy->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-outline-primary btn-sm mt-2">
+                            Select Fields for Reporting
+                        </a>
                     @endif
-                </form>
 
-                @if($strategy)
-    <a href="/select_internal_audit_fields_for_report/{{$strategy->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-outline-primary btn-sm mt-2">
-        Select Fields for Reporting
-    </a>
-@endif
+                </div>
             </div>
         </div>
     @endforeach
 </div>
+
 
 
 

@@ -45,9 +45,10 @@ class InternalAudit extends Controller
                         ->keyBy('department_id'); // Key by department_id for easy lookup
 
 
-
-
-
+                        $strategy_time_period=DB::table('strategy_time_period')->where('project_id',$proj_id)
+                        ->first();
+       
+                        $time_period_selected = $strategy_time_period ? $strategy_time_period->time_period : null;
 
 
 
@@ -56,7 +57,8 @@ class InternalAudit extends Controller
                         'project_permissions' => $checkpermission->project_permissions,
                         'departments' => $departments,
                         'level_num' => $level_num,
-                        'existingStrategies' => $existingStrategies
+                        'existingStrategies' => $existingStrategies,
+                        'time_period_selected'=>$time_period_selected
 
                     ]);
                 }
@@ -186,8 +188,8 @@ class InternalAudit extends Controller
 
     }
 
-    
-    public function select_fields_generate_report($internal_audit_strategy_id, $proj_id, $user_id,Request $req)
+
+    public function select_fields_generate_report($internal_audit_strategy_id, $proj_id, $user_id, Request $req)
     {
 
         if ($user_id == auth()->user()->id) {
@@ -203,46 +205,88 @@ class InternalAudit extends Controller
                 ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
                 ->first();
             if ($checkpermission) {
-           
-            $selectedFields = $req->fields ?? [];
-            if (empty($selectedFields)) {
-                return back()->with('error', 'Please select at least one field.');
-            }
 
-              $strategy = DB::table('internal_audit_strategy')->find($internal_audit_strategy_id);
-            $organization = Organization::find($strategy->organization_id);
-            $department = Department::find($strategy->department_id);
+                $selectedFields = $req->fields ?? [];
+                if (empty($selectedFields)) {
+                    return back()->with('error', 'Please select at least one field.');
+                }
 
-             $reportData = [];
-            foreach ($selectedFields as $field) {
-                $reportData[] = [
-                    'label' => ucwords(str_replace('_', ' ', $field)),
-                    'value' => $strategy->$field ?? 'N/A'
-                ];
-            }
+                $strategy = DB::table('internal_audit_strategy')->find($internal_audit_strategy_id);
+                $organization = Organization::find($strategy->organization_id);
+                $department = Department::find($strategy->department_id);
 
-
-            $pdf = Pdf::view('internal_audit.report_pdf', [
-                'organization' => $organization,
-                'department' => $department,
-                'project' => $checkpermission,
-                'reportData' => $reportData
-            ]);
-
-            return $pdf->download('Internal_Audit_Report_' . $organization->name . '_' . $department->name . '.pdf');
-
-             
+                $reportData = [];
+                foreach ($selectedFields as $field) {
+                    $reportData[] = [
+                        'label' => ucwords(str_replace('_', ' ', $field)),
+                        'value' => $strategy->$field ?? 'N/A'
+                    ];
                 }
 
 
+                $pdf = Pdf::view('internal_audit.report_pdf', [
+                    'organization' => $organization,
+                    'department' => $department,
+                    'project' => $checkpermission,
+                    'reportData' => $reportData
+                ]);
 
+                return $pdf->download('Internal_Audit_Report_' . $organization->name . '_' . $department->name . '.pdf');
 
 
             }
-            return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
-        }
 
-    
+
+
+
+
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+    }
+
+
+    public function submit_strategy_time_period($proj_id,$user_id,Request $req){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+
+
+                if (in_array('Data Inputter', $permissions)) {
+
+                    DB::table('strategy_time_period')->updateOrInsert([
+                        'project_id'=>$proj_id,
+                    ],
+                    [
+                        'time_period'=>$req->time_period,
+                        'last_edited_by'=>$user_id,
+                        'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+                    ]);
+
+                    return redirect()->route('internal_audit_level_1',[
+                        'level_num'=>1,
+                        'proj_id'=>$proj_id,
+                        'user_id'=>$user_id
+                    ])->with('success','Strategic Time period saved successfully');
+
+
+                }
+            }
+        }
+          return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+    }
+
 
 
 

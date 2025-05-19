@@ -196,6 +196,8 @@ route::get('internal_audit_level_1/{level_num}/{proj_id}/{user_id}',[InternalAud
 route::post('audit_strategy_department/{proj_id}/{user_id}',[InternalAudit::class,'audit_strategy_department']);
 route::get('select_internal_audit_fields_for_report/{interal_audit_strategy_id}/{proj_id}/{user_id}',[InternalAudit::class,'select_internal_audit_fields_for_report']);
 route::post('select_fields_generate_report/{strategy_id}/{proj_id}/{user_id}',[InternalAudit::class,'select_fields_generate_report']);
+route::post('submit_strategy_time_period/{proj_id}/{user_id}',[InternalAudit::class,'submit_strategy_time_period']);
+
 
 route::get("/risk_assessment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_assessment_report']);
 route::get("/risk_treatment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_treatment']);
