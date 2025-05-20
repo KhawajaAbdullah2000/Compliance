@@ -42,19 +42,20 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
 
 
 <h5 style="text-decoration: underline;"><span class="fw-bold" >Sub-Organization:</span> {{$department->name}}</h5>
+<h5><span class="fw-bold" >Available Unit or Activity or Function or Process:</span> {{$unit->name}}</h5>
 
 
 
 @if (in_array('Data Inputter', $permissions))
     <a class="btn btn-success btn-md float-end me-2 mb-2"
-       href="/add_new_audit_universe_form/{{$risk_based_plan_details->id}}/{{ $project->project_id }}/{{ auth()->user()->id }}" role="button">
- Add new unit or activity or function or process
+       href="/add_new_data_record_form/{{$unit->id}}/{{ $project->project_id }}/{{ auth()->user()->id }}" role="button">
+ Add new Data Record
  <i class="fas fa-plus"></i>
     </a>
 @endif
 
-<a href="{{ route('internal_audit_level_1', [
-    'level_num' => 2,
+<a href="{{ route('audit_universe', [
+    'risk_based_plan_id' => $unit->risk_based_plan_audit_id,
     'proj_id' => $project->project_id,
     'user_id' => auth()->user()->id
 ]) }}" 
@@ -65,14 +66,10 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
   <table class="table table-responsive table-bordered">
                 <thead class="table-dark">
             <tr>
-                <th>Auditable unit or activity or function or process</th>
-                <th>Planned Start</th>
-                <th>Planned End</th>
-                <th>Actual Start</th>
-                <th>Actual End</th>
-                <th>Auditor</th>
-                <th>Approver</th>
-                <th>Enter,Upload or Import Data</th>
+                <th>Data Record</th>
+                <th>Audit Approach</th>
+                <th>Sampling Methodology</th>
+        
                 <th>Edit</th>
                 <th>Delete</th>
              
@@ -80,31 +77,13 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
                </tr>        
                 </thead>
                  <tbody>
-                        @foreach ($auditUniverseList as $unit)
-                            <tr>
-                                <td>{{ $unit->name }}</td>
-                                <td>{{ $unit->planned_start ?? 'N/A' }}</td>
-                                <td>{{ $unit->planned_end ?? 'N/A' }}</td>
-                                <td>{{ $unit->actual_start ?? 'N/A' }}</td>
-                                <td>{{ $unit->actual_end ?? 'N/A' }}</td>
-                                <td>{{ $unit->auditor_name ?? 'N/A' }}</td>
-                                <td>{{ $unit->approver_name ?? 'N/A' }}</td>
-                                <td class="text-center">
+                    @foreach ($data_records as $d )
+                    <td>{{$d->data_record_name}}</td>
+                    <td>{{$d->data_record_approach}}</td>
+                      <td>{{$d->data_record_sampling}}</td>
+                <td class="text-center">
                          @if (in_array('Data Inputter', $permissions))
-                        <a href="/data_records/{{$unit->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-sm btn-success">
-                          <i class="fa fa-edit fa-lg"></i> Data Records
-                      </a>
-                      @else
-                       <i class="fas fa-lock text-secondary"></i>
-                       @endif
-
-                        </td>
-
-
-
-                                <td class="text-center">
-                         @if (in_array('Data Inputter', $permissions))
-                        <a href="/edit_audit_universe/{{$unit->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-sm btn-warning">
+                        <a href="/edit_data_record/{{$d->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-sm btn-warning">
                           <i class="fa fa-edit"></i> Edit
                       </a>
                       @else
@@ -113,9 +92,9 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
 
                         </td>
 
-                         <td class="text-center">
+              <td class="text-center">
                          @if (in_array('Data Inputter', $permissions))
-                        <a href="/delete_audit_universe/{{$unit->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-sm btn-danger">
+                        <a href="/delete_data_record/{{$d->id}}/{{$unit->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-sm btn-danger">
                           <i class="fas fa-trash"></i> Delete
                       </a>
                       @else
@@ -124,8 +103,10 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
 
                         </td>
                                 
-                            </tr>
-                        @endforeach
+                    
+                    @endforeach
+                    
+                       
                     </tbody>
             </table>
 

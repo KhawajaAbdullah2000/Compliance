@@ -207,7 +207,13 @@ route::post('save_audit_universe/{risk_based_plan_id}/{proj_id}/{user_id}',[Inte
 route::get('edit_audit_universe/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'edit_audit_universe']);
 route::post('submit_audit_universe_edit/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'submit_audit_universe_edit']);
 route::get('delete_audit_universe/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'delete_audit_universe']);
+route::get('data_records/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'data_records'])->name('data_records');
+route::get('add_new_data_record_form/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'add_new_data_record_form']);
+route::post('save_data_record/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'save_data_record']);
 
+route::get('edit_data_record/{data_record_id}/{proj_id}/{user_id}',[InternalAudit::class,'edit_data_record']);
+route::post('update_data_record/{data_record_id}/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'update_data_record']);
+route::get('delete_data_record/{data_record_id}/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'delete_data_record']);
 
 
 route::get("/risk_assessment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_assessment_report']);

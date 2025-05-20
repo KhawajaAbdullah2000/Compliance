@@ -738,7 +738,7 @@ class InternalAudit extends Controller
     }
 
 
-           public function delete_audit_universe($unit_id,$proj_id,$user_id){
+    public function delete_audit_universe($unit_id,$proj_id,$user_id){
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -787,11 +787,317 @@ class InternalAudit extends Controller
         }
 
 
+    public function data_records($unit_id, $proj_id, $user_id, Request $request)
+    {
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+
+                    $unit = DB::table('audit_universe')->where('id', $unit_id)->first();
+
+                    $risk_based_plan_details = DB::table('risk_based_plan_audit')->find($unit->risk_based_plan_audit_id);
+                    $department = DB::table('departments')->find($risk_based_plan_details->department_id);
+
+
+                    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                        ->where('projects.project_id', $proj_id)->first();
+                   
+                    $data_records=DB::table('data_record_audit_universe')->where('audit_universe_id',$unit_id)->get();
+            
+
+                    return view('internal_audit.data_records_main', [
+                        'project' => $project,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'department' => $department,
+                        'risk_based_plan_details' => $risk_based_plan_details,
+                        'unit' => $unit,
+                        'data_records'=>$data_records
+
+                    ]);
 
 
 
+            }
 
 
+        }
+
+
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+    }
+
+    public function add_new_data_record_form($unit_id,$proj_id,$user_id){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+
+                    if(in_array('Data Inputter',$permissions)){
+                        $unit = DB::table('audit_universe')->where('id', $unit_id)->first();
+
+                    $risk_based_plan_details = DB::table('risk_based_plan_audit')->find($unit->risk_based_plan_audit_id);
+                    $department = DB::table('departments')->find($risk_based_plan_details->department_id);
+
+
+                    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                        ->where('projects.project_id', $proj_id)->first();
+                   
+
+                    return view('internal_audit.add_data_record_form', [
+                        'project' => $project,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'department' => $department,
+                        'risk_based_plan_details' => $risk_based_plan_details,
+                        'unit' => $unit
+
+                    ]);
+
+
+
+                    }
+
+                    
+
+            }
+
+
+        }
+
+
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+    }
+
+        public function save_data_record($unit_id,$proj_id,$user_id,Request $req){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+
+                    if(in_array('Data Inputter',$permissions)){
+              
+              DB::table('data_record_audit_universe')->insert([
+                'data_record_name'=>$req->data_record_name,
+                'data_record_approach'=>$req->data_record_approach,
+                'data_record_sampling'=>$req->data_record_sampling,
+                'last_edited_by'=>$user_id,
+                'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s'),
+                'audit_universe_id'=>$unit_id
+              ]);
+
+              return redirect()->route('data_records',[
+                'unit_id'=>$unit_id,
+                'proj_id'=>$proj_id,
+                'user_id'=>$user_id,
+              ])->with('success','Data Record Saved Successfully');
+
+                    
+
+
+
+                    }
+
+                    
+
+            }
+
+
+        }
+
+
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+    }
+
+
+
+    public function edit_data_record($data_record_id,$proj_id,$user_id){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+
+                    if(in_array('Data Inputter',$permissions)){
+                       
+                     $data_record=DB::table('data_record_audit_universe')->find($data_record_id);
+            
+                        
+                    $unit = DB::table('audit_universe')->where('id', $data_record->audit_universe_id)->first();
+
+                    $risk_based_plan_details = DB::table('risk_based_plan_audit')->find($unit->risk_based_plan_audit_id);
+                    $department = DB::table('departments')->find($risk_based_plan_details->department_id);
+
+
+                    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                        ->where('projects.project_id', $proj_id)->first();
+                   
+
+                    return view('internal_audit.edit_data_record_form', [
+                        'project' => $project,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'department' => $department,
+                        'risk_based_plan_details' => $risk_based_plan_details,
+                        'unit' => $unit,
+                        'data_record'=>$data_record
+
+                    ]);
+
+
+
+                    }
+
+                    
+
+            }
+
+
+        }
+
+
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+    }
+
+     public function update_data_record($data_record_id,$unit_id,$proj_id,$user_id,Request $req){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+
+                    if(in_array('Data Inputter',$permissions)){
+                       
+                     Db::table('data_record_audit_universe')->where('id',$data_record_id)->update([
+                            'data_record_name'=>$req->data_record_name,
+                            'data_record_approach'=>$req->data_record_approach,
+                            'data_record_sampling'=>$req->data_record_sampling,
+                            'last_edited_by'=>$user_id,
+                            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s'),
+                            
+                     ]);
+
+            
+
+              return redirect()->route('data_records',[
+                'unit_id'=>$unit_id,
+                'proj_id'=>$proj_id,
+                'user_id'=>$user_id,
+              ])->with('success','Data Record Edited Successfully');
+
+
+
+                    }
+
+                    
+
+            }
+
+
+        }
+
+
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+    }
+
+     public function delete_data_record($data_record_id,$unit_id,$proj_id,$user_id){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+
+                    if(in_array('Data Inputter',$permissions)){
+                     
+                        Db::table('data_record_audit_universe')->where('id',$data_record_id)->delete();
+
+
+                        return redirect()->route('data_records',[
+                'unit_id'=>$unit_id,
+                'proj_id'=>$proj_id,
+                'user_id'=>$user_id,
+              ])->with('success','Data Record Deleted Successfully');
+
+
+                    }
+
+                    
+
+            }
+
+
+        }
+
+
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+    }
 
     public function internal_audit_level_2($level1_num, $level2_num, $proj_id, $user_id)
     {
