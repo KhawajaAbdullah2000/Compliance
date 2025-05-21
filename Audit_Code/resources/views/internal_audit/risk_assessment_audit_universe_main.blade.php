@@ -64,7 +64,7 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
                 <th>Actual End</th>
                 <th>Auditor</th>
                 <th>Approver</th>
-                <th>Records</th>
+                <th>Conduct Compliance</th>
                 
 
                </tr>        
@@ -82,7 +82,7 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
                                 <td class="text-center">
                        
                         <a href="/data_records_risk_assessment/{{$unit->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-sm btn-success">
-                          <i class="fa fa-edit fa-lg"></i>Records
+                          <i class="fa fa-search fa-lg"></i>
                       </a>
                 
 

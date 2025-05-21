@@ -224,6 +224,7 @@ route::get('delete_data_record/{data_record_id}/{unit_id}/{proj_id}/{user_id}',[
 route::get('attachments_data_record/{data_record_id}/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'attachments_data_record'])->name('attachments_data_record');
 route::get('attachments_data_record_risk_assessment/{data_record_id}/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'attachments_data_record_risk_assessment'])->name('attachments_data_record_risk_assessment');
 
+route::get('risk_assessment_start_testing/{data_record_id}/{proj_id}/{user_id}',[InternalAudit::class,'risk_assessment_start_testing'])->name('risk_assessment_start_testing');
 
 
 
