@@ -1216,6 +1216,24 @@ class InternalAudit extends Controller
           return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
+    public function delete_record_attachment($file_id){
+        $attachment = DB::table('data_record_attachments')->where('id', $file_id)->first();
+
+    if ($attachment) {
+        $filePath = public_path($attachment->attachment);
+
+        // Delete file if it exists
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        // Delete from DB
+        DB::table('data_record_attachments')->where('id', $file_id)->delete();
+
+        return back()->with('success', 'Attachment deleted successfully.');
+    }
+}
+
 
 
     public function internal_audit_level_2($level1_num, $level2_num, $proj_id, $user_id)

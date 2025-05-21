@@ -216,6 +216,7 @@ route::post('update_data_record/{data_record_id}/{unit_id}/{proj_id}/{user_id}',
 route::get('delete_data_record/{data_record_id}/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'delete_data_record']);
 route::get('attachments_data_record/{data_record_id}/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'attachments_data_record'])->name('attachments_data_record');
 route::post('upload_data_record_attachments/{data_record_id}/{proj_id}/{user_id}',[InternalAudit::class,'upload_data_record_attachments']);
+route::delete('delete_record_attachment/{file_id}',[InternalAudit::class,'delete_record_attachment']);
 
 route::get("/risk_assessment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_assessment_report']);
 route::get("/risk_treatment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_treatment']);
@@ -248,7 +249,6 @@ Route::get('risk_compliance_heatmap_by_asset_from_asset_group/{proj_id}/{s_name}
 Route::get('risk_compliance_heatmap_for_asset_component_by_asset/{proj_id}/{s_name}/{g_name}/{name}/{c_name}/{user_id}',[ProjectController::class,'risk_compliance_heatmap_for_asset_component_by_asset']);
 Route::get('risk_compliance_heatmap_by_service_and_asset/{proj_id}/{s_name}/{name}/{user_id}',[ProjectController::class,'risk_compliance_heatmap_by_service_and_asset']);
 Route::get('risk_compliance_heatmap_by_service_asset_component/{proj_id}/{s_name}/{name}/{c_name}/{user_id}',[ProjectController::class,'risk_compliance_heatmap_by_service_asset_component']);
-
 Route::get('risk_compliance_heatmap_by_service_and_component/{proj_id}/{s_name}/{c_name}/{user_id}',[ProjectController::class,'risk_compliance_heatmap_by_service_and_component']);
 
 Route::get('compliance_status/{proj_id}/{user_id}',[ProjectController::class,'compliance_status'])->name('compliance_status');

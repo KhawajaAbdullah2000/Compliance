@@ -93,6 +93,7 @@ class="btn btn-md btn-secondary mb-2">
                         <th>File Name</th>
                         <th>Download</th>
                         <th>Uploaded On</th>
+                        <th>Action</th> {{-- Delete Column --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -101,17 +102,25 @@ class="btn btn-md btn-secondary mb-2">
                             <td>{{ $index + 1 }}</td>
                             <td>{{ basename($file->attachment) }}</td>
                             <td>
-                                <a href="{{ asset('data_record_attachments/' . basename($file->attachment)) }}" 
-                                   class="btn btn-sm btn-outline-success"
-                                   download>
+                                <a href="{{ asset($file->attachment) }}" class="btn btn-sm btn-outline-success" download>
                                     <i class="fa fa-download"></i> Download
                                 </a>
                             </td>
                             <td>{{ \Carbon\Carbon::parse($file->last_edited_at)->format('Y-m-d H:i') }}</td>
+                            <td>
+                                <form action="/delete_record_attachment/{{$file->id}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this attachment?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+            
         </div>
     </div>
 @endif
