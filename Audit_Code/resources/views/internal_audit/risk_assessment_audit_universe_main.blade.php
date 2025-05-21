@@ -36,7 +36,7 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
 
 
 <h3 class="fw-bold mt-2 text-center">Audit Strategy and Processes</h3>
-<h4 class="fw-bold mt-2 text-center text-primary">Risk Based Audit Plan</h4>
+<h4 class="fw-bold mt-2 text-center text-primary">Risk Assessment for Internal Audit</h4>
 
 <h4 class="fw-bold text-center text-danger">Audit Universe</h4>
 
@@ -45,16 +45,8 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
 
 
 
-@if (in_array('Data Inputter', $permissions))
-    <a class="btn btn-success btn-md float-end me-2 mb-2"
-       href="/add_new_audit_universe_form/{{$risk_based_plan_details->id}}/{{ $project->project_id }}/{{ auth()->user()->id }}" role="button">
- Add new unit or activity or function or process
- <i class="fas fa-plus"></i>
-    </a>
-@endif
-
 <a href="{{ route('internal_audit_level_1', [
-    'level_num' => 2,
+    'level_num' => 3,
     'proj_id' => $project->project_id,
     'user_id' => auth()->user()->id
 ]) }}" 
@@ -72,10 +64,8 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
                 <th>Actual End</th>
                 <th>Auditor</th>
                 <th>Approver</th>
-                <th>Enter,Upload or Import Record</th>
-                <th>Edit</th>
-                <th>Delete</th>
-             
+                <th>Records</th>
+                
 
                </tr>        
                 </thead>
@@ -90,37 +80,17 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
                                 <td>{{ $unit->auditor_name ?? 'N/A' }}</td>
                                 <td>{{ $unit->approver_name ?? 'N/A' }}</td>
                                 <td class="text-center">
-              
-                        <a href="/data_records/{{$unit->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-sm btn-success">
+                       
+                        <a href="/data_records_risk_assessment/{{$unit->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-sm btn-success">
                           <i class="fa fa-edit fa-lg"></i>Records
                       </a>
-                 
+                
 
                         </td>
 
 
 
-                                <td class="text-center">
-                         @if (in_array('Data Inputter', $permissions))
-                        <a href="/edit_audit_universe/{{$unit->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-sm btn-warning">
-                          <i class="fa fa-edit"></i> Edit
-                      </a>
-                      @else
-                       <i class="fas fa-lock text-secondary"></i>
-                       @endif
-
-                        </td>
-
-                         <td class="text-center">
-                         @if (in_array('Data Inputter', $permissions))
-                        <a href="/delete_audit_universe/{{$unit->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-sm btn-danger">
-                          <i class="fas fa-trash"></i> Delete
-                      </a>
-                      @else
-                       <i class="fas fa-lock text-secondary"></i>
-                       @endif
-
-                        </td>
+                  
                                 
                             </tr>
                         @endforeach

@@ -202,12 +202,19 @@ route::post('submit_strategy_time_period/{proj_id}/{user_id}',[InternalAudit::cl
 route::post('submit_risk_based_plan_audit/{proj_id}/{user_id}',[InternalAudit::class,'submit_risk_based_plan_audit']);
 
 route::get('audit_universe/{risk_based_plan_id}/{proj_id}/{user_id}',[InternalAudit::class,'audit_universe'])->name('audit_universe');
+route::get('audit_universe_risk_assessment/{risk_based_plan_id}/{proj_id}/{user_id}',[InternalAudit::class,'audit_universe_risk_assessment'])->name('audit_universe_risk_assessment');
+
 route::get('add_new_audit_universe_form/{risk_based_plan_id}/{proj_id}/{user_id}',[InternalAudit::class,'add_new_audit_universe_form']);
 route::post('save_audit_universe/{risk_based_plan_id}/{proj_id}/{user_id}',[InternalAudit::class,'save_audit_universe']);
 route::get('edit_audit_universe/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'edit_audit_universe']);
 route::post('submit_audit_universe_edit/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'submit_audit_universe_edit']);
 route::get('delete_audit_universe/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'delete_audit_universe']);
 route::get('data_records/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'data_records'])->name('data_records');
+route::get('data_records_risk_assessment/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'data_records_risk_assessment'])->name('data_records_risk_assessment');
+
+
+
+
 route::get('add_new_data_record_form/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'add_new_data_record_form']);
 route::post('save_data_record/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'save_data_record']);
 
@@ -215,6 +222,11 @@ route::get('edit_data_record/{data_record_id}/{proj_id}/{user_id}',[InternalAudi
 route::post('update_data_record/{data_record_id}/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'update_data_record']);
 route::get('delete_data_record/{data_record_id}/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'delete_data_record']);
 route::get('attachments_data_record/{data_record_id}/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'attachments_data_record'])->name('attachments_data_record');
+route::get('attachments_data_record_risk_assessment/{data_record_id}/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'attachments_data_record_risk_assessment'])->name('attachments_data_record_risk_assessment');
+
+
+
+
 route::post('upload_data_record_attachments/{data_record_id}/{proj_id}/{user_id}',[InternalAudit::class,'upload_data_record_attachments']);
 route::delete('delete_record_attachment/{file_id}',[InternalAudit::class,'delete_record_attachment']);
 

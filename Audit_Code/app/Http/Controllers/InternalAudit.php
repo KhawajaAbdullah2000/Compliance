@@ -83,6 +83,24 @@ class InternalAudit extends Controller
                     ]);
                 }
 
+                if($level_num==3){
+                    //RIsk Assessment for Internal Audit
+                     $existingStrategies = DB::table('risk_based_plan_audit')
+                        ->where('project_id', $proj_id)
+                        ->get()
+                        ->keyBy('department_id'); // Key by department_id for easy lookup
+
+                }
+
+                return view('internal_audit.risk_assessment_main', [
+                        'project' => $project,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'departments' => $departments,
+                        'level_num' => $level_num,
+                        'existingStrategies' => $existingStrategies,
+
+                    ]);
+
 
 
             }
@@ -498,6 +516,66 @@ class InternalAudit extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
+     public function audit_universe_risk_assessment($risk_based_plan_id, $proj_id, $user_id)
+    {
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+
+
+                $risk_based_plan_details = DB::table('risk_based_plan_audit')->find($risk_based_plan_id);
+
+
+                $organization = DB::table('organizations')->find($risk_based_plan_details->organization_id);
+                $department = DB::table('departments')->find($risk_based_plan_details->department_id);
+
+                $auditUniverseList = DB::table('audit_universe')
+                    ->leftJoin('users as auditors', 'audit_universe.auditor', '=', 'auditors.id')
+                    ->leftJoin('users as approvers', 'audit_universe.approver', '=', 'approvers.id')
+                    ->select(
+                        'audit_universe.*',
+                        DB::raw("CONCAT(auditors.first_name, ' ', auditors.last_name) as auditor_name"),
+                        DB::raw("CONCAT(approvers.first_name, ' ', approvers.last_name) as approver_name")
+                    )
+                    ->where('project_id', $proj_id)
+                    ->where('dept_id',$risk_based_plan_details->department_id)
+                    ->get();
+
+
+                return view('internal_audit.risk_assessment_audit_universe_main', [
+                    'project' => $project,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'organization' => $organization,
+                    'department' => $department,
+                    'risk_based_plan_details' => $risk_based_plan_details,
+                    'auditUniverseList' => $auditUniverseList
+
+                ]);
+
+
+            }
+
+
+
+
+
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+    }
+
 
     public function add_new_audit_universe_form($risk_based_plan_id, $proj_id, $user_id)
     {
@@ -839,6 +917,59 @@ class InternalAudit extends Controller
 
     }
 
+    
+    public function data_records_risk_assessment($unit_id, $proj_id, $user_id, Request $request)
+    {
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+
+                    $unit = DB::table('audit_universe')->where('id', $unit_id)->first();
+
+                    $risk_based_plan_details = DB::table('risk_based_plan_audit')->find($unit->risk_based_plan_audit_id);
+                    $department = DB::table('departments')->find($risk_based_plan_details->department_id);
+
+
+                    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                        ->where('projects.project_id', $proj_id)->first();
+                   
+                    $data_records=DB::table('data_record_audit_universe')->where('audit_universe_id',$unit_id)->get();
+            
+
+                    return view('internal_audit.risk_assessment_data_records_main', [
+                        'project' => $project,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'department' => $department,
+                        'risk_based_plan_details' => $risk_based_plan_details,
+                        'unit' => $unit,
+                        'data_records'=>$data_records
+
+                    ]);
+
+
+
+            }
+
+
+        }
+
+
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+    }
+
     public function add_new_data_record_form($unit_id,$proj_id,$user_id){
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -1136,6 +1267,70 @@ class InternalAudit extends Controller
                     ->get();
 
                     return view('internal_audit.attachments_data_record', [
+                        'project' => $project,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'department' => $department,
+                        'risk_based_plan_details' => $risk_based_plan_details,
+                        'unit' => $unit,
+                        'data_record'=>$data_record,
+                        'attachments'=>$attachments
+
+                    ]);
+
+
+
+                    
+
+                    
+
+            }
+
+
+        }
+
+
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+    }
+
+    
+     public function attachments_data_record_risk_assessment($data_record_id,$unit_id,$proj_id,$user_id){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+
+                $data_record=DB::table('data_record_audit_universe')->find($data_record_id);
+                
+
+                 $unit = DB::table('audit_universe')->where('id', $unit_id)->first();
+
+                
+
+                    $risk_based_plan_details = DB::table('risk_based_plan_audit')->find($unit->risk_based_plan_audit_id);
+                    $department = DB::table('departments')->find($risk_based_plan_details->department_id);
+
+
+                    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                        ->where('projects.project_id', $proj_id)->first();
+                   
+                        $attachments = DB::table('data_record_attachments')
+                    ->where('data_record_id', $data_record_id)
+                    ->orderByDesc('last_edited_at')
+                    ->get();
+
+                    return view('internal_audit.risk_assessment_attachments_data_record', [
                         'project' => $project,
                         'project_permissions' => $checkpermission->project_permissions,
                         'department' => $department,
