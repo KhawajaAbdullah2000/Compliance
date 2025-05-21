@@ -1081,7 +1081,7 @@ class InternalAudit extends Controller
                 'unit_id'=>$unit_id,
                 'proj_id'=>$proj_id,
                 'user_id'=>$user_id,
-              ])->with('success','Data Record Deleted Successfully');
+              ])->with('success','Record Deleted Successfully');
 
 
                     }
@@ -1098,6 +1098,125 @@ class InternalAudit extends Controller
 
 
     }
+
+
+     public function attachments_data_record($data_record_id,$unit_id,$proj_id,$user_id){
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+
+                $data_record=DB::table('data_record_audit_universe')->find($data_record_id);
+                
+
+                 $unit = DB::table('audit_universe')->where('id', $unit_id)->first();
+
+                
+
+                    $risk_based_plan_details = DB::table('risk_based_plan_audit')->find($unit->risk_based_plan_audit_id);
+                    $department = DB::table('departments')->find($risk_based_plan_details->department_id);
+
+
+                    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                        ->where('projects.project_id', $proj_id)->first();
+                   
+                        $attachments = DB::table('data_record_attachments')
+                    ->where('data_record_id', $data_record_id)
+                    ->orderByDesc('last_edited_at')
+                    ->get();
+
+                    return view('internal_audit.attachments_data_record', [
+                        'project' => $project,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'department' => $department,
+                        'risk_based_plan_details' => $risk_based_plan_details,
+                        'unit' => $unit,
+                        'data_record'=>$data_record,
+                        'attachments'=>$attachments
+
+                    ]);
+
+
+
+                    
+
+                    
+
+            }
+
+
+        }
+
+
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+
+
+    }
+
+    public function upload_data_record_attachments($data_record_id,$proj_id,$user_id,Request $req){
+          if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+
+                    if(in_array('Data Inputter',$permissions)){
+                     $req->validate([
+                        'attachment' => 'required|file|max:10240' // Max 10MB
+                    ]);
+
+                     $data_record=DB::table('data_record_audit_universe')->find($data_record_id);
+                
+                    // Store file
+                $filename = time() . '_' . $req->file('attachment')->getClientOriginalName();
+                $req->file('attachment')->move(public_path('data_record_attachments'), $filename);
+                $filePath = 'data_record_attachments/' . $filename;
+                    // Insert into DB
+                    DB::table('data_record_attachments')->insert([
+                        'data_record_id' => $data_record_id,
+                        'attachment' => $filePath,
+                        'last_edited_by' => auth()->user()->id,
+                        'last_edited_at' => Carbon::now()
+                    ]);
+
+                   
+                    return redirect()->route('attachments_data_record',[
+                        'data_record_id'=>$data_record_id,
+                        'unit_id'=>$data_record->audit_universe_id,
+                        'proj_id'=>$proj_id,
+                        'user_id'=>$user_id
+                    ])->with('success','Attachment added successfully');
+
+                    }
+
+                    return redirect()->back()->with('error','Not Allowed');
+
+            }
+
+        }
+          return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+    }
+
+
 
     public function internal_audit_level_2($level1_num, $level2_num, $proj_id, $user_id)
     {

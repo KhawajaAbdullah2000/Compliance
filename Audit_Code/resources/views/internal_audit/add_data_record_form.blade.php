@@ -59,7 +59,7 @@ class="btn btn-md btn-secondary mb-2">
 <div class="container mt-2">
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white text-center fw-bold">
-            Add Data Record
+            Add Record
         </div>
         <div class="card-body">
             <form action="/save_data_record/{{ $unit->id }}/{{ $project->project_id }}/{{ auth()->user()->id }}" method="POST">
@@ -67,7 +67,7 @@ class="btn btn-md btn-secondary mb-2">
 
 
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Data Record</label>
+                    <label class="form-label fw-semibold">Record</label>
                     <input type="text" name="data_record_name" class="form-control" required>
                 </div>
 
@@ -104,7 +104,7 @@ class="btn btn-md btn-secondary mb-2">
     
        
                 <button type="submit" class="btn btn-success">
-                    <i class="fas fa-save"></i> Save Data Record
+                    <i class="fas fa-save"></i> Save Record
                 </button>
             </form>
         </div>

@@ -72,7 +72,7 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
                 <th>Actual End</th>
                 <th>Auditor</th>
                 <th>Approver</th>
-                <th>Enter,Upload or Import Data</th>
+                <th>Enter,Upload or Import Record</th>
                 <th>Edit</th>
                 <th>Delete</th>
              
@@ -92,7 +92,7 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
                                 <td class="text-center">
                          @if (in_array('Data Inputter', $permissions))
                         <a href="/data_records/{{$unit->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-sm btn-success">
-                          <i class="fa fa-edit fa-lg"></i> Data Records
+                          <i class="fa fa-edit fa-lg"></i>Records
                       </a>
                       @else
                        <i class="fas fa-lock text-secondary"></i>

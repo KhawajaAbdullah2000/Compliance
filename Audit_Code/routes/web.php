@@ -214,7 +214,8 @@ route::post('save_data_record/{unit_id}/{proj_id}/{user_id}',[InternalAudit::cla
 route::get('edit_data_record/{data_record_id}/{proj_id}/{user_id}',[InternalAudit::class,'edit_data_record']);
 route::post('update_data_record/{data_record_id}/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'update_data_record']);
 route::get('delete_data_record/{data_record_id}/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'delete_data_record']);
-
+route::get('attachments_data_record/{data_record_id}/{unit_id}/{proj_id}/{user_id}',[InternalAudit::class,'attachments_data_record'])->name('attachments_data_record');
+route::post('upload_data_record_attachments/{data_record_id}/{proj_id}/{user_id}',[InternalAudit::class,'upload_data_record_attachments']);
 
 route::get("/risk_assessment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_assessment_report']);
 route::get("/risk_treatment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_treatment']);

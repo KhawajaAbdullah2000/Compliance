@@ -49,7 +49,7 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
 @if (in_array('Data Inputter', $permissions))
     <a class="btn btn-success btn-md float-end me-2 mb-2"
        href="/add_new_data_record_form/{{$unit->id}}/{{ $project->project_id }}/{{ auth()->user()->id }}" role="button">
- Add new Data Record
+ Add new Record
  <i class="fas fa-plus"></i>
     </a>
 @endif
@@ -66,9 +66,10 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
   <table class="table table-responsive table-bordered">
                 <thead class="table-dark">
             <tr>
-                <th>Data Record</th>
+                <th>Record</th>
                 <th>Audit Approach</th>
                 <th>Sampling Methodology</th>
+                <th>Enter data</th>
         
                 <th>Edit</th>
                 <th>Delete</th>
@@ -78,12 +79,19 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
                 </thead>
                  <tbody>
                     @foreach ($data_records as $d )
+                    <tr>
                     <td>{{$d->data_record_name}}</td>
                     <td>{{$d->data_record_approach}}</td>
-                      <td>{{$d->data_record_sampling}}</td>
+                    <td>{{$d->data_record_sampling}}</td>
+                    <td class="text-center">
+                         <a href="/attachments_data_record/{{$d->id}}/{{$unit->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-success">
+                          <i class="fa fa-file"></i> 
+                      </a>
+                    </td>
+
                 <td class="text-center">
                          @if (in_array('Data Inputter', $permissions))
-                        <a href="/edit_data_record/{{$d->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-sm btn-warning">
+                        <a href="/edit_data_record/{{$d->id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-sm btn-warning">
                           <i class="fa fa-edit"></i> Edit
                       </a>
                       @else
@@ -102,7 +110,7 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
                        @endif
 
                         </td>
-                                
+                      </tr> 
                     
                     @endforeach
                     
