@@ -69,7 +69,7 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
                 <th>Record</th>
                 <th>Audit Approach</th>
                 <th>Sampling Methodology</th>
-                <th>Enter data</th>
+                <th>Enter, or Upload data</th>
         
                 <th>Edit</th>
                 <th>Delete</th>
