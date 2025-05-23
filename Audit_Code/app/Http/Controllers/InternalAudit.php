@@ -52,7 +52,6 @@ class InternalAudit extends Controller
                     $time_period_selected = $strategy_time_period ? $strategy_time_period->time_period : null;
 
 
-
                     return view('internal_audit.internal_audit_strategy_main', [
                         'project' => $project,
                         'project_permissions' => $checkpermission->project_permissions,
@@ -114,6 +113,7 @@ class InternalAudit extends Controller
 
     public function audit_strategy_department($proj_id, $user_id, Request $req)
     {
+       
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',

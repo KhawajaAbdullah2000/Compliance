@@ -41,8 +41,8 @@
         <thead class="table-dark ">
             <tr>
                 <th>Service</th>
-                    <th>Asset Group</th>
-                    <th>Asset</th>
+                    <th>Asset Type</th>
+                    <th>Asset Subtype</th>
                     <th>Asset Component</th>
                     <th>Asset Owner Dept</th>
                     <th>Asset Physical Location</th>
@@ -108,7 +108,7 @@
 </div>
     
 
-    <div class="row h-100 w-75">
+    <div class="row h-100 w-75 mb-2">
         <div class="row mt-2" >
             <div class="col-12">
 

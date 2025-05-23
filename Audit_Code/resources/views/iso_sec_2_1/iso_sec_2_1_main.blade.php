@@ -138,8 +138,8 @@ $permissions = json_decode($project_permissions);
         <thead class="table-dark ">
             <tr style="cursor: pointer" class="text-center">
                 <th onclick="sortTable(0)">Service</th>
-                    <th onclick="sortTable(1)">Asset Group</th>
-                    <th onclick="sortTable(2)">Asset Category</th>
+                    <th onclick="sortTable(1)">Asset Type</th>
+                    <th onclick="sortTable(2)">Asset SubType</th>
                     <th onclick="sortTable(3)">Asset Component</th>
                     <th onclick="sortTable(4)">Asset Owner Dept</th>
                     <th onclick="sortTable(5)">Asset Physical Location</th>

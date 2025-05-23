@@ -93,15 +93,15 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
                             <div class="col-md-4">
                                 <select disabled name="sampling_methodology" class="form-select">
                    
-                                    <option value="Random Selection" {{ optional($strategy)->audit_approach == 'Random Selection' ? 'selected' : '' }}>Random Selection</option>
+                                    <option value="Random Selection" {{ optional($strategy)->sampling_methodology == 'Random Selection' ? 'selected' : '' }}>Random Selection</option>
 
-                                    <option value="Systematic Selection" {{ optional($strategy)->audit_approach == 'Systematic Selection' ? 'selected' : '' }}>Systematic Selection</option>
+                                    <option value="Systematic Selection" {{ optional($strategy)->sampling_methodology == 'Systematic Selection' ? 'selected' : '' }}>Systematic Selection</option>
 
-                                    <option value="Monetary Unit Sampling" {{ optional($strategy)->audit_approach == 'Monetary Unit Sampling' ? 'selected' : '' }}>Monetary Unit Sampling</option>
+                                    <option value="Monetary Unit Sampling" {{ optional($strategy)->sampling_methodology == 'Monetary Unit Sampling' ? 'selected' : '' }}>Monetary Unit Sampling</option>
 
-                                    <option value="Haphazard Selection" {{ optional($strategy)->audit_approach == 'Haphazard Selection' ? 'selected' : '' }}>Haphazard Selection</option>
+                                    <option value="Haphazard Selection" {{ optional($strategy)->sampling_methodology == 'Haphazard Selection' ? 'selected' : '' }}>Haphazard Selection</option>
 
-                                    <option value="Block Selection" {{ optional($strategy)->audit_approach == 'Block Selection' ? 'selected' : '' }}>Block Selection</option>
+                                    <option value="Block Selection" {{ optional($strategy)->sampling_methodology == 'Block Selection' ? 'selected' : '' }}>Block Selection</option>
                                 </select>
                             </div>
                         </div>

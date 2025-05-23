@@ -41,7 +41,7 @@ $permissions = json_decode($project_permissions);
 
                      <!-- Asset Category -->
                     <div class="mb-4">
-                        <label for="asset_category" class="form-label fw-semibold">Asset Group</label>
+                        <label for="asset_category" class="form-label fw-semibold">Asset Type</label>
                         <select name="g_name" id="asset_category" class="form-control">
                             <option value="None">None</option>
                             @foreach($selectedCategories as $category)
@@ -52,7 +52,7 @@ $permissions = json_decode($project_permissions);
 
                     <!-- Asset SUb Type -->
                     <div class="mb-4">
-                        <label for="asset_type" class="form-label fw-semibold">Asset Category</label>
+                        <label for="asset_type" class="form-label fw-semibold">Asset Subtype</label>
                         <select name="name" id="asset_type" class="form-control">
                             <option value="None">None</option>
                         </select>

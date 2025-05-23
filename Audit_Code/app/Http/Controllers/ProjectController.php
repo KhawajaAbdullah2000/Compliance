@@ -4822,9 +4822,13 @@ foreach ($uniqueComponents as $cname) {
         ->where('iso_sec_2_2.project_id', $proj_id)
         ->where('iso_sec_2_2.last_edited_by', $user_id)
         ->select('iso_sec_2_1.s_name','iso_sec_2_1.g_name','iso_sec_2_1.name',
-        'iso_sec_2_1.c_name','iso_sec_2_2.title_num','iso_sec_2_2.sub_req','iso_sec_2_2.last_edited_at')
+        'iso_sec_2_1.c_name','iso_sec_2_2.title_num','iso_sec_2_2.sub_req','iso_sec_2_2.last_edited_at',
+        'iso_sec_2_1.assessment_id','iso_sec_2_2.subdomain')
         ->orderBy('iso_sec_2_2.last_edited_at', 'desc')
         ->get();
+
+
+
 
         // $activities_2_3_1 = DB::table('iso_sec_2_3_1')
         // ->leftjoin('iso_sec_2_1','iso_sec_2_3_1.asset_id','iso_sec_2_1.assessment_id')

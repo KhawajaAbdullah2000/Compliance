@@ -45,8 +45,8 @@ $permissions=json_decode($project_permissions);
         <thead class="table-dark ">
             <tr>
                 <th>Service</th>
-                    <th>Asset Group</th>
-                    <th>Asset</th>
+                    <th>Asset Type</th>
+                    <th>Asset Subtype</th>
                     <th>Asset Component</th>
                     <th>Asset Owner Dept</th>
                     <th>Asset Physical Location</th>
@@ -81,7 +81,7 @@ $permissions=json_decode($project_permissions);
     
 
 
-      <h2 class="fw-bold mt-4 mb-4">
+      <h2 class="fw-bold mt-4 mb-2">
         @if($title==1)
         1: CyberSecurity Governance
 
@@ -109,7 +109,6 @@ $permissions=json_decode($project_permissions);
     </h4>
 
 
-
     <table class="table table-bordered table-responsive table-primary">
 
         <thead class="fw-bold table-dark">
@@ -127,22 +126,24 @@ $permissions=json_decode($project_permissions);
                 </td>
                 <td><a href="/ksa_nca_sec_2_2_req/{{($data[0][2]) }}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
                 <td>
-                    <form action="/add_mandatory_all_domain/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="domain" value="{{$data[0][2]}}">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2">
-                           
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success">Submit</button>
-                        </div>
-                    </form>
-                </td>
+    <form action="/add_mandatory_all_domain/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="POST" class="d-flex align-items-center gap-2">
+        @csrf
+        <input type="hidden" name="domain" value="{{$data[0][2]}}">
+
+        <select name="comp_status" class="form-select form-select-sm rounded-pill" style="max-width: 160px;">
+              <option value="">Select --</option>
+            <option value="yes" {{ old('comp_status') == 'yes' ? 'selected' : '' }}>In Place</option>
+            <option value="no" {{ old('comp_status') == 'no' ? 'selected' : '' }}>Not in Place</option>
+            <option value="not_applicable" {{ old('comp_status') == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+            <option value="not_tested" {{ old('comp_status') == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+            <option value="partial" {{ old('comp_status') == 'partial' ? 'selected' : '' }}>Partial</option>
+        </select>
+
+        <button type="submit" class="btn btn-success btn-sm px-3">Submit</button>
+        <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
+    </form>
+</td>
+
             </tr>
 
             @for ($i = 1; $i < count($data); $i++)
@@ -165,20 +166,22 @@ $permissions=json_decode($project_permissions);
 
                        <td><a href="/ksa_nca_sec_2_2_req/{{$my_current_main_req_num}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
                        <td>
-                        <form action="/add_mandatory_all_domain/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+                        <form action="/add_mandatory_all_domain/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post" class="d-flex align-items-center gap-2">
                             @csrf
                             <input type="hidden" name="domain" value="{{$data[$i][2]}}">
-                            <div class="d-flex align-items-center">
-                                <select name="comp_status" class="form-select rounded-pill me-2">
-                               
+                        
+                                <select name="comp_status" class="form-select rounded-pill" style="max-width: 160px;">
+                                 <option value="">Select --</option>
                                     <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
                                     <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
                                     <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
                                     <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
                                     <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
                                 </select>
-                                <button type="submit" class="btn btn-sm btn-success">Submit</button>
-                            </div>
+                                
+        <button type="submit" class="btn btn-success btn-sm px-3">Submit</button>
+        <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
+                           
                         </form>
                     </td>
                        @endif

@@ -75,11 +75,11 @@ class="btn btn-md btn-secondary mb-2">
         <select name="data_record_approach" class="form-select">
             <option value="Substantive Testing" {{ $data_record->data_record_approach == 'Substantive Testing' ? 'selected' : '' }}>Substantive Testing</option>
             <option value="Risk-Based" {{ $data_record->data_record_approach == 'Risk-Based' ? 'selected' : '' }}>Risk-Based</option>
-            <option value="Hybrid" {{ $data_record->data_record_approach == 'Hybrid' ? 'selected' : '' }}>Hybrid</option>
+
         </select>
     </div>
 
-    <div class="mb-3">
+    {{-- <div class="mb-3">
         <label class="form-label fw-semibold">Sampling Methodology</label>
         <select name="data_record_sampling" class="form-select">
             <option value="Random Selection" {{ $data_record->data_record_sampling == 'Random Selection' ? 'selected' : '' }}>Random Selection</option>
@@ -88,7 +88,14 @@ class="btn btn-md btn-secondary mb-2">
             <option value="Haphazard Selection" {{ $data_record->data_record_sampling == 'Haphazard Selection' ? 'selected' : '' }}>Haphazard Selection</option>
             <option value="Block Selection" {{ $data_record->data_record_sampling == 'Block Selection' ? 'selected' : '' }}>Block Selection</option>
         </select>
-    </div>
+    </div> --}}
+
+    <div class="mb-3">
+    <label class="form-label fw-semibold">Sampling Methodology</label>
+    <select name="data_record_sampling" class="form-select" id="sampling_methodology">
+        <!-- Will be populated by JavaScript -->
+    </select>
+</div>
 
     <button type="submit" class="btn btn-success">
         <i class="fas fa-save"></i> Update Record
@@ -128,6 +135,53 @@ class="btn btn-md btn-secondary mb-2">
     });
 </script>
 @endif
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const approachSelect = document.querySelector('[name="data_record_approach"]');
+        const samplingSelect = document.getElementById('sampling_methodology');
+
+        const savedValue = @json($data_record->data_record_sampling);
+
+        const allOptions = [
+            { value: "Random Selection", label: "Random Selection" },
+            { value: "Systematic Selection", label: "Systematic Selection" },
+            { value: "Monetary Unit Sampling", label: "Monetary Unit Sampling" },
+            { value: "Haphazard Selection", label: "Haphazard Selection" },
+            { value: "Block Selection", label: "Block Selection" }
+        ];
+
+        function populateOptions(approach) {
+            samplingSelect.innerHTML = ''; // Clear options
+
+            let filteredOptions = [];
+
+            if (approach === 'Substantive Testing') {
+                filteredOptions = allOptions.filter(opt => opt.value === 'Block Selection');
+            } else if (approach === 'Risk-Based') {
+                filteredOptions = allOptions.filter(opt => opt.value !== 'Block Selection');
+            } else {
+                filteredOptions = allOptions;
+            }
+
+            filteredOptions.forEach(opt => {
+                const option = document.createElement('option');
+                option.value = opt.value;
+                option.textContent = opt.label;
+                if (opt.value === savedValue) option.selected = true;
+                samplingSelect.appendChild(option);
+            });
+        }
+
+        // Initial load
+        populateOptions(approachSelect.value);
+
+        // On change
+        approachSelect.addEventListener('change', function () {
+            populateOptions(this.value);
+        });
+    });
+</script>
 
         @endsection
 

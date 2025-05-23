@@ -38,6 +38,10 @@ class IsoSec2_3_1 extends Controller
 
                     $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
+                    if($frameworkDetails['complianceFramework']==null){
+                        return redirect()->back()->with('error','No risk assessment methodology has been selected');
+                    }
+
                     if($frameworkDetails['complianceFramework']->framework_selected==2 
                      && $frameworkDetails['framework_approach']->framework_approach_types_id==1
                      && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2

@@ -532,7 +532,7 @@ route::put('cy_sama_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}/{ass
 route::get("ksa_nca_sec_2_2_subsections/{proj_id}/{user_id}/{asset_id}",[KSA_NCA::class,'ksa_nca_subsections'])->name('ksa_nca_subsections');
 route::get("ksa_nca_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[KSA_NCA::class,'ksa_nca_section_2_2'])->name('ksa_nca_section_2_2');
 route::get("ksa_nca_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id}",[KSA_NCA::class,'ksa_nca_sec_2_2_req'])->name('ksa_nca_sec_2_2_req');
-route::get('ksa_nca_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'ksa_nca_sec2_2_sub_req_edit'])->name('ksa_nca_sec2_2_sub_req_edit');
+route::get('ksa_nca_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}/{main_req?}',[KSA_NCA::class,'ksa_nca_sec2_2_sub_req_edit'])->name('ksa_nca_sec2_2_sub_req_edit');
 route::post('ksa_nca_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_form']);
 route::post('add_mandatory_all_title/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'add_mandatory_all_title'])->name('add_mandatory_all_title');
 route::post('add_mandatory_all_domain/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'add_mandatory_all_domain'])->name('add_mandatory_all_domain');

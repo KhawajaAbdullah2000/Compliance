@@ -111,7 +111,7 @@ class="btn btn-md btn-secondary mb-2">
 
    
     @else
-    <p class="fw-bold">No Record Available</p>
+    <p class="fw-bold">No Attachments Available</p>
 @endif
 
  <div class="text-end">

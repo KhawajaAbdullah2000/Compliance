@@ -77,7 +77,7 @@ class="btn btn-md btn-secondary mb-2">
              <select name="data_record_approach" class="form-select">
                     <option value="Substantive Testing">Substantive Testing</option>
                     <option value="Risk-Based">Risk-Based</option>
-                    <option value="Hybrid">Hybrid</option>
+                    {{-- <option value="Hybrid">Hybrid</option> --}}
              </select>
                           
                  </div>
@@ -140,6 +140,45 @@ class="btn btn-md btn-secondary mb-2">
     });
 </script>
 @endif
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const approachSelect = document.querySelector('[name="data_record_approach"]');
+        const samplingSelect = document.querySelector('[name="data_record_sampling"]');
+
+        const allSamplingOptions = [
+            { value: "Random Selection", label: "Random Selection" },
+            { value: "Systematic Selection", label: "Systematic Selection" },
+            { value: "Monetary Unit Sampling", label: "Monetary Unit Sampling" },
+            { value: "Haphazard Selection", label: "Haphazard Selection" },
+            { value: "Block Selection", label: "Block Selection" }
+        ];
+
+        function updateSamplingOptions(approach) {
+            samplingSelect.innerHTML = ''; // Clear existing options
+
+            if (approach === 'Substantive Testing') {
+                const option = allSamplingOptions.find(opt => opt.value === 'Block Selection');
+                samplingSelect.append(new Option(option.label, option.value));
+            } else if (approach === 'Risk-Based') {
+                allSamplingOptions
+                    .filter(opt => opt.value !== 'Block Selection')
+                    .forEach(opt => samplingSelect.append(new Option(opt.label, opt.value)));
+            } else {
+                // For Hybrid or any other, show all options
+                allSamplingOptions.forEach(opt => samplingSelect.append(new Option(opt.label, opt.value)));
+            }
+        }
+
+        // Initial load
+        updateSamplingOptions(approachSelect.value);
+
+        // On change
+        approachSelect.addEventListener('change', function () {
+            updateSamplingOptions(this.value);
+        });
+    });
+</script>
 
         @endsection
 

@@ -92,15 +92,15 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
                             <div class="col-md-4">
                                 <select id="sampling_methodology_{{ $d->id }}" {{ $canEdit ? '' : 'disabled' }} name="sampling_methodology" class="form-select sampling-methodology" data-dept="{{ $d->id }}">
                    
-                                    <option value="Random Selection" {{ optional($strategy)->audit_approach == 'Random Selection' ? 'selected' : '' }}>Random Selection</option>
+                                    <option value="Random Selection" {{ optional($strategy)->sampling_methodology == 'Random Selection' ? 'selected' : '' }}>Random Selection</option>
 
-                                    <option value="Systematic Selection" {{ optional($strategy)->audit_approach == 'Systematic Selection' ? 'selected' : '' }}>Systematic Selection</option>
+                                    <option value="Systematic Selection" {{ optional($strategy)->sampling_methodology == 'Systematic Selection' ? 'selected' : '' }}>Systematic Selection</option>
 
-                                    <option value="Monetary Unit Sampling" {{ optional($strategy)->audit_approach == 'Monetary Unit Sampling' ? 'selected' : '' }}>Monetary Unit Sampling</option>
+                                    <option value="Monetary Unit Sampling" {{ optional($strategy)->sampling_methodology == 'Monetary Unit Sampling' ? 'selected' : '' }}>Monetary Unit Sampling</option>
 
-                                    <option value="Haphazard Selection" {{ optional($strategy)->audit_approach == 'Haphazard Selection' ? 'selected' : '' }}>Haphazard Selection</option>
+                                    <option value="Haphazard Selection" {{ optional($strategy)->sampling_methodology == 'Haphazard Selection' ? 'selected' : '' }}>Haphazard Selection</option>
 
-                                    <option value="Block Selection" {{ optional($strategy)->audit_approach == 'Block Selection' ? 'selected' : '' }}>Block Selection</option>
+                                    <option value="Block Selection" {{ optional($strategy)->sampling_methodology == 'Block Selection' ? 'selected' : '' }}>Block Selection</option>
                                 </select>
                             </div>
                         </div>
@@ -191,41 +191,7 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const auditApproaches = document.querySelectorAll('.audit-approach');
 
-    auditApproaches.forEach(function (auditSelect) {
-        const deptId = auditSelect.dataset.dept;
-        const samplingSelect = document.querySelector('#sampling_methodology_' + deptId);
-        const allOptions = samplingSelect.querySelectorAll('option');
-        const blockOption = Array.from(allOptions).find(opt => opt.value === 'Block Selection');
-
-        const otherOptions = Array.from(allOptions).filter(opt => opt.value !== 'Block Selection');
-
-        function toggleSamplingOptions() {
-            const selectedApproach = auditSelect.value;
-
-            // Clear current options
-            samplingSelect.innerHTML = '';
-
-            if (selectedApproach === 'Substantive Testing') {
-                // Only show Block Selection
-                if (blockOption) samplingSelect.appendChild(blockOption.cloneNode(true));
-            } else if (selectedApproach === 'Risk-Based') {
-                // Show all options except Block Selection
-                otherOptions.forEach(opt => {
-                    samplingSelect.appendChild(opt.cloneNode(true));
-                });
-            }
-        }
-
-        // Run on page load
-        toggleSamplingOptions();
-
-        // Attach change listener
-        auditSelect.addEventListener('change', toggleSamplingOptions);
-    });
-});
 </script>
 
         @endsection

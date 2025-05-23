@@ -94,7 +94,7 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
                                 <select {{ $canEdit ? '' : 'disabled' }} name="audit_approach" class="form-select">
                                     <option value="Substantive Testing" {{ optional($strategy)->audit_approach == 'Substantive Testing' ? 'selected' : '' }}>Substantive Testing</option>
                                     <option value="Risk-Based" {{ optional($strategy)->audit_approach == 'Risk-Based' ? 'selected' : '' }}>Risk-Based</option>
-                                    <option value="Hybrid" {{ optional($strategy)->audit_approach == 'Hybrid' ? 'selected' : '' }}>Hybrid</option>
+                                 <option value="Hybrid" {{ optional($strategy)->audit_approach == 'Hybrid' ? 'selected' : '' }}>Hybrid</option>
                                 </select>
                             </div>
                         </div>
@@ -104,9 +104,14 @@ $canEdit = is_array($permissions) && in_array('Data Inputter', $permissions);
                             <div class="col-auto"><label for="sampling_methodology_{{ $d->id }}" class="fw-semibold">Sampling Methodology:</label></div>
                             <div class="col-md-4">
                                 <select {{ $canEdit ? '' : 'disabled' }} name="sampling_methodology" class="form-select">
-                                    <option value="Random Selection" {{ optional($strategy)->sampling_methodology == 'Random Selection' ? 'selected' : '' }}>Random Selection</option>
+                                   <option value="Random Selection" {{ optional($strategy)->sampling_methodology == 'Random Selection' ? 'selected' : '' }}>Random Selection</option>
+
                                     <option value="Systematic Selection" {{ optional($strategy)->sampling_methodology == 'Systematic Selection' ? 'selected' : '' }}>Systematic Selection</option>
+
+                                    <option value="Monetary Unit Sampling" {{ optional($strategy)->sampling_methodology == 'Monetary Unit Sampling' ? 'selected' : '' }}>Monetary Unit Sampling</option>
+
                                     <option value="Haphazard Selection" {{ optional($strategy)->sampling_methodology == 'Haphazard Selection' ? 'selected' : '' }}>Haphazard Selection</option>
+
                                     <option value="Block Selection" {{ optional($strategy)->sampling_methodology == 'Block Selection' ? 'selected' : '' }}>Block Selection</option>
                                 </select>
                             </div>

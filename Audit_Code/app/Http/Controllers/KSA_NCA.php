@@ -153,6 +153,10 @@ class KSA_NCA extends Controller
                     $asset = Db::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
 
 
+                    $fetchedData=DB::table('iso_Sec_2_2')->where('project_id',$proj_id)
+                    ->where('subdomain',$main_req_num)
+                    ->get();
+              
 
 
                     return view('KSA_NCA.ksa_nca_2_2_sub_reqs', [
@@ -163,7 +167,8 @@ class KSA_NCA extends Controller
                         'main_req_num' => $main_req_num,
                         'title' => $title,
                         'project' => $project,
-                        'asset' => $asset
+                        'asset' => $asset,
+                        'fetchedData'=>$fetchedData
                     ]);
                 }
             }
@@ -172,8 +177,9 @@ class KSA_NCA extends Controller
     }
 
 
-    public function ksa_nca_sec2_2_sub_req_edit(Request $req, $sub_req, $title, $proj_id, $user_id, $asset_id)
+    public function ksa_nca_sec2_2_sub_req_edit(Request $req, $sub_req, $title, $proj_id, $user_id, $asset_id,?string $main_req=null)
     {
+        
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -198,9 +204,16 @@ class KSA_NCA extends Controller
                 $data = Excel::toArray([], $filepath); //with header
                 $rows = array_slice($data[0], 1); //without header(first row)
 
+                if($main_req==null){
+                     $main_req_num = $req->session()->get('main_req_num');
+                }
 
-                $main_req_num = $req->session()->get('main_req_num');
+                else{
+                    $main_req_num=$main_req;
 
+                }
+
+             
                 $filteredData = collect($rows)->filter(function ($row) use ($sub_req, $main_req_num) {
                     return strval($row[2]) === $main_req_num && strval($row[4]) === $sub_req;
                 })->values()->all();
