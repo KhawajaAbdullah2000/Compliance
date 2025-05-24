@@ -4,6 +4,22 @@
 
 @include('user-nav')
 
+@php
+function getColor($value) {
+        if ($value >= 0 && $value < 0.3) return 'background-color: rgb(58, 235, 58);'; // Green
+        if ($value >= 0.3 && $value < 0.7) return 'background-color: orange;'; // Orange
+        if ($value >= 0.7) return 'background-color: rgb(243, 71, 71);'; // Red
+        return '';
+    }
+
+    function getRiskColor($value) {
+        if ($value >= 0 && $value < 3) return 'background-color: rgb(58, 235, 58);'; // Green
+        if ($value >= 3 && $value < 7) return 'background-color: orange;'; // Orange
+        if ($value >= 7) return 'background-color: rgb(243, 71, 71);'; // Red
+        return '';
+    }
+@endphp
+
 <div class="container my-2">
     <div class="row mt-5">
         <div class="col-lg-12">
@@ -74,18 +90,20 @@
         Data Confidentiality
 
         @if($serviceDetails->risk_confidentiality==10)
-        <span style="background-color: red; border-radius: 5px; width: 50px;
-         height: 30px; display: inline-block; vertical-align: middle;"></span>
+          <span class="fs-5" style="background-color: red; border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+           High(10)</span>
         @endif
 
         @if($serviceDetails->risk_confidentiality==5)
-        <span style="background-color: orange; border-radius: 5px; width: 50px;
-         height: 30px; display: inline-block; vertical-align: middle;"></span>
+            <span class="fs-5" style="background-color: rgb(224, 152, 44); border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+
+           Medium(5)</span>
         @endif
 
         @if($serviceDetails->risk_confidentiality==1)
-        <span style="background-color: rgb(58, 235, 58); border-radius: 5px; width: 50px;
-         height: 30px; display: inline-block; vertical-align: middle;"></span>
+      <span class="fs-5" style="background-color: rgb(29, 235, 56); border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+
+           Low (1)</span>
         @endif
 
         @endif
@@ -94,18 +112,18 @@
         Data Integrity
 
         @if($serviceDetails->risk_integrity==10)
-        <span style="background-color: red; border-radius: 5px; width: 50px;
-         height: 30px; display: inline-block; vertical-align: middle;"></span>
+         <span class="fs-5" style="background-color: red; border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+High (10)</span>
         @endif
 
         @if($serviceDetails->risk_integrity==5)
-        <span style="background-color: orange; border-radius: 5px; width: 50px;
-         height: 30px; display: inline-block; vertical-align: middle;"></span>
+       <span class="fs-5" style="background-color:  rgb(224, 152, 44); border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+Medium (5)</span>
         @endif
 
         @if($serviceDetails->risk_integrity==1)
-        <span style="background-color: rgb(58, 235, 58); border-radius: 5px; width: 50px;
-         height: 30px; display: inline-block; vertical-align: middle;"></span>
+      <span class="fs-5" style="background-color: rgb(38, 206, 60); border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+Low (1)</span>
         @endif
 
         @endif
@@ -113,102 +131,26 @@
         @if($risk_type=='risk_availability')
         Data Availability
         @if($serviceDetails->risk_availability==10)
-        <span style="background-color: red; border-radius: 5px; width: 50px;
-         height: 30px; display: inline-block; vertical-align: middle;"></span>
+          <span class="fs-5" style="background-color: red; border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+High(10)</span>
         @endif
 
         @if($serviceDetails->risk_availability==5)
-        <span style="background-color: orange; border-radius: 5px; width: 50px;
-         height: 30px; display: inline-block; vertical-align: middle;"></span>
+        <span class="fs-5" style="background-color:  rgb(224, 152, 44); border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+Medium(5)</span>
         @endif
 
         @if($serviceDetails->risk_availability==1)
-        <span style="background-color: rgb(58, 235, 58); border-radius: 5px; width: 50px;
-         height: 30px; display: inline-block; vertical-align: middle;"></span>
+   <span class="fs-5" style="background-color: rgb(56, 230, 40); border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+Low(1)</span>
         @endif
 
 
         @endif
-
 
 
     </h4>
 
-    {{-- <div class="row">
-        <div class="col-md-6">
-
-                <table class="table table-responsive table-bordered">
-                    <tr>
-                        <td colspan="4" class="table-primary text-center fw-bold">Risk Map of -  @if($risk_type=='risk_level')
-                            Data Confidentiality
-
-                            @elseif($risk_type=='risk_integrity')
-                            Data Integrity
-
-                            @elseif($risk_type=='risk_availability')
-                            Data Availability
-
-                            @endif </td>
-                    </tr>
-                    <tr>
-                        <th>Adverse Business Impact</th>
-                        <td colspan="3" class="text-center fw-bold" style="vertical-align: middle">Total Number of Risks: {{$totalCount}}</td>
-                    </tr>
-
-
-                    <tbody>
-                        @foreach($data as $impactLevel => $counts)
-                            <tr>
-                                <td>{{ $impactLevel }}</td>
-                                <td class="low" style="background-color: rgb(124, 251, 124)">
-                             {{ $counts['low']['count'] }}
-
-                                </td>
-                                <td class="medium" style="background-color: orange">
-                                    {{ $counts['medium']['count'] }}
-
-                                </td>
-                                <td class="high" style="background-color: rgb(222, 72, 72)">
-                                    {{ $counts['high']['count'] }}
-
-                                </td>
-                            </tr>
-
-
-                        @endforeach
-
-                    </tbody>
-
-                    <tfoot>
-                        <tr>
-                            <td></td>
-                            <td class="low">
-                                {{ $overallRanges['low']['min'] ?? '-' }} - {{ $overallRanges['low']['max'] ?? '-' }}
-                            </td>
-                            <td class="medium">
-                                {{ $overallRanges['medium']['min'] ?? '-' }} - {{ $overallRanges['medium']['max'] ?? '-' }}
-                            </td>
-                            <td class="high">
-                                {{ $overallRanges['high']['min'] ?? '-' }} - {{ $overallRanges['high']['max'] ?? '-' }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td colspan="3" class="fw-bold text-center">Likelihood of Exploit Range</td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <div class="text-center">
-                    <a href="{{ route('risk_register_single_type', [
-                        'service' => $service,
-                        'component' => '_all',
-                        'proj_id' => $project->project_id
-                    ]) }}?group={{ $group }}&subgroup={{ $subgroup }}" class="btn btn-success btn-md">View or Download Risk Register</a>
-                </div>
-
-
-        </div>
-    </div> --}}
 
     <div class="row">
         <div class="col-md-6">
@@ -217,7 +159,7 @@
                     <thead class="table-primary">
                         <tr>
                             <th rowspan="2" class="align-middle">Control Domain</th>
-                            <th colspan="3">Likelihood of Exploit</th>
+                            <th colspan="3">Likelihood of Exploit (Threat x Vul )</th>
                         </tr>
                         <tr>
                             <th>Max</th>
@@ -256,16 +198,16 @@
                             Technological
                             @endif
                             </td>
-                            <td>{{$like->max_likelihood}}</td>
-                            <td>{{$like->mean_likelihood}}</td>
-                            <td>{{$like->min_likelihood}}</td>
+                             <td style="{{ getColor($like->max_likelihood) }}">{{ $like->max_likelihood }}</td>
+    <td style="{{ getColor($like->mean_likelihood) }}">{{ $like->mean_likelihood }}</td>
+    <td style="{{ getColor($like->min_likelihood) }}">{{ $like->min_likelihood }}</td>
                         </tr>
                       
                         @endforeach
-                        <tr>
+                          <tr class="fw-bold table-dark">
                             <td>Total</td>
                             <td>{{ $max_total }}</td>
-                            <td>{{ $count > 0 ? number_format($mean_total / $count, 2) : 0 }}</td>
+                            <td>{{ $mean_total }}</td>
                             <td>{{ $min_total }}</td>
                         </tr>
 
@@ -282,18 +224,7 @@
                     <thead class="table-primary">
                         <tr>
                             {{-- <th rowspan="2" class="align-middle">Control Domain</th> --}}
-                            <th colspan="3">Risk to 
-                            @if($risk_type=='risk_level')
-                             Data Confidentiality 
-                             @endif
-
-                                @if($risk_type=='risk_integrity')
-                                Data Integrity
-                                @endif
-                
-                                @if($risk_type=='risk_availability')
-                                Data Availability
-                                @endif</th>
+                            <th colspan="3">Risk ( Impact Level x Likelihood of Exploit)</th>
                         </tr>
                         <tr>
                             <th>Max</th>
@@ -301,14 +232,30 @@
                             <th>Min</th>
                         </tr>
                     </thead>
+                    @php
+                    $totalMax = 0;
+                    $totalMean = 0;
+                    $totalMin = 0;
+                @endphp
+
                     <tbody class="table-secondary">
                         @foreach($results as $res)
-                        <tr>
-                            <td>{{$res->max_risk}}</td>
-                            <td>{{$res->mean_risk}}</td>
-                            <td>{{$res->min_risk}}</td>
+                        @php
+                        $totalMax += $res->max_risk;
+                        $totalMean += $res->mean_risk;
+                        $totalMin += $res->min_risk;
+                    @endphp
+                                    <tr>
+                       <td style="{{ getRiskColor($res->max_risk) }}">{{ number_format($res->max_risk, 2) }}</td>
+            <td style="{{ getRiskColor($res->mean_risk) }}">{{ number_format($res->mean_risk, 2) }}</td>
+            <td style="{{ getRiskColor($res->min_risk) }}">{{ number_format($res->min_risk, 2) }}</td>
                         </tr>
                         @endforeach
+                          <tr class="fw-bold table-dark">
+        <td>Total: {{ $totalMax }}</td>
+        <td>Total: {{ $totalMean }}</td>
+        <td>Total: {{ $totalMin }}</td>
+    </tr>
 
                     <tbody>
 

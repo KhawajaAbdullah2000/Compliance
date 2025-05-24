@@ -80,7 +80,7 @@ $permissions=json_decode($project_permissions);
     @endif
     
 
-
+@if($project->project_type==7)
       <h2 class="fw-bold mt-4 mb-2">
         @if($title==1)
         1: CyberSecurity Governance
@@ -98,17 +98,24 @@ $permissions=json_decode($project_permissions);
 
         @endif
       </h2>
+      @endif
+
+      @if($project->project_type==18)
+      <h2 class="fw-bold mt-4 mb-2">
+        @if($title==5)
+        5: Monitoring
+        @endif
+      @endif
 
         
     <h4>Select one {{$project->type}}  subdomain from below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
         @if(Session('evidenceLevel')=='service') All Assets in the service: {{$asset->s_name}} @endif
-        @if(Session('evidenceLevel')=='group') All Assets in the group: {{$asset->g_name}} @endif
-        @if(Session('evidenceLevel')=='name') All Assets in: {{$asset->name}} @endif
+        @if(Session('evidenceLevel')=='group') All Asset Types in the group: {{$asset->g_name}} @endif
+        @if(Session('evidenceLevel')=='name') All Asset Subtypes in: {{$asset->name}} @endif
         @if(Session('evidenceLevel')=='component') the Component: {{$asset->c_name}} @endif
     
     </h4>
-
-
+    
     <table class="table table-bordered table-responsive table-primary">
 
         <thead class="fw-bold table-dark">
@@ -138,9 +145,10 @@ $permissions=json_decode($project_permissions);
             <option value="not_tested" {{ old('comp_status') == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
             <option value="partial" {{ old('comp_status') == 'partial' ? 'selected' : '' }}>Partial</option>
         </select>
+<button type="submit" class="btn btn-success btn-sm w-100" style="max-width: 100px;">Submit</button>
+<a href="#" class="btn btn-primary btn-sm w-100" style="max-width: 100px;">AI Input</a>
 
-        <button type="submit" class="btn btn-success btn-sm px-3">Submit</button>
-        <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
+
     </form>
 </td>
 
@@ -179,30 +187,17 @@ $permissions=json_decode($project_permissions);
                                     <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
                                 </select>
                                 
-        <button type="submit" class="btn btn-success btn-sm px-3">Submit</button>
-        <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
+   <button type="submit" class="btn btn-success btn-sm w-100" style="max-width: 100px;">Submit</button>
+<a href="#" class="btn btn-primary btn-sm w-100" style="max-width: 100px;">AI Input</a>
+
                            
                         </form>
                     </td>
                        @endif
-
-
-
-                              {{-- <p>{!! nl2br($data[$i][2]) !!}</p> --}}
+                              
 
              @endfor
-            {{-- @foreach ($data as $d)
-
-            <tr>
-                <td>{!! nl2br($d[2]) !!}</td>
-                <td style="text-align:center">
-                    <a href="/"><i class="fas fa-eye fa-lg" style="color: #114a1d;"></i>
-                    </a></td>
-
-            </tr>
-
-            @endforeach --}}
-
+    
         </tbody>
 
     </table>

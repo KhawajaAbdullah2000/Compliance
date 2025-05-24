@@ -183,8 +183,8 @@ class IsoSec2_2 extends Controller
                     ]);
                 }
 
-                //KSA NCA
-                if ($checkpermission->type_id == 7) {
+                //KSA NCA , COSO
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id==18) {
                     return view('KSA_NCA.ksa_nca_sec_2_2_evidence_selection', [
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
@@ -193,6 +193,8 @@ class IsoSec2_2 extends Controller
 
                     ]);
                 }
+
+            
 
                 //UAE IA
                 if ($checkpermission->type_id == 8) {

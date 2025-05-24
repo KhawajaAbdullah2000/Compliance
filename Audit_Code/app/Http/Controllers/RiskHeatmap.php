@@ -486,9 +486,9 @@ class RiskHeatmap extends Controller
             ->whereIn('iso_sec_2_3_1.asset_id', $assetIds)
             ->selectRaw("
                 FLOOR(control_num) as category, 
-               MAX((vulnerability * threat) /100) as max_likelihood, 
-                MIN((vulnerability * threat) / 100) as min_likelihood, 
-                AVG((vulnerability * threat) / 100) as mean_likelihood
+               MAX((vulnerability * threat) /10000) as max_likelihood, 
+                MIN((vulnerability * threat) / 10000) as min_likelihood, 
+                AVG((vulnerability * threat) / 100000) as mean_likelihood
             ")
             ->groupBy('category')
             ->orderBy('category')

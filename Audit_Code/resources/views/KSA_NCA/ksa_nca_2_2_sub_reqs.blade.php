@@ -92,18 +92,26 @@ $permissions=json_decode($project_permissions);
 
     <a href="/ksa_nca_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary btn-md float-end">Go to All Requirements</a>
 
-      <h4 class="text-center fw-bold mt-4 mb-4">
+      <p class="fw-bold mt-4 mb-4 fs-6">
     {{$main_req_num}}  {{$data[0][3]}}
-    </h4>
+      </p>
 
     <table class="table table-bordered table-responsive table-primary">
 
         <thead style="vertical-align: middle;text-align:center;" class="table-dark">
             <td class="fw-bold" style="width:5%">Control No.</td>
-            <td class="fw-bold" style="width:30%">Mandatory Requirement</td>
+            <td class="fw-bold" 
+            @if($project->project_type==7)
+             style="width:30%;"
+             @elseif($project->project_type==18)
+          style="width:60%;"
+             @endif
+             >Mandatory Requirement</td>
+            @if($project->project_type==7)
              <td class="fw-bold" style="width:10%">Tools</td>
             <td class="fw-bold" style="width:10%">Guidelines</td>
             <td class="fw-bold" style="width:10%">Deliverables</td>
+            @endif
             <td class="fw-bold" style="width:5%">Actions</td>
             <td class="fw-bold" style="width:30%">Edit</td>
         </thead>
@@ -114,6 +122,8 @@ $permissions=json_decode($project_permissions);
             <tr>
                 <td style="text-align:center">{{$d[4]}}</td>
                  <td>{!! nl2br($d[5]) !!}</td>
+
+                 @if($project->project_type==7)
                  <td class="text-center">
     <button style="background-color: pink" class="btn btn-sm fw-bold d-flex align-items-center justify-content-center gap-2 px-3 py-2">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-gear-wide" viewBox="0 0 16 16">
@@ -139,6 +149,8 @@ $permissions=json_decode($project_permissions);
         <span>Deliverables</span>
     </button>
 </td>
+
+@endif
 
 
        

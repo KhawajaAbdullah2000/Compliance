@@ -86,14 +86,14 @@
                     @if($asset->g_name!=null)
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="evidenceLevel" value="group">
-                        <label class="form-check-label" for="assetGroup">Asset Group</label>
+                        <label class="form-check-label" for="assetGroup">Asset Type</label>
                     </div>
                     @endif
     
                     @if($asset->name!=null)
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="evidenceLevel" value="name">
-                        <label class="form-check-label" for="asset">Asset</label>
+                        <label class="form-check-label" for="asset">Asset Subtype</label>
                     </div>
                     @endif
     
@@ -112,7 +112,14 @@
         <div class="row mt-2" >
             <div class="col-12">
 
-         <a href="/ksa_nca_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Upload or enter evidence against the mandatory requirements of KSA National Cybersecurity Authority (NCA)</p></a>
+         <a href="/ksa_nca_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Upload or enter evidence against the mandatory requirements of 
+            @if($project->project_type==7)
+            KSA National Cybersecurity Authority (NCA)
+            @elseif($project->project_type==18)
+            COSO
+            @endif
+
+            </p></a>
         </div>
         </div>
 

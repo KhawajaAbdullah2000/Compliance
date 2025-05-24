@@ -103,6 +103,17 @@
                     </div>
                 </div>
 
+                      <div class="col-md-2">
+                    <div class="card shadow-lg p-4 text-center h-100 d-flex flex-column justify-content-between" style="background-color: orange">
+                        <div class="body flex-grow-1 d-flex flex-column justify-content-between">
+                            <h5 class="card-title text-white">Partially In Place</h5>
+                            <p class="text-white fw-bold mt-3 fs-4 align-self-center">
+                                {{ array_sum($columnTotals) > 0 ? ceil(($columnTotals['partial'] / array_sum($columnTotals)) * 100) . ' %' : '0 %' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-md-2">
                     <div class="card shadow-lg p-4 text-center bg-danger h-100 d-flex flex-column justify-content-between">
                         <div class="body flex-grow-1 d-flex flex-column justify-content-between">
@@ -115,21 +126,12 @@
                 </div>
 
 
-                <div class="col-md-2">
-                    <div class="card shadow-lg p-4 text-center h-100 d-flex flex-column justify-content-between" style="background-color: orange">
-                        <div class="body flex-grow-1 d-flex flex-column justify-content-between">
-                            <h5 class="card-title text-white">Partially In Place</h5>
-                            <p class="text-white fw-bold mt-3 fs-4 align-self-center">
-                                {{ array_sum($columnTotals) > 0 ? ceil(($columnTotals['partial'] / array_sum($columnTotals)) * 100) . ' %' : '0 %' }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
+          
                 
 
 
                 <div class="col-md-2">
-                    <div class="card shadow-lg p-4 text-center bg-secondary h-100 d-flex flex-column justify-content-between">
+                    <div style="background-color: rgb(79, 174, 190)" class="card shadow-lg p-4 text-center h-100 d-flex flex-column justify-content-between">
                         <div class="body flex-grow-1 d-flex flex-column justify-content-between">
                             <h5 class="card-title text-white">Not Applicable</h5>
                             <p class="text-white fw-bold mt-3 fs-4 align-self-center">

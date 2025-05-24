@@ -14,7 +14,7 @@ class Risk_Management_Frameworks extends Seeder
     public function run(): void
     {
         DB::table('risk_management_framework')->insert([
-            ['framework_name' => 'Default Vanilla'],
+            ['framework_name' => 'Default'],
              ['framework_name'=>'ISO 27005:2022'],
              ['framework_name'=>'UAE Information Assurance'],
              ['framework_name'=>'KSA NCA'],

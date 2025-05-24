@@ -54,8 +54,8 @@ $isApprover=in_array('Data Approver', $permissions);
         <thead class="table-dark ">
             <tr>
                 <th>Service</th>
-                    <th>Asset Group</th>
-                    <th>Asset</th>
+                    <th>Asset Type</th>
+                    <th>Asset Subtype</th>
                     <th>Asset Component</th>
                     <th>Asset Owner Dept</th>
                     <th>Asset Physical Location</th>
@@ -91,9 +91,9 @@ $isApprover=in_array('Data Approver', $permissions);
 
 
 <h3>Select From below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
-    @if(Session('evidenceLevel')=='service') All Assets in the service: {{$asset->s_name}} @endif
-    @if(Session('evidenceLevel')=='group') All Assets in the group: {{$asset->g_name}} @endif
-    @if(Session('evidenceLevel')=='name') All Assets in: {{$asset->name}} @endif
+    @if(Session('evidenceLevel')=='service') All Asset in the service: {{$asset->s_name}} @endif
+    @if(Session('evidenceLevel')=='group') All Asset Types in: {{$asset->g_name}} @endif
+    @if(Session('evidenceLevel')=='name') All Assets Subtypes in: {{$asset->name}} @endif
     @if(Session('evidenceLevel')=='component') the Component: {{$asset->c_name}} @endif
 </h3>
 
@@ -139,8 +139,7 @@ $isApprover=in_array('Data Approver', $permissions);
                         <!-- Comments -->
                         <div class="mb-4">
                             <label for="comments" class="form-label fw-semibold">Comments (Optional)</label>
-                            <textarea name="comments" id="comments" rows="4" class="form-control rounded" {{ $isReadOnly ? 'readonly' : '' }}>{{ old('comments', $result->comments ?? '') }}
-                            </textarea>
+                            <textarea name="comments" id="comments" rows="4" class="form-control rounded" {{ $isReadOnly ? 'readonly' : '' }}>{{ old('comments', $result->comments ?? '') }}</textarea>
                             @error('comments')
                             <div class="text-danger small mt-2">{{ $message }}</div>
                             @enderror
