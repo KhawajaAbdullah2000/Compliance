@@ -28,7 +28,7 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id==18) {
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id==18 || $checkpermission->type_id==19) {
                     //ksa or COSO
 
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
@@ -73,7 +73,7 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id==18) {
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id==18 || $checkpermission->type_id==19) {
 
                     if($checkpermission->type_id==7){
                      $filepath = public_path('KSA_NCA_ECC.xlsx');
@@ -81,6 +81,10 @@ class KSA_NCA extends Controller
 
                     if($checkpermission->type_id==18){
                      $filepath = public_path('COSO.xlsx');
+                    }
+
+                       if($checkpermission->type_id==19){
+                     $filepath = public_path('SOC2_Type2.xlsx');
                     }
                  
                     $data = Excel::toArray([], $filepath); //with header
@@ -94,6 +98,7 @@ class KSA_NCA extends Controller
                         return strval($row[0]) === $title_num;
                     })->values()->all();
 
+          
 
                     $asset = Db::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
 
@@ -138,7 +143,7 @@ class KSA_NCA extends Controller
 
                 }
 
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id==18) {
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id==18 || $checkpermission->type_id==19) {
 
                     if($checkpermission->type_id == 7){
                         $filepath = public_path('KSA_NCA_ECC.xlsx');
@@ -146,6 +151,10 @@ class KSA_NCA extends Controller
 
                     if($checkpermission->type_id == 18){
                         $filepath = public_path('COSO.xlsx');
+                    }
+
+                      if($checkpermission->type_id == 19){
+                        $filepath = public_path('SOC2_Type2.xlsx');
                     }
                     
                     $data = Excel::toArray([], $filepath); //with header
@@ -204,7 +213,7 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 7 ||$checkpermission->type_id ==18 ) {
+                if ($checkpermission->type_id == 7 ||$checkpermission->type_id ==18 || $checkpermission->type_id ==19 ) {
                     $result = Db::table('iso_sec_2_2')->join('users', 'iso_sec_2_2.last_edited_by', 'users.id')
                         ->where('project_id', $proj_id)->where('sub_req', $sub_req)->where('asset_id', $asset_id)
                         ->first();
@@ -216,6 +225,10 @@ class KSA_NCA extends Controller
 
                 if ($checkpermission->type_id == 18 ){
                    $filepath = public_path('COSO.xlsx');
+                }
+
+                    if ($checkpermission->type_id == 19 ){
+                   $filepath = public_path('SOC2_Type2.xlsx');
                 }
        
                 $data = Excel::toArray([], $filepath); //with header
@@ -298,7 +311,7 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18) {
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19) {
 
                     $evidenceLevel = $req->session()->get('evidenceLevel');
 
@@ -340,8 +353,6 @@ class KSA_NCA extends Controller
                         }
 
 
-
-
                         if ($evidenceLevel == 'component') {
 
                             if ($req->action == 2) {
@@ -352,6 +363,10 @@ class KSA_NCA extends Controller
 
                                   if($checkpermission->type_id == 18){
                                  $filepath = public_path('COSO.xlsx');
+                                }
+
+                                if($checkpermission->type_id == 19){
+                                 $filepath = public_path('SOC2_Type2.xlsx');
                                 }
                         
                                 $data2 = Excel::toArray([], $filepath); //with header
@@ -395,6 +410,11 @@ class KSA_NCA extends Controller
 
                                   if($checkpermission->type_id == 18){
                                  $filepath = public_path('COSO.xlsx');
+                                }
+
+                                
+                                if($checkpermission->type_id == 19){
+                                 $filepath = public_path('SOC2_Type2.xlsx');
                                 }
                                 $data2 = Excel::toArray([], $filepath); //with header
                                 $rows = array_slice($data2[0], 1); //without header(first row)
@@ -484,6 +504,11 @@ class KSA_NCA extends Controller
                                   if($checkpermission->type_id == 18){
                                  $filepath = public_path('COSO.xlsx');
                                 }
+
+                                
+                                if($checkpermission->type_id == 19){
+                                 $filepath = public_path('SOC2_Type2.xlsx');
+                                }
                                 $data2 = Excel::toArray([], $filepath); //with header
                                 $rows = array_slice($data2[0], 1); //without header(first row)
 
@@ -529,6 +554,12 @@ class KSA_NCA extends Controller
                                   if($checkpermission->type_id == 18){
                                  $filepath = public_path('COSO.xlsx');
                                 }
+
+                                
+                                if($checkpermission->type_id == 19){
+                                 $filepath = public_path('SOC2_Type2.xlsx');
+                                }
+
                                 $data2 = Excel::toArray([], $filepath); //with header
                                 $rows = array_slice($data2[0], 1); //without header(first row)
 
@@ -1082,7 +1113,6 @@ class KSA_NCA extends Controller
     public function add_mandatory_all_title(Request $req, $proj_id, $user_id, $asset_id)
     {
  
-    
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -1115,6 +1145,11 @@ class KSA_NCA extends Controller
                          if ($checkpermission->type_id == 18) {
                         //COSO
                         $filepath = public_path('COSO_Modified.xlsx');
+                    }
+
+                    
+                    if($checkpermission->type_id == 19){
+                      $filepath = public_path('SOC2_Type2_Modified.xlsx');
                     }
 
                     if ($checkpermission->type_id == 1) {
@@ -1176,8 +1211,6 @@ class KSA_NCA extends Controller
 
 
                 
-
-
                     if ($evidenceLevel == 'component') {
 
                 
@@ -1187,8 +1220,7 @@ class KSA_NCA extends Controller
                             return strval($row[0]) === $req->title;
                         })->values()->all();
 
-
-
+    
 
 
                         foreach ($filteredData as $innerArray) {
@@ -1210,7 +1242,7 @@ class KSA_NCA extends Controller
 
                         }
 
-                        if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18) {
+                        if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id==19) {
                             return redirect()->route(
                                 'ksa_nca_subsections',
                                 ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
@@ -1320,7 +1352,7 @@ class KSA_NCA extends Controller
 
                     }
                 
-                    if ($checkpermission->type_id == 7|| $checkpermission->type_id == 18) {
+                    if ($checkpermission->type_id == 7|| $checkpermission->type_id == 18 || $checkpermission->type_id==19) {
                         return redirect()->route(
                             'ksa_nca_subsections',
                             ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
@@ -1408,6 +1440,10 @@ class KSA_NCA extends Controller
                          if ($checkpermission->type_id == 18) {
                         //COSO
                         $filepath = public_path('COSO_Modified.xlsx');
+                    }
+
+                        if($checkpermission->type_id == 19){
+                      $filepath = public_path('SOC2_Type2_Modified.xlsx');
                     }
 
                     if ($checkpermission->type_id == 5) {
@@ -1629,6 +1665,10 @@ class KSA_NCA extends Controller
                          if ($checkpermission->type_id == 18) {
                         //COSO
                         $filepath = public_path('COSO_Modified.xlsx');
+                    }
+
+                        if($checkpermission->type_id == 19){
+                      $filepath = public_path('SOC2_Type2_Modified.xlsx');
                     }
 
                     if ($checkpermission->type_id == 5) {

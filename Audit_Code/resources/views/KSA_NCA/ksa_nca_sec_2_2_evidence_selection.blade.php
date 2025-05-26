@@ -117,6 +117,8 @@
             KSA National Cybersecurity Authority (NCA)
             @elseif($project->project_type==18)
             COSO
+              @elseif($project->project_type==19)
+              AICPA Soc 2 -Type 2
             @endif
 
             </p></a>

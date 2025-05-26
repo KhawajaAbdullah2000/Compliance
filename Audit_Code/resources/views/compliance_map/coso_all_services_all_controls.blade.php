@@ -30,60 +30,27 @@
                         <td class="fw-bold">Sub-Organization:</td>
                         <td>{{ optional(auth()->user()->department)->name ?? 'Not Assigned' }}</td>
                     </tr>
+
+                    <tr>
+                        <td class="fw-bold">No. of Services:</td>
+                        <td>{{$uniqueServicesCount }}</td>
+                        <td class="fw-bold">No. of Asset Subgroups:</td>
+                        <td>{{ $uniqueSubGroupsCount }}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="fw-bold">No. of Asset Groups:</td>
+                        <td>{{$uniqueGroupsCount }}</td>
+                        <td class="fw-bold">No. of Asset Components:</td>
+                        <td>{{ $uniqueComponentsCount }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <h3 class="fw-bold text-center mt-4">View or Download Compliance Map (Selected Control Domain-Selected Service-Selected Asset-All Applicable Controls)</h3>
 
+    <h3 class="fw-bold text-center mt-4">View or Download Compliance Map (All Control Domains-All Services-All Applicable Controls)</h3>
 
-    <div class="row">
-        <div class="col-md-6">
-
-    
-            <h4><span class="fw-bold mt-4">Domain {{$domain}} :</span>{{$domainName}}</h4>
-            <h4><span class="fw-bold">Service Selected : </span>
-                @if($service=='_all')
-                All services - All Controls
-                @else
-                {{$service}} - All Controls
-                @endif
-            </h4>
-        
-            <h4><span class="fw-bold">Assets Selected : </span> 
-                @isset($group)
-                @if($group=='_all')
-                All Asset Groups -
-                @else
-                {{$group}} -
-                @endif
-                @endisset
-        
-        
-            @isset($subgroup)
-            @if($subgroup=='_all')
-            All Asset Subgroups -
-            @else
-            {{$subgroup}} -
-            @endif
-            @endisset
-        
-        @if($component=='_all')
-        
-        All Asset Components 
-        
-        @else
-        
-        {{$component}}
-        @endif
-        </h4>
-        </div>
-
-        <div class="col-md-6 position-relative">
-            <a href="/compliance_map_all_services/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md position-absolute" style="right: 0;">Compliance Map - All Services - All Controls</a>
-        </div>
-    </div>
-    
 
     @if(isset($formattedResults))
 
@@ -104,32 +71,42 @@
         </thead>
         <tbody>
             @php
-            $grandTotal=0;
-            $rowTotal2=0;
+             $rowTotal2=0;
+             $grandTotal=0;
                 // Initialize column totals
                 $columnTotals = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
             @endphp
 
-        {{-- FOr row percentage --}}
-        @foreach($formattedResults as $statuses)
-        @php
-            // Calculate row total and add to grand total
-            $rowTotal2 = array_sum($statuses);
-            $grandTotal += $rowTotal2;
-        @endphp
-        @endforeach
+            @foreach($formattedResults as $statuses)
+            @php
+                // Calculate row total and add to grand total
+                $rowTotal2 = array_sum($statuses);
+                $grandTotal += $rowTotal2;
+            @endphp
+            @endforeach
+
 
             @forelse($formattedResults as $domain => $statuses)
                 <tr>
-                    <td><a href="{{ route('compliance_map_sub_req', [
-                        'domain' => $domain,
-                        'service' => $service,
-                        'component' => $component,
-                        'proj_id' => $project->project_id
-                    ]) }}?group={{ $group }}&subgroup={{ $subgroup }}">
+                    <td><a href="/select_assets_for_subdomain_map/{{$domain}}/{{$project->project_id}}/{{auth()->user()->id}}">
                         
-                        {{ $domain }} - {{$UniqueSubDomains[$domain]}}
-                  
+                        {{ $domain }}- 
+                        @if($domain==1) 
+                        Control Environment
+
+                        @elseif($domain==2)
+                     Risk Assessment
+
+                        @elseif($domain==3)
+                        Control Activities
+
+                        @elseif($domain==4)
+                        Information and Communication
+
+                        @elseif($domain==5)
+                       Monitoring
+
+                        @endif
                     </a>
                     </td>
                     @php
@@ -147,21 +124,18 @@
                     @endforeach
 
                     <td><strong>{{ $rowTotal }}</strong></td>
-           
-                     <!-- Row Percentage -->
-                    <td>
-                        <strong>
-                        @if($grandTotal > 0)
-                            {{ ceil(($rowTotal / $grandTotal) * 100) }}%
-                        @else
-                            0%
-                        @endif
-                        </strong>
-                    </td>
-                  
 
+                     <!-- Row Percentage -->
+                 <td>
+                    <strong>
+                    @if($grandTotal > 0)
+                        {{ ceil(($rowTotal / $grandTotal) * 100) }}%
+                    @else
+                        0%
+                    @endif
+                    </strong>
+                </td>
                 </tr>
-                
                 @empty
                 <tr>
                     <td colspan="8" class="text-center">No data available</td>
@@ -177,18 +151,49 @@
                 <th>{{ $columnTotals['not_applicable'] }}</th>
                 <th>{{ $columnTotals['not_tested'] }}</th>
                 <th>{{ $columnTotals['partial'] }}</th>
-                <th>{{ array_sum($columnTotals) }} </th>
+                <th>{{ array_sum($columnTotals) }}</th>
                 <th>100%</th>
             </tr>
 
             <tr>
                 <th>%</th>
-                <th>{{ ceil( ($columnTotals['yes']/array_sum($columnTotals) )*100 )}}%</th>
-                <th>{{ ceil( ($columnTotals['no']/array_sum($columnTotals) )*100 )}}%</th>
-                <th>{{ ceil( ($columnTotals['not_applicable']/array_sum($columnTotals) )*100 )}}%</th>
-                <th>{{ ceil( ($columnTotals['not_tested']/array_sum($columnTotals) )*100 )}}%</th>
-                <th>{{ ceil( ($columnTotals['partial']/array_sum($columnTotals) )*100 )}}%</th>
-                <th>100 %</th>
+                <th>
+                    @if(array_sum($columnTotals) > 0)
+                        {{ ceil(($columnTotals['yes'] / array_sum($columnTotals)) * 100) }}%
+                    @else
+                        0%
+                    @endif
+                </th>               
+                <th>
+                    @if(array_sum($columnTotals) > 0)
+                        {{ ceil(($columnTotals['no'] / array_sum($columnTotals)) * 100) }}%
+                    @else
+                        0%
+                    @endif
+                </th>                 
+                <th>
+                    @if(array_sum($columnTotals) > 0)
+                        {{ ceil(($columnTotals['not_applicable'] / array_sum($columnTotals)) * 100) }}%
+                    @else
+                        0%
+                    @endif
+                </th>                 
+                
+                <th>
+                    @if(array_sum($columnTotals) > 0)
+                        {{ ceil(($columnTotals['not_tested'] / array_sum($columnTotals)) * 100) }}%
+                    @else
+                        0%
+                    @endif
+                </th>               
+                <th>
+                    @if(array_sum($columnTotals) > 0)
+                        {{ ceil(($columnTotals['partial'] / array_sum($columnTotals)) * 100) }}%
+                    @else
+                        0%
+                    @endif
+                </th>              
+                   <th>100 %</th>
                 <th></th>
             </tr>
         </tfoot>
@@ -210,19 +215,16 @@
         // Cache the button and checkboxes
         const downloadExcelButton = $('#downloadExcelButton');
           const downloadExcelButton2 = $('#downloadExcelButton2');
+
         const projectID = {{ $project->project_id }};
         const userID = {{ auth()->user()->id }};
-        const formattedResult = @json($results);
-
 
         // Function to update the Excel download link
         function updateDownloadLink() {
-            const formattedResultEncoded = encodeURIComponent(JSON.stringify(formattedResult));
 
-        
-            const url = `/download_excel_compliance_map_subdomain/${projectID}/${userID}?formattedResult=${formattedResultEncoded}`;
+            const url = `/download_excel_compliance_map/${projectID}/${userID}`;
             downloadExcelButton.attr('href', url);
-            downloadExcelButton2.attr('href', url);
+             downloadExcelButton2.attr('href', url);
         }
 
         // Update the link on page load and when a checkbox changes

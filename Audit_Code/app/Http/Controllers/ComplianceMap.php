@@ -177,8 +177,8 @@ class ComplianceMap extends Controller
 
     public function compliance_map_all_services($proj_id, $user_id)
     {
+
       
-     
         $checkpermission = Db::table('project_details')->select(
             'project_types.id as type_id',
             'project_details.project_code',
@@ -255,8 +255,19 @@ class ComplianceMap extends Controller
 
                 //KSA
                 if ($project->project_type == 7) {
-                    
                 return view('compliance_map.ksa_nca_all_services_all_controls', [
+                    'project' => $project,
+                    'uniqueServicesCount' => $uniqueServicesCount,
+                    'uniqueGroupsCount'=>$uniqueGroupsCount,
+                    'uniqueSubGroupsCount'=>$uniqueSubGroupsCount,
+                    'uniqueComponentsCount'=>$uniqueComponentsCount,
+                    'formattedResults' => $formattedResults,
+                ]);
+            }
+
+                if ($project->project_type == 18) {
+                    //coso
+                return view('compliance_map.coso_all_services_all_controls', [
                     'project' => $project,
                     'uniqueServicesCount' => $uniqueServicesCount,
                     'uniqueGroupsCount'=>$uniqueGroupsCount,
@@ -439,6 +450,7 @@ class ComplianceMap extends Controller
         }
 
     }
+
 
     public function download_excel_compliance_map($proj_id, $user_id)
     {
@@ -782,6 +794,16 @@ foreach ($formattedResults as $domain => $statuses) {
     
         }
 
+            if ($project->project_type == 18) {
+            $domainNames = [
+                1 => 'Control Environment',
+                2 => 'Risk Assessment',
+                3 => 'Control Activities',
+                4 => 'Information and Communication',
+                5 => 'Monitoring'
+            ];
+        } 
+
 
 
 
@@ -1105,6 +1127,16 @@ foreach ($formattedResults as $domain => $statuses) {
             
     
         }
+
+              if ($project->project_type == 18) {
+            $domainNames = [
+                1 => 'Control Environment',
+                2 => 'Risk Assessment',
+                3 => 'Control Activities',
+                4 => 'Information and Communication',
+                5 => 'Monitoring'
+            ];
+        } 
         
 
 
@@ -1424,6 +1456,16 @@ foreach ($formattedResults as $domain => $statuses) {
     
         }
 
+              if ($project->project_type == 18) {
+            $domainNames = [
+                1 => 'Control Environment',
+                2 => 'Risk Assessment',
+                3 => 'Control Activities',
+                4 => 'Information and Communication',
+                5 => 'Monitoring'
+            ];
+        } 
+
 
         if ($groups->count() == 0) {
             return redirect()->route(
@@ -1475,6 +1517,16 @@ foreach ($formattedResults as $domain => $statuses) {
                 3 => 'Cybersecurity Resilience',
                 4 => 'Third-Party and Cloud Computing Cybersecurity',
                 5 => 'Industrial Control Systems Cybersecurity',
+            ];
+        } 
+
+              if ($project->project_type == 18) {
+            $domainNames = [
+                1 => 'Control Environment',
+                2 => 'Risk Assessment',
+                3 => 'Control Activities',
+                4 => 'Information and Communication',
+                5 => 'Monitoring'
             ];
         } 
 
@@ -1962,6 +2014,16 @@ foreach ($formattedResults as $domain => $statuses) {
         
         }
 
+              if ($project->project_type == 18) {
+            $domainNames = [
+                1 => 'Control Environment',
+                2 => 'Risk Assessment',
+                3 => 'Control Activities',
+                4 => 'Information and Communication',
+                5 => 'Monitoring'
+            ];
+        } 
+
         if ($project->project_type == 6) {
             $domainNames = [
                 1 => 'INFORMATION TECHNOLOGY GOVERNANCE IN FI(s)',
@@ -2284,7 +2346,6 @@ foreach ($formattedResults as $domain => $statuses) {
 
 
 
-
             $domainNames = [
                 1 => 'Cybersecurity Governance',
                 2 => 'Cybersecurity Defense',
@@ -2295,6 +2356,40 @@ foreach ($formattedResults as $domain => $statuses) {
 
 
         }
+
+         if ($project->project_type == 18) {
+
+            $filepath = public_path('COSO_Modified.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+
+        
+          
+       $UniqueSubDomains = collect($filteredData)
+    ->unique(fn($row) => $row[1]) // Keep only first per control ID
+    ->mapWithKeys(function ($row) {
+        return [(string) $row[1] => $row[4]]; // force key to string
+    })
+    ->toArray();
+
+
+                  $domainNames = [
+                1 => 'Control Environment',
+                2 => 'Risk Assessment',
+                3 => 'Control Activities',
+                4 => 'Information and Communication',
+                5 => 'Monitoring'
+                  ];
+
+      
+
+        }
+
+        
 
         if($project->project_type==1){
 
@@ -2789,6 +2884,8 @@ foreach ($formattedResults as $domain => $statuses) {
                 10 => 'Improvement'
             ];
         } 
+
+
 
 
         return view('compliance_map.subdomains_map', [
@@ -3344,6 +3441,42 @@ foreach ($formattedResults as $domain => $statuses) {
 
 
         }
+
+    if ($project->project_type == 18) {
+
+        $filepath = public_path('COSO_Modified.xlsx');
+        $data = Excel::toArray([], $filepath); //with header
+        $rows = array_slice($data[0], 1); //without header(first row)
+
+        $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+            return strval($row[1]) == $subdomain;
+        })->values()->all();
+
+
+        $MainDomainNum=$filteredData[0][0];
+        $MainDomainTitle=$filteredData[0][2] ;//title
+    
+        $subdomainTitle=$filteredData[0][4];
+
+
+        $UniqueSubReqs = collect($filteredData)
+            ->mapWithKeys(function ($row) {
+                return [$row[3] => $row[5]]; 
+            })
+            ->unique() // Ensure unique keys (1st index)
+            ->toArray(); // Convert to array
+    
+        }
+
+        
+                  $domainNames = [
+                1 => 'Control Environment',
+                2 => 'Risk Assessment',
+                3 => 'Control Activities',
+                4 => 'Information and Communication',
+                5 => 'Monitoring'
+                  ];
+
         return view('compliance_map.subreq_map', [
             'project' => $project,
             'formattedResults' => $formattedResults,

@@ -196,7 +196,7 @@ All Asset Components
     </tfoot>
 </table>
 
-<a id="downloadExcelButton" href="#" class="btn btn-success btn-md float-end mb-2">Download Excel</a>
+<a id="downloadExcelButton2" href="#" class="btn btn-success btn-md float-end mb-2">Download Excel</a>
 
 
 
@@ -213,6 +213,7 @@ All Asset Components
     $(document).ready(function () {
         // Cache the button and checkboxes
         const downloadExcelButton = $('#downloadExcelButton');
+         const downloadExcelButton2 = $('#downloadExcelButton2');
         const projectID = {{ $project->project_id }};
         const userID = {{ auth()->user()->id }};
         const formattedResult = @json($results);
@@ -225,6 +226,7 @@ All Asset Components
         
             const url = `/download_excel_compliance_map_subreq/${projectID}/${userID}?formattedResult=${formattedResultEncoded}`;
             downloadExcelButton.attr('href', url);
+             downloadExcelButton2.attr('href', url);
         }
 
         // Update the link on page load and when a checkbox changes

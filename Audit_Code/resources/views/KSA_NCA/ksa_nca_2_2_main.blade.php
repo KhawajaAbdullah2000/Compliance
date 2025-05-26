@@ -102,10 +102,15 @@ $permissions=json_decode($project_permissions);
 
       @if($project->project_type==18)
       <h2 class="fw-bold mt-4 mb-2">
-        @if($title==5)
-        5: Monitoring
-        @endif
+      {{$data[0][1]}}
       @endif
+
+         @if($project->project_type==19)
+      <h2 class="fw-bold mt-4 mb-2">
+      {{$data[0][1]}}
+      </h2>
+      @endif
+
 
         
     <h4>Select one {{$project->type}}  subdomain from below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
