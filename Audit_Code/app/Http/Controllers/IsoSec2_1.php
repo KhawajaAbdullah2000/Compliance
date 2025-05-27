@@ -76,7 +76,7 @@ class IsoSec2_1 extends Controller
                     ->get();
 
 
-
+        
 
 
                     return view('iso_sec_2_1.iso_sec_2_1_main', [

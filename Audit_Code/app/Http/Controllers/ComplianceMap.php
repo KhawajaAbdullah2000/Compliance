@@ -278,6 +278,20 @@ class ComplianceMap extends Controller
 
                 }
 
+                if ($project->project_type == 19) {
+                    //coso
+                return view('compliance_map.soc2_type2_all_services_all_controls', [
+                    'project' => $project,
+                    'uniqueServicesCount' => $uniqueServicesCount,
+                    'uniqueGroupsCount'=>$uniqueGroupsCount,
+                    'uniqueSubGroupsCount'=>$uniqueSubGroupsCount,
+                    'uniqueComponentsCount'=>$uniqueComponentsCount,
+                    'formattedResults' => $formattedResults,
+                ]);
+
+                }
+
+
         
 
                 //PCI SIngle
@@ -804,6 +818,32 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
         } 
 
+        if ($project->project_type == 19) {
+           $domainNames = [
+            1 => 'Asset Management',
+            2 => 'Availability',
+            3 => 'Change Management',
+            4 => 'Communications',
+            5 => 'Confidentiality',
+            6 => 'Data Classification',
+            7 => 'Fraud Management',
+            8 => 'Human Resource aspects of Trust Services',
+            9 => 'Information Assets Security Management Policy',
+            10 => 'Information Security Events Monitoring',
+            11 => 'Information Security Incident Management',
+            12 => 'Information Security Monitoring',
+            13 => 'IT Operational Anomalies Reporting',
+            14 => 'Logical and Physical Access Controls',
+            15 => 'Monitoring of Controls',
+            16 => 'Organization & Management',
+            17 => 'Risk Management',
+            18 => 'Vendor and Business Partner Risk Management',
+            19 => 'Vulnerability Management'
+        ];
+
+        } 
+
+
 
 
 
@@ -1027,6 +1067,31 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
         
         }
+
+         if ($project->project_type == 19) {
+           $domainNames = [
+            1 => 'Asset Management',
+            2 => 'Availability',
+            3 => 'Change Management',
+            4 => 'Communications',
+            5 => 'Confidentiality',
+            6 => 'Data Classification',
+            7 => 'Fraud Management',
+            8 => 'Human Resource aspects of Trust Services',
+            9 => 'Information Assets Security Management Policy',
+            10 => 'Information Security Events Monitoring',
+            11 => 'Information Security Incident Management',
+            12 => 'Information Security Monitoring',
+            13 => 'IT Operational Anomalies Reporting',
+            14 => 'Logical and Physical Access Controls',
+            15 => 'Monitoring of Controls',
+            16 => 'Organization & Management',
+            17 => 'Risk Management',
+            18 => 'Vendor and Business Partner Risk Management',
+            19 => 'Vulnerability Management'
+        ];
+    }
+
 
         if($project->project_type==12){
             $domainNames = [
@@ -1466,6 +1531,30 @@ foreach ($formattedResults as $domain => $statuses) {
             ];
         } 
 
+          if ($project->project_type == 19) {
+           $domainNames = [
+            1 => 'Asset Management',
+            2 => 'Availability',
+            3 => 'Change Management',
+            4 => 'Communications',
+            5 => 'Confidentiality',
+            6 => 'Data Classification',
+            7 => 'Fraud Management',
+            8 => 'Human Resource aspects of Trust Services',
+            9 => 'Information Assets Security Management Policy',
+            10 => 'Information Security Events Monitoring',
+            11 => 'Information Security Incident Management',
+            12 => 'Information Security Monitoring',
+            13 => 'IT Operational Anomalies Reporting',
+            14 => 'Logical and Physical Access Controls',
+            15 => 'Monitoring of Controls',
+            16 => 'Organization & Management',
+            17 => 'Risk Management',
+            18 => 'Vendor and Business Partner Risk Management',
+            19 => 'Vulnerability Management'
+        ];
+    }
+
 
         if ($groups->count() == 0) {
             return redirect()->route(
@@ -1806,6 +1895,30 @@ foreach ($formattedResults as $domain => $statuses) {
             
     
         }
+
+          if ($project->project_type == 19) {
+           $domainNames = [
+            1 => 'Asset Management',
+            2 => 'Availability',
+            3 => 'Change Management',
+            4 => 'Communications',
+            5 => 'Confidentiality',
+            6 => 'Data Classification',
+            7 => 'Fraud Management',
+            8 => 'Human Resource aspects of Trust Services',
+            9 => 'Information Assets Security Management Policy',
+            10 => 'Information Security Events Monitoring',
+            11 => 'Information Security Incident Management',
+            12 => 'Information Security Monitoring',
+            13 => 'IT Operational Anomalies Reporting',
+            14 => 'Logical and Physical Access Controls',
+            15 => 'Monitoring of Controls',
+            16 => 'Organization & Management',
+            17 => 'Risk Management',
+            18 => 'Vendor and Business Partner Risk Management',
+            19 => 'Vulnerability Management'
+        ];
+    }
 
 
         if ($subgroups->count() == 0) {
@@ -2148,6 +2261,30 @@ foreach ($formattedResults as $domain => $statuses) {
     
         }
 
+          if ($project->project_type == 19) {
+           $domainNames = [
+            1 => 'Asset Management',
+            2 => 'Availability',
+            3 => 'Change Management',
+            4 => 'Communications',
+            5 => 'Confidentiality',
+            6 => 'Data Classification',
+            7 => 'Fraud Management',
+            8 => 'Human Resource aspects of Trust Services',
+            9 => 'Information Assets Security Management Policy',
+            10 => 'Information Security Events Monitoring',
+            11 => 'Information Security Incident Management',
+            12 => 'Information Security Monitoring',
+            13 => 'IT Operational Anomalies Reporting',
+            14 => 'Logical and Physical Access Controls',
+            15 => 'Monitoring of Controls',
+            16 => 'Organization & Management',
+            17 => 'Risk Management',
+            18 => 'Vendor and Business Partner Risk Management',
+            19 => 'Vulnerability Management'
+        ];
+    }
+
         
         if ($project->project_type == 4) {
             $domainNames = [
@@ -2388,6 +2525,53 @@ foreach ($formattedResults as $domain => $statuses) {
       
 
         }
+
+        if ($project->project_type == 19) {
+
+            $filepath = public_path('Soc2_Type2_Modified.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+
+        
+          
+       $UniqueSubDomains = collect($filteredData)
+    ->unique(fn($row) => $row[1]) // Keep only first per control ID
+    ->mapWithKeys(function ($row) {
+        return [(string) $row[1] => $row[4]]; // force key to string
+    })
+    ->toArray();
+
+$domainNames = [
+    1 => 'Asset Management',
+    2 => 'Availability',
+    3 => 'Change Management',
+    4 => 'Communications',
+    5 => 'Confidentiality',
+    6 => 'Data Classification',
+    7 => 'Fraud Management',
+    8 => 'Human Resource aspects of Trust Services',
+    9 => 'Information Assets Security Management Policy',
+    10 => 'Information Security Events Monitoring',
+    11 => 'Information Security Incident Management',
+    12 => 'Information Security Monitoring',
+    13 => 'IT Operational Anomalies Reporting',
+    14 => 'Logical and Physical Access Controls',
+    15 => 'Monitoring of Controls',
+    16 => 'Organization & Management',
+    17 => 'Risk Management',
+    18 => 'Vendor and Business Partner Risk Management',
+    19 => 'Vulnerability Management'
+];
+
+      
+
+        }
+
+        
 
         
 
@@ -3466,16 +3650,38 @@ foreach ($formattedResults as $domain => $statuses) {
             ->unique() // Ensure unique keys (1st index)
             ->toArray(); // Convert to array
     
+               
         }
 
+         if ($project->project_type == 19) {
+
+        $filepath = public_path('SOC2_Type2_Modified.xlsx');
+        $data = Excel::toArray([], $filepath); //with header
+        $rows = array_slice($data[0], 1); //without header(first row)
+
+        $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+            return strval($row[1]) == $subdomain;
+        })->values()->all();
+
+
+        $MainDomainNum=$filteredData[0][0];
+        $MainDomainTitle=$filteredData[0][2] ;//title
+    
+        $subdomainTitle=$filteredData[0][4];
+
+
+        $UniqueSubReqs = collect($filteredData)
+            ->mapWithKeys(function ($row) {
+                return [$row[3] => $row[5]]; 
+            })
+            ->unique() // Ensure unique keys (1st index)
+            ->toArray(); // Convert to array
+    
+               
+        }
+
+
         
-                  $domainNames = [
-                1 => 'Control Environment',
-                2 => 'Risk Assessment',
-                3 => 'Control Activities',
-                4 => 'Information and Communication',
-                5 => 'Monitoring'
-                  ];
 
         return view('compliance_map.subreq_map', [
             'project' => $project,

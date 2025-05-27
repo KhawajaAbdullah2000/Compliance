@@ -3015,6 +3015,7 @@ public function delete_strategic_scenario($scenario_id,$proj_id,$user_id){
 
     public function iso_sec_2_3_1($asset_id, $proj_id, $user_id)
     {
+       
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -3077,7 +3078,8 @@ public function delete_strategic_scenario($scenario_id,$proj_id,$user_id){
 
                     $global_asset_value = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)->first();
 
-                 
+                    $frameworkDetails = $this->getProjectFrameworkDetails($project);
+               
 
                     return view('iso_sec_2_3_1.iso_sec_2_3_1_main', [
 
@@ -3094,7 +3096,8 @@ public function delete_strategic_scenario($scenario_id,$proj_id,$user_id){
                         'a7_results' => $a7_results,
                         'a8_results' => $a8_results,
                         'project' => $project,
-                        'global_asset_value' => $global_asset_value
+                        'global_asset_value' => $global_asset_value,
+                        'complianceFramework'=>$frameworkDetails['complianceFramework']
                     ]);
                 
             }

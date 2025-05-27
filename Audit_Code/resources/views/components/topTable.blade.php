@@ -28,6 +28,9 @@
             
             <td class="fw-bold">Information Security Risk Management Methodology:</td>
             <td>
+                @if($complianceFramework->framework_name=="Default")
+                Default 
+                @endif
                 {{ $framework_approach->approach_name ?? '' }} -
                 {{ $risk_assessment_approach->global_assessment_approach ?? '' }}
             </td>
