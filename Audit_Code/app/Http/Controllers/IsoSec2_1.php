@@ -344,12 +344,18 @@ class IsoSec2_1 extends Controller
                         ->get();
                        // dd($selectedCategories);
 
+                         $frameworkDetails = $this->getProjectFrameworkDetails($project);
+                    
                         return view('iso_sec_2_1.iso_sec_2_1_new', [
                             'project_id' => $checkpermission->project_id,
                             'project_name' => $checkpermission->project_name,
                             'project_permissions' => $checkpermission->project_permissions,
                             'project'=>$project,
-                            'selectedCategories'=>$selectedCategories
+                            'selectedCategories'=>$selectedCategories,
+                            'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                            'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                            'framework_approach'=>$frameworkDetails['framework_approach'],
+
                         ]);
 
                 }
@@ -404,6 +410,7 @@ class IsoSec2_1 extends Controller
 
                         $selected_type= Db::table('iso_sec_2_1')->where('assessment_id', $assessment_id)->where('project_id', $proj_id)->first();
 
+                           $frameworkDetails = $this->getProjectFrameworkDetails($project);
                        
                         return view('iso_sec_2_1.iso_sec_2_1_edit', [
                             'data' => $data,
@@ -413,7 +420,10 @@ class IsoSec2_1 extends Controller
                             'project'=>$project,
                             'selectedCategories'=>$selectedCategories,
                             'selected_type'=>$selected_type->name,
-                            'selected_category'=>$selected_type->g_name
+                            'selected_category'=>$selected_type->g_name,
+                            'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                            'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                            'framework_approach'=>$frameworkDetails['framework_approach'],
                         ]);
                     
                 }
