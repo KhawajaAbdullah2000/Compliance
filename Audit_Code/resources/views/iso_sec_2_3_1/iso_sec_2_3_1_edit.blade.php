@@ -28,7 +28,7 @@ $isApprover=in_array('Data Approver', $permissions);
 
     <div class="row d-flex justify-content-between align-items-start">
 
-    <div class="col-md-6 mt-4">
+    <div class="col-md-8 mt-4">
         <table class="table table-bordered table-responsive">
             <tr>
                 <td class="bg-secondary text-white">Service</td>
@@ -43,7 +43,7 @@ $isApprover=in_array('Data Approver', $permissions);
         </table>
         </div>
 
-        <div class="col-md-6 mt-4 text-end">
+        <div class="col-md-4 mt-4 text-end">
            <a href="/iso_sec_2_3_1/{{$assetData->asset_id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-md btn-warning">Go back to RIsk Assessment</a>
         </div>
 
@@ -76,7 +76,7 @@ $isApprover=in_array('Data Approver', $permissions);
             @csrf
             @method('PUT')
 
-            <h3 class="">Severity of Adverse Impacts</h3>
+            <h3 class="">Adverse Consequence to the Service</h3>
 
             <p><span class="fw-bold">Risk Confidentiality:</span>
             @if($riskData->risk_confidentiality==10)

@@ -21,9 +21,9 @@
     <!-- Projects Table -->
     <div class="card shadow-lg border-0">
         <div class="card-body">
-            <table class="table table-hover table-bordered text-center" id="myTable">
+            <table class="table table-hover text-center" id="myTable">
                 <thead class="table-dark">
-                    <tr >
+                    <tr>
                         <th style='text-align:center'>Project Name</th>
                         <th style='text-align:center'>Project Type</th>
                         <th style='text-align:center'>Project Status</th>
@@ -50,7 +50,7 @@
                 </thead>
                 <tbody>
                     @foreach($projects as $pro)
-                    <tr>
+                    <tr style="border-bottom: 1px solid black;">
                         <!-- Project Name -->
                         <td style='text-align:initial'>
                                 {{ $pro->project_name }}

@@ -47,11 +47,11 @@ $permissions=json_decode($project_permissions);
 </table>
 </div>
 
-<h4 class="fw-bold mt-2">Severity of Adverse Impacts</h4>
+<h4 class="fw-bold mt-2">Adverse Consequence to the Service</h4>
 <div class="col-md-8">
 <table class="table mt-2 table-bordered table-responsive">
     <tr>
-        <td class="bg-secondary text-white">Risk to Data Confidentiality</td>
+        <td class="bg-secondary text-white">Data Confidentiality</td>
         <td>  @if($assetData->risk_confidentiality == 10)
             <span class="text-danger">High (10)</span>
           @elseif($assetData->risk_confidentiality == 5)
@@ -59,7 +59,7 @@ $permissions=json_decode($project_permissions);
           @elseif($assetData->risk_confidentiality == 1)
             <span class="text-success">Low (1)</span>
           @endif</td>
-        <td class="bg-secondary text-white">Risk to Data Integrity</td>
+        <td class="bg-secondary text-white">Data Integrity</td>
         <td>    @if($assetData->risk_integrity == 10)
             <span class="text-danger">High (10)</span>
           @elseif($assetData->risk_integrity == 5)
@@ -67,7 +67,7 @@ $permissions=json_decode($project_permissions);
           @elseif($assetData->risk_integrity == 1)
             <span class="text-success">Low (1)</span>
           @endif</td>
-        <td class="bg-secondary text-white">Risk to Data Availability</td>
+        <td class="bg-secondary text-white">Data Availability</td>
         <td>    @if($assetData->risk_availability == 10)
             <span class="text-danger">High (10)</span>
           @elseif($assetData->risk_availability == 5)
@@ -147,6 +147,9 @@ $permissions=json_decode($project_permissions);
 
 
     @if(in_array('Data Inputter',$permissions))
+    <div class="text-end">
+     <i class="fas fa-exclamation-triangle text-warning mb-2"></i> Press Update Changes button after any changes in the table or any value to Adverse Consequence to the Service
+    </div>
     <div class="d-flex justify-content-end mb-4">
         <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md me-2">
           Assets in this Project

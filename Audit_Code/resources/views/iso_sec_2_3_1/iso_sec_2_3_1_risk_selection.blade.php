@@ -53,11 +53,11 @@
         </table>
         </div>
         
-        <h3 class="fw-bold mt-2">Severity of Adverse Impacts</h3>
+        <h3 class="fw-bold mt-2">Adverse Consequence to the Service</h3>
         <div class="col-md-8">
         <table class="table mt-2 table-bordered table-responsive">
             <tr>
-                <td class="bg-secondary text-white">Risk to Data Confidentiality</td>
+                <td class="bg-secondary text-white">Data Confidentiality</td>
                 <td>  @if($asset->risk_confidentiality == 10)
                     <span class="text-danger">High</span>
                   @elseif($asset->risk_confidentiality == 5)
@@ -65,7 +65,7 @@
                   @elseif($asset->risk_confidentiality == 1)
                     <span class="text-success">Low</span>
                   @endif</td>
-                <td class="bg-secondary text-white">Risk to Data Integrity</td>
+                <td class="bg-secondary text-white">Data Integrity</td>
                 <td>    @if($asset->risk_integrity == 10)
                     <span class="text-danger">High</span>
                   @elseif($asset->risk_integrity == 5)
@@ -73,7 +73,7 @@
                   @elseif($asset->risk_integrity == 1)
                     <span class="text-success">Low</span>
                   @endif</td>
-                <td class="bg-secondary text-white">Risk to Data Availability</td>
+                <td class="bg-secondary text-white">Data Availability</td>
                 <td>    @if($asset->risk_availability == 10)
                     <span class="text-danger">High</span>
                   @elseif($asset->risk_availability == 5)
@@ -91,12 +91,12 @@
 
 
 
-<form method="post" action="/iso_sec2_3_1_risk_selection/{{$asset->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}">
+<form id="riskForm" method="post" action="/iso_sec2_3_1_risk_selection/{{$asset->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}">
     @method('PUT')
     @csrf
     <div class="form-group">
         <label class="form-label" data-bs-toggle="tooltip" title="Severity of adverse impact to the business if data is leaked in an unauthorized manner beyond tolerable limit">
-            Select Impact Level due to Loss of Data Confidentiality
+            Select Adverse Consequence Level:  Data Confidentiality
         </label>
         <div>
             <div class="form-check form-check-inline">
@@ -119,7 +119,7 @@
 
     <div class="form-group mt-4">
         <label class="form-label" data-bs-toggle="tooltip" title="Severity of adverse impact to the business if data is modified in an unauthorized manner beyond tolerable limits">
-            Select Impact Level due to Loss of Data Integrity
+            Select Adverse Consequence Level: Data Integrity
         </label>
         <div>
             <div class="form-check form-check-inline">
@@ -142,7 +142,7 @@
 
     <div class="form-group mt-4">
         <label class="form-label" data-bs-toggle="tooltip" title="Severity of adverse impact to the business if information is inaccessible to authorized parties beyond the tolerable time limit">
-            Select Impact Level due to Loss of Data Availability
+            Select Adverse Consequence Level: Data Availability
         </label>
         <div>
             <div class="form-check form-check-inline">
@@ -183,6 +183,58 @@
         return new bootstrap.Tooltip(tooltipTriggerEl)
     })
 </script>
+
+@if(Session::has('success'))
+<script>
+    swal({
+  title: "{{Session::get('success')}}",
+  icon: "success",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script>
+@endif
+
+@if(Session::has('error'))
+<script>
+    swal({
+  title: "{{Session::get('error')}}",
+  icon: "error",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script>
+@endif
+
+
+<script>
+    document.getElementById('riskForm').addEventListener('submit', function (e) {
+        console.log("hello");
+        e.preventDefault(); // Prevent default form submission
+
+        swal({
+            title: "Are you sure?",
+            text: "The values set will apply to all asset components in this service and will over-ride any different values set previously.",
+            icon: "warning",
+            buttons: {
+                cancel: "Cancel",
+                confirm: {
+                    text: "Proceed",
+                    value: true,
+                    visible: true,
+                    className: "btn btn-danger",
+                    closeModal: true
+                }
+            },
+            dangerMode: true,
+        }).then((willSubmit) => {
+            if (willSubmit) {
+                this.submit(); // Proceed with form submission
+            }
+        });
+    });
+</script>
+
 
 @endsection
 

@@ -41,7 +41,7 @@
         <thead>
             <tr>
                 <th></th>
-                <th colspan="3" class="fs-5">Severity of Adverse Impacts</th>
+                <th colspan="3" class="fs-5">Adverse Consequence to the Service</th>
                 <th></th>
             </tr>
             <tr class="table-dark">

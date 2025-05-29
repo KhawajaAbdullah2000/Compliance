@@ -3638,13 +3638,18 @@ public function delete_strategic_scenario($scenario_id,$proj_id,$user_id){
                         ->where('assessment_id',$asset_id)->first();
 
           
+                         $frameworkDetails = $this->getProjectFrameworkDetails($project);
+                   
 
 
                     return view('iso_sec_2_3_1.iso_sec_2_3_1_edit', [
                         'project' => $project,
                         'assetData' => $assetData,
                         'riskData'=>$riskData,
-                        'project_permissions'=>$checkpermission->project_permissions
+                        'project_permissions'=>$checkpermission->project_permissions,
+                        'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                        'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                        'framework_approach'=>$frameworkDetails['framework_approach']
                     ]);
                 
             }
