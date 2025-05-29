@@ -37,33 +37,10 @@
         </div>
     </div>
 
-    <table  class="table table-bordered table-hover text-center table-secondary align-middle">
-        <thead class="table-dark ">
-            <tr>
-                <th>Service</th>
-                    <th>Asset Group</th>
-                    <th>Asset</th>
-                    <th>Asset Component</th>
-                    <th>Asset Owner Dept</th>
-                    <th>Asset Physical Location</th>
-                    <th>Asset Logical Location</th>
-                
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ $asset->s_name }}</td>
-                <td>{{ $asset->g_name }}</td>
-                <td>{{ $asset->name }}</td>
-                <td>{{ $asset->c_name }}</td>
-                <td>{{ $asset->owner_dept }}</td>
-                <td>{{ $asset->physical_loc }}</td>
-                <td>{{ $asset->logical_loc }}</td>
-               
-            </tr>
-          
-        </tbody>
-    </table>
+     @include('components.sec2_2_asset_details',[
+    'asset'=>$asset
+  ])
+
 
     <div class="border p-3 col-md-6" style="border: 1px solid #ccc; border-radius: 5px;background-color: #f3f3f3">
     <div class="row">

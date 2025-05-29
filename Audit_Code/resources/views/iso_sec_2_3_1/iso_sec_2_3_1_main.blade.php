@@ -19,7 +19,7 @@ $permissions=json_decode($project_permissions);
 
 
 
-    <h3 class="fw-bold">Information Security Risk Assessment Applicable to</h3>
+    <h4 class="fw-bold">Information Security Risk Assessment Applicable to</h4>
 
 
     @if ($errors->any())
@@ -32,14 +32,14 @@ $permissions=json_decode($project_permissions);
     </div>
 @endif
 
-<div class="col-md-6 mt-4">
+<div class="col-md-8 mt-4">
 <table class="table table-bordered table-responsive">
     <tr>
         <td class="bg-secondary text-white">Service</td>
         <td>{{$assetData->s_name}}</td>
-        <td class="bg-secondary text-white">Asset Group</td>
+        <td class="bg-secondary text-white">Asset Type</td>
         <td>{{$assetData->g_name}}</td>
-        <td class="bg-secondary text-white">Asset Subgroup</td>
+        <td class="bg-secondary text-white">Asset Subtype</td>
         <td>{{$assetData->name}}</td>
         <td class="bg-secondary text-white">Asset Component</td>
         <td>{{$assetData->c_name}}</td>
@@ -47,33 +47,33 @@ $permissions=json_decode($project_permissions);
 </table>
 </div>
 
-<h3 class="fw-bold mt-2">Severity of Adverse Impacts</h3>
-<div class="col-md-6">
+<h4 class="fw-bold mt-2">Severity of Adverse Impacts</h4>
+<div class="col-md-8">
 <table class="table mt-2 table-bordered table-responsive">
     <tr>
         <td class="bg-secondary text-white">Risk to Data Confidentiality</td>
         <td>  @if($assetData->risk_confidentiality == 10)
-            <span class="text-danger">High</span>
+            <span class="text-danger">High (10)</span>
           @elseif($assetData->risk_confidentiality == 5)
-            <span class="text-warning">Medium</span>
+            <span class="text-warning">Medium (5)</span>
           @elseif($assetData->risk_confidentiality == 1)
-            <span class="text-success">Low</span>
+            <span class="text-success">Low (1)</span>
           @endif</td>
         <td class="bg-secondary text-white">Risk to Data Integrity</td>
         <td>    @if($assetData->risk_integrity == 10)
-            <span class="text-danger">High</span>
+            <span class="text-danger">High (10)</span>
           @elseif($assetData->risk_integrity == 5)
-            <span class="text-warning">Medium</span>
+            <span class="text-warning">Medium (5)</span>
           @elseif($assetData->risk_integrity == 1)
-            <span class="text-success">Low</span>
+            <span class="text-success">Low (1)</span>
           @endif</td>
         <td class="bg-secondary text-white">Risk to Data Availability</td>
         <td>    @if($assetData->risk_availability == 10)
-            <span class="text-danger">High</span>
+            <span class="text-danger">High (10)</span>
           @elseif($assetData->risk_availability == 5)
-            <span class="text-warning">Medium</span>
+            <span class="text-warning">Medium (5)</span>
           @elseif($assetData->risk_availability == 1)
-            <span class="text-success">Low</span>
+            <span class="text-success">Low (1)</span>
           @endif</td>
   
         
@@ -170,6 +170,7 @@ $permissions=json_decode($project_permissions);
                 <col style="width: 100px;">
                 <col style="width: 100px;">
                 <col style="width: 100px;">
+                 <col style="width: 100px;">
                 <col style="width: 150px;">
                 <col style="width: 150px;">
                 <col style="width: 150px;">
@@ -185,6 +186,7 @@ $permissions=json_decode($project_permissions);
                 <th>Control Compliance%</th>
                 <th>Vulnerability%</th>
                 <th>Threat%</th>
+                <th>Likelihood of Exploit</th>
                 <th>Risk to Data Confidentiality</th>
                 <th>Risk to Data Integrity</th>
                 <th>Risk to Data Availability</th>
@@ -329,6 +331,32 @@ $permissions=json_decode($project_permissions);
                         @endforeach
                     @else
             <input type="number" name="threat[]" value=99 class="form-control" min=1 max=99 data-control-id="{{$sec2_4_a5_rows[$i][0]}}">
+
+                    @endif
+
+                </td>
+
+
+                 <td>
+                    @if($a5_results->count()>0)
+                        @foreach ($a5_results as $a5)
+
+                            @if( $a5->control_num===strval($sec2_4_a5_rows[$i][0]))
+
+       <input type="number" name="exploit[]" class="form-control" value={{$a5->exploit}}  data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+
+                                 {{-- <p>{{$a5->vulnerability}}%</p> --}}
+
+                                    @break
+                                @endif
+
+                                @if($loop->last)
+                            <input type="number" name="exploit[]"  class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
+                                @endif
+
+                        @endforeach
+                    @else
+                        <input type="number" name="exploit[]"  class="form-control" data-control-id="{{$sec2_4_a5_rows[$i][0]}}" readonly>
 
                     @endif
 
@@ -624,6 +652,31 @@ $permissions=json_decode($project_permissions);
 
             </td>
 
+             <td>
+                    @if($a6_results->count()>0)
+                    @foreach ($a6_results as $a6)
+
+                        @if($a6->control_num===strval($sec2_4_a6_rows[$i][0]))
+
+              <input type="number" name="exploit[]" class="form-control" value={{$a6->exploit}} data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+
+
+                                @break
+                            @endif
+
+                            @if($loop->last)
+        <input type="number" name="exploit[]"   class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+                    @endif
+
+                    @endforeach
+                @else
+    <input type="number" name="exploit[]"  class="form-control" data-control-id="{{$sec2_4_a6_rows[$i][0]}}" readonly>
+
+                @endif
+
+            </td>
+
+
             <td>
                 @if($a6_results->count()>0)
                 @foreach ($a6_results as $a6)
@@ -913,6 +966,32 @@ $permissions=json_decode($project_permissions);
 
          </td>
 
+           <td>
+            @if($a7_results->count()>0)
+            @foreach ($a7_results as $a7)
+
+                @if( $a7->control_num===strval($sec2_4_a7_rows[$i][0]))
+                <input type="number" name="exploit[]" value={{$a7->exploit}} class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
+
+                    {{-- <p>{{$a7->vulnerability}}% </p> --}}
+                        @break
+                    @endif
+
+                    @if($loop->last)
+        <input type="number" name="exploit[]"  class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
+
+
+                    @endif
+
+            @endforeach
+        @else
+     <input type="number" name="exploit[]"  class="form-control" data-control-id="{{$sec2_4_a7_rows[$i][0]}}" readonly>
+
+        @endif
+
+
+         </td>
+
          <td>
             @if($a7_results->count()>0)
             @foreach ($a7_results as $a7)
@@ -1177,6 +1256,31 @@ $permissions=json_decode($project_permissions);
 
 
         </td>
+
+        <td>
+            @if($a8_results->count()>0)
+            @foreach ($a8_results as $a8)
+
+                @if($a8->control_num===strval($sec2_4_a8_rows[$i][0]))
+                <input type="number" name="exploit[]" value={{$a8->exploit}} class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
+
+                    {{-- <p>{{$a8->vulnerability}}%</p> --}}
+                        @break
+                    @endif
+
+                    @if($loop->last)
+        <input type="number" name="exploit[]"  class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
+
+                      @endif
+
+            @endforeach
+        @else
+    <input type="number" name="exploit[]"  class="form-control" data-control-id="{{$sec2_4_a8_rows[$i][0]}}" readonly>
+
+        @endif
+
+        </td>
+
 
         <td>
             @if($a8_results->count()>0)

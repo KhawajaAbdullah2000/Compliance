@@ -198,9 +198,9 @@ Low(1)</span>
                             Technological
                             @endif
                             </td>
-                             <td style="{{ getColor($like->max_likelihood) }}">{{ $like->max_likelihood }}</td>
-    <td style="{{ getColor($like->mean_likelihood) }}">{{ $like->mean_likelihood }}</td>
-    <td style="{{ getColor($like->min_likelihood) }}">{{ $like->min_likelihood }}</td>
+                             <td style="{{ getColor($like->max_likelihood) }}">{{ number_format($like->max_likelihood,6) }}</td>
+    <td style="{{ getColor($like->mean_likelihood) }}">{{ number_format($like->mean_likelihood,6) }}</td>
+    <td style="{{ getColor($like->min_likelihood) }}">{{ number_format($like->min_likelihood,6) }}</td>
                         </tr>
                       
                         @endforeach
@@ -246,9 +246,9 @@ Low(1)</span>
                         $totalMin += $res->min_risk;
                     @endphp
                                     <tr>
-                       <td style="{{ getRiskColor($res->max_risk) }}">{{ number_format($res->max_risk, 2) }}</td>
-            <td style="{{ getRiskColor($res->mean_risk) }}">{{ number_format($res->mean_risk, 2) }}</td>
-            <td style="{{ getRiskColor($res->min_risk) }}">{{ number_format($res->min_risk, 2) }}</td>
+                       <td style="{{ getRiskColor($res->max_risk) }}">{{ number_format($res->max_risk, 6) }}</td>
+            <td style="{{ getRiskColor($res->mean_risk) }}">{{ number_format($res->mean_risk, 6) }}</td>
+            <td style="{{ getRiskColor($res->min_risk) }}">{{ number_format($res->min_risk, 6) }}</td>
                         </tr>
                         @endforeach
                           <tr class="fw-bold table-dark">

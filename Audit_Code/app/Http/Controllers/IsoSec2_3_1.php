@@ -3015,7 +3015,7 @@ public function delete_strategic_scenario($scenario_id,$proj_id,$user_id){
 
     public function iso_sec_2_3_1($asset_id, $proj_id, $user_id)
     {
-       
+
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -3052,27 +3052,50 @@ public function delete_strategic_scenario($scenario_id,$proj_id,$user_id){
                     $sec2_4_a8_data = Excel::toArray([], $filepath4); //with header
                     $sec2_4_a8_rows = array_slice($sec2_4_a8_data[0], 1); //without header(first row)
 
-                    $a5_results = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)
-                        ->where('asset_id', $asset_id)->where('control_num', 'like', '5%')
-                        ->get();
+                    $a5_results = Db::table('iso_sec_2_3_1')
+                    ->select(
+                    '*',
+                    DB::raw('(vulnerability * threat) / 10000 as exploit')
+                )
+               ->where('project_id', $proj_id)
+                 ->where('asset_id', $asset_id)->where('control_num', 'like', '5%')
+                ->get();
+
+               
 
     
 
-                    $a6_results = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)
+                    $a6_results = Db::table('iso_sec_2_3_1')
+                      ->select(
+                    '*',
+                    DB::raw('(vulnerability * threat) / 10000 as exploit')
+                )
+                    ->where('project_id', $proj_id)
                         ->where('asset_id', $asset_id)->where('control_num', 'like', '6%')
                         ->get();
 
             
         
 
-                    $a7_results = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)
+                    $a7_results = Db::table('iso_sec_2_3_1')
+                      ->select(
+                    '*',
+                    DB::raw('(vulnerability * threat) / 10000 as exploit')
+                )
+                    ->where('project_id', $proj_id)
                         ->where('asset_id', $asset_id)->where('control_num', 'like', '7%')
                         ->get();
 
-                    $a8_results = Db::table('iso_sec_2_3_1')->where('project_id', $proj_id)
+                    $a8_results = Db::table('iso_sec_2_3_1')
+                      ->select(
+                    '*',
+                    DB::raw('(vulnerability * threat) / 10000 as exploit')
+                )
+                    ->where('project_id', $proj_id)
                         ->where('asset_id', $asset_id)->where('control_num', 'like', '8%')
                         ->get();
 
+    
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                         ->where('projects.project_id', $proj_id)->first();
 

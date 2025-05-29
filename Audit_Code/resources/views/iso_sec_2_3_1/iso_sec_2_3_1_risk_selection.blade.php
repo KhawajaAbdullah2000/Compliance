@@ -10,7 +10,7 @@
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-secondary">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -43,9 +43,9 @@
             <tr>
                 <td class="bg-secondary text-white">Service</td>
                 <td>{{$asset->s_name}}</td>
-                <td class="bg-secondary text-white">Asset Group</td>
+                <td class="bg-secondary text-white">Asset Type</td>
                 <td>{{$asset->g_name}}</td>
-                <td class="bg-secondary text-white">Asset</td>
+                <td class="bg-secondary text-white">Asset Subtype</td>
                 <td>{{$asset->name}}</td>
                 <td class="bg-secondary text-white">Asset Component</td>
                 <td>{{$asset->c_name}}</td>
@@ -102,17 +102,17 @@
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="risk_confidentiality" id="risk_confidentiality_high" value="10" 
                     {{ old('risk_confidentiality', $asset->risk_confidentiality) == 10 ? 'checked' : '' }}>
-                <label class="form-check-label" for="risk_confidentiality_high">High</label>
+                <label class="form-check-label" for="risk_confidentiality_high">High (10)</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="risk_confidentiality" id="risk_confidentiality_medium" value="5" 
                     {{ old('risk_confidentiality', $asset->risk_confidentiality) == 5 ? 'checked' : '' }}>
-                <label class="form-check-label" for="risk_confidentiality_medium">Medium</label>
+                <label class="form-check-label" for="risk_confidentiality_medium">Medium (5)</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="risk_confidentiality" id="risk_confidentiality_low" value="1" 
                     {{ old('risk_confidentiality', $asset->risk_confidentiality) == 1 ? 'checked' : '' }}>
-                <label class="form-check-label" for="risk_confidentiality_low">Low</label>
+                <label class="form-check-label" for="risk_confidentiality_low">Low (1)</label>
             </div>
         </div>
     </div>
@@ -125,17 +125,17 @@
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="risk_integrity" id="risk_integrity_high" value="10" 
                     {{ old('risk_integrity', $asset->risk_integrity) == 10 ? 'checked' : '' }}>
-                <label class="form-check-label" for="risk_integrity_high">High</label>
+                <label class="form-check-label" for="risk_integrity_high">High (10)</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="risk_integrity" id="risk_integrity_medium" value="5" 
                     {{ old('risk_integrity', $asset->risk_integrity) == 5 ? 'checked' : '' }}>
-                <label class="form-check-label" for="risk_integrity_medium">Medium</label>
+                <label class="form-check-label" for="risk_integrity_medium">Medium (5)</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="risk_integrity" id="risk_integrity_low" value="1" 
                     {{ old('risk_integrity', $asset->risk_integrity) == 1 ? 'checked' : '' }}>
-                <label class="form-check-label" for="risk_integrity_low">Low</label>
+                <label class="form-check-label" for="risk_integrity_low">Low (1)</label>
             </div>
         </div>
     </div>
@@ -148,17 +148,17 @@
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="risk_availability" id="risk_availability_high" value="10" 
                     {{ old('risk_availability', $asset->risk_availability) == 10 ? 'checked' : '' }}>
-                <label class="form-check-label" for="risk_availability_high">High</label>
+                <label class="form-check-label" for="risk_availability_high">High (10)</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="risk_availability" id="risk_availability_medium" value="5" 
                     {{ old('risk_availability', $asset->risk_availability) == 5 ? 'checked' : '' }}>
-                <label class="form-check-label" for="risk_availability_medium">Medium</label>
+                <label class="form-check-label" for="risk_availability_medium">Medium (5)</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="risk_availability" id="risk_availability_low" value="1" 
                     {{ old('risk_availability', $asset->risk_availability) == 1 ? 'checked' : '' }}>
-                <label class="form-check-label" for="risk_availability_low">Low</label>
+                <label class="form-check-label" for="risk_availability_low">Low (1)</label>
             </div>
         </div>
     </div>
