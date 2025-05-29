@@ -106,6 +106,59 @@ $permissions = json_decode($project_permissions);
                             @endif
                         </div>
 
+                    
+                        <div class="mb-4">
+                            <label for="service_risk_owner" class="form-label fw-semibold">Service Risk Owner</label>
+                            <select name="service_risk_owner" class="form-select">
+                                @foreach($users as $user)
+                                <option value="">--</option>
+                                <option value="{{$user->id}}">{{$user->first_name}} {{$user->last_name}}</option>
+                                @endforeach
+                            </select>
+                      @if($errors->has('service_risk_owner'))
+                            <div class="text-danger small mt-2">{{ $errors->first('service_risk_owner') }}</div>
+                            @endif
+                        </div>
+
+                             <div class="mb-4">
+                            <label for="component_risk_owner" class="form-label fw-semibold">Asset Component Risk Owner</label>
+                            <select name="component_risk_owner" class="form-select">
+                                @foreach($users as $user)
+                                <option value="">--</option>
+                                <option value="{{$user->id}}">{{$user->first_name}} {{$user->last_name}}</option>
+                                @endforeach
+                            </select>
+                      @if($errors->has('component_risk_owner'))
+                            <div class="text-danger small mt-2">{{ $errors->first('component_risk_owner') }}</div>
+                            @endif
+                        </div>
+
+                               <div class="mb-4">
+                            <label for="service_custodian" class="form-label fw-semibold">Service Custodian</label>
+                            <select name="service_custodian" class="form-select">
+                                @foreach($users as $user)
+                                <option value="">--</option>
+                                <option value="{{$user->id}}">{{$user->first_name}} {{$user->last_name}}</option>
+                                @endforeach
+                            </select>
+                      @if($errors->has('service_custodian'))
+                            <div class="text-danger small mt-2">{{ $errors->first('service_custodian') }}</div>
+                            @endif
+                        </div>
+
+                             <div class="mb-4">
+                            <label for="component_custodian" class="form-label fw-semibold">Asset Component Custodian</label>
+                            <select name="component_custodian" class="form-select">
+                                @foreach($users as $user)
+                                <option value="">--</option>
+                                <option value="{{$user->id}}">{{$user->first_name}} {{$user->last_name}}</option>
+                                @endforeach
+                            </select>
+                      @if($errors->has('component_custodian'))
+                            <div class="text-danger small mt-2">{{ $errors->first('component_custodian') }}</div>
+                            @endif
+                        </div>
+
                         <!-- Submit Button -->
                         <div class="text-center">
                             <button type="submit" class="btn btn-success btn-lg px-5 rounded-pill">Save Changes</button>

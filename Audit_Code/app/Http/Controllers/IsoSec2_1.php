@@ -7,7 +7,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Project;
-
+use App\Models\User;
 
 
 class IsoSec2_1 extends Controller
@@ -29,12 +29,27 @@ class IsoSec2_1 extends Controller
                 ->first();
             if ($checkpermission) {
 
-                    $data = DB::table('iso_sec_2_1')->join(
-                        'users',
-                        'iso_sec_2_1.last_edited_by',
-                        'users.id'
-                    )
-                        ->where('project_id', $proj_id)->get();
+
+
+$data = DB::table('iso_sec_2_1')
+    ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+    ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+    ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+    ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+    ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+    ->select(
+        'iso_sec_2_1.*',
+        DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+        DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+        DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+        DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name")
+    )
+    ->where('project_id', $proj_id)
+    ->get();
+
+  
+         
 
                  $project=Project::join('project_types','projects.project_type','project_types.id')
                         ->where('projects.project_id',$proj_id)->first();
@@ -239,6 +254,7 @@ class IsoSec2_1 extends Controller
                 
             ]
         );
+
      
 
 
@@ -272,7 +288,11 @@ class IsoSec2_1 extends Controller
                                 'logical_loc' => $req->logical_loc,
                                 's_name' => $req->s_name,
                                 'last_edited_by' => $user_id,
-                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                                'service_risk_owner'=>$req->service_risk_owner,
+                                'component_risk_owner'=>$req->component_risk_owner,
+                                'service_custodian'=>$req->service_custodian,
+                                'component_custodian'=>$req->component_custodian
                             ]);
 
                             Db::table('audit_trail_for_services')->insert([
@@ -345,7 +365,20 @@ class IsoSec2_1 extends Controller
                        // dd($selectedCategories);
 
                          $frameworkDetails = $this->getProjectFrameworkDetails($project);
-                    
+
+                           $super = Db::table('users')->where('privilege_id', 1)->pluck('id')->toArray();
+
+        //superusers of that organization
+        $superusers_of_that_org = DB::table('superusers')->wherein('user_id', $super)
+            ->where('org_id', auth()->user()->org_id)->pluck('user_id')->toArray();
+      
+
+        //organziatons of those superusers
+        $orgs = Db::table('users')->wherein('id', $superusers_of_that_org)->pluck('org_id')->toArray();
+
+        $users = User::where('privilege_id', 5)->wherein('org_id', $orgs)->get(['id', 'first_name', 'last_name']);
+          
+    
                         return view('iso_sec_2_1.iso_sec_2_1_new', [
                             'project_id' => $checkpermission->project_id,
                             'project_name' => $checkpermission->project_name,
@@ -355,6 +388,7 @@ class IsoSec2_1 extends Controller
                             'complianceFramework'=>$frameworkDetails['complianceFramework'],
                             'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
                             'framework_approach'=>$frameworkDetails['framework_approach'],
+                            'users'=>$users
 
                         ]);
 
@@ -399,7 +433,7 @@ class IsoSec2_1 extends Controller
                 if (in_array('Data Inputter', $permissions)) {
                    
                         $data = Db::table('iso_sec_2_1')->where('assessment_id', $assessment_id)->where('project_id', $proj_id)->first();
-
+                 
                         $project=Project::join('project_types','projects.project_type','project_types.id')
                         ->where('projects.project_id',$proj_id)->first();
 
@@ -411,6 +445,19 @@ class IsoSec2_1 extends Controller
                         $selected_type= Db::table('iso_sec_2_1')->where('assessment_id', $assessment_id)->where('project_id', $proj_id)->first();
 
                            $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                            $super = Db::table('users')->where('privilege_id', 1)->pluck('id')->toArray();
+
+        //superusers of that organization
+        $superusers_of_that_org = DB::table('superusers')->wherein('user_id', $super)
+            ->where('org_id', auth()->user()->org_id)->pluck('user_id')->toArray();
+      
+
+        //organziatons of those superusers
+        $orgs = Db::table('users')->wherein('id', $superusers_of_that_org)->pluck('org_id')->toArray();
+
+        $users = User::where('privilege_id', 5)->wherein('org_id', $orgs)->get(['id', 'first_name', 'last_name']);
+          
                        
                         return view('iso_sec_2_1.iso_sec_2_1_edit', [
                             'data' => $data,
@@ -424,6 +471,7 @@ class IsoSec2_1 extends Controller
                             'complianceFramework'=>$frameworkDetails['complianceFramework'],
                             'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
                             'framework_approach'=>$frameworkDetails['framework_approach'],
+                            'users'=>$users
                         ]);
                     
                 }

@@ -144,6 +144,7 @@ $permissions = json_decode($project_permissions);
                     <th onclick="sortTable(4)">Asset Owner Dept</th>
                     <th onclick="sortTable(5)">Asset Physical Location</th>
                     <th onclick="sortTable(6)">Asset Logical Location</th>
+                    
  @if(!(optional($complianceFramework)->framework_id == 2 && 
       optional($framework_approach)->framework_approach_types_id == 1 && 
       optional($risk_assessment_approach)->global_risk_assessment_approach_id == 1))
