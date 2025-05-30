@@ -523,7 +523,7 @@ class RiskHeatmap extends Controller
             $serviceDetails=DB::table('iso_sec_2_1')->where('project_id',$proj_id)
             ->where('s_name',$service)->first();
             
-           
+          // dd($serviceDetails);
         
             return view('heatmap.heatmap_single_type',
             [

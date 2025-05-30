@@ -35,7 +35,7 @@
                 @if($framework_approach->framework_approach_types_id==1)
                 <th>Vulnerabilities</th>
                 @endif
-                <th>Vulnerability Level due to </th>
+                <th>Vulnerability Level </th>
                 <th>Risk Scenarios (Optional)</th>
            
             </tr>

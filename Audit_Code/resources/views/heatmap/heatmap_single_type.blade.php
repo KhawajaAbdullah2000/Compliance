@@ -85,64 +85,65 @@ function getColor($value) {
     </div>
     
 
-    <h4 class="mt-2">Impact Level Due to Loss of
+    <h4 class="mt-2">Adverse Consequence Level to the Service: 
         @if($risk_type=='risk_level')
-        Data Confidentiality
-
+    
         @if($serviceDetails->risk_confidentiality==10)
-          <span class="fs-5" style="background-color: red; border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+          <span class="fs-4 fw-bold">
            High(10)</span>
         @endif
 
         @if($serviceDetails->risk_confidentiality==5)
-            <span class="fs-5" style="background-color: rgb(224, 152, 44); border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-
+            <span class="fs-5 fw-bold">
            Medium(5)</span>
         @endif
 
         @if($serviceDetails->risk_confidentiality==1)
-      <span class="fs-5" style="background-color: rgb(29, 235, 56); border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-
+             <span class="fs-4 fw-bold">
            Low (1)</span>
         @endif
 
         @endif
 
         @if($risk_type=='risk_integrity')
-        Data Integrity
-
+       
         @if($serviceDetails->risk_integrity==10)
-         <span class="fs-5" style="background-color: red; border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-High (10)</span>
+             <span class="fs-4 fw-bold">
+                       High (10)
+             </span>
         @endif
 
         @if($serviceDetails->risk_integrity==5)
-       <span class="fs-5" style="background-color:  rgb(224, 152, 44); border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-Medium (5)</span>
+            <span class="fs-4 fw-bold">
+                    Medium (5)
+             </span>
         @endif
 
         @if($serviceDetails->risk_integrity==1)
-      <span class="fs-5" style="background-color: rgb(38, 206, 60); border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-Low (1)</span>
+         <span class="fs-4 fw-bold">
+                  Low (1)
+             </span>
         @endif
 
         @endif
 
         @if($risk_type=='risk_availability')
-        Data Availability
+   
         @if($serviceDetails->risk_availability==10)
-          <span class="fs-5" style="background-color: red; border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-High(10)</span>
+               <span class="fs-4 fw-bold">
+                      High (10)
+             </span>
         @endif
 
         @if($serviceDetails->risk_availability==5)
-        <span class="fs-5" style="background-color:  rgb(224, 152, 44); border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-Medium(5)</span>
+             <span class="fs-4 fw-bold">
+                      Medium (5)
+             </span>
         @endif
 
         @if($serviceDetails->risk_availability==1)
-   <span class="fs-5" style="background-color: rgb(56, 230, 40); border-radius: 5px; width: 120px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-Low(1)</span>
+       <span class="fs-4 fw-bold">
+Low (1)</span>
         @endif
 
 
@@ -198,9 +199,9 @@ Low(1)</span>
                             Technological
                             @endif
                             </td>
-                             <td style="{{ getColor($like->max_likelihood) }}">{{ number_format($like->max_likelihood,6) }}</td>
-    <td style="{{ getColor($like->mean_likelihood) }}">{{ number_format($like->mean_likelihood,6) }}</td>
-    <td style="{{ getColor($like->min_likelihood) }}">{{ number_format($like->min_likelihood,6) }}</td>
+                             <td >{{ number_format($like->max_likelihood,6) }}</td>
+                            <td >{{ number_format($like->mean_likelihood,6) }}</td>
+                            <td >{{ number_format($like->min_likelihood,6) }}</td>
                         </tr>
                       
                         @endforeach
@@ -246,9 +247,9 @@ Low(1)</span>
                         $totalMin += $res->min_risk;
                     @endphp
                                     <tr>
-                       <td style="{{ getRiskColor($res->max_risk) }}">{{ number_format($res->max_risk, 6) }}</td>
-            <td style="{{ getRiskColor($res->mean_risk) }}">{{ number_format($res->mean_risk, 6) }}</td>
-            <td style="{{ getRiskColor($res->min_risk) }}">{{ number_format($res->min_risk, 6) }}</td>
+                       <td >{{ number_format($res->max_risk, 6) }}</td>
+            <td >{{ number_format($res->mean_risk, 6) }}</td>
+            <td >{{ number_format($res->min_risk, 6) }}</td>
                         </tr>
                         @endforeach
                           <tr class="fw-bold table-dark">
