@@ -247,9 +247,9 @@ Low (1)</span>
                         $totalMin += $res->min_risk;
                     @endphp
                                     <tr>
-                       <td >{{ number_format($res->max_risk, 6) }}</td>
-            <td >{{ number_format($res->mean_risk, 6) }}</td>
-            <td >{{ number_format($res->min_risk, 6) }}</td>
+                       <td style="{{ getRiskColor($res->max_risk) }}">{{ number_format($res->max_risk, 6) }}</td>
+            <td style="{{ getRiskColor($res->mean_risk) }}">{{ number_format($res->mean_risk, 6) }}</td>
+            <td style="{{ getRiskColor($res->min_risk) }}">{{ number_format($res->min_risk, 6) }}</td>
                         </tr>
                         @endforeach
                           <tr class="fw-bold table-dark">
@@ -263,6 +263,11 @@ Low (1)</span>
 
 
             </table>
+
+            <p class="fs-5 fw-bold">Risk Ranges per Control Domain</p>
+            <p class="fs-6">7.00 to 9.80: High</p>
+            <p class="fs-6">3.00 to 6.99: Medium</p>
+            <p class="fs-6">1.00 to 2.99: Low</p>
         </div>
     </div>
 

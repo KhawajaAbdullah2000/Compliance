@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Project;
 use App\Models\User;
+use App\Exports\AssetCategoryExport;
 
 
 class IsoSec2_1 extends Controller
@@ -60,6 +61,7 @@ $data = DB::table('iso_sec_2_1')
 
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
+          
 
                     $org_projects=Db::table('projects')->where('org_id',auth()->user()->org_id)
                     ->where('project_id','!=',$proj_id)->get();
@@ -458,7 +460,8 @@ $data = DB::table('iso_sec_2_1')
 
         $users = User::where('privilege_id', 5)->wherein('org_id', $orgs)->get(['id', 'first_name', 'last_name']);
           
-                       
+                  
+      
                         return view('iso_sec_2_1.iso_sec_2_1_edit', [
                             'data' => $data,
                             'project_id' => $checkpermission->project_id,
@@ -526,7 +529,11 @@ $data = DB::table('iso_sec_2_1')
                             'logical_loc' => $req->logical_loc,
                             's_name' => $req->s_name,
                             'last_edited_by' => $user_id,
-                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                             'service_risk_owner'=>$req->service_risk_owner,
+                                'component_risk_owner'=>$req->component_risk_owner,
+                                'service_custodian'=>$req->service_custodian,
+                                'component_custodian'=>$req->component_custodian
                         ]);
 
                         Db::table('audit_trail_for_services')->insert([
@@ -618,7 +625,71 @@ $data = DB::table('iso_sec_2_1')
 
     public function download_asset_template(){
         $path=public_path("assets_template.xlsx");
-        return response()->download($path);
+//  $org_categories = DB::table('org_assets_categories')
+//             ->join('global_asset_categories', 'org_assets_categories.asset_category_selected', '=', 'global_asset_categories.asset_category_id')
+//             ->where('org_assets_categories.org_id', auth()->user()->organization->id)
+//             ->where('global_asset_categories.is_manual', 'no')
+//             ->select('org_assets_categories.*', 'global_asset_categories.asset_category', 'global_asset_categories.asset_category_id')
+//             ->get();
+
+//                   $custom_org_categories = DB::table('org_assets_categories')
+//             ->join('global_asset_categories', 'org_assets_categories.asset_category_selected', '=', 'global_asset_categories.asset_category_id')
+//             ->where('org_assets_categories.org_id', auth()->user()->organization->id)
+//             ->where('global_asset_categories.is_manual', 'yes')
+//             ->select('org_assets_categories.*', 'global_asset_categories.asset_category', 'global_asset_categories.asset_category_id')
+//             ->get();
+
+        
+
+//   $categoryNames = $org_categories
+//     ->merge($custom_org_categories)
+//     ->pluck('asset_category')
+//     ->unique()
+//     ->values()
+//     ->all();
+
+$orgId = auth()->user()->organization->id;
+
+$orgCategories = DB::table('org_assets_categories')
+    ->join('global_asset_categories', 'org_assets_categories.asset_category_selected', '=', 'global_asset_categories.asset_category_id')
+    ->where('org_assets_categories.org_id', $orgId)
+    ->select(
+        'global_asset_categories.asset_category_id',
+        'global_asset_categories.asset_category'
+    )
+    ->get();
+
+
+  $orgAssetTypes = DB::table('org_assets_types')
+    ->join('global_asset_types', 'org_assets_types.asset_type_selected', '=', 'global_asset_types.asset_type_id')
+    ->where('org_assets_types.org_id', $orgId)
+    ->select(
+        'global_asset_types.asset_type_id',
+        'global_asset_types.asset_type',
+        'global_asset_types.asset_category' // category_id
+    )
+    ->get();
+
+ 
+
+    $excelData = [];
+
+foreach ($orgCategories as $category) {
+    $typesForCategory = $orgAssetTypes->where('asset_category', $category->asset_category_id);
+
+    foreach ($typesForCategory as $type) {
+        $excelData[] = ['', $category->asset_category, $type->asset_type];
+    }
+}
+
+
+
+
+           return Excel::download(new AssetCategoryExport($excelData), 'assets_template_with_assets_and_sub_types.xlsx');
+
+
+
+      //  return response()->download($path);
 
     }
 

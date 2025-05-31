@@ -28,6 +28,8 @@ class RiskManagementFramework extends Controller
         $req->validate([
             'risk_management_methodology'=>'required'
          ]);
+
+
         $project_types_selected = [];
         foreach ($req->risk_management_methodology as $proj_type) {
             $project_types_selected[] = $proj_type; // append to array
@@ -35,6 +37,7 @@ class RiskManagementFramework extends Controller
 
         $projects=DB::table('project_types')->whereIn("id",$project_types_selected)->get();
         $frameworks=DB::table('risk_management_framework')->get();
+     
         
         return view("risk_management.select_framework",[
             'projects'=>$projects,
@@ -47,6 +50,7 @@ class RiskManagementFramework extends Controller
          $req->validate([
             'framework'=>'required'
          ]);
+
 
          foreach($req->selected_projects as $proj){
             DB::table('org_projects_framework_selected')
@@ -75,6 +79,7 @@ class RiskManagementFramework extends Controller
     
 $framework_approaches=DB::table('framework_approach_types')->get();
 
+
       return view("risk_management.choose_framework_approach",[
         'projects'=>$projects,
         'framework_approaches'=>$framework_approaches,
@@ -88,6 +93,7 @@ $framework_approaches=DB::table('framework_approach_types')->get();
         $req->validate([
             'framework_approach'=>'required'
         ]);
+
 
 
         foreach($req->selected_projects as $proj){

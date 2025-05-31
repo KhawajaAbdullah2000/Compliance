@@ -47,6 +47,7 @@ class OrgAssets extends Controller
             ->where('global_asset_categories.is_manual', 'no')
             ->select('org_assets_categories.*', 'global_asset_categories.asset_category', 'global_asset_categories.asset_category_id')
             ->get();
+      
     
         $custom_org_categories = DB::table('org_assets_categories')
             ->join('global_asset_categories', 'org_assets_categories.asset_category_selected', '=', 'global_asset_categories.asset_category_id')
@@ -54,6 +55,7 @@ class OrgAssets extends Controller
             ->where('global_asset_categories.is_manual', 'yes')
             ->select('org_assets_categories.*', 'global_asset_categories.asset_category', 'global_asset_categories.asset_category_id')
             ->get();
+
     
         // // For global categories: all global asset types regardless of org selection
         // $all_global_asset_types = DB::table('global_asset_types')
@@ -80,7 +82,7 @@ $org_manual_types = DB::table('org_assets_types')
 $combined_types = $non_manual_types->concat($org_manual_types)->groupBy('asset_category');
 
 $all_global_asset_types = $combined_types;
-    
+
         // For custom categories: only org's selected subtypes
         $org_custom_asset_types = DB::table('org_assets_types')
         ->join('global_asset_types', 'org_assets_types.asset_type_selected', '=', 'global_asset_types.asset_type_id')

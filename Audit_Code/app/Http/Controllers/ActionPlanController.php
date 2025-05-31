@@ -356,6 +356,8 @@ $treatment_action_plan = DB::table('iso_sec_2_1 AS assets')
 ->paginate(10, ['*'], 'treatment_page');
 }
 
+
+
 return view('action_plan.all_projects_show_action_plan',[
     'treatment_action_plan'=>$treatment_action_plan,
     'mandatory_action_plan'=>$mandatory_action_plan,

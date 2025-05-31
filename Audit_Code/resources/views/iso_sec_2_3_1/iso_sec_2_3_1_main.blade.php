@@ -164,7 +164,7 @@ $permissions=json_decode($project_permissions);
  
 
     <div class="mt-4">
-        <table class="table table-responsive table-primary table-striped">
+        <table class="table table-responsive table-primary table-hover ">
             <colgroup>
                 <col style="width: 100px;">
                 <col style="width: 300px;">

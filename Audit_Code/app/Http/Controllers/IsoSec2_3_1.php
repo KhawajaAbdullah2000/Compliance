@@ -38,9 +38,12 @@ class IsoSec2_3_1 extends Controller
 
                     $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
+        
+
                     if($frameworkDetails['complianceFramework']==null){
                         return redirect()->back()->with('error','No risk assessment methodology has been selected');
                     }
+
 
                     if($frameworkDetails['complianceFramework']->framework_selected==2 
                      && $frameworkDetails['framework_approach']->framework_approach_types_id==1
@@ -88,6 +91,16 @@ class IsoSec2_3_1 extends Controller
                         ]);
 
                      }
+
+                     if($frameworkDetails['complianceFramework']->framework_selected==2 
+                     && $frameworkDetails['framework_approach']->framework_approach_types_id==2
+                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
+                    )
+                    {
+                        //quantitative event based
+                        return redirect()->back()->with('error','Quantitative Event based not implemented');
+
+                    }
 
 
 
@@ -1504,8 +1517,7 @@ class IsoSec2_3_1 extends Controller
                 ->where('asset_id', $asset_id)
                 ->value('vulnerability_selected');
                
-              
-         
+     
     
                      return view("iso_27005.risk_assessment",[
                     'project_id' => $checkpermission->project_id,
