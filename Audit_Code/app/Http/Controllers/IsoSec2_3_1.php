@@ -38,6 +38,7 @@ class IsoSec2_3_1 extends Controller
 
                     $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
+                
         
 
                     if($frameworkDetails['complianceFramework']==null){
@@ -110,7 +111,10 @@ class IsoSec2_3_1 extends Controller
                         'project_name' => $checkpermission->project_name,
                         'project_permissions' => $checkpermission->project_permissions,
                         'project' => $project,
-                        'asset'=>$asset
+                        'asset'=>$asset,
+                          'complianceFramework'=>$frameworkDetails['complianceFramework'],
+                        'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
+                        'framework_approach'=>$frameworkDetails['framework_approach']
                     ]);
 
                 

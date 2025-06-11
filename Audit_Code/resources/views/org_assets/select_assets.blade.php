@@ -170,6 +170,7 @@
                         Asset types are mandatory to assign to asset components, as they determine which controls are applicable. Adding Asset Subtypes is optional.
                     </p>
 
+        
                     <form action="/add_asset_categories_in_org/{{ auth()->user()->organization->id }}" method="POST">
                         @csrf
                         <div class="form-group">
@@ -223,8 +224,15 @@
                         
                         
                         </div>
-                    
-                        <button type="submit" class="btn btn-primary mt-3">Save Asset Types</button>
+                    <button type="submit" name="action" value="save_categories" class="btn btn-primary mt-3">
+    Save Categories
+</button>
+
+<button type="submit" name="action" value="save_with_subtypes" class="btn btn-success mt-3 ms-2">
+    Save Categories + All Subtypes
+</button>
+
+                        {{-- <button type="submit" class="btn btn-primary mt-3">Save Asset Types</button> --}}
                     </form>
                     
 {{-- 

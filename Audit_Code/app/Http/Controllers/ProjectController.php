@@ -116,7 +116,7 @@ class ProjectController extends Controller
             ->where('project_type_id',$project->project_type)
             ->first();
 
-            //dd($complianceFramework);
+       
 
             $risk_assessment_approach = DB::table('org_risk_assessment_approach')
          ->join('global_risk_assessment_approach', 

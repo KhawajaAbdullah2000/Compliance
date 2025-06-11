@@ -182,54 +182,100 @@ $all_global_asset_types = $combined_types;
         ])->with('success', "Asset Type deleted from the Organization successfully");
     }
 
-    public function add_asset_categories_in_org($org_id, Request $req)
-    {
+    // public function add_asset_categories_in_org($org_id, Request $req)
+    // {
 
-        $req->validate([
-            'asset_categories' => 'required'
-        ]);
-
-
-        // DB::table('org_assets_categories')->join('global_asset_categories', 'org_assets_categories.asset_category_selected', 'global_asset_categories.asset_category_id')
-        //     ->where('org_id', $org_id)
-        //     ->where('is_manual', 'no')
-        //     ->delete();
+    //     $req->validate([
+    //         'asset_categories' => 'required'
+    //     ]);
        
-        $categoryIds = DB::table('org_assets_categories')
+    //     $categoryIds = DB::table('org_assets_categories')
+    //     ->join('global_asset_categories', 'org_assets_categories.asset_category_selected', '=', 'global_asset_categories.asset_category_id')
+    //     ->where('org_assets_categories.org_id', $org_id)
+    //     ->where('global_asset_categories.is_manual', 'no')
+    //     ->pluck('global_asset_categories.asset_category_id');
+    
+    // // Step 2: Get all asset type IDs under those categories
+    // $assetTypeIds = DB::table('global_asset_types')
+    //     ->whereIn('asset_category', $categoryIds)
+    //     ->pluck('asset_type_id');
+    
+    // // Step 3: Delete related org asset types
+    // DB::table('org_assets_types')->whereIn('asset_type_selected', $assetTypeIds)->delete();
+    
+
+    
+    // // Step 5: Delete org asset categories
+    // DB::table('org_assets_categories')
+    //     ->where('org_id', $org_id)
+    //     ->whereIn('asset_category_selected', $categoryIds)
+    //     ->delete();
+    
+
+
+    //     foreach ($req->asset_categories as $category) {
+    //         DB::table('org_assets_categories')->insert([
+    //             'org_id' => $org_id,
+    //             'asset_category_selected' => $category
+    //         ]);
+    //     }
+
+    //     return redirect()->route('select_assets', [
+    //         'org_id' => $org_id
+    //     ])->with('success', "Asset Types added to the Organization successfully");
+    // }
+
+    
+    public function add_asset_categories_in_org($org_id, Request $req)
+{
+    $req->validate([
+        'asset_categories' => 'required|array',
+    ]);
+
+    // Step 1: Delete existing auto-selected categories and types
+    $existingCategoryIds = DB::table('org_assets_categories')
         ->join('global_asset_categories', 'org_assets_categories.asset_category_selected', '=', 'global_asset_categories.asset_category_id')
         ->where('org_assets_categories.org_id', $org_id)
         ->where('global_asset_categories.is_manual', 'no')
         ->pluck('global_asset_categories.asset_category_id');
-    
-    // Step 2: Get all asset type IDs under those categories
-    $assetTypeIds = DB::table('global_asset_types')
-        ->whereIn('asset_category', $categoryIds)
+
+    $existingTypeIds = DB::table('global_asset_types')
+        ->whereIn('asset_category', $existingCategoryIds)
         ->pluck('asset_type_id');
-    
-    // Step 3: Delete related org asset types
-    DB::table('org_assets_types')->whereIn('asset_type_selected', $assetTypeIds)->delete();
-    
 
-    
-    // Step 5: Delete org asset categories
-    DB::table('org_assets_categories')
-        ->where('org_id', $org_id)
-        ->whereIn('asset_category_selected', $categoryIds)
-        ->delete();
-    
+    DB::table('org_assets_types')->where('org_id', $org_id)->whereIn('asset_type_selected', $existingTypeIds)->delete();
+    DB::table('org_assets_categories')->where('org_id', $org_id)->whereIn('asset_category_selected', $existingCategoryIds)->delete();
 
+    // Step 2: Insert selected categories
+    foreach ($req->asset_categories as $categoryId) {
+        DB::table('org_assets_categories')->insert([
+            'org_id' => $org_id,
+            'asset_category_selected' => $categoryId,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+    }
 
-        foreach ($req->asset_categories as $category) {
-            DB::table('org_assets_categories')->insert([
+    // Step 3: If second button clicked, insert all subtypes
+    if ($req->action === 'save_with_subtypes') {
+        $typeIds = DB::table('global_asset_types')
+            ->whereIn('asset_category', $req->asset_categories)
+            ->pluck('asset_type_id');
+
+        foreach ($typeIds as $typeId) {
+            DB::table('org_assets_types')->insert([
                 'org_id' => $org_id,
-                'asset_category_selected' => $category
+                'asset_type_selected' => $typeId,
+                'created_at' => now(),
+                'updated_at' => now()
             ]);
         }
-
-        return redirect()->route('select_assets', [
-            'org_id' => $org_id
-        ])->with('success', "Asset Types added to the Organization successfully");
     }
+
+    return redirect()->route('select_assets', [
+        'org_id' => $org_id
+    ])->with('success', 'Asset categories saved successfully.');
+}
 
     public function select_asset_types_for_category($category_id)
     {

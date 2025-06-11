@@ -175,8 +175,11 @@ class KSA_NCA extends Controller
                     $fetchedData=DB::table('iso_Sec_2_2')->where('project_id',$proj_id)
                     ->where('subdomain',$main_req_num)
                     ->get();
-              
 
+
+                  
+         
+              
 
                     return view('KSA_NCA.ksa_nca_2_2_sub_reqs', [
                         'project_id' => $checkpermission->project_id,
@@ -293,6 +296,7 @@ class KSA_NCA extends Controller
     }
     public function ksa_nca_sec_2_2_form(Request $req, $sub_req, $title, $proj_id, $user_id, $asset_id)
     {
+      
         $req->validate([
             'comp_status' => 'required'
         ]);
@@ -373,17 +377,17 @@ class KSA_NCA extends Controller
                                 $rows = array_slice($data2[0], 1); //without header(first row)
 
                                 //all controls in this domain
-                                $filteredData = collect($rows)->filter(function ($row) use ($title) {
-                                    return strval($row[0]) === $title;
+                                $filteredData = collect($rows)->filter(function ($row) use ($req) {
+                                    return strval($row[2]) === $req->subdomain;
                                 })->values()->all();
 
-
+    
 
                                 foreach ($filteredData as $innerArray) {
                                     // Access specific value from the inner array
-                                    $fetch_sub_req = $innerArray['4'];
                                     $fetch_title = $innerArray['0'];
                                     $subdomain = $innerArray['2'];
+                                    $fetch_sub_req = $innerArray['4'];
 
                                     DB::table('iso_sec_2_2')->updateOrInsert(
                                         [
@@ -419,10 +423,14 @@ class KSA_NCA extends Controller
                                 $data2 = Excel::toArray([], $filepath); //with header
                                 $rows = array_slice($data2[0], 1); //without header(first row)
 
+                                $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                                    return strval($row[0]) === $title;
+                                })->values()->all();
+
 
                                 //all controls in this domain
 
-                                foreach ($rows as $innerArray2) {
+                                foreach ($filteredData as $innerArray2) {
                                     // Access specific value from the inner array
                                     $fetch_sub_req = $innerArray2['4'];
                                     $fetch_title = $innerArray2['0'];
@@ -513,8 +521,8 @@ class KSA_NCA extends Controller
                                 $rows = array_slice($data2[0], 1); //without header(first row)
 
                                 //all controls in this domain
-                                $filteredData = collect($rows)->filter(function ($row) use ($title) {
-                                    return strval($row[0]) === $title;
+                                $filteredData = collect($rows)->filter(function ($row) use ($req) {
+                                    return strval($row[2]) === $req->subdomain;
                                 })->values()->all();
 
 
@@ -563,8 +571,12 @@ class KSA_NCA extends Controller
                                 $data2 = Excel::toArray([], $filepath); //with header
                                 $rows = array_slice($data2[0], 1); //without header(first row)
 
+                                $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                                    return strval($row[0]) === $title;
+                                })->values()->all();
 
-                                foreach ($rows as $innerArray) {
+
+                                foreach ($filteredData as $innerArray) {
 
                                     // Access specific value from the inner array
                                     $fetch_title = $innerArray['0'];

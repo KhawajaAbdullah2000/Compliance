@@ -33,7 +33,7 @@ $permissions=json_decode($project_permissions);
                         <td class="fw-bold">Project Status:</td>
                         <td>{{$project->status}}</td>
                         <td class="fw-bold">Sub-Organization:</td>
-                        <td>{{auth()->user()->organization->sub_org}}</td>
+                 <td>{{ optional(auth()->user()->department)->name ?? 'Not Assigned' }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -91,10 +91,11 @@ $permissions=json_decode($project_permissions);
                 </a>
             </td>
 
-            <td>     <form action="/add_mandatory_all_sub_req/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+            <td>     
+                <form action="/add_mandatory_all_sub_req/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
                 @csrf
                 <input type="hidden" name="sub_req" value="{{$d[3]}}">
-                <div class="d-flex align-items-center">
+                {{-- <div class="d-flex align-items-center">
                     <select name="comp_status" class="form-select rounded-pill me-2">
                    
                         <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
@@ -104,7 +105,17 @@ $permissions=json_decode($project_permissions);
                         <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
                     </select>
                     <button type="submit" class="btn btn-sm btn-success">Submit</button>
-                </div>
+                </div> --}}
+                 @php $selectedStatus = $fetchedData->firstWhere('sub_req', $d[3])->comp_status ?? ''; @endphp
+
+        <select name="comp_status" class="form-select rounded-pill form-select-sm" style="max-width: 180px;">
+            <option value="">Select --</option>
+            <option value="yes" {{ $selectedStatus == 'yes' ? 'selected' : '' }}>In Place</option>
+            <option value="no" {{ $selectedStatus == 'no' ? 'selected' : '' }}>Not in Place</option>
+            <option value="not_applicable" {{ $selectedStatus == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+            <option value="not_tested" {{ $selectedStatus == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+            <option value="partial" {{ $selectedStatus == 'partial' ? 'selected' : '' }}>Partial</option>
+        </select>
             </form></td>
 
              </tr>

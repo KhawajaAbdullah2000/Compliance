@@ -359,6 +359,7 @@ class IsoSec2_2 extends Controller
 
     public function iso_sec_2_2_req(Request $req, $main_req_num, $title, $proj_id, $user_id, $asset_id)
     {
+      
 
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -414,6 +415,10 @@ class IsoSec2_2 extends Controller
                             return substr($value, 0, 1) === $main_req_num;
                         })->values()->all();
 
+                           $fetchedData=DB::table('iso_Sec_2_2')->where('project_id',$proj_id)
+                    ->where('subdomain',$main_req_num)
+                    ->get();
+
 
                         return view('iso_sec_2_2.iso_sec_2_2_sub_reqs_user_req', [
                             'project_id' => $checkpermission->project_id,
@@ -423,7 +428,8 @@ class IsoSec2_2 extends Controller
                             'main_req_num' => $main_req_num,
                             'title' => $title,
                             'project' => $project,
-                            'asset' => $asset
+                            'asset' => $asset,
+                            'fetchedData'=>$fetchedData
                         ]);
                     }
 
@@ -439,7 +445,11 @@ class IsoSec2_2 extends Controller
                         return strval($my_main_req[0]) === $main_req_num;
                     })->values()->all();
 
+  $fetchedData=DB::table('iso_Sec_2_2')->where('project_id',$proj_id)
+                    ->where('subdomain',$main_req_num)
+                    ->get();
 
+          
 
 
                     return view('iso_sec_2_2.iso_sec_2_2_sub_reqs', [
@@ -450,7 +460,8 @@ class IsoSec2_2 extends Controller
                         'main_req_num' => $main_req_num,
                         'title' => $title,
                         'project' => $project,
-                        'asset' => $asset
+                        'asset' => $asset,
+                        'fetchedData'=>$fetchedData
                     ]);
                 }
             }
@@ -481,6 +492,8 @@ class IsoSec2_2 extends Controller
                         ->where('project_id', $proj_id)->where('sub_req', $sub_req)->where('asset_id', $asset_id)
                         ->first();
                 }
+
+       
 
 
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
@@ -579,6 +592,7 @@ class IsoSec2_2 extends Controller
 
     public function iso_sec_2_2_form(Request $req, $sub_req, $title, $proj_id, $user_id,$asset_id)
     {
+        
         $req->validate([
             'comp_status' => 'required'
         ]);
@@ -598,6 +612,7 @@ class IsoSec2_2 extends Controller
                 $permissions = json_decode($checkpermission->project_permissions);
                 if ($checkpermission->type_id == 4) {
 
+            
 
                     $evidenceLevel = $req->session()->get('evidenceLevel');
 
@@ -639,8 +654,10 @@ class IsoSec2_2 extends Controller
                         }
 
                     
+                        
 
                             if ($evidenceLevel == 'component') {
+                               
 
                                 if($req->action==2){
                                     $filepath = public_path('ISO_SEC_2_2.xlsx');
@@ -648,11 +665,17 @@ class IsoSec2_2 extends Controller
                                     $rows = array_slice($data2[0], 1); //without header(first row)
                             
                                     //all controls in this domain
-                                     $filteredData = collect($rows)->filter(function ($row) use ($title) {
-                                    return strval($row[0]) === $title;
-                                })->values()->all();
+                        //  $filteredData = collect($rows)->filter(function ($row) use ($req) {
+                        //             return strval($row[2]) === $req->subdomain;
+                        //         })->values()->all();
+                        $filteredData = collect($rows)->filter(function ($row) use ($req) {
+                    $value = isset($row[2]) ? trim($row[2]) : '';
 
-                            
+                    // Get only the first word before the space
+                    $firstPart = explode(' ', $value)[0];
+
+                    return $firstPart === $req->subdomain;
+                })->values()->all();
                                 
                                     foreach ($filteredData as $innerArray) {
                                         // Access specific value from the inner array
@@ -685,10 +708,13 @@ class IsoSec2_2 extends Controller
                                     $data2 = Excel::toArray([], $filepath); //with header
                                     $rows = array_slice($data2[0], 1); //without header(first row)
                             
+                                     $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                                    return strval($row[0]) === $title;
+                                })->values()->all();
                      
                                     //all controls in this domain
                                 
-                                     foreach ($rows as $innerArray2) {
+                                     foreach ($filteredData as $innerArray2) {
                                         // Access specific value from the inner array
                                         $fetch_sub_req = $innerArray2['3']; 
                                         $fetch_title=$innerArray2['0'];
