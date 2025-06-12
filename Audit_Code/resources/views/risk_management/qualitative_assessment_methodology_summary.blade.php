@@ -51,7 +51,7 @@
                 <p class="fw-bold fs-5">{{$risk_acceptance_criteria}}</p>
 
                 <h4 class="mt-4">
-                    Selected Information Security Risk Assessment Approach
+                    Selected Risk Assessment Approach
                 </h4>
                 <p class="fw-bold fs-5">{{$risk_assessment_approaches}}</p>
 

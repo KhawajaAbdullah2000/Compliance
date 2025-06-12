@@ -104,7 +104,7 @@
 
     <div class="row mt-2">
         <div class="col-12">
-     <a href="/uae_ia_section_2_2/M2.2/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">M2.2 INFORMATION SECURITY RISK ASSESSMENT
+     <a href="/uae_ia_section_2_2/M2.2/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">M2.2 Risk Assessment
 
     </p></a>
     </div>

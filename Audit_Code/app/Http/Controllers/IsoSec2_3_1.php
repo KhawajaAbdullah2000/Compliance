@@ -1634,7 +1634,7 @@ class IsoSec2_3_1 extends Controller
                  && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
                 ){
 
-                    if($checkpermission->type_id==18){
+                    if($frameworkDetails['complianceFramework']->framework_selected==6){
                         //coso
                     $filename = '31000checklistcontrols.xlsx';
                     }else{
@@ -1685,7 +1685,7 @@ class IsoSec2_3_1 extends Controller
                 ->value('vulnerability_selected');
                
             
-         
+        
     
                      return view("iso_27005.risk_assessment_qual_event",[
                     'project_id' => $checkpermission->project_id,

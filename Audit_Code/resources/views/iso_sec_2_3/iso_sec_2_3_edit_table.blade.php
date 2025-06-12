@@ -22,7 +22,7 @@ $permissions=json_decode($project_permissions);
 
         <div class="card mt-2">
             <div class="card-header bg-primary text-center">
-                <h2>Information Security Risk Assessment And Treatment</h2>
+                <h2>Risk Assessment And Treatment</h2>
               </div>
             <div class="card-body">
 

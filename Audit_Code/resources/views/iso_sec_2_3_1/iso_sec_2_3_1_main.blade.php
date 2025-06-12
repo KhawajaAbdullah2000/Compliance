@@ -19,7 +19,7 @@ $permissions=json_decode($project_permissions);
 
 
 
-    <h4 class="fw-bold">Information Security Risk Assessment Applicable to</h4>
+    <h4 class="fw-bold">Risk Assessment Applicable to</h4>
 
 
     @if ($errors->any())

@@ -15,7 +15,7 @@ $permissions = json_decode($project_permissions);
             @include('components.topTable')
         </div>
     </div>
-    <h3 class="fw-bold mt-2">Information Security Risk Assessment for {{auth()->user()->organization->name}}</h3>
+    <h3 class="fw-bold mt-2">Risk Assessment for {{auth()->user()->organization->name}}</h3>
 
 
     

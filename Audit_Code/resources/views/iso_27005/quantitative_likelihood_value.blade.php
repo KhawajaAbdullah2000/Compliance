@@ -16,7 +16,7 @@ $isEditable = in_array('Data Inputter', $permissions);
             @include('components.topTable')
         </div>
     </div>
-    <h3 class="fw-bold mt-2">Information Security Risk Assessment for</h3>
+    <h3 class="fw-bold mt-2">Risk Assessment for</h3>
 
     @include('components.asset-summary_component', ['asset' => $asset])
     

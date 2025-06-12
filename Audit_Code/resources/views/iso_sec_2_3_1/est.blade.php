@@ -105,7 +105,7 @@ $permissions=json_decode($project_permissions);
 
 </div>
 
-<h4 class="mt-4 mb-4 fw-bold">Current Information Security Risk Assessment</h4>
+<h4 class="mt-4 mb-4 fw-bold">Current Risk Assessment</h4>
 
 <div class="row">
 

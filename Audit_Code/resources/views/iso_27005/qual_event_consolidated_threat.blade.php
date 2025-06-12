@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <h3 class="fw-bold mt-2">Information Security Risk Assessment for {{ auth()->user()->organization->name }}</h3>
+    <h3 class="fw-bold mt-2">Risk Assessment for {{ auth()->user()->organization->name }}</h3>
     <span class="fw-bold">Services: </span>{{ $services->pluck('s_name')->implode(', ') }}
 
        <div class="float-end mb-4">

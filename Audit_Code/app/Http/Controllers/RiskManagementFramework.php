@@ -67,12 +67,12 @@ class RiskManagementFramework extends Controller
 
     $projects=DB::table('project_types')->whereIn("id",$req->selected_projects)->get();
 
-    $risk_management_framework=DB::table('org_projects_framework_selected')
-    ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
-    'risk_management_framework.framework_id')
-    ->where('org_id',$org_id)->first();
+    // $risk_management_framework=DB::table('org_projects_framework_selected')
+    // ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
+    // 'risk_management_framework.framework_id')
+    // ->where('org_id',$org_id)->first();
 
-    // $risk_management_framework=Db::table('risk_management_framework')->where('framework_id',$req->framework)->first();
+     $risk_management_framework=Db::table('risk_management_framework')->where('framework_id',$req->framework)->first();
 
 
     if($req->framework==1){
@@ -118,10 +118,19 @@ $framework_approaches=DB::table('framework_approach_types')->get();
 
          $projects=DB::table('project_types')->whereIn("id",$req->selected_projects)->get();
 
+         $selected_project_ids = DB::table('project_types')
+    ->whereIn("id", $req->selected_projects)
+    ->pluck('id') // just get the IDs for filtering
+    ->toArray();
+
+
          $risk_management_framework=DB::table('org_projects_framework_selected')
          ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
          'risk_management_framework.framework_id')
          ->where('org_id',$org_id)->first();
+
+
+    
 
             $framework_approach=Db::table('framework_approach_types')
             ->where('framework_approach_types_id',$req->framework_approach)
@@ -157,10 +166,15 @@ $framework_approaches=DB::table('framework_approach_types')->get();
  
         $projects=DB::table('project_types')->whereIn("id",$req->selected_projects)->get();
 
-        $risk_management_framework=DB::table('org_projects_framework_selected')
-        ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
-        'risk_management_framework.framework_id')
-        ->where('org_id',$org_id)->first();
+                 $selected_project_ids = DB::table('project_types')
+    ->whereIn("id", $req->selected_projects)
+    ->pluck('id') // just get the IDs for filtering
+    ->toArray();
+
+ $risk_management_framework=DB::table('org_projects_framework_selected')
+         ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
+         'risk_management_framework.framework_id')
+         ->where('org_id',$org_id)->first();
 
            $framework_approach=Db::table('framework_approach_types')
            ->where('approach_name',$req->framework_approach)
@@ -179,10 +193,16 @@ $framework_approaches=DB::table('framework_approach_types')->get();
     public function qualitative_info_security_risk_criteria($org_id,Request $req){
         $projects=DB::table('project_types')->whereIn("id",$req->selected_projects)->get();
 
-        $risk_management_framework=DB::table('org_projects_framework_selected')
-        ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
-        'risk_management_framework.framework_id')
-        ->where('org_id',$org_id)->first();
+               $selected_project_ids = DB::table('project_types')
+    ->whereIn("id", $req->selected_projects)
+    ->pluck('id') // just get the IDs for filtering
+    ->toArray();
+
+ $risk_management_framework=DB::table('org_projects_framework_selected')
+         ->join('risk_management_framework','org_projects_framework_selected.framework_selected',
+         'risk_management_framework.framework_id')
+         ->where('org_id',$org_id)->first();
+
 
            $framework_approach=Db::table('framework_approach_types')
            ->where('approach_name',$req->framework_approach)

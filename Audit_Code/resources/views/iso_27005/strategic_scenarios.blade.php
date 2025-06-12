@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    <h3 class="fw-bold mt-2">Information Security Risk Assessment for {{ auth()->user()->organization->name }}</h3>
+    <h3 class="fw-bold mt-2">Risk Assessment for {{ auth()->user()->organization->name }}</h3>
 
   <div class="row">
     <div class="col-md-10">

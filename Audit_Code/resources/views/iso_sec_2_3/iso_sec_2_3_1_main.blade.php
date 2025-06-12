@@ -15,7 +15,7 @@ $permissions=json_decode($project_permissions);
     <h3 class="text-center fw-bold mb-3"> Project name: {{$project_name}}</h3>
 
 
-    <h2 class="text-center">  Section2.3.1 Information Security Risk Assessment And Treatment</h2>
+    <h2 class="text-center">  Section2.3.1 Risk Assessment And Treatment</h2>
 
 
     <form action="/iso_sec2_3_1_new/{{$project_id}}/{{auth()->user()->id}}" method="post">

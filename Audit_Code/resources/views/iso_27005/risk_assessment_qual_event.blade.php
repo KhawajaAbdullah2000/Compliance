@@ -11,7 +11,7 @@
             @include('components.topTable')
         </div>
     </div>
-    <h3 class="fw-bold mt-2">Information Security Risk Assessment for {{auth()->user()->organization->id}}</h3>
+    <h3 class="fw-bold mt-2">Risk Assessment for {{auth()->user()->organization->id}}</h3>
 
    <span class="fw-bold">Services: </span> {{ $services->pluck('s_name')->implode(', ') }}
     
@@ -35,7 +35,14 @@
         <thead class="thead-dark">
             <tr>
                 <th>No.</th>
-                <th>Controls (as per ISO 27001:2022 Annex A)</th>
+                <th>Controls (as per 
+                    @if($complianceFramework->framework_id==6)
+                        ISO 31000:2018
+                    @else
+                    ISO 27001:2022 
+                    @endif
+                    Annex A)
+                 </th>
                 <th>Vulnerability Level due to </th>
                 
            

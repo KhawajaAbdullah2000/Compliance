@@ -45,7 +45,7 @@
 
         {{-- <div class="row mt-2">
             <div class="col-12">
-         <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-secondary text-white w-100"><p class="fw-bold" style="text-align:left;">Undertake or view information security risk assessment on the services and/or assets</p></a>
+         <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-secondary text-white w-100"><p class="fw-bold" style="text-align:left;">Undertake or view Risk Assessment on the services and/or assets</p></a>
         </div>
         </div> --}}
 
