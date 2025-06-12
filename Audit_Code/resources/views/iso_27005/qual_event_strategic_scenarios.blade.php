@@ -90,7 +90,7 @@
     </table>
 
 
-        <a href="{{route('iso_27005_risk_assessment_qual_event',[
+        <a href="{{route('qual_event_consolidated_threat',[
     'proj_id'=>$project->project_id,
     'user_id'=>auth()->user()->id])}}" class="btn btn-primary btn-md float-end">Go to Next</a>
     {{-- <a href="{{route('iso_27005_risk_assessment_qual_event',[

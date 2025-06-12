@@ -33,7 +33,7 @@
                         <th style='text-align:center'>View Compliance</th>
                         <th style='text-align:center'>View Risk Heatmap</th>
                         <th style='text-align:center'>View Action Plan</th>
-        
+         
                         {{-- <th style='text-align:center'>Risk & Compliance Heatmap</th>  --}}
                         {{-- <th style='text-align:center'>Drill Down by Service</th>  --}}
                         {{-- <th style='text-align:center'>Project Visuals</th>
@@ -45,6 +45,7 @@
                         <th class="text-center">Duplicate Project</th>
                         <th class="text-center">User Actions</th>
                         <th>Data Governance</th>
+                     <th style='text-align:center'>View Risk Details</th>
 
                     </tr>
                 </thead>
@@ -249,20 +250,21 @@
                                     <i class="fas fa-eye fa-lg" style="color: rgb(235, 23, 147)"></i>
                                 </a>
                             </td> 
+<td style="text-align:center">
+    @if($pro->type_id == 14 || $pro->type_id == 15)
+        <a href="/data_catalog_sections/{{ $pro->project_code }}/{{ auth()->user()->id }}">
+            <i class="fas fa-address-card fa-lg" style="color: rgb(71, 16, 173);"></i>
+        </a>
+    @else
+        <i class="fas fa-lock fa-lg" style="color:red;" title="Access Restricted"></i>
+    @endif
+</td>
 
-                            <td style='text-align:center'>
-                                <a href="/data_catalog_sections/{{ $pro->project_code }}/{{ auth()->user()->id }}" 
-                                >
-                                    @if($pro->type_id ==14 ||$pro->type_id ==15 )
-                                    <i class="fas fa-address-card fa-lg" style="color: rgb(71, 16, 173)"> </i>
-                                    @else
-                                    <i class="fas fa-lock fa-lg" style="color:red;"> </i>
-                                    @endif
-                                </a>
-                               
-
-                        
-                            </td>
+            <td style="text-align:center">
+        <a href="/iso_section2_1/{{ $pro->project_code }}/{{ auth()->user()->id }}">
+            <i class="fas fa-eye fa-lg" style="color: rgb(71, 16, 173);"></i>
+        </a>
+            </td>
                         
                     </tr>
                     @endforeach

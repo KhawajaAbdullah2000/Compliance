@@ -26,7 +26,7 @@
             <td class="fw-bold">Compliance Framework:</td>
             <td>{{ $project->type }}</td>
             
-            <td class="fw-bold">Information Security Risk Management Methodology:</td>
+            <td class="fw-bold">Risk Management Methodology:</td>
             <td>
                 @if($complianceFramework->framework_name=="Default")
                 Default 

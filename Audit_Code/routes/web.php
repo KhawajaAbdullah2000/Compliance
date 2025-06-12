@@ -372,7 +372,7 @@ route::Post('iso_sec2_3_1_initial_add/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3
 route::get("iso_27005_risk_assessment/{proj_id}/{user_id}/{asset_id}",[IsoSec2_3_1::class,'iso_27005_risk_assessment'])->name('iso_27005_risk_assessment');
 route::get("iso_27005_risk_assessment_qual_event/{proj_id}/{user_id}",[IsoSec2_3_1::class,'iso_27005_risk_assessment_qual_event'])->name('iso_27005_risk_assessment_qual_event');
 route::post('save_likelihood_qual_event_form/{proj_id}/{user_id}',[IsoSec2_3_1::class,'save_likelihood_qual_event_form']);
-
+route::post('proj_asset_selected_level_of_threat_qual_event/{proj_id}/{user_id}',[IsoSec2_3_1::class,'proj_asset_selected_level_of_threat_qual_event']);
 //IOS 27005 quality Asset based
 route::get("target_objective_of_risk_source/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}",[IsoSec2_3_1::class,'target_objective_of_risk_source']);
 route::get('target_objective_of_risk_source_qual_event/{proj_id}/{user_id}/{g_risk_source_num}',[IsoSec2_3_1::class,'target_objective_of_risk_source_qual_event']);
@@ -397,6 +397,7 @@ route::put('edit_party_submit/{party_id}/{proj_id}/{user_id}',[IsoSec2_3_1::clas
 route::get('delete_party/{party_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'delete_party']);
 
 route::get('iso_sec_2_3_1_qual_event_scenarios/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_1_qual_event_scenarios'])->name('iso_sec_2_3_1_qual_event_scenarios');
+route::get('qual_event_consolidated_threat/{proj_id}/{user_id}',[IsoSec2_3_1::class,'qual_event_consolidated_threat'])->name('qual_event_consolidated_threat');
 route::get('qual_event_add_scenario_form/{proj_id}/{user_id}',[IsoSec2_3_1::class,'qual_event_add_scenario_form']);
 route::post('submit_new_scenario/{proj_id}/{user_id}',[IsoSec2_3_1::class,'submit_new_scenario']);
 route::get('strategic_scenarios/{party_id}/{risk_type}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'strategic_scenarios'])->name('strategic_scenarios');
