@@ -31,9 +31,7 @@
                 </div>@endif
                 @endforeach
 
-                <button type="submit" class="btn btn-primary btn-md">Select Information Security Risk
-                    Management Methodology for the
-                    project types selected
+                <button type="submit" class="btn btn-primary btn-md">Select Risk Management Methodology
                     </button>
             </form>
 

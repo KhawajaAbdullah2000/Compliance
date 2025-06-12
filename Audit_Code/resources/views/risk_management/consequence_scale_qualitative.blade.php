@@ -25,7 +25,7 @@
                 @endforelse
             </ul>
 
-            <h4 class="mt-4">Information Security Risk
+            <h4 class="mt-4">Risk
                 Management Framework selected:</h4>
                 <p class="fw-bold fs-5">{{$framework_name}}</p>
 
@@ -33,7 +33,7 @@
 
                 </div>
 
-                <h4 class="mt-4">Information Security Risk
+                <h4 class="mt-4">Risk
            Management Approach selected:</h4>
                     <p class="fw-bold fs-5">{{$framework_approach}}</p>
 

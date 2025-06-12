@@ -8,7 +8,7 @@
 <section class="min-h-100">
     <div class="container py-5">
        <h4 class="fw-bold">Organization: {{auth()->user()->organization->name}}</h4>
-       <h3 class="fw-bold">Set up information security risk management methodology by project type</h3>
+       <h3 class="fw-bold">Set up Risk Management methodology by project type</h3>
     
        <div class="row">
         <div class="col-md-4 me-md-4">

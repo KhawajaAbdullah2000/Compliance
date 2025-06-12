@@ -201,10 +201,10 @@ $permissions = json_decode($project_permissions);
         </tbody>
     </table>
 
-@if(optional($complianceFramework)->framework_id == 2 && 
+@if((optional($complianceFramework)->framework_id == 2 ||optional($complianceFramework)->framework_id == 6 ) && 
     optional($framework_approach)->framework_approach_types_id == 1 && 
     optional($risk_assessment_approach)->global_risk_assessment_approach_id == 1)
-         <a href="/initiaite_risk_assessment_qual_event/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md float-end">GO to Risk Assessment</a>
+         <a href="/initiaite_risk_assessment_qual_event/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md float-end">Manage Risk</a>
 
          @endif
 

@@ -33,30 +33,6 @@
   </div>
 
 
-{{-- 
-    @if (in_array('Data Inputter', $permissions))
-      <div class="col-md-6">
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-light fw-bold">
-            Add Scenario
-        </div>
-        <div class="card-body">
-            <form action="/party_strategic_scenario_submit/{{$project->project_id}}/{{auth()->user()->id}}" method="post">
-                @csrf
-                <div class="form-floating mb-3">
-                    <textarea class="form-control" placeholder="Write your strategic scenario here..." id="scenario" name="scenario" style="height: 150px" required></textarea>
-                    <label for="scenario">Strategic Scenario</label>
-                </div>
-
-                <input type="hidden" name="risk_type" value="{{$risk_type_selected}}">
-                <input type="hidden" name="party_type" value="{{$party->id}}">
-                <button type="submit" class="btn btn-primary w-100">Save</button>
-            </form>
-        </div>
-    </div>
-</div>
-    @endif --}}
-
     
 
        @if (in_array('Data Inputter', $permissions))
@@ -114,9 +90,12 @@
     </table>
 
 
-    <a href="{{route('iso_27005_risk_assessment_qual_event',[
+        <a href="{{route('iso_27005_risk_assessment_qual_event',[
     'proj_id'=>$project->project_id,
     'user_id'=>auth()->user()->id])}}" class="btn btn-primary btn-md float-end">Go to Next</a>
+    {{-- <a href="{{route('iso_27005_risk_assessment_qual_event',[
+    'proj_id'=>$project->project_id,
+    'user_id'=>auth()->user()->id])}}" class="btn btn-primary btn-md float-end">Go to Next</a> --}}
 
 
 </div>

@@ -414,6 +414,7 @@ route::get('route_for_risk_source/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::
 route::get('route_for_risk_source_qual_event/{proj_id}/{user_id}',[IsoSec2_3_1::class,'route_for_risk_source_qual_event'])->name('route_for_risk_source_qual_event');
 route::post('iso_27005_submit_risk_assessment/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'iso_27005_submit_risk_assessment']);
 route::post('iso_27005_submit_risk_assessment_qual_event/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_27005_submit_risk_assessment_qual_event']);
+route::get('ai_input_submit_risk_assessment_qual_event/{proj_id}/{user_id}',[IsoSec2_3_1::class,'ai_input_submit_risk_assessment_qual_event']);
 
 
 route::post('proj_asset_selected_level_of_vulnerability/{proj_id}/{user_id}/{asset_id}',[IsoSec2_3_1::class,'proj_asset_selected_level_of_vulnerability']);

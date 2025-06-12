@@ -29,9 +29,8 @@
         </div>
 
         <div class="col-md-8">
-            <h2 class="fw-bold">Summary of Information Security Risk Management methodology selected</h2>
-            <h4 class="mt-4">Information Security Risk
-                Management Framework selected:</h4>
+            <h2 class="fw-bold">Summary of Risk Management methodology selected</h2>
+            <h4 class="mt-4">Risk Management selected:</h4>
                 <p class="fw-bold fs-5">{{$framework_name}}</p>
 
 
@@ -39,8 +38,7 @@
 
                 </div>
 
-                <h4 class="mt-4">Information Security Risk
-           Management Approach selected:</h4>
+                <h4 class="mt-4">Risk Management Approach selected:</h4>
                     <p class="fw-bold fs-5">{{$framework_approach}}</p>
 
                     <h4 class="mt-4">Likelihood Scale</h4>

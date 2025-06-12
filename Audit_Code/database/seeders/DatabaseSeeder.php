@@ -21,8 +21,10 @@ class DatabaseSeeder extends Seeder
         $this->call(AddInternalAuditProjectType::class);
         $this->call(CosoProjectType::class);
         $this->call(SOC2_Type2::class);
+        $this->call(Base2AndIso3100::class);
         $this->call(Organization::class);
         $this->call(Risk_Management_Frameworks::class);
+        $this->call(AddIso31000RiskFramework::class);
         $this->call(GlobalAssetCategories::class);
         $this->call(GlobalAssetTypes::class);
         $this->call(frameworkApproachTypes::class);

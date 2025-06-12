@@ -25,7 +25,7 @@
                 @endforelse
             </ul>
 
-            <h3 class="mt-4">Information Security Risk
+            <h3 class="mt-4">Risk
                 Management Framework selected:</h3>
                 <p class="fw-bold fs-4">{{$framework_name}}</p>
         </div>
@@ -33,7 +33,7 @@
         <div class="col-md-4 mt-4">
             <form action="/selected_framework_approach/{{auth()->user()->organization->id}}" method="POST">
                 @csrf
-                <h4 class="fw-bold mb-3">Select Information Security Risk
+                <h4 class="fw-bold mb-3">Select Risk
                     Management Approach</h4>
         
                 @forelse ($framework_approaches as $approach)

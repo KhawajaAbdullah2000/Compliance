@@ -140,7 +140,7 @@ class ProjectController extends Controller
          
 
     //  dd($framework_approach,$risk_assessment_approach,$complianceFramework);
-         
+
 
                 return view(
                     'iso.iso_sections',

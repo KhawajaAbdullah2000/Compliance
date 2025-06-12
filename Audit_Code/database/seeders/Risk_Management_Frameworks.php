@@ -20,9 +20,6 @@ class Risk_Management_Frameworks extends Seeder
              ['framework_name'=>'KSA NCA'],
              ['framework_name'=>'Custom Framework'],
 
-            
-           
-
         ]);
     }
 }

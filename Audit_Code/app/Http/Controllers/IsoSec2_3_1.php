@@ -1368,7 +1368,7 @@ class IsoSec2_3_1 extends Controller
     }
 
     public function iso_27005_submit_risk_assessment($proj_id,$user_id,$asset_id,Request $req){
-        //dd($req->all());
+       
         foreach($req->control_num as $key=>$value){
             DB::table('iso27005_risk_assessment')->updateOrInsert(
                 [
@@ -1413,7 +1413,7 @@ class IsoSec2_3_1 extends Controller
     }
 
     public function iso_27005_submit_risk_assessment_qual_event($proj_id,$user_id,Request $req){
-        //dd($req->all());
+
         foreach($req->control_num as $key=>$value){
             DB::table('iso27005_risk_assessment')->updateOrInsert(
                 [
@@ -1436,7 +1436,7 @@ class IsoSec2_3_1 extends Controller
       
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
-            if($frameworkDetails['complianceFramework']->framework_selected==2 
+            if(in_array($frameworkDetails['complianceFramework']->framework_selected, [2, 6]) 
              &&( $frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
              && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
             ){
@@ -1450,6 +1450,53 @@ class IsoSec2_3_1 extends Controller
 
 
        
+    }
+
+    public function ai_input_submit_risk_assessment_qual_event($proj_id,$user_id){
+
+         $controlNums = [
+            "5.1-1", "5.1-2", "5.2-1", "5.2-2", "5.2-3", "5.2-4", "5.3-1", "5.3-2",
+            "5.4.1-1", "5.4.1-2", "5.4.2-1", "5.4.2-2", "5.4.2-3", "5.4.2-4", "5.4.2-5",
+            "5.4.2-6", "5.4.2-7", "5.4.2-8", "5.4.2-9", "5.4.3-1", "5.4.3-2", "5.4.4-1",
+            "5.4.4-2", "5.4.4-3", "5.4.4-4", "5.4.4-5", "5.4.4-6", "5.4.5-1", "5.4.5-2",
+            "5.5.1", "5.5.2", "5.5.3", "5.5.4", "5.6.1", "5.6.2", "5.7.1", "5.7.2", "5.7.3"
+        ];
+
+        // Possible vulnerability levels
+        $vulnerabilityLevels = ['Very High', 'High', 'Medium', 'Low', 'Very Low'];
+        $global_vulnerabilityLevels = [1,2,3,4,5];
+
+        foreach ($controlNums as $controlNum) {
+            DB::table('iso27005_risk_assessment')->updateOrInsert(
+                [
+                    'project_id' => $proj_id,
+                    'control_num' => $controlNum,
+                ],
+                [
+                    'vulnerability_due_to' => $vulnerabilityLevels[array_rand($vulnerabilityLevels)],
+                    'last_edited_by' => $user_id,
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                ]
+            );
+        }
+
+         DB::table('proj_asset_selected_level_of_vulnerability')
+                        ->updateOrInsert([
+                            'project_id'=>$proj_id,
+                        ],
+                    [
+                        'vulnerability_selected'=>$global_vulnerabilityLevels[array_rand($global_vulnerabilityLevels)],
+                        'last_edited_by'=>$user_id,
+                        'created_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+                        'updated_at'=> Carbon::now()->format('Y-m-d H:i:s')
+                    ]
+                );
+        return redirect()->route('iso_27005_risk_assessment_qual_event',[
+                'proj_id'=>$proj_id,
+                'user_id'=>$user_id,
+                
+               ])->with('success','Data Saved Successfully');
     }
 
     public function iso_27005_risk_assessment($proj_id,$user_id,$asset_id){
@@ -1557,6 +1604,7 @@ class IsoSec2_3_1 extends Controller
 
     public function iso_27005_risk_assessment_qual_event($proj_id,$user_id){
         //route for risk assesment quality asset based with controls
+    
         $checkpermission = Db::table('project_details')->select(
             'project_types.id as type_id',
             'project_details.project_code',
@@ -1581,12 +1629,19 @@ class IsoSec2_3_1 extends Controller
           
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
-                if($frameworkDetails['complianceFramework']->framework_selected==2 
+                if(in_array($frameworkDetails['complianceFramework']->framework_selected, [2, 6])
                  && ($frameworkDetails['framework_approach']->framework_approach_types_id==1 || $frameworkDetails['framework_approach']->framework_approach_types_id==2)
                  && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
                 ){
+
+                    if($checkpermission->type_id==18){
+                        //coso
+                    $filename = '31000checklistcontrols.xlsx';
+                    }else{
+                        $filename = 'ISO27K1_2022_Other.xlsx';
+                    }
                     //ISo 27005:2022 Qualitative Event based
-                    $filename = 'ISO27K1_2022_Other.xlsx';
+                
                     $filepath = public_path($filename);
                     
                     // Fallback to 'None' file if original doesn't exist
@@ -1598,6 +1653,7 @@ class IsoSec2_3_1 extends Controller
                     $data2 = Excel::toArray([], $filepath); // Load Excel with header
                     $rows = array_slice($data2[0], 1); // Remove header row
 
+                   
                     foreach ($rows as &$row) {
                         if (isset($row[0])) {
                             $row[0] = trim((string) $row[0]); // keep it as-is
@@ -2000,6 +2056,8 @@ return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id])
 }
 
 public function proj_asset_selected_level_of_vulnerability_qual_event($proj_id,$user_id,Request $req){
+
+   
     $checkpermission = Db::table('project_details')->select(
         'project_types.id as type_id',
         'project_details.project_code',
@@ -2024,7 +2082,7 @@ public function proj_asset_selected_level_of_vulnerability_qual_event($proj_id,$
       
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
-            if($frameworkDetails['complianceFramework']->framework_selected==2 
+            if(in_array($frameworkDetails['complianceFramework']->framework_selected, [2, 6])
              &&( $frameworkDetails['framework_approach']->framework_approach_types_id==1 ||  $frameworkDetails['framework_approach']->framework_approach_types_id==2)
              && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
             ){
@@ -2209,7 +2267,7 @@ public function iso_27005_likelihood_value_qual_event($proj_id,$user_id){
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
         
-            if($frameworkDetails['complianceFramework']->framework_selected==2 
+            if(in_array($frameworkDetails['complianceFramework']->framework_selected, [2, 6])
             &&( $frameworkDetails['framework_approach']->framework_approach_types_id==1)
             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
            ){
@@ -2235,7 +2293,7 @@ public function iso_27005_likelihood_value_qual_event($proj_id,$user_id){
 
 
 
-                if($frameworkDetails['complianceFramework']->framework_selected==2 
+                if(in_array($frameworkDetails['complianceFramework']->framework_selected, [2, 6])
                 && $frameworkDetails['framework_approach']->framework_approach_types_id==1
                 && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
                ){

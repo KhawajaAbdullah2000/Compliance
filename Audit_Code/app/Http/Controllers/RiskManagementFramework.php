@@ -47,7 +47,8 @@ class RiskManagementFramework extends Controller
     }
 
     public function selected_project_and_framework($org_id,Request $req){
-         $req->validate([
+   
+        $req->validate([
             'framework'=>'required'
          ]);
 
@@ -71,6 +72,9 @@ class RiskManagementFramework extends Controller
     'risk_management_framework.framework_id')
     ->where('org_id',$org_id)->first();
 
+    // $risk_management_framework=Db::table('risk_management_framework')->where('framework_id',$req->framework)->first();
+
+
     if($req->framework==1){
         //default vanilla
         return redirect()->route('user_home')->with('success',"Default Vanilla Framework selected successfully");
@@ -78,6 +82,8 @@ class RiskManagementFramework extends Controller
  
     
 $framework_approaches=DB::table('framework_approach_types')->get();
+
+
 
 
       return view("risk_management.choose_framework_approach",[
@@ -93,7 +99,6 @@ $framework_approaches=DB::table('framework_approach_types')->get();
         $req->validate([
             'framework_approach'=>'required'
         ]);
-
 
 
         foreach($req->selected_projects as $proj){

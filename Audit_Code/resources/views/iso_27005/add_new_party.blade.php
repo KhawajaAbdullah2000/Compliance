@@ -36,7 +36,7 @@
                     <tr>
                         <td class="fw-bold">Compliance Framework:</td>
                         <td>{{$complianceFramework->framework_name}}</td>
-                        <td class="fw-bold">Information Security Risk Management Methodology:</td>
+                        <td class="fw-bold">Risk Management Methodology:</td>
                         <td>{{$framework_approach->approach_name}} - {{$risk_assessment_approach->global_assessment_approach}} </td>
                     </tr>
                 </tbody>

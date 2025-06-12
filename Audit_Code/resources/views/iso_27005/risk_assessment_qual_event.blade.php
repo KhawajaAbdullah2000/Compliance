@@ -20,10 +20,14 @@
         </h5>
         
 
+@if($project->project_type==18)
+{{-- only in coso --}}
+<div class="text-end">
+     <a href="/ai_input_submit_risk_assessment_qual_event/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md" style="max-width: 200px;min-width:100px;">AI Input</a>
+</div>
+@endif
 
-
-
-<div class="col-md-8">
+<div class="col-md-10">
     <form action="/iso_27005_submit_risk_assessment_qual_event/{{$project->project_id}}/{{auth()->user()->id}}" method="POST">
         @csrf
 
@@ -49,11 +53,14 @@
          
             <input type="hidden" name="control_num[]" value="{{ $controlNum }}">
             <td>
-                <select class="form-select" name="vulnerability_due_to[]">
-                    @foreach (['Very High', 'High', 'Medium', 'Low', 'Very Low'] as $level)
-                        <option value="{{ $level }}" {{ $selectedValue == $level ? 'selected' : '' }}>{{ $level }}</option>
-                    @endforeach
-                </select>
+                <div class="d-flex gap-2 align-items-center">
+    <select class="form-select" name="vulnerability_due_to[]" style="min-width: 150px;max-width:150px;">
+        @foreach (['Very High', 'High', 'Medium', 'Low', 'Very Low'] as $level)
+            <option value="{{ $level }}" {{ $selectedValue == $level ? 'selected' : '' }}>{{ $level }}</option>
+        @endforeach
+    </select>
+   
+</div>
             </td>
 
             {{-- @if ($loop->first)
@@ -75,8 +82,9 @@
     
 </div>
 
-
-<h5 class="fw-bold">Consolidated Level of Vulnerability</h5>
+<div class="row">
+    <div class="col-md-6">
+        <h5 class="fw-bold">Consolidated Level of Vulnerability</h5>
 
 <form action="/proj_asset_selected_level_of_vulnerability_qual_event/{{$project->project_id}}/{{auth()->user()->id}}" method="Post">
 @csrf
@@ -109,6 +117,10 @@
 
 
 
+
+
+    </div>
+</div>
 
 
 
