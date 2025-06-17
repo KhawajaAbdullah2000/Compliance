@@ -102,6 +102,7 @@
         <thead class="table-dark">
             <tr>
                 <th>Req No.</th>
+                <th>Compliance Status</th>
                 <th>Action</th>
                 <th>Target Date</th>
                 <th>Completion Date</th>
@@ -117,6 +118,21 @@
 
     <tr>
         <td>{{$mand->sub_req}}</td>
+        <td>
+            @if($mand->comp_status == 'not_applicable')
+                Not applicable
+            @elseif($mand->comp_status == 'yes')
+                Inplace
+            @elseif($mand->comp_status == 'no')
+                Not In Place
+                 @elseif($mand->comp_status == 'not_tested')
+                Not Tested
+                @elseif($mand->comp_status == 'partial')
+                Partial 
+                @else
+                {{$mand->comp_status}}
+            @endif
+        </td>
         <td>{{$mand->treatment_action}}</td>
         <td>{{$mand->treatment_target_date}}</td>
         <td>{{$mand->treatment_comp_date}}</td>

@@ -65,9 +65,20 @@ $permissions=json_decode($project_permissions);
 
 </h3>
 
+
+
       <h2 class="text-center fw-bold mt-4 mb-4">
    {{$data[0][2]}}
     </h2>
+
+    <div class="text-end mb-2">
+    <a id="ai-assist-btn" href="/get_ai_data_for_compliance/{{$asset->assessment_id}}/{{$title}}/{{$main_req_num}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning">
+         <i class="fa fa-magic"></i> AI Assistance</a>
+    </div>
+
+    <div id="ai-spinner" class="text-end mb-3" style="display: none;">
+    <i class="fa fa-spinner fa-spin text-warning"></i> <span class="fw-bold">Processing AI Analysis...</span>
+</div>
 
 
     <table class="table table-bordered table-responsive table-primary">
@@ -141,6 +152,19 @@ $permissions=json_decode($project_permissions);
     });
 </script>
 @endif
+
+<script>
+    document.getElementById('ai-assist-btn').addEventListener('click', function (e) {
+    // Show the spinner
+    document.getElementById('ai-spinner').style.display = 'block';
+
+    // Optional: Disable the button to prevent double-clicks
+    this.classList.add('disabled');
+    this.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Processing...';
+
+    // Allow form to continue (don't prevent default for actual navigation)
+});
+</script>
 
 @endsection
 

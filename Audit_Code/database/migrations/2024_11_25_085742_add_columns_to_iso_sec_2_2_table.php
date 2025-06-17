@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('iso_sec_2_2', function (Blueprint $table) {
-            $table->string('treatment_action', 1000)->nullable();
+            $table->longText('treatment_action')->nullable();
             $table->date('treatment_target_date')->nullable();
             $table->date('treatment_comp_date')->nullable();
             $table->unsignedBigInteger('responsibility_for_treatment')->nullable();

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('title_num',100)->nullable();
             $table->string('sub_req', 100)->nullable();
             $table->string('comp_status', 30)->nullable();
-            $table->string('comments', 3000)->nullable();
+            $table->longText('comments')->nullable();
             $table->string('attachment', 1000)->nullable();
             $table->unsignedBigInteger('last_edited_by')->nullable()->index('last_edited_by');
             $table->dateTime('last_edited_at');

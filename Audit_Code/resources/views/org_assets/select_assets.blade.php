@@ -225,11 +225,11 @@
                         
                         </div>
                     <button type="submit" name="action" value="save_categories" class="btn btn-primary mt-3">
-    Save Categories
+    Save Asset Types
 </button>
 
 <button type="submit" name="action" value="save_with_subtypes" class="btn btn-success mt-3 ms-2">
-    Save Categories + All Subtypes
+    Save Asset types + All Asset Subtypes
 </button>
 
                         {{-- <button type="submit" class="btn btn-primary mt-3">Save Asset Types</button> --}}

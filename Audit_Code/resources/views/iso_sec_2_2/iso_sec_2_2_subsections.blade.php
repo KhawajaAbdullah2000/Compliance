@@ -51,6 +51,16 @@
 
 @endif
 
+<div class="text-end">
+    <form action="/upload_file_for_compliance_api_proj/{{$project->project_id}}/{{auth()->user()->id}}" method="POST" enctype="multipart/form-data" class="d-inline-block">
+        @csrf
+        <div class="input-group input-group-sm mb-2">
+         
+            <input type="file" name="data_record_attachments" id="data_record_attachments" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-sm btn-primary">Upload</button>
+    </form>
+</div>
 
 
 <h4>Select one {{$project->type}} mandatory compliance domain from below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
@@ -257,6 +267,17 @@
     swal({
   title: "{{Session::get('success')}}",
   icon: "success",
+  closeOnClickOutside: true,
+  timer: 3000,
+    });
+</script>
+@endif
+
+@if(Session::has('error'))
+<script>
+    swal({
+  title: "{{Session::get('error')}}",
+  icon: "error",
   closeOnClickOutside: true,
   timer: 3000,
     });

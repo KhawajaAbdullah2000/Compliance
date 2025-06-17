@@ -1,13 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Project;
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 
 class IsoSec2_2 extends Controller
 {
@@ -419,6 +421,8 @@ class IsoSec2_2 extends Controller
                     ->where('subdomain',$main_req_num)
                     ->get();
 
+               
+
 
                         return view('iso_sec_2_2.iso_sec_2_2_sub_reqs_user_req', [
                             'project_id' => $checkpermission->project_id,
@@ -450,7 +454,7 @@ class IsoSec2_2 extends Controller
                     ->get();
 
           
-
+     
 
                     return view('iso_sec_2_2.iso_sec_2_2_sub_reqs', [
                         'project_id' => $checkpermission->project_id,
@@ -1287,248 +1291,209 @@ class IsoSec2_2 extends Controller
             }
 
 
-    //new insert in sec2_2
-    // public function iso_sec_2_2_form(Request $req, $sub_req, $title, $proj_id, $user_id,$asset_id)
-    // {
-    //     $req->validate([
-    //         'comp_status' => 'required'
-    //     ]);
-    //     if ($user_id == auth()->user()->id) {
-    //         $checkpermission = Db::table('project_details')->select(
-    //             'project_types.id as type_id',
-    //             'project_details.project_code',
-    //             'project_details.project_permissions',
-    //             'projects.project_name',
-    //             'projects.project_id'
-    //         )
-    //             ->join('projects', 'project_details.project_code', 'projects.project_id')
-    //             ->join('project_types', 'projects.project_type', 'project_types.id')
-    //             ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-    //             ->first();
-    //         if ($checkpermission) {
-    //             $permissions = json_decode($checkpermission->project_permissions);
-    //             if ($checkpermission->type_id == 4) {
 
-    //                 $evidenceLevel = $req->session()->get('evidenceLevel');
+    public function upload_file_for_compliance_api_proj($proj_id,$user_id,Request $req){
+      $req->validate([
+         'data_record_attachments' => 'required|file|mimes:pdf|max:20480',
+      ]);
 
+      if ($req->hasFile('data_record_attachments')) {
+        $file = $req->file('data_record_attachments');
 
-    //                 if (in_array('Data Inputter', $permissions)) {
+        // Generate unique filename
+        $filename = time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
 
-    //                     $fileName=null;
-    //                     if ($req->attachment != null) {
-    //                         $fileName = time() . '.' . $req->attachment->extension();
-    //                         $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
-    //                     }
+        // Store the file in public/data_record_attachments
+        $file->move(public_path('data_record_attachments'), $filename);
 
-    //                     $data=[
-    //                                 'comp_status' => $req->comp_status,
-    //                                 'comments' => $req->comments,
-    //                                 'attachment' => $fileName,
-    //                                 'treatment_action' => $req->treatment_action,
-    //                                 'treatment_target_date' => $req->treatment_target_date,
-    //                                 'treatment_comp_date' => $req->treatment_comp_date,
-    //                                 'responsibility_for_treatment' => $req->responsibility_for_treatment,
-    //                                 'acceptance_actual_date'=>$req->acceptance_actual_date,
-    //                                 'last_edited_by' => $user_id,
-    //                                 'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-    //                     ];
+        // Insert record into database
+        DB::table('attachment_for_compliance_project_level')->insert([
+            'filename' => $filename,
+            'project_id' => $proj_id,
+            'uploaded_by' => $user_id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
-    //                     if ($evidenceLevel == 'component') {
+        return back()->with('success', 'File uploaded successfully.');
+    }
 
-    //                         // If evidence level is 'component', just insert or update for the specific asset
-    //                         DB::table('iso_sec_2_2')->updateOrInsert(
-    //                             [
-    //                                 'project_id' => $proj_id, 
-    //                                 'asset_id' => $asset_id,
-    //                                 'title_num' => $title,
-    //                                 'sub_req' => $sub_req,
-    //                             ], 
-    //                             $data
-    //                         );
+    return back()->withErrors(['data_record_attachments' => 'File upload failed.']);
 
-    //                         // Redirect after updating the specific asset
-    //                         $mysessionreq = $req->session()->get('main_req_num');
-    //                         return redirect()->route(
-    //                             'iso_sec_2_2_req',
-    //                             ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-    //                         )
-    //                             ->with('success', 'Record Updated Successfully');
-    //                     }
+    }
 
 
-    //                     $assetDetails=DB::table('iso_sec_2_1')->where('project_id',$proj_id)->where('assessment_id',$asset_id)->first();
+    public function get_ai_data_for_compliance($asset_id,$domain,$subdomain,$proj_id,$user_id){
+        $attachments=DB::table('attachment_for_compliance_project_level')->where('project_id',$proj_id)->pluck('filename')->toArray();
 
-    //                     $assets=null;
+        if($attachments==null){
+            return redirect()->route('iso_sec_2_2_subsections',[
+                'proj_id'=>$proj_id,
+                'user_id'=>$user_id,
+                'asset_id'=>$asset_id
+            ])->with('error','Please add atleast one document');
+        }
 
-    //                     if($evidenceLevel=='name'){
-    //                         $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('name',$assetDetails->name)->get();
-    //                     }
+        $proj=DB::table('projects')->where('project_id',$proj_id)->first();
+        $proj_type=DB::table('project_types')->where('id',$proj->project_type)->first();
+        $asset=DB::table('iso_sec_2_1')->where('assessment_id',$asset_id)->first();
+     
+        
+        $org=auth()->user()->organization->name;
+        $sub_org=auth()->user()->department->name??"null";
+        $project_id=$proj_id;
+        $project_name=$proj->project_name;
+        $project_type=$proj_type->type;
+        $service=$asset->s_name;
+        $asset_type=$asset->g_name??"null";
+        $asset_subtype=$asset->name??"null";
+        $component=$asset->c_name;
 
-    //                     if($evidenceLevel=='group'){
-    //                         $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('g_name',$assetDetails->g_name)->get();
-    //                     }
-    //                     if($evidenceLevel=='service'){
-    //                         $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->where('s_name',$assetDetails->s_name)->get();
-    //                     }
+        $filepath = public_path('ISO_SEC_2_2.xlsx');
+            $data = Excel::toArray([], $filepath); 
+            $rows = array_slice($data[0], 1); 
 
-    //                     if($evidenceLevel=='project'){
-    //                         $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_id)->get();
-    //                     }
+            $filteredData = collect($rows)->filter(function ($row) use ($domain,$subdomain) {
+            
+                // Condition 1: First column must exactly match the domain
+                $firstColumnMatch = strval($row[0]) === $domain;
 
+                // Condition 2: The number before the first space in column 3 must also match the domain
+                $thirdColNumber = explode(' ', trim($row[2]))[0] ?? null;
+                $thirdColumnMatch = $thirdColNumber === $subdomain;
 
+                return $firstColumnMatch && $thirdColumnMatch;
+            })->values();
 
-    //                     foreach($assets as $ass){ 
-    //                         DB::table('iso_sec_2_2')->updateOrInsert(
-    //                             [
-    //                                 'project_id' => $proj_id, 
-    //                                 'asset_id' => $ass->assessment_id, 
-    //                                 'title_num' => $title,
-    //                                 'sub_req' => $sub_req,
-    //                             ], 
-    //                             $data
-    //                         );
-    //                     }
+           $controls = [];
 
-    //                 }
-    //                     $mysessionreq = $req->session()->get('main_req_num');
+    foreach ($filteredData as $row) {
+        $level1 = strval($row[0]);       // e.g., "4"
+        $level2 = trim($row[2]);         // e.g., "4.1 ..."
+        $level2Key = explode(' ', $level2)[0]; // "4.1"
+        $level3Key = trim($row[3]);      // e.g., "4.1-a"
+        $description = trim($row[4]);    // control description
 
-    //                     return redirect()->route(
-    //                         'iso_sec_2_2_req',
-    //                         ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id,'asset_id'=>$asset_id]
-    //                     )
-    //                         ->with('success', 'Record Updated SUccessfully');
+        if (!$level1 || !$level2Key || !$level3Key || !$description) continue;
 
-    //             }
-    //         }
-    //         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
-    //     }
-    // }
-    // public function iso_sec_2_2_edit_form(Request $req, $sub_req, $title, $proj_id, $user_id, $asset_id)
-    // {
-    //     $req->validate([
-    //         'comp_status' => 'required'
-    //     ]);
-    //     if ($user_id == auth()->user()->id) {
-    //         $checkpermission = Db::table('project_details')->select(
-    //             'project_types.id as type_id',
-    //             'project_details.project_code',
-    //             'project_details.project_permissions',
-    //             'projects.project_name',
-    //             'projects.project_id'
-    //         )
-    //             ->join('projects', 'project_details.project_code', 'projects.project_id')
-    //             ->join('project_types', 'projects.project_type', 'project_types.id')
-    //             ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-    //             ->first();
-    //         if ($checkpermission) {
-    //             $permissions = json_decode($checkpermission->project_permissions);
-    //             if ($checkpermission->type_id == 4) {
+        $controls[$level1][$level2Key][$level3Key] = $description;
+    }
 
-    //                 $evidenceLevel = $req->session()->get('evidenceLevel');
-
-
-    //                 if (in_array('Data Inputter', $permissions)) {
-
-    //                     $fileName = null;
-    //                     if ($req->attachment != null) {
-    //                         $fileName = time() . '.' . $req->attachment->extension();
-    //                         $req->attachment->move(public_path('iso_sec_2_2'), $fileName);
-    //                         $data = [
-    //                             'comp_status' => $req->comp_status,
-    //                             'comments' => $req->comments,
-
-    //                             'attachment' => $fileName,
-    //                             'treatment_action' => $req->treatment_action,
-    //                             'treatment_target_date' => $req->treatment_target_date,
-    //                             'treatment_comp_date' => $req->treatment_comp_date,
-    //                             'responsibility_for_treatment' => $req->responsibility_for_treatment,
-    //                             'acceptance_actual_date' => $req->acceptance_actual_date,
-    //                             'last_edited_by' => $user_id,
-    //                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-    //                         ];
-    //                     } else {
-    //                         $data = [
-    //                             'comp_status' => $req->comp_status,
-    //                             'comments' => $req->comments,
-
-    //                             'treatment_action' => $req->treatment_action,
-    //                             'treatment_target_date' => $req->treatment_target_date,
-    //                             'treatment_comp_date' => $req->treatment_comp_date,
-    //                             'responsibility_for_treatment' => $req->responsibility_for_treatment,
-    //                             'acceptance_actual_date' => $req->acceptance_actual_date,
-    //                             'last_edited_by' => $user_id,
-    //                             'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-    //                         ];
-
-    //                     }
-
-
-    //                     if ($evidenceLevel == 'component') {
-
-    //                         DB::table('iso_sec_2_2')->updateOrInsert(
-    //                             [
-    //                                 'project_id' => $proj_id,
-    //                                 'asset_id' => $asset_id,
-    //                                 'title_num' => $title,
-    //                                 'sub_req' => $sub_req,
-    //                             ],
-    //                             $data
-    //                         );
-    //                         $mysessionreq = $req->session()->get('main_req_num');
-
-    //                         return redirect()->route(
-    //                             'iso_sec_2_2_req',
-    //                             ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-    //                         )
-    //                             ->with('success', 'Record Updated SUccessfully');
-
-    //                     }
-
-    //                     $assetDetails = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
-
-    //                     $assets = null;
-
-    //                     if ($evidenceLevel == 'name') {
-    //                         $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('name', $assetDetails->name)->get();
-    //                     }
-
-    //                     if ($evidenceLevel == 'group') {
-    //                         $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('g_name', $assetDetails->g_name)->get();
-    //                     }
-    //                     if ($evidenceLevel == 'service') {
-    //                         $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('s_name', $assetDetails->s_name)->get();
-    //                     }
-
-    //                     if ($evidenceLevel == 'project') {
-    //                         $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->get();
-    //                     }
+     // Build final payload
+    $payload = [
+        "org" => $org,
+        "sub_org" => $sub_org,
+        "project_id" => (int)$proj_id,
+        "project_name" => $project_name,
+        "project_type" => $project_type,
+        "asset_id" => (int)$asset_id,
+        "service" => $service,
+        "asset_type" => $asset_type,
+        "asset_subtype" => $asset_subtype,
+        "asset_component" => $component,
+        "controls" => $controls,
+        "attachments" => $attachments,
+    ];
 
 
 
-    //                     foreach ($assets as $ass) {
-    //                         DB::table('iso_sec_2_2')->updateOrInsert(
-    //                             [
-    //                                 'project_id' => $proj_id,
-    //                                 'asset_id' => $ass->assessment_id,
-    //                                 'title_num' => $title,
-    //                                 'sub_req' => $sub_req,
-    //                             ],
-    //                             $data
-    //                         );
-    //                     }
+     $evidenceLevel = Session::get('evidenceLevel');
+     
 
-    //                 }
-    //                 $mysessionreq = $req->session()->get('main_req_num');
+    // Call the API
+    $response = Http::post('http://103.31.80.138:3000/submit-structure', $payload);
 
-    //                 return redirect()->route(
-    //                     'iso_sec_2_2_req',
-    //                     ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-    //                 )
-    //                     ->with('success', 'Record Updated SUccessfully');
+ // dd($response->json());
 
-    //             }
-    //         }
-    //         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
-    //     }
-    // }
+   $complianceAnalysis = $responseData['message']['compliance_analysis'] ?? [];
+
+    $responseData = $response->json();
+
+$complianceAnalysis = $responseData['message']['compliance_analysis'] ?? [];
+
+$responseData = $response->json();
+
+$complianceAnalysis = $responseData['message']['compliance_analysis'] ?? [];
+
+    $complianceMap = [];
+
+foreach ($complianceAnalysis as $item) {
+    foreach ($item as $controlId => $details) {
+        $rawStatus = $details['compliance_status'] ?? '';
+        $normalizedStatus = strtolower(trim($details['compliance_status'] ?? ''));
+
+        if ($normalizedStatus === 'not-inplace') {
+            $compStatus = 'no';
+        } elseif ($normalizedStatus === 'in-place') {
+            $compStatus = 'yes';
+        } else {
+            $compStatus = $normalizedStatus;
+        }
+        $treatmentDate = null;
+
+    
+        if (!empty($details['date'])) {
+            try {
+                $treatmentDate = Carbon::createFromFormat('d/m/Y', trim($details['date']))->format('Y-m-d');
+            } catch (\Exception $e) {
+                $treatmentDate = null; // fallback if invalid
+            }
+        }
+
+      
+
+        $complianceMap[$controlId] = [
+           'comp_status' => $compStatus,
+            'comments' => $details['compliance_comments'] ?? null,
+            'treatment_action' =>$details['action_plan'],
+            'treatment_target_date' => $treatmentDate,
+        ];
+    }
+
 }
+
+
+// Step 2: Loop through controls and insert data row by row
+if ($evidenceLevel == 'component') {
+    foreach ($controls as $level1 => $level2Array) {
+        foreach ($level2Array as $level2 => $level3Array) {
+            foreach ($level3Array as $level3 => $description) {
+                
+                $compliance = $complianceMap[$level3] ?? [];
+
+                $insertData = array_merge($compliance, [
+                    'last_edited_by' => $user_id,
+                    'last_edited_at' => now(),
+                 
+                ]);
+
+             
+
+                DB::table('iso_sec_2_2')->updateOrInsert(
+                    [
+                        'project_id' => $proj_id,
+                        'asset_id' => $asset_id,
+                        'title_num' => $level1,
+                        'subdomain' => $level2,
+                        'sub_req' => $level3,
+                    ],
+                    $insertData
+                );
+            }
+        }
+    }
+}
+    
+return redirect()->route('iso_sec_2_2_req',[
+    'main_req_num'=>$subdomain,
+    'title'=>$domain,
+    'proj_id'=>$proj_id,
+    'user_id'=>$user_id,
+    'asset_id'=>$asset_id
+])->with('success',"AI input done successfully");
+
+        
+    }
+
+}
+

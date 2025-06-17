@@ -485,8 +485,8 @@ route::get('iso_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asset_id
 route::get('iso_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_sec2_2_sub_req_edit'])->name('iso_sec2_2_sub_req_edit');
 route::post('iso_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_sec_2_2_form']);
 route::post('iso_sec_2_2_form_user_req/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[IsoSec2_2::class,'iso_sec_2_2_form_user_req']);
-
-
+route::post('upload_file_for_compliance_api_proj/{proj_id}/{user_id}',[IsoSec2_2::class,'upload_file_for_compliance_api_proj']);
+route::get('get_ai_data_for_compliance/{asset_id}/{domain}/{subdomain}/{proj_id}/{user_id}',[IsoSec2_2::class,'get_ai_data_for_compliance']);
 //PCI single sheet
 route::get("pci_single_sheet_subsections/{proj_id}/{user_id}/{asset_id}",[PCI_Single_Sheet::class,'pci_single_sheet_subsections'])->name('pci_single_sheet_subsections');
 route::get("pci_section_2_2/{title_num}/{proj_id}/{user_id}/{asset_id}",[PCI_Single_Sheet::class,'pci_section_2_2'])->name('pci_section_2_2_main');

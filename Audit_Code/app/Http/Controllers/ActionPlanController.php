@@ -295,7 +295,9 @@ public function action_plan_show( $service, $component, $proj_id, Request $req){
            
 
     }
+ 
 
+   
     if($action_plan_type=='Treatment'||$action_plan_type=='Both' ){
         $treatment_action_plan = DB::table('iso_sec_2_1 AS assets')
         ->join('iso_risk_treatment AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
