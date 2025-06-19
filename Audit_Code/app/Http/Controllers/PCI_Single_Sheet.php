@@ -94,6 +94,20 @@ class PCI_Single_Sheet extends Controller
                     })->values()->all();
 
 
+                    $results=DB::table('iso_sec_2_2')->where('project_id',$proj_id)
+                    ->where('asset_id',$asset_id)->where('title_num',$title_num)
+                    ->get();
+
+                 
+
+               $finalStatusBySubdomain = $results->groupBy('subdomain')->map(function ($items) {
+                $statuses = $items->pluck('comp_status')->filter()->unique();
+
+                return $statuses->count() === 1 ? $statuses->first() : 'different';
+            });
+
+         // dd($finalStatusBySubdomain);
+
                     return view('pci_single_sheet.pci_sec_2_2_main', [
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
@@ -101,7 +115,8 @@ class PCI_Single_Sheet extends Controller
                         'data' => $filteredData,
                         'title' => $title_num,
                         'project' => $project,
-                        'asset' => $asset
+                        'asset' => $asset,
+                        'finalStatusBySubdomain'=>$finalStatusBySubdomain
                     ]);
                 }
             }
@@ -151,6 +166,11 @@ class PCI_Single_Sheet extends Controller
                     $asset = Db::table(table: 'iso_sec_2_1')->where('assessment_id', $asset_id)->first();
 
 
+                     $fetchedData=DB::table('iso_Sec_2_2')->where('project_id',$proj_id)
+                    ->where('subdomain',$main_req_num)
+                    ->get();
+                   // dd($fetchedData);
+
                     return view('pci_single_sheet.pci_2_2_sub_reqs', [
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
@@ -159,7 +179,8 @@ class PCI_Single_Sheet extends Controller
                         'main_req_num' => $main_req_num,
                         'title' => $title,
                         'project' => $project,
-                        'asset' => $asset
+                        'asset' => $asset,
+                        'fetchedData'=>$fetchedData
                     ]);
                 }
             }

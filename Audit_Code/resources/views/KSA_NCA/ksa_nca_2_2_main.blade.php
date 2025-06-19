@@ -137,10 +137,7 @@ $permissions=json_decode($project_permissions);
                 // human-readable label
         $status  = $finalStatusBySubdomain->get($subdomain); 
     @endphp
-            @if($status === 'different')
-                <span class="badge fs-6 bg-secondary">Values are different</span>
-
-            @else
+          
                 <form action="/add_mandatory_all_domain/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
                       method="POST"
                       class="d-flex align-items-center gap-2">
@@ -149,7 +146,7 @@ $permissions=json_decode($project_permissions);
 
                     <select name="comp_status"
                             class="form-select form-select-sm rounded-pill"
-                            style="max-width:160px;">
+                            style="max-width:150px;min-width:150px;">
                         <option value="">Select --</option>
 
                         @foreach([
@@ -166,11 +163,17 @@ $permissions=json_decode($project_permissions);
                         @endforeach
                     </select>
 
-                    
-                </form>
-            @endif
+                
+          
             <button class="btn btn-success btn-sm w-100" style="max-width:100px;">Submit</button>
                     <a class="btn btn-primary btn-sm w-100" style="max-width:100px;">AI Input</a>
+                     @If($status=="different")
+                    <span class="badge fs-6 bg-secondary">Values are different</span>
+                    @endif
+            </form>
+
+                   
+
         </td>
 
             </tr>
@@ -195,55 +198,50 @@ $permissions=json_decode($project_permissions);
 
                        <td><a href="/ksa_nca_sec_2_2_req/{{$my_current_main_req_num}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
                       <td>
-    @php
+     @php
         $subdomain = $data[$i][2];                     
-        $status = $finalStatusBySubdomain->get($subdomain); 
+                // human-readable label
+        $status  = $finalStatusBySubdomain->get($subdomain); 
     @endphp
+  
+          
+                <form action="/add_mandatory_all_domain/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                      method="POST"
+                      class="d-flex align-items-center gap-2">
+                    @csrf
+                    <input type="hidden" name="domain" value="{{$data[$i][2]}}">
 
-    @if($status === 'different')
-        <span class="badge fs-6 bg-secondary">Values are different</span>
-    @else
-        <form action="/add_mandatory_all_domain/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
-              method="POST">
-            @csrf
-            <input type="hidden" name="domain" value="{{ $subdomain }}">
+                    <select name="comp_status"
+                            class="form-select form-select-sm rounded-pill"
+                            style="max-width:150px;min-width:150px;">
+                        <option value="">Select --</option>
 
-            <div class="d-flex align-items-center gap-2">
-                <select name="comp_status"
-                        class="form-select form-select-sm rounded-pill flex-fill"
-                        style="max-width:160px;">
-                    <option value="">Select --</option>
+                        @foreach([
+                            'yes'            => 'In Place',
+                            'no'             => 'Not in Place',
+                            'not_applicable' => 'Not Applicable',
+                            'not_tested'     => 'Not Tested',
+                            'partial'        => 'Partial',
+                        ] as $value => $label)
+                            <option value="{{ $value }}"
+                                {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
 
-                    @foreach([
-                        'yes'            => 'In Place',
-                        'no'             => 'Not in Place',
-                        'not_applicable' => 'Not Applicable',
-                        'not_tested'     => 'Not Tested',
-                        'partial'        => 'Partial',
-                    ] as $value => $label)
-                        <option value="{{ $value }}"
-                            {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
-                            {{ $label }}
-                        </option>
-                    @endforeach
-                </select>
+                
+          
+            <button class="btn btn-success btn-sm w-100" style="max-width:100px;">Submit</button>
+                    <a class="btn btn-primary btn-sm w-100" style="max-width:100px;">AI Input</a>
+                     @If($status=="different")
+                    <span class="badge fs-6 bg-secondary">Values are different</span>
+                    @endif
+            </form>
 
-                <button type="submit"
-                        class="btn btn-success btn-sm flex-shrink-0"
-                        style="width:100px;">
-                    Submit
-                </button>
+                   
 
-                <a href="#"
-                   class="btn btn-primary btn-sm flex-shrink-0"
-                   style="width:100px;">
-                    AI Input
-                </a>
-            </div>
-        </form>
-    @endif
-</td>
-
+        </td>
            @endif    
                               
 

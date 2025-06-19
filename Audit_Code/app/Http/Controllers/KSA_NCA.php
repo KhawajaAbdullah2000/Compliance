@@ -106,7 +106,8 @@ class KSA_NCA extends Controller
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                         ->where('projects.project_id', $proj_id)->first();
 
-                    $filteredData = collect($data[0])->filter(function ($row) use ($title_num) {
+                 
+                    $filteredData = collect($rows)->filter(function ($row) use ($title_num) {
                         return strval($row[0]) === $title_num;
                     })->values()->all();
 
@@ -127,6 +128,7 @@ class KSA_NCA extends Controller
             });
 
    
+      
 
                     return view('KSA_NCA.ksa_nca_2_2_main', [
                         'project_id' => $checkpermission->project_id,
@@ -1694,6 +1696,7 @@ class KSA_NCA extends Controller
                         'last_edited_by' => $user_id,
                         'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
                     ];
+                  
                     if ($checkpermission->type_id == 7) {
                         //ksa Nca
                         $filepath = public_path('KSA_NCA_ECC_Modified.xlsx');
@@ -1768,8 +1771,10 @@ class KSA_NCA extends Controller
 
 
                         $filteredData = collect($rows)->filter(function ($row) use ($req) {
-                            return strval($row[3]) === $req->sub_req;
+                            return strval(trim($row[3])) === $req->sub_req;
                         })->values()->all();
+
+                    
 
 
 
@@ -1831,7 +1836,7 @@ class KSA_NCA extends Controller
 
                         //all controls in this domain
                         $filteredData = collect($rows)->filter(function ($row) use ($req) {
-                            return strval($row[3]) === $req->sub_req;
+                            return strval(trim($row[3])) === $req->sub_req;
                         })->values()->all();
 
 
