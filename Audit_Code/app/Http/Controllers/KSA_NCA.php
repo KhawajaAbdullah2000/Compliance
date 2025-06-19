@@ -41,12 +41,24 @@ class KSA_NCA extends Controller
 
                     $asset = Db::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
 
+                    $results=DB::table('iso_sec_2_2')->where('project_id',$proj_id)
+                    ->where('asset_id',$asset_id)->get();
+
+               $finalStatusByTitle = $results->groupBy('title_num')->map(function ($items) {
+                $statuses = $items->pluck('comp_status')->filter()->unique();
+
+                return $statuses->count() === 1 ? $statuses->first() : 'different';
+            });
+
+            //dd($finalStatusByTitle);
+           
 
                     return view('KSA_NCA.sec_2_2_subsections', [
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
                         'project' => $project,
-                        'asset' => $asset
+                        'asset' => $asset,
+                        'finalStatusByTitle'=>$finalStatusByTitle
                     ]);
                 }
             }
@@ -102,6 +114,19 @@ class KSA_NCA extends Controller
 
                     $asset = Db::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
 
+                    $results=DB::table('iso_sec_2_2')->where('project_id',$proj_id)
+                    ->where('asset_id',$asset_id)->where('title_num',$title_num)
+                    ->get();
+
+                 
+
+               $finalStatusBySubdomain = $results->groupBy('subdomain')->map(function ($items) {
+                $statuses = $items->pluck('comp_status')->filter()->unique();
+
+                return $statuses->count() === 1 ? $statuses->first() : 'different';
+            });
+
+   
 
                     return view('KSA_NCA.ksa_nca_2_2_main', [
                         'project_id' => $checkpermission->project_id,
@@ -110,7 +135,8 @@ class KSA_NCA extends Controller
                         'data' => $filteredData,
                         'title' => $title_num,
                         'project' => $project,
-                        'asset' => $asset
+                        'asset' => $asset,
+                        'finalStatusBySubdomain'=>$finalStatusBySubdomain
                     ]);
                 }
             }
@@ -177,8 +203,7 @@ class KSA_NCA extends Controller
                     ->get();
 
 
-                  
-         
+        
               
 
                     return view('KSA_NCA.ksa_nca_2_2_sub_reqs', [

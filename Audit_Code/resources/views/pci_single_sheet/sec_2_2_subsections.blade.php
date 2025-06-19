@@ -71,25 +71,45 @@
          <a href="/pci_section_2_2/{{1}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">PCI-DSS v4.0.1 Requirement 1: Install and Maintain Network Security Controls</p></a>
         </div>
 
+         @php
+    $title = 1;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
         <div class="col-md-4">
-        
-                <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                    @csrf
-                    <input type="hidden" name="title" value="1">
-                    <div class="d-flex align-items-center">
-                        <select name="comp_status" class="form-select rounded-pill me-2">
-                       
-                            <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                            <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                            <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                            <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                            <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                        </select>
-                        <button type="submit" class="btn btn-sm btn-success">Submit</button>
-                    </div>
-                </form>
-            
-        </div>
+
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
+                @csrf
+                <input type="hidden" name="title" value="{{ $title }}">
+
+                <div class="d-flex align-items-center">
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:130px;min-width:130px;">
+                        <option value="">Select --</option>
+
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" style="min-width:150px;max-width:150px;" type="submit">Submit</button>
+                    <button class="btn btn-sm btn-primary px-3" style="min-width:150px;max-width:150px;" type="submit">AI Input</button>
+
+                </div>
+            </form>
+               {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
+    </div>
         </div>
 
 
@@ -97,24 +117,44 @@
             <div class="col-md-8">
          <a href="/pci_section_2_2/{{2}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0.1 Requirement 2: Apply Secure Configurations to All System Components</p></a>
         </div>
+           @php
+    $title = 2;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
         <div class="col-md-4">
-        
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
                 @csrf
-                <input type="hidden" name="title" value="2">
+                <input type="hidden" name="title" value="{{ $title }}">
+
                 <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2">
-                   
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:130px;min-width:130px;">
+                        <option value="">Select --</option>
+
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
-                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" style="min-width:150px;max-width:150px;" type="submit">Submit</button>
+                    <button class="btn btn-sm btn-primary px-3" style="min-width:150px;max-width:150px;" type="submit">AI Input</button>
+
                 </div>
             </form>
-        
+               {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
     </div>
         </div>
 
@@ -122,24 +162,44 @@
             <div class="col-md-8">
          <a href="/pci_section_2_2/{{3}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0.1 Requirement 3: Protect Stored Account Data</p></a>
         </div>
+          @php
+    $title = 3;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
         <div class="col-md-4">
-        
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
                 @csrf
-                <input type="hidden" name="title" value="3">
+                <input type="hidden" name="title" value="{{ $title }}">
+
                 <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2">
-                   
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:130px;min-width:130px;">
+                        <option value="">Select --</option>
+
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
-                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" style="min-width:150px;max-width:150px;" type="submit">Submit</button>
+                    <button class="btn btn-sm btn-primary px-3" style="min-width:150px;max-width:150px;" type="submit">AI Input</button>
+
                 </div>
             </form>
-        
+               {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
     </div>
         </div>
 
@@ -147,24 +207,44 @@
             <div class="col-md-8">
          <a href="/pci_section_2_2/{{4}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0.1 Requirement 4: Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks</p></a>
         </div>
+          @php
+    $title = 4;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
         <div class="col-md-4">
-        
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
                 @csrf
-                <input type="hidden" name="title" value="4">
+                <input type="hidden" name="title" value="{{ $title }}">
+
                 <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2">
-                   
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:130px;min-width:130px;">
+                        <option value="">Select --</option>
+
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
-                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" style="min-width:150px;max-width:150px;" type="submit">Submit</button>
+                    <button class="btn btn-sm btn-primary px-3" style="min-width:150px;max-width:150px;" type="submit">AI Input</button>
+
                 </div>
             </form>
-        
+               {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
     </div>
         </div>
 
@@ -173,24 +253,44 @@
          <a href="/pci_section_2_2/{{5}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning  w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0.1 Requirement 5: Protect All Systems and Networks from Malicious Software</p></a>
         </div>
 
+          @php
+    $title = 5;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
         <div class="col-md-4">
-        
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
                 @csrf
-                <input type="hidden" name="title" value="5">
+                <input type="hidden" name="title" value="{{ $title }}">
+
                 <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2">
-                   
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:130px;min-width:130px;">
+                        <option value="">Select --</option>
+
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
-                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" style="min-width:150px;max-width:150px;" type="submit">Submit</button>
+                    <button class="btn btn-sm btn-primary px-3" style="min-width:150px;max-width:150px;" type="submit">AI Input</button>
+
                 </div>
             </form>
-        
+               {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
     </div>
         </div>
 
@@ -199,24 +299,44 @@
             <div class="col-md-8">
          <a href="/pci_section_2_2/{{6}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning  w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0.1 Requirement 6: Develop and Maintain Secure Systems and Software</p></a>
         </div>
+           @php
+    $title = 6;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
         <div class="col-md-4">
-        
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
                 @csrf
-                <input type="hidden" name="title" value="6">
+                <input type="hidden" name="title" value="{{ $title }}">
+
                 <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2">
-                   
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:130px;min-width:130px;">
+                        <option value="">Select --</option>
+
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
-                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" style="min-width:150px;max-width:150px;" type="submit">Submit</button>
+                    <button class="btn btn-sm btn-primary px-3" style="min-width:150px;max-width:150px;" type="submit">AI Input</button>
+
                 </div>
             </form>
-        
+               {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
     </div>
         </div>
 
@@ -225,24 +345,44 @@
             <div class="col-md-8">
          <a href="/pci_section_2_2/{{7}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0.1 Requirement 7: Restrict Access to System Components and Cardholder Data by Business Need to Know</p></a>
         </div>
+          @php
+    $title = 7;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
         <div class="col-md-4">
-        
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
                 @csrf
-                <input type="hidden" name="title" value="7">
+                <input type="hidden" name="title" value="{{ $title }}">
+
                 <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2">
-                   
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:130px;min-width:130px;">
+                        <option value="">Select --</option>
+
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
-                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" style="min-width:150px;max-width:150px;" type="submit">Submit</button>
+                    <button class="btn btn-sm btn-primary px-3" style="min-width:150px;max-width:150px;" type="submit">AI Input</button>
+
                 </div>
             </form>
-        
+               {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
     </div>
         </div>
 
@@ -250,24 +390,44 @@
             <div class="col-md-8">
          <a href="/pci_section_2_2/{{8}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0.1 Requirement 8: Identify Users and Authenticate Access to System Components</p></a>
         </div>
+           @php
+    $title = 8;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
         <div class="col-md-4">
-        
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
                 @csrf
-                <input type="hidden" name="title" value="8">
+                <input type="hidden" name="title" value="{{ $title }}">
+
                 <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2">
-                   
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:130px;min-width:130px;">
+                        <option value="">Select --</option>
+
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
-                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" style="min-width:150px;max-width:150px;" type="submit">Submit</button>
+                    <button class="btn btn-sm btn-primary px-3" style="min-width:150px;max-width:150px;" type="submit">AI Input</button>
+
                 </div>
             </form>
-        
+               {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
     </div>
         </div>
 
@@ -275,24 +435,44 @@
             <div class="col-md-8">
          <a href="/pci_section_2_2/{{9}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0.1 Requirement 9: Restrict Physical Access to Cardholder Data</p></a>
         </div>
+         @php
+    $title = 9;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
         <div class="col-md-4">
-        
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
                 @csrf
-                <input type="hidden" name="title" value="9">
+                <input type="hidden" name="title" value="{{ $title }}">
+
                 <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2">
-                   
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:130px;min-width:130px;">
+                        <option value="">Select --</option>
+
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
-                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" style="min-width:150px;max-width:150px;" type="submit">Submit</button>
+                    <button class="btn btn-sm btn-primary px-3" style="min-width:150px;max-width:150px;" type="submit">AI Input</button>
+
                 </div>
             </form>
-        
+               {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
     </div>
         </div>
 
@@ -300,24 +480,44 @@
             <div class="col-md-8">
          <a href="/pci_section_2_2/{{10}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0.1 Requirement 10: Log and Monitor All Access to System Components and Cardholder Data</p></a>
         </div>
+          @php
+    $title = 10;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
         <div class="col-md-4">
-        
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
                 @csrf
-                <input type="hidden" name="title" value="10">
+                <input type="hidden" name="title" value="{{ $title }}">
+
                 <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2">
-                   
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:130px;min-width:130px;">
+                        <option value="">Select --</option>
+
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
-                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" style="min-width:150px;max-width:150px;" type="submit">Submit</button>
+                    <button class="btn btn-sm btn-primary px-3" style="min-width:150px;max-width:150px;" type="submit">AI Input</button>
+
                 </div>
             </form>
-        
+               {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
     </div>
         </div>
 
@@ -325,24 +525,44 @@
             <div class="col-md-8">
          <a href="/pci_section_2_2/{{11}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0.1 Requirement 11: Test Security of Systems and Networks Regularly</p></a>
         </div>
+          @php
+    $title = 11;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
         <div class="col-md-4">
-        
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
                 @csrf
-                <input type="hidden" name="title" value="11">
+                <input type="hidden" name="title" value="{{ $title }}">
+
                 <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2">
-                   
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:130px;min-width:130px;">
+                        <option value="">Select --</option>
+
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
-                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" style="min-width:150px;max-width:150px;" type="submit">Submit</button>
+                    <button class="btn btn-sm btn-primary px-3" style="min-width:150px;max-width:150px;" type="submit">AI Input</button>
+
                 </div>
             </form>
-        
+               {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
     </div>
         </div>
 
@@ -350,24 +570,44 @@
             <div class="col-md-8">
          <a href="/pci_section_2_2/{{12}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">PCI-DSS v4.0.1 Requirement 12: Support Information Security with Organizational Policies and Programs</p></a>
         </div>
+           @php
+    $title = 12;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
         <div class="col-md-4">
-        
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
                 @csrf
-                <input type="hidden" name="title" value="12">
+                <input type="hidden" name="title" value="{{ $title }}">
+
                 <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2">
-                   
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:130px;min-width:130px;">
+                        <option value="">Select --</option>
+
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
-                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" style="min-width:150px;max-width:150px;" type="submit">Submit</button>
+                    <button class="btn btn-sm btn-primary px-3" style="min-width:150px;max-width:150px;" type="submit">AI Input</button>
+
                 </div>
             </form>
-        
+               {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
     </div>
         </div>
 
@@ -375,24 +615,44 @@
             <div class="col-md-8">
          <a href="/pci_section_2_2/A2/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">Appendix A2: Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections</p></a>
         </div>
+           @php
+    $title = 'A2';                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
         <div class="col-md-4">
-        
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
                 @csrf
-                <input type="hidden" name="title" value="A2">
+                <input type="hidden" name="title" value="{{ $title }}">
+
                 <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2">
-                   
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:130px;min-width:130px;">
+                        <option value="">Select --</option>
+
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
-                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" style="min-width:150px;max-width:150px;" type="submit">Submit</button>
+                    <button class="btn btn-sm btn-primary px-3" style="min-width:150px;max-width:150px;" type="submit">AI Input</button>
+
                 </div>
             </form>
-        
+               {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
     </div>
         </div>
             {{-- <a href="/v_3_2_section1/{{$project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-warning">Section1</a> --}}

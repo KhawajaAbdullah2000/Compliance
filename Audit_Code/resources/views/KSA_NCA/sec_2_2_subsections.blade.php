@@ -66,130 +66,251 @@
     {{-- KSA --}}
     <div class="row h-100 w-100 mb-2">
         <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{1}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">1. Cybersecurity Governance</p></a>
         </div>
-        <div class="col-md-4">
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                @csrf
-                <input type="hidden" name="title" value="1">
-                <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                     <option value="">Select --</option>
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                    </select>
-                    <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                    <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                </div>
-            </form>
+        @php
+    $title = 1;                             
+    $status = $finalStatusByTitle->get($title); 
+@endphp
+
+<div class="col-md-4">
+    <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+          method="POST">
+        @csrf
+        <input type="hidden" name="title" value="{{ $title }}">
+
+        <div class="d-flex align-items-center gap-2">
+            {{-- Dropdown --}}
+            <select name="comp_status"
+                    class="form-select rounded-pill"
+                    style="min-width:150px;max-width:150px;">
+                <option value="">Select --</option>
+
+                @foreach([
+                    'yes' => 'In Place',
+                    'no' => 'Not in Place',
+                    'not_applicable' => 'Not Applicable',
+                    'not_tested' => 'Not Tested',
+                    'partial' => 'Partial'
+                ] as $value => $label)
+                    <option value="{{ $value }}"
+                        {{ old('comp_status', $status !== 'different' ? $status : '') === $value ? 'selected' : '' }}>
+                        {{ $label }}
+                    </option>
+                @endforeach
+            </select>
+
+            {{-- Submit Button --}}
+            <button class="btn btn-sm btn-success flex-shrink-0" style="width:100px;" type="submit">Submit</button>
+
+            {{-- AI Input Button --}}
+            <a class="btn btn-sm btn-primary flex-shrink-0 d-flex justify-content-center align-items-center"
+               style="width:100px;" href="#">
+                AI Input
+            </a>
+
+            {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
         </div>
+    </form>
+</div>
+
         </div>
 
 
         <div class="row mt-2 align-items-center">
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{2}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">2. Cybersecurity Defense</p></a>
         </div>
 
+          @php
+    $title = 2;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
         <div class="col-md-4">
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post" class="d-flex align-items-center">
+      
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
                 @csrf
-                <input type="hidden" name="title" value="2">
-                <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                     <option value="">Select --</option>
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                    </select>
-                    <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                     <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
+                <input type="hidden" name="title" value="{{ $title }}">
 
+                <div class="d-flex align-items-center">
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:150px;">
+                        <option value="">Select --</option>
+
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" type="submit">Submit</button>
+                    <a class="btn btn-primary btn-sm px-3" style="min-width:80px;">AI Input</a>
                 </div>
             </form>
-        </div>
+           
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
+            {{-- mixed values ⇒ show static badge (or whatever UI you prefer) --}}
+           
+    </div>
         </div>
 
  <div class="row mt-3 align-items-center">
-    <div class="col-md-8">
+    <div class="col-md-6">
         <a href="/ksa_nca_section_2_2/3/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100 text-start fw-bold">
             3. Cybersecurity Resilience
         </a>
     </div>
 
-    <div class="col-md-4">
-        <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="POST" class="d-flex align-items-center">
-            @csrf
-            <input type="hidden" name="title" value="3">
+      @php
+    $title = 3;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
+        <div class="col-md-4">
+    
+            {{-- uniform value ⇒ show dropdown with that value pre-selected --}}
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
+                @csrf
+                <input type="hidden" name="title" value="{{ $title }}">
 
-            <select name="comp_status" class="form-select form-select-sm rounded-pill me-2" style="max-width: 150px;">
-                <option value="">Select --</option>
-                <option value="yes" {{ old('comp_status') == 'yes' ? 'selected' : '' }}>In Place</option>
-                <option value="no" {{ old('comp_status') == 'no' ? 'selected' : '' }}>Not in Place</option>
-                <option value="not_applicable" {{ old('comp_status') == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                <option value="not_tested" {{ old('comp_status') == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                <option value="partial" {{ old('comp_status') == 'partial' ? 'selected' : '' }}>Partial</option>
-            </select>
+                <div class="d-flex align-items-center">
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:150px;">
+                        <option value="">Select --</option>
 
-            <button type="submit" class="btn btn-success btn-sm me-2 px-3">Submit</button>
-            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-        </form>
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" type="submit">Submit</button>
+                    <a class="btn btn-primary btn-sm px-3" style="min-width:80px;">AI Input</a>
+                </div>
+            </form>
+               {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
+          
+           
     </div>
 </div>
 
 
         <div class="row mt-2 align-items-center">
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{4}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">4. Third-Party and Cloud Computing Cybersecurity</p></a>
         </div>
+         @php
+    $title = 4;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
         <div class="col-md-4">
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
+
+            <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+                  method="POST">
                 @csrf
-                <input type="hidden" name="title" value="4">
+                <input type="hidden" name="title" value="{{ $title }}">
+
                 <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                     <option value="">Select --</option>
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
+                    <select name="comp_status"
+                            class="form-select rounded-pill me-2"
+                            style="max-width:150px;">
+                        <option value="">Select --</option>
+
+                        @foreach(['yes' => 'In Place',
+                                  'no'  => 'Not in Place',
+                                  'not_applicable' => 'Not Applicable',
+                                  'not_tested'     => 'Not Tested',
+                                  'partial'        => 'Partial'] as $value => $label)
+                            <option value="{{ $value }}"
+                                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
-                    <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                      <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
+
+                    <button class="btn btn-sm btn-success me-2 px-3" type="submit">Submit</button>
+                    <a class="btn btn-primary btn-sm px-3" style="min-width:80px;">AI Input</a>
                 </div>
             </form>
-        </div>
+               {{-- Badge for "different" --}}
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6">Values are different in below levels</span>
+            @endif
+    </div>
         </div>
 
         <div class="row mt-2 align-items-center">
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{5}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold " style="text-align: left;">5. Industrial Control Systems Cybersecurity</p></a>
         </div>
-        <div class="col-md-4">
-            <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                @csrf
-                <input type="hidden" name="title" value="5">
-                <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                     <option value="">Select --</option>
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                    </select>
-                    <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                      <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                </div>
-            </form>
+        @php
+    $title = 5;                             
+    $status = $finalStatusByTitle->get($title); 
+    @endphp
+       <div class="col-md-4">
+    <form action="/add_mandatory_all_title/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+          method="POST">
+        @csrf
+        <input type="hidden" name="title" value="{{ $title }}">
+
+        <div class="d-flex align-items-center gap-2">
+            <select name="comp_status"
+                    class="form-select rounded-pill"
+                    style="max-width:150px;min-width:150px;">
+                <option value="">Select --</option>
+
+                @foreach([
+                    'yes' => 'In Place',
+                    'no' => 'Not in Place',
+                    'not_applicable' => 'Not Applicable',
+                    'not_tested' => 'Not Tested',
+                    'partial' => 'Partial'
+                ] as $value => $label)
+                    <option value="{{ $value }}"
+                            {{ old('comp_status', $status !== 'different' ? $status : '') === $value ? 'selected' : '' }}>
+                        {{ $label }}
+                    </option>
+                @endforeach
+            </select>
+
+            <button class="btn btn-sm btn-success flex-shrink-0" style="width:100px;" type="submit">Submit</button>
+
+            <a class="btn btn-sm btn-primary flex-shrink-0 d-flex justify-content-center align-items-center"
+               style="width:100px;" href="#">
+                AI Input
+            </a>
+
+            @if($status === 'different')
+                <span class="badge bg-secondary fs-6 flex-shrink-0">Values are different in below levels</span>
+            @endif
         </div>
+    </form>
+</div>
+
         </div>
 
 
@@ -203,7 +324,7 @@
 <div class="row h-100 w-100 mb-2">
 
      <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{1}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Control Environment</p></a>
         </div>
         <div class="col-md-4">
@@ -227,7 +348,7 @@
         </div>
 
      <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{2}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Risk Assessment</p></a>
         </div>
         <div class="col-md-4">
@@ -251,7 +372,7 @@
         </div>
 
      <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{3}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Control Activities</p></a>
         </div>
         <div class="col-md-4">
@@ -278,7 +399,7 @@
 
 
       <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{4}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Information and communication</p></a>
         </div>
         <div class="col-md-4">
@@ -304,7 +425,7 @@
 
 
         <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{5}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Monitoring</p></a>
         </div>
         <div class="col-md-4">
@@ -337,7 +458,7 @@
 <div class="row h-100 w-100 mb-2">
 
      <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{1}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Asset Management</p></a>
         </div>
         <div class="col-md-4">
@@ -361,7 +482,7 @@
         </div>
 
          <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{2}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Availability</p></a>
         </div>
         <div class="col-md-4">
@@ -385,7 +506,7 @@
         </div>
 
          <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{3}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Change Management</p></a>
         </div>
         <div class="col-md-4">
@@ -409,7 +530,7 @@
         </div>
 
          <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{4}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Communications</p></a>
         </div>
         <div class="col-md-4">
@@ -433,7 +554,7 @@
         </div>
 
          <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{5}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Confidentiality</p></a>
         </div>
         <div class="col-md-4">
@@ -458,7 +579,7 @@
 
 
          <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{6}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Data Classification</p></a>
         </div>
         <div class="col-md-4">
@@ -482,7 +603,7 @@
         </div>
 
         <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{7}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Fraud Management</p></a>
         </div>
         <div class="col-md-4">
@@ -506,7 +627,7 @@
         </div>
 
         <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{8}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Human Resource aspects of Trust Services</p></a>
         </div>
         <div class="col-md-4">
@@ -530,7 +651,7 @@
         </div>
 
            <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{9}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Information Assets Security Management Policy </p></a>
         </div>
         <div class="col-md-4">
@@ -554,7 +675,7 @@
         </div>
 
          <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{10}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Information Security Events Monitoring</p></a>
         </div>
         <div class="col-md-4">
@@ -578,7 +699,7 @@
         </div>
 
           <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{11}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Information Security Incident Management
 </p></a>
         </div>
@@ -604,7 +725,7 @@
         
 
         <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{12}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Information Security Monitoring</p></a>
         </div>
         <div class="col-md-4">
@@ -628,7 +749,7 @@
         </div>
 
           <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{13}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">IT Operational Anomalies Reporting</p></a>
         </div>
         <div class="col-md-4">
@@ -652,7 +773,7 @@
         </div>
 
              <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{14}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Logical and Physical Access Controls</p></a>
         </div>
         <div class="col-md-4">
@@ -678,7 +799,7 @@
 
         
              <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{15}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Monitoring of Controls</p></a>
         </div>
         <div class="col-md-4">
@@ -702,7 +823,7 @@
         </div>
 
          <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{16}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Organization & Management</p></a>
         </div>
         <div class="col-md-4">
@@ -726,7 +847,7 @@
         </div>
 
            <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{17}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Risk Management </p></a>
         </div>
         <div class="col-md-4">
@@ -750,7 +871,7 @@
         </div>
 
         <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{18}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Vendor and Business Partner Risk Management </p></a>
         </div>
         <div class="col-md-4">
@@ -775,7 +896,7 @@
         
 
          <div class="row mt-2 align-items-center" >
-            <div class="col-md-8">
+            <div class="col-md-6">
          <a href="/ksa_nca_section_2_2/{{19}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Vulnerability Management</p></a>
         </div>
         <div class="col-md-4">
@@ -792,7 +913,7 @@
                         <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
                     </select>
                     <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                    <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
+                    <a href="#" class="btn btn-primary btn-sm px-3" >AI Input</a>
                 </div>
             </form>
         </div>
