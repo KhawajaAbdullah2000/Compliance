@@ -93,14 +93,16 @@ $permissions=json_decode($project_permissions);
                 @csrf
                 <input type="hidden" name="sub_req" value="{{$d[3]}}">
                 <div class="d-flex align-items-center">
-                    <select name="comp_status" class="form-select rounded-pill me-2">
-                   
-                        <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                        <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                        <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                        <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                        <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                    </select>
+  @php $selectedStatus = $fetchedData->firstWhere('sub_req', $d[3])->comp_status ?? ''; @endphp
+
+        <select name="comp_status" class="form-select rounded-pill form-select-sm" style="max-width: 180px;">
+            <option value="">Select --</option>
+            <option value="yes" {{ $selectedStatus == 'yes' ? 'selected' : '' }}>In Place</option>
+            <option value="no" {{ $selectedStatus == 'no' ? 'selected' : '' }}>Not in Place</option>
+            <option value="not_applicable" {{ $selectedStatus == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+            <option value="not_tested" {{ $selectedStatus == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+            <option value="partial" {{ $selectedStatus == 'partial' ? 'selected' : '' }}>Partial</option>
+        </select>
                     <button type="submit" class="btn btn-sm btn-success">Submit</button>
                 </div>
             </form></td>
