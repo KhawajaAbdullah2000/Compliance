@@ -110,23 +110,46 @@ $permissions=json_decode($project_permissions);
 
                 </td>
                 <td><a href="/pci_merchant_sec_2_2_req/{{($data[0][1]) }}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
-                <td>
-                    <form action="/add_mandatory_all_domain/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="domain" value="{{$data[0][1]}}">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2">
-                           
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success">Submit</button>
-                        </div>
-                    </form>
-                </td>
+                 <td>
+    @php
+        $subdomain = trim($data[0][1]);    
+        $status = $finalStatusBySubdomain->get($subdomain);
+    @endphp
+   
+
+    <form action="/add_mandatory_all_domain/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+          method="POST"
+          class="d-flex align-items-center gap-2 flex-wrap">
+        @csrf
+        <input type="hidden" name="domain" value="{{ $data[0][1] }}">
+
+        <select name="comp_status"
+                class="form-select form-select-sm rounded-pill"
+                style="max-width:150px;">
+            <option value="">Select --</option>
+            @foreach([
+                'yes' => 'In Place',
+                'no' => 'Not in Place',
+                'not_applicable' => 'Not Applicable',
+                'not_tested' => 'Not Tested',
+                'partial' => 'Partial',
+            ] as $value => $label)
+                <option value="{{ $value }}"
+                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                    {{ $label }}
+                </option>
+            @endforeach
+        </select>
+
+        <button class="btn btn-success btn-sm" style="width:100px; height:35px;">Submit</button>
+        <a class="btn btn-primary btn-sm d-flex align-items-center justify-content-center" 
+           style="width:100px; height:35px;">AI Input</a>
+
+        @if($status === 'different')
+            <span class="badge bg-secondary fs-6 ms-2">Values are different</span>
+        @endif
+    </form>
+</td>
             </tr>
 
             @for ($i = 1; $i < count($data); $i++)
@@ -148,23 +171,46 @@ $permissions=json_decode($project_permissions);
                        </td>
 
                        <td><a href="/pci_merchant_sec_2_2_req/{{$my_current_main_req_num}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
-                       <td>
-                        <form action="/add_mandatory_all_domain/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                            @csrf
-                            <input type="hidden" name="domain" value="{{$data[$i][1]}}">
-                            <div class="d-flex align-items-center">
-                                <select name="comp_status" class="form-select rounded-pill me-2">
-                               
-                                    <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                    <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                    <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                    <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                    <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                                </select>
-                                <button type="submit" class="btn btn-sm btn-success">Submit</button>
-                            </div>
-                        </form>
-                    </td>
+                         <td>
+    @php
+        $subdomain = trim($data[$i][1]);    
+        $status = $finalStatusBySubdomain->get($subdomain);
+    @endphp
+   
+
+    <form action="/add_mandatory_all_domain/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
+          method="POST"
+          class="d-flex align-items-center gap-2 flex-wrap">
+        @csrf
+        <input type="hidden" name="domain" value="{{ $data[$i][1] }}">
+
+        <select name="comp_status"
+                class="form-select form-select-sm rounded-pill"
+                style="max-width:150px;">
+            <option value="">Select --</option>
+            @foreach([
+                'yes' => 'In Place',
+                'no' => 'Not in Place',
+                'not_applicable' => 'Not Applicable',
+                'not_tested' => 'Not Tested',
+                'partial' => 'Partial',
+            ] as $value => $label)
+                <option value="{{ $value }}"
+                    {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
+                    {{ $label }}
+                </option>
+            @endforeach
+        </select>
+
+        <button class="btn btn-success btn-sm" style="width:100px; height:35px;">Submit</button>
+        <a class="btn btn-primary btn-sm d-flex align-items-center justify-content-center" 
+           style="width:100px; height:35px;">AI Input</a>
+
+        @if($status === 'different')
+            <span class="badge bg-secondary fs-6 ms-2">Values are different</span>
+        @endif
+    </form>
+</td>
                    
                        @endif
 
