@@ -576,6 +576,7 @@ route::put('pci_merchant_sec_2_2_edit_form/{sub_req}/{title}/{proj_id}/{user_id}
 //Compliance Map
 
 route::get('compliance_map_dashboard_all_services/{proj_id}/{user_id}',[ComplianceMap::class,'compliance_map_dashboard_all_services'])->name('compliance_map_dashboard_all_services');
+route::get('compliance_map_all_services_comp_type/{proj_id}/{user_id}/{comp_status}',[ComplianceMap::class,'compliance_map_all_services_comp_type'])->name('compliance_map_all_services_comp_type');
 
 route::get('compliance_map_all_services/{proj_id}/{user_id}',[ComplianceMap::class,'compliance_map_all_services'])->name('compliance_map_all_services');
 
@@ -585,6 +586,7 @@ Route::get('download_excel_compliance_map/{proj_id}/{user_id}',[ComplianceMap::c
 
 
 Route::get('select_assets_for_subdomain_map/{domain}/{proj_id}/{user_id}',[ComplianceMap::class,'select_assets_for_subdomain_map'])->name('select_assets_for_subdomain_map');
+route::get('select_assets_for_subdomain_map_comp_status/{domain}/{comp_status}/{proj_id}/{user_id}',[ComplianceMap::class,'select_assets_for_subdomain_map_comp_status'])->name('select_assets_for_subdomain_map_comp_status');
 
 Route::get('/services/{domain}/{service}/{proj_id}', [ComplianceMap::class, 'getGroups'])->name('service.groups');
 Route::get('/services/{domain}/{service}/{group}/{proj_id}', [ComplianceMap::class, 'getSubgroups'])->name('service.groups.subgroups');

@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <h3 class="fw-bold text-center mt-4">View or Download Compliance Map (Selected Domain-Selected Service-Selected Asset-Selected Subdomain-All Applicable Controls)</h3>
+    <h3 class="fw-bold text-center mt-4">View @if(!session('comp_status')) or Download @endif Compliance Map (Selected Domain-Selected Service-Selected Asset-Selected Subdomain-All Applicable Controls)</h3>
 
     <div class="row">
 
@@ -51,7 +51,7 @@
         @endif
     </h4>
 
-    <h4><span class="fw-bold">Assets Selected : </span> 
+    <h5><span class="fw-bold">Assets Selected : </span> 
         @isset($group)
         @if($group=='_all')
         All Asset Groups -
@@ -77,17 +77,106 @@ All Asset Components
 
 {{$component}}
 @endif
-</h4>
+</h5>
 
-<h4><span class="fw-bold mt-4">Subdomain {{$subdomainNum}} :</span> {{$subdomainTitle}}</h4>
+<h5><span class="fw-bold mt-4">Subdomain {{$subdomainNum}} :</span> {{$subdomainTitle}}</h5>
 </div>
 
+@if(session('comp_status'))
+<div class="col-md-6 position-relative">
+    <a href="/compliance_map_all_services_comp_type/{{$project->project_id}}/{{auth()->user()->id}}/{{session('comp_status')}}" class="btn btn-primary btn-md position-absolute" style="right: 0;">Compliance Map - All Services - All Controls</a>
+</div>
+
+@else
 <div class="col-md-6 position-relative">
     <a href="/compliance_map_all_services/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md position-absolute" style="right: 0;">Compliance Map - All Services - All Controls</a>
 </div>
+@endif
 
 </div>
 @if(isset($formattedResults))
+
+@if(session('comp_status'))
+@php
+    $comp_status = session('comp_status');
+
+    if (!$comp_status) return;
+
+    $statusLabels = [
+        'yes'            => 'In Place',
+        'no'             => 'Not In Place',
+        'not_applicable' => 'Not Applicable',
+        'not_tested'     => 'Not Tested',
+        'partial'        => 'Partial',
+    ];
+
+    $statusLabel = $statusLabels[$comp_status] ?? ucfirst($comp_status);
+    $columnTotal = 0;
+
+     $chartLabels = [];
+    $chartData = [];
+
+    foreach ($formattedResults as $subReq => $statuses) {
+        $count = $statuses[$comp_status] ?? 0;
+        if ($count > 0) {
+            $columnTotal += $count;
+            $chartLabels[] = $subReq . (isset($UniqueSubReqs[$subReq]) ? ' – ' . $UniqueSubReqs[$subReq] : '');
+            $chartData[] = $count;
+        }
+    }
+@endphp
+
+<div class="row">
+
+    <div class="col-md-6">
+        <table class="table table-bordered mt-4">
+    <thead class="table-dark">
+        <tr>
+            <th>Sub Requirement</th>
+            <th>{{ $statusLabel }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        @forelse($formattedResults as $subReq => $statuses)
+            @php
+                $count = $statuses[$comp_status] ?? 0;
+                $columnTotal += $count;
+            @endphp
+            <tr>
+                <td>
+                    {{ $subReq }} 
+                    @if(isset($UniqueSubReqs[$subReq]))
+                        – {{ $UniqueSubReqs[$subReq] }}
+                    @endif
+                </td>
+                <td>{{ $count }}</td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="2" class="text-center">No data available</td>
+            </tr>
+        @endforelse
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Total</th>
+            <th>{{ $columnTotal }}</th>
+        </tr>
+    </tfoot>
+</table>
+    </div>
+
+<div class="col-md-6 d-flex align-items-center justify-content-center">
+    <div style="width: 500px; height: 500px;">
+        <canvas id="compliancePieChart"></canvas>
+    </div>
+</div>
+
+</div>
+
+
+
+@else
 
 <a id="downloadExcelButton" href="#" class="btn btn-success btn-md float-end mb-2">Download Excel</a>
 
@@ -198,7 +287,7 @@ All Asset Components
 
 <a id="downloadExcelButton2" href="#" class="btn btn-success btn-md float-end mb-2">Download Excel</a>
 
-
+@endif
 
 
 @endif
@@ -208,6 +297,49 @@ All Asset Components
 
 @section('scripts')
 
+@if(session('comp_status'))
+ <script>
+        Chart.register(ChartDataLabels);
+
+        const ctx = document.getElementById('compliancePieChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: {!! json_encode($chartLabels) !!},
+                datasets: [{
+                    label: '{{ $statusLabel }} by Sub Requirement',
+                    data: {!! json_encode($chartData) !!},
+                    backgroundColor: [
+                        '#4caf50', '#2196f3', '#ff9800', '#9c27b0', '#00bcd4', '#e91e63',
+                        '#3f51b5', '#ffc107', '#8bc34a', '#ff5722', '#795548', '#607d8b'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    datalabels: {
+                        color: '#000',
+                        font: {
+                            weight: 'bold',
+                            size: 14
+                        },
+                        formatter: function(value) {
+                            return value;
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+    </script>
+
+@endif
 
 <script>
     $(document).ready(function () {

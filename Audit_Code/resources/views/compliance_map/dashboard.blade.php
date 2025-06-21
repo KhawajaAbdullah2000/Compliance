@@ -94,34 +94,40 @@
             <div class="row mt-4 justify-content-center">
                 <div class="col-md-2">
                     <div class="card shadow-lg p-4 text-center bg-success h-100 d-flex flex-column justify-content-between">
+                        <a href="/compliance_map_all_services_comp_type/{{$project->project_id}}/{{auth()->user()->id}}/yes" style="text-decoration: none; color: inherit;">
                         <div class="body flex-grow-1 d-flex flex-column justify-content-between">
                             <h5 class="card-title text-white">In Place</h5>
                             <p class="text-white fw-bold mt-3 fs-4 align-self-center">
                                 {{ array_sum($columnTotals) > 0 ? ceil(($columnTotals['yes'] / array_sum($columnTotals)) * 100) . ' %' : '0 %' }}
                             </p>
                         </div>
+                    </a>
                     </div>
                 </div>
 
                       <div class="col-md-2">
                     <div class="card shadow-lg p-4 text-center h-100 d-flex flex-column justify-content-between" style="background-color: orange">
+                          <a href="/compliance_map_all_services_comp_type/{{$project->project_id}}/{{auth()->user()->id}}/partial" style="text-decoration: none; color: inherit;">
                         <div class="body flex-grow-1 d-flex flex-column justify-content-between">
                             <h5 class="card-title text-white">Partially In Place</h5>
                             <p class="text-white fw-bold mt-3 fs-4 align-self-center">
                                 {{ array_sum($columnTotals) > 0 ? ceil(($columnTotals['partial'] / array_sum($columnTotals)) * 100) . ' %' : '0 %' }}
                             </p>
                         </div>
+                    </a>
                     </div>
                 </div>
 
                 <div class="col-md-2">
                     <div class="card shadow-lg p-4 text-center bg-danger h-100 d-flex flex-column justify-content-between">
+                          <a href="/compliance_map_all_services_comp_type/{{$project->project_id}}/{{auth()->user()->id}}/no" style="text-decoration: none; color: inherit;">
                         <div class="body flex-grow-1 d-flex flex-column justify-content-between">
                             <h5 class="card-title text-white">Not In Place</h5>
                             <p class="text-white fw-bold mt-3 fs-4 align-self-center">
                                 {{ array_sum($columnTotals) > 0 ? ceil(($columnTotals['no'] / array_sum($columnTotals)) * 100) . ' %' : '0 %' }}
                             </p>
                         </div>
+                    </a>
                     </div>
                 </div>
 
@@ -132,12 +138,14 @@
 
                 <div class="col-md-2">
                     <div style="background-color: rgb(79, 174, 190)" class="card shadow-lg p-4 text-center h-100 d-flex flex-column justify-content-between">
+                          <a href="/compliance_map_all_services_comp_type/{{$project->project_id}}/{{auth()->user()->id}}/not_applicable" style="text-decoration: none; color: inherit;">
                         <div class="body flex-grow-1 d-flex flex-column justify-content-between">
                             <h5 class="card-title text-white">Not Applicable</h5>
                             <p class="text-white fw-bold mt-3 fs-4 align-self-center">
                                 {{ array_sum($columnTotals) > 0 ? ceil(($columnTotals['not_applicable'] / array_sum($columnTotals)) * 100) . ' %' : '0 %' }}
                             </p>
                         </div>
+                          </a>
                     </div>
                 </div>
                 
@@ -145,12 +153,14 @@
 
                 <div class="col-md-2">
                     <div class="card shadow-lg p-4 text-center bg-secondary h-100 d-flex flex-column justify-content-between">
+                          <a href="/compliance_map_all_services_comp_type/{{$project->project_id}}/{{auth()->user()->id}}/not_tested" style="text-decoration: none; color: inherit;">
                         <div class="body flex-grow-1 d-flex flex-column justify-content-between">
                             <h5 class="card-title text-white">Not Tested</h5>
                             <p class="text-white fw-bold mt-3 fs-4 align-self-center">
                                 {{ array_sum($columnTotals) > 0 ? ceil(($columnTotals['not_tested'] / array_sum($columnTotals)) * 100) . ' %' : '0 %' }}
                             </p>
                         </div>
+                    </a>
                     </div>
                 </div>
                 
