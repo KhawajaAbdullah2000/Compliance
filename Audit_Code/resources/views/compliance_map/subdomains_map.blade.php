@@ -117,19 +117,19 @@
 
     $statusLabel = $statusLabels[$comp_status] ?? ucfirst($comp_status);
 
+          $statusColors = [
+        'yes'            => 'bg-success text-white',   // green
+        'no'             => 'bg-danger text-white',    // red
+        'partial'        => 'bg-warning text-dark',    // orange/yellow
+        'not_applicable' => 'bg-primary text-white',   // blue
+        'not_tested'     => 'bg-secondary text-white', // grey
+    ];
+
+     $statusClass = $statusColors[$comp_status] ?? 'bg-light';
+
     // Column total
     $columnTotal = 0;
-       $chartLabels = [];
-    $chartData = [];
-
-    foreach ($formattedResults as $domain => $statuses) {
-        $count = $statuses[$comp_status] ?? 0;
-        if ($count > 0) {
-            $columnTotal += $count;
-            $chartLabels[] = $domain . ' - ' . ($UniqueSubDomains[$domain] ?? '');
-            $chartData[] = $count;
-        }
-    }
+ 
 @endphp
 
 <div class="row">
@@ -139,7 +139,7 @@
     <thead class="table-dark">
         <tr>
             <th>Domain</th>
-            <th>{{ $statusLabel }}</th>
+   <th class="{{ $statusClass }}">{{ $statusLabel }}</th>
         </tr>
     </thead>
     <tbody>
@@ -193,11 +193,11 @@
         <thead class="table-dark">
             <tr>
                 <th>Domain</th>
-                <th>In Place</th>
-                <th>Not In Place</th>
-                <th>Not Applicable</th>
-                <th>Not Tested</th>
-                <th>Partial</th>
+                <th class="bg-success">In Place</th>
+                <th style="background-color: orange">Partially in Place</th>
+                <th class="bg-danger">Not In Place</th>
+                <th style="background-color: rgb(79, 174, 190)">Not Applicable</th>
+                <th class="bg-secondary">Not Tested</th>
                 <th>Total</th>
                 <th>%</th>
             </tr>
@@ -237,7 +237,7 @@
                         $rowTotal = 0;
                     @endphp
 
-                    @foreach(['yes', 'no', 'not_applicable', 'not_tested', 'partial'] as $status)
+                    @foreach(['yes','partial', 'no', 'not_applicable', 'not_tested'] as $status)
                         @php
                             $count = $statuses[$status] ?? 0;
                             $rowTotal += $count;
@@ -273,10 +273,11 @@
             <tr>
                 <th>Total</th>
                 <th>{{ $columnTotals['yes'] }}</th>
+                <th>{{ $columnTotals['partial'] }}</th>
                 <th>{{ $columnTotals['no'] }}</th>
                 <th>{{ $columnTotals['not_applicable'] }}</th>
                 <th>{{ $columnTotals['not_tested'] }}</th>
-                <th>{{ $columnTotals['partial'] }}</th>
+                
                 <th>{{ array_sum($columnTotals) }} </th>
                 <th>100%</th>
             </tr>
@@ -284,10 +285,11 @@
             <tr>
                 <th>%</th>
                 <th>{{ ceil( ($columnTotals['yes']/array_sum($columnTotals) )*100 )}}%</th>
+                    <th>{{ ceil( ($columnTotals['partial']/array_sum($columnTotals) )*100 )}}%</th>
                 <th>{{ ceil( ($columnTotals['no']/array_sum($columnTotals) )*100 )}}%</th>
                 <th>{{ ceil( ($columnTotals['not_applicable']/array_sum($columnTotals) )*100 )}}%</th>
                 <th>{{ ceil( ($columnTotals['not_tested']/array_sum($columnTotals) )*100 )}}%</th>
-                <th>{{ ceil( ($columnTotals['partial']/array_sum($columnTotals) )*100 )}}%</th>
+            
                 <th>100 %</th>
                 <th></th>
             </tr>
@@ -302,6 +304,22 @@
 
     @endif
 </div>
+
+@php
+      $chartLabels = [];
+    $chartData = [];
+
+    foreach ($formattedResults as $domain => $statuses) {
+        $count = $statuses[$comp_status] ?? 0;
+        if ($count > 0) {
+            $columnTotal += $count;
+            $chartLabels[] = $domain . ' - ' . ($UniqueSubDomains[$domain] ?? '');
+            $chartData[] = $count;
+        }
+    }
+
+
+@endphp
 
 @section('scripts')
 

@@ -239,6 +239,7 @@
         'not_tested'     => 'Not Tested',
         'partial'        => 'Partially in Place',
     ];
+        $statusLabel = $statusLabels[$comp_status] ?? ucfirst($comp_status);
 
        $statusColors = [
         'yes'            => 'bg-success text-white',   // green
@@ -248,7 +249,6 @@
         'not_tested'     => 'bg-secondary text-white', // grey
     ];
 
-    $statusLabel = $statusLabels[$comp_status] ?? ucfirst($comp_status);
      $statusClass = $statusColors[$comp_status] ?? 'bg-light';
 @endphp
 
