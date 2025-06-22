@@ -173,29 +173,16 @@ class ComplianceMap extends Controller
         ]);
     }
 
+    public function compliance_map_all_services(int $proj_id, int $user_id)
+{
+     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+               ->where('projects.project_id', $proj_id)->first();
 
+  
 
-    public function compliance_map_all_services($proj_id, $user_id)
-    {
+    $domainNames = config('domain-names')[$project->project_type] ?? [];
 
-
-        $checkpermission = Db::table('project_details')->select(
-            'project_types.id as type_id',
-            'project_details.project_code',
-            'project_details.project_permissions',
-            'projects.project_name'
-        )
-            ->join('projects', 'project_details.project_code', 'projects.project_id')
-            ->join('project_types', 'projects.project_type', 'project_types.id')
-            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-            ->first();
-
-        if ($checkpermission) {
-            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
-                ->where('projects.project_id', $proj_id)->first();
-
-            //KSA NCA
-            $results = DB::table('iso_sec_2_1 AS assets')
+ $results = DB::table('iso_sec_2_1 AS assets')
                 ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
                 ->select(
                     'compliance.title_num AS Domain',
@@ -233,7 +220,7 @@ class ComplianceMap extends Controller
             // Add the total for all rows
             $totalCounts['total'] = array_sum($totalCounts);
 
-            $uniqueServicesCount = DB::table('iso_sec_2_1')
+            $uniqueServices = DB::table('iso_sec_2_1')
                 ->where('project_id', $proj_id)
                 ->distinct()
                 ->count('s_name');
@@ -253,197 +240,290 @@ class ComplianceMap extends Controller
                 ->distinct()
                 ->count('c_name');
 
-            //KSA
-            if ($project->project_type == 7) {
-                return view('compliance_map.ksa_nca_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-
-            if ($project->project_type == 18) {
-                //coso
-                return view('compliance_map.coso_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-
-            if ($project->project_type == 19) {
-                //coso
-                return view('compliance_map.soc2_type2_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
+    // 4)  One single view
+    return view('compliance_map.all_services_all_controls', [
+        'project'               => $project,
+        'domainNames'           => $domainNames,
+        'formattedResults'      => $formattedResults,
+        'uniqueServicesCount'   => $uniqueServices,
+        'uniqueGroupsCount'     => $uniqueGroupsCount,
+        'uniqueSubGroupsCount'  => $uniqueSubGroupsCount,
+        'uniqueComponentsCount' => $uniqueComponentsCount,
+    ]);
+}
 
 
 
 
-            //PCI SIngle
-            if ($project->project_type == 1) {
+    // public function compliance_map_all_services($proj_id, $user_id)
+    // {
 
-                return view('compliance_map.pci_single_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
 
-            //PCI Multi
-            if ($project->project_type == 2) {
+    //     $checkpermission = Db::table('project_details')->select(
+    //         'project_types.id as type_id',
+    //         'project_details.project_code',
+    //         'project_details.project_permissions',
+    //         'projects.project_name'
+    //     )
+    //         ->join('projects', 'project_details.project_code', 'projects.project_id')
+    //         ->join('project_types', 'projects.project_type', 'project_types.id')
+    //         ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+    //         ->first();
 
-                return view('compliance_map.pci_multi_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
+    //     if ($checkpermission) {
+    //         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+    //             ->where('projects.project_id', $proj_id)->first();
 
-            //PCI Merchant
-            if ($project->project_type == 3) {
+    //         //KSA NCA
+    //         $results = DB::table('iso_sec_2_1 AS assets')
+    //             ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
+    //             ->select(
+    //                 'compliance.title_num AS Domain',
+    //                 'compliance.comp_status',
+    //                 DB::raw('COUNT(compliance.comp_status) AS status_count')
+    //             )
+    //             ->where('assets.project_id', $proj_id)
+    //             ->groupBy('compliance.title_num', 'compliance.comp_status') // Group by service, component, and comp_status
+    //             ->orderBy('compliance.title_num') // Optional: Order by service name
+    //             ->get();
 
-                return view('compliance_map.pci_merchant_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
+    //         $formattedResults = [];
+    //         $totalCounts = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
 
-            //CY SAMA
-            if ($project->project_type == 5) {
+    //         foreach ($results as $result) {
+    //             $domain = $result->Domain;
+    //             $status = $result->comp_status;
+    //             $count = $result->status_count;
 
-                return view('compliance_map.cy_sama_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
+    //             // Initialize domain
+    //             if (!isset($formattedResults[$domain])) {
+    //                 $formattedResults[$domain] = [];
+    //             }
 
-            //SBP ETGRMF
-            if ($project->project_type == 6) {
+    //             if (!isset($formattedResults[$domain][$status])) {
+    //                 $formattedResults[$domain][$status] = 0;
+    //             }
 
-                return view('compliance_map.sbp_etgrmf_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
+    //             // Add the count to the respective comp_status
+    //             $formattedResults[$domain][$status] += $count;
 
-            //UAE IA
-            if ($project->project_type == 8) {
-                return view('compliance_map.uae_ia_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
+    //             // Update the grand totals for each status
+    //             $totalCounts[$status] += $count;
+    //         }
+    //         // Add the total for all rows
+    //         $totalCounts['total'] = array_sum($totalCounts);
 
-            //ISO
-            if ($project->project_type == 4) {
-                return view('compliance_map.iso_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
+    //         $uniqueServicesCount = DB::table('iso_sec_2_1')
+    //             ->where('project_id', $proj_id)
+    //             ->distinct()
+    //             ->count('s_name');
 
-            //IS part 3-2
-            if ($project->project_type == 10) {
-                return view('compliance_map.isa_3_2_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
+    //         $uniqueGroupsCount = DB::table('iso_sec_2_1')
+    //             ->where('project_id', $proj_id)
+    //             ->distinct()
+    //             ->count('g_name');
 
-            //IS part 4-2
-            if ($project->project_type == 12) {
-                return view('compliance_map.isa_4_2_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
+    //         $uniqueSubGroupsCount = DB::table('iso_sec_2_1')
+    //             ->where('project_id', $proj_id)
+    //             ->distinct()
+    //             ->count('name');
 
-            //ISA part 3-3
-            if ($project->project_type == 13) {
-                return view('compliance_map.isa_3_3_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-            //ISA part 2-1
-            if ($project->project_type == 11) {
-                return view('compliance_map.isa_2_1_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
+    //         $uniqueComponentsCount = DB::table('iso_sec_2_1')
+    //             ->where('project_id', $proj_id)
+    //             ->distinct()
+    //             ->count('c_name');
 
-            //ISA part 4-1
-            if ($project->project_type == 9) {
+    //         //KSA
+    //         if ($project->project_type == 7) {
+    //             return view('compliance_map.ksa_nca_all_services_all_controls', [
+    //                 'project' => $project,
+    //                 'uniqueServicesCount' => $uniqueServicesCount,
+    //                 'uniqueGroupsCount' => $uniqueGroupsCount,
+    //                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //                 'uniqueComponentsCount' => $uniqueComponentsCount,
+    //                 'formattedResults' => $formattedResults,
+    //             ]);
+    //         }
 
-                return view('compliance_map.isa_4_1_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-        } else {
-            return redirect()->back()->with('error', "You are not assigned as an end user on this project");
-        }
-    }
+    //         if ($project->project_type == 18) {
+    //             //coso
+    //             return view('compliance_map.coso_all_services_all_controls', [
+    //                 'project' => $project,
+    //                 'uniqueServicesCount' => $uniqueServicesCount,
+    //                 'uniqueGroupsCount' => $uniqueGroupsCount,
+    //                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //                 'uniqueComponentsCount' => $uniqueComponentsCount,
+    //                 'formattedResults' => $formattedResults,
+    //             ]);
+    //         }
+
+    //         if ($project->project_type == 19) {
+    //             //coso
+    //             return view('compliance_map.soc2_type2_all_services_all_controls', [
+    //                 'project' => $project,
+    //                 'uniqueServicesCount' => $uniqueServicesCount,
+    //                 'uniqueGroupsCount' => $uniqueGroupsCount,
+    //                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //                 'uniqueComponentsCount' => $uniqueComponentsCount,
+    //                 'formattedResults' => $formattedResults,
+    //             ]);
+    //         }
+
+
+
+
+    //         //PCI SIngle
+    //         if ($project->project_type == 1) {
+
+    //             return view('compliance_map.pci_single_all_services_all_controls', [
+    //                 'project' => $project,
+    //                 'uniqueServicesCount' => $uniqueServicesCount,
+    //                 'uniqueGroupsCount' => $uniqueGroupsCount,
+    //                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //                 'uniqueComponentsCount' => $uniqueComponentsCount,
+    //                 'formattedResults' => $formattedResults,
+    //             ]);
+    //         }
+
+    //         //PCI Multi
+    //         if ($project->project_type == 2) {
+
+    //             return view('compliance_map.pci_multi_all_services_all_controls', [
+    //                 'project' => $project,
+    //                 'uniqueServicesCount' => $uniqueServicesCount,
+    //                 'uniqueGroupsCount' => $uniqueGroupsCount,
+    //                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //                 'uniqueComponentsCount' => $uniqueComponentsCount,
+    //                 'formattedResults' => $formattedResults,
+    //             ]);
+    //         }
+
+    //         //PCI Merchant
+    //         if ($project->project_type == 3) {
+
+    //             return view('compliance_map.pci_merchant_all_services_all_controls', [
+    //                 'project' => $project,
+    //                 'uniqueServicesCount' => $uniqueServicesCount,
+    //                 'uniqueGroupsCount' => $uniqueGroupsCount,
+    //                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //                 'uniqueComponentsCount' => $uniqueComponentsCount,
+    //                 'formattedResults' => $formattedResults,
+    //             ]);
+    //         }
+
+    //         //CY SAMA
+    //         if ($project->project_type == 5) {
+
+    //             return view('compliance_map.cy_sama_all_services_all_controls', [
+    //                 'project' => $project,
+    //                 'uniqueServicesCount' => $uniqueServicesCount,
+    //                 'uniqueGroupsCount' => $uniqueGroupsCount,
+    //                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //                 'uniqueComponentsCount' => $uniqueComponentsCount,
+    //                 'formattedResults' => $formattedResults,
+    //             ]);
+    //         }
+
+    //         //SBP ETGRMF
+    //         if ($project->project_type == 6) {
+
+    //             return view('compliance_map.sbp_etgrmf_all_services_all_controls', [
+    //                 'project' => $project,
+    //                 'uniqueServicesCount' => $uniqueServicesCount,
+    //                 'uniqueGroupsCount' => $uniqueGroupsCount,
+    //                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //                 'uniqueComponentsCount' => $uniqueComponentsCount,
+    //                 'formattedResults' => $formattedResults,
+    //             ]);
+    //         }
+
+    //         //UAE IA
+    //         if ($project->project_type == 8) {
+    //             return view('compliance_map.uae_ia_all_services_all_controls', [
+    //                 'project' => $project,
+    //                 'uniqueServicesCount' => $uniqueServicesCount,
+    //                 'uniqueGroupsCount' => $uniqueGroupsCount,
+    //                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //                 'uniqueComponentsCount' => $uniqueComponentsCount,
+    //                 'formattedResults' => $formattedResults,
+    //             ]);
+    //         }
+
+    //         //ISO
+    //         if ($project->project_type == 4) {
+    //             return view('compliance_map.iso_all_services_all_controls', [
+    //                 'project' => $project,
+    //                 'uniqueServicesCount' => $uniqueServicesCount,
+    //                 'uniqueGroupsCount' => $uniqueGroupsCount,
+    //                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //                 'uniqueComponentsCount' => $uniqueComponentsCount,
+    //                 'formattedResults' => $formattedResults,
+    //             ]);
+    //         }
+
+    //         //IS part 3-2
+    //         if ($project->project_type == 10) {
+    //             return view('compliance_map.isa_3_2_all_services_all_controls', [
+    //                 'project' => $project,
+    //                 'uniqueServicesCount' => $uniqueServicesCount,
+    //                 'uniqueGroupsCount' => $uniqueGroupsCount,
+    //                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //                 'uniqueComponentsCount' => $uniqueComponentsCount,
+    //                 'formattedResults' => $formattedResults,
+    //             ]);
+    //         }
+
+    //         //IS part 4-2
+    //         if ($project->project_type == 12) {
+    //             return view('compliance_map.isa_4_2_all_services_all_controls', [
+    //                 'project' => $project,
+    //                 'uniqueServicesCount' => $uniqueServicesCount,
+    //                 'uniqueGroupsCount' => $uniqueGroupsCount,
+    //                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //                 'uniqueComponentsCount' => $uniqueComponentsCount,
+    //                 'formattedResults' => $formattedResults,
+    //             ]);
+    //         }
+
+    //         //ISA part 3-3
+    //         if ($project->project_type == 13) {
+    //             return view('compliance_map.isa_3_3_all_services_all_controls', [
+    //                 'project' => $project,
+    //                 'uniqueServicesCount' => $uniqueServicesCount,
+    //                 'uniqueGroupsCount' => $uniqueGroupsCount,
+    //                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //                 'uniqueComponentsCount' => $uniqueComponentsCount,
+    //                 'formattedResults' => $formattedResults,
+    //             ]);
+    //         }
+    //         //ISA part 2-1
+    //         if ($project->project_type == 11) {
+    //             return view('compliance_map.isa_2_1_all_services_all_controls', [
+    //                 'project' => $project,
+    //                 'uniqueServicesCount' => $uniqueServicesCount,
+    //                 'uniqueGroupsCount' => $uniqueGroupsCount,
+    //                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //                 'uniqueComponentsCount' => $uniqueComponentsCount,
+    //                 'formattedResults' => $formattedResults,
+    //             ]);
+    //         }
+
+    //         //ISA part 4-1
+    //         if ($project->project_type == 9) {
+
+    //             return view('compliance_map.isa_4_1_all_services_all_controls', [
+    //                 'project' => $project,
+    //                 'uniqueServicesCount' => $uniqueServicesCount,
+    //                 'uniqueGroupsCount' => $uniqueGroupsCount,
+    //                 'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+    //                 'uniqueComponentsCount' => $uniqueComponentsCount,
+    //                 'formattedResults' => $formattedResults,
+    //             ]);
+    //         }
+    //     } else {
+    //         return redirect()->back()->with('error', "You are not assigned as an end user on this project");
+    //     }
+    // }
 
     public function compliance_map_all_services_comp_type($proj_id, $user_id, $comp_status)
     {
@@ -463,18 +543,8 @@ class ComplianceMap extends Controller
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
 
-
-            // $results = DB::table('iso_sec_2_1 AS assets')
-            //     ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
-            //     ->select(
-            //         'compliance.title_num AS Domain',
-            //         'compliance.comp_status',
-            //         DB::raw('COUNT(compliance.comp_status) AS status_count')
-            //     )
-            //     ->where('assets.project_id', $proj_id)
-            //     ->groupBy('compliance.title_num', 'compliance.comp_status') // Group by service, component, and comp_status
-            //     ->orderBy('compliance.title_num') // Optional: Order by service name
-            //     ->get();
+   $domainNames = config('domain-names')[$project->project_type] ?? [];
+          
             $results = DB::table('iso_sec_2_1 AS assets')
                 ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
                 ->select(
@@ -515,7 +585,7 @@ class ComplianceMap extends Controller
             // Add the total for all rows
             $totalCounts['total'] = array_sum($totalCounts);
 
-            $uniqueServicesCount = DB::table('iso_sec_2_1')
+            $uniqueServices = DB::table('iso_sec_2_1')
                 ->where('project_id', $proj_id)
                 ->distinct()
                 ->count('s_name');
@@ -535,199 +605,24 @@ class ComplianceMap extends Controller
                 ->distinct()
                 ->count('c_name');
 
-            //KSA
-            if ($project->project_type == 7) {
-                return view('compliance_map.ksa_nca_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
+            return view('compliance_map.all_services_all_controls', [
+        'project'               => $project,
+        'domainNames'           => $domainNames,
+        'formattedResults'      => $formattedResults,
+        'uniqueServicesCount'   => $uniqueServices,
+        'uniqueGroupsCount'     => $uniqueGroupsCount,
+        'uniqueSubGroupsCount'  => $uniqueSubGroupsCount,
+        'uniqueComponentsCount' => $uniqueComponentsCount,
+         'comp_status_count' => 1,
+        'comp_status' => $comp_status
+    ]);
 
-            if ($project->project_type == 18) {
-                //coso
-                return view('compliance_map.coso_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
+           
 
-            if ($project->project_type == 19) {
-                //coso
-                return view('compliance_map.soc2_type2_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-
-
-
-
-            //PCI SIngle
-            if ($project->project_type == 1) {
-
-                return view('compliance_map.pci_single_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                    'comp_status_count' => 1,
-                    'comp_status' => $comp_status
-                ]);
-            }
-
-            //PCI Multi
-            if ($project->project_type == 2) {
-
-                return view('compliance_map.pci_multi_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-
-            //PCI Merchant
-            if ($project->project_type == 3) {
-
-                return view('compliance_map.pci_merchant_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-
-            //CY SAMA
-            if ($project->project_type == 5) {
-
-                return view('compliance_map.cy_sama_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-
-            //SBP ETGRMF
-            if ($project->project_type == 6) {
-
-                return view('compliance_map.sbp_etgrmf_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-
-            //UAE IA
-            if ($project->project_type == 8) {
-                return view('compliance_map.uae_ia_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-
-            //ISO
-            if ($project->project_type == 4) {
-                return view('compliance_map.iso_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-
-            //IS part 3-2
-            if ($project->project_type == 10) {
-                return view('compliance_map.isa_3_2_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-
-            //IS part 4-2
-            if ($project->project_type == 12) {
-                return view('compliance_map.isa_4_2_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-
-            //ISA part 3-3
-            if ($project->project_type == 13) {
-                return view('compliance_map.isa_3_3_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-            //ISA part 2-1
-            if ($project->project_type == 11) {
-                return view('compliance_map.isa_2_1_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-
-            //ISA part 4-1
-            if ($project->project_type == 9) {
-
-                return view('compliance_map.isa_4_1_all_services_all_controls', [
-                    'project' => $project,
-                    'uniqueServicesCount' => $uniqueServicesCount,
-                    'uniqueGroupsCount' => $uniqueGroupsCount,
-                    'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
-                    'uniqueComponentsCount' => $uniqueComponentsCount,
-                    'formattedResults' => $formattedResults,
-                ]);
-            }
-        } else {
-            return redirect()->back()->with('error', "You are not assigned as an end user on this project");
-        }
+        
     }
+
+}
 
 
     public function download_excel_compliance_map($proj_id, $user_id)

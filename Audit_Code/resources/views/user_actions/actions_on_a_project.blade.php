@@ -43,7 +43,7 @@
                         <th>Last Status</th>
                         <th>Role in Project</th>
                         <th>Total Activities on Assets </th>
-                        <th>Total Activities on Mandatory Compliance </th>
+                        <th>Total Activities on Compliance </th>
                         <th>Total Activities on Risk Assessment </th>
                         <th>Total</th>
                     </tr>

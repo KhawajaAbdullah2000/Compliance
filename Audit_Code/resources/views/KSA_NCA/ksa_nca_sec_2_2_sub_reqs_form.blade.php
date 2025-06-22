@@ -61,7 +61,7 @@ $isApprover=in_array('Data Approver', $permissions);
 
 @endif
 
-<a href="/ksa_nca_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary btn-md float-end mb-4">All mandatory compliance domains</a>
+<a href="/ksa_nca_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary btn-md float-end mb-4">All Compliance domains</a>
 
 
 

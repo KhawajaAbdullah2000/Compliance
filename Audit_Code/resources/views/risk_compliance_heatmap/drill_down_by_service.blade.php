@@ -50,7 +50,7 @@
         <thead class="table-dark">
             <tr>
                 <th>Service Name</th>
-                <th>Mandatory Compliance %</th>
+                <th>Compliance %</th>
                 <th>Risk of data confidentiality% </th>
                 <th>Risk of data integrity% </th>
                 <th>Risk of data availability% </th>

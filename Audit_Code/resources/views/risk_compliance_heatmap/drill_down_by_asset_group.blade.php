@@ -52,7 +52,7 @@
         <thead class="table-dark">
             <tr>
                 <th>Asset Group</th>
-                <th>Mandatory Compliance %</th>
+                <th>Compliance %</th>
                 <th>Risk of data confidentiality% </th>
                 <th>Risk of data integrity% </th>
                 <th>Risk of data availability% </th>

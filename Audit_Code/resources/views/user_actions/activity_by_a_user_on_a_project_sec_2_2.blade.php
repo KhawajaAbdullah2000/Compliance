@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <h4 class="fw-bold" style='margin-top: 40px;margin-bottom:30px;'>User actions audit trail for Mandatory Compliance on Project: {{$project->project_name}} for {{$user->email}} </h4>
+    <h4 class="fw-bold" style='margin-top: 40px;margin-bottom:30px;'>User actions audit trail for Compliance on Project: {{$project->project_name}} for {{$user->email}} </h4>
 
 
     <div class="card shadow-lg border-0 mt-4">

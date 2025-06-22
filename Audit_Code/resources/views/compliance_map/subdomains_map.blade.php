@@ -305,6 +305,7 @@
     @endif
 </div>
 
+@if(session('comp_status'))
 @php
       $chartLabels = [];
     $chartData = [];
@@ -320,6 +321,7 @@
 
 
 @endphp
+@endif
 
 @section('scripts')
 
