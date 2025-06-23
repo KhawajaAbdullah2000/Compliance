@@ -120,15 +120,15 @@ class IsoSec2_2 extends Controller
                 $asset = Db::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
 
                 //ISO 
-                if ($checkpermission->type_id == 4) {
-                    return view('iso_sec_2_2.iso_sec_2_2_evidence_selection', [
-                        'project_id' => $checkpermission->project_id,
-                        'project_name' => $checkpermission->project_name,
-                        'project' => $project,
-                        'asset' => $asset
+                // if ($checkpermission->type_id == 4) {
+                //     return view('iso_sec_2_2.iso_sec_2_2_evidence_selection', [
+                //         'project_id' => $checkpermission->project_id,
+                //         'project_name' => $checkpermission->project_name,
+                //         'project' => $project,
+                //         'asset' => $asset
 
-                    ]);
-                }
+                //     ]);
+                // }
 
                 //PCI SIngle tenant
                 if ($checkpermission->type_id == 1) {
@@ -186,7 +186,8 @@ class IsoSec2_2 extends Controller
                 }
 
                 //KSA NCA , COSO , Soc2_type2
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id==18 || $checkpermission->type_id==19) {
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id==18 || $checkpermission->type_id==19 || $checkpermission->type_id == 4 ) {
+                   
                     return view('KSA_NCA.ksa_nca_sec_2_2_evidence_selection', [
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,

@@ -95,6 +95,9 @@
             COSO
               @elseif($project->project_type==19)
               AICPA Soc 2 -Type 2
+
+            @elseif($project->project_type==4)
+              ISO 27001:2022
             @endif
 
             </p></a>

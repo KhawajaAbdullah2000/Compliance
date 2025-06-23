@@ -110,7 +110,7 @@ $permissions=json_decode($project_permissions);
                 <p>{!! nl2br($data[0][2]) !!} {!! nl2br($data[0][3]) !!}</p>
 
                 </td>
-                <td><a href="/ksa_nca_sec_2_2_req/{{($data[0][2]) }}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
+                <td><a href="/ksa_nca_sec_2_2_req/{{($data[0][2])}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
                 {{-- <td>
     <form action="/add_mandatory_all_domain/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="POST" class="d-flex align-items-center gap-2">
         @csrf
@@ -133,11 +133,14 @@ $permissions=json_decode($project_permissions);
 
 <td>
      @php
-        $subdomain = $data[0][2];                     
+        $subdomain = trim((string) $data[0][2]);                       
                 // human-readable label
         $status  = $finalStatusBySubdomain->get($subdomain); 
     @endphp
-          
+       
+  
+  
+  
                 <form action="/add_mandatory_all_domain/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
                       method="POST"
                       class="d-flex align-items-center gap-2">
@@ -203,6 +206,8 @@ $permissions=json_decode($project_permissions);
                 // human-readable label
         $status  = $finalStatusBySubdomain->get($subdomain); 
     @endphp
+
+ 
   
           
                 <form action="/add_mandatory_all_domain/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
