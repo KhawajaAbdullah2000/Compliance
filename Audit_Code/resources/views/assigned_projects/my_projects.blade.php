@@ -16,6 +16,7 @@
     <a href="/user_action_all_projects_in_org/{{auth()->user()->organization->id}}" class="btn btn-primary btn-md mb-4">View User Action on All Projects</a>
     <a href="/compliances_all_projects_in_org/{{auth()->user()->organization->id}}" class="btn btn-primary btn-md mb-4">View Compliances on All Projects</a>
     <a href="/action_plan_all_projects_in_org/{{auth()->user()->organization->id}}" class="btn btn-primary btn-md mb-4">View Action Plan on All Projects</a>
+    <a href="/comp_risk_analysis_menu/{{auth()->user()->organization->id}}" class="btn btn-primary btn-md mb-4">Compliance and Risk Analysis Menu</a>
 
 
     <!-- Projects Table -->

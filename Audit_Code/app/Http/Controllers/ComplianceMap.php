@@ -92,9 +92,9 @@ class ComplianceMap extends Controller
                 ->distinct()
                 ->count('c_name');
 
-                if(session('comp_status')){
-                    session()->forget('comp_status');
-                }
+            if (session('comp_status')) {
+                session()->forget('comp_status');
+            }
 
             return view('compliance_map.dashboard', [
                 'project' => $project,
@@ -174,83 +174,83 @@ class ComplianceMap extends Controller
     }
 
     public function compliance_map_all_services(int $proj_id, int $user_id)
-{
-     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
-               ->where('projects.project_id', $proj_id)->first();
+    {
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
 
-  
 
-    $domainNames = config('domain-names')[$project->project_type] ?? [];
 
- $results = DB::table('iso_sec_2_1 AS assets')
-                ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
-                ->select(
-                    'compliance.title_num AS Domain',
-                    'compliance.comp_status',
-                    DB::raw('COUNT(compliance.comp_status) AS status_count')
-                )
-                ->where('assets.project_id', $proj_id)
-                ->groupBy('compliance.title_num', 'compliance.comp_status') // Group by service, component, and comp_status
-                ->orderBy('compliance.title_num') // Optional: Order by service name
-                ->get();
+        $domainNames = config('domain-names')[$project->project_type] ?? [];
 
-            $formattedResults = [];
-            $totalCounts = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
+        $results = DB::table('iso_sec_2_1 AS assets')
+            ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
+            ->select(
+                'compliance.title_num AS Domain',
+                'compliance.comp_status',
+                DB::raw('COUNT(compliance.comp_status) AS status_count')
+            )
+            ->where('assets.project_id', $proj_id)
+            ->groupBy('compliance.title_num', 'compliance.comp_status') // Group by service, component, and comp_status
+            ->orderBy('compliance.title_num') // Optional: Order by service name
+            ->get();
 
-            foreach ($results as $result) {
-                $domain = $result->Domain;
-                $status = $result->comp_status;
-                $count = $result->status_count;
+        $formattedResults = [];
+        $totalCounts = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
 
-                // Initialize domain
-                if (!isset($formattedResults[$domain])) {
-                    $formattedResults[$domain] = [];
-                }
+        foreach ($results as $result) {
+            $domain = $result->Domain;
+            $status = $result->comp_status;
+            $count = $result->status_count;
 
-                if (!isset($formattedResults[$domain][$status])) {
-                    $formattedResults[$domain][$status] = 0;
-                }
-
-                // Add the count to the respective comp_status
-                $formattedResults[$domain][$status] += $count;
-
-                // Update the grand totals for each status
-                $totalCounts[$status] += $count;
+            // Initialize domain
+            if (!isset($formattedResults[$domain])) {
+                $formattedResults[$domain] = [];
             }
-            // Add the total for all rows
-            $totalCounts['total'] = array_sum($totalCounts);
 
-            $uniqueServices = DB::table('iso_sec_2_1')
-                ->where('project_id', $proj_id)
-                ->distinct()
-                ->count('s_name');
+            if (!isset($formattedResults[$domain][$status])) {
+                $formattedResults[$domain][$status] = 0;
+            }
 
-            $uniqueGroupsCount = DB::table('iso_sec_2_1')
-                ->where('project_id', $proj_id)
-                ->distinct()
-                ->count('g_name');
+            // Add the count to the respective comp_status
+            $formattedResults[$domain][$status] += $count;
 
-            $uniqueSubGroupsCount = DB::table('iso_sec_2_1')
-                ->where('project_id', $proj_id)
-                ->distinct()
-                ->count('name');
+            // Update the grand totals for each status
+            $totalCounts[$status] += $count;
+        }
+        // Add the total for all rows
+        $totalCounts['total'] = array_sum($totalCounts);
 
-            $uniqueComponentsCount = DB::table('iso_sec_2_1')
-                ->where('project_id', $proj_id)
-                ->distinct()
-                ->count('c_name');
+        $uniqueServices = DB::table('iso_sec_2_1')
+            ->where('project_id', $proj_id)
+            ->distinct()
+            ->count('s_name');
 
-    // 4)  One single view
-    return view('compliance_map.all_services_all_controls', [
-        'project'               => $project,
-        'domainNames'           => $domainNames,
-        'formattedResults'      => $formattedResults,
-        'uniqueServicesCount'   => $uniqueServices,
-        'uniqueGroupsCount'     => $uniqueGroupsCount,
-        'uniqueSubGroupsCount'  => $uniqueSubGroupsCount,
-        'uniqueComponentsCount' => $uniqueComponentsCount,
-    ]);
-}
+        $uniqueGroupsCount = DB::table('iso_sec_2_1')
+            ->where('project_id', $proj_id)
+            ->distinct()
+            ->count('g_name');
+
+        $uniqueSubGroupsCount = DB::table('iso_sec_2_1')
+            ->where('project_id', $proj_id)
+            ->distinct()
+            ->count('name');
+
+        $uniqueComponentsCount = DB::table('iso_sec_2_1')
+            ->where('project_id', $proj_id)
+            ->distinct()
+            ->count('c_name');
+
+        // 4)  One single view
+        return view('compliance_map.all_services_all_controls', [
+            'project'               => $project,
+            'domainNames'           => $domainNames,
+            'formattedResults'      => $formattedResults,
+            'uniqueServicesCount'   => $uniqueServices,
+            'uniqueGroupsCount'     => $uniqueGroupsCount,
+            'uniqueSubGroupsCount'  => $uniqueSubGroupsCount,
+            'uniqueComponentsCount' => $uniqueComponentsCount,
+        ]);
+    }
 
 
 
@@ -543,8 +543,8 @@ class ComplianceMap extends Controller
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
 
-   $domainNames = config('domain-names')[$project->project_type] ?? [];
-          
+            $domainNames = config('domain-names')[$project->project_type] ?? [];
+
             $results = DB::table('iso_sec_2_1 AS assets')
                 ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
                 ->select(
@@ -606,23 +606,18 @@ class ComplianceMap extends Controller
                 ->count('c_name');
 
             return view('compliance_map.all_services_all_controls', [
-        'project'               => $project,
-        'domainNames'           => $domainNames,
-        'formattedResults'      => $formattedResults,
-        'uniqueServicesCount'   => $uniqueServices,
-        'uniqueGroupsCount'     => $uniqueGroupsCount,
-        'uniqueSubGroupsCount'  => $uniqueSubGroupsCount,
-        'uniqueComponentsCount' => $uniqueComponentsCount,
-         'comp_status_count' => 1,
-        'comp_status' => $comp_status
-    ]);
-
-           
-
-        
+                'project'               => $project,
+                'domainNames'           => $domainNames,
+                'formattedResults'      => $formattedResults,
+                'uniqueServicesCount'   => $uniqueServices,
+                'uniqueGroupsCount'     => $uniqueGroupsCount,
+                'uniqueSubGroupsCount'  => $uniqueSubGroupsCount,
+                'uniqueComponentsCount' => $uniqueComponentsCount,
+                'comp_status_count' => 1,
+                'comp_status' => $comp_status
+            ]);
+        }
     }
-
-}
 
 
     public function download_excel_compliance_map($proj_id, $user_id)
@@ -1351,11 +1346,11 @@ class ComplianceMap extends Controller
         }
     }
 
-       public function select_assets_for_subdomain_map_comp_status($domain,$comp_status, $proj_id, $user_id)
+    public function select_assets_for_subdomain_map_comp_status($domain, $comp_status, $proj_id, $user_id)
     {
 
         session(['comp_status' => $comp_status]);
-   
+
         $checkpermission = Db::table('project_details')->select(
             'project_types.id as type_id',
             'project_details.project_code',
@@ -2874,56 +2869,53 @@ class ComplianceMap extends Controller
             ->pluck('assessment_id')->toArray();
 
         if (session()->has('comp_status')) {
-    $comp_status = session('comp_status');
-    $results = DB::table('iso_sec_2_1 AS assets')
-            ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
-            ->select(
-                'compliance.subdomain AS SubDomain',
-                'compliance.comp_status',
-                DB::raw('COUNT(compliance.comp_status) AS status_count')
-            )
-            ->where('assets.project_id', $proj_id)
-            ->whereIn('compliance.asset_id', $assetIds)
-            ->where('compliance.title_num', $domain)
-            ->groupBy('compliance.subdomain', 'compliance.comp_status') // Group by service, component, and comp_status
-            ->orderByRaw("CAST(SUBSTRING_INDEX(compliance.subdomain, '-', 1) AS UNSIGNED), CAST(SUBSTRING_INDEX(compliance.subdomain, '-', -1) AS UNSIGNED)")
-            ->get();
+            $comp_status = session('comp_status');
             $results = DB::table('iso_sec_2_1 AS assets')
-    ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
-    ->select(
-        'compliance.comp_status',
-        'compliance.subdomain AS SubDomain',
-        DB::raw('COUNT(*) AS status_count')   // count after filtering
-    )
-    ->where('assets.project_id', $proj_id)
-    ->whereIn('compliance.asset_id', $assetIds)
-    ->where('compliance.title_num', $domain)
-    ->where('compliance.comp_status', $comp_status)   // 🔑 keep only this status
-    ->groupBy('compliance.subdomain','compliance.comp_status')                 // no need to group by comp_status now
-    ->orderByRaw("
+                ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
+                ->select(
+                    'compliance.subdomain AS SubDomain',
+                    'compliance.comp_status',
+                    DB::raw('COUNT(compliance.comp_status) AS status_count')
+                )
+                ->where('assets.project_id', $proj_id)
+                ->whereIn('compliance.asset_id', $assetIds)
+                ->where('compliance.title_num', $domain)
+                ->groupBy('compliance.subdomain', 'compliance.comp_status') // Group by service, component, and comp_status
+                ->orderByRaw("CAST(SUBSTRING_INDEX(compliance.subdomain, '-', 1) AS UNSIGNED), CAST(SUBSTRING_INDEX(compliance.subdomain, '-', -1) AS UNSIGNED)")
+                ->get();
+            $results = DB::table('iso_sec_2_1 AS assets')
+                ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
+                ->select(
+                    'compliance.comp_status',
+                    'compliance.subdomain AS SubDomain',
+                    DB::raw('COUNT(*) AS status_count')   // count after filtering
+                )
+                ->where('assets.project_id', $proj_id)
+                ->whereIn('compliance.asset_id', $assetIds)
+                ->where('compliance.title_num', $domain)
+                ->where('compliance.comp_status', $comp_status)   // 🔑 keep only this status
+                ->groupBy('compliance.subdomain', 'compliance.comp_status')                 // no need to group by comp_status now
+                ->orderByRaw("
         CAST(SUBSTRING_INDEX(compliance.subdomain, '-', 1) AS UNSIGNED),
         CAST(SUBSTRING_INDEX(compliance.subdomain, '-', -1) AS UNSIGNED)
     ")->get();
+        } else {
+            $results = DB::table('iso_sec_2_1 AS assets')
+                ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
+                ->select(
+                    'compliance.subdomain AS SubDomain',
+                    'compliance.comp_status',
+                    DB::raw('COUNT(compliance.comp_status) AS status_count')
+                )
+                ->where('assets.project_id', $proj_id)
+                ->whereIn('compliance.asset_id', $assetIds)
+                ->where('compliance.title_num', $domain)
+                ->groupBy('compliance.subdomain', 'compliance.comp_status') // Group by service, component, and comp_status
+                ->orderByRaw("CAST(SUBSTRING_INDEX(compliance.subdomain, '-', 1) AS UNSIGNED), CAST(SUBSTRING_INDEX(compliance.subdomain, '-', -1) AS UNSIGNED)")
+                ->get();
+        }
 
-}
-else{
-    $results = DB::table('iso_sec_2_1 AS assets')
-            ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
-            ->select(
-                'compliance.subdomain AS SubDomain',
-                'compliance.comp_status',
-                DB::raw('COUNT(compliance.comp_status) AS status_count')
-            )
-            ->where('assets.project_id', $proj_id)
-            ->whereIn('compliance.asset_id', $assetIds)
-            ->where('compliance.title_num', $domain)
-            ->groupBy('compliance.subdomain', 'compliance.comp_status') // Group by service, component, and comp_status
-            ->orderByRaw("CAST(SUBSTRING_INDEX(compliance.subdomain, '-', 1) AS UNSIGNED), CAST(SUBSTRING_INDEX(compliance.subdomain, '-', -1) AS UNSIGNED)")
-            ->get();
 
-}
-
-        
 
 
         $formattedResults = [];
@@ -3634,45 +3626,40 @@ else{
             ->pluck('assessment_id')->toArray();
 
 
-            if(session('comp_status')){
-                $comp_status = session('comp_status'); // get from session, or pass as parameter
+        if (session('comp_status')) {
+            $comp_status = session('comp_status'); // get from session, or pass as parameter
 
-        $results = DB::table('iso_sec_2_1 AS assets')
-            ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
-            ->select(
-                'compliance.sub_req AS SubReq',
-                'compliance.comp_status',
-                DB::raw('COUNT(compliance.comp_status) AS status_count')
-            )
-            ->where('assets.project_id', $proj_id)
-            ->whereIn('compliance.asset_id', $assetIds)
-            ->where('compliance.subdomain', $subdomain)
-            ->where('compliance.comp_status', $comp_status) 
-            ->groupBy('compliance.sub_req', 'compliance.comp_status')
-            ->orderBy('compliance.sub_req')
-            ->get();
-        
-
-            }
-            else{
-                    $results = DB::table('iso_sec_2_1 AS assets')
-            ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
-            ->select(
-                'compliance.sub_req AS SubReq',
-                'compliance.comp_status',
-                DB::raw('COUNT(compliance.comp_status) AS status_count')
-            )
-            ->where('assets.project_id', $proj_id)
-            ->whereIn('compliance.asset_id', $assetIds)
-            ->where('compliance.subdomain', $subdomain)
-            ->groupBy('compliance.sub_req', 'compliance.comp_status') // Group by service, component, and comp_status
-            ->orderby('compliance.sub_req')
-            ->get();
+            $results = DB::table('iso_sec_2_1 AS assets')
+                ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
+                ->select(
+                    'compliance.sub_req AS SubReq',
+                    'compliance.comp_status',
+                    DB::raw('COUNT(compliance.comp_status) AS status_count')
+                )
+                ->where('assets.project_id', $proj_id)
+                ->whereIn('compliance.asset_id', $assetIds)
+                ->where('compliance.subdomain', $subdomain)
+                ->where('compliance.comp_status', $comp_status)
+                ->groupBy('compliance.sub_req', 'compliance.comp_status')
+                ->orderBy('compliance.sub_req')
+                ->get();
+        } else {
+            $results = DB::table('iso_sec_2_1 AS assets')
+                ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
+                ->select(
+                    'compliance.sub_req AS SubReq',
+                    'compliance.comp_status',
+                    DB::raw('COUNT(compliance.comp_status) AS status_count')
+                )
+                ->where('assets.project_id', $proj_id)
+                ->whereIn('compliance.asset_id', $assetIds)
+                ->where('compliance.subdomain', $subdomain)
+                ->groupBy('compliance.sub_req', 'compliance.comp_status') // Group by service, component, and comp_status
+                ->orderby('compliance.sub_req')
+                ->get();
+        }
 
 
-            }
-
- 
 
 
 
@@ -4241,5 +4228,152 @@ else{
             new ComplianceStatusSubDomainExport($formattedResults, $totalCounts),
             $projectName . '_compliance_map_sub_sub_domains.xlsx'
         );
+    }
+
+    public function comp_risk_analysis_menu($org_id)
+    {
+        return view('comp_analysis.navigation_menu');
+    }
+
+    public function analyze_comp_risk($org_id)
+    {
+        $projects = Project::join('project_details', 'projects.project_id', 'project_details.project_code')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->join('iso_sec_2_1', 'projects.project_id', 'iso_sec_2_1.project_id')
+            ->where('projects.org_id', $org_id)
+            ->get([
+                'projects.project_id',
+                'project_name',
+                'project_type',
+                'type',
+                'assessment_id',
+                's_name',
+                'g_name',
+                'name',
+                'c_name',
+                'owner_dept',
+                'physical_loc',
+                'logical_loc',
+
+            ]);
+
+        $groupedServices = $projects->groupBy('s_name')->map(function ($items) {
+            return [
+                'project_names' => $items->pluck('project_name')->unique()->implode(', '),
+                'project_types' => $items->pluck('type')->unique()->implode(', '),
+                'g_names'       => $items->pluck('g_name')->unique()->implode(', '),
+                'names'         => $items->pluck('name')->unique()->implode(', '),
+                'c_names'       => $items->pluck('c_name')->unique()->implode(', '),
+                'owner_depts'   => $items->pluck('owner_dept')->filter()->unique()->implode(', '),
+                'physical_locs' => $items->pluck('physical_loc')->filter()->unique()->implode(', '),
+                'logical_locs'  => $items->pluck('logical_loc')->filter()->unique()->implode(', '),
+            ];
+        });
+
+        return view('comp_analysis.services_list', [
+            'groupedServices' => $groupedServices
+        ]);
+    }
+
+    public function select_projects_for_comp_analysis($s_name, $org_id)
+    {
+        $projects = DB::table('projects')
+            ->join('project_types', 'projects.project_type', '=', 'project_types.id')
+            ->join('iso_sec_2_1', 'projects.project_id', '=', 'iso_sec_2_1.project_id')
+            ->where('projects.org_id', $org_id)
+            ->where('s_name', $s_name)
+            ->select(
+                'projects.project_id',
+                'projects.project_name',
+                'projects.project_type',
+                'project_types.type'
+            )
+            ->distinct()
+            ->get();
+
+        return view('comp_analysis.select_projects_view', [
+            'serviceName' => $s_name,
+            'projects' => $projects, // the collection with project_id, project_name, type
+        ]);
+    }
+
+    public function submit_selected_projects_for_comp_analysis($org_id, Request $req)
+    {
+        $serviceName     = $req->input('s_name');                 // e.g. “Service 1”
+        $projectIds      = $req->input('selected_projects', []);  // [11, 12]
+
+        $rows = DB::table('projects')
+            ->join('iso_sec_2_1', 'projects.project_id', '=', 'iso_sec_2_1.project_id')
+            ->where('projects.org_id', $org_id)
+            ->whereIn('projects.project_id', $projectIds)
+            ->where('iso_sec_2_1.s_name', $serviceName)
+            ->select(
+                'projects.project_id',
+                'projects.project_name',
+                'iso_sec_2_1.c_name'   // asset component
+            )
+            ->get();
+
+        $projects = $rows
+            ->groupBy('project_id')
+            ->map(function ($items) {
+                return [
+                    'name'       => $items->first()->project_name,
+                    'components' => $items->pluck('c_name')->unique()->sort()->values()
+                ];
+            });
+
+
+
+
+        return view('comp_analysis.choose_components_for_service', [
+            'serviceName' => $serviceName,
+            'projects'    => $projects,
+        ]);
+    }
+
+    public function submit_components_for_comp_analysis($org_id, Request $req)
+    {
+        $req->validate([
+            'selected_projects' => 'required|array|min:1',
+            'components' => 'required|array|min:1'
+        ]);
+
+        // dd($req->all());
+        $serviceName = $req->input('s_name');
+        $selectedProjects = $req->input('selected_projects');
+        $selectedComponents = $req->input('components');
+
+        // Get project name & type
+        $projects = DB::table('projects')
+            ->join('project_types', 'projects.project_type', '=', 'project_types.id')
+            ->whereIn('projects.project_id', $selectedProjects)
+            ->select('projects.project_id', 'projects.project_name', 'projects.project_type', 'project_types.type')
+            ->get();
+
+        // Build view data structure
+        $structuredData = [];
+
+        foreach ($projects as $project) {
+            $type = $project->project_type;
+            $domainNames = config('domain-names')[$type] ?? [];
+
+            $structuredData[] = [
+                'id'          => $project->project_id,
+                'name'        => $project->project_name,
+                'type_label'  => $project->type,
+                'components'  => $selectedComponents[$project->project_id] ?? [],
+                'domains'     => $domainNames
+            ];
+        }
+
+        return view('comp_analysis.select_domains', [
+            'serviceName' => $serviceName,
+            'projects'    => $structuredData,
+        ]);
+    }
+
+    public function selected_domains($org_id,Request $req){
+        dd($req->all());
     }
 }

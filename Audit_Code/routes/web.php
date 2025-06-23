@@ -604,6 +604,14 @@ Route::get('compliance_map_sub_req/{domain}/{service}/{component}/{proj_id}',[Co
 
 Route::get('download_excel_compliance_map_subreq/{proj_id}/{user_id}',[ComplianceMap::class,'download_excel_compliance_map_subreq']);
 
+Route::get('comp_risk_analysis_menu/{org_id}',[ComplianceMap::class,'comp_risk_analysis_menu'])->name('comp_risk_analysis_menu');
+Route::get('analyze_comp_risk/{org_id}',[ComplianceMap::class,'analyze_comp_risk'])->name('analyze_comp_risk');
+Route::get('select_projects_for_comp_analysis/{s_name}/{org_id}',[ComplianceMap::class,'select_projects_for_comp_analysis'])->name('select_projects_for_comp_analysis');
+Route::Post('submit_selected_projects_for_comp_analysis/{org_id}',[ComplianceMap::class,'submit_selected_projects_for_comp_analysis']);
+Route::Post('submit_components_for_comp_analysis/{org_id}',[ComplianceMap::class,'submit_components_for_comp_analysis']);
+Route::Post('selected_domains/{org_id}',[ComplianceMap::class,'selected_domains']);
+
+
 
 //Action Plan
 
