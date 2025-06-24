@@ -19,19 +19,19 @@
     <h3 class="mb-4">Service: <span class="text-primary">{{ $serviceName }}</span></h3>
 
 
+
    <div class="col-md-6">
      <form action="/submit_components_for_comp_analysis/{{auth()->user()->organization->id}}" method="POST">
         @csrf
 
-        <!-- Preserve service name -->
         <input type="hidden" name="s_name" value="{{ $serviceName }}">
+              <label class="form-label fw-bold">Select Components:</label>
 
         @foreach ($projects as $projectId => $project)
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">{{ $project['name'] }}</h5>
+                    <h5 class="card-title">{{ $project['name'] }} - <span class="fs-6">{{$project['type']}}</span></h5>
 
-                    <!-- Hidden field to keep track of selected projects -->
                     <input type="hidden" name="selected_projects[]" value="{{ $projectId }}">
 
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2">
@@ -53,8 +53,10 @@
                 </div>
             </div>
         @endforeach
-
-        <button type="submit" class="btn btn-success">Submit Components</button>
+    <div class="d-flex gap-3">
+        <button type="submit" name="action" value="compliance" class="btn btn-success">Analyze Compliance</button>
+        <button type="submit" name="action" value="risk" class="btn btn-warning">Analyze Risk</button>
+    </div>
     </form>
    </div>
 

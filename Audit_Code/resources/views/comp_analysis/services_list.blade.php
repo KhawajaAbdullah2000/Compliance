@@ -18,7 +18,7 @@
     
 
    <div class="mt-4">
-    <table class="table table-responsive">
+    <table class="table table-responsive table-bordered table-hover table-striped">
            <thead class="table-dark">
         <tr>
             <th>Service Name</th>

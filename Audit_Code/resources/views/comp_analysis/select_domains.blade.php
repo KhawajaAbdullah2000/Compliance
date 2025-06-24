@@ -9,9 +9,9 @@
 
     <!-- Navigation Buttons -->
     <div class="mb-4">
-        <a href="/user_action_all_projects_in_org/{{ auth()->user()->organization->id }}" class="btn btn-primary btn-md me-2">User Actions</a>
-        <a href="/compliances_all_projects_in_org/{{ auth()->user()->organization->id }}" class="btn btn-primary btn-md me-2">Compliances</a>
-        <a href="/action_plan_all_projects_in_org/{{ auth()->user()->organization->id }}" class="btn btn-primary btn-md">Action Plan</a>
+        <a href="/user_action_all_projects_in_org/{{ auth()->user()->organization->id }}" class="btn btn-primary btn-md me-2">View User Actions on All Projects</a>
+        <a href="/compliances_all_projects_in_org/{{ auth()->user()->organization->id }}" class="btn btn-primary btn-md me-2">View Compliances on All Projects</a>
+        <a href="/action_plan_all_projects_in_org/{{ auth()->user()->organization->id }}" class="btn btn-primary btn-md">View Action Plan on All Projects</a>
     </div>
 
     <h3 class="mb-4">Service: <span class="text-primary">{{ $serviceName }}</span></h3>
@@ -36,9 +36,11 @@
 
                         <h6 class="mt-3">Selected Components:</h6>
                    <div class="d-flex flex-wrap gap-2">
-    @foreach ($project['components'] as $component)
-        <span class="badge badge-md bg-secondary">{{ $component }}</span>
-    @endforeach
+   @forelse ($project['components'] as $component)
+    <span class="badge badge-md bg-secondary">{{ $component }}</span>
+@empty
+    <span class="text-muted">No components selected.</span>
+@endforelse
 </div>
 
                         <h6 class="mt-4">Select Domain Names:</h6>
@@ -63,7 +65,7 @@
             @endforeach
         </div>
 
-        <button type="submit" class="btn btn-success">Submit Domain Selections</button>
+        <button type="submit" class="btn btn-success">Next</button>
     </form>
 
     <div class="mt-4">
