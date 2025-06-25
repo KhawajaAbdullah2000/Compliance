@@ -98,7 +98,17 @@ public function root_home(){
 
 //return user home
 public function user_home(){
-    return view('user.user_home');
+        $org_projects=DB::table('organization_project_types')
+        ->join('project_types','organization_project_types.project_type_id','project_types.id')
+        ->where('org_id',auth()->user()->organization->id)
+        ->select('project_type_id','type','org_id')
+        ->get();
+
+       // dd($org_projects);
+      
+    return view('user.user_home',[
+        'org_projects'=>$org_projects
+    ]);
 }
 //logout
 public function logout(){

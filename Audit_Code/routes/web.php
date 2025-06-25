@@ -23,6 +23,7 @@ use App\Http\Controllers\IsoSec2_4_A6;
 use App\Http\Controllers\IsoSec2_4_A7;
 use App\Http\Controllers\IsoSec2_4_A8;
 use App\Http\Controllers\KSA_NCA;
+use App\Http\Controllers\OneLinkSuperUserController;
 use App\Http\Controllers\OrgAssets;
 use App\Http\Controllers\PCI_Merchant_Sheet;
 use App\Http\Controllers\PCI_Multi_Sheet;
@@ -149,9 +150,11 @@ route::delete('delete_custom_asset_type/{category_id}',[OrgAssets::class,'delete
 
 
 
+route::get('entities_list/{user_id}/{org_id}',[OneLinkSuperUserController::class,'entities_list'])->name('entities_list');
+route::get('add_sub_entity/{org_id}/{dept_id}/{user_id}',[OneLinkSuperUserController::class,'add_sub_entity']);
+route::get('view_sub_entities/{org_id}/{dept_id}/{user_id}',[OneLinkSuperUserController::class,'view_sub_entities']);
 
-
-
+route::post('submit_sub_entities/{org_id}/{dept_id}/{user_id}',[OneLinkSuperUserController::class,'submit_sub_entities']);
 } );
 
 //for project creator end user

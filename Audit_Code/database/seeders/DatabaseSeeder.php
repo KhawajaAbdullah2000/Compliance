@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(Organization::class);
         $this->call(Risk_Management_Frameworks::class);
         $this->call(AddIso31000RiskFramework::class);
+        $this->call(OneLink::class);
         $this->call(GlobalAssetCategories::class);
         $this->call(GlobalAssetTypes::class);
         $this->call(frameworkApproachTypes::class);
