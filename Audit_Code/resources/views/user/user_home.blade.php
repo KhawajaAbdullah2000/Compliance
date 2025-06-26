@@ -73,6 +73,23 @@
                         <a href="/assigned_projects/{{ auth()->user()->id }}" class="btn btn-outline-info btn-lg">Go to Dashboard</a>
 
                         {{-- <a href="/my_personal_dashboard/{{ auth()->user()->id }}" class="btn btn-outline-info btn-lg">Visual and AI Dashboard</a> --}}
+                 <div class="text-center mt-2">
+
+                    @foreach($org_projects as $proj)
+
+                    @if($proj->project_type_id==22)
+                            {{-- 1 Link ERM --}}
+
+                    <a href="/create_one_link_erm_project/{{auth()->user()->id}}/{{auth()->user()->organization->id}}" class="btn btn-md btn-primary"> Create 1 Link ERM Project</a>
+
+                    @break
+                    @endif
+
+                    @endforeach
+           
+       
+                   
+                  
                     </div>
                     @endrole
 

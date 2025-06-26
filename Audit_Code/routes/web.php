@@ -23,6 +23,7 @@ use App\Http\Controllers\IsoSec2_4_A6;
 use App\Http\Controllers\IsoSec2_4_A7;
 use App\Http\Controllers\IsoSec2_4_A8;
 use App\Http\Controllers\KSA_NCA;
+use App\Http\Controllers\OneLinkEndUserController;
 use App\Http\Controllers\OneLinkSuperUserController;
 use App\Http\Controllers\OrgAssets;
 use App\Http\Controllers\PCI_Merchant_Sheet;
@@ -161,6 +162,8 @@ route::post('submit_sub_entities/{org_id}/{dept_id}/{user_id}',[OneLinkSuperUser
 Route::middleware(['auth','is_user','permission:Project Creator'])->group(function(){
 route::get('create_project/{id}',[EndUserController::class,'create_project']);
 route::post('create_project/{id}',[EndUserController::class,'submit_create_project']);
+route::get('create_one_link_erm_project/{user_id}/{org_id}',[OneLinkEndUserController::class,'create_one_link_erm_project']);
+
 route::get('/projects/{user_id}',[EndUserController::class,'projects'])->name('projects');
 
 route::get("/edit_project/{id}",[EndUserController::class,'editProject'])->name('edit_project');
@@ -238,6 +241,15 @@ route::get("/risk_assessment_report/{proj_id}/{user_id}",[ProjectController::cla
 route::get("/risk_treatment_report/{proj_id}/{user_id}",[ProjectController::class,'risk_treatment']);
 route::get("/dashboard/{proj_id}/{user_id}",[ProjectController::class,'dashBoard'])->name('dashboard');
 route::get('delete_my_project/{proj_id}/{user_id}',[ProjectController::class,'delete_my_project']);
+
+
+//1 Link
+route::get('one_link_inherent_risk_main/{proj_id}/{user_id}',[OneLinkEndUserController::class,'one_link_inherent_risk_main'])->name('one_link_inherent_risk_main');
+
+route::get('add_new_risk_record/{proj_id}/{user_id}',[OneLinkEndUserController::class,'add_new_risk_record']);
+
+
+
 //perosnal dashooard on home
 route::get("/my_personal_dashboard/{user_id}",[ProjectController::class,'my_personal_dashboard'])->name('my_personal_dashboard');
 Route::get('risk_compliance_heatmap/{proj_id}/{user_id}',[ProjectController::class,'risk_compliance_heatmap'])->name('risk_compliance_heatmap');

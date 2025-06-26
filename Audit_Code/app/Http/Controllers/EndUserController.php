@@ -46,10 +46,12 @@ class EndUserController extends Controller
             'project_type' => 'required',
         ]);
 
+ 
         $project = new Project();
         $project->project_name = $req->project_name;
         $project->created_by = $user_id;
         $project->org_id = auth()->user()->org_id;
+        $project->dept_id = optional(auth()->user()->department)->id;
         $project->project_creation_date = Carbon::now()->format('Y-m-d');
         $project->project_creation_time = Carbon::now()->format('H:i:s');
         $project->project_type = $req->project_type;

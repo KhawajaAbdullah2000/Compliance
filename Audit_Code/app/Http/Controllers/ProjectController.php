@@ -107,6 +107,19 @@ class ProjectController extends Controller
                     ]);
                         }
 
+                        
+                     if($project->project_type==22){
+
+                            //1 link ERM
+                        return view('one_link_inherent_risk.main_sections_list', [
+                        'project_id' => $checkpermission->project_code,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project'=>$project
+                     
+                    ]);
+                        }
+
 
 
             $complianceFramework=DB::table('org_projects_framework_selected')

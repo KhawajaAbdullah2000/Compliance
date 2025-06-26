@@ -23,7 +23,14 @@ return new class extends Migration
             $table->unsignedBigInteger('project_type')->nullable()->index('project_type');
             $table->string('status', 100)->default('Not submitted for approval');
             $table->unsignedBigInteger('status_last_changed_by')->nullable();
+            $table->unsignedBigInteger('dept_id')->nullable()->index('dept_id');
             $table->timestamps();
+            
+             $table->foreign('dept_id')
+          ->references('id')
+          ->on('departments')
+          ->onUpdate('cascade')
+          ->onDelete('set null');
         });
     }
 
