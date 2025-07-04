@@ -11,21 +11,17 @@
         <span class="fw-bold">{{ $user->organization->name ?? '-' }}</span>
     </h4>
 
-    <h3 class="fw-bold">Set up Sub-Entities within Departments (SBUs)</h3>
+    <h3 class="fw-bold">Set up Sub-Entities</h3>
 
-    <h4>
-        Department (SBU):
-        <span class="fw-bold">{{ $department->name ?? '-' }}</span>
-    </h4>
 
     {{-- ---------------  FORM --------------- --}}
-    <form action="/submit_sub_entities/{{auth()->user()->organization->id}}/{{$department->id}}/{{auth()->user()->id}}" method="POST" class="mt-4">
+    <form action="/submit_sub_entities/{{auth()->user()->organization->id}}/{{auth()->user()->id}}" method="POST" class="mt-4">
         @csrf
 
         @php
             // Helper array to DRY-up the markup
             $blocks = [
-                ['key' => 'functions',     'label' => 'Function (Unit)'],
+        
                 ['key' => 'products',      'label' => 'Product'],
                 ['key' => 'cycles',        'label' => 'Cycle/Process'],
                 ['key' => 'sub_processes', 'label' => 'Sub-Process'],

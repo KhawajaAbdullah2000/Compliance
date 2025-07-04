@@ -81,6 +81,7 @@
                             {{-- 1 Link ERM --}}
 
                     <a href="/create_one_link_erm_project/{{auth()->user()->id}}/{{auth()->user()->organization->id}}" class="btn btn-md btn-primary"> Create 1 Link ERM Project</a>
+                    
 
                     @break
                     @endif
@@ -121,7 +122,10 @@
                     @if($proj->project_type_id==22)
                             {{-- 1 Link ERM --}}
 
-                    <a href="/entities_list/{{auth()->user()->id}}/{{auth()->user()->organization->id}}" class="btn btn-md btn-primary">Set up Sub-Entities within Departments (SBUs) for 1LINK ERM</a>
+                    <a href="/sub_entities_list/{{auth()->user()->id}}/{{auth()->user()->organization->id}}" class="btn btn-md btn-primary">Set up Sub Entities for 1Link ERM</a>
+
+                    <a href="/entities_list/{{auth()->user()->id}}/{{auth()->user()->organization->id}}" class="btn btn-md btn-primary">Set up Function (Units) within Departments (SBUs) for 1LINK ERM</a>
+
 
                     @break
                     @endif

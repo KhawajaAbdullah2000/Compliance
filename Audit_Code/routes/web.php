@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActionPlanController;
+use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\Cobit;
 use App\Http\Controllers\ComplianceMap;
 use App\Http\Controllers\CY_SAMA;
@@ -152,11 +153,27 @@ route::delete('delete_custom_asset_type/{category_id}',[OrgAssets::class,'delete
 
 
 route::get('entities_list/{user_id}/{org_id}',[OneLinkSuperUserController::class,'entities_list'])->name('entities_list');
-route::get('add_sub_entity/{org_id}/{dept_id}/{user_id}',[OneLinkSuperUserController::class,'add_sub_entity']);
-route::get('view_sub_entities/{org_id}/{dept_id}/{user_id}',[OneLinkSuperUserController::class,'view_sub_entities']);
+route::get('sub_entities_list/{user_id}/{org_id}',[OneLinkSuperUserController::class,'sub_entities_list'])->name('sub_entities_list');
 
-route::post('submit_sub_entities/{org_id}/{dept_id}/{user_id}',[OneLinkSuperUserController::class,'submit_sub_entities']);
+
+route::get('add_sub_entity/{org_id}/{user_id}',[OneLinkSuperUserController::class,'add_sub_entity']);
+route::get('view_sub_entities/{org_id}/{dept_id}/{user_id}',[OneLinkSuperUserController::class,'view_sub_entities']);
+Route::get('/sub_entity/{id}/edit', [OneLinkSuperUserController::class, 'sub_entity_edit'])->name('sub_entity.edit');
+Route::put('/sub_entity/{id}', [OneLinkSuperUserController::class, 'sub_entity_update'])->name('sub_entity.update');
+Route::delete('/sub_entity/{id}', [OneLinkSuperUserController::class, 'sub_entity_destroy'])->name('sub_entity.destroy');
+
+
+
+route::post('save_unit',[OneLinkSuperUserController::class,'save_unit']);
+Route::get('/departments/{id}/units', [OneLinkSuperUserController::class, 'getUnits']);
+Route::get('/units/{id}/edit', [OneLinkSuperUserController::class, 'edit_unit'])->name('units.edit');
+Route::put('/units/{id}', [OneLinkSuperUserController::class, 'update_unit'])->name('units.update');
+Route::get('/units/{id}/delete', [OneLinkSuperUserController::class, 'delete_unit'])->name('units.delete');
+
+route::post('submit_sub_entities/{org_id}/{user_id}',[OneLinkSuperUserController::class,'submit_sub_entities']);
 } );
+
+
 
 //for project creator end user
 Route::middleware(['auth','is_user','permission:Project Creator'])->group(function(){
@@ -246,7 +263,26 @@ route::get('delete_my_project/{proj_id}/{user_id}',[ProjectController::class,'de
 //1 Link
 route::get('one_link_inherent_risk_main/{proj_id}/{user_id}',[OneLinkEndUserController::class,'one_link_inherent_risk_main'])->name('one_link_inherent_risk_main');
 
+route::get('edit_risk_record_initial/{risk_id}/{proj_id}/{user_id}',[OneLinkEndUserController::class,'edit_risk_record_initial']);
+
+route::Post('edit_initial_risk_record/{proj_id}/{org_id}/{user_id}',[OneLinkEndUserController::class,'edit_initial_risk_record']);
+
+
 route::get('add_new_risk_record/{proj_id}/{user_id}',[OneLinkEndUserController::class,'add_new_risk_record']);
+
+Route::get('/get-units-by-department/{id}', function($id) {
+    return \App\Models\Unit::where('department_id', $id)->get(['id', 'name']);
+});
+
+Route::post('save_initial_risk_record/{proj_id}/{org_id}/{user_id}', [OneLinkEndUserController::class, 'save_initial_risk_record']);
+
+
+route::get('edit_risk_record_attributes/{risk_record_id}/{proj_id}/{user_id}',[OneLinkEndUserController::class,'edit_risk_record_attributes']);
+
+route::post('update_risk_record/{proj_id}/{org_id}/{user_id}',[OneLinkEndUserController::class,'update_risk_record']);
+
+Route::get('/risk-description-catalog/{proj_id?}', [CatalogController::class, 'index']);
+Route::post('/risk-description-catalog', [CatalogController::class, 'store']);
 
 
 

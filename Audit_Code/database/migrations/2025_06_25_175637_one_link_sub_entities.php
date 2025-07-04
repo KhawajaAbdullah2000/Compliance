@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('sub_entity_type'); // e.g., Function, Product, etc.
 
             $table->unsignedBigInteger('org_id')->nullable();
-            $table->unsignedBigInteger('department_id')->nullable();
+            $table->unsignedBigInteger('department_id')->nullable(); //not needed now but its nullable so keep it anyways in migration file
             $table->unsignedBigInteger('created_by')->nullable();
 
             $table->timestamps();
