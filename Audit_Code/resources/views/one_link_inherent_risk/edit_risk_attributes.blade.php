@@ -78,7 +78,7 @@ $permissions = json_decode($project_permissions);
                 <input type="hidden" name="risk_id" value="{{$record->risk_id}}">
 
        <div class="mb-3">
-    <label for="catalog_select" class="form-label">Choose from Catalog (optional)</label>
+    <label class="fw-bold" for="catalog_select" class="form-label">Choose from Catalog (optional)</label>
     
     <div class="input-group">
         <div class="input-group-text bg-white">
@@ -99,13 +99,32 @@ $permissions = json_decode($project_permissions);
 
     <!-- Editable Textarea -->
     <div class="mb-3">
-        <label for="risk_description" class="form-label">Risk Description</label>
+        <label class="fw-bold" for="risk_description" class="form-label">Risk Description</label>
         <textarea name="risk_description" id="risk_description" class="form-control" rows="4" required>{{ old('risk_description', $record->risk_description) }}</textarea>
     </div>
 
 
+     <div class="mb-3">
+            <label class="fw-bold"  for="risk_owner" class="form-label">Risk Owner</label>
+            <select name="risk_owner" id="risk_owner" class="form-select" required>
+                <option value="">-- Select --</option>
+
+                @php
+                    $selectedValue = old('risk_owner', $record->risk_owner);
+                @endphp
+
+                @foreach($risk_owners as $owner)
+                    <option value="{{ $owner->id }}" {{ $selectedValue === $owner->id ? 'selected' : '' }}>
+                        {{ $owner->first_name }} {{$owner->last_name}}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+
+
         <div class="mb-3">
-            <label for="erm_risk_classification" class="form-label">ERM Risk Classification</label>
+            <label class="fw-bold" for="erm_risk_classification" class="form-label">ERM Risk Classification</label>
             <select name="erm_risk_classification" id="erm_risk_classification" class="form-select" required>
                 <option value="">-- Select ERM Risk Classification --</option>
 
@@ -124,7 +143,7 @@ $permissions = json_decode($project_permissions);
 
 
         <div class="mb-3">
-    <label for="op_loss_event_type_one" class="form-label">Basel II Operational Loss Event Type I</label>
+    <label class="fw-bold" for="op_loss_event_type_one" class="form-label">Basel II Operational Loss Event Type I</label>
     <select name="op_loss_event_type_one" id="op_loss_event_type_one" class="form-select" required>
         <option value="">-- Select Loss Event Type I --</option>
 
@@ -152,7 +171,7 @@ $permissions = json_decode($project_permissions);
 
 
 <div class="mb-3">
-    <label for="op_loss_event_type_two" class="form-label">Basel II Operational Loss Event Type II</label>
+    <label class="fw-bold" for="op_loss_event_type_two" class="form-label">Basel II Operational Loss Event Type II</label>
     <select name="op_loss_event_type_two" id="op_loss_event_type_two" class="form-select" required>
         <option value="">-- Select Loss Event Type II --</option>
 
@@ -189,6 +208,10 @@ $permissions = json_decode($project_permissions);
             </form>
         </div>
     </div>
+</div>
+
+<div class="text-end">
+    <a href="/initiate_gross_assessment_form/{{$record->risk_id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-md mb-2 mt-4 fw-bold text-white" style="background: linear-gradient(135deg, #FF512F, #F09819); transition: 0.3s;">Initiate Gross Risk Assessment</a>
 </div>
 
 

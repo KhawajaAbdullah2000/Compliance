@@ -74,7 +74,38 @@ th.rotate {
 
 }
 
+.impact-box {
+        border: 1px solid black;
+        padding: 6px;
+        text-align: center;
+        font-weight: bold;
+        background-color: white;
+        color: black;
+        transition: 0.3s ease;
+    }
 
+    .impact-box.active-high {
+        background-color: #b10000;
+        color: white;
+    }
+
+    .impact-box.active-medium {
+        background-color: #f0ad4e;
+        color: white;
+    }
+
+    .impact-box.active-low {
+        background-color: #5bc0de;
+        color: white;
+    }
+
+      .modal-backdrop {
+        z-index: 1040 !important;
+    }
+    .gross_risk_modal {
+        z-index: 1050 !important;
+    }
+    
 .risk-row {
     font-size: 18px;
     font-weight: bold;

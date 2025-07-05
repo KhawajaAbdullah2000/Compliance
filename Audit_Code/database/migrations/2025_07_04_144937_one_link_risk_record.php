@@ -32,21 +32,7 @@ return new class extends Migration
               $table->string('op_loss_event_type_two')->nullable();
                 $table->unsignedBigInteger('risk_owner')->nullable();
 
-            // $table->integer('financial_impact')->nullable();
-            // $table->integer('criticality_on_revenue')->nullable();
-            // $table->integer('financial_ecosystem')->nullable();
-            // $table->integer('geog_service_devilery')->nullable();
-            // $table->integer('strategic_importance')->nullable();
-            // $table->integer('criticality_of_customer_base')->nullable();
-            // $table->integer('monthly_transactions')->nullable();
-            // $table->integer('reg_comp_obligations')->nullable();
-            // $table->integer('dependency_on_external_vendors')->nullable();
-
-            // $table->integer('overall_impact')->nullable();
-            // $table->integer('inherent_risk_rating')->nullable();
-
-            // $table->string('likelihood')->nullable();
-
+            
 
           
 

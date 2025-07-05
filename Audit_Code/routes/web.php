@@ -263,6 +263,8 @@ route::get('delete_my_project/{proj_id}/{user_id}',[ProjectController::class,'de
 //1 Link
 route::get('one_link_inherent_risk_main/{proj_id}/{user_id}',[OneLinkEndUserController::class,'one_link_inherent_risk_main'])->name('one_link_inherent_risk_main');
 
+route::get('one_link_gross_risk_main/{proj_id}/{user_id}',[OneLinkEndUserController::class,'one_link_gross_risk_main'])->name('one_link_gross_risk_main');
+
 route::get('edit_risk_record_initial/{risk_id}/{proj_id}/{user_id}',[OneLinkEndUserController::class,'edit_risk_record_initial']);
 
 route::Post('edit_initial_risk_record/{proj_id}/{org_id}/{user_id}',[OneLinkEndUserController::class,'edit_initial_risk_record']);
@@ -285,6 +287,10 @@ Route::get('/risk-description-catalog/{proj_id?}', [CatalogController::class, 'i
 Route::post('/risk-description-catalog', [CatalogController::class, 'store']);
 
 
+//Gross RIsk Assessment 1 link
+ROute::get('initiate_gross_assessment_form/{risk_id}/{proj_id}/{user_id}',[OneLinkEndUserController::class,'initiate_gross_assessment_form'])->name('initiate_gross_assessment_form');
+
+route::Post('update_gross_risk_data/{proj_id}/{org_id}/{user_id}',[OneLinkEndUserController::class,'update_gross_risk_data']);
 
 //perosnal dashooard on home
 route::get("/my_personal_dashboard/{user_id}",[ProjectController::class,'my_personal_dashboard'])->name('my_personal_dashboard');

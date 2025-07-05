@@ -24,7 +24,7 @@
           <a href="{{route('organizations')}}">Organizations</a>
       </li>
       <li>
-      <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Users</a>
+      <a class="dropdown-toggle" href="#pageSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Users <i class="fas fa-caret-down ms-1"></i></a>
       <ul class="collapse list-unstyled" id="pageSubmenu">
         <li>
             <a href="{{route('add_user')}}">Add a user</a>
