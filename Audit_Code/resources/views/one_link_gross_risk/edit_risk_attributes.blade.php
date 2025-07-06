@@ -196,6 +196,14 @@
         </div>
     </div>
 
+
+    
+        <div class="text-end">
+            <a href="/initiate_residual_assessment_form/{{ $record->risk_id }}/{{ $project->project_id }}/{{ auth()->user()->id }}"
+                class="btn btn-md mb-2 mt-4 fw-bold"
+                style="background: linear-gradient(135deg, #70e292, #F09819); transition: 0.3s;">Initiate Residual Risk Assessment</a>
+        </div>
+
 </div> <!-- END .container -->
 
 @section('scripts')

@@ -34,7 +34,7 @@ $permissions = json_decode($project_permissions);
         </div>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mb-4">
         <div class="col-6 col-md-6">
             <a href="/one_link_gross_risk_main/{{$project->project_id}}/{{auth()->user()->id}}" class="text-decoration-none">
                 <div class="p-4 text-white text-center rounded shadow"
@@ -44,7 +44,20 @@ $permissions = json_decode($project_permissions);
             </a>
         </div>
     </div>
+
+        <div class="row justify-content-center">
+        <div class="col-6 col-md-6">
+            <a href="/one_link_residual_risk_main/{{$project->project_id}}/{{auth()->user()->id}}" class="text-decoration-none">
+                <div class="p-4 text-white text-center rounded shadow"
+                     style="background: linear-gradient(135deg, #70e292, #F09819); transition: 0.3s;">
+                    <h4 class="fw-bold mb-0">Residual Risk Assessment</h4>
+                </div>
+            </a>
+        </div>
+    </div>
 </div>
+
+
 
 
 

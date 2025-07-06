@@ -265,6 +265,10 @@ route::get('one_link_inherent_risk_main/{proj_id}/{user_id}',[OneLinkEndUserCont
 
 route::get('one_link_gross_risk_main/{proj_id}/{user_id}',[OneLinkEndUserController::class,'one_link_gross_risk_main'])->name('one_link_gross_risk_main');
 
+
+route::get('one_link_residual_risk_main/{proj_id}/{user_id}',[OneLinkEndUserController::class,'one_link_residual_risk_main'])->name('one_link_residual_risk_main');
+
+
 route::get('edit_risk_record_initial/{risk_id}/{proj_id}/{user_id}',[OneLinkEndUserController::class,'edit_risk_record_initial']);
 
 route::Post('edit_initial_risk_record/{proj_id}/{org_id}/{user_id}',[OneLinkEndUserController::class,'edit_initial_risk_record']);
@@ -279,18 +283,41 @@ Route::get('/get-units-by-department/{id}', function($id) {
 Route::post('save_initial_risk_record/{proj_id}/{org_id}/{user_id}', [OneLinkEndUserController::class, 'save_initial_risk_record']);
 
 
-route::get('edit_risk_record_attributes/{risk_record_id}/{proj_id}/{user_id}',[OneLinkEndUserController::class,'edit_risk_record_attributes']);
+route::get('edit_risk_record_attributes/{risk_record_id}/{proj_id}/{user_id}',[OneLinkEndUserController::class,'edit_risk_record_attributes'])->name('edit_risk_record_attributes');
 
 route::post('update_risk_record/{proj_id}/{org_id}/{user_id}',[OneLinkEndUserController::class,'update_risk_record']);
 
-Route::get('/risk-description-catalog/{proj_id?}', [CatalogController::class, 'index']);
+Route::get('/risk-description-catalog/{risk_record_id}/{proj_id}/{user_id}', [CatalogController::class, 'index']);
 Route::post('/risk-description-catalog', [CatalogController::class, 'store']);
+
+Route::get('/control-objective-catalog/{risk_record_id}/{proj_id}/{user_id}', [CatalogController::class, 'control_objective_index']);
+Route::post('/control-objective-catalog', [CatalogController::class, 'control_objective_store']);
+
+Route::get('/control-description-catalog/{risk_record_id}/{proj_id}/{user_id}', [CatalogController::class, 'control_description_index']);
+Route::post('/control-description-catalog', [CatalogController::class, 'control_description_store']);
+
+Route::get('/control-type-catalog/{risk_record_id}/{proj_id}/{user_id}', [CatalogController::class, 'control_type_index']);
+Route::post('/control-type-catalog', [CatalogController::class, 'control_type_store']);
+
+Route::get('/document-reference-catalog/{risk_record_id}/{proj_id}/{user_id}', [CatalogController::class, 'document_reference_index']);
+Route::post('/document-reference-catalog', [CatalogController::class, 'document_reference_store']);
+
+Route::get('/sub-process-reference-catalog/{risk_record_id}/{proj_id}/{user_id}', [CatalogController::class, 'sub_process_reference_index']);
+Route::post('/sub-process-reference-catalog', [CatalogController::class, 'sub_process_reference_store']);
+
+Route::get('/application-catalog/{risk_record_id}/{proj_id}/{user_id}', [CatalogController::class, 'application_index']);
+Route::post('/application-catalog', [CatalogController::class, 'application_store']);
+
 
 
 //Gross RIsk Assessment 1 link
 ROute::get('initiate_gross_assessment_form/{risk_id}/{proj_id}/{user_id}',[OneLinkEndUserController::class,'initiate_gross_assessment_form'])->name('initiate_gross_assessment_form');
 
 route::Post('update_gross_risk_data/{proj_id}/{org_id}/{user_id}',[OneLinkEndUserController::class,'update_gross_risk_data']);
+
+
+//Residual risk assessment
+ROute::get('initiate_residual_assessment_form/{risk_id}/{proj_id}/{user_id}',[OneLinkEndUserController::class,'initiate_residual_assessment_form'])->name('initiate_residual_assessment_form');
 
 //perosnal dashooard on home
 route::get("/my_personal_dashboard/{user_id}",[ProjectController::class,'my_personal_dashboard'])->name('my_personal_dashboard');

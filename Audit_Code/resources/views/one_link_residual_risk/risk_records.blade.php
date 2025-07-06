@@ -20,18 +20,9 @@
 
             <div class="col-12 col-md-4 col-lg-3">
                 <div class="p-3 text-white text-center rounded shadow"
-                    style="background: linear-gradient(135deg, #FF512F, #DD2476);">
-                    <h5 class="fw-bold mb-0">Risk Identification and Classification</h5>
+                    style="background: linear-gradient(135deg, #70e292, #F09819); transition: 0.3s;">
+                    <h5 class="fw-bold mb-0">Residual Risk Assessment</h5>
                 </div>
-            </div>
-
-            <div class="text-end mt-4">
-                @if (in_array('Data Inputter', $permissions))
-                    <a class="btn btn-success btn-md float-end"
-                        href="/add_new_risk_record/{{ $project->project_id }}/{{ auth()->user()->id }}" role="button">Add
-                        Inherent Risk Record
-                        <i class="fas fa-plus"></i></a>
-                @endif
             </div>
 
 
@@ -55,7 +46,8 @@
                                         <th>Cycle</th>
                                         <th>Sub-Process</th>
                                         <th>Created By</th>
-                                           <th>Gross Risk Assessment Output</th>
+                                        <th>Gross Risk Assessment Output</th>
+
                                         <th>Edit Attributes</th>
                                         <th>Edit Table</th>
                                         {{-- <th>Created At</th> --}}
@@ -75,7 +67,8 @@
                                             <td>{{ $record->sub_process_name }}</td>
 
                                             <td>{{ $record->created_by_name ?? 'N/A' }}</td>
-                                             <td>
+
+                                            <td>
                                                 <a href="javascript:void(0);" class="text-info view-risk-output"
                                                     data-overall="{{ $record->overall_impact }}"
                                                     data-likelihood="{{ $record->likelihood }}"
@@ -85,9 +78,13 @@
                                                     <i class="fas fa-eye fa-2x" style="cursor: pointer;"></i>
                                                 </a>
                                             </td>
+
+
+
+
                                             {{-- <td>{{ \Carbon\Carbon::parse($record->created_at)->format('d M Y, h:i A') }}</td> --}}
                                             <td>
-                                                <a href="/edit_risk_record_attributes/{{ $record->risk_id }}/{{ $project->project_id }}/{{ auth()->user()->id }}"
+                                                <a href="/initiate_residual_assessment_form/{{ $record->risk_id }}/{{ $project->project_id }}/{{ auth()->user()->id }}"
                                                     class="text-primary me-2">
                                                     <i class="fas fa-edit fa-2x"></i>
                                                 </a>
@@ -116,7 +113,11 @@
 
 
 
-<!-- Modal HTML OUTSIDE content section -->
+
+
+    @endsection
+
+    <!-- Modal HTML OUTSIDE content section -->
     <div class="modal gross_risk_modal fade" id="grossRiskModal" tabindex="-1" aria-labelledby="grossRiskModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -138,9 +139,6 @@
         </div>
     </div>
 
-
-
-
     @section('scripts')
         @if (Session::has('success'))
             <script>
@@ -153,7 +151,7 @@
             </script>
         @endif
 
-           <script>
+        <script>
             document.addEventListener('DOMContentLoaded', function() {
                 document.querySelectorAll('.view-risk-output').forEach(function(icon) {
                     icon.addEventListener('click', function() {
@@ -176,6 +174,3 @@
             });
         </script>
     @endsection
-
-
-@endsection
