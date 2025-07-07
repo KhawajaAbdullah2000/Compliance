@@ -25,10 +25,10 @@
                 </div>
 
                 <!-- Right: Back Button -->
-                {{-- <a href="{{ route('one_link_residual_risk_main', [
+                <a href="{{ route('one_link_risk_response_main', [
                 'proj_id' => $project->project_id,
                 'user_id' => auth()->user()->id
-            ]) }}" class="btn btn-secondary btn-lg">Back</a> --}}
+            ]) }}" class="btn btn-secondary btn-lg">Back</a>
             </div>
         </div>
 
@@ -67,15 +67,15 @@
                     method="POST">
                     @csrf
 
-                     <div class="mb-3">
+
+                    <input type="hidden" name="risk_id" value="{{ $record->risk_id }}">
+
+                    <div class="mb-3">
                         <label for="risk_response" class="form-label fw-bold">Risk Response</label>
                         <select name="risk_response" id="risk_response" class="form-select">
                             <option value="">-- None --</option>
                             @php
-                                $allowedValues = [
-                                    'Yes',
-                                    'No'
-                                ];
+                                $allowedValues = ['Yes', 'No'];
                                 $selectedValue = old('risk_response', $record->risk_response);
                             @endphp
                             @foreach ($allowedValues as $val)
@@ -87,15 +87,12 @@
                     </div>
 
 
-                     <div class="mb-3">
+                    <div class="mb-3">
                         <label for="entity_level_control" class="form-label fw-bold">Entity-Level Control (ELC)</label>
                         <select name="entity_level_control" id="entity_level_control" class="form-select">
                             <option value="">-- None --</option>
                             @php
-                                $allowedValues = [
-                                    'Yes',
-                                    'No'
-                                ];
+                                $allowedValues = ['Yes', 'No'];
                                 $selectedValue = old('entity_level_control', $record->entity_level_control);
                             @endphp
                             @foreach ($allowedValues as $val)
@@ -107,8 +104,9 @@
                     </div>
 
 
-                      <div class="mb-3">
-                        <label class="fw-bold" for="catalog_select" class="form-label">Choose from Incident Reference Catalog
+                    <div class="mb-3">
+                        <label class="fw-bold" for="catalog_select" class="form-label">Choose from Incident Reference
+                            Catalog
                             (optional)</label>
 
                         <div class="input-group">
@@ -136,8 +134,9 @@
 
 
 
-                      <div class="mb-3">
-                        <label class="fw-bold" for="catalog_select" class="form-label">Choose from External Audit Observation Catalog
+                    <div class="mb-3">
+                        <label class="fw-bold" for="catalog_select" class="form-label">Choose from External Audit
+                            Observation Catalog
                             (optional)</label>
 
                         <div class="input-group">
@@ -159,33 +158,100 @@
 
                     <!-- Editable Textarea -->
                     <div class="mb-3">
-                        <label class="fw-bold" for="external_audit_observation" class="form-label">External Audit Observation</label>
-                        <textarea name="external_audit_observation" id="external_audit_observation" class="form-control" rows="4" required>{{ old('external_audit_observation', $record->external_audit_observation) }}</textarea>
-                    </div>
-
-
-                     <div class="mb-3">
-                        <label for="review_date" class="form-label fw-bold">Review Date</label>
-                       <input class="form-control" type="date" name="review_date" id="" value="{{old('review_date',$record->review_date)}}">
-                    </div>
-
-
-                     <div class="mb-3">
-                        <label for="risk_mitigation_target_date" class="form-label fw-bold">Risk Mitigation Target Completion Date</label>
-                       <input class="form-control" type="date" name="risk_mitigation_target_date" id="" value="{{old('risk_mitigation_target_date',$record->risk_mitigation_target_date)}}">
+                        <label class="fw-bold" for="external_audit_observation" class="form-label">External Audit
+                            Observation Reference No</label>
+                        <textarea name="external_audit_observation" id="external_audit_observation" class="form-control" rows="4"
+                            required>{{ old('external_audit_observation', $record->external_audit_observation) }}</textarea>
                     </div>
 
 
                     <div class="mb-3">
-                        <label for="key_risk" class="form-label fw-bold">Key Risk</label>
-                        <select name="key_risk" id="key_risk" class="form-select">
+                        <label class="fw-bold" for="catalog_select" class="form-label">Choose from Internal Audit
+                            Observation Catalog
+                            (optional)</label>
+
+                        <div class="input-group">
+                            <div class="input-group-text bg-white">
+                                <a href="/internal-audit-observation-catalog/{{ $record->risk_id }}/{{ $project->project_id }}/{{ auth()->user()->id }}"
+                                    class="text-warning" title="Edit Catalog">
+                                    <i class="fas fa-edit fa-2x"></i>
+                                </a>
+                            </div>
+
+                            <select id="internal_audit_observation_catalog" class="form-select">
+                                <option value="">-- Select Catalog Entry --</option>
+                                @foreach ($internal_audit_observation_catalogs as $cat)
+                                    <option value="{{ $cat->description }}">{{ $cat->description }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Editable Textarea -->
+                    <div class="mb-3">
+                        <label class="fw-bold" for="internal_audit_observation" class="form-label">Internal Audit
+                            Observation Reference No.</label>
+                        <textarea name="internal_audit_observation" id="internal_audit_observation" class="form-control" rows="4"
+                            required>{{ old('internal_audit_observation', $record->internal_audit_observation) }}</textarea>
+                    </div>
+
+
+
+                    <div class="mb-3">
+                        <label for="review_date" class="form-label fw-bold">Review Date</label>
+                        <input class="form-control" type="date" name="review_date" id=""
+                            value="{{ old('review_date', $record->review_date) }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="fw-bold" for="catalog_select" class="form-label">Choose from Risk Mitigation Plan
+                            Catalog
+                            (optional)</label>
+
+                        <div class="input-group">
+                            <div class="input-group-text bg-white">
+                                <a href="/risk-mitigation-plan-catalog/{{ $record->risk_id }}/{{ $project->project_id }}/{{ auth()->user()->id }}"
+                                    class="text-warning" title="Edit Catalog">
+                                    <i class="fas fa-edit fa-2x"></i>
+                                </a>
+                            </div>
+
+                            <select id="risk_mitigation_plan_catalog" class="form-select">
+                                <option value="">-- Select Catalog Entry --</option>
+                                @foreach ($risk_mitigation_plan_catalogs as $cat)
+                                    <option value="{{ $cat->description }}">{{ $cat->description }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Editable Textarea -->
+                    <div class="mb-3">
+                        <label class="fw-bold" for="risk_mitigation_plan" class="form-label">Risk Mitigation Plan
+                            (Actionable Item)</label>
+                        <textarea name="risk_mitigation_plan" id="risk_mitigation_plan" class="form-control" rows="4" required>{{ old('risk_mitigation_plan', $record->risk_mitigation_plan) }}</textarea>
+                    </div>
+
+
+
+
+
+
+
+                    <div class="mb-3">
+                        <label for="risk_mitigation_target_date" class="form-label fw-bold">Risk Mitigation Target
+                            Completion Date</label>
+                        <input class="form-control" type="date" name="risk_mitigation_target_date" id=""
+                            value="{{ old('risk_mitigation_target_date', $record->risk_mitigation_target_date) }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="implementation_status" class="form-label fw-bold">Implementation Status</label>
+                        <select name="implementation_status" id="implementation_status" class="form-select">
                             <option value="">-- None --</option>
                             @php
-                                $allowedValues = [
-                                    'Yes',
-                                    'No'
-                                ];
-                                $selectedValue = old('key_risk', $record->key_risk);
+                                $allowedValues = ['Open', 'Closed', 'In-Progress'];
+                                $selectedValue = old('implementation_status', $record->implementation_status);
                             @endphp
                             @foreach ($allowedValues as $val)
                                 <option value="{{ $val }}" {{ $selectedValue == $val ? 'selected' : '' }}>
@@ -197,7 +263,53 @@
 
 
 
-            </form>
+                    <div class="mb-3">
+                        <label for="key_risk" class="form-label fw-bold">Key Risk</label>
+                        <select name="key_risk" id="key_risk" class="form-select">
+                            <option value="">-- None --</option>
+                            @php
+                                $allowedValues = ['Yes', 'No'];
+                                $selectedValue = old('key_risk', $record->key_risk);
+                            @endphp
+                            @foreach ($allowedValues as $val)
+                                <option value="{{ $val }}" {{ $selectedValue == $val ? 'selected' : '' }}>
+                                    {{ $val }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label for="kri_category" class="form-label fw-bold">KRI Category</label>
+                        <select name="kri_category" id="kri_category" class="form-select">
+                            <option value="">-- None (Default) --</option>
+                            <option value="Fraud Risk">Fraud Risk</option>
+                            <option value="Cybersecurity">Cybersecurity</option>
+                            <option value="System Downtime">System Downtime</option>
+                            <option value="Regulatory Compliance">Regulatory Compliance</option>
+                            <option value="Operational Errors">Operational Errors</option>
+                            <option value="Vendor Risk">Vendor Risk</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="kri_metric" class="form-label fw-bold">KRI Metric</label>
+                        <input type="text" name="kri_metric" id="kri_metric" class="form-control" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="kri_threshold" class="form-label fw-bold">KRI Threshold</label>
+                        <input type="text" name="kri_threshold" id="kri_threshold" class="form-control" readonly>
+                    </div>
+
+
+                    <div class="text-end">
+                        <button class="btn btn-success" type="submit">Submit Risk Record</button>
+                    </div>
+
+
+                </form>
 
             </div>
 
@@ -224,23 +336,74 @@
             }
         });
 
-         document.getElementById('external_audit_observation_catalog').addEventListener('change', function() {
+        document.getElementById('external_audit_observation_catalog').addEventListener('change', function() {
             const selectedValue = this.value;
             if (selectedValue) {
                 document.getElementById('external_audit_observation').value = selectedValue;
             }
         });
 
-       
-      
-        
 
+        document.getElementById('internal_audit_observation_catalog').addEventListener('change', function() {
+            const selectedValue = this.value;
+            if (selectedValue) {
+                document.getElementById('internal_audit_observation').value = selectedValue;
+            }
+        });
 
-      
-       
+        document.getElementById('risk_mitigation_plan_catalog').addEventListener('change', function() {
+            const selectedValue = this.value;
+            if (selectedValue) {
+                document.getElementById('risk_mitigation_plan').value = selectedValue;
+            }
+        });
     </script>
 
-   
+
+    <script>
+        const kriOptions = {
+            'Fraud Risk': {
+                metric: '% of fraudulent transactions',
+                threshold: '≤ 0.5%'
+            },
+            'Cybersecurity': {
+                metric: 'No. of security breaches',
+                threshold: '≤ 2 per month'
+            },
+            'System Downtime': {
+                metric: '% of service disruption',
+                threshold: '≤ 1% uptime impact'
+            },
+            'Regulatory Compliance': {
+                metric: 'No. of compliance breaches',
+                threshold: '0'
+            },
+            'Operational Errors': {
+                metric: 'No. of failed settlements/errors',
+                threshold: '≤ 3 per month'
+            },
+            'Vendor Risk': {
+                metric: '% of vendor failures affecting ops',
+                threshold: '≤ 1%'
+            }
+        };
+
+        document.getElementById('kri_category').addEventListener('change', function() {
+            const selected = this.value;
+            const metricInput = document.getElementById('kri_metric');
+            const thresholdInput = document.getElementById('kri_threshold');
+
+            if (kriOptions[selected]) {
+                metricInput.value = kriOptions[selected].metric;
+                thresholdInput.value = kriOptions[selected].threshold;
+            } else {
+                metricInput.value = '';
+                thresholdInput.value = '';
+            }
+        });
+    </script>
+
+
 
 
 

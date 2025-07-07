@@ -20,12 +20,7 @@ $permissions = json_decode($project_permissions);
     </div>
 
     
-   <div class="col-12 col-md-4 col-lg-3">
-    <div class="p-3 text-white text-center rounded shadow"
-         style="background: linear-gradient(135deg, #FF512F, #DD2476);">
-        <h5 class="fw-bold mb-0">Risk Identification and Classification</h5>
-    </div>
-</div>
+  
 
 
  <div class="card shadow-lg w-100 justify-content-center col-lg-8">

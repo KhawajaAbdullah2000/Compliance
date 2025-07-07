@@ -269,6 +269,8 @@ route::get('one_link_gross_risk_main/{proj_id}/{user_id}',[OneLinkEndUserControl
 route::get('one_link_residual_risk_main/{proj_id}/{user_id}',[OneLinkEndUserController::class,'one_link_residual_risk_main'])->name('one_link_residual_risk_main');
 
 
+
+
 route::get('edit_risk_record_initial/{risk_id}/{proj_id}/{user_id}',[OneLinkEndUserController::class,'edit_risk_record_initial']);
 
 route::Post('edit_initial_risk_record/{proj_id}/{org_id}/{user_id}',[OneLinkEndUserController::class,'edit_initial_risk_record']);
@@ -325,12 +327,22 @@ route::Post('update_residual_risk_data/{proj_id}/{org_id}/{user_id}',[OneLinkEnd
 //RISK RESPONSE
 ROute::get('initiate_risk_response_assessment_form/{risk_id}/{proj_id}/{user_id}',[OneLinkEndUserController::class,'initiate_risk_response_assessment_form'])->name('initiate_risk_response_assessment_form');
 
+route::get('one_link_risk_response_main/{proj_id}/{user_id}',[OneLinkEndUserController::class,'one_link_risk_response_main'])->name('one_link_risk_response_main');
+
 Route::get('/incident-reference-catalog/{risk_record_id}/{proj_id}/{user_id}', [CatalogController::class, 'incident_reference_index']);
 Route::post('/incident-reference-catalog', [CatalogController::class, 'incident_reference_store']);
 
 
 Route::get('/external-audit-observation-catalog/{risk_record_id}/{proj_id}/{user_id}', [CatalogController::class, 'external_audit_observation_index']);
 Route::post('/external-audit-observation-catalog', [CatalogController::class, 'external_audit_observation_store']);
+
+Route::get('/internal-audit-observation-catalog/{risk_record_id}/{proj_id}/{user_id}', [CatalogController::class, 'internal_audit_observation_index']);
+Route::post('/internal-audit-observation-catalog', [CatalogController::class, 'internal_audit_observation_store']);
+
+Route::get('/risk-mitigation-plan-catalog/{risk_record_id}/{proj_id}/{user_id}', [CatalogController::class, 'risk_mitigation_plan_index']);
+Route::post('/risk-mitigation-plan-catalog', [CatalogController::class, 'risk_mitigation_plan_store']);
+
+route::Post('update_risk_response_data/{proj_id}/{org_id}/{user_id}',[OneLinkEndUserController::class,'update_risk_response_data']);
 
 
 

@@ -159,7 +159,7 @@ class CatalogController extends Controller
         return back()->with('success', 'Catalog item added successfully.');
     }
 
-     public function external_audit_observation_index($risk_record_id, $proj_id, $user_id)
+    public function external_audit_observation_index($risk_record_id, $proj_id, $user_id)
     {
         $catalogs = DB::table('external_audit_observation_catalog')->get();
         return view('catalog.external_audit_observation_index', compact('catalogs', 'proj_id', 'risk_record_id', 'user_id'));
@@ -169,6 +169,43 @@ class CatalogController extends Controller
     {
         $request->validate(['description' => 'required|unique:risk_description_catalog,description']);
         DB::table('external_audit_observation_catalog')->insert([
+            'description' => $request->description,
+            'created_by' => auth()->id(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        return back()->with('success', 'Catalog item added successfully.');
+    }
+
+
+    public function internal_audit_observation_index($risk_record_id, $proj_id, $user_id)
+    {
+        $catalogs = DB::table('internal_audit_observation_catalog')->get();
+        return view('catalog.internal_audit_observation_index', compact('catalogs', 'proj_id', 'risk_record_id', 'user_id'));
+    }
+
+    public function internal_audit_observation_store(Request $request)
+    {
+        $request->validate(['description' => 'required|unique:risk_description_catalog,description']);
+        DB::table('internal_audit_observation_catalog')->insert([
+            'description' => $request->description,
+            'created_by' => auth()->id(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        return back()->with('success', 'Catalog item added successfully.');
+    }
+
+       public function risk_mitigation_plan_index($risk_record_id, $proj_id, $user_id)
+    {
+        $catalogs = DB::table('risk_mitigation_plan')->get();
+        return view('catalog.risk_mitigation_plan_index', compact('catalogs', 'proj_id', 'risk_record_id', 'user_id'));
+    }
+
+    public function risk_mitigation_plan_store(Request $request)
+    {
+        $request->validate(['description' => 'required|unique:risk_description_catalog,description']);
+        DB::table('risk_mitigation_plan')->insert([
             'description' => $request->description,
             'created_by' => auth()->id(),
             'created_at' => now(),
