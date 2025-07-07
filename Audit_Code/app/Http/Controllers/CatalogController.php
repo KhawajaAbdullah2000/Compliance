@@ -122,7 +122,7 @@ class CatalogController extends Controller
 
 
 
-     public function application_index($risk_record_id, $proj_id, $user_id)
+    public function application_index($risk_record_id, $proj_id, $user_id)
     {
         $catalogs = DB::table('application')->get();
         return view('catalog.application_index', compact('catalogs', 'proj_id', 'risk_record_id', 'user_id'));
@@ -132,6 +132,43 @@ class CatalogController extends Controller
     {
         $request->validate(['description' => 'required|unique:risk_description_catalog,description']);
         DB::table('application')->insert([
+            'description' => $request->description,
+            'created_by' => auth()->id(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        return back()->with('success', 'Catalog item added successfully.');
+    }
+
+
+    public function incident_reference_index($risk_record_id, $proj_id, $user_id)
+    {
+        $catalogs = DB::table('incident_reference_catalog')->get();
+        return view('catalog.incident_reference_index', compact('catalogs', 'proj_id', 'risk_record_id', 'user_id'));
+    }
+
+    public function incident_reference_store(Request $request)
+    {
+        $request->validate(['description' => 'required|unique:risk_description_catalog,description']);
+        DB::table('incident_reference_catalog')->insert([
+            'description' => $request->description,
+            'created_by' => auth()->id(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        return back()->with('success', 'Catalog item added successfully.');
+    }
+
+     public function external_audit_observation_index($risk_record_id, $proj_id, $user_id)
+    {
+        $catalogs = DB::table('external_audit_observation_catalog')->get();
+        return view('catalog.external_audit_observation_index', compact('catalogs', 'proj_id', 'risk_record_id', 'user_id'));
+    }
+
+    public function external_audit_observation_store(Request $request)
+    {
+        $request->validate(['description' => 'required|unique:risk_description_catalog,description']);
+        DB::table('external_audit_observation_catalog')->insert([
             'description' => $request->description,
             'created_by' => auth()->id(),
             'created_at' => now(),

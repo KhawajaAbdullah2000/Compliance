@@ -397,7 +397,7 @@
                 <!-- Left: Title Box -->
                 <div class="p-3 fw-bold rounded shadow"
                     style="background: linear-gradient(135deg, #70e292, #3c866a); transition: 0.3s;">
-                    <h5 class="fw-bold mb-0">COntrol Design Effective Factors</h5>
+                    <h5 class="fw-bold mb-0">Control Design Effective Factors</h5>
                 </div>
 
             </div>
@@ -473,6 +473,12 @@
         </div>
 
 
+        <div class="text-end">
+            <a href="/initiate_risk_response_assessment_form/{{ $record->risk_id }}/{{ $project->project_id }}/{{ auth()->user()->id }}"
+                class="btn btn-md mb-2 mt-4 fw-bold fw-bold"
+                style="background: linear-gradient(135deg, #41da92, #1869e2); transition: 0.3s;">Initiate Risk Response
+                </a>
+        </div>
 
 
     </div> <!-- END .container -->

@@ -588,7 +588,7 @@ class OneLinkEndUserController extends Controller
     }
 
 
-        public function one_link_residual_risk_main($proj_id, $user_id)
+    public function one_link_residual_risk_main($proj_id, $user_id)
     {
 
         $checkpermission = Db::table('project_details')->select(
@@ -718,6 +718,148 @@ class OneLinkEndUserController extends Controller
                 'document_reference_catalogs' => $document_reference_catalogs,
                 'sub_process_reference_catalogs' => $sub_process_reference_catalogs,
                 'application_catalogs' => $application_catalogs
+
+            ]);
+        }
+
+        return redirect()->route('assigned_projects', [
+            'user_id' => $user_id
+        ])->with('error', 'donot have permission');
+    }
+
+    public function update_residual_risk_data($proj_id, $org_id, $user_id, Request $req)
+    {
+
+        $req->validate([
+            'risk_id' => 'required|exists:one_link_risk_record,id',
+
+        ]);
+
+
+
+        // Save the risk record
+        // Save the risk record
+        DB::table('one_link_risk_record')
+            ->where('id', $req->risk_id)
+            ->where('project_id', $proj_id)
+            ->update([
+                'control_objective'         => $req->control_objective,
+                'control_description'       => $req->control_description,
+                'control_type'              => $req->control_type,
+                'control_owner'             => $req->control_owner,
+                'technology_support'        => $req->technology_support,
+                'document_reference'        => $req->document_reference,
+                'sub_process_reference'     => $req->sub_process_reference,
+                'coso_component'            => $req->coso_component,
+                'nature_of_control'         => $req->nature_of_control,
+                'application'               => $req->application,
+                'control_mechanism'         => $req->control_mechanism,
+                'recurrence_of_control'     => $req->recurrence_of_control,
+                'frequency_application'     => $req->frequency_application,
+                'policy'                    => $req->policy,
+                'sop'                       => $req->sop,
+                'marker_checker_control'    => $req->marker_checker_control,
+                'ownership'                 => $req->ownership,
+                'control_design_review'     => $req->control_design_review,
+                'diagnosis_of_control'      => $req->diagnosis_of_control,
+                'meets_control_obj'         => $req->meets_control_obj,
+                'complaints_management'     => $req->complaints_management,
+                'control_design_ass'        => $req->control_design_ass,
+                'control_implementation'    => $req->control_implementation,
+                'control_rating'            => $req->control_rating,
+                'key_control'               => $req->key_control,
+                'residual_risk_rating'      => $req->residual_risk_rating,
+            ]);
+
+        $catalogMappings = [
+            'control_objective'       => 'control_objective_catalog',
+            'control_description'     => 'control_description_catalog',
+            'control_type'            => 'control_type_catalog',
+            'document_reference'      => 'document_reference',
+            'sub_process_reference'   => 'sub_process_reference',
+            'application'             => 'application',
+        ];
+
+        foreach ($catalogMappings as $field => $table) {
+            $value = trim($req->$field);
+
+            if (!empty($value)) {
+                $exists = DB::table($table)
+                    ->whereRaw('LOWER(TRIM(description)) = ?', [strtolower($value)])
+                    ->exists();
+
+                if (!$exists) {
+                    DB::table($table)->insert([
+                        'description' => $value,
+                        'created_by'  => $user_id,
+                        'created_at'  => now(),
+                        'updated_at'  => now(),
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->back()->with('success', 'Risk description updated and catalog updated (if needed).');
+    }
+
+
+      public function initiate_risk_response_assessment_form($risk_id, $proj_id, $user_id)
+    {
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+
+
+            $riskRecord = DB::table('one_link_risk_record as r')
+                ->leftJoin('departments as d', 'r.department_id', '=', 'd.id')
+                ->leftJoin('units as u', 'r.unit_id', '=', 'u.id')
+                ->leftJoin('one_link_sub_entities as p', 'r.product_id', '=', 'p.id')
+                ->leftJoin('one_link_sub_entities as c', 'r.cycle_id', '=', 'c.id')
+                ->leftJoin('one_link_sub_entities as sp', 'r.sub_process_id', '=', 'sp.id')
+                ->leftJoin('users as usr', 'r.created_by', '=', 'usr.id')
+                ->select(
+                    'r.*',
+                    'r.id as risk_id',
+                    'd.name as department_name',
+                    'u.name as unit_name',
+                    'p.name as product_name',
+                    'c.name as cycle_name',
+                    'sp.name as sub_process_name',
+                    DB::raw("CONCAT(usr.first_name, ' ', usr.last_name) as created_by_name")
+                )
+                ->where('r.org_id', auth()->user()->organization->id)
+                ->where('r.project_id', $proj_id)
+                ->where('r.id', $risk_id)
+                ->orderBy('r.created_at', 'desc')
+                ->first();
+
+            $incident_reference_catalogs = DB::table('incident_reference_catalog')->orderBy('description')->get();
+
+            $external_audit_observation_catalogs=DB::table('external_audit_observation_catalog')->orderBy('description')->get();
+
+            // $risk_owners = DB::table('users')->where('org_id', auth()->user()->organization->id)
+            //     ->where('privilege_id', 5)->get();
+
+
+            return view('one_link_risk_response.edit_risk_attributes', [
+                'record' => $riskRecord,
+                'project' => $project,
+                'project_permissions' => $checkpermission->project_permissions,
+                'incident_reference_catalogs'=>$incident_reference_catalogs,
+                'external_audit_observation_catalogs'=>$external_audit_observation_catalogs
 
             ]);
         }

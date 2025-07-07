@@ -319,6 +319,21 @@ route::Post('update_gross_risk_data/{proj_id}/{org_id}/{user_id}',[OneLinkEndUse
 //Residual risk assessment
 ROute::get('initiate_residual_assessment_form/{risk_id}/{proj_id}/{user_id}',[OneLinkEndUserController::class,'initiate_residual_assessment_form'])->name('initiate_residual_assessment_form');
 
+route::Post('update_residual_risk_data/{proj_id}/{org_id}/{user_id}',[OneLinkEndUserController::class,'update_residual_risk_data']);
+
+
+//RISK RESPONSE
+ROute::get('initiate_risk_response_assessment_form/{risk_id}/{proj_id}/{user_id}',[OneLinkEndUserController::class,'initiate_risk_response_assessment_form'])->name('initiate_risk_response_assessment_form');
+
+Route::get('/incident-reference-catalog/{risk_record_id}/{proj_id}/{user_id}', [CatalogController::class, 'incident_reference_index']);
+Route::post('/incident-reference-catalog', [CatalogController::class, 'incident_reference_store']);
+
+
+Route::get('/external-audit-observation-catalog/{risk_record_id}/{proj_id}/{user_id}', [CatalogController::class, 'external_audit_observation_index']);
+Route::post('/external-audit-observation-catalog', [CatalogController::class, 'external_audit_observation_store']);
+
+
+
 //perosnal dashooard on home
 route::get("/my_personal_dashboard/{user_id}",[ProjectController::class,'my_personal_dashboard'])->name('my_personal_dashboard');
 Route::get('risk_compliance_heatmap/{proj_id}/{user_id}',[ProjectController::class,'risk_compliance_heatmap'])->name('risk_compliance_heatmap');
