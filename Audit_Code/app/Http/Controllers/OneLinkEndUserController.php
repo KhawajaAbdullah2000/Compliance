@@ -877,7 +877,7 @@ class OneLinkEndUserController extends Controller
     }
 
 
-       public function update_risk_response_data($proj_id, $org_id, $user_id, Request $req)
+    public function update_risk_response_data($proj_id, $org_id, $user_id, Request $req)
     {
 
         $req->validate([
@@ -888,26 +888,26 @@ class OneLinkEndUserController extends Controller
         // Save the risk record
 
         DB::table('one_link_risk_record')
-    ->where('id', $req->risk_id)
-    ->where('project_id', $proj_id)
-    ->update([
-        'risk_response'               => $req->risk_response,
-        'entity_level_control'       => $req->entity_level_control,
-        'incident_reference'         => trim($req->incident_reference),
-        'external_audit_observation' => trim($req->external_audit_observation),
-        'internal_audit_observation' => trim($req->internal_audit_observation),
-        'review_date'                => $req->review_date,
-        'risk_mitigation_plan'       => trim($req->risk_mitigation_plan),
-        'risk_mitigation_target_date'=> $req->risk_mitigation_target_date,
-        'implementation_status'      => $req->implementation_status,
-        'key_risk'                   => $req->key_risk,
-        'kri_category'               => $req->kri_category,
-        'kri_metric'                 => $req->kri_metric,
-        'kri_threshold'              => $req->kri_threshold,
-        'updated_at'                 => now()
-    ]);
+            ->where('id', $req->risk_id)
+            ->where('project_id', $proj_id)
+            ->update([
+                'risk_response'               => $req->risk_response,
+                'entity_level_control'       => $req->entity_level_control,
+                'incident_reference'         => trim($req->incident_reference),
+                'external_audit_observation' => trim($req->external_audit_observation),
+                'internal_audit_observation' => trim($req->internal_audit_observation),
+                'review_date'                => $req->review_date,
+                'risk_mitigation_plan'       => trim($req->risk_mitigation_plan),
+                'risk_mitigation_target_date' => $req->risk_mitigation_target_date,
+                'implementation_status'      => $req->implementation_status,
+                'key_risk'                   => $req->key_risk,
+                'kri_category'               => $req->kri_category,
+                'kri_metric'                 => $req->kri_metric,
+                'kri_threshold'              => $req->kri_threshold,
+                'updated_at'                 => now()
+            ]);
 
-     
+
         $catalogMappings = [
             'incident_reference'       => 'incident_reference_catalog',
             'external_audit_observation'  => 'external_audit_observation_catalog',
@@ -938,7 +938,7 @@ class OneLinkEndUserController extends Controller
     }
 
 
-     public function one_link_risk_response_main($proj_id, $user_id)
+    public function one_link_risk_response_main($proj_id, $user_id)
     {
 
         $checkpermission = Db::table('project_details')->select(
@@ -991,6 +991,396 @@ class OneLinkEndUserController extends Controller
                 'project_permissions' => $checkpermission->project_permissions,
                 'riskRecords' => $riskRecords
             ]);
+        }
+    }
+
+    public function one_link_risk_treatment_tracker($proj_id, $user_id)
+    {
+
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+
+
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+
+
+            $riskRecords = DB::table('one_link_risk_record as r')
+                ->leftJoin('departments as d', 'r.department_id', '=', 'd.id')
+                ->leftJoin('units as u', 'r.unit_id', '=', 'u.id')
+                ->leftJoin('one_link_sub_entities as p', 'r.product_id', '=', 'p.id')
+                ->leftJoin('one_link_sub_entities as c', 'r.cycle_id', '=', 'c.id')
+                ->leftJoin('one_link_sub_entities as sp', 'r.sub_process_id', '=', 'sp.id')
+                ->leftJoin('users as usr', 'r.created_by', '=', 'usr.id')
+                ->leftJoin('users as riskOwner', 'r.risk_owner', '=', 'riskOwner.id')
+                ->select(
+                    'r.*',
+                    'r.id as risk_id',
+                    'd.name as department_name',
+                    'u.name as unit_name',
+                    'p.name as product_name',
+                    'c.name as cycle_name',
+                    'sp.name as sub_process_name',
+                    DB::raw("CONCAT(usr.first_name, ' ', usr.last_name) as created_by_name"),
+                    DB::raw("CONCAT(riskOwner.first_name, ' ', riskOwner.last_name) as risk_owner_name")
+                )
+                ->where('r.org_id', auth()->user()->organization->id)
+                ->where('r.project_id', $project->project_id)
+                ->orderBy('r.created_at', 'desc')
+                ->get();
+
+
+
+
+
+            return view('one_link_risk_treatment_tracker.risk_records', [
+                'project' => $project,
+                'project_permissions' => $checkpermission->project_permissions,
+                'riskRecords' => $riskRecords
+            ]);
+        }
+    }
+
+    public function update_comments_one_link_risk_record($proj_id, $user_id, Request $req)
+    {
+        $req->validate([
+            'comments' => 'required'
+        ]);
+
+        DB::table('one_link_risk_record')
+            ->where('id', $req->risk_id)
+            ->where('project_id', $proj_id)
+            ->update([
+                'comments' => $req->comments
+            ]);
+
+        return redirect()->route('one_link_risk_treatment_tracker', [
+            'proj_id' => $proj_id,
+            'user_id' => $user_id
+        ])->with('success', 'Comments Updated Successfully');
+    }
+
+
+    public function one_link_risk_register($proj_id, $user_id)
+    {
+
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+
+
+
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+
+
+            $riskRecords = DB::table('one_link_risk_record as r')
+                ->leftJoin('departments as d', 'r.department_id', '=', 'd.id')
+                ->leftJoin('units as u', 'r.unit_id', '=', 'u.id')
+                ->leftJoin('one_link_sub_entities as p', 'r.product_id', '=', 'p.id')
+                ->leftJoin('one_link_sub_entities as c', 'r.cycle_id', '=', 'c.id')
+                ->leftJoin('one_link_sub_entities as sp', 'r.sub_process_id', '=', 'sp.id')
+                ->leftJoin('users as usr', 'r.created_by', '=', 'usr.id')
+                ->leftJoin('users as riskOwner', 'r.risk_owner', '=', 'riskOwner.id')
+                ->select(
+                    'r.*',
+                    'r.id as risk_id',
+                    'd.name as department_name',
+                    'u.name as unit_name',
+                    'p.name as product_name',
+                    'c.name as cycle_name',
+                    'sp.name as sub_process_name',
+                    DB::raw("CONCAT(usr.first_name, ' ', usr.last_name) as created_by_name"),
+                    DB::raw("CONCAT(riskOwner.first_name, ' ', riskOwner.last_name) as risk_owner_name")
+                )
+                ->where('r.org_id', auth()->user()->organization->id)
+                ->where('r.project_id', $project->project_id)
+                ->orderBy('r.created_at', 'desc')
+                ->get();
+
+
+
+            return view('one_link_risk_register.risk_records', [
+                'project' => $project,
+                'project_permissions' => $checkpermission->project_permissions,
+                'riskRecords' => $riskRecords
+            ]);
+        }
+    }
+
+
+    public function risk_register_risk_record_details($risk_id, $proj_id)
+    {
+
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', auth()->user()->id)
+            ->first();
+
+
+
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+
+
+            $riskRecord = DB::table('one_link_risk_record as r')
+                ->leftJoin('departments as d', 'r.department_id', '=', 'd.id')
+                ->leftJoin('units as u', 'r.unit_id', '=', 'u.id')
+                ->leftJoin('one_link_sub_entities as p', 'r.product_id', '=', 'p.id')
+                ->leftJoin('one_link_sub_entities as c', 'r.cycle_id', '=', 'c.id')
+                ->leftJoin('one_link_sub_entities as sp', 'r.sub_process_id', '=', 'sp.id')
+                ->leftJoin('users as usr', 'r.created_by', '=', 'usr.id')
+                ->leftJoin('users as riskOwner', 'r.risk_owner', '=', 'riskOwner.id')
+                ->leftJoin('users as controlOwner', 'r.risk_owner', '=', 'controlOwner.id')
+                ->leftJoin('users as technologySupport', 'r.technology_support', '=', 'technologySupport.id')
+
+
+                ->select(
+                    'r.*',
+                    'r.id as risk_id',
+                    'd.name as department_name',
+                    'u.name as unit_name',
+                    'p.name as product_name',
+                    'c.name as cycle_name',
+                    'sp.name as sub_process_name',
+                    DB::raw("CONCAT(usr.first_name, ' ', usr.last_name) as created_by_name"),
+                    DB::raw("CONCAT(riskOwner.first_name, ' ', riskOwner.last_name) as risk_owner_name"),
+                    DB::raw("CONCAT(controlOwner.first_name, ' ', controlOwner.last_name) as control_owner_name"),
+                    DB::raw("CONCAT(technologySupport.first_name, ' ', technologySupport.last_name) as technology_support_name"),
+
+                )
+                ->where('r.org_id', auth()->user()->organization->id)
+                ->where('r.project_id', $project->project_id)
+                ->orderBy('r.created_at', 'desc')
+                ->where('r.id', $risk_id)
+                ->first();
+
+
+
+
+            return view('one_link_risk_register.risk_record_details', [
+                'project' => $project,
+                'project_permissions' => $checkpermission->project_permissions,
+                'risk' => $riskRecord
+            ]);
+        }
+    }
+
+    public function one_link_risk_management_plan($proj_id, $user_id)
+    {
+
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', auth()->user()->id)
+            ->first();
+
+
+
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+
+
+            $activities = DB::table('one_link_risk_management as one_link')
+                ->join('units as u', 'one_link.responsible_team', 'u.id')
+                ->where('one_link.project_id', $proj_id)
+                ->select(
+                    'one_link.*',
+                    'one_link.id as activity_id',
+                    'u.name as unit_name'
+                )
+                ->get();
+
+
+
+            return view('one_link_risk_management.activity_records', [
+                'project' => $project,
+                'project_permissions' => $checkpermission->project_permissions,
+                'activities' => $activities
+            ]);
+        }
+    }
+
+
+    public function add_risk_management_activity($proj_id, $user_id)
+    {
+
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', auth()->user()->id)
+            ->first();
+
+
+
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+
+            $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+
+            $units = DB::table('Units')->get();
+
+
+
+            return view('one_link_risk_management.add_activity_form', [
+                'project' => $project,
+                'project_permissions' => $checkpermission->project_permissions,
+                'units' => $units
+            ]);
+        }
+    }
+
+    public function insert_activity_form($proj_id, $user_id, Request $req)
+    {
+
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', auth()->user()->id)
+            ->first();
+
+
+
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+
+            DB::table('one_link_risk_management')
+                ->insert([
+                    'project_id' => $proj_id,
+                    'activity_name' => $req->activity_name,
+                    'activity_type' => $req->activity_type,
+                    'responsible_team' => $req->responsible_team,
+                    'frequency' => $req->frequency,
+                    'completion_status' => $req->completion_status,
+                    'comments' => $req->comments,
+                    'scheduled_date' => $req->scheduled_date,
+                    'created_by' => $user_id,
+                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                ]);
+
+            return redirect()->route('one_link_risk_management_plan', [
+                'proj_id' => $proj_id,
+                'user_id' => $user_id
+            ])->with('success', 'Activity added successfully');
+        }
+    }
+
+
+    public function edit_activity_form($proj_id, $user_id, $activity_id)
+    {
+        $checkpermission = Db::table('project_details')
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)
+            ->where('assigned_enduser', auth()->user()->id)
+            ->select('project_details.project_permissions', 'projects.project_name')
+            ->first();
+
+        if ($checkpermission) {
+            $activity = DB::table('one_link_risk_management')->where('id', $activity_id)->first();
+            $project = DB::table('projects')->where('project_id', $proj_id)->first();
+            $units = DB::table('units')->get();
+
+            return view('one_link_risk_management.edit_activity_form', [
+                'project' => $project,
+                'project_permissions' => $checkpermission->project_permissions,
+                'units' => $units,
+                'activity' => $activity
+            ]);
+        }
+    }
+
+    public function update_activity_form($proj_id, $user_id, $activity_id, Request $req)
+    {
+        $checkpermission = Db::table('project_details')
+            ->where('project_code', $proj_id)
+            ->where('assigned_enduser', auth()->user()->id)
+            ->first();
+
+        if ($checkpermission) {
+            DB::table('one_link_risk_management')->where('id', $activity_id)->update([
+                'activity_name' => $req->activity_name,
+                'activity_type' => $req->activity_type,
+                'responsible_team' => $req->responsible_team,
+                'frequency' => $req->frequency,
+                'completion_status' => $req->completion_status,
+                'comments' => $req->comments,
+                'scheduled_date' => $req->scheduled_date,
+                'updated_at' => now(),
+            ]);
+
+            return redirect()->route('one_link_risk_management_plan', [
+                'proj_id' => $proj_id,
+                'user_id' => $user_id
+            ])->with('success', 'Activity updated successfully');
+        }
+    }
+
+    public function delete_activity_form($proj_id, $user_id, $activity_id, Request $req)
+    {
+        $checkpermission = Db::table('project_details')
+            ->where('project_code', $proj_id)
+            ->where('assigned_enduser', auth()->user()->id)
+            ->first();
+
+        if ($checkpermission) {
+            DB::table('one_link_risk_management')->where('id', $activity_id)->delete();
+
+            return redirect()->route('one_link_risk_management_plan', [
+                'proj_id' => $proj_id,
+                'user_id' => $user_id
+            ])->with('success', 'Activity deleted successfully');
         }
     }
 }

@@ -57,12 +57,48 @@ $permissions = json_decode($project_permissions);
     </div>
 
 
-      <div class="row justify-content-center">
+      <div class="row justify-content-center mb-4">
         <div class="col-6 col-md-6">
             <a href="/one_link_risk_response_main/{{$project->project_id}}/{{auth()->user()->id}}" class="text-decoration-none">
                 <div class="p-4 text-white text-center rounded shadow"
                     style="background: linear-gradient(135deg, #41da92, #1869e2); transition: 0.3s;">
                     <h4 class="fw-bold mb-0">Risk Response</h4>
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+    
+      <div class="row justify-content-center mb-4">
+        <div class="col-6 col-md-6">
+            <a href="/one_link_risk_treatment_tracker/{{$project->project_id}}/{{auth()->user()->id}}" class="text-decoration-none">
+                <div class="p-4 text-white text-center rounded shadow"
+                    style="background: linear-gradient(135deg, #883354, #1869e2); transition: 0.3s;">
+                    <h4 class="fw-bold mb-0">Risk Treatment Tracker</h4>
+                </div>
+            </a>
+        </div>
+    </div>
+
+          <div class="row justify-content-center mb-4">
+        <div class="col-6 col-md-6">
+            <a href="/one_link_risk_register/{{$project->project_id}}/{{auth()->user()->id}}" class="text-decoration-none">
+                <div class="p-4 text-white text-center rounded shadow"
+                    style="background: linear-gradient(135deg, #35323296, #848680); transition: 0.3s;">
+                    <h4 class="fw-bold mb-0">Risk Register</h4>
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+        <div class="row justify-content-center mb-4">
+        <div class="col-6 col-md-6">
+            <a href="/one_link_risk_management_plan/{{$project->project_id}}/{{auth()->user()->id}}" class="text-decoration-none">
+                <div class="p-4 text-white text-center rounded shadow"
+                    style="background: linear-gradient(135deg, #f878d296, #ee15d1); transition: 0.3s;">
+                    <h4 class="fw-bold mb-0">Risk Management Plan</h4>
                 </div>
             </a>
         </div>

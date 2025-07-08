@@ -345,6 +345,32 @@ Route::post('/risk-mitigation-plan-catalog', [CatalogController::class, 'risk_mi
 route::Post('update_risk_response_data/{proj_id}/{org_id}/{user_id}',[OneLinkEndUserController::class,'update_risk_response_data']);
 
 
+//RISK Treatment tracker
+route::get('one_link_risk_treatment_tracker/{proj_id}/{user_id}',[OneLinkEndUserController::class,'one_link_risk_treatment_tracker'])->name('one_link_risk_treatment_tracker');
+route::post('update_comments_one_link_risk_record/{proj_id}/{user_id}',[OneLinkEndUserController::class,'update_comments_one_link_risk_record']);
+
+
+//RIsk Register
+route::get('one_link_risk_register/{proj_id}/{user_id}',[OneLinkEndUserController::class,'one_link_risk_register'])->name('one_link_risk_register');
+
+route::get('risk_register_risk_record_details/{risk_id}/{proj_id}',[OneLinkEndUserController::class,'risk_register_risk_record_details'])->name('risk_register_risk_record_details');
+
+
+//Risk management plan
+route::get('one_link_risk_management_plan/{proj_id}/{user_id}',[OneLinkEndUserController::class,'one_link_risk_management_plan'])->name('one_link_risk_management_plan');
+
+route::get('add_risk_management_activity/{proj_id}/{user_id}',[OneLinkEndUserController::class,'add_risk_management_activity'])->name('add_risk_management_activity');
+
+
+route::post('insert_activity_form/{proj_id}/{user_id}',[OneLinkEndUserController::class,'insert_activity_form']);
+
+
+Route::get('/edit_activity_form/{proj_id}/{user_id}/{activity_id}', [OneLinkEndUserController::class, 'edit_activity_form'])->name('edit_activity_form');
+
+Route::post('/update_activity_form/{proj_id}/{user_id}/{activity_id}', [OneLinkEndUserController::class, 'update_activity_form'])->name('update_activity_form');
+
+Route::get('/delete_activity_form/{proj_id}/{user_id}/{activity_id}', [OneLinkEndUserController::class, 'delete_activity_form'])->name('delete_activity_form');
+
 
 //perosnal dashooard on home
 route::get("/my_personal_dashboard/{user_id}",[ProjectController::class,'my_personal_dashboard'])->name('my_personal_dashboard');

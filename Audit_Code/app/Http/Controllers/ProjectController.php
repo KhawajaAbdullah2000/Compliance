@@ -37,6 +37,12 @@ class ProjectController extends Controller
             );
 
  
+            $type22Project = $projects->firstWhere('type_id', 22);
+
+            if ($type22Project) {
+            return view('assigned_projects.one_link_my_projects', ['projects' => $projects]);
+
+            } 
 
 
         return view('assigned_projects.my_projects', ['projects' => $projects]);
