@@ -858,6 +858,7 @@ class OneLinkEndUserController extends Controller
             // $risk_owners = DB::table('users')->where('org_id', auth()->user()->organization->id)
             //     ->where('privilege_id', 5)->get();
 
+        
 
             return view('one_link_risk_response.edit_risk_attributes', [
                 'record' => $riskRecord,
@@ -880,6 +881,7 @@ class OneLinkEndUserController extends Controller
     public function update_risk_response_data($proj_id, $org_id, $user_id, Request $req)
     {
 
+      
         $req->validate([
             'risk_id' => 'required|exists:one_link_risk_record,id',
 

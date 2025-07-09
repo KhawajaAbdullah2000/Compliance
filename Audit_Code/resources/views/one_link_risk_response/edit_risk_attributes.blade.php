@@ -283,24 +283,24 @@
                     <div class="mb-3">
                         <label for="kri_category" class="form-label fw-bold">KRI Category</label>
                         <select name="kri_category" id="kri_category" class="form-select">
-                            <option value="">-- None (Default) --</option>
-                            <option value="Fraud Risk">Fraud Risk</option>
-                            <option value="Cybersecurity">Cybersecurity</option>
-                            <option value="System Downtime">System Downtime</option>
-                            <option value="Regulatory Compliance">Regulatory Compliance</option>
-                            <option value="Operational Errors">Operational Errors</option>
-                            <option value="Vendor Risk">Vendor Risk</option>
+                             <option value="" {{ $record->kri_category == '' ? 'selected' : '' }}>-- None (Default) --</option>
+        <option value="Fraud Risk" {{ $record->kri_category == 'Fraud Risk' ? 'selected' : '' }}>Fraud Risk</option>
+        <option value="Cybersecurity" {{ $record->kri_category == 'Cybersecurity' ? 'selected' : '' }}>Cybersecurity</option>
+        <option value="System Downtime" {{ $record->kri_category == 'System Downtime' ? 'selected' : '' }}>System Downtime</option>
+        <option value="Regulatory Compliance" {{ $record->kri_category == 'Regulatory Compliance' ? 'selected' : '' }}>Regulatory Compliance</option>
+        <option value="Operational Errors" {{ $record->kri_category == 'Operational Errors' ? 'selected' : '' }}>Operational Errors</option>
+        <option value="Vendor Risk" {{ $record->kri_category == 'Vendor Risk' ? 'selected' : '' }}>Vendor Risk</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label for="kri_metric" class="form-label fw-bold">KRI Metric</label>
-                        <input type="text" name="kri_metric" id="kri_metric" class="form-control" readonly>
+                        <input value="{{old('kri_metric',$record->kri_metric)}}" type="text" name="kri_metric" id="kri_metric" class="form-control" readonly>
                     </div>
 
                     <div class="mb-3">
                         <label for="kri_threshold" class="form-label fw-bold">KRI Threshold</label>
-                        <input type="text" name="kri_threshold" id="kri_threshold" class="form-control" readonly>
+                        <input type="text" name="kri_threshold" id="kri_threshold" class="form-control" value="{{old('kri_threshold',$record->kri_threshold)}}" readonly>
                     </div>
 
 
