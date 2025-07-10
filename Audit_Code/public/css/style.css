@@ -9,47 +9,63 @@ body {
 .navbar-brand img:hover {
     transform: scale(1.6);
 }
-.bg-light_blue{
+
+.bg-light_blue {
     background-color: rgb(122, 206, 233) !important;
 }
 
-.bg-light_green{
+.bg-light_green {
     background-color: #58e858 !important;
 }
+
 .navbar-light .nav-link {
     color: #333;
     font-size: medium;
     font-weight: 500;
     transition: color 0.3s ease;
 }
-.low { background-color: green; color: white; }
-.medium { background-color: yellow; }
-.high { background-color: red; color: white; }
+
+.low {
+    background-color: green;
+    color: white;
+}
+
+.medium {
+    background-color: yellow;
+}
+
+.high {
+    background-color: red;
+    color: white;
+}
+
 th.rotate {
     writing-mode: vertical-rl;
     transform: rotate(180deg);
 }
 
 .risk-header {
-    background-color: #0074A2; /* Blue background for header */
+    background-color: #0074A2;
+    /* Blue background for header */
     color: white;
     font-weight: bold;
     padding: 10px;
 }
 
 
- .hover-card {
+.hover-card {
     transition: all 0.2s ease-in;
-  }
+}
 
-  .hover-card:hover {
+.hover-card:hover {
     transform: scale(1.02);
     box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15);
     background-color: #78c7fc;
-  }
+}
 
-  .modal {
-    display: none; /* Hidden by default */
+.modal {
+    display: none;
+    /* Hidden by default */
     position: fixed;
     z-index: 1050;
     left: 0;
@@ -57,7 +73,8 @@ th.rotate {
     width: 100%;
     height: 100%;
     overflow-y: auto;
-    background-color: rgba(0, 0, 0, 0.5); /* dark overlay */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* dark overlay */
     padding-top: 60px;
 }
 
@@ -69,43 +86,44 @@ th.rotate {
     border-radius: 8px;
     width: 90%;
     max-width: 600px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     position: relative;
 
 }
 
 .impact-box {
-        border: 1px solid black;
-        padding: 6px;
-        text-align: center;
-        font-weight: bold;
-        background-color: white;
-        color: black;
-        transition: 0.3s ease;
-    }
+    border: 1px solid black;
+    padding: 6px;
+    text-align: center;
+    font-weight: bold;
+    background-color: white;
+    color: black;
+    transition: 0.3s ease;
+}
 
-    .impact-box.active-high {
-        background-color: #b10000;
-        color: white;
-    }
+.impact-box.active-high {
+    background-color: #b10000;
+    color: white;
+}
 
-    .impact-box.active-medium {
-        background-color: #f0ad4e;
-        color: white;
-    }
+.impact-box.active-medium {
+    background-color: #f0ad4e;
+    color: white;
+}
 
-    .impact-box.active-low {
-        background-color: #5bc0de;
-        color: white;
-    }
+.impact-box.active-low {
+    background-color: #5bc0de;
+    color: white;
+}
 
-      .modal-backdrop {
-        z-index: 1040 !important;
-    }
-    .gross_risk_modal {
-        z-index: 1050 !important;
-    }
-    
+.modal-backdrop {
+    z-index: 1040 !important;
+}
+
+.gross_risk_modal {
+    z-index: 1050 !important;
+}
+
 .risk-row {
     font-size: 18px;
     font-weight: bold;
@@ -130,9 +148,22 @@ th.rotate {
 }
 
 
-.hidden-row{
-    display:none;
+.hidden-row {
+    display: none;
 }
+
+
+#riskTable th {
+    cursor: pointer;
+    position: relative;
+}
+
+#riskTable th:hover::after {
+    content: ' ⇅';
+    font-size: 0.8rem;
+    color: #ccc;
+}
+
 
 .navbar {
     padding: 15px;
@@ -143,23 +174,23 @@ th.rotate {
 }
 
 #myTable_wrapper .dataTables_filter {
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 }
 
-.bg-home-card{
-    background-color:rgb(24, 24, 24);
+.bg-home-card {
+    background-color: rgb(24, 24, 24);
 }
 
 .btn-danger:hover {
     background-color: rgb(203, 95, 95);
 }
 
-.my_margin_top{
-    margin-top:50px;
+.my_margin_top {
+    margin-top: 50px;
 }
 
 .green-background {
-    background-color:lightgreen;
+    background-color: lightgreen;
     font-weight: bold;
 
 }
@@ -171,16 +202,19 @@ th.rotate {
 }
 
 .red-background {
-    background-color:pink;
+    background-color: pink;
     font-weight: bold;
 
 }
 
 
 .custom-badge {
-    font-size: 0.90rem;  /* Increase the font size */
-    padding: 0.5em 1em;  /* Adjust the padding */
-    border-radius: 0.5rem;  /* Optional: Make the badge more rounded */
+    font-size: 0.90rem;
+    /* Increase the font size */
+    padding: 0.5em 1em;
+    /* Adjust the padding */
+    border-radius: 0.5rem;
+    /* Optional: Make the badge more rounded */
 }
 
 /* Sidebar Container */
@@ -188,11 +222,12 @@ th.rotate {
     min-width: 250px;
     max-width: 250px;
     min-height: 100vh;
-    background: linear-gradient(135deg, #1e3c72, #2a5298); /* Gradient background */
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    /* Gradient background */
     color: #fff;
     transition: all 0.3s ease;
     font-weight: 600;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Collapsed State */
@@ -201,7 +236,7 @@ th.rotate {
 }
 
 /* Active Link Styling */
-#sidebar .components li.active > a {
+#sidebar .components li.active>a {
     background-color: rgba(255, 255, 255, 0.15);
     color: #fff;
     border-left: 4px solid #ffb347;
@@ -230,7 +265,7 @@ th.rotate {
 }
 
 /* Submenus */
-#sidebar ul li > ul {
+#sidebar ul li>ul {
     margin-left: 15px;
 }
 
@@ -244,23 +279,23 @@ th.rotate {
     transition: all 0.3s ease;
 }
 
-  .elevation-effect {
-        transition: all 0.3s ease;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        transform: translateY(0);
-        border: 1px solid #e0e0e0;
-    }
+.elevation-effect {
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
+    border: 1px solid #e0e0e0;
+}
 
-    .elevation-effect:hover {
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-        transform: translateY(-5px);
-        background-color: #f8f9fa;
-    }
+.elevation-effect:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+    background-color: #f8f9fa;
+}
 
-    .accordion-button:not(.collapsed) {
-        background-color: #007bff !important;
-        color: #fff !important;
-    }
+.accordion-button:not(.collapsed) {
+    background-color: #007bff !important;
+    color: #fff !important;
+}
 
 /* Hover State */
 #sidebar ul li a:hover {
@@ -271,7 +306,7 @@ th.rotate {
 }
 
 /* Override Active to Prevent Double Styling */
-#sidebar ul li.active > a:hover {
+#sidebar ul li.active>a:hover {
     color: #ffb347;
     background: rgba(255, 255, 255, 0.15);
 }
@@ -280,6 +315,7 @@ th.rotate {
 #sidebar::-webkit-scrollbar {
     width: 5px;
 }
+
 #sidebar::-webkit-scrollbar-thumb {
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
@@ -289,6 +325,7 @@ th.rotate {
     #sidebar {
         margin-left: -300px;
     }
+
     #sidebar.active {
         margin-left: 0;
     }
@@ -313,46 +350,55 @@ a[data-toggle="collapse"] {
         display: none;
     }
 }
+
 .navigation-box {
-    height: 50px; /* Fixed height */
-    width: 50px; /* Fixed width */
-    background-color:#408000; /* Bootstrap primary color */
+    height: 50px;
+    /* Fixed height */
+    width: 50px;
+    /* Fixed width */
+    background-color: #408000;
+    /* Bootstrap primary color */
     color: #fff;
     text-align: center;
     margin-bottom: 10px;
     border-radius: 5px;
     cursor: pointer;
-    display: flex; /* Use flexbox for centering */
-    justify-content: center; /* Center horizontally */
+    display: flex;
+    /* Use flexbox for centering */
+    justify-content: center;
+    /* Center horizontally */
     align-items: center;
     text-decoration: none;
 
 
-  }
-  .navigation-box:hover {
-    background-color:#1fbb1f ; /* Darker shade of primary color on hover */
-  }
+}
 
-  .navbar{
+.navigation-box:hover {
+    background-color: #1fbb1f;
+    /* Darker shade of primary color on hover */
+}
+
+.navbar {
     max-height: 100px;
-  }
+}
 
-  
 
-  .navigation-box a {
+
+.navigation-box a {
     color: inherit;
     text-decoration: none;
-  }
-.my_bg_color{
+}
+
+.my_bg_color {
     background-color: #408000;
 }
 
-.my_bg_color2{
-    background-color:#1fbb1f;
+.my_bg_color2 {
+    background-color: #1fbb1f;
 }
 
 .my_bg_color:hover {
-    background-color:#1fbb1f;
+    background-color: #1fbb1f;
 }
 
 .my_bg_color2:hover {
@@ -518,6 +564,7 @@ input::-webkit-inner-spin-button {
     position: relative;
     cursor: help;
 }
+
 .hover-desc {
     display: none;
     position: absolute;
@@ -533,21 +580,25 @@ input::-webkit-inner-spin-button {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     font-size: 0.85rem;
 }
+
 .score-cell:hover .hover-desc {
     display: block;
 }
 
-.risk-table th, .risk-table td {
+.risk-table th,
+.risk-table td {
     text-align: center;
     vertical-align: middle;
     padding: 12px;
     border: 1px solid #dee2e6;
 }
+
 .risk-table .header-top {
     background-color: #000;
     color: #fff;
     font-weight: bold;
 }
+
 .risk-table .header-left {
     background-color: #000;
     color: #fff;
@@ -576,11 +627,12 @@ thead.table-pointer {
     text-decoration: underline;
 }
 
-.my_card_bg1{
+.my_card_bg1 {
     background-color: #14a214;
 
 }
-.my_card_bg2{
+
+.my_card_bg2 {
     background-color: orange;
 }
 
@@ -607,6 +659,7 @@ thead.table-pointer {
         width: 100%;
         text-align: center;
     }
+
     .tab .nav-tabs li a {
         margin-right: 0;
     }

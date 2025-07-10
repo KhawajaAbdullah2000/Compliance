@@ -33,21 +33,19 @@
                 <div class="card shadow-md mt-2">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover text-center align-middle">
+                            <table id="riskTable" class="table table-bordered table-hover text-center align-middle">
                                 <thead class="table-dark">
-                                    <tr>
-                                        <th>S.NO</th>
-                                        <th>Risk Id</th>
-                                        <th>ERM Risk Classification</th>
-                                        <th>n Basel II Loss Event Type I</th>
-                                        <th>Basel II Loss Event Type II</th>
-                                        <th>Risk Description</th>
-                                        <th>Inherent Risk Rating</th>
-                                        <th>Residual Risk Rating</th>
-                                        <th>Risk Owner</th>
-                                  
-                                
-                                    </tr>
+                                   <tr>
+                            <th onclick="sortTable(0, 'numeric')">S.NO</th>
+                            <th onclick="sortTable(1, 'alpha')">Risk Id</th>
+                            <th onclick="sortTable(2, 'alpha')">ERM Risk Classification</th>
+                            <th onclick="sortTable(3, 'alpha')">n Basel II Loss Event Type I</th>
+                            <th onclick="sortTable(4, 'alpha')">Basel II Loss Event Type II</th>
+                            <th onclick="sortTable(5, 'alpha')">Risk Description</th>
+                            <th onclick="sortTable(6, 'custom_inherent')">Inherent Risk Rating</th>
+                            <th onclick="sortTable(7, 'numeric')">Residual Risk Rating</th>
+                            <th onclick="sortTable(8, 'alpha')">Risk Owner</th>
+                        </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($riskRecords as $index => $record)
@@ -91,6 +89,46 @@
                 });
             </script>
         @endif
+
+
+        <script>
+    let sortDirection = {};
+
+    function sortTable(columnIndex, type) {
+        const table = document.getElementById("riskTable");
+        const tbody = table.tBodies[0];
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+        const direction = sortDirection[columnIndex] === "asc" ? "desc" : "asc";
+        sortDirection[columnIndex] = direction;
+
+        const getCellValue = (row) => row.children[columnIndex].innerText.trim();
+
+        const inherentOrder = { 'LOW': 3, 'MEDIUM': 2, 'LOW': 1 };
+
+        rows.sort((a, b) => {
+            const valA = getCellValue(a);
+            const valB = getCellValue(b);
+
+            if (type === 'numeric') {
+                return direction === "asc" ? Number(valA) - Number(valB) : Number(valB) - Number(valA);
+            }
+
+            if (type === 'custom_inherent') {
+                const aValue = inherentOrder[valA] || 0;
+                const bValue = inherentOrder[valB] || 0;
+                return direction === "asc" ? aValue - bValue : bValue - aValue;
+            }
+
+            // Default: Alphabetical
+            return direction === "asc"
+                ? valA.localeCompare(valB)
+                : valB.localeCompare(valA);
+        });
+
+        // Rebuild the table with sorted rows
+        rows.forEach(row => tbody.appendChild(row));
+    }
+</script>
 
        
     @endsection
