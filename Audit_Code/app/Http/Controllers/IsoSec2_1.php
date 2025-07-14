@@ -13,9 +13,10 @@ use App\Exports\AssetCategoryExport;
 
 class IsoSec2_1 extends Controller
 {
-    public function iso_section2_1($proj_id, $user_id)
+    public function iso_section2_1($proj_id, $user_id,$page_type)
     {
-        
+       
+       
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -38,18 +39,21 @@ $data = DB::table('iso_sec_2_1')
     ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
     ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
     ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+    ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+
+   
     ->select(
         'iso_sec_2_1.*',
         DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
         DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
         DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
         DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
-        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name")
+        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+        DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
     )
     ->where('project_id', $proj_id)
     ->get();
 
-  
          
 
                  $project=Project::join('project_types','projects.project_type','project_types.id')
@@ -93,10 +97,11 @@ $data = DB::table('iso_sec_2_1')
                     ->get();
 
 
-        
+    
 
 
                     return view('iso_sec_2_1.iso_sec_2_1_main', [
+                        'page_type'=>$page_type,
                         'data' => $data,
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
@@ -328,7 +333,7 @@ $data = DB::table('iso_sec_2_1')
                         }
 
 
-                        return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
+                        return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id,'page_type'=>"services_register"])
                             ->with('success', 'Record Added successfully');
 
                 }
@@ -555,7 +560,7 @@ $data = DB::table('iso_sec_2_1')
                         ]);
 
 
-                        return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
+                        return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id,'page_type'=>'services_register'])
                             ->with('success', 'Record Updated successfully');
                     }catch (\Exception $e) {
                         $error=$e->getMessage();
