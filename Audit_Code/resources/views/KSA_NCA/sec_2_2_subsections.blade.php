@@ -333,7 +333,7 @@
                 <span class="fw-bold">Compliance Status</span>
             </div>
             <div class="col-md-2 text-end">
-                <button class="btn btn-md btn-success px-5">Save</button>
+                <button class="btn btn-md btn-success px-5">Save Compliance</button>
             </div>
         </div>
 

@@ -86,16 +86,106 @@ $permissions=json_decode($project_permissions);
       @endif
 
 
-        
-    <h4>Select one {{$project->type}}  subdomain from below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
+        <div class="text-end">
+            <a href="{{route('ksa_nca_subsections',[
+            'proj_id'=>$project->project_id,
+            'user_id'=>auth()->user()->id,
+            'asset_id'=>$asset->assessment_id
+
+            ])}}" class="btn btn-primary btn-md mb-2">Go to All Requirements</a>
+        </div>
+    {{-- <h4>Select one {{$project->type}}  subdomain from below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
         @if(Session('evidenceLevel')=='service') All Assets in the service: {{$asset->s_name}} @endif
         @if(Session('evidenceLevel')=='group') All Asset Types in the group: {{$asset->g_name}} @endif
         @if(Session('evidenceLevel')=='name') All Asset Subtypes in: {{$asset->name}} @endif
         @if(Session('evidenceLevel')=='component') the Component: {{$asset->c_name}} @endif
     
-    </h4>
-    
+    </h4> --}}
+
+
+    <form action="/add_mandatory_all_domain_all_controls/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" method="POST">
+    @csrf
+
+    <!-- Top Bar: Save Button -->
+    <div class="row mb-3 align-items-start">
+        <div class="col-md-8">
+              @if($project->project_type==4)
+      <h2 class="fw-bold">
+      {{$data[0][0]}}. {{$data[0][1]}}
+      </h2>
+      @endif
+        </div>
+        <div class="col-md-4 text-end">
+            <button type="submit" class="btn btn-success btn-md px-5">Save All</button>
+        </div>
+    </div>
+
     <table class="table table-bordered table-responsive table-primary">
+        <thead class="fw-bold table-dark">
+            <tr>
+                <td style="width: 50%;">Subdomain</td>
+              
+                <td>Compliance Status</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            @for ($i = 0; $i < count($data); $i++)
+                @php
+                    if ($i > 0 && $data[$i][2] == $data[$i-1][2]) {
+                        continue; // skip duplicate subdomains
+                    }
+                    $subdomain = trim((string) $data[$i][2]);   
+                    $status = $finalStatusBySubdomain->get($subdomain);
+                @endphp
+
+                <tr>
+                    <td>
+                       <a style="color: inherit;" href="/ksa_nca_sec_2_2_req/{{$subdomain}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}"><p class="fw-bold">{!! nl2br($data[$i][2]) !!} {!! nl2br($data[$i][3]) !!}</p>
+                       </a>
+                    </td>
+
+                    {{-- <td>
+                        <a href="/ksa_nca_sec_2_2_req/{{$subdomain}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a>
+                    </td> --}}
+
+                    <td>
+    <input type="hidden" name="domains[]" value="{{ $subdomain }}">
+
+    <div class="d-flex align-items-center gap-2">
+        <select name="comp_statuses[]" class="form-select form-select-sm rounded-pill" style="max-width:150px;min-width:150px;">
+            <option value="">Select --</option>
+            @foreach([
+                'yes' => 'In Place',
+                'no' => 'Not in Place',
+                'not_applicable' => 'Not Applicable',
+                'not_tested' => 'Not Tested',
+                'partial' => 'Partial'
+            ] as $value => $label)
+                <option value="{{ $value }}"
+                    {{ old('comp_statuses.' . $i, $status) === $value ? 'selected' : '' }}>
+                    {{ $label }}
+                </option>
+            @endforeach
+        </select>
+
+        <a href="#" class="btn btn-primary btn-sm" style="min-width:100px;">AI Input</a>
+    </div>
+
+    @if($status=="different")
+        <span class="badge fs-6 bg-secondary mt-2">Values are different</span>
+    @endif
+</td>
+
+                </tr>
+            @endfor
+        </tbody>
+    </table>
+
+</form>
+
+    
+    {{-- <table class="table table-bordered table-responsive table-primary">
 
         <thead class="fw-bold table-dark">
             <td style="width: 50%;">Subdomain</td>
@@ -111,25 +201,7 @@ $permissions=json_decode($project_permissions);
 
                 </td>
                 <td><a href="/ksa_nca_sec_2_2_req/{{($data[0][2])}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
-                {{-- <td>
-    <form action="/add_mandatory_all_domain/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="POST" class="d-flex align-items-center gap-2">
-        @csrf
-        <input type="hidden" name="domain" value="{{$data[0][2]}}">
 
-        <select name="comp_status" class="form-select form-select-sm rounded-pill" style="max-width: 160px;">
-              <option value="">Select --</option>
-            <option value="yes" {{ old('comp_status') == 'yes' ? 'selected' : '' }}>In Place</option>
-            <option value="no" {{ old('comp_status') == 'no' ? 'selected' : '' }}>Not in Place</option>
-            <option value="not_applicable" {{ old('comp_status') == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-            <option value="not_tested" {{ old('comp_status') == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-            <option value="partial" {{ old('comp_status') == 'partial' ? 'selected' : '' }}>Partial</option>
-        </select>
-<button type="submit" class="btn btn-success btn-sm w-100" style="max-width: 100px;">Submit</button>
-<a href="#" class="btn btn-primary btn-sm w-100" style="max-width: 100px;">AI Input</a>
-
-
-    </form>
-</td> --}}
 
 <td>
      @php
@@ -139,7 +211,7 @@ $permissions=json_decode($project_permissions);
     @endphp
        
   
-  
+
   
                 <form action="/add_mandatory_all_domain/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}"
                       method="POST"
@@ -254,7 +326,7 @@ $permissions=json_decode($project_permissions);
     
         </tbody>
 
-    </table>
+    </table> --}}
 
 </div>
 @section('scripts')
