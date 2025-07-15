@@ -674,6 +674,10 @@ route::get("ksa_nca_sec_2_2_req/{main_req_num}/{title}/{proj_id}/{user_id}/{asse
 route::get('ksa_nca_sec2_2_sub_req_edit/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}/{main_req?}',[KSA_NCA::class,'ksa_nca_sec2_2_sub_req_edit'])->name('ksa_nca_sec2_2_sub_req_edit');
 route::post('ksa_nca_sec_2_2_form/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'ksa_nca_sec_2_2_form']);
 route::post('add_mandatory_all_title/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'add_mandatory_all_title'])->name('add_mandatory_all_title');
+route::post('add_mandatory_all_title_all_controls/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'add_mandatory_all_title_all_controls'])->name('add_mandatory_all_title_all_controls');
+
+
+
 route::post('add_mandatory_all_domain/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'add_mandatory_all_domain'])->name('add_mandatory_all_domain');
 route::post('add_mandatory_all_sub_req/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'add_mandatory_all_sub_req'])->name('add_mandatory_all_sub_req');
 

@@ -43,8 +43,8 @@
 
     <div class="border p-3 col-md-6" style="border: 1px solid #ccc; border-radius: 5px;background-color: #f3f3f3">
     <div class="row">
-        <h5 class="fw-bold">Select the level at which to apply the evidence by selecting from the 
-            selections below:</h5>
+        <h5 class="fw-bold">Select the level at which to assist compliance by selecting from the 
+            list below:</h5>
         <div class="col-md-6">
     
             <div class="border p-3" style="border: 1px solid #ccc; border-radius: 5px;">
@@ -88,16 +88,16 @@
         <div class="row mt-2" >
             <div class="col-12">
 
-         <a href="/ksa_nca_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Upload or enter evidence against the mandatory requirements of 
+         <a href="/ksa_nca_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Assess compliance against controls
             @if($project->project_type==7)
-            KSA National Cybersecurity Authority (NCA)
+           for KSA National Cybersecurity Authority (NCA)
             @elseif($project->project_type==18)
             COSO
               @elseif($project->project_type==19)
               AICPA Soc 2 -Type 2
 
-            @elseif($project->project_type==4)
-              ISO 27001:2022
+            {{-- @elseif($project->project_type==4)
+              ISO 27001:2022 --}}
             @endif
 
             </p></a>

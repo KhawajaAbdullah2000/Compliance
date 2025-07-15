@@ -70,7 +70,7 @@
         <!-- Table with Toggle Columns -->
         <div class="border p-3 mb-4" style="border: 1px solid #ccc; border-radius: 5px;background-color: #f3f3f3">
             <div class="row">
-                <h5 class="fw-bold">Table Columns View:</h5>
+                <h5 class="fw-bold">Select to Hide Columns:</h5>
                 {{-- <div class="col-md-6">
 
                     <div class="border p-3" style="border: 1px solid #ccc; border-radius: 5px;">

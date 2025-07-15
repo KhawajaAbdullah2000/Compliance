@@ -117,7 +117,25 @@ class IsoSec2_2 extends Controller
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
 
-                $asset = Db::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
+                $asset=DB::table('iso_sec_2_1')
+    ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+    ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+    ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+    ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+    ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+    ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+    ->select(
+        'iso_sec_2_1.*',
+        DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+        DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+        DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+        DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+        DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+    )
+    ->where('iso_sec_2_1.assessment_id', $asset_id)
+    ->first();
+
 
                 //ISO 
                 // if ($checkpermission->type_id == 4) {
