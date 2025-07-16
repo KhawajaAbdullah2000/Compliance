@@ -243,7 +243,7 @@ class KSA_NCA extends Controller
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                         ->where('projects.project_id', $proj_id)->first();
 
-                     $asset = DB::table('iso_sec_2_1')
+                    $asset = DB::table('iso_sec_2_1')
                         ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
                         ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
                         ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
@@ -352,7 +352,24 @@ class KSA_NCA extends Controller
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
 
-                $asset = Db::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
+                $asset = DB::table('iso_sec_2_1')
+                    ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+                    ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+                    ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+                    ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+                    ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+                    ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+                    ->select(
+                        'iso_sec_2_1.*',
+                        DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+                        DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+                        DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+                        DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+                        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+                        DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+                    )
+                    ->where('iso_sec_2_1.assessment_id', $asset_id)
+                    ->first();
 
                 $super = Db::table('users')->where('privilege_id', 1)->pluck('id')->toArray();
 
@@ -2064,4 +2081,136 @@ class KSA_NCA extends Controller
             }
         }
     }
+
+
+    public function add_mandatory_all_sub_req_all_controls(Request $req, $proj_id, $user_id, $asset_id)
+{
+    if ($user_id != auth()->user()->id) {
+        return redirect()->back()->with('error', 'Unauthorized action.');
+    }
+
+    $checkpermission = DB::table('project_details')
+        ->select('project_types.id as type_id', 'project_details.project_code', 'project_details.project_permissions', 'projects.project_name', 'projects.project_id')
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)
+        ->where('assigned_enduser', $user_id)
+        ->first();
+
+    if (!$checkpermission) {
+        return redirect()->back()->with('error', 'No project permission found.');
+    }
+
+    $permissions = json_decode($checkpermission->project_permissions);
+
+    if (!in_array('Data Inputter', $permissions)) {
+        return redirect()->route('iso_sections', ['proj_id' => $proj_id, 'user_id' => $user_id])
+            ->with('error', 'Not Allowed');
+    }
+
+    $evidenceLevel = $req->session()->get('evidenceLevel');
+
+    // File mapping logic
+    $fileMap = [
+        7 => 'KSA_NCA_ECC_Modified.xlsx',
+        18 => 'COSO_Modified.xlsx',
+        19 => 'SOC2_Type2_Modified.xlsx',
+        5 => 'CY_SAMA_Modified.xlsx',
+        1 => 'PCI_DSS_4_Single_TSP.xlsx',
+        16 => 'COBIT_2019.xlsx',
+        2 => 'PCI_DSS_4_Multi_TSP.xlsx',
+        3 => 'PCI_DSS_4_Merchant.xlsx',
+        10 => 'ISA_62443_Part 3-2_Modified.xlsx',
+        12 => 'ISA 62443 Part 4-2 -Modified.xlsx',
+        13 => 'ISA 62443 Part 3-3 - Modified.xlsx',
+        11 => 'ISA 62443 Part 2-1 - Modified.xlsx',
+        9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
+        4 => 'ISO27K1_2022_Compliance_Updated_Modified.xlsx',
+    ];
+
+    $filepath = public_path($fileMap[$checkpermission->type_id]);
+
+    $data2 = Excel::toArray([], $filepath);
+    $rows = array_slice($data2[0], 1); // skip header
+
+    $sub_reqs = $req->input('sub_reqs');
+    $statuses = $req->input('comp_statuses');
+
+    if ($evidenceLevel === 'component') {
+        foreach ($sub_reqs as $index => $sub_req) {
+            $compStatus = $statuses[$index];
+
+            $data = [
+                'comp_status' => $compStatus,
+                'last_edited_by' => $user_id,
+                'last_edited_at' => now()->format('Y-m-d H:i:s')
+            ];
+
+            $filteredData = collect($rows)->filter(function ($row) use ($sub_req) {
+                return strval(trim($row[3])) === strval(trim($sub_req));
+            });
+
+            foreach ($filteredData as $innerArray) {
+                DB::table('iso_sec_2_2')->updateOrInsert(
+                    [
+                        'project_id' => $proj_id,
+                        'asset_id' => $asset_id,
+                        'title_num' => $innerArray[0],
+                        'sub_req' => $innerArray[3],
+                        'subdomain' => $innerArray[1]
+                    ],
+                    $data
+                );
+            }
+        }
+
+        return redirect()->back()->with('success', 'Sub-requirements updated successfully.');
+    }
+
+    // For name, group, service, project levels
+    $assetDetails = DB::table('iso_sec_2_1')
+        ->where('project_id', $proj_id)
+        ->where('assessment_id', $asset_id)
+        ->first();
+
+    $assets = match ($evidenceLevel) {
+        'name' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('name', $assetDetails->name)->get(),
+        'group' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('g_name', $assetDetails->g_name)->get(),
+        'service' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('s_name', $assetDetails->s_name)->get(),
+        'project' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->get(),
+        default => collect(),
+    };
+
+    foreach ($assets as $ass) {
+        foreach ($sub_reqs as $index => $sub_req) {
+            $compStatus = $statuses[$index];
+
+            $data = [
+                'comp_status' => $compStatus,
+                'last_edited_by' => $user_id,
+                'last_edited_at' => now()->format('Y-m-d H:i:s')
+            ];
+
+            $filteredData = collect($rows)->filter(function ($row) use ($sub_req) {
+                return strval(trim($row[3])) === strval(trim($sub_req));
+            });
+
+            foreach ($filteredData as $innerArray) {
+                DB::table('iso_sec_2_2')->updateOrInsert(
+                    [
+                        'project_id' => $proj_id,
+                        'asset_id' => $ass->assessment_id,
+                        'title_num' => $innerArray[0],
+                        'sub_req' => $innerArray[3],
+                        'subdomain' => $innerArray[1]
+                    ],
+                    $data
+                );
+            }
+        }
+    }
+
+    return redirect()->back()->with('success', 'All sub-requirements updated successfully.');
+}
+
 }

@@ -684,6 +684,8 @@ route::post('add_mandatory_all_domain_all_controls/{proj_id}/{user_id}/{asset_id
 
 
 route::post('add_mandatory_all_sub_req/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'add_mandatory_all_sub_req'])->name('add_mandatory_all_sub_req');
+route::post('add_mandatory_all_sub_req_all_controls/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'add_mandatory_all_sub_req_all_controls'])->name('add_mandatory_all_sub_req_all_controls');
+
 
 route::post('approve_sec_2_2/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'approve_sec_2_2']);
 route::post('approve_sec_2_3_1/{control_num}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'approve_sec_2_3_1']);

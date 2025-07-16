@@ -64,13 +64,13 @@ $isApprover=in_array('Data Approver', $permissions);
 <a href="/ksa_nca_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary btn-md float-end mb-4">All Compliance domains</a>
 
 
-
+{{-- 
 <h3>Select From below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
     @if(Session('evidenceLevel')=='service') All Asset in the service: {{$asset->s_name}} @endif
     @if(Session('evidenceLevel')=='group') All Asset Types in: {{$asset->g_name}} @endif
     @if(Session('evidenceLevel')=='name') All Assets Subtypes in: {{$asset->name}} @endif
     @if(Session('evidenceLevel')=='component') the Component: {{$asset->c_name}} @endif
-</h3>
+</h3> --}}
 
 
     <p class="fw-bold mt-4 mb-4">

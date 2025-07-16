@@ -51,7 +51,21 @@
     
     @endif
     
-    
+    <div class="text-end">
+    <i class="fas fa-lightbulb fa-2x text-warning"
+       style="cursor: pointer;"
+       data-bs-toggle="tooltip"
+       data-bs-placement="left"
+       title="The hierarchy of control requirements are at 3 tiers:
+Control Domain
+Control Sub-domain
+Control Requirement
+
+If you choose to select values for “Applicable” and “Compliance Status” on this page, then the same values will apply to the controls at each domain’s lower layers, however you can edit values at the lower layers
+">
+    </i>
+</div>
+   
     
     {{-- <h4>Select one {{$project->type}} Compliance domain from below and apply to @if(Session('evidenceLevel')=='project') All Services and Assets in this Project @endif
         @if(Session('evidenceLevel')=='service') All Assets in the service: {{$asset->s_name}} @endif
@@ -61,6 +75,7 @@
     
     </h4> --}}
 
+ 
 
     @if($project->project_type==7)
     {{-- KSA --}}
@@ -103,6 +118,7 @@
 
             {{-- Submit Button --}}
             <button class="btn btn-sm btn-success flex-shrink-0" style="width:100px;" type="submit">Submit</button>
+
 
             {{-- AI Input Button --}}
             <a class="btn btn-sm btn-primary flex-shrink-0 d-flex justify-content-center align-items-center"
@@ -1051,6 +1067,15 @@
     });
 </script>
 @endif
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl, {html: false})
+        })
+    });
+</script>
 
 @endsection
 

@@ -101,6 +101,21 @@ $permissions=json_decode($project_permissions);
         @if(Session('evidenceLevel')=='component') the Component: {{$asset->c_name}} @endif
     
     </h4> --}}
+<div class="text-end">
+    <i class="fas fa-lightbulb fa-2x text-warning"
+       style="cursor: pointer;"
+       data-bs-toggle="tooltip"
+       data-bs-placement="left"
+       title="The hierarchy of control requirements are at 3 tiers:
+Control Domain
+Control Sub-domain
+Control Requirement
+
+
+If you choose to select values for “Applicable” and “Compliance Status” on this page, then the same values will apply to the controls at each sub-domain’s lower layers, however you can edit values at the lower layers
+">
+    </i>
+</div>
 
 
     <form action="/add_mandatory_all_domain_all_controls/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" method="POST">
@@ -341,6 +356,15 @@ $permissions=json_decode($project_permissions);
     });
 </script>
 @endif
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl, {html: false})
+        })
+    });
+</script>
 
 @endsection
 @endsection
