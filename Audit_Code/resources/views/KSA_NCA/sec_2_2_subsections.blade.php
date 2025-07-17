@@ -317,7 +317,7 @@ If you choose to select values for “Applicable” and “Compliance Status” 
 
         @elseif($project->project_type==4)
 
-      <div class="row h-100 w-100 mb-2">
+   <div class="row h-100 w-100 mb-2">
 
     <form action="/add_mandatory_all_title_all_controls/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" method="POST">
         @csrf
@@ -338,788 +338,106 @@ If you choose to select values for “Applicable” and “Compliance Status” 
             </div>
         </div>
 
-        <!-- Loop Starts -->
         @foreach([4 => 'Context of the Organization', 5 => 'Leadership', 6=>'Planning',7=>"Support",8=>"Operation",9=>"Performance Evaluation",10=>"Operation"] as $title => $label)
 
-            @php
-                $status = $finalStatusByTitle->get($title);
-                $applicability = $finalApplicabilityByTitle->get($title);
-            @endphp
+        @php
+        $status = $finalStatusByTitle->get($title);
+        $applicability = $finalApplicabilityByTitle->get($title);
+        @endphp
 
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-5">
-                    <a href="/ksa_nca_section_2_2/{{ $title }}/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" 
-                       class="btn btn-lg btn-warning w-100 text-start fw-bold">
-                        {{ $title }}. {{ $label }}
+        <div class="row mb-3 align-items-start">
+            <div class="col-md-5">
+                <a href="/ksa_nca_section_2_2/{{ $title }}/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" 
+                   class="btn btn-lg btn-warning w-100 text-start fw-bold">
+                    {{ $title }}. {{ $label }}
+                </a>
+            </div>
+
+            <div class="col-md-3">
+                <input type="hidden" name="titles[]" value="{{ $title }}">
+
+                <select name="applicabilities[]" class="form-select rounded-pill">
+                    <option value="">Select --</option>
+                    <option value="yes" {{ old('applicabilities.' . $loop->index, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
+                    <option value="no" {{ old('applicabilities.' . $loop->index, $applicability) === 'no' ? 'selected' : '' }}>No</option>
+                </select>
+
+                @if(trim($applicability) === 'different')
+                <div class="mt-1">
+                    <span class="badge bg-secondary fs-6">Applicability differs in lower layers</span>
+                </div>
+                @endif
+            </div>
+
+            <div class="col-md-4">
+                <div class="d-flex align-items-center gap-2">
+                    <select name="comp_statuses[]" class="form-select rounded-pill w-100">
+                        <option value="">Select --</option>
+                        @foreach([
+                            'yes' => 'In Place',
+                            'no' => 'Not in Place',
+                            'not_applicable' => 'Not Applicable',
+                            'not_tested' => 'Not Tested',
+                            'partial' => 'Partial'
+                        ] as $value => $labelOption)
+                        <option value="{{ $value }}" 
+                            {{ old('comp_statuses.' . $loop->index, $status !== 'different' ? $status : '') === $value ? 'selected' : '' }}>
+                            {{ $labelOption }}
+                        </option>
+                        @endforeach
+                    </select>
+
+                    <a class="btn btn-sm btn-primary" style="min-width:100px;" href="#">
+                        AI Input
                     </a>
                 </div>
 
-                <div class="col-md-3">
-                    <input type="hidden" name="titles[]" value="{{ $title }}">
-                    <select name="applicabilities[]" class="form-select rounded-pill">
-                        <option value="">Select --</option>
-                        <option value="yes" {{ old('applicabilities.' . $loop->index, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
-                        <option value="no" {{ old('applicabilities.' . $loop->index, $applicability) === 'no' ? 'selected' : '' }}>No</option>
-                    </select>
+                @if(trim($status) === 'different')
+                <div class="mt-1">
+                    <span class="badge bg-secondary fs-6">Compliance differs in lower layers</span>
                 </div>
-
-                <div class="col-md-3">
-                    <div class="d-flex align-items-center gap-2">
-                        <select name="comp_statuses[]" class="form-select rounded-pill w-100">
-                            <option value="">Select --</option>
-                            @foreach([
-                                'yes' => 'In Place',
-                                'no' => 'Not in Place',
-                                'not_applicable' => 'Not Applicable',
-                                'not_tested' => 'Not Tested',
-                                'partial' => 'Partial'
-                            ] as $value => $labelOption)
-                                <option value="{{ $value }}" 
-                                    {{ old('comp_statuses.' . $loop->index, $status !== 'different' ? $status : '') === $value ? 'selected' : '' }}>
-                                    {{ $labelOption }}
-                                </option>
-                            @endforeach
-                        </select>
-
-                        <a class="btn btn-sm btn-primary" style="min-width:100px;" href="#">
-                            AI Input
-                        </a>
-                    </div>
-
-                    @if(trim($status) === 'different')
-                        <div class="mt-1">
-                            <span class="badge bg-secondary fs-6">Compliance differs in lower layers</span>
-                        </div>
-                    @endif
-
-                     
-                </div>
+                @endif
             </div>
+
+        </div>
 
         @endforeach
 
-
-
-
-
-        {{-- ISO 27001 end --}}
-
-
-        @elseif($project->project_type==18)
-        {{-- COSO --}}
-
-
-        <div class="row h-100 w-100 mb-2">
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{1}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Control Environment</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="1">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{2}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Risk Assessment</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="2">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{3}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Control Activities</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="3">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
-
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{4}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Information and communication</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="4">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{5}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Monitoring</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="5">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-        </div>
-
-
-
-        @elseif($project->project_type==19)
-        {{-- SOc2 - type 2 --}}
-
-        <div class="row h-100 w-100 mb-2">
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{1}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Asset Management</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="1">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{2}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Availability</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="2">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{3}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Change Management</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="3">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{4}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Communications</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="4">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{5}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Confidentiality</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="5">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{6}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Data Classification</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="6">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{7}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Fraud Management</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="7">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{8}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Human Resource aspects of Trust Services</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="8">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{9}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Information Assets Security Management Policy </p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="9">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{10}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Information Security Events Monitoring</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="10">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{11}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Information Security Incident Management
-                        </p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="11">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{12}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Information Security Monitoring</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="12">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{13}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">IT Operational Anomalies Reporting</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="13">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{14}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Logical and Physical Access Controls</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="14">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{15}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Monitoring of Controls</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="15">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{16}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Organization & Management</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="16">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{17}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Risk Management </p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="17">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{18}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Vendor and Business Partner Risk Management </p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="18">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3" style="min-width: 80px;">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
-            <div class="row mt-2 align-items-center">
-                <div class="col-md-6">
-                    <a href="/ksa_nca_section_2_2/{{19}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100">
-                        <p class="fw-bold" style="text-align: left;">Vulnerability Management</p>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <form action="/add_mandatory_all_title/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="Post">
-                        @csrf
-                        <input type="hidden" name="title" value="19">
-                        <div class="d-flex align-items-center">
-                            <select name="comp_status" class="form-select rounded-pill me-2" style="max-width: 150px;">
-                                <option value="">Select --</option>
-                                <option value="yes" {{ old('comp_status', ) == 'yes' ? 'selected' : '' }}>In Place</option>
-                                <option value="no" {{ old('comp_status', ) == 'no' ? 'selected' : '' }}>Not in Place</option>
-                                <option value="not_applicable" {{ old('comp_status', ) == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                                <option value="not_tested" {{ old('comp_status', ) == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                                <option value="partial" {{ old('comp_status' ) == 'partial' ? 'selected' : '' }}>Partial</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success me-2 px-3">Submit</button>
-                            <a href="#" class="btn btn-primary btn-sm px-3">AI Input</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        </div>
-
-
-        @endif
-
-    </div>
+    </form>
 
 </div>
 
-
-
-@section('scripts')
-
-@if(Session::has('success'))
-<script>
-    swal({
-        title: "{{Session::get('success')}}"
-        , icon: "success"
-        , closeOnClickOutside: true
-        , timer: 3000
-    , });
-
-</script>
 @endif
+    </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl, {
-                html: false
+
+
+    @section('scripts')
+
+    @if(Session::has('success'))
+    <script>
+        swal({
+            title: "{{Session::get('success')}}"
+            , icon: "success"
+            , closeOnClickOutside: true
+            , timer: 3000
+        , });
+
+    </script>
+    @endif
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl, {
+                    html: false
+                })
             })
-        })
-    });
+        });
 
-</script>
+    </script>
 
-@endsection
+    @endsection
 
-@endsection
+    @endsection
