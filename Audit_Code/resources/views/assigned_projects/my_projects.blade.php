@@ -31,8 +31,8 @@
                         <th style='text-align:center'>My Permissions on Project</th>
                         <th style='text-align:center'>Data</th>
                         <th style='text-align:center'>Metadata</th>
-                        <th style='text-align:center'>View Compliance</th>
-                        <th style='text-align:center'>View Risk Heatmap</th>
+                        <th style='text-align:center'>View Compliance(to be deleted)</th>
+                        <th style='text-align:center'>View Compliance or Risk</th>
                         <th style='text-align:center'>View Action Plan</th>
          
                         {{-- <th style='text-align:center'>Risk & Compliance Heatmap</th>  --}}

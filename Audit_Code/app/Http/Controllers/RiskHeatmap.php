@@ -289,7 +289,17 @@ class RiskHeatmap extends Controller
         ->distinct()
         ->count('c_name');
 
-        return view('heatmap.select_service_and_risk_type',[
+        // return view('heatmap.select_service_and_risk_type',[
+        //     'uniqueServices'=>$uniqueServices,
+        //     'project'=>$project,
+        //     'uniqueServicesCount' => $uniqueServicesCount,
+        //     'uniqueGroupsCount' => $uniqueGroupsCount,
+        //     'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
+        //     'uniqueComponentsCount' => $uniqueComponentsCount
+        // ]);
+
+        
+        return view('heatmap.dashboard_options',[
             'uniqueServices'=>$uniqueServices,
             'project'=>$project,
             'uniqueServicesCount' => $uniqueServicesCount,
@@ -297,6 +307,9 @@ class RiskHeatmap extends Controller
             'uniqueSubGroupsCount' => $uniqueSubGroupsCount,
             'uniqueComponentsCount' => $uniqueComponentsCount
         ]);
+
+
+        
 
  
     }
