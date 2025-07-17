@@ -72,92 +72,104 @@ $permissions=json_decode($project_permissions);
     </p>
 
     <form action="/add_mandatory_all_sub_req_all_controls/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="POST">
-    @csrf
+        @csrf
 
-    <div class="d-flex justify-content-end mb-3">
-        <button class="btn btn-success btn-md px-5">Save All</button>
-    </div>
+        <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-success btn-md px-5">Save All</button>
+        </div>
 
-    <table class="table table-bordered table-responsive table-primary">
-        <thead style="vertical-align: middle; text-align: center;" class="table-dark">
-            <tr>
-                <td class="fw-bold" style="width:5%">Control No.</td>
-                <td class="fw-bold" @if($project->project_type==7) style="width:30%;" @elseif($project->project_type==18) style="width:60%;" @else style="width:50%;" @endif>Requirement</td>
+        <table class="table table-bordered table-responsive table-primary">
+            <thead style="vertical-align: middle; text-align: center;" class="table-dark">
+                <tr>
+                    <td class="fw-bold" style="width:5%">Control No.</td>
+                    <td class="fw-bold" @if($project->project_type==7) style="width:30%;" @elseif($project->project_type==18) style="width:60%;" @else style="width:50%;" @endif>Requirement</td>
 
-                @if($project->project_type==7)
-                <td class="fw-bold" style="width:10%">Tools</td>
-                <td class="fw-bold" style="width:10%">Guidelines</td>
-                <td class="fw-bold" style="width:10%">Deliverables</td>
-                @endif
+                    @if($project->project_type==7)
+                    <td class="fw-bold" style="width:10%">Tools</td>
+                    <td class="fw-bold" style="width:10%">Guidelines</td>
+                    <td class="fw-bold" style="width:10%">Deliverables</td>
+                    @endif
 
-                <td class="fw-bold">Applicability</td>
-                <td class="fw-bold">Compliance Status</td>
-            </tr>
-        </thead>
+                    <td class="fw-bold">Applicability</td>
+                    <td class="fw-bold">Compliance Status</td>
+                </tr>
+            </thead>
 
-        <tbody>
-            @foreach ($data as $d)
-            @php
-                $subReq = $d[4];
-                $status = $fetchedData->firstWhere('sub_req', $subReq)->comp_status ?? '';
-                $applicability = $fetchedData->firstWhere('sub_req', $subReq)->applicability ?? '';
-            @endphp
+            <tbody>
+               @foreach ($data as $index => $d)
+@php
+    $subReq = $d[4];
+    $status = $fetchedData->firstWhere('sub_req', $subReq)->comp_status ?? '';
+    $applicability = $fetchedData->firstWhere('sub_req', $subReq)->applicability ?? '';
+    $justification = $fetchedData->firstWhere('sub_req', $subReq)->justification ?? '';
+@endphp
 
-            <tr>
-                <td style="text-align:center">{{$subReq}}</td>
-                <td class="fw-bold"><a href="/ksa_nca_sec2_2_sub_req_edit/{{$subReq}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" style="text-decoration: underline;color:inherit;">{!! nl2br($d[5]) !!}</a></td>
+<tr>
+    <td style="text-align:center">{{$subReq}}</td>
+    <td class="fw-bold">
+        <a href="/ksa_nca_sec2_2_sub_req_edit/{{$subReq}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" style="text-decoration: underline;color:inherit;">
+            {!! nl2br($d[5]) !!}
+        </a>
+    </td>
 
-                @if($project->project_type==7)
-                <td class="text-center">
-                    <button style="background-color: pink" class="btn btn-sm fw-bold d-flex align-items-center justify-content-center gap-2 px-3 py-2">
-                        <i class="bi bi-gear-wide"></i> <span>Tools</span>
-                    </button>
-                </td>
-                <td class="text-center">
-                    <button style="background-color: rgb(117, 236, 117)" class="btn btn-sm fw-bold d-flex align-items-center justify-content-center gap-2 px-3 py-2">
-                        <i class="bi bi-rulers"></i> <span>Guidelines</span>
-                    </button>
-                </td>
-                <td class="text-center">
-                    <button style="background-color: rgb(243, 243, 67)" class="btn btn-sm fw-bold d-flex align-items-center justify-content-center gap-2 px-3 py-2">
-                        <i class="bi bi-truck"></i> <span>Deliverables</span>
-                    </button>
-                </td>
-                @endif
+    @if($project->project_type==7)
+    <td class="text-center">
+        <button style="background-color: pink" class="btn btn-sm fw-bold d-flex align-items-center justify-content-center gap-2 px-3 py-2">
+            <i class="bi bi-gear-wide"></i> <span>Tools</span>
+        </button>
+    </td>
+    <td class="text-center">
+        <button style="background-color: rgb(117, 236, 117)" class="btn btn-sm fw-bold d-flex align-items-center justify-content-center gap-2 px-3 py-2">
+            <i class="bi bi-rulers"></i> <span>Guidelines</span>
+        </button>
+    </td>
+    <td class="text-center">
+        <button style="background-color: rgb(243, 243, 67)" class="btn btn-sm fw-bold d-flex align-items-center justify-content-center gap-2 px-3 py-2">
+            <i class="bi bi-truck"></i> <span>Deliverables</span>
+        </button>
+    </td>
+    @endif
 
-                <td>
-                    <input type="hidden" name="sub_reqs[]" value="{{$subReq}}">
+    <td>
+        <input type="hidden" name="sub_reqs[]" value="{{$subReq}}">
 
-                    <select name="applicabilities[]" class="form-select form-select-sm rounded-pill" style="max-width:150px; min-width:150px;">
-                        <option value="">Select --</option>
-                        <option value="yes" {{ $applicability == 'yes' ? 'selected' : '' }}>Yes</option>
-                        <option value="no" {{ $applicability == 'no' ? 'selected' : '' }}>No</option>
-                    </select>
-                </td>
+        <select name="applicabilities[]" class="form-select form-select-sm rounded-pill applicability-select" data-index="{{$index}}" style="max-width:150px; min-width:150px;">
+            <option value="">Select --</option>
+            <option value="yes" {{ $applicability == 'yes' ? 'selected' : '' }}>Yes</option>
+            <option value="no" {{ $applicability == 'no' ? 'selected' : '' }}>No</option>
+        </select>
 
-                <td>
-                    <div class="d-flex align-items-center gap-2">
-                        <select name="comp_statuses[]" class="form-select rounded-pill form-select-sm" style="max-width: 180px;">
-                            <option value="">Select --</option>
-                            <option value="yes" {{ $status == 'yes' ? 'selected' : '' }}>In Place</option>
-                            <option value="no" {{ $status == 'no' ? 'selected' : '' }}>Not in Place</option>
-                            <option value="not_applicable" {{ $status == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
-                            <option value="not_tested" {{ $status == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
-                            <option value="partial" {{ $status == 'partial' ? 'selected' : '' }}>Partial</option>
-                        </select>
+        <!-- Justification field -->
+        <textarea name="justifications[]" 
+                  class="form-control form-control-sm mt-2 justification-textarea justification-{{$index}}" 
+                  placeholder="Enter justification"
+                  style="display: {{ $applicability == 'no' ? 'block' : 'none' }};">{{$justification}}</textarea>
+    </td>
 
-                        <a href="/ksa_nca_sec2_2_sub_req_edit/{{$subReq}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary btn-sm px-3 text-nowrap">AI Input</a>
-                    </div>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <td>
+        <div class="d-flex align-items-center gap-2">
+            <select name="comp_statuses[]" class="form-select rounded-pill form-select-sm" style="max-width: 180px;">
+                <option value="">Select --</option>
+                <option value="yes" {{ $status == 'yes' ? 'selected' : '' }}>In Place</option>
+                <option value="no" {{ $status == 'no' ? 'selected' : '' }}>Not in Place</option>
+                <option value="not_applicable" {{ $status == 'not_applicable' ? 'selected' : '' }}>Not Applicable</option>
+                <option value="not_tested" {{ $status == 'not_tested' ? 'selected' : '' }}>Not Tested</option>
+                <option value="partial" {{ $status == 'partial' ? 'selected' : '' }}>Partial</option>
+            </select>
 
-    <div class="d-flex justify-content-end mt-3">
-        <button class="btn btn-success btn-md px-5">Save All</button>
-    </div>
-</form>
+            <a href="/ksa_nca_sec2_2_sub_req_edit/{{$subReq}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary btn-sm px-3 text-nowrap">AI Input</a>
+        </div>
+    </td>
+</tr>
+@endforeach
+
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-end mt-3">
+            <button class="btn btn-success btn-md px-5">Save All</button>
+        </div>
+    </form>
 
 
 
@@ -176,6 +188,23 @@ $permissions=json_decode($project_permissions);
 
 </script>
 @endif
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.applicability-select').forEach(function (select) {
+        select.addEventListener('change', function () {
+            var index = this.getAttribute('data-index');
+            var justification = document.querySelector('.justification-' + index);
+            if (this.value === 'no') {
+                justification.style.display = 'block';
+            } else {
+                justification.style.display = 'none';
+                justification.value = '';
+            }
+        });
+    });
+});
+</script>
 
 @endsection
 

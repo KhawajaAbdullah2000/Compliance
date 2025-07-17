@@ -132,78 +132,80 @@ If you choose to select values for “Applicable” and “Compliance Status” 
             </div>
 
             <table class="table table-bordered table-responsive table-primary">
-    <thead class="fw-bold table-dark">
-        <tr>
-            <td style="width: 50%;">Subdomain</td>
-            <td>Applicability</td>
-            <td>Compliance Status</td>
-        </tr>
-    </thead>
+                <thead class="fw-bold table-dark">
+                    <tr>
+                        <td style="width: 50%;">Subdomain</td>
+                        <td>Applicability</td>
+                        <td>Compliance Status</td>
+                    </tr>
+                </thead>
 
-    <tbody>
-        @for ($i = 0; $i < count($data); $i++)
-            @php 
-                if ($i > 0 && $data[$i][2] == $data[$i-1][2]) {
-                    continue; // skip duplicate subdomains
-                }
-                $subdomain = trim((string) $data[$i][2]);
-                $status = $finalStatusBySubdomain->get($subdomain);
-                $applicability = $finalApplicabilityByTitle->get($subdomain); 
-            @endphp
+                <tbody>
+                    @for ($i = 0; $i < count($data); $i++) @php if ($i> 0 && $data[$i][2] == $data[$i-1][2]) {
+                        continue; // skip duplicate subdomains
+                        }
+                        $subdomain = trim((string) $data[$i][2]);
+                        $status = $finalStatusBySubdomain->get($subdomain);
+                        $applicability = $finalApplicabilityByTitle->get($subdomain);
+                        @endphp
 
-            <tr>
-                <td>
-                    <a style="color: inherit;" href="/ksa_nca_sec_2_2_req/{{$subdomain}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}">
-                        <p class="fw-bold mb-0">{!! nl2br($data[$i][2]) !!} {!! nl2br($data[$i][3]) !!}</p>
-                    </a>
-                </td>
+                        <tr>
+                            <td>
+                                <a style="color: inherit;" href="/ksa_nca_sec_2_2_req/{{$subdomain}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}">
+                                    <p class="fw-bold mb-0">{!! nl2br($data[$i][2]) !!} {!! nl2br($data[$i][3]) !!}</p>
+                                </a>
+                            </td>
 
-                <td>
-                    <input type="hidden" name="domains[]" value="{{ $subdomain }}">
+                            <td>
+                                <input type="hidden" name="domains[]" value="{{ $subdomain }}">
 
-                    <select name="applicabilities[]" class="form-select form-select-sm rounded-pill" style="max-width:150px;min-width:150px;">
-                        <option value="">Select --</option>
-                        <option value="yes" {{ old('applicabilities.' . $i, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
-                        <option value="no" {{ old('applicabilities.' . $i, $applicability) === 'no' ? 'selected' : '' }}>No</option>
-                    </select>
+                                <select name="applicabilities[]" class="form-select form-select-sm rounded-pill applicability-select" data-index="{{ $i }}" style="max-width:150px;min-width:150px;">
+                                    <option value="">Select --</option>
+                                    <option value="yes" {{ old('applicabilities.' . $i, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
+                                    <option value="no" {{ old('applicabilities.' . $i, $applicability) === 'no' ? 'selected' : '' }}>No</option>
+                                </select>
 
-                    @if(trim($applicability) == "different")
-                    <div class="mt-1">
-                        <span class="badge fs-6 bg-secondary">Applicability differs in lower layers</span>
-                    </div>
-                    @endif
-                </td>
+                                @if(trim($applicability) == "different")
+                                <div class="mt-1">
+                                    <span class="badge fs-6 bg-secondary">Applicability differs in lower layers</span>
+                                </div>
+                                @endif
 
-                <td>
-                    <div class="d-flex align-items-center gap-2">
-                        <select name="comp_statuses[]" class="form-select form-select-sm rounded-pill" style="max-width:150px;min-width:150px;">
-                            <option value="">Select --</option>
-                            @foreach([
-                                'yes' => 'In Place',
-                                'no' => 'Not in Place',
-                                'not_applicable' => 'Not Applicable',
-                                'not_tested' => 'Not Tested',
-                                'partial' => 'Partial'
-                            ] as $value => $label)
-                            <option value="{{ $value }}" {{ old('comp_statuses.' . $i, $status) === $value ? 'selected' : '' }}>
-                                {{ $label }}
-                            </option>
-                            @endforeach
-                        </select>
+                                <!-- Justification Field -->
+                                <textarea name="justifications[]" class="form-control form-control-sm mt-2 justification-textarea justification-{{ $i }}" style="display: {{ (old('applicabilities.' . $i, $applicability) === 'no') ? 'block' : 'none' }};" placeholder="Enter justification">{{ old('justifications.' . $i) }}</textarea>
+                            </td>
 
-                        <a href="#" class="btn btn-primary btn-sm" style="min-width:100px;">AI Input</a>
-                    </div>
 
-                    @if(trim($status) == "different")
-                    <div class="mt-1">
-                        <span class="badge fs-6 bg-secondary">Compliance differs in lower layers</span>
-                    </div>
-                    @endif
-                </td>
-            </tr>
-        @endfor
-    </tbody>
-</table>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <select name="comp_statuses[]" class="form-select form-select-sm rounded-pill" style="max-width:150px;min-width:150px;">
+                                        <option value="">Select --</option>
+                                        @foreach([
+                                        'yes' => 'In Place',
+                                        'no' => 'Not in Place',
+                                        'not_applicable' => 'Not Applicable',
+                                        'not_tested' => 'Not Tested',
+                                        'partial' => 'Partial'
+                                        ] as $value => $label)
+                                        <option value="{{ $value }}" {{ old('comp_statuses.' . $i, $status) === $value ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+
+                                    <a href="#" class="btn btn-primary btn-sm" style="min-width:100px;">AI Input</a>
+                                </div>
+
+                                @if(trim($status) == "different")
+                                <div class="mt-1">
+                                    <span class="badge fs-6 bg-secondary">Compliance differs in lower layers</span>
+                                </div>
+                                @endif
+                            </td>
+                        </tr>
+                        @endfor
+                </tbody>
+            </table>
 
 
         </form>
@@ -367,6 +369,25 @@ If you choose to select values for “Applicable” and “Compliance Status” 
     });
 
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.applicability-select').forEach(function (select) {
+            select.addEventListener('change', function () {
+                var index = this.getAttribute('data-index');
+                var justification = document.querySelector('.justification-' + index);
+
+                if (this.value === 'no') {
+                    justification.style.display = 'block';
+                } else {
+                    justification.style.display = 'none';
+                    justification.value = ''; // Clear the value when hidden
+                }
+            });
+        });
+    });
+</script>
+
 
 @endsection
 @endsection

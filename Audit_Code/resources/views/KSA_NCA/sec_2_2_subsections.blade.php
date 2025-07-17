@@ -345,7 +345,7 @@ If you choose to select values for “Applicable” and “Compliance Status” 
         $applicability = $finalApplicabilityByTitle->get($title);
         @endphp
 
-        <div class="row mb-3 align-items-start">
+        {{-- <div class="row mb-3 align-items-start">
             <div class="col-md-5">
                 <a href="/ksa_nca_section_2_2/{{ $title }}/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" 
                    class="btn btn-lg btn-warning w-100 text-start fw-bold">
@@ -399,7 +399,69 @@ If you choose to select values for “Applicable” and “Compliance Status” 
                 @endif
             </div>
 
+        </div> --}}
+
+        <div class="row mb-3 align-items-start">
+    <div class="col-md-5">
+        <a href="/ksa_nca_section_2_2/{{ $title }}/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" 
+           class="btn btn-lg btn-warning w-100 text-start fw-bold">
+            {{ $title }}. {{ $label }}
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <input type="hidden" name="titles[]" value="{{ $title }}">
+
+        <select name="applicabilities[]" class="form-select rounded-pill applicability-select" data-index="{{ $loop->index }}">
+            <option value="">Select --</option>
+            <option value="yes" {{ old('applicabilities.' . $loop->index, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
+            <option value="no" {{ old('applicabilities.' . $loop->index, $applicability) === 'no' ? 'selected' : '' }}>No</option>
+        </select>
+
+        @if(trim($applicability) === 'different')
+        <div class="mt-1">
+            <span class="badge bg-secondary fs-6">Applicability differs in lower layers</span>
         </div>
+        @endif
+
+        <!-- Justification Field (hidden by default, shown via JS) -->
+        <textarea name="justifications[]" 
+                  class="form-control mt-2 justification-textarea justification-{{ $loop->index }}" 
+                  style="display: {{ (old('applicabilities.' . $loop->index, $applicability) === 'no') ? 'block' : 'none' }};"
+                  placeholder="Enter justification">{{ old('justifications.' . $loop->index) }}</textarea>
+    </div>
+
+    <div class="col-md-4">
+        <div class="d-flex align-items-center gap-2">
+            <select name="comp_statuses[]" class="form-select rounded-pill w-100">
+                <option value="">Select --</option>
+                @foreach([
+                    'yes' => 'In Place',
+                    'no' => 'Not in Place',
+                    'not_applicable' => 'Not Applicable',
+                    'not_tested' => 'Not Tested',
+                    'partial' => 'Partial'
+                ] as $value => $labelOption)
+                <option value="{{ $value }}" 
+                    {{ old('comp_statuses.' . $loop->index, $status !== 'different' ? $status : '') === $value ? 'selected' : '' }}>
+                    {{ $labelOption }}
+                </option>
+                @endforeach
+            </select>
+
+            <a class="btn btn-sm btn-primary" style="min-width:100px;" href="#">
+                AI Input
+            </a>
+        </div>
+
+        @if(trim($status) === 'different')
+        <div class="mt-1">
+            <span class="badge bg-secondary fs-6">Compliance differs in lower layers</span>
+        </div>
+        @endif
+    </div>
+</div>
+
 
         @endforeach
 
@@ -437,6 +499,25 @@ If you choose to select values for “Applicable” and “Compliance Status” 
         });
 
     </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.applicability-select').forEach(function (select) {
+            select.addEventListener('change', function () {
+                var index = this.getAttribute('data-index');
+                var justification = document.querySelector('.justification-' + index);
+
+                if (this.value === 'no') {
+                    justification.style.display = 'block';
+                } else {
+                    justification.style.display = 'none';
+                    justification.value = ''; // Clear if hidden
+                }
+            });
+        });
+    });
+</script>
+
 
     @endsection
 

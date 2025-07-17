@@ -276,14 +276,11 @@ class KSA_NCA extends Controller
                         )
                         ->where('iso_sec_2_1.assessment_id', $asset_id)
                         ->first();
-
-
+                    
                     $fetchedData = DB::table('iso_Sec_2_2')->where('project_id', $proj_id)
+                       ->where('title_num',$title)
                         ->where('subdomain', $main_req_num)
                         ->get();
-
-
-
 
 
                     return view('KSA_NCA.ksa_nca_2_2_sub_reqs', [
@@ -1555,7 +1552,6 @@ class KSA_NCA extends Controller
     //         }
     //     }
     // }
-
     public function add_mandatory_all_title_all_controls(Request $req, $proj_id, $user_id, $asset_id)
     {
         if ($user_id != auth()->user()->id) {
@@ -1582,6 +1578,7 @@ class KSA_NCA extends Controller
         $titles = $req->input('titles');
         $statuses = $req->input('comp_statuses');
         $applicabilities = $req->input('applicabilities');
+        $justifications = $req->input('justifications');
 
         $filepath = public_path('ISO27K1_2022_Compliance_Updated_Modified.xlsx');
         $evidenceLevel = $req->session()->get('evidenceLevel');
@@ -1607,9 +1604,10 @@ class KSA_NCA extends Controller
 
             $compStatus = $statuses[$index];
             $applicability = $applicabilities[$index];
+            $justification = $justifications[$index];
 
-            // Skip if both are null (nothing to update)
-            if (is_null($compStatus) && is_null($applicability)) {
+            // Skip if all fields are null/empty
+            if (is_null($compStatus) && is_null($applicability) && empty($justification)) {
                 continue;
             }
 
@@ -1624,6 +1622,10 @@ class KSA_NCA extends Controller
 
             if (!is_null($applicability)) {
                 $data['applicability'] = $applicability;
+            }
+
+            if (!empty($justification)) {
+                $data['justification'] = $justification;
             }
 
             $filteredData = collect($rows)->filter(function ($row) use ($title) {
@@ -1663,6 +1665,7 @@ class KSA_NCA extends Controller
 
         return redirect()->back()->with('success', 'All controls updated successfully.');
     }
+
 
 
 
@@ -1880,143 +1883,15 @@ class KSA_NCA extends Controller
         }
     }
 
-    // public function add_mandatory_all_domain_all_controls(Request $req, $proj_id, $user_id, $asset_id)
-    // {
-    //     if ($user_id != auth()->user()->id) {
-    //         return redirect()->back()->with('error', 'Unauthorized action.');
-    //     }
 
-    //     $checkpermission = DB::table('project_details')
-    //         ->select('project_types.id as type_id', 'project_details.project_code', 'project_details.project_permissions', 'projects.project_name', 'projects.project_id')
-    //         ->join('projects', 'project_details.project_code', 'projects.project_id')
-    //         ->join('project_types', 'projects.project_type', 'project_types.id')
-    //         ->where('project_code', $proj_id)
-    //         ->where('assigned_enduser', $user_id)
-    //         ->first();
 
-    //     if (!$checkpermission) {
-    //         return redirect()->back()->with('error', 'No project permission found.');
-    //     }
-
-    //     $permissions = json_decode($checkpermission->project_permissions);
-
-    //     if (!in_array('Data Inputter', $permissions)) {
-    //         return redirect()->route('iso_sections', ['proj_id' => $proj_id, 'user_id' => $user_id])
-    //             ->with('error', 'Not Allowed');
-    //     }
-
-    //     $evidenceLevel = $req->session()->get('evidenceLevel');
-
-    //     // Determine correct Excel file
-    //     $fileMap = [
-    //         7 => 'KSA_NCA_ECC_Modified.xlsx',
-    //         18 => 'COSO_Modified.xlsx',
-    //         19 => 'SOC2_Type2_Modified.xlsx',
-    //         5 => 'CY_SAMA_Modified.xlsx',
-    //         1 => 'PCI_DSS_4_Single_TSP.xlsx',
-    //         16 => 'COBIT_2019.xlsx',
-    //         2 => 'PCI_DSS_4_Multi_TSP.xlsx',
-    //         3 => 'PCI_DSS_4_Merchant.xlsx',
-    //         10 => 'ISA_62443_Part 3-2_Modified.xlsx',
-    //         12 => 'ISA 62443 Part 4-2 -Modified.xlsx',
-    //         13 => 'ISA 62443 Part 3-3 - Modified.xlsx',
-    //         11 => 'ISA 62443 Part 2-1 - Modified.xlsx',
-    //         9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
-    //         4 => 'ISO27K1_2022_Compliance_Updated_Modified.xlsx',
-    //     ];
-
-    //     $filepath = public_path($fileMap[$checkpermission->type_id]);
-
-    //     $data2 = Excel::toArray([], $filepath); // Load Excel once
-    //     $rows = array_slice($data2[0], 1); // Skip header
-
-    //     $domains = $req->input('domains');
-    //     $statuses = $req->input('comp_statuses');
-
-    //     if ($evidenceLevel === 'component') {
-    //         foreach ($domains as $index => $domain) {
-
-    //             $compStatus = $statuses[$index];
-
-    //             $data = [
-    //                 'comp_status' => $compStatus,
-    //                 'last_edited_by' => $user_id,
-    //                 'last_edited_at' => now()->format('Y-m-d H:i:s'),
-    //             ];
-
-    //             $filteredData = collect($rows)->filter(function ($row) use ($domain) {
-    //                 return strval($row[1]) === strval($domain);
-    //             });
-
-    //             foreach ($filteredData as $innerArray) {
-    //                 DB::table('iso_sec_2_2')->updateOrInsert(
-    //                     [
-    //                         'project_id' => $proj_id,
-    //                         'asset_id' => $asset_id,
-    //                         'title_num' => $innerArray[0],
-    //                         'sub_req' => $innerArray[3],
-    //                         'subdomain' => $innerArray[1]
-    //                     ],
-    //                     $data
-    //                 );
-    //             }
-    //         }
-
-    //         return redirect()->back()->with('success', 'Subdomain records updated successfully.');
-    //     }
-
-    //     // For name, group, service, project levels:
-    //     $assetDetails = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
-
-    //     $assets = match ($evidenceLevel) {
-    //         'name' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('name', $assetDetails->name)->get(),
-    //         'group' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('g_name', $assetDetails->g_name)->get(),
-    //         'service' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('s_name', $assetDetails->s_name)->get(),
-    //         'project' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->get(),
-    //         default => collect(),
-    //     };
-
-    //     foreach ($assets as $ass) {
-    //         foreach ($domains as $index => $domain) {
-
-    //             $compStatus = $statuses[$index];
-
-    //             $data = [
-    //                 'comp_status' => $compStatus,
-    //                 'last_edited_by' => $user_id,
-    //                 'last_edited_at' => now()->format('Y-m-d H:i:s'),
-    //             ];
-
-    //             $filteredData = collect($rows)->filter(function ($row) use ($domain) {
-    //                 return strval($row[1]) === strval($domain);
-    //             });
-
-    //             foreach ($filteredData as $innerArray) {
-    //                 DB::table('iso_sec_2_2')->updateOrInsert(
-    //                     [
-    //                         'project_id' => $proj_id,
-    //                         'asset_id' => $ass->assessment_id,
-    //                         'title_num' => $innerArray[0],
-    //                         'sub_req' => $innerArray[3],
-    //                         'subdomain' => $innerArray[1]
-    //                     ],
-    //                     $data
-    //                 );
-    //             }
-    //         }
-    //     }
-
-    //     return redirect()->back()->with('success', 'All subdomains updated successfully.');
-    // }
-
- public function add_mandatory_all_domain_all_controls(Request $req, $proj_id, $user_id, $asset_id)
+   public function add_mandatory_all_domain_all_controls(Request $req, $proj_id, $user_id, $asset_id)
 {
     if ($user_id != auth()->user()->id) {
         return redirect()->back()->with('error', 'Unauthorized action.');
     }
 
     $checkpermission = DB::table('project_details')
-        ->select('project_types.id as type_id', 'project_details.project_code', 'project_details.project_permissions', 'projects.project_name', 'projects.project_id')
         ->join('projects', 'project_details.project_code', 'projects.project_id')
         ->join('project_types', 'projects.project_type', 'project_types.id')
         ->where('project_code', $proj_id)
@@ -2053,7 +1928,8 @@ class KSA_NCA extends Controller
         4 => 'ISO27K1_2022_Compliance_Updated_Modified.xlsx',
     ];
 
-    $filepath = public_path($fileMap[$checkpermission->type_id]);
+
+    $filepath = public_path($fileMap[$checkpermission->project_type]);
 
     $data2 = Excel::toArray([], $filepath);
     $rows = array_slice($data2[0], 1);
@@ -2061,15 +1937,17 @@ class KSA_NCA extends Controller
     $domains = $req->input('domains');
     $statuses = $req->input('comp_statuses');
     $applicabilities = $req->input('applicabilities');
+    $justifications = $req->input('justifications');
 
     if ($evidenceLevel === 'component') {
         foreach ($domains as $index => $domain) {
 
             $compStatus = $statuses[$index];
             $applicability = $applicabilities[$index];
+            $justification = $justifications[$index];
 
-            // Skip if both are null (no update needed)
-            if (is_null($compStatus) && is_null($applicability)) {
+            // Skip if no update needed
+            if (is_null($compStatus) && is_null($applicability) && empty($justification)) {
                 continue;
             }
 
@@ -2084,6 +1962,10 @@ class KSA_NCA extends Controller
 
             if (!is_null($applicability)) {
                 $data['applicability'] = $applicability;
+            }
+
+            if (!empty($justification)) {
+                $data['justification'] = $justification;
             }
 
             $filteredData = collect($rows)->filter(function ($row) use ($domain) {
@@ -2107,7 +1989,7 @@ class KSA_NCA extends Controller
         return redirect()->back()->with('success', 'Subdomain records updated successfully.');
     }
 
-    // For name, group, service, project levels:
+    // For other levels (name, group, service, project)
     $assetDetails = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
 
     $assets = match ($evidenceLevel) {
@@ -2123,9 +2005,9 @@ class KSA_NCA extends Controller
 
             $compStatus = $statuses[$index];
             $applicability = $applicabilities[$index];
+            $justification = $justifications[$index];
 
-            // Skip if both are null
-            if (is_null($compStatus) && is_null($applicability)) {
+            if (is_null($compStatus) && is_null($applicability) && empty($justification)) {
                 continue;
             }
 
@@ -2140,6 +2022,10 @@ class KSA_NCA extends Controller
 
             if (!is_null($applicability)) {
                 $data['applicability'] = $applicability;
+            }
+
+            if (!empty($justification)) {
+                $data['justification'] = $justification;
             }
 
             $filteredData = collect($rows)->filter(function ($row) use ($domain) {
@@ -2163,6 +2049,7 @@ class KSA_NCA extends Controller
 
     return redirect()->back()->with('success', 'All subdomains updated successfully.');
 }
+
 
 
 
@@ -2363,139 +2250,173 @@ class KSA_NCA extends Controller
         }
     }
 
-    public function add_mandatory_all_sub_req_all_controls(Request $req, $proj_id, $user_id, $asset_id)
-    {
-
-
-        if ($user_id != auth()->user()->id) {
-            return redirect()->back()->with('error', 'Unauthorized action.');
-        }
-
-        $checkpermission = DB::table('project_details')
-            ->select('project_types.id as type_id', 'project_details.project_code', 'project_details.project_permissions', 'projects.project_name', 'projects.project_id')
-            ->join('projects', 'project_details.project_code', 'projects.project_id')
-            ->join('project_types', 'projects.project_type', 'project_types.id')
-            ->where('project_code', $proj_id)
-            ->where('assigned_enduser', $user_id)
-            ->first();
-
-        if (!$checkpermission) {
-            return redirect()->back()->with('error', 'No project permission found.');
-        }
-
-        $permissions = json_decode($checkpermission->project_permissions);
-
-        if (!in_array('Data Inputter', $permissions)) {
-            return redirect()->route('iso_sections', ['proj_id' => $proj_id, 'user_id' => $user_id])
-                ->with('error', 'Not Allowed');
-        }
-
-        $evidenceLevel = $req->session()->get('evidenceLevel');
-
-        $fileMap = [
-            7 => 'KSA_NCA_ECC_Modified.xlsx',
-            18 => 'COSO_Modified.xlsx',
-            19 => 'SOC2_Type2_Modified.xlsx',
-            5 => 'CY_SAMA_Modified.xlsx',
-            1 => 'PCI_DSS_4_Single_TSP.xlsx',
-            16 => 'COBIT_2019.xlsx',
-            2 => 'PCI_DSS_4_Multi_TSP.xlsx',
-            3 => 'PCI_DSS_4_Merchant.xlsx',
-            10 => 'ISA_62443_Part 3-2_Modified.xlsx',
-            12 => 'ISA 62443 Part 4-2 -Modified.xlsx',
-            13 => 'ISA 62443 Part 3-3 - Modified.xlsx',
-            11 => 'ISA 62443 Part 2-1 - Modified.xlsx',
-            9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
-            4 => 'ISO27K1_2022_Compliance_Updated_Modified.xlsx',
-        ];
-
-        $filepath = public_path($fileMap[$checkpermission->type_id]);
-
-        $data2 = Excel::toArray([], $filepath);
-        $rows = array_slice($data2[0], 1); // skip header
-
-        $sub_reqs = $req->input('sub_reqs');
-        $statuses = $req->input('comp_statuses');
-        $applicabilities = $req->input('applicabilities');
-
-        if ($evidenceLevel === 'component') {
-            foreach ($sub_reqs as $index => $sub_req) {
-                $compStatus = $statuses[$index];
-                $applicability = $applicabilities[$index];
-
-                $data = [
-                    'comp_status' => $compStatus,
-                    'applicability' => $applicability,
-                    'last_edited_by' => $user_id,
-                    'last_edited_at' => now()->format('Y-m-d H:i:s')
-                ];
-
-                $filteredData = collect($rows)->filter(function ($row) use ($sub_req) {
-                    return strval(trim($row[3])) === strval(trim($sub_req));
-                });
-
-                foreach ($filteredData as $innerArray) {
-                    DB::table('iso_sec_2_2')->updateOrInsert(
-                        [
-                            'project_id' => $proj_id,
-                            'asset_id' => $asset_id,
-                            'title_num' => $innerArray[0],
-                            'sub_req' => $innerArray[3],
-                            'subdomain' => $innerArray[1]
-                        ],
-                        $data
-                    );
-                }
-            }
-
-            return redirect()->back()->with('success', 'Sub-requirements updated successfully.');
-        }
-
-        // For name, group, service, project levels
-        $assetDetails = DB::table('iso_sec_2_1')
-            ->where('project_id', $proj_id)
-            ->where('assessment_id', $asset_id)
-            ->first();
-
-        $assets = match ($evidenceLevel) {
-            'name' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('name', $assetDetails->name)->get(),
-            'group' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('g_name', $assetDetails->g_name)->get(),
-            'service' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('s_name', $assetDetails->s_name)->get(),
-            'project' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->get(),
-            default => collect(),
-        };
-
-        foreach ($assets as $ass) {
-            foreach ($sub_reqs as $index => $sub_req) {
-                $compStatus = $statuses[$index];
-                $applicability = $applicabilities[$index];
-
-                $data = [
-                    'comp_status' => $compStatus,
-                    'applicability' => $applicability,
-                    'last_edited_by' => $user_id,
-                    'last_edited_at' => now()->format('Y-m-d H:i:s')
-                ];
-
-                $filteredData = collect($rows)->filter(function ($row) use ($sub_req) {
-                    return strval(trim($row[3])) === strval(trim($sub_req));
-                });
-
-                foreach ($filteredData as $innerArray) {
-                    DB::table('iso_sec_2_2')->updateOrInsert(
-                        [
-                            'project_id' => $proj_id,
-                            'asset_id' => $ass->assessment_id,
-                            'title_num' => $innerArray[0],
-                            'sub_req' => $innerArray[3],
-                            'subdomain' => $innerArray[1]
-                        ],
-                        $data
-                    );
-                }
-            }
-        }
-
-        return redirect()->back()->with('success', 'All sub-requirements updated successfully.');
+   public function add_mandatory_all_sub_req_all_controls(Request $req, $proj_id, $user_id, $asset_id)
+{
+    if ($user_id != auth()->user()->id) {
+        return redirect()->back()->with('error', 'Unauthorized action.');
     }
+
+    $checkpermission = DB::table('project_details')
+        ->select('project_types.id as type_id', 'project_details.project_code', 'project_details.project_permissions', 'projects.project_name', 'projects.project_id')
+        ->join('projects', 'project_details.project_code', 'projects.project_id')
+        ->join('project_types', 'projects.project_type', 'project_types.id')
+        ->where('project_code', $proj_id)
+        ->where('assigned_enduser', $user_id)
+        ->first();
+
+    if (!$checkpermission) {
+        return redirect()->back()->with('error', 'No project permission found.');
+    }
+
+    $permissions = json_decode($checkpermission->project_permissions);
+
+    if (!in_array('Data Inputter', $permissions)) {
+        return redirect()->route('iso_sections', ['proj_id' => $proj_id, 'user_id' => $user_id])
+            ->with('error', 'Not Allowed');
+    }
+
+    $evidenceLevel = $req->session()->get('evidenceLevel');
+
+    $fileMap = [
+        7 => 'KSA_NCA_ECC_Modified.xlsx',
+        18 => 'COSO_Modified.xlsx',
+        19 => 'SOC2_Type2_Modified.xlsx',
+        5 => 'CY_SAMA_Modified.xlsx',
+        1 => 'PCI_DSS_4_Single_TSP.xlsx',
+        16 => 'COBIT_2019.xlsx',
+        2 => 'PCI_DSS_4_Multi_TSP.xlsx',
+        3 => 'PCI_DSS_4_Merchant.xlsx',
+        10 => 'ISA_62443_Part 3-2_Modified.xlsx',
+        12 => 'ISA 62443 Part 4-2 -Modified.xlsx',
+        13 => 'ISA 62443 Part 3-3 - Modified.xlsx',
+        11 => 'ISA 62443 Part 2-1 - Modified.xlsx',
+        9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
+        4 => 'ISO27K1_2022_Compliance_Updated_Modified.xlsx',
+    ];
+
+    $filepath = public_path($fileMap[$checkpermission->type_id]);
+
+    $data2 = Excel::toArray([], $filepath);
+    $rows = array_slice($data2[0], 1); // Skip header
+
+    $sub_reqs = $req->input('sub_reqs');
+    $statuses = $req->input('comp_statuses');
+    $applicabilities = $req->input('applicabilities');
+    $justifications = $req->input('justifications');
+
+    if ($evidenceLevel === 'component') {
+        foreach ($sub_reqs as $index => $sub_req) {
+
+            $compStatus = $statuses[$index];
+            $applicability = $applicabilities[$index];
+            $justification = $justifications[$index];
+
+            // Skip if all fields are empty
+            if (is_null($compStatus) && is_null($applicability) && empty($justification)) {
+                continue;
+            }
+
+            $data = [
+                'last_edited_by' => $user_id,
+                'last_edited_at' => now()->format('Y-m-d H:i:s')
+            ];
+
+            if (!is_null($compStatus)) {
+                $data['comp_status'] = $compStatus;
+            }
+
+            if (!is_null($applicability)) {
+                $data['applicability'] = $applicability;
+            }
+
+            if (!empty($justification)) {
+                $data['justification'] = $justification;
+            }
+
+            $filteredData = collect($rows)->filter(function ($row) use ($sub_req) {
+                return strval(trim($row[3])) === strval(trim($sub_req));
+            });
+
+            foreach ($filteredData as $innerArray) {
+                DB::table('iso_sec_2_2')->updateOrInsert(
+                    [
+                        'project_id' => $proj_id,
+                        'asset_id' => $asset_id,
+                        'title_num' => $innerArray[0],
+                        'sub_req' => $innerArray[3],
+                        'subdomain' => $innerArray[1]
+                    ],
+                    $data
+                );
+            }
+        }
+
+        return redirect()->back()->with('success', 'Sub-requirements updated successfully.');
+    }
+
+    // For name, group, service, project levels
+    $assetDetails = DB::table('iso_sec_2_1')
+        ->where('project_id', $proj_id)
+        ->where('assessment_id', $asset_id)
+        ->first();
+
+    $assets = match ($evidenceLevel) {
+        'name' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('name', $assetDetails->name)->get(),
+        'group' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('g_name', $assetDetails->g_name)->get(),
+        'service' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('s_name', $assetDetails->s_name)->get(),
+        'project' => DB::table('iso_sec_2_1')->where('project_id', $proj_id)->get(),
+        default => collect(),
+    };
+
+    foreach ($assets as $ass) {
+        foreach ($sub_reqs as $index => $sub_req) {
+
+            $compStatus = $statuses[$index];
+            $applicability = $applicabilities[$index];
+            $justification = $justifications[$index];
+
+            // Skip if all fields are empty
+            if (is_null($compStatus) && is_null($applicability) && empty($justification)) {
+                continue;
+            }
+
+            $data = [
+                'last_edited_by' => $user_id,
+                'last_edited_at' => now()->format('Y-m-d H:i:s')
+            ];
+
+            if (!is_null($compStatus)) {
+                $data['comp_status'] = $compStatus;
+            }
+
+            if (!is_null($applicability)) {
+                $data['applicability'] = $applicability;
+            }
+
+            if (!empty($justification)) {
+                $data['justification'] = $justification;
+            }
+
+            $filteredData = collect($rows)->filter(function ($row) use ($sub_req) {
+                return strval(trim($row[3])) === strval(trim($sub_req));
+            });
+
+            foreach ($filteredData as $innerArray) {
+                DB::table('iso_sec_2_2')->updateOrInsert(
+                    [
+                        'project_id' => $proj_id,
+                        'asset_id' => $ass->assessment_id,
+                        'title_num' => $innerArray[0],
+                        'sub_req' => $innerArray[3],
+                        'subdomain' => $innerArray[1]
+                    ],
+                    $data
+                );
+            }
+        }
+    }
+
+    return redirect()->back()->with('success', 'All sub-requirements updated successfully.');
+}
+
 }
