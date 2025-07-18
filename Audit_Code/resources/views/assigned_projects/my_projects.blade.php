@@ -31,6 +31,7 @@
                         <th style='text-align:center'>My Permissions on Project</th>
                         <th style='text-align:center'>Data</th>
                         <th style='text-align:center'>Metadata</th>
+                        <th style='text-align:center'>View SOA</th>
                         <th style='text-align:center'>View Compliance(to be deleted)</th>
                         <th style='text-align:center'>View Compliance or Risk</th>
                         <th style='text-align:center'>View Action Plan</th>
@@ -103,6 +104,16 @@
 
 
                                 @endif
+                            </td>
+
+
+                            {{-- VIew SOA --}}
+                              <td style='text-align:center'>
+                                
+                                <a href="/view_soa_project/{{ $pro->project_code }}/{{auth()->user()->id}}" data-toggle="tooltip" data-placement="top" title="Edit Project">
+                                    <i class="fas fa-eye fa-lg" style="color:purple;"></i>
+                                </a>
+                            
                             </td>
 {{-- 
                             Compliance Map - ALlservices all controls --}}

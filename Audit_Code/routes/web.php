@@ -32,6 +32,7 @@ use App\Http\Controllers\PCI_Multi_Sheet;
 use App\Http\Controllers\PCI_Single_Sheet;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RiskManagementFramework;
+use App\Http\Controllers\RiskRegisterController;
 use App\Http\Controllers\SBP_ETGRMF;
 use App\Http\Controllers\v3_2_s2_Controller;
 use App\Http\Controllers\v3_2_s3_Controller;
@@ -687,6 +688,12 @@ route::post('add_mandatory_all_sub_req/{proj_id}/{user_id}/{asset_id}',[KSA_NCA:
 route::post('add_mandatory_all_sub_req_all_controls/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'add_mandatory_all_sub_req_all_controls'])->name('add_mandatory_all_sub_req_all_controls');
 
 
+//SOA
+route::get('view_soa_project/{proj_id}/{user_id}',[KSA_NCA::class,'view_soa_project'])->name('view_soa_project');
+route::post('show_soa/{proj_id}/{user_id}',[KSA_NCA::class,'show_soa']);
+
+
+
 route::post('approve_sec_2_2/{sub_req}/{title}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'approve_sec_2_2']);
 route::post('approve_sec_2_3_1/{control_num}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'approve_sec_2_3_1']);
 route::post('approve_risk_treatment/{control_num}/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'approve_risk_treatment']);
@@ -758,6 +765,9 @@ Route::Post('submit_selected_projects_for_comp_analysis/{org_id}',[ComplianceMap
 Route::Post('submit_components_for_comp_analysis/{org_id}',[ComplianceMap::class,'submit_components_for_comp_analysis']);
 Route::Post('selected_domains/{org_id}',[ComplianceMap::class,'selected_domains']);
 
+
+//RIsk Register
+route::get('risk_register_dashboard/{proj_id}/{user_id}',[RiskRegisterController::class,'risk_register_dashboard'])->name('risk_register_dashboard');
 
 
 //Action Plan

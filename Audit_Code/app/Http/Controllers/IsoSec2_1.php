@@ -617,7 +617,7 @@ $data = DB::table('iso_sec_2_1')
                         Db::table('iso_sec_2_1')->where('assessment_id',$assessment_id)->where('project_id',$proj_id)
                         ->delete();
 
-                        return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
+                        return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id,'page_type'=>'services_register'])
                             ->with('success', 'Record Deleted successfully');
                     
                 }

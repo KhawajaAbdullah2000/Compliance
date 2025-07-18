@@ -211,137 +211,7 @@ If you choose to select values for “Applicable” and “Compliance Status” 
         </form>
 
 
-        {{-- <table class="table table-bordered table-responsive table-primary">
-
-        <thead class="fw-bold table-dark">
-            <td style="width: 50%;">Subdomain</td>
-            <td>Actions</td>
-            <td>Edit</td>
-        </thead>
-
-        <tbody>
-            <tr>
-
-                <td>
-                <p>{!! nl2br($data[0][2]) !!} {!! nl2br($data[0][3]) !!}</p>
-
-                </td>
-                <td><a href="/ksa_nca_sec_2_2_req/{{($data[0][2])}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
-
-
-        <td>
-            @php
-            $subdomain = trim((string) $data[0][2]);
-            // human-readable label
-            $status = $finalStatusBySubdomain->get($subdomain);
-            @endphp
-
-
-
-
-            <form action="/add_mandatory_all_domain/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" method="POST" class="d-flex align-items-center gap-2">
-                @csrf
-                <input type="hidden" name="domain" value="{{$data[0][2]}}">
-
-                <select name="comp_status" class="form-select form-select-sm rounded-pill" style="max-width:150px;min-width:150px;">
-                    <option value="">Select --</option>
-
-                    @foreach([
-                    'yes' => 'In Place',
-                    'no' => 'Not in Place',
-                    'not_applicable' => 'Not Applicable',
-                    'not_tested' => 'Not Tested',
-                    'partial' => 'Partial',
-                    ] as $value => $label)
-                    <option value="{{ $value }}" {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
-                        {{ $label }}
-                    </option>
-                    @endforeach
-                </select>
-
-
-
-                <button class="btn btn-success btn-sm w-100" style="max-width:100px;">Submit</button>
-                <a class="btn btn-primary btn-sm w-100" style="max-width:100px;">AI Input</a>
-                @If($status=="different")
-                <span class="badge fs-6 bg-secondary">Values are different</span>
-                @endif
-            </form>
-
-
-
-        </td>
-
-        </tr>
-
-        @for ($i = 1; $i < count($data); $i++) <tr style="vertical-align: middle;text-align:initial">
-
-            @php
-            $my_prev_main_req_num=$data[$i-1][2];
-            $my_current_main_req_num=$data[$i][2];
-            @endphp
-
-
-            @if ($my_prev_main_req_num==$my_current_main_req_num)
-            @continue
-
-            @else
-            <td>
-                <p> {!! nl2br($data[$i][2]) !!} {!! nl2br($data[$i][3]) !!}</p>
-
-            </td>
-
-            <td><a href="/ksa_nca_sec_2_2_req/{{$my_current_main_req_num}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-sm my_bg_color text-white">Select</a></td>
-            <td>
-                @php
-                $subdomain = $data[$i][2];
-                // human-readable label
-                $status = $finalStatusBySubdomain->get($subdomain);
-                @endphp
-
-
-
-
-                <form action="/add_mandatory_all_domain/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" method="POST" class="d-flex align-items-center gap-2">
-                    @csrf
-                    <input type="hidden" name="domain" value="{{$data[$i][2]}}">
-
-                    <select name="comp_status" class="form-select form-select-sm rounded-pill" style="max-width:150px;min-width:150px;">
-                        <option value="">Select --</option>
-
-                        @foreach([
-                        'yes' => 'In Place',
-                        'no' => 'Not in Place',
-                        'not_applicable' => 'Not Applicable',
-                        'not_tested' => 'Not Tested',
-                        'partial' => 'Partial',
-                        ] as $value => $label)
-                        <option value="{{ $value }}" {{ old('comp_status', $status) === $value ? 'selected' : '' }}>
-                            {{ $label }}
-                        </option>
-                        @endforeach
-                    </select>
-
-
-
-                    <button class="btn btn-success btn-sm w-100" style="max-width:100px;">Submit</button>
-                    <a class="btn btn-primary btn-sm w-100" style="max-width:100px;">AI Input</a>
-                    @If($status=="different")
-                    <span class="badge fs-6 bg-secondary">Values are different</span>
-                    @endif
-                </form>
-
-
-
-            </td>
-            @endif
-
-
-            @endfor
-
-            </tbody>
-
-            </table> --}}
+       
 
 </div>
 @section('scripts')
@@ -371,9 +241,9 @@ If you choose to select values for “Applicable” and “Compliance Status” 
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.applicability-select').forEach(function (select) {
-            select.addEventListener('change', function () {
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.applicability-select').forEach(function(select) {
+            select.addEventListener('change', function() {
                 var index = this.getAttribute('data-index');
                 var justification = document.querySelector('.justification-' + index);
 
@@ -386,6 +256,7 @@ If you choose to select values for “Applicable” and “Compliance Status” 
             });
         });
     });
+
 </script>
 
 

@@ -70,7 +70,7 @@
     <div class="row text-center">
         <!-- Row 2 -->
         <div class="col-md-3 mb-4">
-            <a href="">
+            <a href="/risk_register_dashboard/{{$project->project_id}}/{{auth()->user()->id}}">
                 <img src="{{ asset('risk-register.png') }}" alt="Risk Register" class="img-fluid" style="height: 100px;">
                 <p class="fw-bold mt-2">Risk Register</p>
                
