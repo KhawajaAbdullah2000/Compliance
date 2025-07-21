@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('org_risk_assessment_approach_id');
             $table->unsignedBigInteger('org_id');
             $table->unsignedBigInteger('project_type_id');
-             $table->unsignedBigInteger('assessment_approach_selected');
+             $table->unsignedBigInteger('assessment_approach_selected')->nullable();
              $table->foreign('org_id')->references('id')->on('organizations')->onDelete('cascade');
              $table->foreign('project_type_id')->references('id')->on('project_types')->onDelete('cascade');
              $table->foreign('assessment_approach_selected','org_ass_app_fk')->references('global_risk_assessment_approach_id')->on('global_risk_assessment_approach')->onDelete('cascade')->onUpdate('cascade');

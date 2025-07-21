@@ -504,6 +504,11 @@ route::get('iso_sec_2_3/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3'])->
 //ISosec2.3.1
 
 route::get('iso_sec_2_3_1_risk_selection/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_1_risk_selection'])->name('iso_sec_2_3_1_risk_selection');
+
+route::get('proceed_to_risk_assessment/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'proceed_to_risk_assessment'])->name('proceed_to_risk_assessment');
+
+
+
 route::put('iso_sec2_3_1_risk_selection/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'Risk_Selection_form_Submit']);
 route::get('iso_sec_2_3_1/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec_2_3_1'])->name('iso_sec_2_3_1');
 route::Post('iso_sec2_3_1_initial_add/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'iso_sec2_3_1_initial_add']);
@@ -581,6 +586,9 @@ route::get('iso_27005_likelihood_value_all/{proj_id}/{user_id}/{asset_id}',[IsoS
 
 route::Post('quantitave_consequence_scale_amount_entered/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'quantitave_consequence_scale_amount_entered']);
 
+
+
+route::post('update_framework_approach/{proj_id}/{user_id}',[IsoSec2_3_1::class,'update_framework_approach']);
 
 
 //editing risk assesment view

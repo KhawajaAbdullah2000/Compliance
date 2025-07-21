@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('org_framework_approach_selected_id');
             $table->unsignedBigInteger('org_id');
             $table->unsignedBigInteger('project_type_id');
-             $table->unsignedBigInteger('framework_approach_types');
+             $table->unsignedBigInteger('framework_approach_types')->nullable();
              $table->foreign('org_id')->references('id')->on('organizations')->onDelete('cascade');
              $table->foreign('project_type_id')->references('id')->on('project_types')->onDelete('cascade');
 
