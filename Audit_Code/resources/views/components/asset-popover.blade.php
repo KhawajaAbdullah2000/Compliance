@@ -1,4 +1,4 @@
-<table class='table table-bordered table-sm text-center mb-0'>
+ <table class="table table-bordered table-sm text-center mb-0">
     <thead class='table-dark'>
         <tr>
             <th>Service</th>

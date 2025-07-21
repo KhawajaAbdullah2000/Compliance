@@ -164,6 +164,11 @@ th.rotate {
     color: #ccc;
 }
 
+.custom-modal-width {
+    min-width: 90%; /* You can set 90%, 95%, or even 100% */
+    
+}
+
 
 .navbar {
     padding: 15px;

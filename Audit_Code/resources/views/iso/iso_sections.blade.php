@@ -133,7 +133,7 @@
                     <i class="fas fa-tools fa-lg me-3 text-secondary"></i>
                     <div>
                          <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}/risk_assessment" class="stretched-link text-decoration-none text-dark fw-bold">
-                            Asset Risk against Controls
+                            Assess Risk against Controls
                         </a>
                     </div>
                 </div>
