@@ -38,7 +38,8 @@ class IsoSec2_3_1 extends Controller
                     ->where('projects.project_id', $proj_id)->first();
 
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
-                //dd($frameworkDetails);
+
+                // dd($frameworkDetails);
 
                 $risk_management_frameworks = DB::table('risk_management_framework')->get();
 
@@ -47,6 +48,7 @@ class IsoSec2_3_1 extends Controller
                 $global_risk_assessment_approaches = DB::table('global_risk_assessment_approach')->get();
 
 
+                //dd($project);
 
                 return view('iso_sec_2_3_1.show_selected_framework', [
 
@@ -64,91 +66,12 @@ class IsoSec2_3_1 extends Controller
 
 
                 ]);
-
-
-                // if($frameworkDetails['complianceFramework']==null){
-                //     return redirect()->back()->with('error','No risk assessment methodology has been selected');
-                // }
-
-
-                // if($frameworkDetails['complianceFramework']->framework_selected==2 
-                //  && $frameworkDetails['framework_approach']->framework_approach_types_id==1
-                //  && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
-                // ){
-                //     //ISo 27005:2022 Qualitative Asset based
-                //     return view("iso_27005.consequence_on_service",[
-                //     'project_id' => $checkpermission->project_id,
-                //     'project_name' => $checkpermission->project_name,
-                //     'project_permissions' => $checkpermission->project_permissions,
-                //     'project' => $project,
-                //     'asset'=>$asset,
-                //     'complianceFramework'=>$frameworkDetails['complianceFramework'],
-                //     'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
-                //     'framework_approach'=>$frameworkDetails['framework_approach']
-                //     ]);
-
-                //  }
-
-                //  if($frameworkDetails['complianceFramework']->framework_selected==2 
-                //  && $frameworkDetails['framework_approach']->framework_approach_types_id==2
-                //  && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
-                // ){
-                //     //ISo 27005:2022 Quantitative Asset based
-
-                //     $consequence_scale=DB::table('org_quantitavie_consequence_scale')
-                //     ->join('global_currency','org_quantitavie_consequence_scale.currency_selected','global_currency.global_currency_id')
-                //     ->where('project_type_id',$project->project_type)
-                //     ->orderBy('org_quantitavie_consequence_scale.scale','desc')
-                //     ->get();
-
-                //     $global_currency=DB::table('global_currency')->get();
-
-                //     return view("iso_27005.consequence_on_service",[
-                //     'project_id' => $checkpermission->project_id,
-                //     'project_name' => $checkpermission->project_name,
-                //     'project_permissions' => $checkpermission->project_permissions,
-                //     'project' => $project,
-                //     'asset'=>$asset,
-                //     'complianceFramework'=>$frameworkDetails['complianceFramework'],
-                //     'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
-                //     'framework_approach'=>$frameworkDetails['framework_approach'],
-                //     'consequence_scale'=>$consequence_scale,
-                //     'global_currency'=>$global_currency
-                //     ]);
-
-                //  }
-
-                //  if($frameworkDetails['complianceFramework']->framework_selected==2 
-                //  && $frameworkDetails['framework_approach']->framework_approach_types_id==2
-                //  && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
-                // )
-                // {
-                //     //quantitative event based
-                //     return redirect()->back()->with('error','Quantitative Event based not implemented');
-
-                // }
-
-
-
-                // return view('iso_sec_2_3_1.iso_sec_2_3_1_risk_selection', [
-
-                //     'project_id' => $checkpermission->project_id,
-                //     'project_name' => $checkpermission->project_name,
-                //     'project_permissions' => $checkpermission->project_permissions,
-                //     'project' => $project,
-                //     'asset'=>$asset,
-                //       'complianceFramework'=>$frameworkDetails['complianceFramework'],
-                //     'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
-                //     'framework_approach'=>$frameworkDetails['framework_approach']
-                // ]);
-
-
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-      public function proceed_to_risk_assessment($asset_id, $proj_id, $user_id)
+    public function proceed_to_risk_assessment($asset_id, $proj_id, $user_id)
     {
 
         if ($user_id == auth()->user()->id) {
@@ -164,7 +87,24 @@ class IsoSec2_3_1 extends Controller
                 ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
                 ->first();
             if ($checkpermission) {
-                $asset = Db::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
+                $asset =DB::table('iso_sec_2_1')
+    ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+    ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+    ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+    ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+    ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+    ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+    ->select(
+        'iso_sec_2_1.*',
+        DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+        DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+        DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+        DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+        DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+    )
+    ->where('iso_sec_2_1.assessment_id', $asset_id)
+    ->first();
 
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
@@ -173,66 +113,76 @@ class IsoSec2_3_1 extends Controller
                 //dd($frameworkDetails);
 
 
-                if($frameworkDetails['complianceFramework']==null){
-                    return redirect()->back()->with('error','No risk assessment methodology has been selected');
+                if ($frameworkDetails['complianceFramework'] == null) {
+                    return redirect()->back()->with('error', 'No risk assessment methodology has been selected');
                 }
 
 
-                if($frameworkDetails['complianceFramework']->framework_selected==2 
-                 && $frameworkDetails['framework_approach']->framework_approach_types_id==1
-                 && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
-                ){
+                if (
+                    $frameworkDetails['complianceFramework']->framework_selected == 2
+                    && $frameworkDetails['framework_approach']->framework_approach_types_id == 1
+                    && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 2
+                ) {
                     //ISo 27005:2022 Qualitative Asset based
-                    return view("iso_27005.consequence_on_service",[
-                    'project_id' => $checkpermission->project_id,
-                    'project_name' => $checkpermission->project_name,
-                    'project_permissions' => $checkpermission->project_permissions,
-                    'project' => $project,
-                    'asset'=>$asset,
-                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
-                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
-                    'framework_approach'=>$frameworkDetails['framework_approach']
+                    return view("iso_27005.consequence_on_service", [
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project' => $project,
+                        'asset' => $asset,
+                        'complianceFramework' => $frameworkDetails['complianceFramework'],
+                        'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
+                        'framework_approach' => $frameworkDetails['framework_approach']
                     ]);
+                }
 
-                 }
-
-                 if($frameworkDetails['complianceFramework']->framework_selected==2 
-                 && $frameworkDetails['framework_approach']->framework_approach_types_id==2
-                 && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2
-                ){
+                if (
+                    $frameworkDetails['complianceFramework']->framework_selected == 2
+                    && $frameworkDetails['framework_approach']->framework_approach_types_id == 2
+                    && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 2
+                ) {
                     //ISo 27005:2022 Quantitative Asset based
 
-                    $consequence_scale=DB::table('org_quantitavie_consequence_scale')
-                    ->join('global_currency','org_quantitavie_consequence_scale.currency_selected','global_currency.global_currency_id')
-                    ->where('project_type_id',$project->project_type)
-                    ->orderBy('org_quantitavie_consequence_scale.scale','desc')
-                    ->get();
+                    $consequence_scale = DB::table('org_quantitavie_consequence_scale')
+                        ->join('global_currency', 'org_quantitavie_consequence_scale.currency_selected', 'global_currency.global_currency_id')
+                        ->where('project_type_id', $project->project_type)
+                        ->orderBy('org_quantitavie_consequence_scale.scale', 'desc')
+                        ->get();
 
-                    $global_currency=DB::table('global_currency')->get();
+                    $global_currency = DB::table('global_currency')->get();
 
-                    return view("iso_27005.consequence_on_service",[
-                    'project_id' => $checkpermission->project_id,
-                    'project_name' => $checkpermission->project_name,
-                    'project_permissions' => $checkpermission->project_permissions,
-                    'project' => $project,
-                    'asset'=>$asset,
-                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
-                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
-                    'framework_approach'=>$frameworkDetails['framework_approach'],
-                    'consequence_scale'=>$consequence_scale,
-                    'global_currency'=>$global_currency
+                    return view("iso_27005.consequence_on_service", [
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project' => $project,
+                        'asset' => $asset,
+                        'complianceFramework' => $frameworkDetails['complianceFramework'],
+                        'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
+                        'framework_approach' => $frameworkDetails['framework_approach'],
+                        'consequence_scale' => $consequence_scale,
+                        'global_currency' => $global_currency
                     ]);
+                }
 
-                 }
-
-                 if($frameworkDetails['complianceFramework']->framework_selected==2 
-                 && $frameworkDetails['framework_approach']->framework_approach_types_id==2
-                 && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==1
-                )
-                {
+                if (
+                    $frameworkDetails['complianceFramework']->framework_selected == 2
+                    && $frameworkDetails['framework_approach']->framework_approach_types_id == 2
+                    && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 1
+                ) {
                     //quantitative event based
-                    return redirect()->back()->with('error','Quantitative Event based not implemented');
 
+                    return redirect()->back()->with('error', 'Quantitative Event based not implemented');
+                }
+
+                if (
+                    $frameworkDetails['complianceFramework']->framework_selected == 2
+                    && $frameworkDetails['framework_approach']->framework_approach_types_id == 1
+                    && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 1
+                ) {
+
+                    //quanliitative event based
+                    return redirect()->back()->with('error', 'Qualitative Event based not implemented');
                 }
 
 
@@ -243,20 +193,18 @@ class IsoSec2_3_1 extends Controller
                     'project_name' => $checkpermission->project_name,
                     'project_permissions' => $checkpermission->project_permissions,
                     'project' => $project,
-                    'asset'=>$asset,
-                      'complianceFramework'=>$frameworkDetails['complianceFramework'],
-                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
-                    'framework_approach'=>$frameworkDetails['framework_approach']
+                    'asset' => $asset,
+                    'complianceFramework' => $frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
+                    'framework_approach' => $frameworkDetails['framework_approach']
                 ]);
-
-
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
 
-   
+
 
     public function iso_sec_2_3_1_risk_selection_qual_event($proj_id, $user_id)
     {
@@ -342,8 +290,24 @@ class IsoSec2_3_1 extends Controller
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
 
-                $service =  Db::table('iso_sec_2_1')
-                    ->where('assessment_id', $asset_id)->first();
+                $service =  DB::table('iso_sec_2_1')
+                    ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+                    ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+                    ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+                    ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+                    ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+                    ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+                    ->select(
+                        'iso_sec_2_1.*',
+                        DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+                        DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+                        DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+                        DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+                        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+                        DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+                    )
+                    ->where('iso_sec_2_1.assessment_id', $asset_id)
+                    ->first();
 
 
                 Db::table('iso_sec_2_1')
@@ -465,9 +429,24 @@ class IsoSec2_3_1 extends Controller
         if ($checkpermission) {
             $permissions = json_decode($checkpermission->project_permissions);
 
-            $asset =  Db::table('iso_sec_2_1')
-                ->where('assessment_id', $asset_id)->first();
-
+            $asset = DB::table('iso_sec_2_1')
+                ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+                ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+                ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+                ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+                ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+                ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+                ->select(
+                    'iso_sec_2_1.*',
+                    DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+                    DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+                    DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+                    DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+                    DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+                    DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+                )
+                ->where('iso_sec_2_1.assessment_id', $asset_id)
+                ->first();
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
@@ -587,9 +566,24 @@ class IsoSec2_3_1 extends Controller
         if ($checkpermission) {
             $permissions = json_decode($checkpermission->project_permissions);
 
-            $asset =  Db::table('iso_sec_2_1')
-                ->where('assessment_id', $asset_id)->first();
-
+            $asset = DB::table('iso_sec_2_1')
+                ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+                ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+                ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+                ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+                ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+                ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+                ->select(
+                    'iso_sec_2_1.*',
+                    DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+                    DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+                    DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+                    DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+                    DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+                    DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+                )
+                ->where('iso_sec_2_1.assessment_id', $asset_id)
+                ->first();
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
@@ -734,8 +728,24 @@ class IsoSec2_3_1 extends Controller
         if ($checkpermission) {
             $permissions = json_decode($checkpermission->project_permissions);
 
-            $asset =  Db::table('iso_sec_2_1')
-                ->where('assessment_id', $asset_id)->first();
+            $asset =  DB::table('iso_sec_2_1')
+    ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+    ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+    ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+    ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+    ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+    ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+    ->select(
+        'iso_sec_2_1.*',
+        DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+        DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+        DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+        DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+        DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+    )
+    ->where('iso_sec_2_1.assessment_id', $asset_id)
+    ->first();
 
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
@@ -1156,8 +1166,24 @@ class IsoSec2_3_1 extends Controller
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
 
-            $asset =  Db::table('iso_sec_2_1')
-                ->where('assessment_id', $asset_id)->first();
+            $asset =  DB::table('iso_sec_2_1')
+    ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+    ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+    ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+    ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+    ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+    ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+    ->select(
+        'iso_sec_2_1.*',
+        DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+        DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+        DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+        DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+        DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+    )
+    ->where('iso_sec_2_1.assessment_id', $asset_id)
+    ->first();
 
 
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
@@ -1294,8 +1320,24 @@ class IsoSec2_3_1 extends Controller
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
 
-            $asset =  Db::table('iso_sec_2_1')
-                ->where('assessment_id', $asset_id)->first();
+            $asset =  DB::table('iso_sec_2_1')
+                ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+                ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+                ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+                ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+                ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+                ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+                ->select(
+                    'iso_sec_2_1.*',
+                    DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+                    DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+                    DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+                    DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+                    DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+                    DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+                )
+                ->where('iso_sec_2_1.assessment_id', $asset_id)
+                ->first();
 
 
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
@@ -1584,8 +1626,24 @@ class IsoSec2_3_1 extends Controller
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
 
-            $asset =  Db::table('iso_sec_2_1')
-                ->where('assessment_id', $asset_id)->first();
+            $asset = DB::table('iso_sec_2_1')
+                ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+                ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+                ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+                ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+                ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+                ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+                ->select(
+                    'iso_sec_2_1.*',
+                    DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+                    DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+                    DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+                    DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+                    DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+                    DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+                )
+                ->where('iso_sec_2_1.assessment_id', $asset_id)
+                ->first();
 
 
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
@@ -1793,8 +1851,24 @@ class IsoSec2_3_1 extends Controller
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
 
-            $asset =  Db::table('iso_sec_2_1')
-                ->where('assessment_id', $asset_id)->first();
+            $asset =  DB::table('iso_sec_2_1')
+    ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+    ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+    ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+    ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+    ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+    ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+    ->select(
+        'iso_sec_2_1.*',
+        DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+        DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+        DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+        DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+        DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+    )
+    ->where('iso_sec_2_1.assessment_id', $asset_id)
+    ->first();
 
 
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
@@ -2042,8 +2116,24 @@ class IsoSec2_3_1 extends Controller
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
 
-            $asset =  Db::table('iso_sec_2_1')
-                ->where('assessment_id', $asset_id)->first();
+            $asset =  DB::table('iso_sec_2_1')
+    ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+    ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+    ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+    ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+    ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+    ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+    ->select(
+        'iso_sec_2_1.*',
+        DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+        DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+        DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+        DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+        DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+    )
+    ->where('iso_sec_2_1.assessment_id', $asset_id)
+    ->first();
 
 
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
@@ -2256,8 +2346,24 @@ class IsoSec2_3_1 extends Controller
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
 
-            $asset =  Db::table('iso_sec_2_1')
-                ->where('assessment_id', $asset_id)->first();
+            $asset =  DB::table('iso_sec_2_1')
+    ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+    ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+    ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+    ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+    ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+    ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+    ->select(
+        'iso_sec_2_1.*',
+        DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+        DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+        DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+        DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+        DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+    )
+    ->where('iso_sec_2_1.assessment_id', $asset_id)
+    ->first();
 
 
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
@@ -2457,8 +2563,24 @@ class IsoSec2_3_1 extends Controller
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
 
-            $asset =  Db::table('iso_sec_2_1')
-                ->where('assessment_id', $asset_id)->first();
+            $asset =  DB::table('iso_sec_2_1')
+    ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+    ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+    ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+    ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+    ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+    ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+    ->select(
+        'iso_sec_2_1.*',
+        DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+        DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+        DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+        DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+        DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+    )
+    ->where('iso_sec_2_1.assessment_id', $asset_id)
+    ->first();
 
 
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
@@ -2698,8 +2820,24 @@ class IsoSec2_3_1 extends Controller
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
 
-            $asset =  Db::table('iso_sec_2_1')
-                ->where('assessment_id', $asset_id)->first();
+            $asset =  DB::table('iso_sec_2_1')
+    ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+    ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+    ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+    ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+    ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+    ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+    ->select(
+        'iso_sec_2_1.*',
+        DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+        DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+        DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+        DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+        DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+    )
+    ->where('iso_sec_2_1.assessment_id', $asset_id)
+    ->first();
 
 
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
@@ -4461,7 +4599,7 @@ class IsoSec2_3_1 extends Controller
         return compact('complianceFramework', 'risk_assessment_approach', 'framework_approach');
     }
 
-    public function update_framework_approach($proj_id, $user_id, Request $req)
+    public function update_framework_approach($proj_type, $user_id, Request $req)
     {
         $validated = $req->validate([
             'framework_option' => 'required|in:default,qualitative_asset,quantitative_asset,qualitative_event,quantitative_event',
@@ -4473,6 +4611,7 @@ class IsoSec2_3_1 extends Controller
         $framework_selected = 1; // Default framework_id = 1
         $framework_approach_types_id = null;
         $global_risk_assessment_approach_id = null;
+
 
         switch ($option) {
             case 'qualitative_asset':
@@ -4507,9 +4646,10 @@ class IsoSec2_3_1 extends Controller
                 break;
         }
 
+
         // Update or Insert in org_projects_framework_selected
         DB::table('org_projects_framework_selected')->updateOrInsert(
-            ['org_id' => $org_id, 'project_type_id' => $proj_id],
+            ['org_id' => $org_id, 'project_type_id' => $proj_type],
             [
                 'framework_selected' => $framework_selected,
                 'updated_at' => now(),
@@ -4517,9 +4657,11 @@ class IsoSec2_3_1 extends Controller
             ]
         );
 
+
+
         // Update or Insert in org_framework_approach_selected
         DB::table('org_framework_approach_selected')->updateOrInsert(
-            ['org_id' => $org_id, 'project_type_id' => $proj_id],
+            ['org_id' => $org_id, 'project_type_id' => $proj_type],
             [
                 'framework_approach_types' => $framework_approach_types_id,
                 'updated_at' => now(),
@@ -4529,7 +4671,7 @@ class IsoSec2_3_1 extends Controller
 
         // Update or Insert in org_risk_assessment_approach
         DB::table('org_risk_assessment_approach')->updateOrInsert(
-            ['org_id' => $org_id, 'project_type_id' => $proj_id],
+            ['org_id' => $org_id, 'project_type_id' => $proj_type],
             [
                 'assessment_approach_selected' => $global_risk_assessment_approach_id,
                 'updated_at' => now(),

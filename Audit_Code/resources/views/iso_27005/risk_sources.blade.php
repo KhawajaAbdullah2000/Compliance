@@ -13,10 +13,19 @@
             @include('components.topTable')
         </div>
     </div>
-    <h3 class="fw-bold mt-2">Risk Assessment for</h3>
+    <h3 class="fw-bold mt-2">Risk Register for</h3>
 
+    <div class="col-12">
     @include('components.asset-summary_component', ['asset' => $asset])
     
+    </div>
+
+
+    <div class="col-12">
+    @include('components.consequence_of_loss', ['asset' => $asset])
+    
+    </div>
+
         
         <h4 class="fw-bold mt-4">Identify which risk sources (threats) could exploit vulnerabilities in the asset component 
         </h4>

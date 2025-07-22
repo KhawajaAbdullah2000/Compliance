@@ -588,7 +588,7 @@ route::Post('quantitave_consequence_scale_amount_entered/{asset_id}/{proj_id}/{u
 
 
 
-route::post('update_framework_approach/{proj_id}/{user_id}',[IsoSec2_3_1::class,'update_framework_approach']);
+route::post('update_framework_approach/{proj_type}/{user_id}',[IsoSec2_3_1::class,'update_framework_approach']);
 
 
 //editing risk assesment view

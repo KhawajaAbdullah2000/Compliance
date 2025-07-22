@@ -30,7 +30,8 @@
         'qualitative_asset'=>'Qualitative Asset Based',
         'qualitative_event'=>'Qualitative Event Based',
         'quantitative_asset'=>'Quantitative Asset Based',
-        'quantitative_event'=>'Quantitative Event Based'
+        'quantitative_event'=>'Quantitative Event Based',
+        'default'=>'Default'
     ]
 @endphp
 
@@ -55,7 +56,7 @@
 </p>
 
 
-    <form method="POST" action="/update_framework_approach/{{$project->project_id}}/{{auth()->user()->id}}">
+    <form method="POST" action="/update_framework_approach/{{$project->project_type}}/{{auth()->user()->id}}">
         @csrf
 
         <label>

@@ -11,6 +11,15 @@
                     <td class="bg-light">{{$asset->name}}</td>
                     <td class="bg-light_blue">Asset Component</td>
                     <td class="bg-light">{{$asset->c_name}}</td>
+
+                     <td class="bg-light_blue">Service Risk Owner</td>
+                    <td class="bg-light">{{$asset->service_risk_owner_name}}</td>
+                    <td class="bg-light_blue">Component Risk Owner</td>
+                    <td class="bg-light">{{$asset->component_risk_owner_name}}</td>
+                    <td class="bg-light_blue">Service Custodian</td>
+                    <td class="bg-light">{{$asset->service_custodian_name}}</td>
+                    <td class="bg-light_blue">Asset Component Custodian</td>
+                    <td class="bg-light">{{$asset->component_custodian_name}}</td>
                 </tr>
             </tbody>
         </table>
