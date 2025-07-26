@@ -28,8 +28,8 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4) {
-                    //ksa or COSO or iso or
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23) {
+                    //ksa or COSO or iso or NIST CSF
 
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                         ->where('projects.project_id', $proj_id)->first();
@@ -117,7 +117,7 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4) {
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23) {
 
                     if ($checkpermission->type_id == 7) {
                         $filepath = public_path('KSA_NCA_ECC.xlsx');
@@ -136,6 +136,10 @@ class KSA_NCA extends Controller
                     // }
                     if ($checkpermission->type_id == 4) {
                         $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 23) {
+                        $filepath = public_path('NIST_CSF.xlsx');
                     }
 
 
@@ -237,7 +241,7 @@ class KSA_NCA extends Controller
                     $req->session()->put('main_req_num', $main_req_num);
                 }
 
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4) {
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23) {
 
                     if ($checkpermission->type_id == 7) {
                         $filepath = public_path('KSA_NCA_ECC.xlsx');
@@ -249,6 +253,10 @@ class KSA_NCA extends Controller
 
                     if ($checkpermission->type_id == 19) {
                         $filepath = public_path('SOC2_Type2.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 23) {
+                        $filepath = public_path('NIST_CSF.xlsx');
                     }
 
                     // if ($checkpermission->type_id == 4) {
@@ -333,7 +341,7 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4) {
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23) {
                     $result = Db::table('iso_sec_2_2')->join('users', 'iso_sec_2_2.last_edited_by', 'users.id')
                         ->where('project_id', $proj_id)->where('sub_req', $sub_req)->where('asset_id', $asset_id)
                         ->first();
@@ -356,6 +364,12 @@ class KSA_NCA extends Controller
                 if ($checkpermission->type_id == 4) {
                     $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
                 }
+
+                if ($checkpermission->type_id == 23) {
+                    $filepath = public_path('NIST_CSF.xlsx');
+                }
+
+
 
 
 
@@ -450,7 +464,7 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19  || $checkpermission->type_id == 4) {
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19  || $checkpermission->type_id == 4 || $checkpermission->type_id == 23) {
 
                     $evidenceLevel = $req->session()->get('evidenceLevel');
 
@@ -510,6 +524,10 @@ class KSA_NCA extends Controller
                                     $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
                                 }
 
+                                if ($checkpermission->type_id == 23) {
+                                    $filepath = public_path('NIST_CSF.xlsx');
+                                }
+
                                 $data2 = Excel::toArray([], $filepath); //with header
                                 $rows = array_slice($data2[0], 1); //without header(first row)
 
@@ -556,6 +574,10 @@ class KSA_NCA extends Controller
 
                                 if ($checkpermission->type_id == 4) {
                                     $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
+                                }
+
+                                if ($checkpermission->type_id == 23) {
+                                    $filepath = public_path('NIST_CSF.xlsx');
                                 }
                                 $data2 = Excel::toArray([], $filepath); //with header
                                 $rows = array_slice($data2[0], 1); //without header(first row)
@@ -654,6 +676,10 @@ class KSA_NCA extends Controller
                                 if ($checkpermission->type_id == 4) {
                                     $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
                                 }
+
+                                if ($checkpermission->type_id == 23) {
+                                    $filepath = public_path('NIST_CSF.xlsx');
+                                }
                                 $data2 = Excel::toArray([], $filepath); //with header
                                 $rows = array_slice($data2[0], 1); //without header(first row)
 
@@ -703,6 +729,10 @@ class KSA_NCA extends Controller
 
                                 if ($checkpermission->type_id == 4) {
                                     $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
+                                }
+
+                                if ($checkpermission->type_id == 23) {
+                                    $filepath = public_path('NIST_CSF.xlsx');
                                 }
 
                                 $data2 = Excel::toArray([], $filepath); //with header
@@ -1480,6 +1510,7 @@ class KSA_NCA extends Controller
             ->where('assigned_enduser', $user_id)
             ->first();
 
+
         if (!$checkpermission) {
             return redirect()->back()->with('error', 'No project permission found.');
         }
@@ -1495,7 +1526,17 @@ class KSA_NCA extends Controller
         $applicabilities = $req->input('applicabilities');
         $justifications = $req->input('justifications');
 
-        $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx');
+        $filepath = "";
+        if ($checkpermission->id == 4) {
+            $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx');
+        }
+
+        if ($checkpermission->id == 23) {
+            $filepath = public_path('NIST_CSF_Modified.xlsx');
+        }
+
+
+
         $evidenceLevel = $req->session()->get('evidenceLevel');
 
         $assetDetails = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
@@ -1841,6 +1882,7 @@ class KSA_NCA extends Controller
             11 => 'ISA 62443 Part 2-1 - Modified.xlsx',
             9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx',
+            23=>'NIST_CSF_Modified.xlsx'
         ];
 
 
@@ -2207,6 +2249,7 @@ class KSA_NCA extends Controller
             11 => 'ISA 62443 Part 2-1 - Modified.xlsx',
             9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx',
+            23=>'NIST_CSF_Modified.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
@@ -2357,6 +2400,7 @@ class KSA_NCA extends Controller
         $fileMap = [
 
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25.xlsx',
+            23=>'NIST_CSF.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
@@ -2412,7 +2456,8 @@ class KSA_NCA extends Controller
         return redirect()->back()->with('success', 'All sub-requirements updated successfully.');
     }
 
-    public function show_soa($proj_id,$user_id,Request $req){
+    public function show_soa($proj_id, $user_id, Request $req)
+    {
         if ($user_id != auth()->user()->id) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
@@ -2429,10 +2474,11 @@ class KSA_NCA extends Controller
             return redirect()->back()->with('error', 'No project permission found.');
         }
 
-        
+
         $fileMap = [
 
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25.xlsx',
+            23=>'NIST_CSF.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
@@ -2440,47 +2486,44 @@ class KSA_NCA extends Controller
         $data2 = Excel::toArray([], $filepath);
         $rows = array_slice($data2[0], 1); // Skip header
 
-        $data=Db::table('iso_sec_2_2')->whereIn('title_num',$req->selected_titles)
-        ->where('asset_id',$req->selected_asset)
-        ->orderBy('title_num','asc')
-        ->get();
+        $data = Db::table('iso_sec_2_2')->whereIn('title_num', $req->selected_titles)
+            ->where('asset_id', $req->selected_asset)
+            ->orderBy('title_num', 'asc')
+            ->get();
 
         $finalData = [];
 
-    foreach ($data as $record) {
-        $matchingRow = collect($rows)->first(function ($row) use ($record) {
-            return strval($row[0]) === $record->title_num && // Title number
-                   strval($row[2]) === $record->subdomain && // Subdomain number
-                   strval($row[4]) === $record->sub_req;     // Sub req number
-        });
+        foreach ($data as $record) {
+            $matchingRow = collect($rows)->first(function ($row) use ($record) {
+                return strval($row[0]) === $record->title_num && // Title number
+                    strval($row[2]) === $record->subdomain && // Subdomain number
+                    strval($row[4]) === $record->sub_req;     // Sub req number
+            });
 
-        $finalData[] = [
-            'title_num' => $record->title_num,
-            'title' => $matchingRow[1] ?? 'N/A',
-            'subdomain' => $record->subdomain,
-            'subdomain_heading'=>$matchingRow['3'],
-            'sub_req' => $record->sub_req,
-            'requirement' => $matchingRow[5] ?? 'N/A',
-            'comp_status' => $record->comp_status,
-            'applicability' => $record->applicability,
-            'justification' => $record->justification ?? '-'
-        ];
-    }
+            $finalData[] = [
+                'title_num' => $record->title_num,
+                'title' => $matchingRow[1] ?? 'N/A',
+                'subdomain' => $record->subdomain,
+                'subdomain_heading' => $matchingRow['3'],
+                'sub_req' => $record->sub_req,
+                'requirement' => $matchingRow[5] ?? 'N/A',
+                'comp_status' => $record->comp_status,
+                'applicability' => $record->applicability,
+                'justification' => $record->justification ?? '-'
+            ];
+        }
 
-    
+
         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
             ->where('projects.project_id', $proj_id)->first();
 
-    return view('SOA.show_soa', [
-        
+        return view('SOA.show_soa', [
+
             'proj_id' => $proj_id,
             'user_id' => $user_id,
             'project' => $project,
-            'finalData'=>$finalData
+            'finalData' => $finalData
 
         ]);
-
-       
-
     }
 }

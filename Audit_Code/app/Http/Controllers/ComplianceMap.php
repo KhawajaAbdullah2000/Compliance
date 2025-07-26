@@ -182,6 +182,8 @@ class ComplianceMap extends Controller
 
         $domainNames = config('domain-names')[$project->project_type] ?? [];
 
+
+
         $results = DB::table('iso_sec_2_1 AS assets')
             ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
             ->select(
@@ -680,6 +682,17 @@ class ComplianceMap extends Controller
             ];
         }
 
+        if ($project->project_type == 23) {
+            $domainNames = [
+                1 => 'Govern',
+                2 => 'Identify',
+                3 => 'Protect',
+                4 => 'Detect',
+                5 => 'Respond',
+                6=>'Recover'
+            ];
+        }
+
         if ($project->project_type == 1) {
             $domainNames = [
                 1 => 'Install and Maintain Network Security Controls',
@@ -1026,6 +1039,18 @@ class ComplianceMap extends Controller
                     3 => 'Cybersecurity Resilience',
                     4 => 'Third-Party and Cloud Computing Cybersecurity',
                     5 => 'Industrial Control Systems Cybersecurity',
+                ];
+            }
+
+            if ($project->project_type == 23) {
+                $domainNames = [
+                    1 => 'Govern',
+                    2 => 'Identify',
+                    3 => 'Protect',
+                    4 => 'Detect',
+                    5 => 'Respond',
+                    6 => 'Recover'
+
                 ];
             }
 
@@ -1383,6 +1408,19 @@ class ComplianceMap extends Controller
                 ];
             }
 
+            if ($project->project_type == 23) {
+                $domainNames = [
+                    1 => 'Govern',
+                    2 => 'Identify',
+                    3 => 'Protect',
+                    4 => 'Detect',
+                    5 => 'Respond',
+                    6 => 'Recover'
+
+                ];
+            }
+
+
             //PCI SIngle
 
             if ($project->project_type == 1) {
@@ -1715,6 +1753,19 @@ class ComplianceMap extends Controller
             ->select('g_name')
             ->distinct()
             ->get();
+
+
+        if ($project->project_type == 23) {
+            $domainNames = [
+                1 => 'Govern',
+                2 => 'Identify',
+                3 => 'Protect',
+                4 => 'Detect',
+                5 => 'Respond',
+                6 => 'Recover'
+
+            ];
+        }
 
 
         if ($project->project_type == 8) {
@@ -2081,6 +2132,19 @@ class ComplianceMap extends Controller
             ];
         }
 
+        if ($project->project_type == 23) {
+            $domainNames = [
+                1 => 'Govern',
+                2 => 'Identify',
+                3 => 'Protect',
+                4 => 'Detect',
+                5 => 'Respond',
+                6 => 'Recover'
+
+            ];
+        }
+
+
         if ($project->project_type == 18) {
             $domainNames = [
                 1 => 'Control Environment',
@@ -2440,6 +2504,19 @@ class ComplianceMap extends Controller
             ->select('c_name')
             ->distinct()
             ->get();
+
+        if ($project->project_type == 23) {
+            $domainNames = [
+                1 => 'Govern',
+                2 => 'Identify',
+                3 => 'Protect',
+                4 => 'Detect',
+                5 => 'Respond',
+                6 => 'Recover'
+
+            ];
+        }
+
 
 
         if ($project->project_type == 8) {
@@ -3499,14 +3576,6 @@ class ComplianceMap extends Controller
             })->values()->all();
 
 
-
-            // $UniqueSubDomains = collect($filteredData)
-            // ->pluck(2) // Pluck the 2nd index from each sub-array
-            // ->unique() // Get unique values
-            // ->values() // Reindex the collection
-            // ->all(); // Convert to an array if needed
-            // dd($UniqueSubDomains);
-
             $UniqueSubDomains = collect($filteredData)
                 ->mapWithKeys(function ($item) {
                     $words = explode(" ", $item[2]);
@@ -3531,6 +3600,41 @@ class ComplianceMap extends Controller
                 10 => 'Improvement'
             ];
         }
+
+
+        if ($project->project_type == 23) {
+
+            $filepath = public_path('NIST_CSF_Modified.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+
+            //dd($filteredData);
+
+            $UniqueSubDomains = collect($filteredData)
+                ->unique(function ($row) {
+                    return (string)$row[1]; // convert to string to keep 6.1, 6.2 separate
+                })
+                ->mapWithKeys(function ($row) {
+                    return [(string)$row[1] => $row[4]];
+                })
+                ->toArray();
+
+
+            $domainNames = [
+                1 => 'Govern',
+                2 => 'Identify',
+                3 => 'Protect',
+                4 => 'Detect',
+                5 => 'Respond',
+                6 => 'Recover'
+
+            ];
+        }
+
 
 
 
@@ -4073,10 +4177,6 @@ class ComplianceMap extends Controller
 
 
 
-
-
-
-
         if ($project->project_type == 4) {
 
             $filepath = public_path('ISO_SEC_2_2.xlsx');
@@ -4161,6 +4261,32 @@ class ComplianceMap extends Controller
 
         }
 
+
+          if ($project->project_type == 23) {
+
+            $filepath = public_path('NIST_CSF_Modified.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+                return strval($row[1]) == $subdomain;
+            })->values()->all();
+
+
+            $MainDomainNum = $filteredData[0][0];
+            $MainDomainTitle = $filteredData[0][2]; //title
+
+            $subdomainTitle = $filteredData[0][4];
+
+
+            $UniqueSubReqs = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [$row[3] => $row[5]];
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+
+        }
 
 
 
@@ -4341,42 +4467,42 @@ class ComplianceMap extends Controller
             'components' => 'required|array|min:1'
         ]);
         $action = $req->input('action');
-        if($action=="compliance"){
+        if ($action == "compliance") {
 
-        $serviceName = $req->input('s_name');
-        $selectedProjects = $req->input('selected_projects');
-        $selectedComponents = $req->input('components');
+            $serviceName = $req->input('s_name');
+            $selectedProjects = $req->input('selected_projects');
+            $selectedComponents = $req->input('components');
 
-        // Get project name & type
-        $projects = DB::table('projects')
-            ->join('project_types', 'projects.project_type', '=', 'project_types.id')
-            ->whereIn('projects.project_id', $selectedProjects)
-            ->select('projects.project_id', 'projects.project_name', 'projects.project_type', 'project_types.type')
-            ->get();
+            // Get project name & type
+            $projects = DB::table('projects')
+                ->join('project_types', 'projects.project_type', '=', 'project_types.id')
+                ->whereIn('projects.project_id', $selectedProjects)
+                ->select('projects.project_id', 'projects.project_name', 'projects.project_type', 'project_types.type')
+                ->get();
 
-        // Build view data structure
-        $structuredData = [];
+            // Build view data structure
+            $structuredData = [];
 
-        foreach ($projects as $project) {
-            $type = $project->project_type;
-            $domainNames = config('domain-names')[$type] ?? [];
+            foreach ($projects as $project) {
+                $type = $project->project_type;
+                $domainNames = config('domain-names')[$type] ?? [];
 
-            $structuredData[] = [
-                'id'          => $project->project_id,
-                'name'        => $project->project_name,
-                'type_label'  => $project->type,
-                'components'  => $selectedComponents[$project->project_id] ?? [],
-                'domains'     => $domainNames
-            ];
+                $structuredData[] = [
+                    'id'          => $project->project_id,
+                    'name'        => $project->project_name,
+                    'type_label'  => $project->type,
+                    'components'  => $selectedComponents[$project->project_id] ?? [],
+                    'domains'     => $domainNames
+                ];
+            }
+
+            return view('comp_analysis.select_domains', [
+                'serviceName' => $serviceName,
+                'projects'    => $structuredData,
+            ]);
+        } else {
+            dd("Analyze risk to be built later");
         }
-
-        return view('comp_analysis.select_domains', [
-            'serviceName' => $serviceName,
-            'projects'    => $structuredData,
-        ]);
-    }else{
-        dd("Analyze risk to be built later");
-    }
     }
 
     // public function selected_domains($org_id, Request $req)
@@ -4442,90 +4568,92 @@ class ComplianceMap extends Controller
     // }
 
     public function selected_domains($org_id, Request $req)
-{
-    $selectedProjects   = $req->input('selected_projects', []);
-    $selectedComponents = $req->input('components', []);
-    $selectedDomains    = $req->input('domains', []);
+    {
+        $selectedProjects   = $req->input('selected_projects', []);
+        $selectedComponents = $req->input('components', []);
+        $selectedDomains    = $req->input('domains', []);
 
-    $componentStats = [];
+        $componentStats = [];
 
-    foreach ($selectedProjects as $proj_id) {
-        $componentsInProject = $selectedComponents[$proj_id] ?? [];
-        $domainsInProject    = $selectedDomains[$proj_id] ?? [];
+        foreach ($selectedProjects as $proj_id) {
+            $componentsInProject = $selectedComponents[$proj_id] ?? [];
+            $domainsInProject    = $selectedDomains[$proj_id] ?? [];
 
-        if (empty($componentsInProject) || empty($domainsInProject)) {
-            continue;
-        }
+            if (empty($componentsInProject) || empty($domainsInProject)) {
+                continue;
+            }
 
-        // Get project name
-       $project = DB::table('projects')
-    ->join('project_types', 'projects.project_type', '=', 'project_types.id')
-    ->where('projects.project_id', $proj_id)
-    ->select('projects.project_name', 'project_types.type AS project_type_name',
-    'projects.project_type')
-    ->first();
-        $projectName = $project ? $project->project_name : 'Unknown Project';
-        $projectType = $project?->project_type_name ?? 'N/A';
-
-        $domainNamesForType = config('domain-names')[$project->project_type] ?? [];
-
-        $domainList = collect($domainsInProject)
-            ->map(function ($domainKey) use ($domainNamesForType) {
-                return [
-                    'number' => $domainKey,
-                    'name'   => $domainNamesForType[$domainKey] ?? 'Unknown Domain',
-                ];
-            })
-            ->values()
-            ->all();
-
-
-        foreach ($componentsInProject as $componentName) {
-            $results = DB::table('iso_sec_2_1 AS assets')
-                ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
+            // Get project name
+            $project = DB::table('projects')
+                ->join('project_types', 'projects.project_type', '=', 'project_types.id')
+                ->where('projects.project_id', $proj_id)
                 ->select(
-                    'compliance.comp_status',
-                    DB::raw('COUNT(*) AS status_count')
+                    'projects.project_name',
+                    'project_types.type AS project_type_name',
+                    'projects.project_type'
                 )
-                ->where('assets.project_id', $proj_id)
-                ->where('assets.c_name', $componentName)
-                ->whereIn('compliance.title_num', $domainsInProject)
-                ->groupBy('compliance.comp_status')
-                ->get();
+                ->first();
+            $projectName = $project ? $project->project_name : 'Unknown Project';
+            $projectType = $project?->project_type_name ?? 'N/A';
 
-            // Init counters
-            $statusCounts = ['yes' => 0, 'no' => 0, 'partial' => 0, 'not_tested' => 0, 'not_applicable' => 0];
+            $domainNamesForType = config('domain-names')[$project->project_type] ?? [];
 
-            foreach ($results as $row) {
-                if (isset($statusCounts[$row->comp_status])) {
-                    $statusCounts[$row->comp_status] += $row->status_count;
+            $domainList = collect($domainsInProject)
+                ->map(function ($domainKey) use ($domainNamesForType) {
+                    return [
+                        'number' => $domainKey,
+                        'name'   => $domainNamesForType[$domainKey] ?? 'Unknown Domain',
+                    ];
+                })
+                ->values()
+                ->all();
+
+
+            foreach ($componentsInProject as $componentName) {
+                $results = DB::table('iso_sec_2_1 AS assets')
+                    ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
+                    ->select(
+                        'compliance.comp_status',
+                        DB::raw('COUNT(*) AS status_count')
+                    )
+                    ->where('assets.project_id', $proj_id)
+                    ->where('assets.c_name', $componentName)
+                    ->whereIn('compliance.title_num', $domainsInProject)
+                    ->groupBy('compliance.comp_status')
+                    ->get();
+
+                // Init counters
+                $statusCounts = ['yes' => 0, 'no' => 0, 'partial' => 0, 'not_tested' => 0, 'not_applicable' => 0];
+
+                foreach ($results as $row) {
+                    if (isset($statusCounts[$row->comp_status])) {
+                        $statusCounts[$row->comp_status] += $row->status_count;
+                    }
                 }
+
+                $total = array_sum($statusCounts);
+                $percentages = [];
+
+                foreach ($statusCounts as $status => $count) {
+                    $percentages[$status] = $total > 0 ? round(($count / $total) * 100, 1) : 0;
+                }
+
+                $componentStats[] = [
+                    'project_id'   => $proj_id,
+                    'project_name' => $projectName,
+                    'project_type' => $projectType,
+                    'component'    => $componentName,
+                    'counts'       => $statusCounts,
+                    'percentages'  => $percentages,
+                    'total'        => $total,
+                    'domains'       => $domainList
+                ];
             }
-
-            $total = array_sum($statusCounts);
-            $percentages = [];
-
-            foreach ($statusCounts as $status => $count) {
-                $percentages[$status] = $total > 0 ? round(($count / $total) * 100, 1) : 0;
-            }
-
-            $componentStats[] = [
-                'project_id'   => $proj_id,
-                'project_name' => $projectName,
-                'project_type' => $projectType,
-                'component'    => $componentName,
-                'counts'       => $statusCounts,
-                'percentages'  => $percentages,
-                'total'        => $total,
-                'domains'       => $domainList
-            ];
         }
+
+        return view('comp_analysis.compliance_summary_first_level', [
+            'serviceName'     => $req->s_name,
+            'componentStats'  => $componentStats,
+        ]);
     }
-
-    return view('comp_analysis.compliance_summary_first_level', [
-        'serviceName'     => $req->s_name,
-        'componentStats'  => $componentStats,
-    ]);
-}
-
 }

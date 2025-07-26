@@ -124,6 +124,16 @@ return [
         5 => 'Industrial Control Systems Cybersecurity',
     ],
 
+    23=>[
+         1 => 'Govern',
+        2 => 'Identify',
+        3 => 'Protect',
+        4 => 'Detect',
+        5 => 'Respond',
+        6=>'Recover'
+
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | UAE-IA Information Assurance

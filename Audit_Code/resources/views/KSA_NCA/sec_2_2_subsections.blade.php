@@ -345,120 +345,217 @@ If you choose to select values for “Applicable” and “Compliance Status” 
                 $applicability = $finalApplicabilityByTitle->get($title);
                 @endphp
 
-    <div class="row mb-3 align-items-start">
-        <div class="col-md-5">
-            <a href="/ksa_nca_section_2_2/{{ $title }}/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" class="btn btn-lg btn-warning w-100 text-start fw-bold">
-                {{ $title }}. {{ $label }}
-            </a>
+                <div class="row mb-3 align-items-start">
+                    <div class="col-md-5">
+                        <a href="/ksa_nca_section_2_2/{{ $title }}/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" class="btn btn-lg btn-warning w-100 text-start fw-bold">
+                            {{ $title }}. {{ $label }}
+                        </a>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="hidden" name="titles[]" value="{{ $title }}">
+
+                        <select name="applicabilities[]" class="form-select rounded-pill applicability-select" data-index="{{ $loop->index }}">
+                            <option value="">Select --</option>
+                            <option value="yes" {{ old('applicabilities.' . $loop->index, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
+                            <option value="no" {{ old('applicabilities.' . $loop->index, $applicability) === 'no' ? 'selected' : '' }}>No</option>
+                        </select>
+
+                        @if(trim($applicability) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Applicability differs in lower layers</span>
+                        </div>
+                        @endif
+
+                        <!-- Justification Field (hidden by default, shown via JS) -->
+                        <textarea name="justifications[]" class="form-control mt-2 justification-textarea justification-{{ $loop->index }}" style="display: {{ (old('applicabilities.' . $loop->index, $applicability) === 'no') ? 'block' : 'none' }};" placeholder="Enter justification">{{ old('justifications.' . $loop->index) }}</textarea>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <select name="comp_statuses[]" class="form-select rounded-pill w-100">
+                                <option value="">Select --</option>
+                                @foreach([
+                                'yes' => 'In Place',
+                                'no' => 'Not in Place',
+                                'not_applicable' => 'Not Applicable',
+                                'not_tested' => 'Not Tested',
+                                'partial' => 'Partial'
+                                ] as $value => $labelOption)
+                                <option value="{{ $value }}" {{ old('comp_statuses.' . $loop->index, $status !== 'different' ? $status : '') === $value ? 'selected' : '' }}>
+                                    {{ $labelOption }}
+                                </option>
+                                @endforeach
+                            </select>
+
+                            <a class="btn btn-sm btn-primary" style="min-width:100px;" href="#">
+                                AI Input
+                            </a>
+                        </div>
+
+                        @if(trim($status) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Compliance differs in lower layers</span>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+
+
+                @endforeach
+
+            </form>
+
         </div>
 
-        <div class="col-md-3">
-            <input type="hidden" name="titles[]" value="{{ $title }}">
 
-            <select name="applicabilities[]" class="form-select rounded-pill applicability-select" data-index="{{ $loop->index }}">
-                <option value="">Select --</option>
-                <option value="yes" {{ old('applicabilities.' . $loop->index, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
-                <option value="no" {{ old('applicabilities.' . $loop->index, $applicability) === 'no' ? 'selected' : '' }}>No</option>
-            </select>
 
-            @if(trim($applicability) === 'different')
-            <div class="mt-1">
-                <span class="badge bg-secondary fs-6">Applicability differs in lower layers</span>
-            </div>
-            @endif
 
-            <!-- Justification Field (hidden by default, shown via JS) -->
-            <textarea name="justifications[]" class="form-control mt-2 justification-textarea justification-{{ $loop->index }}" style="display: {{ (old('applicabilities.' . $loop->index, $applicability) === 'no') ? 'block' : 'none' }};" placeholder="Enter justification">{{ old('justifications.' . $loop->index) }}</textarea>
+        {{-- NIST CSF --}}
+          @elseif($project->project_type==23)
+
+        <div class="row h-100 w-100 mb-2">
+
+            <form action="/add_mandatory_all_title_all_controls/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" method="POST">
+                @csrf
+
+                <!-- Top Row: Save Button & Headings -->
+                <div class="row align-items-center mb-3">
+                    <div class="col-md-5">
+                        <h5 class="fw-bold mb-0">Control Domains</h5>
+                    </div>
+                    <div class="col-md-3 text-start">
+                        <span class="fw-bold">Applicability</span>
+                    </div>
+                    <div class="col-md-3 text-start">
+                        <span class="fw-bold">Compliance Status</span>
+                    </div>
+                    <div class="col-md-1 text-end">
+                        <button class="btn btn-md btn-success px-4">Save</button>
+                    </div>
+                </div>
+
+                @foreach([1 => 'Govern', 2 => 'Identify', 3=>'Protect',4=>"Detect",5=>"Respond",6=>"Recover"] as $title => $label)
+
+                @php
+                $status = $finalStatusByTitle->get($title);
+                $applicability = $finalApplicabilityByTitle->get($title);
+                @endphp
+
+                <div class="row mb-3 align-items-start">
+                    <div class="col-md-5">
+                        <a href="/ksa_nca_section_2_2/{{ $title }}/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" class="btn btn-lg btn-warning w-100 text-start fw-bold">
+                            {{ $title }}. {{ $label }}
+                        </a>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="hidden" name="titles[]" value="{{ $title }}">
+
+                        <select name="applicabilities[]" class="form-select rounded-pill applicability-select" data-index="{{ $loop->index }}">
+                            <option value="">Select --</option>
+                            <option value="yes" {{ old('applicabilities.' . $loop->index, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
+                            <option value="no" {{ old('applicabilities.' . $loop->index, $applicability) === 'no' ? 'selected' : '' }}>No</option>
+                        </select>
+
+                        @if(trim($applicability) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Applicability differs in lower layers</span>
+                        </div>
+                        @endif
+
+                        <!-- Justification Field (hidden by default, shown via JS) -->
+                        <textarea name="justifications[]" class="form-control mt-2 justification-textarea justification-{{ $loop->index }}" style="display: {{ (old('applicabilities.' . $loop->index, $applicability) === 'no') ? 'block' : 'none' }};" placeholder="Enter justification">{{ old('justifications.' . $loop->index) }}</textarea>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <select name="comp_statuses[]" class="form-select rounded-pill w-100">
+                                <option value="">Select --</option>
+                                @foreach([
+                                'yes' => 'In Place',
+                                'no' => 'Not in Place',
+                                'not_applicable' => 'Not Applicable',
+                                'not_tested' => 'Not Tested',
+                                'partial' => 'Partial'
+                                ] as $value => $labelOption)
+                                <option value="{{ $value }}" {{ old('comp_statuses.' . $loop->index, $status !== 'different' ? $status : '') === $value ? 'selected' : '' }}>
+                                    {{ $labelOption }}
+                                </option>
+                                @endforeach
+                            </select>
+
+                            <a class="btn btn-sm btn-primary" style="min-width:100px;" href="#">
+                                AI Input
+                            </a>
+                        </div>
+
+                        @if(trim($status) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Compliance differs in lower layers</span>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+
+
+                @endforeach
+
+            </form>
+
         </div>
 
-        <div class="col-md-4">
-            <div class="d-flex align-items-center gap-2">
-                <select name="comp_statuses[]" class="form-select rounded-pill w-100">
-                    <option value="">Select --</option>
-                    @foreach([
-                    'yes' => 'In Place',
-                    'no' => 'Not in Place',
-                    'not_applicable' => 'Not Applicable',
-                    'not_tested' => 'Not Tested',
-                    'partial' => 'Partial'
-                    ] as $value => $labelOption)
-                    <option value="{{ $value }}" {{ old('comp_statuses.' . $loop->index, $status !== 'different' ? $status : '') === $value ? 'selected' : '' }}>
-                        {{ $labelOption }}
-                    </option>
-                    @endforeach
-                </select>
-
-                <a class="btn btn-sm btn-primary" style="min-width:100px;" href="#">
-                    AI Input
-                </a>
-            </div>
-
-            @if(trim($status) === 'different')
-            <div class="mt-1">
-                <span class="badge bg-secondary fs-6">Compliance differs in lower layers</span>
-            </div>
-            @endif
-        </div>
+        @endif
     </div>
 
 
-    @endforeach
 
-    </form>
+    @section('scripts')
 
-</div>
+    @if(Session::has('success'))
+    <script>
+        swal({
+            title: "{{Session::get('success')}}"
+            , icon: "success"
+            , closeOnClickOutside: true
+            , timer: 3000
+        , });
 
-@endif
-</div>
+    </script>
+    @endif
 
-
-
-@section('scripts')
-
-@if(Session::has('success'))
-<script>
-    swal({
-        title: "{{Session::get('success')}}"
-        , icon: "success"
-        , closeOnClickOutside: true
-        , timer: 3000
-    , });
-
-</script>
-@endif
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl, {
-                html: false
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl, {
+                    html: false
+                })
             })
-        })
-    });
+        });
 
-</script>
+    </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.applicability-select').forEach(function(select) {
-            select.addEventListener('change', function() {
-                var index = this.getAttribute('data-index');
-                var justification = document.querySelector('.justification-' + index);
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.applicability-select').forEach(function(select) {
+                select.addEventListener('change', function() {
+                    var index = this.getAttribute('data-index');
+                    var justification = document.querySelector('.justification-' + index);
 
-                if (this.value === 'no') {
-                    justification.style.display = 'block';
-                } else {
-                    justification.style.display = 'none';
-                    justification.value = ''; // Clear if hidden
-                }
+                    if (this.value === 'no') {
+                        justification.style.display = 'block';
+                    } else {
+                        justification.style.display = 'none';
+                        justification.value = ''; // Clear if hidden
+                    }
+                });
             });
         });
-    });
 
-</script>
+    </script>
 
 
-@endsection
+    @endsection
 
-@endsection
+    @endsection
