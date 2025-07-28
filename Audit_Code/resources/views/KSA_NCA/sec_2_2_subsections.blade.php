@@ -412,7 +412,7 @@ If you choose to select values for “Applicable” and “Compliance Status” 
 
 
         {{-- NIST CSF --}}
-          @elseif($project->project_type==23)
+        @elseif($project->project_type==23)
 
         <div class="row h-100 w-100 mb-2">
 
@@ -436,6 +436,101 @@ If you choose to select values for “Applicable” and “Compliance Status” 
                 </div>
 
                 @foreach([1 => 'Govern', 2 => 'Identify', 3=>'Protect',4=>"Detect",5=>"Respond",6=>"Recover"] as $title => $label)
+
+                @php
+                $status = $finalStatusByTitle->get($title);
+                $applicability = $finalApplicabilityByTitle->get($title);
+                @endphp
+
+                <div class="row mb-3 align-items-start">
+                    <div class="col-md-5">
+                        <a href="/ksa_nca_section_2_2/{{ $title }}/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" class="btn btn-lg btn-warning w-100 text-start fw-bold">
+                            {{ $title }}. {{ $label }}
+                        </a>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="hidden" name="titles[]" value="{{ $title }}">
+
+                        <select name="applicabilities[]" class="form-select rounded-pill applicability-select" data-index="{{ $loop->index }}">
+                            <option value="">Select --</option>
+                            <option value="yes" {{ old('applicabilities.' . $loop->index, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
+                            <option value="no" {{ old('applicabilities.' . $loop->index, $applicability) === 'no' ? 'selected' : '' }}>No</option>
+                        </select>
+
+                        @if(trim($applicability) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Applicability differs in lower layers</span>
+                        </div>
+                        @endif
+
+                        <!-- Justification Field (hidden by default, shown via JS) -->
+                        <textarea name="justifications[]" class="form-control mt-2 justification-textarea justification-{{ $loop->index }}" style="display: {{ (old('applicabilities.' . $loop->index, $applicability) === 'no') ? 'block' : 'none' }};" placeholder="Enter justification">{{ old('justifications.' . $loop->index) }}</textarea>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <select name="comp_statuses[]" class="form-select rounded-pill w-100">
+                                <option value="">Select --</option>
+                                @foreach([
+                                'yes' => 'In Place',
+                                'no' => 'Not in Place',
+                                'not_applicable' => 'Not Applicable',
+                                'not_tested' => 'Not Tested',
+                                'partial' => 'Partial'
+                                ] as $value => $labelOption)
+                                <option value="{{ $value }}" {{ old('comp_statuses.' . $loop->index, $status !== 'different' ? $status : '') === $value ? 'selected' : '' }}>
+                                    {{ $labelOption }}
+                                </option>
+                                @endforeach
+                            </select>
+
+                            <a class="btn btn-sm btn-primary" style="min-width:100px;" href="#">
+                                AI Input
+                            </a>
+                        </div>
+
+                        @if(trim($status) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Compliance differs in lower layers</span>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+
+
+                @endforeach
+
+            </form>
+
+        </div>
+
+
+           {{-- ISO 27701 2019 --}}
+        @elseif($project->project_type==24)
+
+        <div class="row h-100 w-100 mb-2">
+
+            <form action="/add_mandatory_all_title_all_controls/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" method="POST">
+                @csrf
+
+                <!-- Top Row: Save Button & Headings -->
+                <div class="row align-items-center mb-3">
+                    <div class="col-md-5">
+                        <h5 class="fw-bold mb-0">Control Domains</h5>
+                    </div>
+                    <div class="col-md-3 text-start">
+                        <span class="fw-bold">Applicability</span>
+                    </div>
+                    <div class="col-md-3 text-start">
+                        <span class="fw-bold">Compliance Status</span>
+                    </div>
+                    <div class="col-md-1 text-end">
+                        <button class="btn btn-md btn-success px-4">Save</button>
+                    </div>
+                </div>
+
+                @foreach(['5.2' => 'Context of the organization', '5.3' => 'Leadership', '5.4'=>'Planning','5.5'=>"Support",'5.6'=>"Operation",'5.7'=>'Performance Evaluation','5.8'=>'Improvement','6.2'=>'ISO 27002:2013 aspects of PII','6.3'=>'ISO 27002:2013 aspects of PII','6.4'=>'ISO 27002:2013 aspects of PII','6.5'=>'ISO 27002:2013 aspects of PII','6.6'=>'ISO 27002:2013 aspects of PII','6.6.2'=>'User access management aspects of PII','6.6.4'=>'System and application access control aspects of PII','6.7.1'=>'Cryptographic controls control aspects of PII','6.8.2'=>'Equipment control aspects of PII','6.9.3'=>'Backup control aspects of PII','6.9.4'=>'Logging and monitoring control aspects of PII','6.11.2'=>'Security requirements of information systems control aspects of PII','6.13.1'=>'Management of information security incidents and improvements aspects of PII','6.15.2'=>'Information security reviews aspects of PII','A'=>'PIMS-specific reference control objectives and controls for PII Controllers','B'=>'PIMS-specific reference control objectives and controls for PII Processors'] as $title => $label)
 
                 @php
                 $status = $finalStatusByTitle->get($title);

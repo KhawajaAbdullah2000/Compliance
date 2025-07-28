@@ -46,9 +46,13 @@ class ComplianceMap extends Controller
                 ->orderBy('compliance.title_num') // Optional: Order by service name
                 ->get();
 
+
+
+
             $formattedResults = [];
             $totalCounts = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
 
+            // dd($results);
             foreach ($results as $result) {
                 $domain = $result->Domain;
                 $status = $result->comp_status;
@@ -689,7 +693,35 @@ class ComplianceMap extends Controller
                 3 => 'Protect',
                 4 => 'Detect',
                 5 => 'Respond',
-                6=>'Recover'
+                6 => 'Recover'
+            ];
+        }
+
+        if ($project->project_type == 24) {
+            $domainNames = [
+                '5.2' => 'Context of the organization',
+                '5.3' => 'Leadership',
+                '5.4' => 'Planning',
+                '5.5' => "Support",
+                '5.6' => "Operation",
+                '5.7' => 'Performance Evaluation',
+                '5.8' => 'Improvement',
+                '6.2' => 'ISO 27002:2013 aspects of PII',
+                '6.3' => 'ISO 27002:2013 aspects of PII',
+                '6.4' => 'ISO 27002:2013 aspects of PII',
+                '6.5' => 'ISO 27002:2013 aspects of PII',
+                '6.6' => 'ISO 27002:2013 aspects of PII',
+                '6.6.2' => 'User access management aspects of PII',
+                '6.6.4' => 'System and application access control aspects of PII',
+                '6.7.1' => 'Cryptographic controls control aspects of PII',
+                '6.8.2' => 'Equipment control aspects of PII',
+                '6.9.3' => 'Backup control aspects of PII',
+                '6.9.4' => 'Logging and monitoring control aspects of PII',
+                '6.11.2' => 'Security requirements of information systems control aspects of PII',
+                '6.13.1' => 'Management of information security incidents and improvements aspects of PII',
+                '6.15.2' => 'Information security reviews aspects of PII',
+                'A' => 'PIMS-specific reference control objectives and controls for PII Controllers',
+                'B' => 'PIMS-specific reference control objectives and controls for PII Processors'
             ];
         }
 
@@ -1053,6 +1085,35 @@ class ComplianceMap extends Controller
 
                 ];
             }
+
+            if ($project->project_type == 24) {
+                $domainNames = [
+                    '5.2' => 'Context of the organization',
+                    '5.3' => 'Leadership',
+                    '5.4' => 'Planning',
+                    '5.5' => "Support",
+                    '5.6' => "Operation",
+                    '5.7' => 'Performance Evaluation',
+                    '5.8' => 'Improvement',
+                    '6.2' => 'ISO 27002:2013 aspects of PII',
+                    '6.3' => 'ISO 27002:2013 aspects of PII',
+                    '6.4' => 'ISO 27002:2013 aspects of PII',
+                    '6.5' => 'ISO 27002:2013 aspects of PII',
+                    '6.6' => 'ISO 27002:2013 aspects of PII',
+                    '6.6.2' => 'User access management aspects of PII',
+                    '6.6.4' => 'System and application access control aspects of PII',
+                    '6.7.1' => 'Cryptographic controls control aspects of PII',
+                    '6.8.2' => 'Equipment control aspects of PII',
+                    '6.9.3' => 'Backup control aspects of PII',
+                    '6.9.4' => 'Logging and monitoring control aspects of PII',
+                    '6.11.2' => 'Security requirements of information systems control aspects of PII',
+                    '6.13.1' => 'Management of information security incidents and improvements aspects of PII',
+                    '6.15.2' => 'Information security reviews aspects of PII',
+                    'A' => 'PIMS-specific reference control objectives and controls for PII Controllers',
+                    'B' => 'PIMS-specific reference control objectives and controls for PII Processors'
+                ];
+            }
+
 
             //PCI SIngle
 
@@ -1420,6 +1481,35 @@ class ComplianceMap extends Controller
                 ];
             }
 
+            if ($project->project_type == 24) {
+                $domainNames = [
+                    '5.2' => 'Context of the organization',
+                    '5.3' => 'Leadership',
+                    '5.4' => 'Planning',
+                    '5.5' => "Support",
+                    '5.6' => "Operation",
+                    '5.7' => 'Performance Evaluation',
+                    '5.8' => 'Improvement',
+                    '6.2' => 'ISO 27002:2013 aspects of PII',
+                    '6.3' => 'ISO 27002:2013 aspects of PII',
+                    '6.4' => 'ISO 27002:2013 aspects of PII',
+                    '6.5' => 'ISO 27002:2013 aspects of PII',
+                    '6.6' => 'ISO 27002:2013 aspects of PII',
+                    '6.6.2' => 'User access management aspects of PII',
+                    '6.6.4' => 'System and application access control aspects of PII',
+                    '6.7.1' => 'Cryptographic controls control aspects of PII',
+                    '6.8.2' => 'Equipment control aspects of PII',
+                    '6.9.3' => 'Backup control aspects of PII',
+                    '6.9.4' => 'Logging and monitoring control aspects of PII',
+                    '6.11.2' => 'Security requirements of information systems control aspects of PII',
+                    '6.13.1' => 'Management of information security incidents and improvements aspects of PII',
+                    '6.15.2' => 'Information security reviews aspects of PII',
+                    'A' => 'PIMS-specific reference control objectives and controls for PII Controllers',
+                    'B' => 'PIMS-specific reference control objectives and controls for PII Processors'
+                ];
+            }
+
+
 
             //PCI SIngle
 
@@ -1766,6 +1856,35 @@ class ComplianceMap extends Controller
 
             ];
         }
+
+        if ($project->project_type == 24) {
+            $domainNames = [
+                '5.2' => 'Context of the organization',
+                '5.3' => 'Leadership',
+                '5.4' => 'Planning',
+                '5.5' => "Support",
+                '5.6' => "Operation",
+                '5.7' => 'Performance Evaluation',
+                '5.8' => 'Improvement',
+                '6.2' => 'ISO 27002:2013 aspects of PII',
+                '6.3' => 'ISO 27002:2013 aspects of PII',
+                '6.4' => 'ISO 27002:2013 aspects of PII',
+                '6.5' => 'ISO 27002:2013 aspects of PII',
+                '6.6' => 'ISO 27002:2013 aspects of PII',
+                '6.6.2' => 'User access management aspects of PII',
+                '6.6.4' => 'System and application access control aspects of PII',
+                '6.7.1' => 'Cryptographic controls control aspects of PII',
+                '6.8.2' => 'Equipment control aspects of PII',
+                '6.9.3' => 'Backup control aspects of PII',
+                '6.9.4' => 'Logging and monitoring control aspects of PII',
+                '6.11.2' => 'Security requirements of information systems control aspects of PII',
+                '6.13.1' => 'Management of information security incidents and improvements aspects of PII',
+                '6.15.2' => 'Information security reviews aspects of PII',
+                'A' => 'PIMS-specific reference control objectives and controls for PII Controllers',
+                'B' => 'PIMS-specific reference control objectives and controls for PII Processors'
+            ];
+        }
+
 
 
         if ($project->project_type == 8) {
@@ -2144,6 +2263,35 @@ class ComplianceMap extends Controller
             ];
         }
 
+        if ($project->project_type == 24) {
+            $domainNames = [
+                '5.2' => 'Context of the organization',
+                '5.3' => 'Leadership',
+                '5.4' => 'Planning',
+                '5.5' => "Support",
+                '5.6' => "Operation",
+                '5.7' => 'Performance Evaluation',
+                '5.8' => 'Improvement',
+                '6.2' => 'ISO 27002:2013 aspects of PII',
+                '6.3' => 'ISO 27002:2013 aspects of PII',
+                '6.4' => 'ISO 27002:2013 aspects of PII',
+                '6.5' => 'ISO 27002:2013 aspects of PII',
+                '6.6' => 'ISO 27002:2013 aspects of PII',
+                '6.6.2' => 'User access management aspects of PII',
+                '6.6.4' => 'System and application access control aspects of PII',
+                '6.7.1' => 'Cryptographic controls control aspects of PII',
+                '6.8.2' => 'Equipment control aspects of PII',
+                '6.9.3' => 'Backup control aspects of PII',
+                '6.9.4' => 'Logging and monitoring control aspects of PII',
+                '6.11.2' => 'Security requirements of information systems control aspects of PII',
+                '6.13.1' => 'Management of information security incidents and improvements aspects of PII',
+                '6.15.2' => 'Information security reviews aspects of PII',
+                'A' => 'PIMS-specific reference control objectives and controls for PII Controllers',
+                'B' => 'PIMS-specific reference control objectives and controls for PII Processors'
+            ];
+        }
+
+
 
         if ($project->project_type == 18) {
             $domainNames = [
@@ -2516,6 +2664,35 @@ class ComplianceMap extends Controller
 
             ];
         }
+
+        if ($project->project_type == 24) {
+            $domainNames = [
+                '5.2' => 'Context of the organization',
+                '5.3' => 'Leadership',
+                '5.4' => 'Planning',
+                '5.5' => "Support",
+                '5.6' => "Operation",
+                '5.7' => 'Performance Evaluation',
+                '5.8' => 'Improvement',
+                '6.2' => 'ISO 27002:2013 aspects of PII',
+                '6.3' => 'ISO 27002:2013 aspects of PII',
+                '6.4' => 'ISO 27002:2013 aspects of PII',
+                '6.5' => 'ISO 27002:2013 aspects of PII',
+                '6.6' => 'ISO 27002:2013 aspects of PII',
+                '6.6.2' => 'User access management aspects of PII',
+                '6.6.4' => 'System and application access control aspects of PII',
+                '6.7.1' => 'Cryptographic controls control aspects of PII',
+                '6.8.2' => 'Equipment control aspects of PII',
+                '6.9.3' => 'Backup control aspects of PII',
+                '6.9.4' => 'Logging and monitoring control aspects of PII',
+                '6.11.2' => 'Security requirements of information systems control aspects of PII',
+                '6.13.1' => 'Management of information security incidents and improvements aspects of PII',
+                '6.15.2' => 'Information security reviews aspects of PII',
+                'A' => 'PIMS-specific reference control objectives and controls for PII Controllers',
+                'B' => 'PIMS-specific reference control objectives and controls for PII Processors'
+            ];
+        }
+
 
 
 
@@ -3635,6 +3812,54 @@ class ComplianceMap extends Controller
             ];
         }
 
+        if ($project->project_type == 24) {
+
+            $filepath = public_path('ISO27701_2019v2_Modified.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+
+            //dd($filteredData);
+
+            $UniqueSubDomains = collect($filteredData)
+                ->unique(function ($row) {
+                    return (string)$row[1]; // convert to string to keep 6.1, 6.2 separate
+                })
+                ->mapWithKeys(function ($row) {
+                    return [(string)$row[1] => $row[4]];
+                })
+                ->toArray();
+
+            $domainNames = [
+                '5.2' => 'Context of the organization',
+                '5.3' => 'Leadership',
+                '5.4' => 'Planning',
+                '5.5' => "Support",
+                '5.6' => "Operation",
+                '5.7' => 'Performance Evaluation',
+                '5.8' => 'Improvement',
+                '6.2' => 'ISO 27002:2013 aspects of PII',
+                '6.3' => 'ISO 27002:2013 aspects of PII',
+                '6.4' => 'ISO 27002:2013 aspects of PII',
+                '6.5' => 'ISO 27002:2013 aspects of PII',
+                '6.6' => 'ISO 27002:2013 aspects of PII',
+                '6.6.2' => 'User access management aspects of PII',
+                '6.6.4' => 'System and application access control aspects of PII',
+                '6.7.1' => 'Cryptographic controls control aspects of PII',
+                '6.8.2' => 'Equipment control aspects of PII',
+                '6.9.3' => 'Backup control aspects of PII',
+                '6.9.4' => 'Logging and monitoring control aspects of PII',
+                '6.11.2' => 'Security requirements of information systems control aspects of PII',
+                '6.13.1' => 'Management of information security incidents and improvements aspects of PII',
+                '6.15.2' => 'Information security reviews aspects of PII',
+                'A' => 'PIMS-specific reference control objectives and controls for PII Controllers',
+                'B' => 'PIMS-specific reference control objectives and controls for PII Processors'
+            ];
+        }
+
 
 
 
@@ -4262,9 +4487,35 @@ class ComplianceMap extends Controller
         }
 
 
-          if ($project->project_type == 23) {
+        if ($project->project_type == 23) {
 
             $filepath = public_path('NIST_CSF_Modified.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+                return strval($row[1]) == $subdomain;
+            })->values()->all();
+
+
+            $MainDomainNum = $filteredData[0][0];
+            $MainDomainTitle = $filteredData[0][2]; //title
+
+            $subdomainTitle = $filteredData[0][4];
+
+
+            $UniqueSubReqs = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [$row[3] => $row[5]];
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+
+        }
+
+         if ($project->project_type == 24) {
+
+            $filepath = public_path('ISO27701_2019v2_Modified.xlsx');
             $data = Excel::toArray([], $filepath); //with header
             $rows = array_slice($data[0], 1); //without header(first row)
 

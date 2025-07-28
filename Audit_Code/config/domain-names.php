@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Domain-name look-ups by project_type.
  * Usage:  $domainNames = config('domain-names')[ $projectType ] ?? [];
@@ -124,13 +125,40 @@ return [
         5 => 'Industrial Control Systems Cybersecurity',
     ],
 
-    23=>[
-         1 => 'Govern',
+    23 => [
+        1 => 'Govern',
         2 => 'Identify',
         3 => 'Protect',
         4 => 'Detect',
         5 => 'Respond',
-        6=>'Recover'
+        6 => 'Recover'
+
+    ],
+
+    24 => [
+        '5.2' => 'Context of the organization',
+        '5.3' => 'Leadership',
+        '5.4' => 'Planning',
+        '5.5' => "Support",
+        '5.6' => "Operation",
+        '5.7' => 'Performance Evaluation',
+        '5.8' => 'Improvement',
+        '6.2' => 'ISO 27002:2013 aspects of PII',
+        '6.3' => 'ISO 27002:2013 aspects of PII',
+        '6.4' => 'ISO 27002:2013 aspects of PII',
+        '6.5' => 'ISO 27002:2013 aspects of PII',
+        '6.6' => 'ISO 27002:2013 aspects of PII',
+        '6.6.2' => 'User access management aspects of PII',
+        '6.6.4' => 'System and application access control aspects of PII',
+        '6.7.1' => 'Cryptographic controls control aspects of PII',
+        '6.8.2' => 'Equipment control aspects of PII',
+        '6.9.3' => 'Backup control aspects of PII',
+        '6.9.4' => 'Logging and monitoring control aspects of PII',
+        '6.11.2' => 'Security requirements of information systems control aspects of PII',
+        '6.13.1' => 'Management of information security incidents and improvements aspects of PII',
+        '6.15.2' => 'Information security reviews aspects of PII',
+        'A' => 'PIMS-specific reference control objectives and controls for PII Controllers',
+        'B' => 'PIMS-specific reference control objectives and controls for PII Processors'
 
     ],
 

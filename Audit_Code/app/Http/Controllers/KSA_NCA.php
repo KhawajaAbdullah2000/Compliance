@@ -28,7 +28,7 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23) {
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23 || $checkpermission->type_id == 24) {
                     //ksa or COSO or iso or NIST CSF
 
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
@@ -117,7 +117,7 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23) {
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23 || $checkpermission->type_id == 24) {
 
                     if ($checkpermission->type_id == 7) {
                         $filepath = public_path('KSA_NCA_ECC.xlsx');
@@ -140,6 +140,10 @@ class KSA_NCA extends Controller
 
                     if ($checkpermission->type_id == 23) {
                         $filepath = public_path('NIST_CSF.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 24) {
+                        $filepath = public_path('ISO27701_2019v2.xlsx');
                     }
 
 
@@ -180,18 +184,31 @@ class KSA_NCA extends Controller
                         ->first();
 
 
-                    $results = DB::table('iso_sec_2_2')->where('project_id', $proj_id)
-                        ->where('asset_id', $asset_id)->where('title_num', $title_num)
-                        ->get();
+                    // $results = DB::table('iso_sec_2_2')->where('project_id', $proj_id)
+                    //     ->where('asset_id', $asset_id)->where('title_num', $title_num)
+                    //     ->get();
+
+                  $results = DB::table('iso_sec_2_2')
+    ->where('project_id', $proj_id)
+    ->where('asset_id', $asset_id)
+    ->where('title_num', $title_num)
+    ->get()
+    ->map(function ($item) {
+        $item->subdomain = (string) $item->subdomain;
+        $item->comp_status = (string) $item->comp_status;
+        return $item;
+    });
+    
 
 
 
-
-                    $finalStatusBySubdomain = $results->groupBy('subdomain')->map(function ($items) {
+            $finalStatusBySubdomain = $results->groupBy('subdomain')->map(function ($items) {
                         $statuses = $items->pluck('comp_status')->filter()->unique();
 
                         return $statuses->count() === 1 ? $statuses->first() : 'different';
                     });
+
+                  //  dd($finalStatusBySubdomain);
 
 
                     $finalApplicabilityByTitle = $results->groupBy('subdomain')->map(function ($items) {
@@ -201,6 +218,7 @@ class KSA_NCA extends Controller
                     });
 
 
+                   // dd($finalStatusBySubdomain,$finalApplicabilityByTitle);
 
                     return view('KSA_NCA.ksa_nca_2_2_main', [
                         'project_id' => $checkpermission->project_id,
@@ -241,7 +259,7 @@ class KSA_NCA extends Controller
                     $req->session()->put('main_req_num', $main_req_num);
                 }
 
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23) {
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23 || $checkpermission->type_id==24) {
 
                     if ($checkpermission->type_id == 7) {
                         $filepath = public_path('KSA_NCA_ECC.xlsx');
@@ -265,6 +283,10 @@ class KSA_NCA extends Controller
 
                     if ($checkpermission->type_id == 4) {
                         $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
+                    }
+
+                     if ($checkpermission->type_id == 24) {
+                        $filepath = public_path('ISO27701_2019v2.xlsx');
                     }
 
                     $data = Excel::toArray([], $filepath); //with header
@@ -341,7 +363,7 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23) {
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23 || $checkpermission->type_id==24) {
                     $result = Db::table('iso_sec_2_2')->join('users', 'iso_sec_2_2.last_edited_by', 'users.id')
                         ->where('project_id', $proj_id)->where('sub_req', $sub_req)->where('asset_id', $asset_id)
                         ->first();
@@ -368,6 +390,10 @@ class KSA_NCA extends Controller
                 if ($checkpermission->type_id == 23) {
                     $filepath = public_path('NIST_CSF.xlsx');
                 }
+
+                 if ($checkpermission->type_id == 24) {
+                        $filepath = public_path('ISO27701_2019v2.xlsx');
+                    }
 
 
 
@@ -464,7 +490,7 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19  || $checkpermission->type_id == 4 || $checkpermission->type_id == 23) {
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19  || $checkpermission->type_id == 4 || $checkpermission->type_id == 23 || $checkpermission->type_id==24) {
 
                     $evidenceLevel = $req->session()->get('evidenceLevel');
 
@@ -528,6 +554,10 @@ class KSA_NCA extends Controller
                                     $filepath = public_path('NIST_CSF.xlsx');
                                 }
 
+                                 if ($checkpermission->type_id == 24) {
+                                    $filepath = public_path('ISO27701_2019v2.xlsx');
+                                }
+
                                 $data2 = Excel::toArray([], $filepath); //with header
                                 $rows = array_slice($data2[0], 1); //without header(first row)
 
@@ -578,6 +608,10 @@ class KSA_NCA extends Controller
 
                                 if ($checkpermission->type_id == 23) {
                                     $filepath = public_path('NIST_CSF.xlsx');
+                                }
+
+                                 if ($checkpermission->type_id == 24) {
+                                    $filepath = public_path('ISO27701_2019v2.xlsx');
                                 }
                                 $data2 = Excel::toArray([], $filepath); //with header
                                 $rows = array_slice($data2[0], 1); //without header(first row)
@@ -680,6 +714,10 @@ class KSA_NCA extends Controller
                                 if ($checkpermission->type_id == 23) {
                                     $filepath = public_path('NIST_CSF.xlsx');
                                 }
+
+                                 if ($checkpermission->type_id == 24) {
+                                    $filepath = public_path('ISO27701_2019v2.xlsx');
+                                }
                                 $data2 = Excel::toArray([], $filepath); //with header
                                 $rows = array_slice($data2[0], 1); //without header(first row)
 
@@ -733,6 +771,10 @@ class KSA_NCA extends Controller
 
                                 if ($checkpermission->type_id == 23) {
                                     $filepath = public_path('NIST_CSF.xlsx');
+                                }
+
+                                 if ($checkpermission->type_id == 24) {
+                                    $filepath = public_path('ISO27701_2019v2.xlsx');
                                 }
 
                                 $data2 = Excel::toArray([], $filepath); //with header
@@ -1535,6 +1577,10 @@ class KSA_NCA extends Controller
             $filepath = public_path('NIST_CSF_Modified.xlsx');
         }
 
+         if ($checkpermission->id == 24) {
+            $filepath = public_path('ISO27701_2019v2_Modified.xlsx');
+        }
+
 
 
         $evidenceLevel = $req->session()->get('evidenceLevel');
@@ -1882,7 +1928,8 @@ class KSA_NCA extends Controller
             11 => 'ISA 62443 Part 2-1 - Modified.xlsx',
             9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx',
-            23=>'NIST_CSF_Modified.xlsx'
+            23=>'NIST_CSF_Modified.xlsx',
+            24=>'ISO27701_2019v2_Modified.xlsx'
         ];
 
 
@@ -2249,7 +2296,8 @@ class KSA_NCA extends Controller
             11 => 'ISA 62443 Part 2-1 - Modified.xlsx',
             9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx',
-            23=>'NIST_CSF_Modified.xlsx'
+            23=>'NIST_CSF_Modified.xlsx',
+            24=>'ISO27701_2019v2_Modified.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
