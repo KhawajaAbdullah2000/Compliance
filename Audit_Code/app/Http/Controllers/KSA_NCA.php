@@ -323,6 +323,7 @@ class KSA_NCA extends Controller
                     $fetchedData = DB::table('iso_Sec_2_2')->where('project_id', $proj_id)
                         ->where('title_num', $title)
                         ->where('subdomain', $main_req_num)
+                        ->where('asset_id',$asset_id)
                         ->get();
 
 

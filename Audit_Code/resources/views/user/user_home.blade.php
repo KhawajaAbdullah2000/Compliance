@@ -10,11 +10,9 @@
         <div class="row align-items-center h-100">
             <!-- Left Section: Logo -->
             <div class="col-md-6 d-flex justify-content-center">
-                @if(auth()->user()->organization->name=="Center3")
-                <img src="{{ asset('c3logo.png') }}" alt="Logo" class="img-fluid rounded shadow-lg" style="max-width: 80%; height: auto;">
-            @else
-            <img src="{{ asset('logo.png') }}" alt="Logo" class="img-fluid rounded shadow-lg" style="max-width: 80%; height: auto;">
-                @endif
+   
+            <img src="" alt="" class="img-fluid rounded shadow-lg" style="max-width: 80%; height: auto;">
+               
             </div>
 
             <!-- Right Section: User Info -->
