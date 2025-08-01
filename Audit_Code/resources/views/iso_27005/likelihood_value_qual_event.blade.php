@@ -106,7 +106,7 @@ $isEditable = in_array('Data Inputter', $permissions);
     </tbody>
 </table>
 
-<a href="/iso_section2_1/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md float-end mb-2">Services & Assets Page</a>
+<a href="/iso_section2_1/{{$project->project_id}}/{{auth()->user()->id}}/risk_assessment" class="btn btn-primary btn-md float-end mb-2">Services & Assets Page</a>
 
 
 

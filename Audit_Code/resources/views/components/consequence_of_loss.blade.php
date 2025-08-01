@@ -20,9 +20,9 @@ $labels = [
             </thead>
             <tbody>
                 <tr class="bg-light">
-                    <td>{{ $labels[$asset->risk_confidentiality] ?? 'N/A' }}</td>
-                    <td>{{ $labels[$asset->risk_integrity] ?? 'N/A' }}</td>
-                    <td>{{ $labels[$asset->risk_availability] ?? 'N/A' }}</td>
+                    <td>{{ $labels[(int)$asset->risk_confidentiality] ?? 'N/A' }}</td>
+                    <td>{{ $labels[(int)$asset->risk_integrity] ?? 'N/A' }}</td>
+                    <td>{{ $labels[(int)$asset->risk_availability] ?? 'N/A' }}</td>
                 </tr>
             </tbody>
         </table>
