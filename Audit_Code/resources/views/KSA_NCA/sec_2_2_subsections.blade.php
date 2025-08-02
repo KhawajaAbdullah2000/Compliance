@@ -329,7 +329,11 @@ If you choose to select values for “Applicable” and “Compliance Status” 
                     </div>
                     <div class="col-md-3 text-start">
                         <span class="fw-bold">Applicability</span>
+                        <div class="mt-2">
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="toggleApplicability">Set All to Yes</button>
+                        </div>
                     </div>
+
                     <div class="col-md-3 text-start">
                         <span class="fw-bold">Compliance Status</span>
                     </div>
@@ -360,6 +364,7 @@ If you choose to select values for “Applicable” and “Compliance Status” 
                             <option value="yes" {{ old('applicabilities.' . $loop->index, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
                             <option value="no" {{ old('applicabilities.' . $loop->index, $applicability) === 'no' ? 'selected' : '' }}>No</option>
                         </select>
+
 
                         @if(trim($applicability) === 'different')
                         <div class="mt-1">
@@ -506,7 +511,7 @@ If you choose to select values for “Applicable” and “Compliance Status” 
         </div>
 
 
-           {{-- ISO 27701 2019 --}}
+        {{-- ISO 27701 2019 --}}
         @elseif($project->project_type==24)
 
         <div class="row h-100 w-100 mb-2">
@@ -649,6 +654,44 @@ If you choose to select values for “Applicable” and “Compliance Status” 
         });
 
     </script>
+
+    <script>
+        let currentApplicabilityValue = 'yes'; // what button will set to on first click
+
+        document.getElementById('toggleApplicability').addEventListener('click', function() {
+            const selects = document.querySelectorAll('.applicability-select');
+            const toggleBtn = this;
+
+            // Apply the current value
+            selects.forEach((select, index) => {
+                select.value = currentApplicabilityValue;
+                select.dispatchEvent(new Event('change'));
+            });
+
+            // Update button text for next toggle
+            toggleBtn.textContent = `Set All to ${currentApplicabilityValue === 'yes' ? 'No' : 'Yes'}`;
+
+            // Flip the value for the next click
+            currentApplicabilityValue = currentApplicabilityValue === 'yes' ? 'no' : 'yes';
+        });
+
+        // Handle showing/hiding justification fields
+        document.querySelectorAll('.applicability-select').forEach((select, index) => {
+            select.addEventListener('change', function() {
+                const justification = document.querySelector('.justification-' + index);
+                if (this.value === 'no') {
+                    justification.style.display = 'block';
+                } else {
+                    justification.style.display = 'none';
+                }
+            });
+        });
+
+    </script>
+
+
+
+
 
 
     @endsection

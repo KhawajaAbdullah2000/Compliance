@@ -1,4 +1,4 @@
-<table class="table table-bordered table-secondary">
+<table class="table table-bordered table-warning">
     <tbody>
         <tr>
             <td class="fw-bold">Project Name:</td>

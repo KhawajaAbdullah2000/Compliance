@@ -128,7 +128,7 @@ class="btn btn-lg my_bg_color text-white w-100 text-start py-3">
                 <div class="card-body d-flex align-items-center">
                     <i class="fas fa-exclamation-triangle fa-lg me-3 text-warning"></i>
                     <div>
-                        <a href="" class="stretched-link text-decoration-none text-dark fw-bold">
+                        <a href="/risk_treatment/{{$project_id}}/{{auth()->user()->id}}/" class="stretched-link text-decoration-none text-dark fw-bold">
                             Treat Risk
                         </a>
                         <ul class="mb-0 small text-muted ps-3 mt-1">

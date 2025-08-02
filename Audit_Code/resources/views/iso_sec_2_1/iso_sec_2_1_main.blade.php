@@ -144,15 +144,15 @@ $permissions = json_decode($project_permissions);
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input toggle-column" type="checkbox" id="toggleOwner" data-column="4">
-                                <label class="form-check-label" for="toggleOwner">Owner Dept</label>
+                                <label class="form-check-label" for="toggleOwner">Asset Component Owner Dept</label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input toggle-column" type="checkbox" id="togglePhysical" data-column="5">
-                                <label class="form-check-label" for="togglePhysical">Physical Location</label>
+                                <label class="form-check-label" for="togglePhysical">Asset Component Physical Location</label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input toggle-column" type="checkbox" id="toggleLogical" data-column="6">
-                                <label class="form-check-label" for="toggleLogical">Logical Location</label>
+                                <label class="form-check-label" for="toggleLogical">Asset Component Logical Location</label>
                             </div>
                         </div>
 
@@ -221,9 +221,9 @@ $permissions = json_decode($project_permissions);
                 <th onclick="sortTable(1)">Asset Type</th>
                 <th onclick="sortTable(2)">Asset SubType</th>
                 <th onclick="sortTable(3)">Asset Component</th>
-                <th onclick="sortTable(4)">Asset Owner Dept</th>
-                <th onclick="sortTable(5)">Asset Physical Location</th>
-                <th onclick="sortTable(6)">Asset Logical Location</th>
+                <th onclick="sortTable(4)">Asset Component Owner Dept</th>
+                <th onclick="sortTable(5)">Asset Component Physical Location</th>
+                <th onclick="sortTable(6)">Asset Component Logical Location</th>
                 <th onclick="sortTable(7)">Service Risk Owner</th>
                 <th onclick="sortTable(8)">Asset Component Risk Owner</th>
                 <th onclick="sortTable(9)">Service Custodian</th>
@@ -233,6 +233,10 @@ $permissions = json_decode($project_permissions);
                 @endif
                 @if($page_type=="risk_assessment")
                 <th>Assess Risk</th>
+                @endif
+
+                @if($page_type=="risk_treatment")
+                <th>Risk Treatment</th>
                 @endif
 
 
@@ -311,6 +315,11 @@ $permissions = json_decode($project_permissions);
                     <i class="fas fa-lock text-secondary"></i>
                     @endif
                 </td>
+                @endif
+
+                @if($page_type=="risk_treatment")
+                <a href="" class="btn btn-primary btn-md">Treat Risk (stop for now)</a>
+
                 @endif
             </tr>
             @endforeach

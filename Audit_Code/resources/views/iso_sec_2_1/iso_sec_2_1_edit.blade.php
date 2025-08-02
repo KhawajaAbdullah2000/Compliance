@@ -42,31 +42,30 @@ $permissions = json_decode($project_permissions);
                             @endif
                         </div>
 
-             
-                        
-<!-- Asset Category -->
-<div class="mb-4">
-    <label for="asset_category" class="form-label fw-semibold">Asset Type</label>
-    <select name="g_name" id="asset_category" class="form-control">
-        <option value="None">None</option>
-        @foreach($selectedCategories as $category)
-            <option value="{{ $category->asset_category }}" 
-                {{ $category->asset_category == $selected_category ? 'selected' : '' }}>
-                {{ $category->asset_category }}
-            </option>
-        @endforeach
-    </select>
-</div>
 
-<!-- Asset SubType -->
-<div class="mb-4">
-    <label for="asset_type" class="form-label fw-semibold">Asset Subtype</label>
-    <select name="name" id="asset_type" class="form-control">
-        <option value="None">None</option> <!-- default -->
-        <!-- Options will be dynamically loaded -->
-    </select>
-</div>
-                    
+
+                        <!-- Asset Category -->
+                        <div class="mb-4">
+                            <label for="asset_category" class="form-label fw-semibold">Asset Type</label>
+                            <select name="g_name" id="asset_category" class="form-control">
+                                <option value="None">None</option>
+                                @foreach($selectedCategories as $category)
+                                <option value="{{ $category->asset_category }}" {{ $category->asset_category == $selected_category ? 'selected' : '' }}>
+                                    {{ $category->asset_category }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Asset SubType -->
+                        <div class="mb-4">
+                            <label for="asset_type" class="form-label fw-semibold">Asset Subtype</label>
+                            <select name="name" id="asset_type" class="form-control">
+                                <option value="None">None</option> <!-- default -->
+                                <!-- Options will be dynamically loaded -->
+                            </select>
+                        </div>
+
 
                         <!-- Asset Component Name -->
                         <div class="mb-4">
@@ -79,8 +78,16 @@ $permissions = json_decode($project_permissions);
 
                         <!-- Asset Owner Sub-Organization -->
                         <div class="mb-4">
-                            <label for="owner_dept" class="form-label fw-semibold">Asset Owner Dept</label>
-                            <input type="text" name="owner_dept" id="owner_dept" class="form-control rounded-pill" value="{{ old('owner_dept', $data->owner_dept) }}">
+                            <label for="owner_dept" class="form-label fw-semibold">Asset Component Owner Dept</label>
+                            {{-- <input type="text" name="owner_dept" id="owner_dept" class="form-control rounded-pill" value="{{ old('owner_dept', $data->owner_dept) }}"> --}}
+                            <select class="form-control" name="owner_dept" id="owner_dept">
+                                <option value="">Select--</option>
+                                @foreach($departments as $dept)
+                                <option value="{{ $dept->name }}" {{ old('owner_dept', $data->owner_dept) == $dept->name ? 'selected' : '' }}>
+                                    {{ $dept->name }}
+                                </option>
+                                @endforeach
+                            </select>
                             @if($errors->has('owner_dept'))
                             <div class="text-danger small mt-2">{{ $errors->first('owner_dept') }}</div>
                             @endif
@@ -88,7 +95,7 @@ $permissions = json_decode($project_permissions);
 
                         <!-- Asset Physical Location -->
                         <div class="mb-4">
-                            <label for="physical_loc" class="form-label fw-semibold">Asset Physical Location</label>
+                            <label for="physical_loc" class="form-label fw-semibold">Asset Component Physical Location</label>
                             <input type="text" name="physical_loc" id="physical_loc" class="form-control rounded-pill" value="{{ old('physical_loc', $data->physical_loc) }}">
                             @if($errors->has('physical_loc'))
                             <div class="text-danger small mt-2">{{ $errors->first('physical_loc') }}</div>
@@ -97,74 +104,74 @@ $permissions = json_decode($project_permissions);
 
                         <!-- Asset Logical Location -->
                         <div class="mb-4">
-                            <label for="logical_loc" class="form-label fw-semibold">Asset Logical Location</label>
+                            <label for="logical_loc" class="form-label fw-semibold">Asset Component Logical Location</label>
                             <input type="text" name="logical_loc" id="logical_loc" class="form-control rounded-pill" value="{{ old('logical_loc', $data->logical_loc) }}">
                             @if($errors->has('logical_loc'))
                             <div class="text-danger small mt-2">{{ $errors->first('logical_loc') }}</div>
                             @endif
                         </div>
 
-                        
+
 
                         <div class="mb-4">
-    <label for="service_risk_owner" class="form-label fw-semibold">Service Risk Owner</label>
-    <select name="service_risk_owner" class="form-select">
-        @foreach($users as $user)
-            <option value=""></option>
-            <option value="{{ $user->id }}" {{ $data->service_risk_owner == $user->id ? 'selected' : '' }}>
-                {{ $user->first_name }} {{ $user->last_name }}
-            </option>
-        @endforeach
-    </select>
-    @if($errors->has('service_risk_owner'))
-        <div class="text-danger small mt-2">{{ $errors->first('service_risk_owner') }}</div>
-    @endif
-</div>
+                            <label for="service_risk_owner" class="form-label fw-semibold">Service Risk Owner</label>
+                            <select name="service_risk_owner" class="form-select">
+                                @foreach($users as $user)
+                                <option value=""></option>
+                                <option value="{{ $user->id }}" {{ $data->service_risk_owner == $user->id ? 'selected' : '' }}>
+                                    {{ $user->first_name }} {{ $user->last_name }}
+                                </option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('service_risk_owner'))
+                            <div class="text-danger small mt-2">{{ $errors->first('service_risk_owner') }}</div>
+                            @endif
+                        </div>
 
-<div class="mb-4">
-    <label for="component_risk_owner" class="form-label fw-semibold">Asset Component Risk Owner</label>
-    <select name="component_risk_owner" class="form-select">
-        @foreach($users as $user)
-             <option value=""></option>
-            <option value="{{ $user->id }}" {{ $data->component_risk_owner == $user->id ? 'selected' : '' }}>
-                {{ $user->first_name }} {{ $user->last_name }}
-            </option>
-        @endforeach
-    </select>
-    @if($errors->has('component_risk_owner'))
-        <div class="text-danger small mt-2">{{ $errors->first('component_risk_owner') }}</div>
-    @endif
-</div>
+                        <div class="mb-4">
+                            <label for="component_risk_owner" class="form-label fw-semibold">Asset Component Risk Owner</label>
+                            <select name="component_risk_owner" class="form-select">
+                                @foreach($users as $user)
+                                <option value=""></option>
+                                <option value="{{ $user->id }}" {{ $data->component_risk_owner == $user->id ? 'selected' : '' }}>
+                                    {{ $user->first_name }} {{ $user->last_name }}
+                                </option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('component_risk_owner'))
+                            <div class="text-danger small mt-2">{{ $errors->first('component_risk_owner') }}</div>
+                            @endif
+                        </div>
 
-<div class="mb-4">
-    <label for="service_custodian" class="form-label fw-semibold">Service Custodian</label>
-    <select name="service_custodian" class="form-select">
-        @foreach($users as $user)
-                <option value=""></option>
-            <option value="{{ $user->id }}" {{ $data->service_custodian == $user->id ? 'selected' : '' }}>
-                {{ $user->first_name }} {{ $user->last_name }}
-            </option>
-        @endforeach
-    </select>
-    @if($errors->has('service_custodian'))
-        <div class="text-danger small mt-2">{{ $errors->first('service_custodian') }}</div>
-    @endif
-</div>
+                        <div class="mb-4">
+                            <label for="service_custodian" class="form-label fw-semibold">Service Custodian</label>
+                            <select name="service_custodian" class="form-select">
+                                @foreach($users as $user)
+                                <option value=""></option>
+                                <option value="{{ $user->id }}" {{ $data->service_custodian == $user->id ? 'selected' : '' }}>
+                                    {{ $user->first_name }} {{ $user->last_name }}
+                                </option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('service_custodian'))
+                            <div class="text-danger small mt-2">{{ $errors->first('service_custodian') }}</div>
+                            @endif
+                        </div>
 
-<div class="mb-4">
-    <label for="component_custodian" class="form-label fw-semibold">Asset Component Custodian</label>
-    <select name="component_custodian" class="form-select">
-        @foreach($users as $user)
-                  <option value=""></option>
-            <option value="{{ $user->id }}" {{ $data->component_custodian == $user->id ? 'selected' : '' }}>
-                {{ $user->first_name }} {{ $user->last_name }}
-            </option>
-        @endforeach
-    </select>
-    @if($errors->has('component_custodian'))
-        <div class="text-danger small mt-2">{{ $errors->first('component_custodian') }}</div>
-    @endif
-</div>
+                        <div class="mb-4">
+                            <label for="component_custodian" class="form-label fw-semibold">Asset Component Custodian</label>
+                            <select name="component_custodian" class="form-select">
+                                @foreach($users as $user)
+                                <option value=""></option>
+                                <option value="{{ $user->id }}" {{ $data->component_custodian == $user->id ? 'selected' : '' }}>
+                                    {{ $user->first_name }} {{ $user->last_name }}
+                                </option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('component_custodian'))
+                            <div class="text-danger small mt-2">{{ $errors->first('component_custodian') }}</div>
+                            @endif
+                        </div>
 
 
                         <!-- Submit Button -->
@@ -181,7 +188,7 @@ $permissions = json_decode($project_permissions);
 @section('scripts')
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         const assetTypeDropdown = $('#asset_type');
         const selectedCategory = $('#asset_category').val();
         const selectedType = "{{ $selected_type ?? '' }}"; // comes from controller
@@ -192,17 +199,17 @@ $permissions = json_decode($project_permissions);
 
             if (categoryName && categoryName !== "None") {
                 $.ajax({
-                    url: '/get-asset-types/' + categoryName,
-                    type: 'GET',
-                    success: function (data) {
-                        data.forEach(function (type) {
+                    url: '/get-asset-types/' + categoryName
+                    , type: 'GET'
+                    , success: function(data) {
+                        data.forEach(function(type) {
                             const isSelected = type.asset_type === preselect ? 'selected' : '';
                             assetTypeDropdown.append(
                                 `<option value="${type.asset_type}" ${isSelected}>${type.asset_type}</option>`
                             );
                         });
-                    },
-                    error: function () {
+                    }
+                    , error: function() {
                         assetTypeDropdown.append('<option value="">Error loading types</option>');
                     }
                 });
@@ -210,20 +217,20 @@ $permissions = json_decode($project_permissions);
         }
 
         // On category change
-        $('#asset_category').on('change', function () {
+        $('#asset_category').on('change', function() {
             const categoryId = $(this).val();
             loadAssetTypes(categoryId);
         });
 
         // On page load (for edit form only)
         @if(isset($selected_category) && isset($selected_type))
-            loadAssetTypes("{{ $selected_category }}", "{{ $selected_type }}");
+        loadAssetTypes("{{ $selected_category }}", "{{ $selected_type }}");
         @endif
     });
+
 </script>
 
 
 @endsection
 
 @endsection
-
