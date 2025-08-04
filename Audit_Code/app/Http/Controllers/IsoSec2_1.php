@@ -982,7 +982,8 @@ class IsoSec2_1 extends Controller
 
                     return redirect()->route('iso_section2_1', [
                         'proj_id' => $proj_id,
-                        'user_id' => auth()->user()->id
+                        'user_id' => auth()->user()->id,
+                        'page_type'=>'services_register'
                     ])->with('success', 'Selected services copied successfully.');
                 }
             }
