@@ -148,38 +148,9 @@ class IsoSec2_2 extends Controller
                 //     ]);
                 // }
 
-                //PCI SIngle tenant
-                if ($checkpermission->type_id == 1) {
-                    return view('pci_single_sheet.pci_sec_2_2_evidence_selection', [
-                        'project_id' => $checkpermission->project_id,
-                        'project_name' => $checkpermission->project_name,
-                        'project' => $project,
-                        'asset' => $asset
 
-                    ]);
-                }
 
-                //PCI Multi tenant
-                if ($checkpermission->type_id == 2) {
-                    return view('pci_multi_sheet.pci_sec_2_2_evidence_selection', [
-                        'project_id' => $checkpermission->project_id,
-                        'project_name' => $checkpermission->project_name,
-                        'project' => $project,
-                        'asset' => $asset
 
-                    ]);
-                }
-
-                //PCI Merchant tenant
-                if ($checkpermission->type_id == 3) {
-                    return view('pci_merchant_sheet.pci_sec_2_2_evidence_selection', [
-                        'project_id' => $checkpermission->project_id,
-                        'project_name' => $checkpermission->project_name,
-                        'project' => $project,
-                        'asset' => $asset
-
-                    ]);
-                }
 
                 //CY SAMA
                 if ($checkpermission->type_id == 5) {
@@ -203,8 +174,8 @@ class IsoSec2_2 extends Controller
                     ]);
                 }
 
-                //KSA NCA , COSO , Soc2_type2
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id==23 || $checkpermission->type_id==24) {
+               
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23 || $checkpermission->type_id == 24 || $checkpermission->type_id == 1 || $checkpermission->type_id == 2 || $checkpermission->type_id == 3 ||$checkpermission->type_id==16) {
 
                     return view('KSA_NCA.ksa_nca_sec_2_2_evidence_selection', [
                         'project_id' => $checkpermission->project_id,
@@ -237,18 +208,6 @@ class IsoSec2_2 extends Controller
                         'project' => $project,
                         'asset' => $asset,
                         'project_type' => $checkpermission->type_id
-
-                    ]);
-                }
-
-                //CObit 2019
-                if ($checkpermission->type_id == 16) {
-
-                    return view('cobit.cobit_sec_2_2_evidence_selection', [
-                        'project_id' => $checkpermission->project_id,
-                        'project_name' => $checkpermission->project_name,
-                        'project' => $project,
-                        'asset' => $asset
 
                     ]);
                 }

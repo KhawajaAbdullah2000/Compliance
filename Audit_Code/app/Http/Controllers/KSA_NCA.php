@@ -28,71 +28,68 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23 || $checkpermission->type_id == 24) {
-                    //ksa or COSO or iso or NIST CSF
 
-                    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
-                        ->where('projects.project_id', $proj_id)->first();
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
 
-                    if ($req->evidenceLevel != null) {
-                        $req->session()->forget('evidenceLevel');
-                        $req->session()->put('evidenceLevel', $req->evidenceLevel);
-                    }
-
-
-
-                    $asset = DB::table('iso_sec_2_1')
-                        ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
-                        ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
-                        ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
-                        ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
-                        ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
-                        ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
-                        ->select(
-                            'iso_sec_2_1.*',
-                            DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
-                            DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
-                            DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
-                            DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
-                            DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
-                            DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
-                        )
-                        ->where('iso_sec_2_1.assessment_id', $asset_id)
-                        ->first();
-
-
-                    $results = DB::table('iso_sec_2_2')->where('project_id', $proj_id)
-                        ->where('asset_id', $asset_id)->get();
-
-
-                    $finalStatusByTitle = $results->groupBy('title_num')->map(function ($items) {
-                        $statuses = $items->pluck('comp_status')->filter()->unique();
-
-                        return $statuses->count() === 1 ? $statuses->first() : 'different';
-                    });
-
-
-                    $finalApplicabilityByTitle = $results->groupBy('title_num')->map(function ($items) {
-                        $statuses = $items->pluck('applicability')->filter()->unique();
-
-                        return $statuses->count() === 1 ? $statuses->first() : 'different';
-                    });
-
-
-                    //  dd($finalApplicabilityByTitle);
-
-
-
-
-                    return view('KSA_NCA.sec_2_2_subsections', [
-                        'project_id' => $checkpermission->project_id,
-                        'project_name' => $checkpermission->project_name,
-                        'project' => $project,
-                        'asset' => $asset,
-                        'finalStatusByTitle' => $finalStatusByTitle,
-                        'finalApplicabilityByTitle' => $finalApplicabilityByTitle
-                    ]);
+                if ($req->evidenceLevel != null) {
+                    $req->session()->forget('evidenceLevel');
+                    $req->session()->put('evidenceLevel', $req->evidenceLevel);
                 }
+
+
+
+                $asset = DB::table('iso_sec_2_1')
+                    ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+                    ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+                    ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+                    ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+                    ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+                    ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+                    ->select(
+                        'iso_sec_2_1.*',
+                        DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+                        DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+                        DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+                        DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+                        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+                        DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+                    )
+                    ->where('iso_sec_2_1.assessment_id', $asset_id)
+                    ->first();
+
+
+                $results = DB::table('iso_sec_2_2')->where('project_id', $proj_id)
+                    ->where('asset_id', $asset_id)->get();
+
+
+                $finalStatusByTitle = $results->groupBy('title_num')->map(function ($items) {
+                    $statuses = $items->pluck('comp_status')->filter()->unique();
+
+                    return $statuses->count() === 1 ? $statuses->first() : 'different';
+                });
+
+
+                $finalApplicabilityByTitle = $results->groupBy('title_num')->map(function ($items) {
+                    $statuses = $items->pluck('applicability')->filter()->unique();
+
+                    return $statuses->count() === 1 ? $statuses->first() : 'different';
+                });
+
+
+                //  dd($finalApplicabilityByTitle);
+
+
+
+
+                return view('KSA_NCA.sec_2_2_subsections', [
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project' => $project,
+                    'asset' => $asset,
+                    'finalStatusByTitle' => $finalStatusByTitle,
+                    'finalApplicabilityByTitle' => $finalApplicabilityByTitle
+                ]);
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
@@ -117,121 +114,134 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23 || $checkpermission->type_id == 24) {
-
-                    if ($checkpermission->type_id == 7) {
-                        $filepath = public_path('KSA_NCA_ECC.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 18) {
-                        $filepath = public_path('COSO.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 19) {
-                        $filepath = public_path('SOC2_Type2.xlsx');
-                    }
-
-                    // if ($checkpermission->type_id == 4) {
-                    //     $filepath = public_path('ISO27K1_2022_Compliance_Updated.xlsx');
-                    // }
-                    if ($checkpermission->type_id == 4) {
-                        $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 23) {
-                        $filepath = public_path('NIST_CSF.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 24) {
-                        $filepath = public_path('ISO27701_2019v2.xlsx');
-                    }
 
 
-
-                    $data = Excel::toArray([], $filepath); //with header
-                    $rows = array_slice($data[0], 1); //without header(first row)
-
-
-
-                    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
-                        ->where('projects.project_id', $proj_id)->first();
-
-
-
-                    $filteredData = collect($rows)->filter(function ($row) use ($title_num) {
-                        return strval($row[0]) === $title_num;
-                    })->values()->all();
-
-
-
-                    $asset = DB::table('iso_sec_2_1')
-                        ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
-                        ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
-                        ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
-                        ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
-                        ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
-                        ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
-                        ->select(
-                            'iso_sec_2_1.*',
-                            DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
-                            DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
-                            DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
-                            DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
-                            DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
-                            DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
-                        )
-                        ->where('iso_sec_2_1.assessment_id', $asset_id)
-                        ->first();
-
-
-                    // $results = DB::table('iso_sec_2_2')->where('project_id', $proj_id)
-                    //     ->where('asset_id', $asset_id)->where('title_num', $title_num)
-                    //     ->get();
-
-                  $results = DB::table('iso_sec_2_2')
-    ->where('project_id', $proj_id)
-    ->where('asset_id', $asset_id)
-    ->where('title_num', $title_num)
-    ->get()
-    ->map(function ($item) {
-        $item->subdomain = (string) $item->subdomain;
-        $item->comp_status = (string) $item->comp_status;
-        return $item;
-    });
-    
-
-
-
-            $finalStatusBySubdomain = $results->groupBy('subdomain')->map(function ($items) {
-                        $statuses = $items->pluck('comp_status')->filter()->unique();
-
-                        return $statuses->count() === 1 ? $statuses->first() : 'different';
-                    });
-
-                  //  dd($finalStatusBySubdomain);
-
-
-                    $finalApplicabilityByTitle = $results->groupBy('subdomain')->map(function ($items) {
-                        $statuses = $items->pluck('applicability')->filter()->unique();
-
-                        return $statuses->count() === 1 ? $statuses->first() : 'different';
-                    });
-
-
-                   // dd($finalStatusBySubdomain,$finalApplicabilityByTitle);
-
-                    return view('KSA_NCA.ksa_nca_2_2_main', [
-                        'project_id' => $checkpermission->project_id,
-                        'project_name' => $checkpermission->project_name,
-                        'project_permissions' => $checkpermission->project_permissions,
-                        'data' => $filteredData,
-                        'title' => $title_num,
-                        'project' => $project,
-                        'asset' => $asset,
-                        'finalStatusBySubdomain' => $finalStatusBySubdomain,
-                        'finalApplicabilityByTitle' => $finalApplicabilityByTitle
-                    ]);
+                if ($checkpermission->type_id == 7) {
+                    $filepath = public_path('KSA_NCA_ECC.xlsx');
                 }
+
+                if ($checkpermission->type_id == 18) {
+                    $filepath = public_path('COSO.xlsx');
+                }
+
+                if ($checkpermission->type_id == 19) {
+                    $filepath = public_path('SOC2_Type2.xlsx');
+                }
+
+
+                if ($checkpermission->type_id == 4) {
+                    $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
+                }
+
+                if ($checkpermission->type_id == 23) {
+                    $filepath = public_path('NIST_CSF.xlsx');
+                }
+
+                if ($checkpermission->type_id == 24) {
+                    $filepath = public_path('ISO27701_2019v2.xlsx');
+                }
+
+                if ($checkpermission->type_id == 1) {
+                    $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
+                }
+
+                if ($checkpermission->type_id == 2) {
+                    $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                }
+
+                if ($checkpermission->type_id == 3) {
+                    $filepath = public_path('PCI_DSS_4_Merchant_TSP.xlsx');
+                }
+
+                if ($checkpermission->type_id == 16) {
+                    $filepath = public_path('COBIT_2019.xlsx');
+                }
+
+
+
+                $data = Excel::toArray([], $filepath); //with header
+                $rows = array_slice($data[0], 1); //without header(first row)
+
+
+
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+
+
+
+                $filteredData = collect($rows)->filter(function ($row) use ($title_num) {
+                    return strval($row[0]) === $title_num;
+                })->values()->all();
+
+
+
+                $asset = DB::table('iso_sec_2_1')
+                    ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+                    ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+                    ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+                    ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+                    ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+                    ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+                    ->select(
+                        'iso_sec_2_1.*',
+                        DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+                        DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+                        DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+                        DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+                        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+                        DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+                    )
+                    ->where('iso_sec_2_1.assessment_id', $asset_id)
+                    ->first();
+
+
+                // $results = DB::table('iso_sec_2_2')->where('project_id', $proj_id)
+                //     ->where('asset_id', $asset_id)->where('title_num', $title_num)
+                //     ->get();
+
+                $results = DB::table('iso_sec_2_2')
+                    ->where('project_id', $proj_id)
+                    ->where('asset_id', $asset_id)
+                    ->where('title_num', $title_num)
+                    ->get()
+                    ->map(function ($item) {
+                        $item->subdomain = (string) $item->subdomain;
+                        $item->comp_status = (string) $item->comp_status;
+                        return $item;
+                    });
+
+
+
+
+                $finalStatusBySubdomain = $results->groupBy('subdomain')->map(function ($items) {
+                    $statuses = $items->pluck('comp_status')->filter()->unique();
+
+                    return $statuses->count() === 1 ? $statuses->first() : 'different';
+                });
+
+                //  dd($finalStatusBySubdomain);
+
+
+                $finalApplicabilityByTitle = $results->groupBy('subdomain')->map(function ($items) {
+                    $statuses = $items->pluck('applicability')->filter()->unique();
+
+                    return $statuses->count() === 1 ? $statuses->first() : 'different';
+                });
+
+
+                // dd($finalStatusBySubdomain,$finalApplicabilityByTitle);
+
+                return view('KSA_NCA.ksa_nca_2_2_main', [
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'data' => $filteredData,
+                    'title' => $title_num,
+                    'project' => $project,
+                    'asset' => $asset,
+                    'finalStatusBySubdomain' => $finalStatusBySubdomain,
+                    'finalApplicabilityByTitle' => $finalApplicabilityByTitle
+                ]);
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
@@ -259,88 +269,98 @@ class KSA_NCA extends Controller
                     $req->session()->put('main_req_num', $main_req_num);
                 }
 
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23 || $checkpermission->type_id==24) {
 
-                    if ($checkpermission->type_id == 7) {
-                        $filepath = public_path('KSA_NCA_ECC.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 18) {
-                        $filepath = public_path('COSO.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 19) {
-                        $filepath = public_path('SOC2_Type2.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 23) {
-                        $filepath = public_path('NIST_CSF.xlsx');
-                    }
-
-                    // if ($checkpermission->type_id == 4) {
-                    //     $filepath = public_path('ISO27K1_2022_Compliance_Updated.xlsx');
-                    // }
-
-                    if ($checkpermission->type_id == 4) {
-                        $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
-                    }
-
-                     if ($checkpermission->type_id == 24) {
-                        $filepath = public_path('ISO27701_2019v2.xlsx');
-                    }
-
-                    $data = Excel::toArray([], $filepath); //with header
-                    $rows = array_slice($data[0], 1); //without header(first row)
-
-                    $filteredData = collect($rows)->filter(function ($row) use ($main_req_num) {
-
-                        return strval($row[2]) === $main_req_num;
-                    })->values()->all();
-
-
-                    $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
-                        ->where('projects.project_id', $proj_id)->first();
-
-                    $asset = DB::table('iso_sec_2_1')
-                        ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
-                        ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
-                        ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
-                        ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
-                        ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
-                        ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
-                        ->select(
-                            'iso_sec_2_1.*',
-                            DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
-                            DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
-                            DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
-                            DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
-                            DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
-                            DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
-                        )
-                        ->where('iso_sec_2_1.assessment_id', $asset_id)
-                        ->first();
-
-                    $fetchedData = DB::table('iso_Sec_2_2')->where('project_id', $proj_id)
-                        ->where('title_num', $title)
-                        ->where('subdomain', $main_req_num)
-                        ->where('asset_id',$asset_id)
-                        ->get();
-
-
-
-
-                    return view('KSA_NCA.ksa_nca_2_2_sub_reqs', [
-                        'project_id' => $checkpermission->project_id,
-                        'project_name' => $checkpermission->project_name,
-                        'project_permissions' => $checkpermission->project_permissions,
-                        'data' => $filteredData,
-                        'main_req_num' => $main_req_num,
-                        'title' => $title,
-                        'project' => $project,
-                        'asset' => $asset,
-                        'fetchedData' => $fetchedData
-                    ]);
+                if ($checkpermission->type_id == 7) {
+                    $filepath = public_path('KSA_NCA_ECC.xlsx');
                 }
+
+                if ($checkpermission->type_id == 18) {
+                    $filepath = public_path('COSO.xlsx');
+                }
+
+                if ($checkpermission->type_id == 19) {
+                    $filepath = public_path('SOC2_Type2.xlsx');
+                }
+
+                if ($checkpermission->type_id == 23) {
+                    $filepath = public_path('NIST_CSF.xlsx');
+                }
+
+                if ($checkpermission->type_id == 4) {
+                    $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
+                }
+
+                if ($checkpermission->type_id == 24) {
+                    $filepath = public_path('ISO27701_2019v2.xlsx');
+                }
+
+                if ($checkpermission->type_id == 1) {
+                    $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
+                }
+
+                if ($checkpermission->type_id == 2) {
+                    $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                }
+
+                if ($checkpermission->type_id == 3) {
+                    $filepath = public_path('PCI_DSS_4_Merchant_TSP.xlsx');
+                }
+
+                if ($checkpermission->type_id == 16) {
+                    $filepath = public_path('COBIT_2019.xlsx');
+                }
+
+                $data = Excel::toArray([], $filepath); //with header
+                $rows = array_slice($data[0], 1); //without header(first row)
+
+                $filteredData = collect($rows)->filter(function ($row) use ($main_req_num) {
+
+                    return strval($row[2]) === $main_req_num;
+                })->values()->all();
+
+
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+
+                $asset = DB::table('iso_sec_2_1')
+                    ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+                    ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+                    ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+                    ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+                    ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+                    ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+                    ->select(
+                        'iso_sec_2_1.*',
+                        DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+                        DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+                        DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+                        DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+                        DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+                        DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+                    )
+                    ->where('iso_sec_2_1.assessment_id', $asset_id)
+                    ->first();
+
+                $fetchedData = DB::table('iso_Sec_2_2')->where('project_id', $proj_id)
+                    ->where('title_num', $title)
+                    ->where('subdomain', $main_req_num)
+                    ->where('asset_id', $asset_id)
+                    ->get();
+
+
+
+
+                return view('KSA_NCA.ksa_nca_2_2_sub_reqs', [
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'data' => $filteredData,
+                    'main_req_num' => $main_req_num,
+                    'title' => $title,
+                    'project' => $project,
+                    'asset' => $asset,
+                    'fetchedData' => $fetchedData
+                ]);
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
@@ -364,13 +384,14 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
 
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23 || $checkpermission->type_id==24) {
-                    $result = Db::table('iso_sec_2_2')->join('users', 'iso_sec_2_2.last_edited_by', 'users.id')
-                        ->where('project_id', $proj_id)->where('sub_req', $sub_req)->where('asset_id', $asset_id)
-                        ->first();
-                }
+
+                $result = Db::table('iso_sec_2_2')->join('users', 'iso_sec_2_2.last_edited_by', 'users.id')
+                    ->where('project_id', $proj_id)->where('sub_req', $sub_req)->where('asset_id', $asset_id)
+                    ->first();
+
 
                 //  dd($result);
+
 
                 if ($checkpermission->type_id == 7) {
                     $filepath = public_path('KSA_NCA_ECC.xlsx');
@@ -392,12 +413,25 @@ class KSA_NCA extends Controller
                     $filepath = public_path('NIST_CSF.xlsx');
                 }
 
-                 if ($checkpermission->type_id == 24) {
-                        $filepath = public_path('ISO27701_2019v2.xlsx');
-                    }
+                if ($checkpermission->type_id == 24) {
+                    $filepath = public_path('ISO27701_2019v2.xlsx');
+                }
 
+                if ($checkpermission->type_id == 1) {
+                    $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
+                }
 
+                if ($checkpermission->type_id == 2) {
+                    $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                }
 
+                if ($checkpermission->type_id == 3) {
+                    $filepath = public_path('PCI_DSS_4_Merchant_TSP.xlsx');
+                }
+
+                if ($checkpermission->type_id == 16) {
+                    $filepath = public_path('COBIT_2019.xlsx');
+                }
 
 
                 $data = Excel::toArray([], $filepath); //with header
@@ -491,339 +525,282 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19  || $checkpermission->type_id == 4 || $checkpermission->type_id == 23 || $checkpermission->type_id==24) {
-
-                    $evidenceLevel = $req->session()->get('evidenceLevel');
 
 
-                    if (in_array('Data Inputter', $permissions)) {
-
-                        $fileName = null;
-                        if ($req->attachment != null) {
-                            $fileName = time() . '.' . $req->attachment->extension();
-                            $req->attachment->move(public_path('ksa_nca_sec_2_2'), $fileName);
-                            $data = [
-                                'comp_status' => $req->comp_status,
-                                'comments' => $req->comments,
-                                'attachment' => $fileName,
-                                'treatment_action' => $req->treatment_action,
-                                'treatment_target_date' => $req->treatment_target_date,
-                                'treatment_comp_date' => $req->treatment_comp_date,
-                                'responsibility_for_treatment' => $req->responsibility_for_treatment,
-                                'acceptance_actual_date' => $req->acceptance_actual_date,
-                                'last_edited_by' => $user_id,
-                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-
-                            ];
-                        } else {
-
-                            $data = [
-                                'comp_status' => $req->comp_status,
-                                'comments' => $req->comments,
-                                'treatment_action' => $req->treatment_action,
-                                'treatment_target_date' => $req->treatment_target_date,
-                                'treatment_comp_date' => $req->treatment_comp_date,
-                                'responsibility_for_treatment' => $req->responsibility_for_treatment,
-                                'acceptance_actual_date' => $req->acceptance_actual_date,
-                                'last_edited_by' => $user_id,
-                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                            ];
-                        }
+                $evidenceLevel = $req->session()->get('evidenceLevel');
 
 
-                        if ($evidenceLevel == 'component') {
+                if (in_array('Data Inputter', $permissions)) {
 
-                            if ($req->action == 2) {
+                    $fileName = null;
+                    if ($req->attachment != null) {
+                        $fileName = time() . '.' . $req->attachment->extension();
+                        $req->attachment->move(public_path('ksa_nca_sec_2_2'), $fileName);
+                        $data = [
+                            'comp_status' => $req->comp_status,
+                            'comments' => $req->comments,
+                            'attachment' => $fileName,
+                            'treatment_action' => $req->treatment_action,
+                            'treatment_target_date' => $req->treatment_target_date,
+                            'treatment_comp_date' => $req->treatment_comp_date,
+                            'responsibility_for_treatment' => $req->responsibility_for_treatment,
+                            'acceptance_actual_date' => $req->acceptance_actual_date,
+                            'last_edited_by' => $user_id,
+                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
 
-                                if ($checkpermission->type_id == 7) {
-                                    $filepath = public_path('KSA_NCA_ECC.xlsx');
-                                }
+                        ];
+                    } else {
 
-                                if ($checkpermission->type_id == 18) {
-                                    $filepath = public_path('COSO.xlsx');
-                                }
+                        $data = [
+                            'comp_status' => $req->comp_status,
+                            'comments' => $req->comments,
+                            'treatment_action' => $req->treatment_action,
+                            'treatment_target_date' => $req->treatment_target_date,
+                            'treatment_comp_date' => $req->treatment_comp_date,
+                            'responsibility_for_treatment' => $req->responsibility_for_treatment,
+                            'acceptance_actual_date' => $req->acceptance_actual_date,
+                            'last_edited_by' => $user_id,
+                            'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                        ];
+                    }
 
-                                if ($checkpermission->type_id == 19) {
-                                    $filepath = public_path('SOC2_Type2.xlsx');
-                                }
+                    if ($checkpermission->type_id == 7) {
+                        $filepath = public_path('KSA_NCA_ECC.xlsx');
+                    }
 
-                                if ($checkpermission->type_id == 4) {
-                                    $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
-                                }
+                    if ($checkpermission->type_id == 18) {
+                        $filepath = public_path('COSO.xlsx');
+                    }
 
-                                if ($checkpermission->type_id == 23) {
-                                    $filepath = public_path('NIST_CSF.xlsx');
-                                }
+                    if ($checkpermission->type_id == 19) {
+                        $filepath = public_path('SOC2_Type2.xlsx');
+                    }
 
-                                 if ($checkpermission->type_id == 24) {
-                                    $filepath = public_path('ISO27701_2019v2.xlsx');
-                                }
+                    if ($checkpermission->type_id == 4) {
+                        $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
+                    }
 
-                                $data2 = Excel::toArray([], $filepath); //with header
-                                $rows = array_slice($data2[0], 1); //without header(first row)
+                    if ($checkpermission->type_id == 23) {
+                        $filepath = public_path('NIST_CSF.xlsx');
+                    }
 
-                                //all controls in this domain
-                                $filteredData = collect($rows)->filter(function ($row) use ($req) {
-                                    return strval($row[2]) === $req->subdomain;
-                                })->values()->all();
+                    if ($checkpermission->type_id == 24) {
+                        $filepath = public_path('ISO27701_2019v2.xlsx');
+                    }
 
+                    if ($checkpermission->type_id == 1) {
+                        $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
+                    }
 
+                    if ($checkpermission->type_id == 2) {
+                        $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                    }
 
-                                foreach ($filteredData as $innerArray) {
-                                    // Access specific value from the inner array
-                                    $fetch_title = $innerArray['0'];
-                                    $subdomain = $innerArray['2'];
-                                    $fetch_sub_req = $innerArray['4'];
+                    if ($checkpermission->type_id == 3) {
+                        $filepath = public_path('PCI_DSS_4_Merchant_TSP.xlsx');
+                    }
 
-                                    DB::table('iso_sec_2_2')->updateOrInsert(
-                                        [
-                                            'project_id' => $proj_id,
-                                            'asset_id' => $asset_id,
-                                            'title_num' => $fetch_title,
-                                            'sub_req' => $fetch_sub_req,
-                                            'subdomain' => $subdomain
-                                        ],
-                                        $data
-                                    );
-                                }
-                            }
-
-                            if ($req->action == 3) {
-
-                                if ($checkpermission->type_id == 7) {
-                                    $filepath = public_path('KSA_NCA_ECC.xlsx');
-                                }
-
-                                if ($checkpermission->type_id == 18) {
-                                    $filepath = public_path('COSO.xlsx');
-                                }
-
-
-                                if ($checkpermission->type_id == 19) {
-                                    $filepath = public_path('SOC2_Type2.xlsx');
-                                }
-
-                                if ($checkpermission->type_id == 4) {
-                                    $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
-                                }
-
-                                if ($checkpermission->type_id == 23) {
-                                    $filepath = public_path('NIST_CSF.xlsx');
-                                }
-
-                                 if ($checkpermission->type_id == 24) {
-                                    $filepath = public_path('ISO27701_2019v2.xlsx');
-                                }
-                                $data2 = Excel::toArray([], $filepath); //with header
-                                $rows = array_slice($data2[0], 1); //without header(first row)
-
-                                $filteredData = collect($rows)->filter(function ($row) use ($title) {
-                                    return strval($row[0]) === $title;
-                                })->values()->all();
+                    if ($checkpermission->type_id == 16) {
+                        $filepath = public_path('COBIT_2019.xlsx');
+                    }
 
 
-                                //all controls in this domain
 
-                                foreach ($filteredData as $innerArray2) {
-                                    // Access specific value from the inner array
-                                    $fetch_sub_req = $innerArray2['4'];
-                                    $fetch_title = $innerArray2['0'];
-                                    $subdomain = $innerArray2['2'];
+                    if ($evidenceLevel == 'component') {
 
-                                    DB::table('iso_sec_2_2')->updateOrInsert(
-                                        [
-                                            'project_id' => $proj_id,
-                                            'asset_id' => $asset_id,
-                                            'title_num' => $fetch_title,
-                                            'sub_req' => $fetch_sub_req,
-                                            'subdomain' => $subdomain
-                                        ],
-                                        $data
-                                    );
-                                }
-                            }
+                        if ($req->action == 2) {
 
-                            if ($req->action == 1) {
+                            $data2 = Excel::toArray([], $filepath); //with header
+                            $rows = array_slice($data2[0], 1); //without header(first row)
 
-                                // If evidence level is 'component', just insert or update for the specific asset
+                            //all controls in this domain
+                            $filteredData = collect($rows)->filter(function ($row) use ($req) {
+                                return strval($row[2]) === $req->subdomain;
+                            })->values()->all();
+
+
+                            foreach ($filteredData as $innerArray) {
+                                // Access specific value from the inner array
+                                $fetch_title = $innerArray['0'];
+                                $subdomain = $innerArray['2'];
+                                $fetch_sub_req = $innerArray['4'];
+
                                 DB::table('iso_sec_2_2')->updateOrInsert(
                                     [
                                         'project_id' => $proj_id,
                                         'asset_id' => $asset_id,
-                                        'title_num' => $title,
-                                        'sub_req' => $sub_req,
-                                        'subdomain' => $req->subdomain
+                                        'title_num' => $fetch_title,
+                                        'sub_req' => $fetch_sub_req,
+                                        'subdomain' => $subdomain
                                     ],
                                     $data
                                 );
                             }
-
-
-
-                            // Redirect after updating the specific asset
-                            $mysessionreq = $req->session()->get('main_req_num');
-                            return redirect()->route(
-                                'ksa_nca_sec_2_2_req',
-                                ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                            )
-                                ->with('success', 'Record Updated Successfully');
                         }
 
+                        if ($req->action == 3) {
 
 
+                            $data2 = Excel::toArray([], $filepath); //with header
+                            $rows = array_slice($data2[0], 1); //without header(first row)
 
-                        $assetDetails = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
-
-                        $assets = null;
-
-                        if ($evidenceLevel == 'name') {
-                            $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('name', $assetDetails->name)->get();
-                        }
-
-                        if ($evidenceLevel == 'group') {
-                            $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('g_name', $assetDetails->g_name)->get();
-                        }
-                        if ($evidenceLevel == 'service') {
-                            $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('s_name', $assetDetails->s_name)->get();
-                        }
-
-                        if ($evidenceLevel == 'project') {
-                            $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->get();
-                        }
+                            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                                return strval($row[0]) === $title;
+                            })->values()->all();
 
 
+                            //all controls in this domain
 
-                        foreach ($assets as $ass) {
-                            if ($req->action == 2) {
-                                if ($checkpermission->type_id == 7) {
-                                    $filepath = public_path('KSA_NCA_ECC.xlsx');
-                                }
+                            foreach ($filteredData as $innerArray2) {
+                                // Access specific value from the inner array
+                                $fetch_sub_req = $innerArray2['4'];
+                                $fetch_title = $innerArray2['0'];
+                                $subdomain = $innerArray2['2'];
 
-                                if ($checkpermission->type_id == 18) {
-                                    $filepath = public_path('COSO.xlsx');
-                                }
-
-
-                                if ($checkpermission->type_id == 19) {
-                                    $filepath = public_path('SOC2_Type2.xlsx');
-                                }
-
-                                if ($checkpermission->type_id == 4) {
-                                    $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
-                                }
-
-                                if ($checkpermission->type_id == 23) {
-                                    $filepath = public_path('NIST_CSF.xlsx');
-                                }
-
-                                 if ($checkpermission->type_id == 24) {
-                                    $filepath = public_path('ISO27701_2019v2.xlsx');
-                                }
-                                $data2 = Excel::toArray([], $filepath); //with header
-                                $rows = array_slice($data2[0], 1); //without header(first row)
-
-                                //all controls in this domain
-                                $filteredData = collect($rows)->filter(function ($row) use ($req) {
-                                    return strval($row[2]) === $req->subdomain;
-                                })->values()->all();
-
-
-
-
-                                foreach ($filteredData as $innerArray) {
-                                    // Access specific value from the inner array
-                                    $fetch_sub_req = $innerArray['4'];
-                                    $fetch_title = $innerArray['0'];
-                                    $subdomain = $innerArray['2'];
-
-
-                                    DB::table('iso_sec_2_2')->updateOrInsert(
-                                        [
-                                            'project_id' => $proj_id,
-                                            'asset_id' => $ass->assessment_id,
-                                            'title_num' => $fetch_title,
-                                            'sub_req' => $fetch_sub_req,
-                                            'subdomain' => $subdomain
-                                        ],
-                                        $data
-                                    );
-                                }
+                                DB::table('iso_sec_2_2')->updateOrInsert(
+                                    [
+                                        'project_id' => $proj_id,
+                                        'asset_id' => $asset_id,
+                                        'title_num' => $fetch_title,
+                                        'sub_req' => $fetch_sub_req,
+                                        'subdomain' => $subdomain
+                                    ],
+                                    $data
+                                );
                             }
+                        }
 
-                            if ($req->action == 3) {
-                                //all controls in all  domains
+                        if ($req->action == 1) {
 
-                                if ($checkpermission->type_id == 7) {
-                                    $filepath = public_path('KSA_NCA_ECC.xlsx');
-                                }
-
-                                if ($checkpermission->type_id == 18) {
-                                    $filepath = public_path('COSO.xlsx');
-                                }
-
-
-                                if ($checkpermission->type_id == 19) {
-                                    $filepath = public_path('SOC2_Type2.xlsx');
-                                }
-
-                                if ($checkpermission->type_id == 4) {
-                                    $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
-                                }
-
-                                if ($checkpermission->type_id == 23) {
-                                    $filepath = public_path('NIST_CSF.xlsx');
-                                }
-
-                                 if ($checkpermission->type_id == 24) {
-                                    $filepath = public_path('ISO27701_2019v2.xlsx');
-                                }
-
-                                $data2 = Excel::toArray([], $filepath); //with header
-                                $rows = array_slice($data2[0], 1); //without header(first row)
-
-                                $filteredData = collect($rows)->filter(function ($row) use ($title) {
-                                    return strval($row[0]) === $title;
-                                })->values()->all();
+                            // If evidence level is 'component', just insert or update for the specific asset
+                            DB::table('iso_sec_2_2')->updateOrInsert(
+                                [
+                                    'project_id' => $proj_id,
+                                    'asset_id' => $asset_id,
+                                    'title_num' => $title,
+                                    'sub_req' => $sub_req,
+                                    'subdomain' => $req->subdomain
+                                ],
+                                $data
+                            );
+                        }
 
 
-                                foreach ($filteredData as $innerArray) {
 
-                                    // Access specific value from the inner array
-                                    $fetch_title = $innerArray['0'];
-                                    $fetch_sub_req = $innerArray['4'];
-                                    $subdomain = $innerArray['2'];
+                        // Redirect after updating the specific asset
+                        $mysessionreq = $req->session()->get('main_req_num');
+                        return redirect()->route(
+                            'ksa_nca_sec_2_2_req',
+                            ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
+                        )
+                            ->with('success', 'Record Updated Successfully');
+                    }
 
-                                    DB::table('iso_sec_2_2')->updateOrInsert(
-                                        [
-                                            'project_id' => $proj_id,
-                                            'asset_id' => $ass->assessment_id,
-                                            'sub_req' => $fetch_sub_req,
-                                            'title_num' => $fetch_title,
-                                            'subdomain' => $subdomain
 
-                                        ],
-                                        $data
-                                    );
-                                }
-                            }
 
-                            if ($req->action == 1) {
+
+                    $assetDetails = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
+
+                    $assets = null;
+
+                    if ($evidenceLevel == 'name') {
+                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('name', $assetDetails->name)->get();
+                    }
+
+                    if ($evidenceLevel == 'group') {
+                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('g_name', $assetDetails->g_name)->get();
+                    }
+                    if ($evidenceLevel == 'service') {
+                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('s_name', $assetDetails->s_name)->get();
+                    }
+
+                    if ($evidenceLevel == 'project') {
+                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->get();
+                    }
+
+
+
+                    foreach ($assets as $ass) {
+                        if ($req->action == 2) {
+
+                            $data2 = Excel::toArray([], $filepath); //with header
+                            $rows = array_slice($data2[0], 1); //without header(first row)
+
+                            //all controls in this domain
+                            $filteredData = collect($rows)->filter(function ($row) use ($req) {
+                                return strval($row[2]) === $req->subdomain;
+                            })->values()->all();
+
+
+                            foreach ($filteredData as $innerArray) {
+                                // Access specific value from the inner array
+                                $fetch_sub_req = $innerArray['4'];
+                                $fetch_title = $innerArray['0'];
+                                $subdomain = $innerArray['2'];
+
 
                                 DB::table('iso_sec_2_2')->updateOrInsert(
                                     [
                                         'project_id' => $proj_id,
                                         'asset_id' => $ass->assessment_id,
-                                        'title_num' => $title,
-                                        'sub_req' => $sub_req,
-                                        'subdomain' => $req->subdomain
+                                        'title_num' => $fetch_title,
+                                        'sub_req' => $fetch_sub_req,
+                                        'subdomain' => $subdomain
+                                    ],
+                                    $data
+                                );
+                            }
+                        }
+
+                        if ($req->action == 3) {
+                            //all controls in all  domains
+
+                            $data2 = Excel::toArray([], $filepath); //with header
+                            $rows = array_slice($data2[0], 1); //without header(first row)
+
+                            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                                return strval($row[0]) === $title;
+                            })->values()->all();
+
+
+                            foreach ($filteredData as $innerArray) {
+
+                                // Access specific value from the inner array
+                                $fetch_title = $innerArray['0'];
+                                $fetch_sub_req = $innerArray['4'];
+                                $subdomain = $innerArray['2'];
+
+                                DB::table('iso_sec_2_2')->updateOrInsert(
+                                    [
+                                        'project_id' => $proj_id,
+                                        'asset_id' => $ass->assessment_id,
+                                        'sub_req' => $fetch_sub_req,
+                                        'title_num' => $fetch_title,
+                                        'subdomain' => $subdomain
 
                                     ],
                                     $data
                                 );
                             }
                         }
+
+                        if ($req->action == 1) {
+
+                            DB::table('iso_sec_2_2')->updateOrInsert(
+                                [
+                                    'project_id' => $proj_id,
+                                    'asset_id' => $ass->assessment_id,
+                                    'title_num' => $title,
+                                    'sub_req' => $sub_req,
+                                    'subdomain' => $req->subdomain
+
+                                ],
+                                $data
+                            );
+                        }
                     }
                 }
+
                 $mysessionreq = $req->session()->get('main_req_num');
 
                 return redirect()->route(
@@ -1270,275 +1247,6 @@ class KSA_NCA extends Controller
 
 
 
-
-    public function add_mandatory_all_title(Request $req, $proj_id, $user_id, $asset_id)
-    {
-
-        if ($user_id == auth()->user()->id) {
-            $checkpermission = Db::table('project_details')->select(
-                'project_types.id as type_id',
-                'project_details.project_code',
-                'project_details.project_permissions',
-                'projects.project_name',
-                'projects.project_id'
-            )
-                ->join('projects', 'project_details.project_code', 'projects.project_id')
-                ->join('project_types', 'projects.project_type', 'project_types.id')
-                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-                ->first();
-            if ($checkpermission) {
-                $permissions = json_decode($checkpermission->project_permissions);
-
-
-                $evidenceLevel = $req->session()->get('evidenceLevel');
-                if (in_array('Data Inputter', $permissions)) {
-
-                    $data = [
-                        'comp_status' => $req->comp_status,
-                        'last_edited_by' => $user_id,
-                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                    ];
-                    if ($checkpermission->type_id == 7) {
-                        //ksa Nca
-                        $filepath = public_path('KSA_NCA_ECC_Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 18) {
-                        //COSO
-                        $filepath = public_path('COSO_Modified.xlsx');
-                    }
-
-
-                    if ($checkpermission->type_id == 19) {
-                        $filepath = public_path('SOC2_Type2_Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 1) {
-                        //PCI SIngle
-                        $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 16) {
-                        //cobit 2019
-                        $filepath = public_path('COBIT_2019.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 2) {
-                        //PCI MUlti
-                        $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 3) {
-                        //PCI Merchant
-                        $filepath = public_path('PCI_DSS_4_Merchant.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 5) {
-                        //Cy sama
-                        $filepath = public_path('CY_SAMA_Modified.xlsx');
-                    }
-
-                    //ISA part 3-2
-                    if ($checkpermission->type_id == 10) {
-                        $filepath = public_path('ISA_62443_Part 3-2_Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 12) {
-                        $filepath = public_path('ISA 62443 Part 4-2 -Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 13) {
-                        $filepath = public_path('ISA 62443 Part 3-3 - Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 11) {
-                        $filepath = public_path('ISA 62443 Part 2-1 - Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 9) {
-
-                        $filepath = public_path('ISA 62443 Part 4-1 - Modified.xlsx');
-                    }
-
-                    //ISO
-                    if ($checkpermission->type_id == 4) {
-                        $filepath = public_path('ISO27K1_2022_Compliance_Updated_Modified.xlsx');
-                    }
-
-
-
-                    if ($evidenceLevel == 'component') {
-
-
-                        $data2 = Excel::toArray([], $filepath); //with header
-                        $rows = array_slice($data2[0], 1); //without header(first row)
-                        $filteredData = collect($rows)->filter(function ($row) use ($req) {
-                            return strval($row[0]) === $req->title;
-                        })->values()->all();
-
-                        // dd($filteredData);
-
-
-
-
-                        foreach ($filteredData as $innerArray) {
-                            // Access specific value from the inner array
-                            $fetch_sub_req = $innerArray['3'];
-                            $fetch_title = $innerArray['0'];
-                            $subdomain = $innerArray['1'];
-
-                            DB::table('iso_sec_2_2')->updateOrInsert(
-                                [
-                                    'project_id' => $proj_id,
-                                    'asset_id' => $asset_id,
-                                    'title_num' => $fetch_title,
-                                    'sub_req' => $fetch_sub_req,
-                                    'subdomain' => $subdomain
-                                ],
-                                $data
-                            );
-                        }
-
-                        if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4) {
-                            return redirect()->route(
-                                'ksa_nca_subsections',
-                                ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                            )
-                                ->with('success', 'Record Updated Successfully');
-                        }
-
-                        if ($checkpermission->type_id == 16) {
-                            return redirect()->route(
-                                'cobit_subsections',
-                                ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                            )
-                                ->with('success', 'Record Updated Successfully');
-                        }
-
-                        if ($checkpermission->type_id == 5) {
-                            return redirect()->route(
-                                'cy_sama_subsections',
-                                ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                            )
-                                ->with('success', 'Record Updated Successfully');
-                        }
-
-                        if ($checkpermission->type_id == 10 || $checkpermission->type_id == 11 || $checkpermission->type_id == 12 ||  $checkpermission->type_id == 13 ||  $checkpermission->type_id == 9) {
-                            return redirect()->route(
-                                'isa_subsections',
-                                ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                            )
-                                ->with('success', 'Record Updated Successfully');
-                        }
-
-
-                        //PCI
-                        if ($checkpermission->type_id == 1 || $checkpermission->type_id == 2 || $checkpermission->type_id == 3) {
-                            return redirect()->back()->with('success', 'Record Updated Successfully');
-                        }
-
-
-                        if ($checkpermission->type_id == 4) {
-
-                            return redirect()->back()->with('success', 'Record Updated Successfully');
-                        }
-                    }
-
-
-
-
-                    $assetDetails = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
-
-                    $assets = null;
-
-                    if ($evidenceLevel == 'name') {
-                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('name', $assetDetails->name)->get();
-                    }
-
-                    if ($evidenceLevel == 'group') {
-                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('g_name', $assetDetails->g_name)->get();
-                    }
-                    if ($evidenceLevel == 'service') {
-                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('s_name', $assetDetails->s_name)->get();
-                    }
-
-                    if ($evidenceLevel == 'project') {
-                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->get();
-                    }
-
-
-                    foreach ($assets as $ass) {
-                        $data2 = Excel::toArray([], $filepath); //with header
-                        $rows = array_slice($data2[0], 1); //without header(first row)
-
-                        //all controls in this domain
-                        $filteredData = collect($rows)->filter(function ($row) use ($req) {
-                            return strval($row[0]) === $req->title;
-                        })->values()->all();
-
-
-
-                        foreach ($filteredData as $innerArray) {
-                            // Access specific value from the inner array
-                            $fetch_sub_req = $innerArray['3'];
-                            $fetch_title = $innerArray['0'];
-                            $subdomain = $innerArray['1'];
-
-
-                            DB::table('iso_sec_2_2')->updateOrInsert(
-                                [
-                                    'project_id' => $proj_id,
-                                    'asset_id' => $ass->assessment_id,
-                                    'title_num' => $fetch_title,
-                                    'sub_req' => $fetch_sub_req,
-                                    'subdomain' => $subdomain
-                                ],
-                                $data
-                            );
-                        }
-                    }
-
-                    if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19) {
-                        return redirect()->route(
-                            'ksa_nca_subsections',
-                            ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                        )
-                            ->with('success', 'Record Updated Successfully');
-                    }
-
-                    if ($checkpermission->type_id == 5) {
-                        return redirect()->route(
-                            'cy_sama_subsections',
-                            ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                        )
-                            ->with('success', 'Record Updated Successfully');
-                    }
-
-                    if ($checkpermission->type_id == 10 || $checkpermission->type_id == 11 || $checkpermission->type_id == 12 || $checkpermission->type_id == 13 || $checkpermission->type_id == 9) {
-                        return redirect()->route(
-                            'isa_subsections',
-                            ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                        )
-                            ->with('success', 'Record Updated Successfully');
-                    }
-
-                    //PCI
-                    if ($checkpermission->type_id == 1 || $checkpermission->type_id == 2 || $checkpermission->type_id == 3) {
-                        return redirect()->back()->with('success', 'Record Updated Successfully');
-                    }
-
-                    //ISO
-                    if ($checkpermission->type_id == 4) {
-                        return redirect()->back()->with('success', 'Record Updated Successfully');
-                    }
-                } else {
-                    return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
-                }
-            }
-        }
-    }
-
-
     public function add_mandatory_all_title_all_controls(Request $req, $proj_id, $user_id, $asset_id)
     {
 
@@ -1578,8 +1286,28 @@ class KSA_NCA extends Controller
             $filepath = public_path('NIST_CSF_Modified.xlsx');
         }
 
-         if ($checkpermission->id == 24) {
+        if ($checkpermission->id == 24) {
             $filepath = public_path('ISO27701_2019v2_Modified.xlsx');
+        }
+
+        if ($checkpermission->id == 1) {
+            $filepath = public_path('PCI_DSS_4_Single_TSP_Modified.xlsx');
+        }
+
+        if ($checkpermission->id == 2) {
+            $filepath = public_path('PCI_DSS_4_Multi_TSP_Modified.xlsx');
+        }
+
+        if ($checkpermission->id == 3) {
+            $filepath = public_path('PCI_DSS_4_Merchant_TSP_Modified.xlsx');
+        }
+
+        if ($checkpermission->id == 19) {
+            $filepath = public_path('SOC2_Type2_Modified.xlsx');
+        }
+
+        if ($checkpermission->id == 16) {
+            $filepath = public_path('COBIT_2019_Modified.xlsx');
         }
 
 
@@ -1672,222 +1400,6 @@ class KSA_NCA extends Controller
 
 
 
-    public function add_mandatory_all_domain(Request $req, $proj_id, $user_id, $asset_id)
-    {
-
-        if ($user_id == auth()->user()->id) {
-            $checkpermission = Db::table('project_details')->select(
-                'project_types.id as type_id',
-                'project_details.project_code',
-                'project_details.project_permissions',
-                'projects.project_name',
-                'projects.project_id'
-            )
-                ->join('projects', 'project_details.project_code', 'projects.project_id')
-                ->join('project_types', 'projects.project_type', 'project_types.id')
-                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-                ->first();
-            if ($checkpermission) {
-                $permissions = json_decode($checkpermission->project_permissions);
-
-
-                $evidenceLevel = $req->session()->get('evidenceLevel');
-                if (in_array('Data Inputter', $permissions)) {
-
-                    $data = [
-                        'comp_status' => $req->comp_status,
-                        'last_edited_by' => $user_id,
-                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                    ];
-                    if ($checkpermission->type_id == 7) {
-                        //ksa Nca
-                        $filepath = public_path('KSA_NCA_ECC_Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 18) {
-                        //COSO
-                        $filepath = public_path('COSO_Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 19) {
-                        $filepath = public_path('SOC2_Type2_Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 5) {
-                        //Cy sama
-                        $filepath = public_path('CY_SAMA_Modified.xlsx');
-                    }
-                    if ($checkpermission->type_id == 1) {
-                        //PCI SIngle
-                        $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 16) {
-                        //cobit 2019
-                        $filepath = public_path('COBIT_2019.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 2) {
-                        //PCI MUlti
-                        $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 3) {
-                        //PCI MUlti
-                        $filepath = public_path('PCI_DSS_4_Merchant.xlsx');
-                    }
-
-                    //ISA part 3-2
-                    if ($checkpermission->type_id == 10) {
-                        $filepath = public_path('ISA_62443_Part 3-2_Modified.xlsx');
-                    }
-
-                    //ISa part4-2
-                    if ($checkpermission->type_id == 12) {
-
-                        $filepath = public_path('ISA 62443 Part 4-2 -Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 13) {
-                        $filepath = public_path('ISA 62443 Part 3-3 - Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 11) {
-                        $filepath = public_path('ISA 62443 Part 2-1 - Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 9) {
-                        $filepath = public_path('ISA 62443 Part 4-1 - Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 4) {
-                        $filepath = public_path('ISO27K1_2022_Compliance_Updated_Modified.xlsx');
-                    }
-
-
-                    if ($evidenceLevel == 'component') {
-
-
-                        $data2 = Excel::toArray([], $filepath); //with header
-                        $rows = array_slice($data2[0], 1); //without header(first row)
-
-
-                        $filteredData = collect($rows)->filter(function ($row) use ($req) {
-                            return strval($row[1]) === $req->domain;
-                        })->values()->all();
-
-
-
-                        foreach ($filteredData as $innerArray) {
-                            // Access specific value from the inner array
-                            $fetch_sub_req = $innerArray['3'];
-                            $fetch_title = $innerArray['0'];
-                            $subdomain = $innerArray['1'];
-
-                            DB::table('iso_sec_2_2')->updateOrInsert(
-                                [
-                                    'project_id' => $proj_id,
-                                    'asset_id' => $asset_id,
-                                    'title_num' => $fetch_title,
-                                    'sub_req' => $fetch_sub_req,
-                                    'subdomain' => $subdomain
-                                ],
-                                $data
-                            );
-                        }
-
-
-                        return redirect()->back()->with('success', 'Record Updated Successfully');
-
-
-                        // if ($checkpermission->type_id == 10||$checkpermission->type_id == 11 || $checkpermission->type_id == 12 || $checkpermission->type_id==13 ) {
-                        //     return redirect()->route(
-                        //         'isa_subsections',
-                        //         ['proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
-                        //     )
-                        //         ->with('success', 'Record Updated Successfully');
-
-                        // }
-
-
-
-
-
-                    }
-
-
-
-
-                    $assetDetails = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
-
-                    $assets = null;
-
-
-
-                    if ($evidenceLevel == 'name') {
-                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('name', $assetDetails->name)->get();
-                    }
-
-                    if ($evidenceLevel == 'group') {
-                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('g_name', $assetDetails->g_name)->get();
-                    }
-                    if ($evidenceLevel == 'service') {
-                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('s_name', $assetDetails->s_name)->get();
-                    }
-
-                    if ($evidenceLevel == 'project') {
-                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->get();
-                    }
-
-
-                    foreach ($assets as $ass) {
-                        $data2 = Excel::toArray([], $filepath); //with header
-                        $rows = array_slice($data2[0], 1); //without header(first row)
-
-                        //all controls in this domain
-                        $filteredData = collect($rows)->filter(function ($row) use ($req) {
-                            return strval($row[1]) === $req->domain;
-                        })->values()->all();
-
-
-
-                        foreach ($filteredData as $innerArray) {
-                            // Access specific value from the inner array
-                            $fetch_sub_req = $innerArray['3'];
-                            $fetch_title = $innerArray['0'];
-                            $subdomain = $innerArray['1'];
-
-
-                            DB::table('iso_sec_2_2')->updateOrInsert(
-                                [
-                                    'project_id' => $proj_id,
-                                    'asset_id' => $ass->assessment_id,
-                                    'title_num' => $fetch_title,
-                                    'sub_req' => $fetch_sub_req,
-                                    'subdomain' => $subdomain
-                                ],
-                                $data
-                            );
-                        }
-                    }
-
-
-
-
-                    return redirect()->back()->with('success', 'Record Updated Successfully');
-                } else {
-                    return redirect()->route(
-                        'iso_sections',
-                        ['proj_id' => $proj_id, 'user_id' => $user_id]
-                    )
-                        ->with('error', 'Not Allowed');
-                }
-            }
-        }
-    }
-
-
-
     public function add_mandatory_all_domain_all_controls(Request $req, $proj_id, $user_id, $asset_id)
     {
         if ($user_id != auth()->user()->id) {
@@ -1919,18 +1431,18 @@ class KSA_NCA extends Controller
             18 => 'COSO_Modified.xlsx',
             19 => 'SOC2_Type2_Modified.xlsx',
             5 => 'CY_SAMA_Modified.xlsx',
-            1 => 'PCI_DSS_4_Single_TSP.xlsx',
-            16 => 'COBIT_2019.xlsx',
-            2 => 'PCI_DSS_4_Multi_TSP.xlsx',
-            3 => 'PCI_DSS_4_Merchant.xlsx',
+            1 => 'PCI_DSS_4_Single_TSP_Modified.xlsx',
+            2 => 'PCI_DSS_4_Multi_TSP_Modified.xlsx',
+            3 => 'PCI_DSS_4_Merchant_TSP_Modified.xlsx',
+            16 => 'COBIT_2019_Modified.xlsx',
             10 => 'ISA_62443_Part 3-2_Modified.xlsx',
             12 => 'ISA 62443 Part 4-2 -Modified.xlsx',
             13 => 'ISA 62443 Part 3-3 - Modified.xlsx',
             11 => 'ISA 62443 Part 2-1 - Modified.xlsx',
             9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx',
-            23=>'NIST_CSF_Modified.xlsx',
-            24=>'ISO27701_2019v2_Modified.xlsx'
+            23 => 'NIST_CSF_Modified.xlsx',
+            24 => 'ISO27701_2019v2_Modified.xlsx'
         ];
 
 
@@ -2057,204 +1569,6 @@ class KSA_NCA extends Controller
 
 
 
-
-
-    public function add_mandatory_all_sub_req(Request $req, $proj_id, $user_id, $asset_id)
-    {
-        if ($user_id == auth()->user()->id) {
-            $checkpermission = Db::table('project_details')->select(
-                'project_types.id as type_id',
-                'project_details.project_code',
-                'project_details.project_permissions',
-                'projects.project_name',
-                'projects.project_id'
-            )
-                ->join('projects', 'project_details.project_code', 'projects.project_id')
-                ->join('project_types', 'projects.project_type', 'project_types.id')
-                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-                ->first();
-            if ($checkpermission) {
-                $permissions = json_decode($checkpermission->project_permissions);
-
-
-                $evidenceLevel = $req->session()->get('evidenceLevel');
-                if (in_array('Data Inputter', $permissions)) {
-
-                    $data = [
-                        'comp_status' => $req->comp_status,
-                        'last_edited_by' => $user_id,
-                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                    ];
-
-                    if ($checkpermission->type_id == 7) {
-                        //ksa Nca
-                        $filepath = public_path('KSA_NCA_ECC_Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 18) {
-                        //COSO
-                        $filepath = public_path('COSO_Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 19) {
-                        $filepath = public_path('SOC2_Type2_Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 5) {
-                        //Cy sama
-                        $filepath = public_path('CY_SAMA_Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 1) {
-                        //PCI SIngle
-                        $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 16) {
-                        //cobit 2019
-                        $filepath = public_path('COBIT_2019.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 2) {
-                        //PCI Multi
-                        $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 3) {
-                        //PCI Merchant
-                        $filepath = public_path('PCI_DSS_4_Merchant.xlsx');
-                    }
-
-                    //ISA part 3-2
-                    if ($checkpermission->type_id == 10) {
-                        $filepath = public_path('ISA_62443_Part 3-2_Modified.xlsx');
-                    }
-
-                    //ISa part4-2
-                    if ($checkpermission->type_id == 12) {
-                        $filepath = public_path('ISA 62443 Part 4-2 -Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 13) {
-                        $filepath = public_path('ISA 62443 Part 3-3 - Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 11) {
-                        $filepath = public_path('ISA 62443 Part 2-1 - Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 9) {
-                        $filepath = public_path('ISA 62443 Part 4-1 - Modified.xlsx');
-                    }
-
-                    if ($checkpermission->type_id == 4) {
-                        $filepath = public_path('ISO27K1_2022_Compliance_Updated_Modified.xlsx');
-                    }
-
-                    if ($evidenceLevel == 'component') {
-
-
-                        $data2 = Excel::toArray([], $filepath); //with header
-                        $rows = array_slice($data2[0], 1); //without header(first row)
-
-
-                        $filteredData = collect($rows)->filter(function ($row) use ($req) {
-                            return strval(trim($row[3])) === $req->sub_req;
-                        })->values()->all();
-
-
-
-
-
-
-                        foreach ($filteredData as $innerArray) {
-                            // Access specific value from the inner array
-                            $fetch_sub_req = $innerArray['3'];
-                            $fetch_title = $innerArray['0'];
-                            $subdomain = $innerArray['1'];
-
-                            DB::table('iso_sec_2_2')->updateOrInsert(
-                                [
-                                    'project_id' => $proj_id,
-                                    'asset_id' => $asset_id,
-                                    'title_num' => $fetch_title,
-                                    'sub_req' => $fetch_sub_req,
-                                    'subdomain' => $subdomain
-                                ],
-                                $data
-                            );
-                        }
-
-
-
-                        return redirect()->back()->with('success', 'Record Updated Successfully');
-                    }
-
-
-
-
-                    $assetDetails = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
-
-                    $assets = null;
-
-                    if ($evidenceLevel == 'name') {
-                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('name', $assetDetails->name)->get();
-                    }
-
-                    if ($evidenceLevel == 'group') {
-                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('g_name', $assetDetails->g_name)->get();
-                    }
-                    if ($evidenceLevel == 'service') {
-                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->where('s_name', $assetDetails->s_name)->get();
-                    }
-
-                    if ($evidenceLevel == 'project') {
-                        $assets = Db::table('iso_sec_2_1')->where('project_id', $proj_id)->get();
-                    }
-
-
-                    foreach ($assets as $ass) {
-                        $data2 = Excel::toArray([], $filepath); //with header
-                        $rows = array_slice($data2[0], 1); //without header(first row)
-
-                        //all controls in this domain
-                        $filteredData = collect($rows)->filter(function ($row) use ($req) {
-                            return strval(trim($row[3])) === $req->sub_req;
-                        })->values()->all();
-
-
-
-                        foreach ($filteredData as $innerArray) {
-                            // Access specific value from the inner array
-                            $fetch_sub_req = $innerArray['3'];
-                            $fetch_title = $innerArray['0'];
-                            $subdomain = $innerArray['1'];
-
-
-                            DB::table('iso_sec_2_2')->updateOrInsert(
-                                [
-                                    'project_id' => $proj_id,
-                                    'asset_id' => $ass->assessment_id,
-                                    'title_num' => $fetch_title,
-                                    'sub_req' => $fetch_sub_req,
-                                    'subdomain' => $subdomain
-                                ],
-                                $data
-                            );
-                        }
-                    }
-                    return redirect()->back()->with('success', 'Record Updated Successfully');
-                } else {
-                    return redirect()->route(
-                        'iso_sections',
-                        ['proj_id' => $proj_id, 'user_id' => $user_id]
-                    )
-                        ->with('error', 'Not Allowed');
-                }
-            }
-        }
-    }
-
     public function add_mandatory_all_sub_req_all_controls(Request $req, $proj_id, $user_id, $asset_id)
     {
         if ($user_id != auth()->user()->id) {
@@ -2287,18 +1601,18 @@ class KSA_NCA extends Controller
             18 => 'COSO_Modified.xlsx',
             19 => 'SOC2_Type2_Modified.xlsx',
             5 => 'CY_SAMA_Modified.xlsx',
-            1 => 'PCI_DSS_4_Single_TSP.xlsx',
-            16 => 'COBIT_2019.xlsx',
-            2 => 'PCI_DSS_4_Multi_TSP.xlsx',
-            3 => 'PCI_DSS_4_Merchant.xlsx',
+            1 => 'PCI_DSS_4_Single_TSP_Modified.xlsx',
+            16 => 'COBIT_2019_Modified.xlsx',
+            2 => 'PCI_DSS_4_Multi_TSP_Modified.xlsx',
+            3 => 'PCI_DSS_4_Merchant_TSP_Modified.xlsx',
             10 => 'ISA_62443_Part 3-2_Modified.xlsx',
             12 => 'ISA 62443 Part 4-2 -Modified.xlsx',
             13 => 'ISA 62443 Part 3-3 - Modified.xlsx',
             11 => 'ISA 62443 Part 2-1 - Modified.xlsx',
             9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx',
-            23=>'NIST_CSF_Modified.xlsx',
-            24=>'ISO27701_2019v2_Modified.xlsx'
+            23 => 'NIST_CSF_Modified.xlsx',
+            24 => 'ISO27701_2019v2_Modified.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
@@ -2449,7 +1763,7 @@ class KSA_NCA extends Controller
         $fileMap = [
 
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25.xlsx',
-            23=>'NIST_CSF.xlsx'
+            23 => 'NIST_CSF.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
@@ -2527,7 +1841,7 @@ class KSA_NCA extends Controller
         $fileMap = [
 
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25.xlsx',
-            23=>'NIST_CSF.xlsx'
+            23 => 'NIST_CSF.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);

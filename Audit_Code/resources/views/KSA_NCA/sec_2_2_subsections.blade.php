@@ -605,6 +605,531 @@ If you choose to select values for “Applicable” and “Compliance Status” 
 
         </div>
 
+
+        {{-- PCI SIngle --}}
+        @elseif($project->project_type==1)
+
+        <div class="row h-100 w-100 mb-2">
+
+            <form action="/add_mandatory_all_title_all_controls/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" method="POST">
+                @csrf
+
+                <!-- Top Row: Save Button & Headings -->
+                <div class="row align-items-center mb-3">
+                    <div class="col-md-5">
+                        <h5 class="fw-bold mb-0">Control Domains</h5>
+                    </div>
+                    <div class="col-md-3 text-start">
+                        <span class="fw-bold">Applicability</span>
+                    </div>
+                    <div class="col-md-3 text-start">
+                        <span class="fw-bold">Compliance Status</span>
+                    </div>
+                    <div class="col-md-1 text-end">
+                        <button class="btn btn-md btn-success px-4">Save</button>
+                    </div>
+                </div>
+
+                @foreach(['1' => 'Install and Maintain Network Security Controls', '2' => 'Apply Secure Configurations to All System Components', '3'=>'Protect Stored Account Data','4'=>"Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks",'5'=>"Protect All Systems and Networks from Malicious Software",'6'=>"Develop and Maintain Secure Systems and Software",'7'=>"Restrict Access to System Components and Cardholder Data by Business Need to Know",'8'=>'Identify Users and Authenticate Access to System Components','9'=>'Restrict Physical Access to Cardholder Data','10'=>'Log and Monitor All Access to System Components and Cardholder Data','11'=>'Test Security of Systems and Networks Regularly','12'=>'Support Information Security with Organizational Policies and Programs','A2'=>'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'] as $title => $label)
+
+                @php
+                $status = $finalStatusByTitle->get($title);
+                $applicability = $finalApplicabilityByTitle->get($title);
+                @endphp
+
+                <div class="row mb-3 align-items-start">
+                    <div class="col-md-5">
+                        <a href="/ksa_nca_section_2_2/{{ $title }}/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" class="btn btn-lg btn-warning w-100 text-start fw-bold">
+                            {{ $title }}. {{ $label }}
+                        </a>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="hidden" name="titles[]" value="{{ $title }}">
+
+                        <select name="applicabilities[]" class="form-select rounded-pill applicability-select" data-index="{{ $loop->index }}">
+                            <option value="">Select --</option>
+                            <option value="yes" {{ old('applicabilities.' . $loop->index, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
+                            <option value="no" {{ old('applicabilities.' . $loop->index, $applicability) === 'no' ? 'selected' : '' }}>No</option>
+                        </select>
+
+                        @if(trim($applicability) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Applicability differs in lower layers</span>
+                        </div>
+                        @endif
+
+                        <!-- Justification Field (hidden by default, shown via JS) -->
+                        <textarea name="justifications[]" class="form-control mt-2 justification-textarea justification-{{ $loop->index }}" style="display: {{ (old('applicabilities.' . $loop->index, $applicability) === 'no') ? 'block' : 'none' }};" placeholder="Enter justification">{{ old('justifications.' . $loop->index) }}</textarea>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <select name="comp_statuses[]" class="form-select rounded-pill w-100">
+                                <option value="">Select --</option>
+                                @foreach([
+                                'yes' => 'In Place',
+                                'no' => 'Not in Place',
+                                'not_applicable' => 'Not Applicable',
+                                'not_tested' => 'Not Tested',
+                                'partial' => 'Partial'
+                                ] as $value => $labelOption)
+                                <option value="{{ $value }}" {{ old('comp_statuses.' . $loop->index, $status !== 'different' ? $status : '') === $value ? 'selected' : '' }}>
+                                    {{ $labelOption }}
+                                </option>
+                                @endforeach
+                            </select>
+
+                            <a class="btn btn-sm btn-primary" style="min-width:100px;" href="#">
+                                AI Input
+                            </a>
+                        </div>
+
+                        @if(trim($status) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Compliance differs in lower layers</span>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+
+
+                @endforeach
+
+            </form>
+
+        </div>
+
+
+
+        {{-- PCI MUlti --}}
+        @elseif($project->project_type==2)
+
+        <div class="row h-100 w-100 mb-2">
+
+            <form action="/add_mandatory_all_title_all_controls/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" method="POST">
+                @csrf
+
+                <!-- Top Row: Save Button & Headings -->
+                <div class="row align-items-center mb-3">
+                    <div class="col-md-5">
+                        <h5 class="fw-bold mb-0">Control Domains</h5>
+                    </div>
+                    <div class="col-md-3 text-start">
+                        <span class="fw-bold">Applicability</span>
+                    </div>
+                    <div class="col-md-3 text-start">
+                        <span class="fw-bold">Compliance Status</span>
+                    </div>
+                    <div class="col-md-1 text-end">
+                        <button class="btn btn-md btn-success px-4">Save</button>
+                    </div>
+                </div>
+
+                @foreach( [
+                1 => 'Install and Maintain Network Security Controls',
+                2 => 'Apply Secure Configurations to All System Components',
+                3 => 'Protect Stored Account Data',
+                4 => 'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                5 => 'Protect All Systems and Networks from Malicious Software',
+                6 => 'Develop and Maintain Secure Systems and Software',
+                7 => 'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                8 => 'Identify Users and Authenticate Access to System Components',
+                9 => 'Restrict Physical Access to Cardholder Data',
+                10 => 'Log and Monitor All Access to System Components and Cardholder Data',
+                11 => 'Test Security of Systems and Networks Regularly',
+                12 => 'Support Information Security with Organizational Policies and Programs',
+                'A1' => 'Additional PCI DSS Requirements for Multi-Tenant Service Providers',
+                'A2' => 'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
+                ] as $title => $label)
+
+                @php
+                $status = $finalStatusByTitle->get($title);
+                $applicability = $finalApplicabilityByTitle->get($title);
+                @endphp
+
+                <div class="row mb-3 align-items-start">
+                    <div class="col-md-5">
+                        <a href="/ksa_nca_section_2_2/{{ $title }}/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" class="btn btn-lg btn-warning w-100 text-start fw-bold">
+                            {{ $title }}. {{ $label }}
+                        </a>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="hidden" name="titles[]" value="{{ $title }}">
+
+                        <select name="applicabilities[]" class="form-select rounded-pill applicability-select" data-index="{{ $loop->index }}">
+                            <option value="">Select --</option>
+                            <option value="yes" {{ old('applicabilities.' . $loop->index, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
+                            <option value="no" {{ old('applicabilities.' . $loop->index, $applicability) === 'no' ? 'selected' : '' }}>No</option>
+                        </select>
+
+                        @if(trim($applicability) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Applicability differs in lower layers</span>
+                        </div>
+                        @endif
+
+                        <!-- Justification Field (hidden by default, shown via JS) -->
+                        <textarea name="justifications[]" class="form-control mt-2 justification-textarea justification-{{ $loop->index }}" style="display: {{ (old('applicabilities.' . $loop->index, $applicability) === 'no') ? 'block' : 'none' }};" placeholder="Enter justification">{{ old('justifications.' . $loop->index) }}</textarea>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <select name="comp_statuses[]" class="form-select rounded-pill w-100">
+                                <option value="">Select --</option>
+                                @foreach([
+                                'yes' => 'In Place',
+                                'no' => 'Not in Place',
+                                'not_applicable' => 'Not Applicable',
+                                'not_tested' => 'Not Tested',
+                                'partial' => 'Partial'
+                                ] as $value => $labelOption)
+                                <option value="{{ $value }}" {{ old('comp_statuses.' . $loop->index, $status !== 'different' ? $status : '') === $value ? 'selected' : '' }}>
+                                    {{ $labelOption }}
+                                </option>
+                                @endforeach
+                            </select>
+
+                            <a class="btn btn-sm btn-primary" style="min-width:100px;" href="#">
+                                AI Input
+                            </a>
+                        </div>
+
+                        @if(trim($status) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Compliance differs in lower layers</span>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+
+
+                @endforeach
+
+            </form>
+
+        </div>
+
+
+
+        {{-- PCI Merchant --}}
+        @elseif($project->project_type==3)
+
+        <div class="row h-100 w-100 mb-2">
+
+            <form action="/add_mandatory_all_title_all_controls/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" method="POST">
+                @csrf
+                <div class="row align-items-center mb-3">
+                    <div class="col-md-5">
+                        <h5 class="fw-bold mb-0">Control Domains</h5>
+                    </div>
+                    <div class="col-md-3 text-start">
+                        <span class="fw-bold">Applicability</span>
+                    </div>
+                    <div class="col-md-3 text-start">
+                        <span class="fw-bold">Compliance Status</span>
+                    </div>
+                    <div class="col-md-1 text-end">
+                        <button class="btn btn-md btn-success px-4">Save</button>
+                    </div>
+                </div>
+
+                @foreach([
+                1 => 'Install and Maintain Network Security Controls',
+                2 => 'Apply Secure Configurations to All System Components',
+                3 => 'Protect Stored Account Data',
+                4 => 'Protect Cardholder Data with Strong Cryptography During Transmission Over Open, Public Networks',
+                5 => 'Protect All Systems and Networks from Malicious Software',
+                6 => 'Develop and Maintain Secure Systems and Software',
+                7 => 'Restrict Access to System Components and Cardholder Data by Business Need to Know',
+                8 => 'Identify Users and Authenticate Access to System Components',
+                9 => 'Restrict Physical Access to Cardholder Data',
+                10 => 'Log and Monitor All Access to System Components and Cardholder Data',
+                11 => 'Test Security of Systems and Networks Regularly',
+                12 => 'Support Information Security with Organizational Policies and Programs',
+                'A2' => 'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'] as $title => $label)
+
+                @php
+                $status = $finalStatusByTitle->get($title);
+                $applicability = $finalApplicabilityByTitle->get($title);
+                @endphp
+
+                <div class="row mb-3 align-items-start">
+                    <div class="col-md-5">
+                        <a href="/ksa_nca_section_2_2/{{ $title }}/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" class="btn btn-lg btn-warning w-100 text-start fw-bold">
+                            {{ $title }}. {{ $label }}
+                        </a>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="hidden" name="titles[]" value="{{ $title }}">
+
+                        <select name="applicabilities[]" class="form-select rounded-pill applicability-select" data-index="{{ $loop->index }}">
+                            <option value="">Select --</option>
+                            <option value="yes" {{ old('applicabilities.' . $loop->index, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
+                            <option value="no" {{ old('applicabilities.' . $loop->index, $applicability) === 'no' ? 'selected' : '' }}>No</option>
+                        </select>
+
+                        @if(trim($applicability) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Applicability differs in lower layers</span>
+                        </div>
+                        @endif
+
+                        <!-- Justification Field (hidden by default, shown via JS) -->
+                        <textarea name="justifications[]" class="form-control mt-2 justification-textarea justification-{{ $loop->index }}" style="display: {{ (old('applicabilities.' . $loop->index, $applicability) === 'no') ? 'block' : 'none' }};" placeholder="Enter justification">{{ old('justifications.' . $loop->index) }}</textarea>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <select name="comp_statuses[]" class="form-select rounded-pill w-100">
+                                <option value="">Select --</option>
+                                @foreach([
+                                'yes' => 'In Place',
+                                'no' => 'Not in Place',
+                                'not_applicable' => 'Not Applicable',
+                                'not_tested' => 'Not Tested',
+                                'partial' => 'Partial'
+                                ] as $value => $labelOption)
+                                <option value="{{ $value }}" {{ old('comp_statuses.' . $loop->index, $status !== 'different' ? $status : '') === $value ? 'selected' : '' }}>
+                                    {{ $labelOption }}
+                                </option>
+                                @endforeach
+                            </select>
+
+                            <a class="btn btn-sm btn-primary" style="min-width:100px;" href="#">
+                                AI Input
+                            </a>
+                        </div>
+
+                        @if(trim($status) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Compliance differs in lower layers</span>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+
+
+                @endforeach
+
+            </form>
+
+        </div>
+
+        {{-- SOC 2 Type 2 --}}
+        @elseif($project->project_type==19)
+
+        <div class="row h-100 w-100 mb-2">
+
+            <form action="/add_mandatory_all_title_all_controls/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" method="POST">
+                @csrf
+                <div class="row align-items-center mb-3">
+                    <div class="col-md-5">
+                        <h5 class="fw-bold mb-0">Control Domains</h5>
+                    </div>
+                    <div class="col-md-3 text-start">
+                        <span class="fw-bold">Applicability</span>
+                    </div>
+                    <div class="col-md-3 text-start">
+                        <span class="fw-bold">Compliance Status</span>
+                    </div>
+                    <div class="col-md-1 text-end">
+                        <button class="btn btn-md btn-success px-4">Save</button>
+                    </div>
+                </div>
+
+                @foreach([
+                1 => 'Asset Management',
+                2 => 'Availability',
+                3 => 'Change Management',
+                4 => 'Communications',
+                5 => 'Confidentiality',
+                6 => 'Data Classification',
+                7 => 'Fraud Management',
+                8 => 'Human Resource aspects of Trust Services',
+                9 => 'Information Assets Security Management Policy',
+                10 => 'Information Security Events Monitoring',
+                11 => 'Information Security Incident Management',
+                12 => 'Information Security Monitoring',
+                13 => 'IT Operational Anomalies Reporting',
+                14 => 'Logical and Physical Access Controls',
+                15 => 'Monitoring of Controls',
+                16 => 'Organization & Management',
+                17 => 'Risk Management',
+                18 => 'Vendor and Business Partner Risk Management',
+                19 => 'Vulnerability Management',
+                ] as $title => $label)
+
+                @php
+                $status = $finalStatusByTitle->get($title);
+                $applicability = $finalApplicabilityByTitle->get($title);
+                @endphp
+
+                <div class="row mb-3 align-items-start">
+                    <div class="col-md-5">
+                        <a href="/ksa_nca_section_2_2/{{ $title }}/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" class="btn btn-lg btn-warning w-100 text-start fw-bold">
+                            {{ $title }}. {{ $label }}
+                        </a>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="hidden" name="titles[]" value="{{ $title }}">
+
+                        <select name="applicabilities[]" class="form-select rounded-pill applicability-select" data-index="{{ $loop->index }}">
+                            <option value="">Select --</option>
+                            <option value="yes" {{ old('applicabilities.' . $loop->index, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
+                            <option value="no" {{ old('applicabilities.' . $loop->index, $applicability) === 'no' ? 'selected' : '' }}>No</option>
+                        </select>
+
+                        @if(trim($applicability) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Applicability differs in lower layers</span>
+                        </div>
+                        @endif
+
+                        <!-- Justification Field (hidden by default, shown via JS) -->
+                        <textarea name="justifications[]" class="form-control mt-2 justification-textarea justification-{{ $loop->index }}" style="display: {{ (old('applicabilities.' . $loop->index, $applicability) === 'no') ? 'block' : 'none' }};" placeholder="Enter justification">{{ old('justifications.' . $loop->index) }}</textarea>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <select name="comp_statuses[]" class="form-select rounded-pill w-100">
+                                <option value="">Select --</option>
+                                @foreach([
+                                'yes' => 'In Place',
+                                'no' => 'Not in Place',
+                                'not_applicable' => 'Not Applicable',
+                                'not_tested' => 'Not Tested',
+                                'partial' => 'Partial'
+                                ] as $value => $labelOption)
+                                <option value="{{ $value }}" {{ old('comp_statuses.' . $loop->index, $status !== 'different' ? $status : '') === $value ? 'selected' : '' }}>
+                                    {{ $labelOption }}
+                                </option>
+                                @endforeach
+                            </select>
+
+                            <a class="btn btn-sm btn-primary" style="min-width:100px;" href="#">
+                                AI Input
+                            </a>
+                        </div>
+
+                        @if(trim($status) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Compliance differs in lower layers</span>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+
+
+                @endforeach
+
+            </form>
+
+        </div>
+
+
+        {{-- COBIT 2019 --}}
+        @elseif($project->project_type==16)
+
+        <div class="row h-100 w-100 mb-2">
+
+            <form action="/add_mandatory_all_title_all_controls/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" method="POST">
+                @csrf
+                <div class="row align-items-center mb-3">
+                    <div class="col-md-5">
+                        <h5 class="fw-bold mb-0">Control Domains</h5>
+                    </div>
+                    <div class="col-md-3 text-start">
+                        <span class="fw-bold">Applicability</span>
+                    </div>
+                    <div class="col-md-3 text-start">
+                        <span class="fw-bold">Compliance Status</span>
+                    </div>
+                    <div class="col-md-1 text-end">
+                        <button class="btn btn-md btn-success px-4">Save</button>
+                    </div>
+                </div>
+
+                @foreach([
+                '1'=>'EDM',
+                '2'=>'APO',
+                '3'=>'BAI',
+                '4'=>'DSS',
+                '5'=>'MEA'
+
+                ] as $title => $label)
+
+                @php
+                $status = $finalStatusByTitle->get($title);
+                $applicability = $finalApplicabilityByTitle->get($title);
+                @endphp
+
+                <div class="row mb-3 align-items-start">
+                    <div class="col-md-5">
+                        <a href="/ksa_nca_section_2_2/{{ $title }}/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" class="btn btn-lg btn-warning w-100 text-start fw-bold">
+                            {{ $title }}. {{ $label }}
+                        </a>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="hidden" name="titles[]" value="{{ $title }}">
+
+                        <select name="applicabilities[]" class="form-select rounded-pill applicability-select" data-index="{{ $loop->index }}">
+                            <option value="">Select --</option>
+                            <option value="yes" {{ old('applicabilities.' . $loop->index, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
+                            <option value="no" {{ old('applicabilities.' . $loop->index, $applicability) === 'no' ? 'selected' : '' }}>No</option>
+                        </select>
+
+                        @if(trim($applicability) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Applicability differs in lower layers</span>
+                        </div>
+                        @endif
+
+                        <!-- Justification Field (hidden by default, shown via JS) -->
+                        <textarea name="justifications[]" class="form-control mt-2 justification-textarea justification-{{ $loop->index }}" style="display: {{ (old('applicabilities.' . $loop->index, $applicability) === 'no') ? 'block' : 'none' }};" placeholder="Enter justification">{{ old('justifications.' . $loop->index) }}</textarea>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <select name="comp_statuses[]" class="form-select rounded-pill w-100">
+                                <option value="">Select --</option>
+                                @foreach([
+                                'yes' => 'In Place',
+                                'no' => 'Not in Place',
+                                'not_applicable' => 'Not Applicable',
+                                'not_tested' => 'Not Tested',
+                                'partial' => 'Partial'
+                                ] as $value => $labelOption)
+                                <option value="{{ $value }}" {{ old('comp_statuses.' . $loop->index, $status !== 'different' ? $status : '') === $value ? 'selected' : '' }}>
+                                    {{ $labelOption }}
+                                </option>
+                                @endforeach
+                            </select>
+
+                            <a class="btn btn-sm btn-primary" style="min-width:100px;" href="#">
+                                AI Input
+                            </a>
+                        </div>
+
+                        @if(trim($status) === 'different')
+                        <div class="mt-1">
+                            <span class="badge bg-secondary fs-6">Compliance differs in lower layers</span>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+
+
+                @endforeach
+
+            </form>
+
+        </div>
+
         @endif
     </div>
 

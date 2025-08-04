@@ -47,7 +47,7 @@ return [
         11 => 'Test Security of Systems and Networks Regularly',
         12 => 'Support Information Security with Organizational Policies and Programs',
         'A1' => 'Additional PCI DSS Requirements for Multi-Tenant Service Providers',
-        'A2' => 'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections',
+        'A2' => 'Additional PCI DSS Requirements for Entities Using SSL/Early TLS for Card-Present POS POI Terminal Connections'
     ],
 
     /*
@@ -400,5 +400,15 @@ return [
         18 => 'Vendor and Business Partner Risk Management',
         19 => 'Vulnerability Management',
     ],
+
+    // COBIT 2019
+    16=>[
+        '1'=>'EDM',
+        '2'=>'APO',
+        '3'=>'BAI',
+        '4'=>'DSS',
+        '5'=>'MEA'
+
+    ]
 
 ];
