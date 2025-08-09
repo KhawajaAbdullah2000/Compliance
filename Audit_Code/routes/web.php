@@ -37,6 +37,7 @@ use App\Http\Controllers\SBP_ETGRMF;
 use App\Http\Controllers\v3_2_s2_Controller;
 use App\Http\Controllers\v3_2_s3_Controller;
 use App\Http\Controllers\v3_2_s4_Controller;
+use App\Models\IsoSec21;
 use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -480,20 +481,28 @@ route::put('submit_edit_sec2_4_a8/{control_num}/{asset_id}/{proj_id}/{user_id}',
 route::get('iso_section2_1/{proj_id}/{user_id}/{page_type}',[IsoSec2_1::class,'iso_section2_1'])->name('iso_section2_1');
 route::get('iso_section2_3/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_section2_3'])->name('iso_section2_3');
 route::get('risk_treatment/{proj_id}/{user_id}',[IsoSec2_1::class,'risk_treatment'])->name('risk_treatment');
-
+route::get('asset_catalog_2_1_edit/{id}/{org_id}/{user_id}',[IsoSec2_1::class,'asset_catalog_2_1_edit']);
+route::get("org_services_register/{org_id}",[IsoSec2_1::class,'org_services_register'])->name('org_services_register');
+route::get('service_register_new_form/{org_id}/{user_id}',[IsoSec2_1::class,'service_register_new_form']);
+route::post('new_service_register_2_1_submit/{org_id}/{user_id}',[IsoSec2_1::class,'new_service_register_2_1_submit']);
 route::post('new_iso_sec_2_1/{proj_id}/{user_id}',[IsoSec2_1::class,'new_iso_sec_2_1']);
 route::get('iso_sec_2_1_new/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_new']);
 route::get('iso_sec_2_1_edit/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_edit']);
 route::put('iso_sec_2_1_submit_edit/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_submit_edit']);
+route::Put('iso_sec_2_1_asset_catalog_submit_edit/{asset_id}/{org_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_asset_catalog_submit_edit']);
 route::get('iso_sec_2_1_delete/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_delete']);
+route::get('asset_catalog_2_1_delete/{asset_id}/{user_id}',[IsoSec2_1::class,'asset_catalog_2_1_delete']);
 Route::get('/get-asset-types/{category_id}', [IsoSec2_1::class, 'getAssetTypes']);
 
 //copy assets gage to open the services of the selected project
 route::get("copy_assets/{proj_id}/{user_id}",[IsoSec2_1::class,'ShowServices'])->name('services');
 //show asset groups of those services
 route::post('show_groups',[IsoSec2_1::class,'ShowGroups'])->name('show_groups');
+route::Post('copy_from_service_register_submit/{org_id}',[IsoSec2_1::class,'copy_from_service_register_submit']);
 route::post('copy_groups/{proj_id}/{user_id}/{proj_to_copy}/{servicename}',[IsoSec2_1::class,'CopyGroups']);
-//download exceltemplate
+
+
+route::get('assets_to_copy_from_register/{proj_id}/{org_id}',[IsoSec2_1::class,'assets_to_copy_from_register']);
 route::get('/download_asset_template',[IsoSec2_1::class,'download_asset_template'])->name('download_asset_template');
 route::post('upload_assets/{proj_id}/{user_id}',[IsoSec2_1::class,'upload_assets']);
 

@@ -8,10 +8,15 @@
 <section class="min-h-100">
     <div class="container py-5 h-100 ">
         <div class="row align-items-center h-100">
-            <!-- Left Section: Logo -->
             <div class="col-md-6 d-flex justify-content-center">
-   
-            <img src="" alt="" class="img-fluid rounded shadow-lg" style="max-width: 80%; height: auto;">
+          @role('end user')
+
+          <div class="">
+            <a href="/org_services_register/{{auth()->user()->organization->id}}" class="btn btn-md btn-warning">Service/Asset Register</a>
+          </div>
+
+
+          @endrole
                
             </div>
 

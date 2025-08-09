@@ -71,64 +71,7 @@ $permissions = json_decode($project_permissions);
     <div class="border p-3 mb-4" style="border: 1px solid #ccc; border-radius: 5px;background-color: #f3f3f3">
         <div class="row">
             <h5 class="fw-bold">Select to Hide Columns:</h5>
-            {{-- <div class="col-md-6">
-
-                    <div class="border p-3" style="border: 1px solid #ccc; border-radius: 5px;">
-                        <div class="d-flex flex-column">
-                            <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="toggleGroup"
-                                    data-column="1">
-                                <label class="form-check-label" for="toggleGroup">Asset Type</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="toggleAsset"
-                                    data-column="2">
-                                <label class="form-check-label" for="toggleAsset">Asset Subtype</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="toggleOwner"
-                                    data-column="4">
-                                <label class="form-check-label" for="toggleOwner">Owner Dept</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="togglePhysical"
-                                    data-column="5">
-                                <label class="form-check-label" for="togglePhysical">Physical Location</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="toggleLogical"
-                                    data-column="6">
-                                <label class="form-check-label" for="toggleLogical">Logical Location</label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="toggleServiceRiskOwner"
-                                    data-column="7">
-                                <label class="form-check-label" for="toggleServiceRiskOwner">Service Risk Owner</label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="toggleAssCompRiskOwner"
-                                    data-column="8">
-                                <label class="form-check-label" for="toggleAssCompRiskOwner">Asset Component Risk
-                                    Owner</label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="toggleServiceCustodian"
-                                    data-column="9">
-                                <label class="form-check-label" for="toggleServiceCustodian">Service Custodian</label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="toggleAssCompCustodian"
-                                    data-column="10">
-                                <label class="form-check-label" for="toggleAssCompCustodian">Asset Component
-                                    Custodian</label>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
+          
             <div class="col-md-6">
                 <div class="border p-3" style="border: 1px solid #ccc; border-radius: 5px;">
                     <div class="row">
@@ -179,13 +122,15 @@ $permissions = json_decode($project_permissions);
                 </div>
             </div>
 
+            
+
 
 
             @if ($org_projects->count() > 0 && in_array('Data Inputter', $permissions))
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <form action="/copy_assets/{{ $project_id }}/{{ auth()->user()->id }}" method="get" class="d-flex align-items-center">
                     <div class="form-group w-50">
-                        <label for="project_to_copy" class="form-label fw-semibold">Copy Service or Asset
+                        <label for="project_to_copy" class="form-label fw-semibold">Copy Assets
                             from</label>
                         <select class="form-select rounded-pill" name="project_to_copy">
                             @foreach ($org_projects as $proj)
@@ -203,7 +148,15 @@ $permissions = json_decode($project_permissions);
 
                 </form>
             </div>
+           
             @endif
+
+            <div class="col-md-2">
+                <p class="form-label fw-bold">Copy Assets from</p>
+                <a href="/assets_to_copy_from_register/{{$project_id}}/{{auth()->user()->organization->id}}" class="btn btn-warning">Service Register</a>
+       
+                
+            </div>
         </div>
     </div>
 

@@ -231,7 +231,7 @@ class IsoSec2_1 extends Controller
                     ->where('projects.project_id', $proj_id)->first();
 
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
-                if ($frameworkDetails['complianceFramework']->framework_name=='Default') {
+                if ($frameworkDetails['complianceFramework']->framework_name == 'Default') {
                     return view('risk_treatment.serviceslist', [
                         'data' => $data,
                         'project_id' => $checkpermission->project_id,
@@ -239,7 +239,7 @@ class IsoSec2_1 extends Controller
                         'project_permissions' => $checkpermission->project_permissions,
                         'project' => $project
                     ]);
-                }else{
+                } else {
                     dd("Risk treatment only configured for Default framework. Choose default framework in risk treatment to access risk treatment");
                 }
             }
@@ -492,6 +492,59 @@ class IsoSec2_1 extends Controller
         }
     }
 
+    public function asset_catalog_2_1_edit($asset_id, $org_id, $user_id)
+    {
+
+        if ($user_id == auth()->user()->id) {
+
+
+            $data = Db::table('asset_catalog')->where('id', $asset_id)->where('organization_id', $org_id)->first();
+
+
+            $OrganizationData = DB::table('organizations')->find($org_id);
+
+
+            $selectedCategories = DB::table('org_assets_categories')
+                ->join('global_asset_categories', 'org_assets_categories.asset_category_selected', 'global_asset_categories.asset_category_id')
+                ->where('org_assets_categories.org_id', auth()->user()->organization->id)
+                ->get();
+
+            $selected_type = Db::table('asset_catalog')->where('id', $asset_id)->where('organization_id', $org_id)->first();
+
+
+            $super = Db::table('users')->where('privilege_id', 1)->pluck('id')->toArray();
+
+            //superusers of that organization
+            $superusers_of_that_org = DB::table('superusers')->wherein('user_id', $super)
+                ->where('org_id', auth()->user()->org_id)->pluck('user_id')->toArray();
+
+
+            //organziatons of those superusers
+            $orgs = Db::table('users')->wherein('id', $superusers_of_that_org)->pluck('org_id')->toArray();
+
+            $users = User::where('privilege_id', 5)->wherein('org_id', $orgs)->get(['id', 'first_name', 'last_name']);
+
+            $departments = DB::table('departments')->where('org_id', auth()->user()->organization->id)
+                ->get();
+
+
+
+            return view('iso_sec_2_1.iso_sec_2_1_asset_catalog_edit', [
+                'data' => $data,
+                'OrganizationData' => $OrganizationData,
+                'selectedCategories' => $selectedCategories,
+                'selected_type' => $selected_type->name,
+                'selected_category' => $selected_type->g_name,
+                'users' => $users,
+                'departments' => $departments
+            ]);
+
+
+            return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+        }
+    }
+
+
     public function iso_sec_2_1_submit_edit(Request $req, $assessment_id, $proj_id, $user_id)
     {
 
@@ -577,6 +630,53 @@ class IsoSec2_1 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
+    public function iso_sec_2_1_asset_catalog_submit_edit($asset_id, $org_id, $user_id, Request $req)
+    {
+
+        $req->validate(
+            [
+                'c_name' => 'required',
+
+            ],
+            [
+                '*.required' => 'This field is required',
+
+            ]
+        );
+
+
+        if ($user_id == auth()->user()->id) {
+
+            try {
+
+                Db::table('asset_catalog')->where('id', $asset_id)->where('organization_id', $org_id)
+                    ->update([
+                        'g_name' => $req->g_name,
+                        'name' => $req->name,
+                        'c_name' => $req->c_name,
+                        'owner_dept' => $req->owner_dept,
+                        'physical_loc' => $req->physical_loc,
+                        'logical_loc' => $req->logical_loc,
+                        's_name' => $req->s_name,
+                        'last_edited_by' => $user_id,
+                        'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                        'service_risk_owner' => $req->service_risk_owner,
+                        'component_risk_owner' => $req->component_risk_owner,
+                        'service_custodian' => $req->service_custodian,
+                        'component_custodian' => $req->component_custodian
+                    ]);
+
+
+                return redirect()->route('org_services_register', ['org_id' => $org_id])
+                    ->with('success', 'Record Updated successfully');
+            } catch (\Exception $e) {
+                $error = $e->getMessage();
+                return redirect()->route('org_services_register', ['org_id' => $org_id])
+                    ->with('error', $error);
+            }
+        }
+    }
+
     public function iso_sec_2_1_delete($assessment_id, $proj_id, $user_id)
     {
         if ($user_id == auth()->user()->id) {
@@ -627,6 +727,15 @@ class IsoSec2_1 extends Controller
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+    }
+
+    public function asset_catalog_2_1_delete($asset_id, $user_id)
+    {
+        $asset = Db::table('asset_catalog')->where('id', $asset_id)
+            ->delete();
+
+        return redirect()->route('org_services_register', ['org_id' => auth()->user()->organization->id])
+            ->with('success', 'Record Deleted successfully');
     }
 
 
@@ -839,17 +948,15 @@ class IsoSec2_1 extends Controller
                     $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                         ->where('projects.project_id', $proj_id)->first();
 
-                    $services = DB::table('iso_sec_2_1')
+                    $assets = DB::table('iso_sec_2_1')
                         ->where('project_id', $req->query('project_to_copy'))
-                        ->select('s_name')
-                        ->distinct('s_name')
                         ->get();
 
                     $project_to_copy = Project::where('project_id', $req->query('project_to_copy'))->first();
 
 
                     return view('iso_sec_2_1.services_to_copy', [
-                        'services' => $services,
+                        'assets' => $assets,
                         'project' => $project,
                         'project_to_copy' => $project_to_copy
 
@@ -862,76 +969,14 @@ class IsoSec2_1 extends Controller
 
     public function ShowGroups(Request $request)
     {
-        // if ($user_id == auth()->user()->id) {
-        //     $checkpermission = Db::table('project_details')->select(
-        //         'project_types.id as type_id',
-        //         'project_details.project_code',
-        //         'project_details.project_permissions',
-        //         'projects.project_name',
-        //         'projects.project_id'
-        //     )
-        //         ->join('projects', 'project_details.project_code', 'projects.project_id')
-        //         ->join('project_types', 'projects.project_type', 'project_types.id')
-        //         ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-        //         ->first();
-        //     if ($checkpermission) {
-        //         $permissions = json_decode($checkpermission->project_permissions);
-        //         if (in_array('Data Inputter', $permissions)) {
 
-
-        //                 $project=Project::join('project_types','projects.project_type','project_types.id')
-        //                 ->where('projects.project_id',$proj_id)->first();
-
-
-        //                 $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_to_copy)->where('s_name',$servicename)
-        //             ->get();
-
-        //             try {
-        //                 foreach($assets as $ass){
-
-
-        //                 Db::table('iso_sec_2_1')->insert([
-        //                     'project_id' => $proj_id,
-        //                     'g_name' => $ass->g_name,
-        //                     'name' => $ass->name,
-        //                     'c_name' => $ass->c_name,
-        //                     'owner_dept' => $ass->owner_dept,
-        //                     'physical_loc' => $ass->physical_loc,
-        //                     'logical_loc' => $ass->logical_loc,
-        //                     's_name' => $ass->s_name,
-        //                     'last_edited_by' => $user_id,
-        //                     'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-        //                 ]);
-
-        //                 }
-
-        //             } catch (\Exception $e) {
-
-        //                 $error=$e->getCode();
-
-        //                 return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
-        //             ->with('error', $error);
-        //             }
-
-        //             return redirect()->route('iso_section2_1',[
-        //                 'proj_id'=>$proj_id,
-        //                 'user_id'=>auth()->user()->id
-
-        //             ])->with('success','Assets copied successfully');
-
-
-
-        //         }
-        //     }
-        // }
-        // return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
         $proj_id = $request->proj_id;
         $user_id = $request->user_id;
         $proj_to_copy = $request->proj_to_copy;
-        $services = $request->services; // Array of selected services
+        $assets = $request->assessment_ids; // Array of selected services
 
-        if (!$services || count($services) == 0) {
-            return redirect()->back()->with('error', 'No services selected.');
+        if (!$assets || count($assets) == 0) {
+            return redirect()->back()->with('error', 'No Assets selected.');
         }
 
         if ($user_id == auth()->user()->id) {
@@ -952,26 +997,28 @@ class IsoSec2_1 extends Controller
                 $permissions = json_decode($checkpermission->project_permissions);
                 if (in_array('Data Inputter', $permissions)) {
                     try {
-                        foreach ($services as $servicename) {
-                            $assets = DB::table('iso_sec_2_1')
+                        foreach ($assets as $asset) {
+                            $ass = DB::table('iso_sec_2_1')
                                 ->where('project_id', $proj_to_copy)
-                                ->where('s_name', $servicename)
-                                ->get();
+                                ->where('assessment_id', $asset)
+                                ->first();
 
-                            foreach ($assets as $ass) {
-                                DB::table('iso_sec_2_1')->insert([
-                                    'project_id' => $proj_id,
-                                    'g_name' => $ass->g_name,
-                                    'name' => $ass->name,
-                                    'c_name' => $ass->c_name,
-                                    'owner_dept' => $ass->owner_dept,
-                                    'physical_loc' => $ass->physical_loc,
-                                    'logical_loc' => $ass->logical_loc,
-                                    's_name' => $ass->s_name,
-                                    'last_edited_by' => $user_id,
-                                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-                                ]);
-                            }
+                            DB::table('iso_sec_2_1')->insert([
+                                'project_id' => $proj_id,
+                                'g_name' => $ass->g_name,
+                                'name' => $ass->name,
+                                'c_name' => $ass->c_name,
+                                'owner_dept' => $ass->owner_dept,
+                                'physical_loc' => $ass->physical_loc,
+                                'logical_loc' => $ass->logical_loc,
+                                's_name' => $ass->s_name,
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                                'service_risk_owner' => $ass->service_risk_owner,
+                                'component_risk_owner' => $ass->component_risk_owner,
+                                'service_custodian' => $ass->service_custodian,
+                                'component_custodian' => $ass->component_custodian
+                            ]);
                         }
                     } catch (\Exception $e) {
                         return redirect()->route('iso_section2_1', [
@@ -983,8 +1030,8 @@ class IsoSec2_1 extends Controller
                     return redirect()->route('iso_section2_1', [
                         'proj_id' => $proj_id,
                         'user_id' => auth()->user()->id,
-                        'page_type'=>'services_register'
-                    ])->with('success', 'Selected services copied successfully.');
+                        'page_type' => 'services_register'
+                    ])->with('success', 'Selected Assets copied successfully.');
                 }
             }
         }
@@ -992,74 +1039,115 @@ class IsoSec2_1 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-    // public function CopyGroups(Request $req,$proj_id,$user_id,$proj_to_copy,$servicename){
-    //     $req->validate([
-    //         'group_to_copy'=>'required'
-    //     ],[
-    //         'required'=>"Please select atleast one group"
-    //     ]);
+    public function copy_from_service_register_submit($org_id, Request $req)
+    {
+        $proj_to_copy = $req->proj_id;
+        $user_id = auth()->user()->id;
+
+        $assets = $req->ids; // Array of selected services
+
+        if (!$assets || count($assets) == 0) {
+            return redirect()->back()->with('error', 'No Assets selected.');
+        }
+
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = DB::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_to_copy)
+                ->where('assigned_enduser', $user_id)
+                ->first();
+
+            if ($checkpermission) {
+                $permissions = json_decode($checkpermission->project_permissions);
+                if (in_array('Data Inputter', $permissions)) {
+                    try {
+                        foreach ($assets as $asset) {
+                            $ass = DB::table('asset_catalog')
+                                ->where('id', $asset)
+                                ->first();
+
+                            DB::table('iso_sec_2_1')->insert([
+                                'project_id' => $proj_to_copy,
+                                'g_name' => $ass->g_name,
+                                'name' => $ass->name,
+                                'c_name' => $ass->c_name,
+                                'owner_dept' => $ass->owner_dept,
+                                'physical_loc' => $ass->physical_loc,
+                                'logical_loc' => $ass->logical_loc,
+                                's_name' => $ass->s_name,
+                                'last_edited_by' => $user_id,
+                                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                                'service_risk_owner' => $ass->service_risk_owner,
+                                'component_risk_owner' => $ass->component_risk_owner,
+                                'service_custodian' => $ass->service_custodian,
+                                'component_custodian' => $ass->component_custodian
+                            ]);
+                        }
+                    } catch (\Exception $e) {
+                        return redirect()->route('iso_section2_1', [
+                            'proj_id' => $proj_to_copy,
+                            'user_id' => $user_id
+                        ])->with('error', 'Error copying assets: ' . $e->getMessage());
+                    }
+
+                    return redirect()->route('iso_section2_1', [
+                        'proj_id' => $proj_to_copy,
+                        'user_id' => auth()->user()->id,
+                        'page_type' => 'services_register'
+                    ])->with('success', 'Selected Assets copied successfully.');
+                }
+            }
+        }
+
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+    }
+
+    public function assets_to_copy_from_register($proj_id, $org_id)
+    {
+
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', auth()->user()->id)
+            ->first();
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+            if (in_array('Data Inputter', $permissions)) {
 
 
-    //     if ($user_id == auth()->user()->id) {
-    //         $checkpermission = Db::table('project_details')->select(
-    //             'project_types.id as type_id',
-    //             'project_details.project_code',
-    //             'project_details.project_permissions',
-    //             'projects.project_name',
-    //             'projects.project_id'
-    //         )
-    //             ->join('projects', 'project_details.project_code', 'projects.project_id')
-    //             ->join('project_types', 'projects.project_type', 'project_types.id')
-    //             ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-    //             ->first();
-    //         if ($checkpermission) {
-    //             $permissions = json_decode($checkpermission->project_permissions);
-    //             if (in_array('Data Inputter', $permissions)) {
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+
+                $assets = DB::table('asset_catalog')
+                    ->where('organization_id', $org_id)
+                    ->get();
 
 
-    //                 $assets=Db::table('iso_sec_2_1')->where('project_id',$proj_to_copy)->where('s_name',$servicename)
-    //                 ->whereIn('g_name',$req->group_to_copy)->get();
+                return view('iso_sec_2_1.assets_from_asset_register_copy', [
+                    'assets' => $assets,
+                    'project' => $project,
 
-    //                 try {
-    //                     foreach($assets as $ass){
+                ]);
+            }
+        }
 
-
-    //                     Db::table('iso_sec_2_1')->insert([
-    //                         'project_id' => $proj_id,
-    //                         'g_name' => $ass->g_name,
-    //                         'name' => $ass->name,
-    //                         'c_name' => $ass->c_name,
-    //                         'owner_dept' => $ass->owner_dept,
-    //                         'physical_loc' => $ass->physical_loc,
-    //                         'logical_loc' => $ass->logical_loc,
-    //                         's_name' => $ass->s_name,
-    //                         'last_edited_by' => $user_id,
-    //                         'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-    //                     ]);
-
-    //                     }
-
-    //                 } catch (\Exception $e) {
-
-    //                     $error=$e->getCode();
-
-    //                     return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
-    //                 ->with('error', $error);
-    //                 }
-
-    //                 return redirect()->route('iso_section2_1',[
-    //                     'proj_id'=>$proj_id,
-    //                     'user_id'=>$user_id
-    //                 ])->with('success','Record Added successfully');
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+    }
 
 
-
-
-    //             }
-    //         }
-    //     }
-    //     return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
-    // }
     function getProjectFrameworkDetails($project)
     {
         $orgId = auth()->user()->organization->id;
@@ -1083,5 +1171,119 @@ class IsoSec2_1 extends Controller
             ->first();
 
         return compact('complianceFramework', 'risk_assessment_approach', 'framework_approach');
+    }
+
+    public function org_services_register($org_id)
+    {
+        $data = DB::table('asset_catalog')
+            ->join('users as editor', 'asset_catalog.last_edited_by', '=', 'editor.id')
+            ->leftJoin('users as service_owner', 'asset_catalog.service_risk_owner', '=', 'service_owner.id')
+            ->leftJoin('users as component_owner', 'asset_catalog.component_risk_owner', '=', 'component_owner.id')
+            ->leftJoin('users as service_custodian', 'asset_catalog.service_custodian', '=', 'service_custodian.id')
+            ->leftJoin('users as component_custodian', 'asset_catalog.component_custodian', '=', 'component_custodian.id')
+            ->leftJoin('users as service_risk_owner', 'asset_catalog.service_risk_owner', '=', 'service_risk_owner.id')
+
+            ->select(
+                'asset_catalog.*',
+                DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+                DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+                DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+                DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+                DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+                DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+            )
+            ->where('organization_id', $org_id)
+            ->get();
+
+        $organizationData = DB::table("organizations")->where('id', $org_id)->first();
+
+
+
+        return view('iso_sec_2_1.service_register', [
+            'data' => $data,
+            'organizationData' => $organizationData
+
+        ]);
+    }
+
+    public function service_register_new_form($org_id, $user_id)
+    {
+
+        $selectedCategories = DB::table('org_assets_categories')
+            ->join('global_asset_categories', 'org_assets_categories.asset_category_selected', 'global_asset_categories.asset_category_id')
+            ->where('org_assets_categories.org_id', $org_id)
+            ->get();
+
+        $super = Db::table('users')->where('privilege_id', 1)->pluck('id')->toArray();
+
+        //superusers of that organization
+        $superusers_of_that_org = DB::table('superusers')->wherein('user_id', $super)
+            ->where('org_id', auth()->user()->org_id)->pluck('user_id')->toArray();
+
+
+        //organziatons of those superusers
+        $orgs = Db::table('users')->wherein('id', $superusers_of_that_org)->pluck('org_id')->toArray();
+
+        $users = User::where('privilege_id', 5)->wherein('org_id', $orgs)->get(['id', 'first_name', 'last_name']);
+
+        $departments = DB::table('departments')->where('org_id', auth()->user()->organization->id)
+            ->get();
+
+
+        return view('iso_sec_2_1.service_register_new', [
+
+            'selectedCategories' => $selectedCategories,
+            'users' => $users,
+            'departments' => $departments
+
+        ]);
+    }
+
+    public function new_service_register_2_1_submit($org_id, $user_id, Request $req)
+    {
+        $req->validate(
+            [
+                'c_name' => 'required|array|min:1',
+                'c_name.*' => 'required|string|max:255'
+            ],
+            [
+                '*.required' => 'This field is required',
+                'c_name.min' => 'You must add at least one component.',
+                'c_name.*.required' => 'Need atleast 1 component',
+
+            ]
+        );
+
+        try {
+
+            foreach ($req->c_name as $component) {
+
+                $assessment_id = Db::table('asset_catalog')->insertGetId([
+                    'organization_id' => $org_id,
+                    'g_name' => $req->g_name,
+                    'name' => $req->name,
+                    'c_name' => $component,
+                    'owner_dept' => $req->owner_dept,
+                    'physical_loc' => $req->physical_loc,
+                    'logical_loc' => $req->logical_loc,
+                    's_name' => $req->s_name,
+                    'last_edited_by' => $user_id,
+                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'service_risk_owner' => $req->service_risk_owner,
+                    'component_risk_owner' => $req->component_risk_owner,
+                    'service_custodian' => $req->service_custodian,
+                    'component_custodian' => $req->component_custodian
+                ]);
+            }
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+
+            return redirect()->route('org_services_register', ['org_id' => $org_id])
+                ->with('error', $error);
+        }
+
+
+        return redirect()->route('org_services_register', ['org_id' => $org_id])
+            ->with('success', 'Record Added successfully');
     }
 }

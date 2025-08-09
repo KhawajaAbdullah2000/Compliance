@@ -136,14 +136,13 @@
     </div>
 
    
-    <h3>Project Name from where Services and its Assets will be copied: {{$project_to_copy->project_name}}</h3>
+    <h3>Copy from Service Register</h3>
    
 
-    <form action="{{ route('show_groups') }}" method="POST">
+    <form action="/copy_from_service_register_submit/{{auth()->user()->organization->id}}" method="POST">
         @csrf
         <input type="hidden" name="proj_id" value="{{ $project->project_id }}">
         <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-        <input type="hidden" name="proj_to_copy" value="{{ $project_to_copy->project_id }}">
 
         <table class="table table-info table-responsive">
             <thead>
@@ -159,7 +158,7 @@
                     @foreach ($assets as $ser)
                         <tr>
                             <td>
-                                <input type="checkbox" name="assessment_ids[]" value="{{ $ser->assessment_id }}" class="service-checkbox">
+                                <input type="checkbox" name="ids[]" value="{{ $ser->id }}" class="service-checkbox">
                             </td>
                             <td>{{ $ser->c_name }}</td>
                         </tr>
