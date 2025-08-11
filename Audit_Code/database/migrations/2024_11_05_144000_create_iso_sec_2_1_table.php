@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('name', 100)->nullable();
             $table->string('c_name', 100);
             $table->string('s_name', 100)->nullable();
-            $table->string('owner_dept', 300);
+            $table->string('owner_dept', 300)->nullable();
             $table->string('physical_loc', 300)->nullable();
             $table->string('logical_loc', 300)->nullable();
             $table->integer('risk_confidentiality')->default(10);

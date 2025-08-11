@@ -1281,6 +1281,7 @@ class IsoSec2_1 extends Controller
         } catch (\Exception $e) {
             $error = $e->getMessage();
 
+          
             return redirect()->route('org_services_register', ['org_id' => $org_id])
                 ->with('error', $error);
         }

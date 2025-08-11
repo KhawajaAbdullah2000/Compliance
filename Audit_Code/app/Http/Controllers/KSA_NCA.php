@@ -389,8 +389,8 @@ class KSA_NCA extends Controller
             if ($checkpermission) {
 
 
-                $attachedIds=[];
-                $record=null;
+                $attachedIds = [];
+                $record = null;
 
                 $result = Db::table('iso_sec_2_2')->join('users', 'iso_sec_2_2.last_edited_by', 'users.id')
                     ->where('project_id', $proj_id)->where('sub_req', $sub_req)->where('asset_id', $asset_id)
@@ -697,7 +697,6 @@ class KSA_NCA extends Controller
                             $targets = array_map('json_decode', $targets, array_fill(0, count($targets), true));
                         }
 
-                        
 
 
                         $affectedIds = [];
@@ -721,7 +720,7 @@ class KSA_NCA extends Controller
                         // 4) Only touch attachments if the field was present in the request
                         //    (so you can distinguish "no changes" vs "clear all")
                         if ($req->has('document_ids')) {
-                        
+
                             // Clear ALL previous links for all affected rows
                             if (!empty($affectedIds)) {
                                 DB::table('iso_sec_2_2_attachments')
@@ -753,8 +752,6 @@ class KSA_NCA extends Controller
 
 
                                 DB::table('iso_sec_2_2_attachments')->insert($rows);
-
-                                
                             }
                         }
 
@@ -884,83 +881,190 @@ class KSA_NCA extends Controller
 
 
 
-                    foreach ($assets as $ass) {
-                        if ($req->action == 2) {
+                    // foreach ($assets as $ass) {
+                    //     if ($req->action == 2) {
 
-                            $data2 = Excel::toArray([], $filepath); //with header
-                            $rows = array_slice($data2[0], 1); //without header(first row)
+                    //         $data2 = Excel::toArray([], $filepath); //with header
+                    //         $rows = array_slice($data2[0], 1); //without header(first row)
 
-                            //all controls in this domain
-                            $filteredData = collect($rows)->filter(function ($row) use ($req) {
-                                return strval($row[2]) === $req->subdomain;
-                            })->values()->all();
-
-
-                            foreach ($filteredData as $innerArray) {
-                                // Access specific value from the inner array
-                                $fetch_sub_req = $innerArray['4'];
-                                $fetch_title = $innerArray['0'];
-                                $subdomain = $innerArray['2'];
+                    //         //all controls in this domain
+                    //         $filteredData = collect($rows)->filter(function ($row) use ($req) {
+                    //             return strval($row[2]) === $req->subdomain;
+                    //         })->values()->all();
 
 
-                                DB::table('iso_sec_2_2')->updateOrInsert(
-                                    [
-                                        'project_id' => $proj_id,
-                                        'asset_id' => $ass->assessment_id,
-                                        'title_num' => $fetch_title,
-                                        'sub_req' => $fetch_sub_req,
-                                        'subdomain' => $subdomain
-                                    ],
-                                    $data
-                                );
-                            }
+                    //         foreach ($filteredData as $innerArray) {
+                    //             // Access specific value from the inner array
+                    //             $fetch_sub_req = $innerArray['4'];
+                    //             $fetch_title = $innerArray['0'];
+                    //             $subdomain = $innerArray['2'];
+
+
+                    //             DB::table('iso_sec_2_2')->updateOrInsert(
+                    //                 [
+                    //                     'project_id' => $proj_id,
+                    //                     'asset_id' => $ass->assessment_id,
+                    //                     'title_num' => $fetch_title,
+                    //                     'sub_req' => $fetch_sub_req,
+                    //                     'subdomain' => $subdomain
+                    //                 ],
+                    //                 $data
+                    //             );
+                    //         }
+                    //     }
+
+                    //     if ($req->action == 3) {
+                    //         //all controls in all  domains
+
+                    //         $data2 = Excel::toArray([], $filepath); //with header
+                    //         $rows = array_slice($data2[0], 1); //without header(first row)
+
+                    //         $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                    //             return strval($row[0]) === $title;
+                    //         })->values()->all();
+
+
+                    //         foreach ($filteredData as $innerArray) {
+
+                    //             // Access specific value from the inner array
+                    //             $fetch_title = $innerArray['0'];
+                    //             $fetch_sub_req = $innerArray['4'];
+                    //             $subdomain = $innerArray['2'];
+
+                    //             DB::table('iso_sec_2_2')->updateOrInsert(
+                    //                 [
+                    //                     'project_id' => $proj_id,
+                    //                     'asset_id' => $ass->assessment_id,
+                    //                     'sub_req' => $fetch_sub_req,
+                    //                     'title_num' => $fetch_title,
+                    //                     'subdomain' => $subdomain
+
+                    //                 ],
+                    //                 $data
+                    //             );
+                    //         }
+                    //     }
+
+                    //     if ($req->action == 1) {
+
+                    //         DB::table('iso_sec_2_2')->updateOrInsert(
+                    //             [
+                    //                 'project_id' => $proj_id,
+                    //                 'asset_id' => $ass->assessment_id,
+                    //                 'title_num' => $title,
+                    //                 'sub_req' => $sub_req,
+                    //                 'subdomain' => $req->subdomain
+
+                    //             ],
+                    //             $data
+                    //         );
+                    //     }
+                    // }
+
+                    $excel = \Maatwebsite\Excel\Facades\Excel::toArray([], $filepath);
+                    $rows  = array_slice($excel[0], 1); // drop header
+
+                    // ----- Build all targets across all selected assets -----
+                    $targets = [];
+
+                    if ((int) $req->action === 1) {
+                        // one control per asset
+                        foreach ($assets as $ass) {
+                            $targets[] = [
+                                'project_id' => $proj_id,
+                                'asset_id'   => $ass->assessment_id,
+                                'title_num'  => $title,
+                                'sub_req'    => $sub_req,
+                                'subdomain'  => $req->subdomain,
+                            ];
                         }
+                    }
 
-                        if ($req->action == 3) {
-                            //all controls in all  domains
-
-                            $data2 = Excel::toArray([], $filepath); //with header
-                            $rows = array_slice($data2[0], 1); //without header(first row)
-
-                            $filteredData = collect($rows)->filter(function ($row) use ($title) {
-                                return strval($row[0]) === $title;
-                            })->values()->all();
-
-
-                            foreach ($filteredData as $innerArray) {
-
-                                // Access specific value from the inner array
-                                $fetch_title = $innerArray['0'];
-                                $fetch_sub_req = $innerArray['4'];
-                                $subdomain = $innerArray['2'];
-
-                                DB::table('iso_sec_2_2')->updateOrInsert(
-                                    [
-                                        'project_id' => $proj_id,
-                                        'asset_id' => $ass->assessment_id,
-                                        'sub_req' => $fetch_sub_req,
-                                        'title_num' => $fetch_title,
-                                        'subdomain' => $subdomain
-
-                                    ],
-                                    $data
-                                );
-                            }
-                        }
-
-                        if ($req->action == 1) {
-
-                            DB::table('iso_sec_2_2')->updateOrInsert(
-                                [
+                    if ((int) $req->action === 2) {
+                        // all controls in this subdomain, for every asset
+                        $filtered = array_values(array_filter($rows, fn($r) => (string) $r[2] === (string) $req->subdomain));
+                        foreach ($assets as $ass) {
+                            foreach ($filtered as $r) {
+                                $targets[] = [
                                     'project_id' => $proj_id,
-                                    'asset_id' => $ass->assessment_id,
-                                    'title_num' => $title,
-                                    'sub_req' => $sub_req,
-                                    'subdomain' => $req->subdomain
+                                    'asset_id'   => $ass->assessment_id,
+                                    'title_num'  => $r[0],
+                                    'sub_req'    => $r[4],
+                                    'subdomain'  => $r[2],
+                                ];
+                            }
+                        }
+                    }
 
-                                ],
-                                $data
-                            );
+                    if ((int) $req->action === 3) {
+                        // all controls in this title, for every asset
+                        $filtered = array_values(array_filter($rows, fn($r) => (string) $r[0] === (string) $title));
+                        foreach ($assets as $ass) {
+                            foreach ($filtered as $r) {
+                                $targets[] = [
+                                    'project_id' => $proj_id,
+                                    'asset_id'   => $ass->assessment_id,
+                                    'title_num'  => $r[0],
+                                    'sub_req'    => $r[4],
+                                    'subdomain'  => $r[2],
+                                ];
+                            }
+                        }
+                    }
+
+                    // ----- De-duplicate targets (avoid double upserts) -----
+                    if (!empty($targets)) {
+                        $targets = array_values(array_unique(array_map('json_encode', $targets)));
+                        $targets = array_map('json_decode', $targets, array_fill(0, count($targets), true));
+                    }
+
+                    // ----- Upsert all targets, collect ALL assessment_ids -----
+                    $affectedIds = [];
+
+                    foreach ($targets as $attrs) {
+                        $existing = DB::table('iso_sec_2_2')->where($attrs)->first();
+
+                        if ($existing) {
+                            DB::table('iso_sec_2_2')
+                                ->where('assessment_id', $existing->assessment_id)
+                                ->update($data);
+
+                            $affectedIds[] = (int) $existing->assessment_id;
+                        } else {
+                            $newId = (int) DB::table('iso_sec_2_2')->insertGetId(array_merge($attrs, $data));
+                            $affectedIds[] = $newId;
+                        }
+                    }
+
+                    $affectedIds = array_values(array_unique($affectedIds));
+
+                    // ----- Sync attachments for ALL affected rows (only if field present) -----
+                    if ($req->has('document_ids')) {
+                        if (!empty($affectedIds)) {
+                            DB::table('iso_sec_2_2_attachments')
+                                ->whereIn('iso_sec_2_2_id', $affectedIds)
+                                ->delete();
+                        }
+
+                        if (!empty($validDocIds) && !empty($affectedIds)) {
+                            $now  = \Carbon\Carbon::now();
+                            $rows = [];
+
+                            foreach ($affectedIds as $id) {
+                                foreach ($validDocIds as $docId) {
+                                    $rows[] = [
+                                        'iso_sec_2_2_id' => $id,
+                                        'document_id'    => $docId,
+                                        'last_edited_by' => $user_id,
+                                        'last_edited_at' => $now,
+                                        // add these if your pivot has timestamps:
+                                        // 'created_at' => $now,
+                                        // 'updated_at' => $now,
+                                    ];
+                                }
+                            }
+
+                            DB::table('iso_sec_2_2_attachments')->insert($rows);
                         }
                     }
                 }

@@ -107,7 +107,7 @@ $isApprover=in_array('Data Approver', $permissions);
                     </div>
 
                     <!-- Attachment -->
-                    {{-- <div class="mb-4">
+                     <div class="mb-4">
                             <label for="attachment" class="form-label fw-semibold">Attachment (Optional)</label>
                             @if($isEditable)
                                 <input type="file" name="attachment" class="form-control">
@@ -117,7 +117,7 @@ $isApprover=in_array('Data Approver', $permissions);
                                     <a href="{{ asset('ksa_nca_sec_2_2/'.$result->attachment) }}" download>{{ $result->attachment }}</a>
                     </p>
                     @endif
-            </div> --}}
+            </div> 
 
             <div class="mb-4">
                 <label class="form-label fw-semibold d-flex align-items-center">

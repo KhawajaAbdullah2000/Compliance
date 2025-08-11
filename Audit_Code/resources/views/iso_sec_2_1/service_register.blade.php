@@ -62,6 +62,31 @@
 
 </div>
 
+{{-- @section('scripts') --}}
+{{-- @if (Session::has('success'))
+<script>
+    swal({
+        title: "{{ Session::get('success') }}"
+        , icon: "success"
+        , closeOnClickOutside: true
+        , timer: 3000
+    , });
+
+</script>
+@endif
+
+@if (Session::has('error'))
+<script>
+    swal({
+        title: "{{ Session::get('error') }}"
+        , icon: "error"
+        , closeOnClickOutside: true
+        , timer: 6000
+    , });
+
+</script>
+@endif --}}
+
 @section('scripts')
 @if (Session::has('success'))
 <script>
@@ -86,6 +111,181 @@
 
 </script>
 @endif
+
+<script>
+    document.getElementById('fileLabel').addEventListener('click', function() {
+        document.getElementById('file').click();
+    });
+
+    function displayFileName(input) {
+        var fileNameElement = document.getElementById('fileName');
+        fileNameElement.innerHTML = input.files[0].name;
+    }
+
+</script>
+
+<script>
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable2");
+        switching = true;
+        // Set the sorting direction to ascending:
+        dir = "asc";
+        /* Make a loop that will continue until
+        no switching has been done: */
+        while (switching) {
+            // Start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /* Loop through all table rows (except the
+            first, which contains table headers): */
+            for (i = 1; i < (rows.length - 1); i++) {
+                // Start by saying there should be no switching:
+                shouldSwitch = false;
+                /* Get the two elements you want to compare,
+                one from current row and one from the next: */
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                /* Check if the two rows should switch place,
+                based on the direction, asc or desc: */
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /* If a switch has been marked, make the switch
+                and mark that a switch has been done: */
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                // Each time a switch is done, increase this count by 1:
+                switchcount++;
+            } else {
+                /* If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again. */
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+
+</script>
+
+<script>
+    $(document).ready(function() {
+        function filterRows() {
+            var selectedService = $('#s_name').val();
+            var selectedGroup = $('#g_name').val();
+            var selectedName = $('#name').val();
+            var selectedComponent = $('#c_name').val();
+
+
+            $('.service-row').each(function() {
+                var service = $(this).data('service');
+                var group = $(this).data('group');
+                var name = $(this).data('name');
+                var c_name = $(this).data('c_name');
+                var showRow = true;
+
+                // Check if the row matches the selected service (if any)
+                if (selectedService && service !== selectedService) {
+                    showRow = false;
+                }
+
+                // Check if the row matches the selected group (if any)
+                if (selectedGroup && group !== selectedGroup) {
+                    showRow = false;
+                }
+
+                if (selectedName && name !== selectedName) {
+                    showRow = false;
+                }
+
+                if (selectedComponent && c_name !== selectedComponent) {
+                    showRow = false;
+                }
+
+
+                // Show or hide the row based on the above conditions
+                if (showRow) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+
+        // Listen for changes in the service filter
+        $('#s_name').on('change', function() {
+            filterRows();
+        });
+
+        // Listen for changes in the group filter
+        $('#g_name').on('change', function() {
+            filterRows();
+        });
+
+        $('#name').on('change', function() {
+            filterRows();
+        });
+
+        $('#c_name').on('change', function() {
+            filterRows();
+        });
+    });
+
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const table = document.getElementById('myTable2');
+        const checkboxes = document.querySelectorAll('.toggle-column');
+
+        // Function to toggle column visibility
+        function toggleColumn(column, isVisible) {
+            const display = isVisible ? '' : 'none';
+            for (let i = 0; i < table.rows.length; i++) {
+                table.rows[i].cells[column].style.display = display;
+            }
+        }
+
+        // Initialize column visibility based on saved state or default
+        checkboxes.forEach(function(checkbox) {
+            const column = checkbox.getAttribute('data-column');
+            const isVisible = localStorage.getItem(`column_${column}`) === 'false' ? false :
+                true; // Default to visible
+            checkbox.checked = !isVisible; // Checkbox unchecked by default for visible columns
+            toggleColumn(column, isVisible);
+        });
+
+        // Add event listener for each checkbox
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const column = this.getAttribute('data-column');
+                const isVisible = !this.checked; // Invert the checkbox state for visibility
+                toggleColumn(column, isVisible);
+
+                // Save state to localStorage
+                localStorage.setItem(`column_${column}`, isVisible);
+            });
+        });
+    });
+
+</script>
+
+
 
 @endsection
 
