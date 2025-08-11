@@ -694,6 +694,17 @@ thead.table-pointer {
     background: linear-gradient(135deg, #22c55e 0%, #06b6d4 100%);
 }
 
+.btn-comp-register{
+    background: linear-gradient(135deg, #f8809e 0%, #851b85 100%);
+}
+
+.btn-proj-register{
+    background: linear-gradient(135deg, #4f6307 0%, #6cb617 100%);
+}
+
+.btn-create-project{
+        background: linear-gradient(135deg, #ca3333 0%, #ee9e0a 100%);
+}
 /* green → cyan */
 .btn-tile .label {
     display: flex;
