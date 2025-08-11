@@ -8,7 +8,10 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\DocumentRepository;
 use App\Exports\AssetCategoryExport;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 
 class IsoSec2_1 extends Controller
@@ -1285,5 +1288,66 @@ class IsoSec2_1 extends Controller
 
         return redirect()->route('org_services_register', ['org_id' => $org_id])
             ->with('success', 'Record Added successfully');
+    }
+
+    public function org_doc_repo($org_id){
+         $organizationData = DB::table("organizations")->where('id', $org_id)->first();
+
+         $org_documents=DB::table('document_repository')->where("organization_id",$org_id)
+         ->get();
+         
+
+        return view('iso_sec_2_1.org_doc_repo', [
+            'organizationData' => $organizationData,
+            'org_documents'=>$org_documents
+
+        ]);
+    }
+
+    public function org_doc_repo_submit($org_id,Request $request){
+           
+        $request->validate([
+            'name'   => ['required','string','max:100'],
+            'type'   => ['nullable','string','max:100'],
+            'source' => ['nullable','string','max:100'],
+            'attachment'   => ['required','file','max:10240','mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png'],
+        ]);
+    
+         $folder = "org_documents_repo";
+
+        $file = $request->file('attachment');
+        $safeName = now()->format('Ymd_His') . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+        $ext = $file->getClientOriginalExtension();
+        $filename = $safeName . '.' . $ext;
+
+        // store to 'public' disk -> storage/app/public/...
+        $storedPath = $file->storeAs($folder, $filename, 'public'); // returns relative path
+
+        DocumentRepository::create([
+            'organization_id' => $org_id,
+            'name'            => $request->name,        
+            'type'            => $request->type,       
+            'source'          => $request->source,     
+            'path'            => $storedPath,          
+            'last_edited_by'  => auth()->user()->id,
+            'last_edited_at'  => now(),
+        ]);
+
+        return back()->with('success', 'Document saved successfully.');
+    }
+
+    public function delete_org_doc_repo($doc_id){
+         $doc = DocumentRepository::findOrFail($doc_id);
+
+    // Delete the physical file if it exists
+    if ($doc->path && Storage::disk('public')->exists($doc->path)) {
+        Storage::disk('public')->delete($doc->path);
+    }
+
+    // Delete the record from the database
+    $doc->delete();
+
+    // Redirect back with success message
+    return back()->with('success', 'Document deleted successfully.');
     }
 }

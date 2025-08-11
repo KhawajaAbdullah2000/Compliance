@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use APP\Models\User;
+use APP\Models\DocumentRepository;
+use App\Models\IsoSec22;
 
 class KSA_NCA extends Controller
 {
@@ -369,8 +371,10 @@ class KSA_NCA extends Controller
 
     public function ksa_nca_sec2_2_sub_req_edit(Request $req, $sub_req, $title, $proj_id, $user_id, $asset_id, ?string $main_req = null)
     {
+        //
 
         if ($user_id == auth()->user()->id) {
+
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
                 'project_details.project_code',
@@ -385,12 +389,22 @@ class KSA_NCA extends Controller
             if ($checkpermission) {
 
 
+                $attachedIds=[];
+                $record=null;
+
                 $result = Db::table('iso_sec_2_2')->join('users', 'iso_sec_2_2.last_edited_by', 'users.id')
                     ->where('project_id', $proj_id)->where('sub_req', $sub_req)->where('asset_id', $asset_id)
                     ->first();
+                if ($result != null) {
+                    $record = IsoSec22::find($result->assessment_id);
+                    if ($record != null) {
+                        $attachedIds = $record->documents()->pluck('document_repository.id')->toArray();
+                        //dd($attachedIds);
+                    }
+                }
 
 
-                //  dd($result);
+
 
 
                 if ($checkpermission->type_id == 7) {
@@ -487,6 +501,11 @@ class KSA_NCA extends Controller
 
 
 
+                $org_documents = DB::table('document_repository')->where('organization_id', auth()->user()->organization->id)
+                    ->orderByDesc('created_at')
+                    ->get();
+
+
                 return view('KSA_NCA.ksa_nca_sec_2_2_sub_reqs_form', [
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
@@ -498,7 +517,10 @@ class KSA_NCA extends Controller
                     'project' => $project,
                     'asset' => $asset,
                     'users' => $users,
-                    'subdomain' => $filteredData[0][2]
+                    'subdomain' => $filteredData[0][2],
+                    'org_documents' => $org_documents,
+                    'attachedIds' => $attachedIds,
+                    'record' => $record
                 ]);
             }
         }
@@ -510,6 +532,7 @@ class KSA_NCA extends Controller
         $req->validate([
             'comp_status' => 'required'
         ]);
+
 
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -604,90 +627,138 @@ class KSA_NCA extends Controller
                         $filepath = public_path('COBIT_2019.xlsx');
                     }
 
+                    $docIds = collect($req->input('document_ids', []))
+                        ->filter(fn($v) => $v !== null && $v !== '' && $v !== '0')
+                        ->map(fn($v) => (int) $v)
+                        ->filter(fn($v) => $v > 0)
+                        ->all();
+
+                    // (Optional) verify IDs exist
+                    $validDocIds = DB::table('document_repository')
+                        ->whereIn('id', $docIds)
+                        ->pluck('id')
+                        ->all();
 
 
+
+                    // 2) Build the target rows to upsert (you already do this; shown compactly)
                     if ($evidenceLevel == 'component') {
 
-                        if ($req->action == 2) {
+                        $targets = [];
 
-                            $data2 = Excel::toArray([], $filepath); //with header
-                            $rows = array_slice($data2[0], 1); //without header(first row)
+                        if ((int) $req->action === 1) {
+                            $targets[] = [
+                                'project_id' => $proj_id,
+                                'asset_id'   => $asset_id,
+                                'title_num'  => $title,
+                                'sub_req'    => $sub_req,
+                                'subdomain'  => $req->subdomain,
+                            ];
+                        }
 
-                            //all controls in this domain
-                            $filteredData = collect($rows)->filter(function ($row) use ($req) {
-                                return strval($row[2]) === $req->subdomain;
-                            })->values()->all();
-
-
-                            foreach ($filteredData as $innerArray) {
-                                // Access specific value from the inner array
-                                $fetch_title = $innerArray['0'];
-                                $subdomain = $innerArray['2'];
-                                $fetch_sub_req = $innerArray['4'];
-
-                                DB::table('iso_sec_2_2')->updateOrInsert(
-                                    [
+                        if ((int) $req->action === 2) {
+                            // all controls in this subdomain
+                            $data2 = \Maatwebsite\Excel\Facades\Excel::toArray([], $filepath);
+                            $rows  = array_slice($data2[0], 1); // drop header
+                            foreach ($rows as $r) {
+                                if ((string) $r[2] === (string) $req->subdomain) {
+                                    $targets[] = [
                                         'project_id' => $proj_id,
-                                        'asset_id' => $asset_id,
-                                        'title_num' => $fetch_title,
-                                        'sub_req' => $fetch_sub_req,
-                                        'subdomain' => $subdomain
-                                    ],
-                                    $data
-                                );
+                                        'asset_id'   => $asset_id,
+                                        'title_num'  => $r[0],
+                                        'sub_req'    => $r[4],
+                                        'subdomain'  => $r[2],
+                                    ];
+                                }
                             }
                         }
 
-                        if ($req->action == 3) {
-
-
-                            $data2 = Excel::toArray([], $filepath); //with header
-                            $rows = array_slice($data2[0], 1); //without header(first row)
-
-                            $filteredData = collect($rows)->filter(function ($row) use ($title) {
-                                return strval($row[0]) === $title;
-                            })->values()->all();
-
-
-                            //all controls in this domain
-
-                            foreach ($filteredData as $innerArray2) {
-                                // Access specific value from the inner array
-                                $fetch_sub_req = $innerArray2['4'];
-                                $fetch_title = $innerArray2['0'];
-                                $subdomain = $innerArray2['2'];
-
-                                DB::table('iso_sec_2_2')->updateOrInsert(
-                                    [
+                        if ((int) $req->action === 3) {
+                            // all controls in this title
+                            $data2 = \Maatwebsite\Excel\Facades\Excel::toArray([], $filepath);
+                            $rows  = array_slice($data2[0], 1); // drop header
+                            foreach ($rows as $r) {
+                                if ((string) $r[0] === (string) $title) {
+                                    $targets[] = [
                                         'project_id' => $proj_id,
-                                        'asset_id' => $asset_id,
-                                        'title_num' => $fetch_title,
-                                        'sub_req' => $fetch_sub_req,
-                                        'subdomain' => $subdomain
-                                    ],
-                                    $data
-                                );
+                                        'asset_id'   => $asset_id,
+                                        'title_num'  => $r[0],
+                                        'sub_req'    => $r[4],
+                                        'subdomain'  => $r[2],
+                                    ];
+                                }
                             }
                         }
 
-                        if ($req->action == 1) {
 
-                            // If evidence level is 'component', just insert or update for the specific asset
-                            DB::table('iso_sec_2_2')->updateOrInsert(
-                                [
-                                    'project_id' => $proj_id,
-                                    'asset_id' => $asset_id,
-                                    'title_num' => $title,
-                                    'sub_req' => $sub_req,
-                                    'subdomain' => $req->subdomain
-                                ],
-                                $data
-                            );
+                        // (optional) de-duplicate targets
+                        if (!empty($targets)) {
+                            $targets = array_values(array_unique(array_map('json_encode', $targets)));
+                            $targets = array_map('json_decode', $targets, array_fill(0, count($targets), true));
+                        }
+
+                        
+
+
+                        $affectedIds = [];
+
+                        foreach ($targets as $attrs) {
+                            $existing = DB::table('iso_sec_2_2')->where($attrs)->first();
+
+                            if ($existing) {
+                                DB::table('iso_sec_2_2')
+                                    ->where('assessment_id', $existing->assessment_id)
+                                    ->update($data);
+                                $affectedIds[] = (int) $existing->assessment_id;
+                            } else {
+                                $newId = (int) DB::table('iso_sec_2_2')->insertGetId(array_merge($attrs, $data));
+                                $affectedIds[] = $newId;
+                            }
+                        }
+
+                        $affectedIds = array_values(array_unique($affectedIds));
+
+                        // 4) Only touch attachments if the field was present in the request
+                        //    (so you can distinguish "no changes" vs "clear all")
+                        if ($req->has('document_ids')) {
+                        
+                            // Clear ALL previous links for all affected rows
+                            if (!empty($affectedIds)) {
+                                DB::table('iso_sec_2_2_attachments')
+                                    ->whereIn('iso_sec_2_2_id', $affectedIds)
+                                    ->delete();
+                            }
+
+
+
+                            // Insert new links (skip if none selected)
+                            if (!empty($validDocIds) && !empty($affectedIds)) {
+                                $now = \Carbon\Carbon::now();
+                                $rows = [];
+
+                                foreach ($affectedIds as $id) {
+                                    foreach ($validDocIds as $docId) {
+                                        $rows[] = [
+                                            'iso_sec_2_2_id' => $id,
+                                            'document_id'    => $docId,
+                                            'last_edited_by' => $user_id,
+                                            'last_edited_at' => $now,
+                                            // if your pivot has created_at/updated_at, add them:
+                                            // 'created_at' => $now,
+                                            // 'updated_at' => $now,
+                                        ];
+                                    }
+                                }
+
+
+
+                                DB::table('iso_sec_2_2_attachments')->insert($rows);
+
+                                
+                            }
                         }
 
 
-
-                        // Redirect after updating the specific asset
                         $mysessionreq = $req->session()->get('main_req_num');
                         return redirect()->route(
                             'ksa_nca_sec_2_2_req',
@@ -695,6 +766,99 @@ class KSA_NCA extends Controller
                         )
                             ->with('success', 'Record Updated Successfully');
                     }
+
+
+
+
+
+                    // if ($evidenceLevel == 'component') {
+
+                    //     if ($req->action == 2) {
+
+                    //         $data2 = Excel::toArray([], $filepath); //with header
+                    //         $rows = array_slice($data2[0], 1); //without header(first row)
+
+                    //         //all controls in this domain
+                    //         $filteredData = collect($rows)->filter(function ($row) use ($req) {
+                    //             return strval($row[2]) === $req->subdomain;
+                    //         })->values()->all();
+
+
+                    //         foreach ($filteredData as $innerArray) {
+                    //             // Access specific value from the inner array
+                    //             $fetch_title = $innerArray['0'];
+                    //             $subdomain = $innerArray['2'];
+                    //             $fetch_sub_req = $innerArray['4'];
+
+                    //             DB::table('iso_sec_2_2')->updateOrInsert(
+                    //                 [
+                    //                     'project_id' => $proj_id,
+                    //                     'asset_id' => $asset_id,
+                    //                     'title_num' => $fetch_title,
+                    //                     'sub_req' => $fetch_sub_req,
+                    //                     'subdomain' => $subdomain
+                    //                 ],
+                    //                 $data
+                    //             );
+                    //         }
+                    //     }
+
+                    //     if ($req->action == 3) {
+
+
+                    //         $data2 = Excel::toArray([], $filepath); //with header
+                    //         $rows = array_slice($data2[0], 1); //without header(first row)
+
+                    //         $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                    //             return strval($row[0]) === $title;
+                    //         })->values()->all();
+
+
+                    //         //all controls in this domain
+
+                    //         foreach ($filteredData as $innerArray2) {
+                    //             // Access specific value from the inner array
+                    //             $fetch_sub_req = $innerArray2['4'];
+                    //             $fetch_title = $innerArray2['0'];
+                    //             $subdomain = $innerArray2['2'];
+
+                    //             DB::table('iso_sec_2_2')->updateOrInsert(
+                    //                 [
+                    //                     'project_id' => $proj_id,
+                    //                     'asset_id' => $asset_id,
+                    //                     'title_num' => $fetch_title,
+                    //                     'sub_req' => $fetch_sub_req,
+                    //                     'subdomain' => $subdomain
+                    //                 ],
+                    //                 $data
+                    //             );
+                    //         }
+                    //     }
+
+                    //     if ($req->action == 1) {
+
+                    //         DB::table('iso_sec_2_2')->updateOrInsert(
+                    //             [
+                    //                 'project_id' => $proj_id,
+                    //                 'asset_id' => $asset_id,
+                    //                 'title_num' => $title,
+                    //                 'sub_req' => $sub_req,
+                    //                 'subdomain' => $req->subdomain
+                    //             ],
+                    //             $data
+                    //         );
+                    //     }
+
+
+
+                    //     // Redirect after updating the specific asset
+                    //     $mysessionreq = $req->session()->get('main_req_num');
+                    //     return redirect()->route(
+                    //         'ksa_nca_sec_2_2_req',
+                    //         ['main_req_num' => $mysessionreq, 'title' => $title, 'proj_id' => $proj_id, 'user_id' => $user_id, 'asset_id' => $asset_id]
+                    //     )
+                    //         ->with('success', 'Record Updated Successfully');
+                    // }
 
 
 

@@ -492,7 +492,12 @@ route::put('iso_sec_2_1_submit_edit/{assessment_id}/{proj_id}/{user_id}',[IsoSec
 route::Put('iso_sec_2_1_asset_catalog_submit_edit/{asset_id}/{org_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_asset_catalog_submit_edit']);
 route::get('iso_sec_2_1_delete/{assessment_id}/{proj_id}/{user_id}',[IsoSec2_1::class,'iso_sec_2_1_delete']);
 route::get('asset_catalog_2_1_delete/{asset_id}/{user_id}',[IsoSec2_1::class,'asset_catalog_2_1_delete']);
-Route::get('/get-asset-types/{category_id}', [IsoSec2_1::class, 'getAssetTypes']);
+Route::get('get-asset-types/{category_id}', [IsoSec2_1::class, 'getAssetTypes']);
+
+ROute::get('org_doc_repo/{org_id}',[IsoSec2_1::class,'org_doc_repo'])->name('org_doc_repo');
+route::Post('org_doc_repo_submit/{org_id}',[IsoSec2_1::class,'org_doc_repo_submit']);
+route::delete('delete_org_doc_repo/{doc_id}',[IsoSec2_1::class,'delete_org_doc_repo']);
+
 
 //copy assets gage to open the services of the selected project
 route::get("copy_assets/{proj_id}/{user_id}",[IsoSec2_1::class,'ShowServices'])->name('services');

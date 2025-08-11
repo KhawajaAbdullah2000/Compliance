@@ -8,12 +8,19 @@
 <section class="min-h-100">
     <div class="container py-5 h-100 ">
         <div class="row align-items-center h-100">
-            <div class="col-md-6 d-flex justify-content-center">
+            <div class="col-md-6 justify-content-center">
           @role('end user')
+    <div class="mb-2">
+            <a href="/org_services_register/{{auth()->user()->organization->id}}" class="btn btn-md btn-warning w-75">
+                Service/Asset Register
+            </a>
+        </div>
 
-          <div class="">
-            <a href="/org_services_register/{{auth()->user()->organization->id}}" class="btn btn-md btn-warning">Service/Asset Register</a>
-          </div>
+        <div class="mb-2">
+            <a href="/org_doc_repo/{{auth()->user()->organization->id}}" class="btn btn-md btn-warning w-75">
+                Documents Repository
+            </a>
+        </div>
 
 
           @endrole
