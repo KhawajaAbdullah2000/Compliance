@@ -1281,7 +1281,7 @@ class IsoSec2_1 extends Controller
         } catch (\Exception $e) {
             $error = $e->getMessage();
 
-          
+
             return redirect()->route('org_services_register', ['org_id' => $org_id])
                 ->with('error', $error);
         }
@@ -1291,32 +1291,51 @@ class IsoSec2_1 extends Controller
             ->with('success', 'Record Added successfully');
     }
 
-    public function org_doc_repo($org_id){
-         $organizationData = DB::table("organizations")->where('id', $org_id)->first();
+    public function org_doc_repo($org_id)
+    {
+        $organizationData = DB::table("organizations")->where('id', $org_id)->first();
 
-         $org_documents=DB::table('document_repository')->where("organization_id",$org_id)
-         ->get();
-         
+        $org_documents = DB::table('document_repository')->where("organization_id", $org_id)
+            ->get();
+
 
         return view('iso_sec_2_1.org_doc_repo', [
             'organizationData' => $organizationData,
-            'org_documents'=>$org_documents
+            'org_documents' => $org_documents
 
         ]);
     }
 
-    public function org_doc_repo_submit($org_id,Request $request){
-           
+    public function org_doc_repo_submit($org_id, Request $request)
+    {
+
         $request->validate([
-            'name'   => ['required','string','max:100'],
-            'type'   => ['nullable','string','max:100'],
-            'source' => ['nullable','string','max:100'],
-            'attachment'   => ['required','file','max:10240','mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png'],
+            'name'   => ['required', 'string', 'max:100'],
+            'type'   => ['nullable', 'string', 'max:100'],
+            'source' => ['nullable', 'string', 'max:100'],
+            'attachment'   => ['required', 'file', 'max:10240', 'mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png'],
         ]);
-    
-         $folder = "org_documents_repo";
+
+        $folder = "org_documents_repo";
 
         $file = $request->file('attachment');
+        $contentHash = hash_file('sha256', $file->getRealPath());
+
+
+        // 2) reject if same content already uploaded for this org
+        $exists = DocumentRepository::where('organization_id', $org_id)
+            ->where('content_hash', $contentHash)
+            ->exists();
+
+
+        if ($exists) {
+            return back()->with('error', 'This exact file already exists in your repository.');
+        }
+
+
+
+
+
         $safeName = now()->format('Ymd_His') . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
         $ext = $file->getClientOriginalExtension();
         $filename = $safeName . '.' . $ext;
@@ -1326,10 +1345,11 @@ class IsoSec2_1 extends Controller
 
         DocumentRepository::create([
             'organization_id' => $org_id,
-            'name'            => $request->name,        
-            'type'            => $request->type,       
-            'source'          => $request->source,     
-            'path'            => $storedPath,          
+            'name'            => $request->name,
+            'type'            => $request->type,
+            'source'          => $request->source,
+            'path'            => $storedPath,
+            'content_hash'    => $contentHash,
             'last_edited_by'  => auth()->user()->id,
             'last_edited_at'  => now(),
         ]);
@@ -1337,18 +1357,19 @@ class IsoSec2_1 extends Controller
         return back()->with('success', 'Document saved successfully.');
     }
 
-    public function delete_org_doc_repo($doc_id){
-         $doc = DocumentRepository::findOrFail($doc_id);
+    public function delete_org_doc_repo($doc_id)
+    {
+        $doc = DocumentRepository::findOrFail($doc_id);
 
-    // Delete the physical file if it exists
-    if ($doc->path && Storage::disk('public')->exists($doc->path)) {
-        Storage::disk('public')->delete($doc->path);
-    }
+        // Delete the physical file if it exists
+        if ($doc->path && Storage::disk('public')->exists($doc->path)) {
+            Storage::disk('public')->delete($doc->path);
+        }
 
-    // Delete the record from the database
-    $doc->delete();
+        // Delete the record from the database
+        $doc->delete();
 
-    // Redirect back with success message
-    return back()->with('success', 'Document deleted successfully.');
+        // Redirect back with success message
+        return back()->with('success', 'Document deleted successfully.');
     }
 }

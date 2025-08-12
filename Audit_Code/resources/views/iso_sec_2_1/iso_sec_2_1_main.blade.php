@@ -151,12 +151,12 @@ $permissions = json_decode($project_permissions);
            
             @endif
 
+            @if($page_type=="services_register")
             <div class="col-md-2">
                 <p class="form-label fw-bold">Copy Assets from</p>
                 <a href="/assets_to_copy_from_register/{{$project_id}}/{{auth()->user()->organization->id}}" class="btn btn-warning">Service Register</a>
-       
-                
             </div>
+            @endif
         </div>
     </div>
 
@@ -167,7 +167,7 @@ $permissions = json_decode($project_permissions);
     @endif
 
     <!-- Data Table -->
-    <table id="myTable2" class="table table-bordered table-hover table-striped align-middle">
+    <table id="myTable2" class="table table-bordered table-hover table-striped align-middle table-responsive">
         <thead class="table-dark ">
             <tr style="cursor: pointer" class="text-center">
                 <th onclick="sortTable(0)">Service</th>
@@ -191,22 +191,6 @@ $permissions = json_decode($project_permissions);
                 @if($page_type=="risk_treatment")
                 <th>Risk Treatment</th>
                 @endif
-
-
-
-
-                {{-- @if (
-                        !(optional($complianceFramework)->framework_id == 2 &&
-                            optional($framework_approach)->framework_approach_types_id == 1 &&
-                            optional($risk_assessment_approach)->global_risk_assessment_approach_id == 1
-                        ))
-                        <th>Risk Assessment</th>
-                    @endif --}}
-
-
-                {{--
-                    <th>Enter Evidence</th> --}}
-
 
                 @if($page_type=="services_register")
                 <th>Actions</th>
@@ -247,8 +231,6 @@ $permissions = json_decode($project_permissions);
                     @endif
                 </td>
                 @endif
-
-
 
 
                 {{-- <td class="text-center">

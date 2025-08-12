@@ -13,6 +13,7 @@ class DocumentRepository extends Model
     protected $fillable = [
         'organization_id',
         'name',
+        'content_hash',
         'type',
         'source',
         'path',

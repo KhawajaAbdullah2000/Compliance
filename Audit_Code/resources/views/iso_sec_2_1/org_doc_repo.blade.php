@@ -25,21 +25,7 @@
   ];
 @endphp
 
-{{-- Bootstrap Icons (optional) --}}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
-<style>
-  .page-head { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
-  .muted { color:#6c757d; }
-  .card-soft { border:0; border-radius:1rem; box-shadow:0 10px 25px rgba(0,0,0,.06); }
-  .badge-soft { border:1px solid rgba(0,0,0,.08); background:#f8f9fa; }
-  .table thead th { white-space:nowrap; }
-  .file-row:hover { background:#fffdfa; }
-  .file-ext { font-size:.7rem; letter-spacing:.5px; }
-  .drop-hint { font-size:.85rem; color:#6c757d; }
-  .btn-gradient { background: linear-gradient(135deg,#3b82f6 0%, #22c55e 100%); color:#fff; border:0; }
-  .btn-gradient:hover { filter:brightness(1.05); }
-</style>
 
 <div class="container py-4">
 
@@ -91,7 +77,7 @@
 
           {{-- Table --}}
           <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0" id="repoTable">
+            <table class="table table_doc_repo table-hover align-middle mb-0" id="repoTable">
               <thead class="table-light">
                 <tr>
                   <th style="width:56px;">#</th>

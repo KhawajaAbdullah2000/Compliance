@@ -694,17 +694,18 @@ thead.table-pointer {
     background: linear-gradient(135deg, #22c55e 0%, #06b6d4 100%);
 }
 
-.btn-comp-register{
+.btn-comp-register {
     background: linear-gradient(135deg, #f8809e 0%, #851b85 100%);
 }
 
-.btn-proj-register{
+.btn-proj-register {
     background: linear-gradient(135deg, #4f6307 0%, #6cb617 100%);
 }
 
-.btn-create-project{
-        background: linear-gradient(135deg, #ca3333 0%, #ee9e0a 100%);
+.btn-create-project {
+    background: linear-gradient(135deg, #ca3333 0%, #ee9e0a 100%);
 }
+
 /* green → cyan */
 .btn-tile .label {
     display: flex;
@@ -737,4 +738,54 @@ thead.table-pointer {
     .tab .nav-tabs li a {
         margin-right: 0;
     }
+}
+
+.page-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.muted {
+    color: #6c757d;
+}
+
+.card-soft {
+    border: 0;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .06);
+}
+
+.badge-soft {
+    border: 1px solid rgba(0, 0, 0, .08);
+    background: #f8f9fa;
+}
+
+.table_doc_repo thead th {
+    white-space: nowrap;
+}
+
+.file-row:hover {
+    background: #fffdfa;
+}
+
+.file-ext {
+    font-size: .7rem;
+    letter-spacing: .5px;
+}
+
+.drop-hint {
+    font-size: .85rem;
+    color: #6c757d;
+}
+
+.btn-gradient {
+    background: linear-gradient(135deg, #3b82f6 0%, #22c55e 100%);
+    color: #fff;
+    border: 0;
+}
+
+.btn-gradient:hover {
+    filter: brightness(1.05);
 }
