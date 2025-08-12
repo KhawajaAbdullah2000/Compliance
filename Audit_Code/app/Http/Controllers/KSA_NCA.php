@@ -2028,10 +2028,24 @@ class KSA_NCA extends Controller
 
         $permissions = json_decode($checkpermission->project_permissions);
 
-        $fileMap = [
 
+           $fileMap = [
+            7 => 'KSA_NCA_ECC.xlsx',
+            18 => 'COSO.xlsx',
+            19 => 'SOC2_Type2.xlsx',
+            5 => 'CY_SAMA.xlsx',
+            1 => 'PCI_DSS_4_Single_TSP.xlsx',
+            16 => 'COBIT_2019.xlsx',
+            2 => 'PCI_DSS_4_Multi_TSP.xlsx',
+            3 => 'PCI_DSS_4_Merchant_TSP.xlsx',
+            10 => 'ISA_62443_Part 3-2.xlsx',
+            12 => 'ISA 62443 Part 4-2.xlsx',
+            13 => 'ISA 62443 Part 3-3.xlsx',
+            11 => 'ISA 62443 Part 2-1.xlsx',
+            9 => 'ISA 62443 Part 4-1.xlsx',
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25.xlsx',
-            23 => 'NIST_CSF.xlsx'
+            23 => 'NIST_CSF.xlsx',
+            24 => 'ISO27701_2019v2.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
@@ -2106,11 +2120,26 @@ class KSA_NCA extends Controller
         }
 
 
-        $fileMap = [
-
+      
+           $fileMap = [
+            7 => 'KSA_NCA_ECC.xlsx',
+            18 => 'COSO.xlsx',
+            19 => 'SOC2_Type2.xlsx',
+            5 => 'CY_SAMA.xlsx',
+            1 => 'PCI_DSS_4_Single_TSP.xlsx',
+            16 => 'COBIT_2019.xlsx',
+            2 => 'PCI_DSS_4_Multi_TSP.xlsx',
+            3 => 'PCI_DSS_4_Merchant_TSP.xlsx',
+            10 => 'ISA_62443_Part 3-2.xlsx',
+            12 => 'ISA 62443 Part 4-2.xlsx',
+            13 => 'ISA 62443 Part 3-3.xlsx',
+            11 => 'ISA 62443 Part 2-1.xlsx',
+            9 => 'ISA 62443 Part 4-1.xlsx',
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25.xlsx',
-            23 => 'NIST_CSF.xlsx'
+            23 => 'NIST_CSF.xlsx',
+            24 => 'ISO27701_2019v2.xlsx'
         ];
+
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
 
