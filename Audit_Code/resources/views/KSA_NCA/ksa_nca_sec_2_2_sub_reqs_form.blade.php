@@ -153,6 +153,8 @@ $isApprover=in_array('Data Approver', $permissions);
     </div>
   </div>
 @endif
+
+
             </div>
 
 
@@ -355,6 +357,8 @@ $isApprover=in_array('Data Approver', $permissions);
     });
 
 </script>
+
+
 
 @endsection
 

@@ -12,7 +12,7 @@ use App\Models\DocumentRepository;
 use App\Exports\AssetCategoryExport;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-
+use PhpParser\Node\Expr\FuncCall;
 
 class IsoSec2_1 extends Controller
 {
@@ -831,8 +831,7 @@ class IsoSec2_1 extends Controller
                         if ($row[0] != null) {
                             $s_name[] = $row[0];
                         } else {
-                            $error = "Service Name of an asset Missing";
-                            break;
+                              $s_name[] = null;
                         }
 
                         if ($row[1] != null) {
@@ -925,6 +924,99 @@ class IsoSec2_1 extends Controller
             return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
         }
     }
+
+    public function upload_org_global_assets($org_id, Request $req)
+    {
+        $req->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+
+        $file = $req->file('file');
+        $data = Excel::toArray([], $file);
+        $rows = array_slice($data[0], 1);
+
+        $g_name = [];
+        $name = [];
+        $c_name = [];
+        $physical_loc = [];
+        $logical_loc = [];
+        $s_name = [];
+        $error = null;
+
+
+        foreach ($rows as $row) {
+
+            if ($row[0] != null) {
+                $s_name[] = $row[0];
+            } else {
+                $s_name[] = null;
+            }
+
+            if ($row[1] != null) {
+                $g_name[] = $row[1];
+            } else {
+                $g_name[] = null;
+            }
+
+            if ($row[2] != null) {
+                $name[] = $row[2];
+            } else {
+                $name[] = null;
+            }
+
+
+            if ($row[3] != null) {
+                $c_name[] = $row[3];
+            } else {
+                $error = "Asset component name of an asset Missing";
+                break;
+            }
+
+
+
+            if ($row[4] != null) {
+                $physical_loc[] = $row[4];
+            } else {
+                $physical_loc[] = null;
+            }
+
+            if ($row[5] != null) {
+                $logical_loc[] = $row[5];
+            } else {
+                $logical_loc[] = null;
+            }
+        }
+
+
+        if ($error != null) {
+            return redirect()->route('org_services_register', ['org_id' => $org_id])
+                ->with('error', $error);
+        }
+
+        for ($i = 0; $i < count($rows); $i++) {
+            DB::table('asset_catalog')->insertGetId([
+                'organization_id' => $org_id,
+                'g_name' => $g_name[$i],
+                'name' => $name[$i],
+                'c_name' => $c_name[$i],
+                'physical_loc' => $physical_loc[$i],
+                'logical_loc' => $logical_loc[$i],
+                's_name' => $s_name[$i],
+                'last_edited_by' => auth()->user()->id,
+                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]);
+        }
+
+
+
+        return redirect()->route('org_services_register', ['org_id' => $org_id])
+            ->with('success', 'Assets Uploaded Successfully');
+
+
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+    }
+
 
 
     public function ShowServices(Request $req, $proj_id, $user_id)
@@ -1371,5 +1463,16 @@ class IsoSec2_1 extends Controller
 
         // Redirect back with success message
         return back()->with('success', 'Document deleted successfully.');
+    }
+
+     public function detachDocument($assessmentId, $documentId)
+    {
+        // Remove the pivot row (safe even if it doesn't exist)
+        DB::table('iso_sec_2_2_attachments')
+            ->where('iso_sec_2_2_id', (int)$assessmentId)
+            ->where('document_id', (int)$documentId)
+            ->delete();
+
+        return back()->with('success', 'Document detached.');
     }
 }

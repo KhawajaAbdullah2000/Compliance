@@ -105,7 +105,7 @@
                   <td class="text-muted">{{ $i + 1 }}</td>
                   <td class="fw-semibold">
                     <i class="bi {{ $icon }} me-2"></i>{{ $doc->name }}
-                    <span class="badge badge-soft file-ext ms-2">{{ strtoupper($ext) }}</span>
+                    <span class="badge badge-soft file-ext ms-2 text-dark">{{ strtoupper($ext) }}</span>
                   </td>
                   <td>
                     <span class="badge bg-info-subtle text-dark border">{{ $doc->type ?? '—' }}</span>

@@ -528,7 +528,7 @@ class KSA_NCA extends Controller
     }
     public function ksa_nca_sec_2_2_form(Request $req, $sub_req, $title, $proj_id, $user_id, $asset_id)
     {
-
+      
         $req->validate([
             'comp_status' => 'required'
         ]);
@@ -1040,11 +1040,10 @@ class KSA_NCA extends Controller
 
                     // ----- Sync attachments for ALL affected rows (only if field present) -----
                     if ($req->has('document_ids')) {
-                        if (!empty($affectedIds)) {
                             DB::table('iso_sec_2_2_attachments')
                                 ->whereIn('iso_sec_2_2_id', $affectedIds)
                                 ->delete();
-                        }
+                      
 
                         if (!empty($validDocIds) && !empty($affectedIds)) {
                             $now  = \Carbon\Carbon::now();

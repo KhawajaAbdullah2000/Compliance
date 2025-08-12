@@ -130,10 +130,10 @@
 
             @role('end user')
             <div class="d-grid gap-3">
-                @can('Project Creator')
+                {{-- @can('Project Creator')
                 <a href="/create_project/{{ auth()->user()->id }}" class="btn btn-outline-light btn-lg">Create New Project</a>
-                @endcan
-                <a href="/assigned_projects/{{ auth()->user()->id }}" class="btn btn-outline-info btn-lg">Go to Dashboard</a>
+                @endcan --}}
+                {{-- <a href="/assigned_projects/{{ auth()->user()->id }}" class="btn btn-outline-info btn-lg">Go to Dashboard</a> --}}
 
                 {{-- <a href="/my_personal_dashboard/{{ auth()->user()->id }}" class="btn btn-outline-info btn-lg">Visual and AI Dashboard</a> --}}
                 <div class="text-center mt-2">

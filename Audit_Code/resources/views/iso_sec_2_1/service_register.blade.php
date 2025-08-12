@@ -59,6 +59,22 @@
         </tbody>
     </table>
 
+    <div class="mt-4">
+        <a href="{{ route('download_asset_template') }}" class="text-decoration-underline text-primary">Download
+            Excel Template</a>
+        <form action="/upload_org_global_assets/{{ auth()->user()->organization->id }}" method="POST" enctype="multipart/form-data" class="mt-3">
+            @csrf
+            <div class="form-group col-md-3">
+                <label for="file" class="form-label fw-bold">Upload a Populated Excel Sheet</label>
+                <input type="file" name="file" id="file" class="form-control">
+                @error('file')
+                <div class="text-danger small">{{ $message }}</div>
+                @enderror
+            </div>
+            <button type="submit" class="btn btn-success btn-sm rounded-pill mt-2">Upload</button>
+        </form>
+    </div>
+
 
 </div>
 

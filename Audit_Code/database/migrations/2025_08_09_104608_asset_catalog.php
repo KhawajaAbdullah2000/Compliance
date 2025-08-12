@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name', 100)->nullable();      // asset/service name
             $table->string('c_name', 100);                // category
             $table->string('s_name', 100)->nullable();    // sub-category
-            $table->string('owner_dept', 300);
+            $table->string('owner_dept', 300)->nullable();
             $table->string('physical_loc', 300)->nullable();
             $table->string('logical_loc', 300)->nullable();
 

@@ -497,7 +497,8 @@ Route::get('get-asset-types/{category_id}', [IsoSec2_1::class, 'getAssetTypes'])
 ROute::get('org_doc_repo/{org_id}',[IsoSec2_1::class,'org_doc_repo'])->name('org_doc_repo');
 route::Post('org_doc_repo_submit/{org_id}',[IsoSec2_1::class,'org_doc_repo_submit']);
 route::delete('delete_org_doc_repo/{doc_id}',[IsoSec2_1::class,'delete_org_doc_repo']);
-
+// Route::post('/iso22/{assessment}/detach-doc/{doc}',[IsoSec2_1::class, 'detachDocument']
+// )->name('iso22.detachDoc');
 
 //copy assets gage to open the services of the selected project
 route::get("copy_assets/{proj_id}/{user_id}",[IsoSec2_1::class,'ShowServices'])->name('services');
@@ -510,7 +511,7 @@ route::post('copy_groups/{proj_id}/{user_id}/{proj_to_copy}/{servicename}',[IsoS
 route::get('assets_to_copy_from_register/{proj_id}/{org_id}',[IsoSec2_1::class,'assets_to_copy_from_register']);
 route::get('/download_asset_template',[IsoSec2_1::class,'download_asset_template'])->name('download_asset_template');
 route::post('upload_assets/{proj_id}/{user_id}',[IsoSec2_1::class,'upload_assets']);
-
+route::post('upload_org_global_assets/{org_id}',[IsoSec2_1::class,'upload_org_global_assets']);
 
 //Iso Sec2.3
 route::get('iso_sec_2_3/{proj_id}/{user_id}',[IsoSec2_3::class,'iso_sec_2_3'])->name('iso_sec_2_3');
