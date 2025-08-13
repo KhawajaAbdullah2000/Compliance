@@ -1184,11 +1184,29 @@ class IsoSec2_1 extends Controller
                                 'service_custodian' => $ass->service_custodian,
                                 'component_custodian' => $ass->component_custodian
                             ]);
+
+                            DB::table('audit_trail_for_services')->insert([
+                                'g_name' => $ass->g_name,
+                                'name' => $ass->name,
+                                'c_name' => $ass->c_name,
+                                'owner_dept' => $ass->owner_dept,
+                                'physical_loc' => $ass->physical_loc,
+                                'logical_loc' => $ass->logical_loc,
+                                's_name' => $ass->s_name,
+                                'last_edited_by' => $user_id,
+                                 'performed_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                                'operation_type' => 'copied from global assets',
+                              
+                            ]);
+
+                            
+                            
                         }
                     } catch (\Exception $e) {
                         return redirect()->route('iso_section2_1', [
                             'proj_id' => $proj_to_copy,
-                            'user_id' => $user_id
+                            'user_id' => $user_id,
+                             'page_type' => 'services_register'
                         ])->with('error', 'Error copying assets: ' . $e->getMessage());
                     }
 
@@ -1369,6 +1387,23 @@ class IsoSec2_1 extends Controller
                     'service_custodian' => $req->service_custodian,
                     'component_custodian' => $req->component_custodian
                 ]);
+
+                 Db::table('audit_trail_for_services')->insert([
+                                'asset_id' => $assessment_id,
+                                'last_edited_by' => $user_id,
+                                'operation_type' => 'insert',
+                                'g_name' => $req->g_name,
+                                'name' => $req->name,
+                                'c_name' => $component,
+                                's_name' => $req->s_name,
+                                'owner_dept' => $req->owner_dept,
+                                'physical_loc' => $req->physical_loc,
+                                'logical_loc' => $req->logical_loc,
+                                'risk_confidentiality' => 10,
+                                'risk_integrity' => 10,
+                                'risk_availability' => 10,
+                                'performed_at' => Carbon::now()->format('Y-m-d H:i:s')
+                            ]);
             }
         } catch (\Exception $e) {
             $error = $e->getMessage();

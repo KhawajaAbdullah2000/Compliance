@@ -8,7 +8,7 @@
 
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered table-secondary">
+            <table class="table table-bordered table-warning">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -43,6 +43,8 @@
                     <tr>
                         <th>User</th>
                         <th>Created Projects</th>
+                        <th>Deleted Projects</th>
+                        <th>Changed Project Status</th>
                         <th>Assigned as user on projects</th>
                         <th>Organization Super User (Note 1)</th>
                         <th>Organization Project Creator (Note 2) </th>
@@ -68,6 +70,36 @@
                                  </a>
                                 @endif
                             </td>
+
+                             <td>
+                                @if ($user->deleted_projects > 0)
+                                <a href="/projects_deleted_by/{{ auth()->user()->organization->id }}/{{ $user->id }}" 
+                                   class="btn btn-outline-warning btn-md">
+                                  <span class="fw-bold"> {{ $user->deleted_projects }}</span>
+                                </a>
+                                @else
+                                <a 
+                                    class="btn btn-outline-warning btn-md">
+                                   <span class="fw-bold"> {{ $user->deleted_projects }}</span>
+                                 </a>
+                                @endif
+                            </td>
+
+                            <td>
+                                @if ($user->status_changed_projects > 0)
+                                <a href="/projects_status_changed_by/{{ auth()->user()->organization->id }}/{{ $user->id }}" 
+                                   class="btn btn-outline-secondary btn-md">
+                                  <span class="fw-bold"> {{ $user->status_changed_projects }}</span>
+                                </a>
+                                @else
+                                <a 
+                                    class="btn btn-outline-secondary btn-md">
+                                   <span class="fw-bold"> {{ $user->status_changed_projects }}</span>
+                                 </a>
+                                @endif
+                            </td>
+
+                           
                             <td>
                                 @if($user->assigned_projects>0 )
                                 <a href="/projects_assigned/{{ auth()->user()->organization->id }}/{{ $user->id }}" 

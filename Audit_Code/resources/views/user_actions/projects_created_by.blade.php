@@ -15,25 +15,28 @@
                 <thead class="table-dark">
                     <tr>
                         <th>Name</th>
-                        <th>Creation Date</th>
+                        <th>Creation At</th>
                         <th>Type</th>
                         <th>Status </th>
                         <td>Last User Role</td>
-                       
+
 
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($projects as $project)
-                        <tr>
-                            <td>{{ $project->project_name}}</td>
-                            <td>{{ $project->project_creation_date}}</td>
-                            <td>{{ $project->project_type_name}}</td>
-                            <td>{{ $project->status}}</td>
-                            <td>{{ implode(', ', json_decode($project->project_permissions, true)) }}</td>
-                            
+                    <tr>
+                        <td>{{ $project->project_name}}</td>
+                        <td>
+                            {{ \Carbon\Carbon::parse($project->project_creation_date . ' ' . $project->project_creation_time)->format('d M Y, h:i A') }}
+                        </td>
 
-                        </tr>
+                        <td>{{ $project->project_type_name}}</td>
+                        <td>{{ $project->status}}</td>
+                        <td>{{ implode(', ', json_decode($project->project_permissions, true)) }}</td>
+
+
+                    </tr>
                     @endforeach
                 </tbody>
             </table>

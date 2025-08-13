@@ -847,6 +847,10 @@ Route::get('download_excel_risk_register_single_type/{service}/{component}/{proj
 Route::get('user_action_all_projects_in_org/{org_id}',[OrganizationController::class,'user_action_all_projects_in_org']);
 Route::get('projects_created_by/{org_id}/{user_id}',[OrganizationController::class,'projects_created_by']);
 Route::get('projects_assigned/{org_id}/{user_id}',[OrganizationController::class,'projects_assigned']);
+Route::get('projects_deleted_by/{org_id}/{user_id}',[OrganizationController::class,'projects_deleted_by']);
+Route::get('projects_status_changed_by/{org_id}/{user_id}',[OrganizationController::class,'projects_status_changed_by']);
+
+
 Route::get('user_actions_on_project/{proj_id}/{user_id}',[ProjectController::class,'user_actions_on_project']);
 Route::get('total_activities_on_project_sec_2_2/{proj_id}/{user_id}',[ProjectController::class,'total_activities_on_project_sec_2_2']);
 Route::get('total_activities_on_project/{proj_id}/{user_id}',[ProjectController::class,'total_activities_on_project']);

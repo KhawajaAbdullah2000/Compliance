@@ -690,6 +690,8 @@ class KSA_NCA extends Controller
                             }
                         }
 
+                        
+
 
                         // (optional) de-duplicate targets
                         if (!empty($targets)) {
@@ -697,9 +699,10 @@ class KSA_NCA extends Controller
                             $targets = array_map('json_decode', $targets, array_fill(0, count($targets), true));
                         }
 
-
+                
 
                         $affectedIds = [];
+                     
 
                         foreach ($targets as $attrs) {
                             $existing = DB::table('iso_sec_2_2')->where($attrs)->first();
@@ -713,6 +716,11 @@ class KSA_NCA extends Controller
                                 $newId = (int) DB::table('iso_sec_2_2')->insertGetId(array_merge($attrs, $data));
                                 $affectedIds[] = $newId;
                             }
+
+                            //audit
+                            Db::table('audit_iso_sec_2_2')->insert(array_merge($attrs, $data));
+
+                            
                         }
 
                         $affectedIds = array_values(array_unique($affectedIds));
@@ -1034,6 +1042,8 @@ class KSA_NCA extends Controller
                             $newId = (int) DB::table('iso_sec_2_2')->insertGetId(array_merge($attrs, $data));
                             $affectedIds[] = $newId;
                         }
+                        //audit
+                           Db::table('audit_iso_sec_2_2')->insert(array_merge($attrs, $data));
                     }
 
                     $affectedIds = array_values(array_unique($affectedIds));
@@ -1642,11 +1652,33 @@ class KSA_NCA extends Controller
                         ],
                         $data
                     );
+
+                     DB::table('audit_iso_sec_2_2')->updateOrInsert(
+                        [
+                            'project_id' => $proj_id,
+                            'asset_id' => $asset_id,
+                            'title_num' => $innerArray[0],
+                            'sub_req' => $innerArray[3],
+                            'subdomain' => $innerArray[1]
+                        ],
+                        $data
+                    );
                 }
             } else {
                 foreach ($assets as $ass) {
                     foreach ($filteredData as $innerArray) {
                         DB::table('iso_sec_2_2')->updateOrInsert(
+                            [
+                                'project_id' => $proj_id,
+                                'asset_id' => $ass->assessment_id,
+                                'title_num' => $innerArray[0],
+                                'sub_req' => $innerArray[3],
+                                'subdomain' => $innerArray[1]
+                            ],
+                            $data
+                        );
+
+                         DB::table('audit_iso_sec_2_2')->updateOrInsert(
                             [
                                 'project_id' => $proj_id,
                                 'asset_id' => $ass->assessment_id,

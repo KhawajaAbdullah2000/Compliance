@@ -7,7 +7,7 @@
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered table-secondary">
+            <table class="table table-bordered table-warning">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -34,6 +34,9 @@
 
     <h4 class="fw-bold" style='margin-top: 40px;margin-bottom:30px;'>User actions audit trail on Project: {{$project->project_name}} for {{$user->email}} </h4>
 
+    <div class="text-end">
+        <a href="/user_actions_on_project/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-secondary btn-md">Back</a>
+    </div>
     <div class="badge text-bg-primary fs-4">
      Audit trail for Assets
       </div>
@@ -64,10 +67,13 @@
                             <td>{{ $activity->owner_dept }} </td>
                             <td>{{ $activity->physical_loc }} </td>
                             <td>{{ $activity->logical_loc }} </td>
-                            <td> <span class="badge @if($activity->operation_type == 'insert') text-bg-success 
+                            <td> <span class="badge 
+                            @if($activity->operation_type == 'insert') text-bg-success 
                             @elseif($activity->operation_type == 'update') text-bg-warning 
                             @elseif($activity->operation_type == 'delete') text-bg-danger 
-                            @endif fs-6 text-center"
+                            @else text-bg-info
+                            @endif 
+                            fs-6 text-center"
                                 style="min-width: 100px;">
                                 {{ $activity->operation_type }} 
                             </span>

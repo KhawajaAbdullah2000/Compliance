@@ -23,7 +23,7 @@
       <div class="card h-100 shadow-md border-1 hover-card">
         <div class="card-body">
           <h5 class="card-title">
-            <a href="https://example.com" class="stretched-link text-decoration-none text-dark">🔗 Analyze by Project</a>
+            <a href="" class="stretched-link text-decoration-none text-dark">🔗 Analyze by Project</a>
           </h5>
         </div>
       </div>

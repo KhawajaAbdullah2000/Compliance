@@ -58,6 +58,17 @@ class EndUserController extends Controller
         $project->status_last_changed_by = $user_id;
         $project->save();
 
+
+         DB::table('audit_projects')->insert([
+                    'project_name' => $project->project_name,
+                    'org_id' => $project->org_id,
+                    'project_type' => $project->project_type,
+                    'dept_id' => $project->dept_id,
+                    'status_changed_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'status_changed_by'=>$user_id,
+                    'status'=>'Not submitted for approval'
+
+                ]);
         $projectId = $project->project_id;
 
         DB::table('party')->insert([
@@ -104,15 +115,34 @@ class EndUserController extends Controller
             'status' => 'required',
         ]);
 
-
+        
 
         $project = Project::where('project_id', $id)->where('created_by', auth()->user()->id)->first();
+      
+          if($project->status!=$req->status){
+        //audit for project status changed
+         DB::table('audit_projects')->insert([
+                    'project_name' => $project->project_name,
+                    'org_id' => $project->org_id,
+                    'project_type' => $project->project_type,
+                    'dept_id' => $project->dept_id,
+                    'status_changed_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'status_changed_by'=>auth()->user()->id,
+                    'status'=>$req->status
+
+                ]);
+       }
+
         if ($project) {
             $project->project_name = $req->project_name;
             $project->project_type = $req->project_type;
             $project->status = $req->status;
             $project->status_last_changed_by = auth()->user()->id;
             $project->save();
+
+           
+
+
             return redirect()->route('projects', ['user_id' => auth()->user()->id])->with('success', 'Project edited successfully');
         } else {
             return redirect()->route('projects', ['user_id' => auth()->user()->id])->with('error', 'Couldnt edit the project');
