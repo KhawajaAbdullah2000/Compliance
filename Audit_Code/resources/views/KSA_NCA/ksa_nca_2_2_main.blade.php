@@ -5,8 +5,10 @@
 @include('user-nav')
 
 @include('iso_sec_nav')
+
 @php
-$permissions=json_decode($project_permissions);
+    $permissions = json_decode($project_permissions, true);
+    $isDataInputter = in_array('Data Inputter', $permissions ?? []);
 @endphp
 
 <div class="container">
@@ -127,7 +129,7 @@ If you choose to select values for “Applicable” and “Compliance Status” 
                     @endif
                 </div>
                 <div class="col-md-4 text-end">
-                    <button type="submit" class="btn btn-success btn-md px-5">Save All</button>
+                    <button @disabled(!$isDataInputter) type="submit" class="btn btn-success btn-md px-5">Save All</button>
                 </div>
             </div>
 
@@ -159,7 +161,7 @@ If you choose to select values for “Applicable” and “Compliance Status” 
                             <td>
                                 <input type="hidden" name="domains[]" value="{{ $subdomain }}">
 
-                                <select name="applicabilities[]" class="form-select form-select-sm rounded-pill applicability-select" data-index="{{ $i }}" style="max-width:150px;min-width:150px;">
+                                <select @disabled(!$isDataInputter) name="applicabilities[]" class="form-select form-select-sm rounded-pill applicability-select" data-index="{{ $i }}" style="max-width:150px;min-width:150px;">
                                     <option value="">Select --</option>
                                     <option value="yes" {{ old('applicabilities.' . $i, $applicability) === 'yes' ? 'selected' : '' }}>Yes</option>
                                     <option value="no" {{ old('applicabilities.' . $i, $applicability) === 'no' ? 'selected' : '' }}>No</option>
@@ -172,13 +174,13 @@ If you choose to select values for “Applicable” and “Compliance Status” 
                                 @endif
 
                                 <!-- Justification Field -->
-                                <textarea name="justifications[]" class="form-control form-control-sm mt-2 justification-textarea justification-{{ $i }}" style="display: {{ (old('applicabilities.' . $i, $applicability) === 'no') ? 'block' : 'none' }};" placeholder="Enter justification">{{ old('justifications.' . $i) }}</textarea>
+                                <textarea @disabled(!$isDataInputter) name="justifications[]" class="form-control form-control-sm mt-2 justification-textarea justification-{{ $i }}" style="display: {{ (old('applicabilities.' . $i, $applicability) === 'no') ? 'block' : 'none' }};" placeholder="Enter justification">{{ old('justifications.' . $i) }}</textarea>
                             </td>
 
 
                             <td>
                                 <div class="d-flex align-items-center gap-2">
-                                    <select name="comp_statuses[]" class="form-select form-select-sm rounded-pill" style="max-width:150px;min-width:150px;">
+                                    <select @disabled(!$isDataInputter) name="comp_statuses[]" class="form-select form-select-sm rounded-pill" style="max-width:150px;min-width:150px;">
                                         <option value="">Select --</option>
                                         @foreach([
                                         'yes' => 'In Place',

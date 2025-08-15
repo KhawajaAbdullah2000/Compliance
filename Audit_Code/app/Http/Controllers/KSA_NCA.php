@@ -82,6 +82,8 @@ class KSA_NCA extends Controller
                 //  dd($finalApplicabilityByTitle);
 
 
+                 $domainNames = config('domain-names')[$project->project_type] ?? [];
+               
 
 
                 return view('KSA_NCA.sec_2_2_subsections', [
@@ -90,7 +92,9 @@ class KSA_NCA extends Controller
                     'project' => $project,
                     'asset' => $asset,
                     'finalStatusByTitle' => $finalStatusByTitle,
-                    'finalApplicabilityByTitle' => $finalApplicabilityByTitle
+                    'finalApplicabilityByTitle' => $finalApplicabilityByTitle,
+                    'domainNames'=>$domainNames,
+                    'project_permissions'=>$checkpermission->project_permissions
                 ]);
             }
         }
@@ -1653,15 +1657,14 @@ class KSA_NCA extends Controller
                         $data
                     );
 
-                     DB::table('audit_iso_sec_2_2')->updateOrInsert(
-                        [
+                     DB::table('audit_iso_sec_2_2')->Insert(
+                      array_merge(  [
                             'project_id' => $proj_id,
                             'asset_id' => $asset_id,
                             'title_num' => $innerArray[0],
                             'sub_req' => $innerArray[3],
                             'subdomain' => $innerArray[1]
-                        ],
-                        $data
+                        ],$data)
                     );
                 }
             } else {
@@ -1678,15 +1681,16 @@ class KSA_NCA extends Controller
                             $data
                         );
 
-                         DB::table('audit_iso_sec_2_2')->updateOrInsert(
-                            [
+                         DB::table('audit_iso_sec_2_2')->Insert(
+                            array_merge( [
                                 'project_id' => $proj_id,
                                 'asset_id' => $ass->assessment_id,
                                 'title_num' => $innerArray[0],
                                 'sub_req' => $innerArray[3],
                                 'subdomain' => $innerArray[1]
-                            ],
-                            $data
+                            ],$data)
+                           
+                            
                         );
                     }
                 }
@@ -1799,6 +1803,19 @@ class KSA_NCA extends Controller
                         ],
                         $data
                     );
+
+                     DB::table('audit_iso_sec_2_2')->Insert(
+                       array_merge( [
+                            'project_id' => $proj_id,
+                            'asset_id' => $asset_id,
+                            'title_num' => $innerArray[0],
+                            'sub_req' => $innerArray[3],
+                            'subdomain' => $innerArray[1]
+                        ],$data)
+
+                    );
+
+                      
                 }
             }
 
@@ -1858,6 +1875,17 @@ class KSA_NCA extends Controller
                             'subdomain' => $innerArray[1]
                         ],
                         $data
+                    );
+
+                       DB::table('audit_iso_sec_2_2')->updateOrInsert(
+                      array_merge(  [
+                            'project_id' => $proj_id,
+                            'asset_id' => $ass->assessment_id,
+                            'title_num' => $innerArray[0],
+                            'sub_req' => $innerArray[3],
+                            'subdomain' => $innerArray[1]
+                        ],
+                        $data)
                     );
                 }
             }
@@ -1968,6 +1996,17 @@ class KSA_NCA extends Controller
                         ],
                         $data
                     );
+
+                     DB::table('audit_iso_sec_2_2')->Insert(
+                       array_merge( [
+                            'project_id' => $proj_id,
+                            'asset_id' => $asset_id,
+                            'title_num' => $innerArray[0],
+                            'sub_req' => $innerArray[3],
+                            'subdomain' => $innerArray[1]
+                        ],
+                        $data)
+                    );
                 }
             }
 
@@ -2031,6 +2070,17 @@ class KSA_NCA extends Controller
                             'subdomain' => $innerArray[1]
                         ],
                         $data
+                    );
+
+                    DB::table('audit_iso_sec_2_2')->Insert(
+                        array_merge([
+                            'project_id' => $proj_id,
+                            'asset_id' => $ass->assessment_id,
+                            'title_num' => $innerArray[0],
+                            'sub_req' => $innerArray[3],
+                            'subdomain' => $innerArray[1]
+                        ],
+                        $data)
                     );
                 }
             }

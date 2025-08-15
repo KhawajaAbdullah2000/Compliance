@@ -7,7 +7,8 @@
 
 @include('iso_sec_nav')
 @php
-$permissions=json_decode($project_permissions);
+    $permissions = json_decode($project_permissions, true);
+    $isDataInputter = in_array('Data Inputter', $permissions ?? []);
 @endphp
 
 <div class="container">
@@ -75,7 +76,7 @@ $permissions=json_decode($project_permissions);
         @csrf
 
         <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-success btn-md px-5">Save All</button>
+            <button @disabled(!$isDataInputter) class="btn btn-success btn-md px-5">Save All</button>
         </div>
 
         <table class="table table-bordered table-responsive table-primary">
@@ -133,14 +134,14 @@ $permissions=json_decode($project_permissions);
     <td>
         <input type="hidden" name="sub_reqs[]" value="{{$subReq}}">
 
-        <select name="applicabilities[]" class="form-select form-select-sm rounded-pill applicability-select" data-index="{{$index}}" style="max-width:150px; min-width:150px;">
+        <select  @disabled(!$isDataInputter) name="applicabilities[]" class="form-select form-select-sm rounded-pill applicability-select" data-index="{{$index}}" style="max-width:150px; min-width:150px;">
             <option value="">Select --</option>
             <option value="yes" {{ $applicability == 'yes' ? 'selected' : '' }}>Yes</option>
             <option value="no" {{ $applicability == 'no' ? 'selected' : '' }}>No</option>
         </select>
 
         <!-- Justification field -->
-        <textarea name="justifications[]" 
+        <textarea @disabled(!$isDataInputter) name="justifications[]" 
                   class="form-control form-control-sm mt-2 justification-textarea justification-{{$index}}" 
                   placeholder="Enter justification"
                   style="display: {{ $applicability == 'no' ? 'block' : 'none' }};">{{$justification}}</textarea>
@@ -148,7 +149,7 @@ $permissions=json_decode($project_permissions);
 
     <td>
         <div class="d-flex align-items-center gap-2">
-            <select name="comp_statuses[]" class="form-select rounded-pill form-select-sm" style="max-width: 180px;">
+            <select  @disabled(!$isDataInputter) name="comp_statuses[]" class="form-select rounded-pill form-select-sm" style="max-width: 180px;">
                 <option value="">Select --</option>
                 <option value="yes" {{ $status == 'yes' ? 'selected' : '' }}>In Place</option>
                 <option value="no" {{ $status == 'no' ? 'selected' : '' }}>Not in Place</option>
@@ -167,7 +168,7 @@ $permissions=json_decode($project_permissions);
         </table>
 
         <div class="d-flex justify-content-end mt-3">
-            <button class="btn btn-success btn-md px-5">Save All</button>
+            <button  @disabled(!$isDataInputter) class="btn btn-success btn-md px-5">Save All</button>
         </div>
     </form>
 

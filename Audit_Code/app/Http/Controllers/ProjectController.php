@@ -4826,7 +4826,6 @@ class ProjectController extends Controller
 
         $asset_activities = Db::table('audit_trail_for_services')
             ->where('project_id', $proj_id)
-            ->orWhere('project_id', null)
             ->where('last_edited_by', $user_id)
             ->get();
 

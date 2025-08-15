@@ -176,12 +176,14 @@ class IsoSec2_2 extends Controller
 
                
                 if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23 || $checkpermission->type_id == 24 || $checkpermission->type_id == 1 || $checkpermission->type_id == 2 || $checkpermission->type_id == 3 ||$checkpermission->type_id==16) {
+            
 
                     return view('KSA_NCA.ksa_nca_sec_2_2_evidence_selection', [
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
                         'project' => $project,
-                        'asset' => $asset
+                        'asset' => $asset,
+                        'project_permissions'=>$checkpermission->project_permissions
 
                     ]);
                 }

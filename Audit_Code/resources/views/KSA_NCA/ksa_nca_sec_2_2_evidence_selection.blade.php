@@ -6,6 +6,11 @@
 
 @include('iso_sec_nav')
 
+@php
+    $permissions = json_decode($project_permissions, true);
+    $isDataInputter = in_array('Data Inputter', $permissions ?? []);
+@endphp
+
 <div class="container">
 
     <div class="row mt-5">
@@ -43,43 +48,49 @@
 
     <div class="border p-3 col-md-6" style="border: 1px solid #ccc; border-radius: 5px;background-color: #f3f3f3">
     <div class="row">
+       
         <h5 class="fw-bold">Select the level at which to assist compliance by selecting from the 
             list below:</h5>
-        <div class="col-md-6">
-    
-            <div class="border p-3" style="border: 1px solid #ccc; border-radius: 5px;">
-                <div class="d-flex flex-column">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="evidenceLevel" value="project" checked>
-                        <label class="form-check-label" for="project">Project</label>
-                    </div>
-    
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="evidenceLevel" value="service">
-                        <label class="form-check-label" for="service">Service</label>
-                    </div>
-    
-                    @if($asset->g_name!=null)
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="evidenceLevel" value="group">
-                        <label class="form-check-label" for="assetGroup">Asset Type</label>
-                    </div>
-                    @endif
-    
-                    @if($asset->name!=null)
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="evidenceLevel" value="name">
-                        <label class="form-check-label" for="asset">Asset Subtype</label>
-                    </div>
-                    @endif
-    
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="evidenceLevel" value="component" checked>
-                        <label class="form-check-label" for="assetComponent">Asset Component</label>
-                    </div>
-                </div>
+   <div class="col-md-6">
+    <div class="border p-3" style="border: 1px solid #ccc; border-radius: 5px;">
+        <div class="d-flex flex-column">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="evidenceLevel" value="project" 
+                       @if(!$isDataInputter) disabled @endif checked>
+                <label class="form-check-label" for="project">Project</label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="evidenceLevel" value="service" 
+                       @if(!$isDataInputter) disabled @endif>
+                <label class="form-check-label" for="service">Service</label>
+            </div>
+
+            @if($asset->g_name != null)
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="evidenceLevel" value="group" 
+                       @if(!$isDataInputter) disabled @endif>
+                <label class="form-check-label" for="assetGroup">Asset Type</label>
+            </div>
+            @endif
+
+            @if($asset->name != null)
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="evidenceLevel" value="name" 
+                       @if(!$isDataInputter) disabled @endif>
+                <label class="form-check-label" for="asset">Asset Subtype</label>
+            </div>
+            @endif
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="evidenceLevel" value="component" 
+                       @if(!$isDataInputter) disabled @endif checked>
+                <label class="form-check-label" for="assetComponent">Asset Component</label>
             </div>
         </div>
+    </div>
+</div>
+       
     </div>
 </div>
     

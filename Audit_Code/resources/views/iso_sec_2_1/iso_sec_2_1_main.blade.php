@@ -71,7 +71,7 @@ $permissions = json_decode($project_permissions);
     <div class="border p-3 mb-4" style="border: 1px solid #ccc; border-radius: 5px;background-color: #f3f3f3">
         <div class="row">
             <h5 class="fw-bold">Select to Hide Columns:</h5>
-          
+
             <div class="col-md-6">
                 <div class="border p-3" style="border: 1px solid #ccc; border-radius: 5px;">
                     <div class="row">
@@ -122,7 +122,7 @@ $permissions = json_decode($project_permissions);
                 </div>
             </div>
 
-            
+
 
 
 
@@ -148,10 +148,10 @@ $permissions = json_decode($project_permissions);
 
                 </form>
             </div>
-           
+
             @endif
 
-            @if($page_type=="services_register")
+            @if (in_array('Data Inputter', $permissions) && $page_type=="services_register")
             <div class="col-md-2">
                 <p class="form-label fw-bold">Copy Assets from</p>
                 <a href="/assets_to_copy_from_register/{{$project_id}}/{{auth()->user()->organization->id}}" class="btn btn-warning">Service Register</a>
