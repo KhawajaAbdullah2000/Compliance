@@ -71,9 +71,9 @@ class RiskRegisterController extends Controller
                     'project' => $project,
                     'assets' => $assets,
                     'project_permissions' => $checkpermission->project_permissions,
-                    'complianceFramework'=>$frameworkDetails['complianceFramework'],
-                    'risk_assessment_approach'=>$frameworkDetails['risk_assessment_approach'],
-                    'framework_approach'=>$frameworkDetails['framework_approach']
+                    'complianceFramework' => $frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
+                    'framework_approach' => $frameworkDetails['framework_approach']
 
                 ]);
             }
@@ -82,29 +82,121 @@ class RiskRegisterController extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-    
+    public function view_risk_register_from_home($org_id){
+        return view('risk_register.view_risk_register_from_home');
+    }
+
+
+    public function index(string $dimension, int $orgId)
+    {
+        // Map each dimension to the columns we want to show (order matters)
+        $columnSets = [
+            'project' => [
+                ['key' => 'project_name',  'label' => 'Project'],
+                ['key' => 'status',        'label' => 'Status'],
+            ],
+            'services' => [
+                ['key' => 's_name',        'label' => 'Service'],
+                ['key' => 'project_name',  'label' => 'Project'],
+                ['key' => 'status',        'label' => 'Status'],
+            ],
+            'asset_types' => [
+                ['key' => 'g_name',        'label' => 'Asset Type'],
+                ['key' => 's_name',        'label' => 'Service'],
+                ['key' => 'project_name',  'label' => 'Project'],
+                ['key' => 'status',        'label' => 'Status'],
+            ],
+            'asset_sub_types' => [
+                ['key' => 'name',          'label' => 'Asset Sub Type'],
+                ['key' => 'g_name',        'label' => 'Asset Type'],
+                ['key' => 's_name',        'label' => 'Service'],
+                ['key' => 'project_name',  'label' => 'Project'],
+                ['key' => 'status',        'label' => 'Status'],
+            ],
+            'components' => [
+                ['key' => 'c_name',        'label' => 'Component'],
+                ['key' => 'name',          'label' => 'Asset Sub Type'],
+                ['key' => 'g_name',        'label' => 'Asset Type'],
+                ['key' => 's_name',        'label' => 'Service'],
+                ['key' => 'project_name',  'label' => 'Project'],
+                ['key' => 'status',        'label' => 'Status'],
+            ],
+        ];
+
+        abort_unless(isset($columnSets[$dimension]), 404);
+
+     
+        $q = DB::table('iso_sec_2_1 as i')
+            ->join('projects as p', 'p.project_id', '=', 'i.project_id')
+            ->where('p.org_id', $orgId);
+
+        // Require relevant levels to be present for each non-project view
+        // (component is mandatory; others are optional otherwise)
+        switch ($dimension) {
+            case 'services':
+                $q->whereNotNull('i.s_name');
+                break;
+            case 'asset_types':
+                $q->whereNotNull('i.g_name');
+                break;
+            case 'asset_sub_types':
+                $q->whereNotNull('i.name');
+                break;
+            case 'components':
+                $q->whereNotNull('i.c_name'); // component required
+                break;
+            case 'project':
+            default:
+                // no extra filters
+                break;
+        }
+
+        // Select only the needed columns for this view + distinct tuples
+        $selects = collect($columnSets[$dimension])->pluck('key')->map(function ($k) {
+            // qualify columns
+            if (in_array($k, ['project_name', 'status'])) return "p.$k as $k";
+            return "i.$k as $k";
+        })->all();
+
+        $rows = $q->select($selects)
+            ->distinct()
+            ->orderBy('p.project_name')
+            ->paginate(25)
+            ->appends(request()->query()); // keep query params in pagination links
+
+        return view('risk_register.index', [
+            'dimension' => $dimension,
+            'columns'   => $columnSets[$dimension],
+            'rows'      => $rows,
+            'orgId'     => $orgId,
+        ]);
+    }
+
+
     function getProjectFrameworkDetails($project)
-{
-    $orgId = auth()->user()->organization->id;
+    {
+        $orgId = auth()->user()->organization->id;
 
-    $complianceFramework = DB::table('org_projects_framework_selected')
-        ->join('risk_management_framework','org_projects_framework_selected.framework_selected', '=', 'risk_management_framework.framework_id')
-        ->where('org_id', $orgId)
-        ->where('project_type_id', $project->project_type)
-        ->first();
+        $complianceFramework = DB::table('org_projects_framework_selected')
+            ->join('risk_management_framework', 'org_projects_framework_selected.framework_selected', '=', 'risk_management_framework.framework_id')
+            ->where('org_id', $orgId)
+            ->where('project_type_id', $project->project_type)
+            ->first();
 
-    $risk_assessment_approach = DB::table('org_risk_assessment_approach')
-        ->join('global_risk_assessment_approach', 'org_risk_assessment_approach.assessment_approach_selected', '=', 'global_risk_assessment_approach.global_risk_assessment_approach_id')
-        ->where('org_risk_assessment_approach.org_id', $orgId)
-        ->where('project_type_id', $project->project_type)
-        ->first();
+        $risk_assessment_approach = DB::table('org_risk_assessment_approach')
+            ->join('global_risk_assessment_approach', 'org_risk_assessment_approach.assessment_approach_selected', '=', 'global_risk_assessment_approach.global_risk_assessment_approach_id')
+            ->where('org_risk_assessment_approach.org_id', $orgId)
+            ->where('project_type_id', $project->project_type)
+            ->first();
 
-    $framework_approach = DB::table('org_framework_approach_selected')
-        ->join('framework_approach_types', 'org_framework_approach_selected.framework_approach_types', '=', 'framework_approach_types.framework_approach_types_id')
-        ->where('org_framework_approach_selected.org_id', $orgId)
-        ->where('project_type_id', $project->project_type)
-        ->first();
+        $framework_approach = DB::table('org_framework_approach_selected')
+            ->join('framework_approach_types', 'org_framework_approach_selected.framework_approach_types', '=', 'framework_approach_types.framework_approach_types_id')
+            ->where('org_framework_approach_selected.org_id', $orgId)
+            ->where('project_type_id', $project->project_type)
+            ->first();
 
-    return compact('complianceFramework', 'risk_assessment_approach', 'framework_approach');
-}
+        return compact('complianceFramework', 'risk_assessment_approach', 'framework_approach');
+    }
+
+
 }

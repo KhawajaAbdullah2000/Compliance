@@ -554,7 +554,7 @@ class IsoSec2_1 extends Controller
 
         $req->validate(
             [
-                's_name' => 'required|string',
+               
                 'c_name' => 'required',
 
             ],

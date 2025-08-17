@@ -74,6 +74,14 @@
                         </span>
                         <i class="bi bi-arrow-right"></i>
                     </a>
+
+                       <a href="/view_risk_register_from_home/{{ auth()->user()->organization->id }}" class="btn btn-tile btn-risk-register">
+                        <span class="label">
+                        <i class="bi bi-projector"></i>
+                            VIew Risk Register
+                        </span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </div>
