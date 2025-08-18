@@ -86,15 +86,15 @@ $permissions = json_decode($project_permissions);
                                 <label class="form-check-label" for="toggleAsset">Asset Subtype</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="toggleOwner" data-column="4">
+                                <input class="form-check-input toggle-column" type="checkbox" id="toggleOwner" data-column="7">
                                 <label class="form-check-label" for="toggleOwner">Asset Component Owner Dept</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="togglePhysical" data-column="5">
+                                <input class="form-check-input toggle-column" type="checkbox" id="togglePhysical" data-column="8">
                                 <label class="form-check-label" for="togglePhysical">Asset Component Physical Location</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="toggleLogical" data-column="6">
+                                <input class="form-check-input toggle-column" type="checkbox" id="toggleLogical" data-column="9">
                                 <label class="form-check-label" for="toggleLogical">Asset Component Logical Location</label>
                             </div>
                         </div>
@@ -102,19 +102,19 @@ $permissions = json_decode($project_permissions);
                         <!-- Second Column -->
                         <div class="col-md-6">
                             <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="toggleServiceRiskOwner" data-column="7">
+                                <input class="form-check-input toggle-column" type="checkbox" id="toggleServiceRiskOwner" data-column="10">
                                 <label class="form-check-label" for="toggleServiceRiskOwner">Service Risk Owner</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="toggleAssCompRiskOwner" data-column="8">
+                                <input class="form-check-input toggle-column" type="checkbox" id="toggleAssCompRiskOwner" data-column="11">
                                 <label class="form-check-label" for="toggleAssCompRiskOwner">Asset Component Risk Owner</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="toggleServiceCustodian" data-column="9">
+                                <input class="form-check-input toggle-column" type="checkbox" id="toggleServiceCustodian" data-column="12">
                                 <label class="form-check-label" for="toggleServiceCustodian">Service Custodian</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input toggle-column" type="checkbox" id="toggleAssCompCustodian" data-column="10">
+                                <input class="form-check-input toggle-column" type="checkbox" id="toggleAssCompCustodian" data-column="13">
                                 <label class="form-check-label" for="toggleAssCompCustodian">Asset Component Custodian</label>
                             </div>
                         </div>
@@ -126,7 +126,7 @@ $permissions = json_decode($project_permissions);
 
 
 
-            @if ($org_projects->count() > 0 && in_array('Data Inputter', $permissions))
+            @if ($org_projects->count() > 0 && in_array('Data Inputter', $permissions) && $page_type=='services_register' )
             <div class="col-md-4">
                 <form action="/copy_assets/{{ $project_id }}/{{ auth()->user()->id }}" method="get" class="d-flex align-items-center">
                     <div class="form-group w-50">
@@ -174,13 +174,16 @@ $permissions = json_decode($project_permissions);
                 <th onclick="sortTable(1)">Asset Type</th>
                 <th onclick="sortTable(2)">Asset SubType</th>
                 <th onclick="sortTable(3)">Asset Component</th>
-                <th onclick="sortTable(4)">Asset Component Owner Dept</th>
-                <th onclick="sortTable(5)">Asset Component Physical Location</th>
-                <th onclick="sortTable(6)">Asset Component Logical Location</th>
-                <th onclick="sortTable(7)">Service Risk Owner</th>
-                <th onclick="sortTable(8)">Asset Component Risk Owner</th>
-                <th onclick="sortTable(9)">Service Custodian</th>
-                <th onclick="sortTable(10)">Asset Component Custodian</th>
+                <th onclick="sortTable(4)">Confidentiality Classification</th>
+                <th onclick="sortTable(5)">Integrity Classification</th>
+                <th onclick="sortTable(6)">Availability Classification</th>
+                <th onclick="sortTable(7)">Asset Component Owner Dept</th>
+                <th onclick="sortTable(8)">Asset Component Physical Location</th>
+                <th onclick="sortTable(9)">Asset Component Logical Location</th>
+                <th onclick="sortTable(10)">Service Risk Owner</th>
+                <th onclick="sortTable(11)">Asset Component Risk Owner</th>
+                <th onclick="sortTable(12)">Service Custodian</th>
+                <th onclick="sortTable(13)">Asset Component Custodian</th>
                 @if($page_type=="assess_compliance")
                 <th>Assess Compliance</th>
                 @endif
@@ -204,6 +207,9 @@ $permissions = json_decode($project_permissions);
                 <td>{{ $d->g_name }}</td>
                 <td>{{ $d->name }}</td>
                 <td>{{ $d->c_name }}</td>
+                <td>{{ $d->risk_confidentiality }}</td>
+                <td>{{ $d->risk_integrity }}</td>
+                <td>{{ $d->risk_availability }}</td>
                 <td>{{ $d->owner_dept }}</td>
                 <td>{{ $d->physical_loc }}</td>
                 <td>{{ $d->logical_loc }}</td>

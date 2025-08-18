@@ -259,7 +259,10 @@ class IsoSec2_1 extends Controller
                 'name' => 'required',
                 's_name' => 'required|string',
                 'c_name' => 'required|array|min:1',
-                'c_name.*' => 'required|string|max:255'
+                'c_name.*' => 'required|string|max:255',
+                'risk_confidentiality' => 'required',
+                'risk_integrity' => 'required',
+                'risk_availability' => 'required'
             ],
             [
                 '*.required' => 'This field is required',
@@ -306,7 +309,11 @@ class IsoSec2_1 extends Controller
                                 'service_risk_owner' => $req->service_risk_owner,
                                 'component_risk_owner' => $req->component_risk_owner,
                                 'service_custodian' => $req->service_custodian,
-                                'component_custodian' => $req->component_custodian
+                                'component_custodian' => $req->component_custodian,
+                                'risk_confidentiality' => $req->risk_confidentiality,
+                                'risk_integrity' => $req->risk_integrity,
+                                'risk_availability' => $req->risk_availability,
+
                             ]);
 
                             Db::table('audit_trail_for_services')->insert([
@@ -324,7 +331,10 @@ class IsoSec2_1 extends Controller
                                 'risk_confidentiality' => 10,
                                 'risk_integrity' => 10,
                                 'risk_availability' => 10,
-                                'performed_at' => Carbon::now()->format('Y-m-d H:i:s')
+                                'performed_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                                'risk_confidentiality' => $req->risk_confidentiality,
+                                'risk_integrity' => $req->risk_integrity,
+                                'risk_availability' => $req->risk_availability,
                             ]);
                         }
                     } catch (\Exception $e) {
@@ -389,6 +399,21 @@ class IsoSec2_1 extends Controller
                     $departments = DB::table('departments')->where('org_id', auth()->user()->organization->id)
                         ->get();
 
+                    $project_type = DB::table('project_types')->where('id', $project->project_type)->first();
+
+
+                    $schemeKey = $project_type->risk_scheme ?? 'none';
+
+                    $allSchemes = config('risk_schemes');
+
+                    $scheme = $allSchemes[$schemeKey] ?? $allSchemes['none'];
+
+
+                    $riskValues = $scheme['values']; // e.g., [5,4,3,2,1]
+                    $riskMap    = $scheme['map'] ?? null;    // name map if named
+                    $isNamed    = $scheme['named'];
+
+
 
                     return view('iso_sec_2_1.iso_sec_2_1_new', [
                         'project_id' => $checkpermission->project_id,
@@ -400,7 +425,11 @@ class IsoSec2_1 extends Controller
                         'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
                         'framework_approach' => $frameworkDetails['framework_approach'],
                         'users' => $users,
-                        'departments' => $departments
+                        'departments' => $departments,
+                        'schemeKey'  => $schemeKey,
+                        'riskValues' => $riskValues,
+                        'riskMap'    => $riskMap,
+                        'isNamed'    => $isNamed,
 
                     ]);
                 }
@@ -472,6 +501,14 @@ class IsoSec2_1 extends Controller
                     $departments = DB::table('departments')->where('org_id', auth()->user()->organization->id)
                         ->get();
 
+                    $allSchemes = config('risk_schemes');
+                    $schemeKey  = $project->risk_scheme ?? 'none';
+                    $scheme     = $allSchemes[$schemeKey] ?? $allSchemes['none'];
+
+                    $riskValues = $scheme['values'];
+                    $riskMap    = $scheme['map'] ?? [];
+                    $isNamed    = $scheme['named'] ?? false;
+
 
 
                     return view('iso_sec_2_1.iso_sec_2_1_edit', [
@@ -487,7 +524,11 @@ class IsoSec2_1 extends Controller
                         'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
                         'framework_approach' => $frameworkDetails['framework_approach'],
                         'users' => $users,
-                        'departments' => $departments
+                        'departments' => $departments,
+                        'schemeKey'  => $schemeKey,
+                        'riskValues' => $riskValues,
+                        'riskMap'    => $riskMap,
+                        'isNamed'    => $isNamed,
                     ]);
                 }
             }
@@ -554,8 +595,11 @@ class IsoSec2_1 extends Controller
 
         $req->validate(
             [
-               
+
                 'c_name' => 'required',
+                'risk_confidentiality' => 'required',
+                'risk_integrity'       => ['required'],
+                'risk_availability'    => ['required'],
 
             ],
             [
@@ -598,7 +642,10 @@ class IsoSec2_1 extends Controller
                                 'service_risk_owner' => $req->service_risk_owner,
                                 'component_risk_owner' => $req->component_risk_owner,
                                 'service_custodian' => $req->service_custodian,
-                                'component_custodian' => $req->component_custodian
+                                'component_custodian' => $req->component_custodian,
+                                'risk_confidentiality' => $req->risk_confidentiality,
+                                'risk_integrity' => $req->risk_integrity,
+                                'risk_availability' => $req->risk_availability
                             ]);
 
                         Db::table('audit_trail_for_services')->insert([
@@ -616,7 +663,10 @@ class IsoSec2_1 extends Controller
                             'risk_confidentiality' => 10,
                             'risk_integrity' => 10,
                             'risk_availability' => 10,
-                            'performed_at' => Carbon::now()->format('Y-m-d H:i:s')
+                            'performed_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                            'risk_confidentiality' => $req->risk_confidentiality,
+                            'risk_integrity' => $req->risk_integrity,
+                            'risk_availability' => $req->risk_availability
                         ]);
 
 
@@ -831,7 +881,7 @@ class IsoSec2_1 extends Controller
                         if ($row[0] != null) {
                             $s_name[] = $row[0];
                         } else {
-                              $s_name[] = null;
+                            $s_name[] = null;
                         }
 
                         if ($row[1] != null) {
@@ -1115,7 +1165,7 @@ class IsoSec2_1 extends Controller
                                 'component_custodian' => $ass->component_custodian
                             ]);
 
-                             DB::table('audit_trail_for_services')->insert([
+                            DB::table('audit_trail_for_services')->insert([
                                 'project_id' => $proj_id,
                                 'g_name' => $ass->g_name,
                                 'name' => $ass->name,
@@ -1125,14 +1175,11 @@ class IsoSec2_1 extends Controller
                                 'logical_loc' => $ass->logical_loc,
                                 's_name' => $ass->s_name,
                                 'last_edited_by' => $user_id,
-                                 'performed_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                                'performed_at' => Carbon::now()->format('Y-m-d H:i:s'),
                                 'operation_type' => 'copied from Another Project',
-                              
+
                             ]);
-
                         }
-
-
                     } catch (\Exception $e) {
                         return redirect()->route('iso_section2_1', [
                             'proj_id' => $proj_id,
@@ -1215,19 +1262,16 @@ class IsoSec2_1 extends Controller
                                 'logical_loc' => $ass->logical_loc,
                                 's_name' => $ass->s_name,
                                 'last_edited_by' => $user_id,
-                                 'performed_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                                'performed_at' => Carbon::now()->format('Y-m-d H:i:s'),
                                 'operation_type' => 'copied from global assets',
-                              
-                            ]);
 
-                            
-                            
+                            ]);
                         }
                     } catch (\Exception $e) {
                         return redirect()->route('iso_section2_1', [
                             'proj_id' => $proj_to_copy,
                             'user_id' => $user_id,
-                             'page_type' => 'services_register'
+                            'page_type' => 'services_register'
                         ])->with('error', 'Error copying assets: ' . $e->getMessage());
                     }
 
@@ -1409,22 +1453,22 @@ class IsoSec2_1 extends Controller
                     'component_custodian' => $req->component_custodian
                 ]);
 
-                 Db::table('audit_trail_for_services')->insert([
-                                'asset_id' => $assessment_id,
-                                'last_edited_by' => $user_id,
-                                'operation_type' => 'insert',
-                                'g_name' => $req->g_name,
-                                'name' => $req->name,
-                                'c_name' => $component,
-                                's_name' => $req->s_name,
-                                'owner_dept' => $req->owner_dept,
-                                'physical_loc' => $req->physical_loc,
-                                'logical_loc' => $req->logical_loc,
-                                'risk_confidentiality' => 10,
-                                'risk_integrity' => 10,
-                                'risk_availability' => 10,
-                                'performed_at' => Carbon::now()->format('Y-m-d H:i:s')
-                            ]);
+                Db::table('audit_trail_for_services')->insert([
+                    'asset_id' => $assessment_id,
+                    'last_edited_by' => $user_id,
+                    'operation_type' => 'insert',
+                    'g_name' => $req->g_name,
+                    'name' => $req->name,
+                    'c_name' => $component,
+                    's_name' => $req->s_name,
+                    'owner_dept' => $req->owner_dept,
+                    'physical_loc' => $req->physical_loc,
+                    'logical_loc' => $req->logical_loc,
+                    'risk_confidentiality' => 10,
+                    'risk_integrity' => 10,
+                    'risk_availability' => 10,
+                    'performed_at' => Carbon::now()->format('Y-m-d H:i:s')
+                ]);
             }
         } catch (\Exception $e) {
             $error = $e->getMessage();
@@ -1521,7 +1565,7 @@ class IsoSec2_1 extends Controller
         return back()->with('success', 'Document deleted successfully.');
     }
 
-     public function detachDocument($assessmentId, $documentId)
+    public function detachDocument($assessmentId, $documentId)
     {
         // Remove the pivot row (safe even if it doesn't exist)
         DB::table('iso_sec_2_2_attachments')

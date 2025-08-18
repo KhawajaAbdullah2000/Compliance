@@ -59,7 +59,7 @@ $permissions = json_decode($project_permissions);
 
 
                         <div class="mb-4">
-                            <label for="c_name" class="form-label fw-semibold">Asset Component Names</label>
+                            <label for="c_name" class="form-label fw-semibold">Asset Component</label>
                             <div id="component-fields">
                                 <div class="input-group mb-3">
                                     <input type="text" name="c_name[]" class="form-control rounded-pill" placeholder="Enter Component Name">
@@ -78,6 +78,67 @@ $permissions = json_decode($project_permissions);
                             @endforeach
                         </div>
 
+
+
+                        {{-- Risk classification dropdowns --}}
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Confidentiality Classification</label>
+                            <select name="risk_confidentiality" class="form-select">
+                                <option value="">-- Select --</option>
+                                @foreach($riskValues as $val)
+                                @php
+                                $optLabel = $isNamed ? ($riskMap[$val]['label'] ?? $val) : $val;
+                                @endphp
+                                <option value="{{ $val }}" {{ (string)old('risk_confidentiality') === (string)$val ? 'selected' : '' }}>
+                                    {{ $isNamed ? "$val — $optLabel" : $optLabel }}
+                                </option>
+                                @endforeach
+                            </select>
+                            @error('risk_confidentiality') <div class="text-danger small mt-2">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Integrity Classification</label>
+                            <select name="risk_integrity" class="form-select">
+                                <option value="">-- Select --</option>
+                                @foreach($riskValues as $val)
+                                @php
+                                $optLabel = $isNamed ? ($riskMap[$val]['label'] ?? $val) : $val;
+                                @endphp
+                                <option value="{{ $val }}" {{ (string)old('risk_integrity') === (string)$val ? 'selected' : '' }}>
+                                    {{ $isNamed ? "$val — $optLabel" : $optLabel }}
+                                </option>
+                                @endforeach
+                            </select>
+                            @error('risk_integrity') <div class="text-danger small mt-2">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Availability Classification</label>
+                            <select name="risk_availability" class="form-select">
+                                <option value="">-- Select --</option>
+                                @foreach($riskValues as $val)
+                                @php
+                                $optLabel = $isNamed ? ($riskMap[$val]['label'] ?? $val) : $val;
+                                @endphp
+                                <option value="{{ $val }}" {{ (string)old('risk_availability') === (string)$val ? 'selected' : '' }}>
+                                    {{ $isNamed ? "$val — $optLabel" : $optLabel }}
+                                </option>
+                                @endforeach
+                            </select>
+                            @error('risk_availability') <div class="text-danger small mt-2">{{ $message }}</div> @enderror
+                        </div>
+
+                        {{-- Optional: tiny legend for clarity --}}
+                        {{-- @if($isNamed && !empty($riskMap))
+                        <div class="small">
+                            <span class="{{ $riskMap[10]['class'] ?? '' }}">10 — {{ $riskMap[10]['label'] ?? '' }}</span> ·
+                            <span class="{{ $riskMap[5]['class']  ?? '' }}">5 — {{ $riskMap[5]['label']  ?? '' }}</span> ·
+                            <span class="{{ $riskMap[1]['class']  ?? '' }}">1 — {{ $riskMap[1]['label']  ?? '' }}</span>
+                        </div>
+                        @endif --}}
+
+
                         <!-- Asset Owner Sub-Organization -->
                         <div class="mb-4">
                             <label for="owner_dept" class="form-label fw-semibold">Asset Component Owner Dept</label>
@@ -87,7 +148,7 @@ $permissions = json_decode($project_permissions);
                                 <option value="{{$dept->name}}">{{$dept->name}}</option>
                                 @endforeach
                             </select>
-                         
+
                             @if($errors->has('owner_dept'))
                             <div class="text-danger small mt-2">{{ $errors->first('owner_dept') }}</div>
                             @endif
