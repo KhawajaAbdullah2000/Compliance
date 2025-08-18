@@ -55,7 +55,7 @@
             <h4><span class="fw-bold">Assets Selected : </span> 
                 @isset($group)
                 @if($group=='_all')
-                All Asset Groups -
+                All Asset Types -
                 @else
                 {{$group}} -
                 @endif
@@ -64,7 +64,7 @@
         
             @isset($subgroup)
             @if($subgroup=='_all')
-            All Asset Subgroups -
+            All Asset Sub Types -
             @else
             {{$subgroup}} -
             @endif

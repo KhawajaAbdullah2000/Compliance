@@ -103,7 +103,7 @@
                 $overallPercentage = $totalGroups > 0 ? $totalPercentage / $totalGroups : 0;
             @endphp
             <tr class="table-primary">
-                <td class="fw-bold">All Asset Groups</td>
+                <td class="fw-bold">All Asset Types</td>
                 <td class="fw-bold">{{ number_format($overallPercentage, 5) }}%</td>
                 <td class="fw-bold">{{ number_format(($totalDataConfidentiality/2700), 5) }}%</td>
                 <td class="fw-bold">{{ number_format(($totalDataIntegrity/2610), 5) }}%</td>

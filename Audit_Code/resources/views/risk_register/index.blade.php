@@ -22,7 +22,11 @@
                                 @foreach ($columns as $col)
                                 <th class="text-nowrap fw-semibold">{{ $col['label'] }}</th>
                                 @endforeach
+                                <th>Data Confidentiality Risk</th>
+                                <th>Data Integrity Risk</th>
+                                <th>Data Availability Risk</th>
                             </tr>
+
                         </thead>
                         <tbody>
                             @forelse ($rows as $row)
@@ -49,10 +53,14 @@
                                     @endif
                                 </td>
                                 @endforeach
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
+
                             @empty
                             <tr>
-                                <td colspan="{{ count($columns) }}" class="text-center text-muted py-4">
+                                <td colspan="{{ count($columns)+3 }}" class="text-center text-muted py-4">
                                     <i class="bi bi-inboxes fs-2 d-block mb-2"></i>
                                     No records found
                                 </td>

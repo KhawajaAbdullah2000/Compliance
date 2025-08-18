@@ -56,7 +56,7 @@
         <div class="col-md-6">
             <div class="card shadow">
                 <div class="card-header bg-warning text-white text-center">
-                    <h2>Available Sub Groups</h2>
+                    <h2>Available Sub Types</h2>
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
@@ -69,7 +69,7 @@
                         @endforeach
                         <li class="list-group-item">
                             <a href="{{ route('service_subgroups_to_components', ['domain'=>$domain,'domainName'=>$domainName,'service' => $service,'subgroup'=>'_all','proj_id'=>$project->project_id]) }}">
-                                All Asset Subgroups
+                                All Asset Sub Types
                             </a>
                         </li>
                     </ul>

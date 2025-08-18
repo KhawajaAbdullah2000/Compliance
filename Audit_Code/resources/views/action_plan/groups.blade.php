@@ -60,7 +60,7 @@
         <div class="col-md-6">
             <div class="card shadow">
                 <div class="card-header bg-warning text-white text-center">
-                    <h2>Available Groups</h2>
+                    <h2>Available Asset Types</h2>
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
@@ -74,7 +74,7 @@
 
                         <li class="list-group-item">
                             <a href="{{ route('action_plan.service.groups.subgroups', ['service' => $service,'group'=>'_all','proj_id'=>$project->project_id]) }}">
-                               All Asset Groups
+                               All Asset Types
                             </a>
                         </li>
                     </ul>

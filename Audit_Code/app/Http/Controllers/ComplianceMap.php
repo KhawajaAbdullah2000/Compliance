@@ -721,9 +721,11 @@ class ComplianceMap extends Controller
 
 
             $services = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
+                ->where('s_name', '!=', null)
                 ->select('s_name')
                 ->distinct()
                 ->get();
+
 
             $domainNames = config('domain-names')[$project->project_type] ?? [];
 
@@ -761,6 +763,7 @@ class ComplianceMap extends Controller
 
 
             $services = DB::table('iso_sec_2_1')->where('project_id', $proj_id)
+                ->where('s_name', '!=', null)
                 ->select('s_name')
                 ->distinct()
                 ->get();
@@ -1692,6 +1695,8 @@ class ComplianceMap extends Controller
             $domainNames = config('domain-names')[$project->project_type] ?? [];
         }
 
+
+  
 
         return view('compliance_map.subdomains_map', [
             'project' => $project,
