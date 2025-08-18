@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Organization;
 use App\Models\Privilege;
 use App\Models\User;
+use App\Support\RiskScheme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -98,6 +99,7 @@ public function root_home(){
 
 //return user home
 public function user_home(){
+    
         $org_projects=DB::table('organization_project_types')
         ->join('project_types','organization_project_types.project_type_id','project_types.id')
         ->where('org_id',auth()->user()->organization->id)

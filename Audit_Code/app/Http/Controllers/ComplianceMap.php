@@ -1823,9 +1823,6 @@ class ComplianceMap extends Controller
         }
 
 
-
-
-
         $formattedResults = [];
         $totalCounts = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\RiskScheme;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
@@ -108,9 +109,14 @@ class IsoSec2_3_1 extends Controller
 
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
+                    
 
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
                 //dd($frameworkDetails);
+                $schemeKey = $project->risk_scheme ?? 'none';
+                $scheme = RiskScheme::for($schemeKey);
+                $riskValues = RiskScheme::values($schemeKey);
+
 
 
                 if ($frameworkDetails['complianceFramework'] == null) {
@@ -123,6 +129,7 @@ class IsoSec2_3_1 extends Controller
                     && $frameworkDetails['framework_approach']->framework_approach_types_id == 1
                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 2
                 ) {
+
                     //ISo 27005:2022 Qualitative Asset based
                     return view("iso_27005.consequence_on_service", [
                         'project_id' => $checkpermission->project_id,
@@ -132,7 +139,10 @@ class IsoSec2_3_1 extends Controller
                         'asset' => $asset,
                         'complianceFramework' => $frameworkDetails['complianceFramework'],
                         'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
-                        'framework_approach' => $frameworkDetails['framework_approach']
+                        'framework_approach' => $frameworkDetails['framework_approach'],
+                        'schemeKey'   => $schemeKey,
+                        'scheme'      => $scheme,
+                        'riskValues'  => $riskValues,
                     ]);
                 }
 
@@ -143,7 +153,7 @@ class IsoSec2_3_1 extends Controller
                 ) {
                     //ISo 27005:2022 Quantitative Asset based
 
-                 
+
                     $consequence_scale = DB::table('org_quantitavie_consequence_scale')
                         ->join('global_currency', 'org_quantitavie_consequence_scale.currency_selected', 'global_currency.global_currency_id')
                         ->where('project_type_id', $project->project_type)
@@ -162,7 +172,10 @@ class IsoSec2_3_1 extends Controller
                         'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
                         'framework_approach' => $frameworkDetails['framework_approach'],
                         'consequence_scale' => $consequence_scale,
-                        'global_currency' => $global_currency
+                        'global_currency' => $global_currency,
+                        'schemeKey'   => $schemeKey,
+                        'scheme'      => $scheme,
+                        'riskValues'  => $riskValues,
                     ]);
                 }
 
@@ -183,9 +196,9 @@ class IsoSec2_3_1 extends Controller
                 ) {
 
                     //qualitative event based
-                    return redirect()->route("initiaite_risk_assessment_qual_event",[
-                        'proj_id'=>$proj_id,
-                        'user_id'=>$user_id
+                    return redirect()->route("initiaite_risk_assessment_qual_event", [
+                        'proj_id' => $proj_id,
+                        'user_id' => $user_id
                     ]);
                     //return redirect()->back()->with('error', 'Qualitative Event based not implemented');
                 }
@@ -279,6 +292,7 @@ class IsoSec2_3_1 extends Controller
 
     public function Risk_Selection_form_Submit(Request $req, $asset_id, $proj_id, $user_id)
     {
+
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -2536,7 +2550,7 @@ class IsoSec2_3_1 extends Controller
                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 1
                 ) {
 
-                 
+
                     $scenarios = DB::table('party_scenarios')
                         ->join('party', 'party_scenarios.party_type', '=', 'party.id')
                         ->leftjoin('proj_scenario_likelihood_value', 'party_scenarios.id', 'proj_scenario_likelihood_value.scenario')

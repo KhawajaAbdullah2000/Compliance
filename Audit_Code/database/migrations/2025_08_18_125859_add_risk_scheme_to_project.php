@@ -8,27 +8,21 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('project_types', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('type', 100);
-            $table->timestamps();
+         Schema::table('projects', function (Blueprint $table) {
             $table->string('risk_scheme')->default('none'); // none|3-level|5-level|3-level-num|5-level-num|10-level-num
-
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('project_types');
+        Schema::table('project', function (Blueprint $table) {
+            //
+        });
     }
 };
