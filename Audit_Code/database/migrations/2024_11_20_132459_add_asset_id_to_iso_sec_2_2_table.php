@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('iso_sec_2_2', function (Blueprint $table) {
-            $table->integer('asset_id')->nullable()->index('asset_id');            $table->string('subdomain',100)->nullable();
+            $table->integer('asset_id')->nullable()->index('asset_id');       
+             $table->string('subdomain',100)->nullable();
 
             $table->foreign('asset_id')
             ->references('assessment_id')

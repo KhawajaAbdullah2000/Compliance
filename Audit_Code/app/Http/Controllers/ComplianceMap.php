@@ -998,7 +998,6 @@ class ComplianceMap extends Controller
     public function compliance_map_subdomain($domain, $service, $component, $proj_id, Request $req)
     {
 
-
         $title = $domain;
         $group = $req->query('group');
         $subgroup = $req->query('subgroup');
@@ -1696,7 +1695,7 @@ class ComplianceMap extends Controller
         }
 
 
-  
+
 
         return view('compliance_map.subdomains_map', [
             'project' => $project,
@@ -1821,6 +1820,7 @@ class ComplianceMap extends Controller
                 ->orderby('compliance.sub_req')
                 ->get();
         }
+
 
 
         $formattedResults = [];
@@ -2278,8 +2278,200 @@ class ComplianceMap extends Controller
             'group' => $group,
             'subgroup' => $subgroup,
             'subdomainTitle' => $subdomainTitle,
-            'subdomainNum' => $subdomain
+            'subdomainNum' => $subdomain,
+
         ]);
+    }
+
+    public function compliance_map_sub_req_components($domain, $service, $component, $proj_id, Request $req)
+    {
+        $group = $req->query('group');
+        $subgroup = $req->query('subgroup');
+
+        // $assetsQuery = DB::table('iso_sec_2_1 as a')
+        //     ->where('a.project_id', $proj_id)
+        //     ->when($service !== '_all', fn($q) => $q->where('a.s_name', $service))
+        //     ->when($group, fn($q) => $q->when($group !== '_all', fn($qq) => $qq->where('a.g_name', $group)))
+        //     ->when($subgroup, fn($q) => $q->when($subgroup !== '_all', fn($qq) => $qq->where('a.name', $subgroup)))
+        //     ->when($component !== '_all', fn($q) => $q->where('a.c_name', $component));
+
+        // // Latest iso_sec_2_2 per asset/sub_req for this project
+        // $latestIdx = DB::table('iso_sec_2_2')
+        //     ->select('asset_id', 'project_id', 'sub_req', DB::raw('MAX(last_edited_at) as maxdt'))
+        //     ->where('project_id', $proj_id)
+        //     ->where('sub_req', $domain)
+        //     ->groupBy('asset_id', 'project_id', 'sub_req');
+
+        // $latestCompliance = DB::query()
+        //     ->fromSub($latestIdx, 'x')
+        //     ->join('iso_sec_2_2 as t', function ($join) {
+        //         $join->on('t.asset_id', '=', 'x.asset_id')
+        //             ->on('t.project_id', '=', 'x.project_id')
+        //             ->on('t.sub_req', '=', 'x.sub_req')
+        //             ->on('t.last_edited_at', '=', 'x.maxdt');
+        //     })
+        //     ->select([
+        //         't.assessment_id as compliance_id',
+        //         't.asset_id',
+        //         't.project_id',
+        //         't.sub_req',
+        //         't.comp_status',
+        //         't.last_edited_at',
+        //     ]);
+
+        // // --- DETAILS: one row per asset (with IDs) ---
+        // $details = (clone $assetsQuery)
+        //     ->leftJoinSub($latestCompliance, 'b', fn($j) => $j->on('b.asset_id', '=', 'a.assessment_id'))
+        //     ->orderBy('a.c_name')
+        //     ->orderBy('a.assessment_id')
+        //     ->select([
+        //         'a.c_name',
+        //         'a.assessment_id as asset_id',   // <-- asset id
+        //         'b.compliance_id',               // <-- iso_sec_2_2 id
+        //         'b.comp_status',
+        //         'b.last_edited_at',
+        //     ])
+        //     ->get();
+
+        // // --- SUMMARY: counts per component (using same deduped join) ---
+        // $summary = (clone $assetsQuery)
+        //     ->leftJoinSub($latestCompliance, 'b', fn($j) => $j->on('b.asset_id', '=', 'a.assessment_id'))
+        //     ->groupBy('a.c_name')
+        //     ->orderBy('a.c_name')
+        //     ->select([
+        //         'a.c_name',
+        //         DB::raw("SUM(CASE WHEN b.comp_status = 'yes' THEN 1 ELSE 0 END)            AS yes_count"),
+        //         DB::raw("SUM(CASE WHEN b.comp_status = 'no' THEN 1 ELSE 0 END)             AS no_count"),
+        //         DB::raw("SUM(CASE WHEN b.comp_status = 'partial' THEN 1 ELSE 0 END)        AS partial_count"),
+        //         DB::raw("SUM(CASE WHEN b.comp_status = 'not_tested' THEN 1 ELSE 0 END)     AS not_tested_count"),
+        //         DB::raw("SUM(CASE WHEN b.comp_status = 'not_applicable' THEN 1 ELSE 0 END) AS not_applicable_count"),
+        //         DB::raw("COUNT(DISTINCT a.assessment_id)                                   AS total_assets"),
+        //         DB::raw("SUM(CASE WHEN b.compliance_id IS NULL THEN 1 ELSE 0 END)          AS missing_count")
+        //     ])
+        //     ->get();
+        $assetsQuery = DB::table('iso_sec_2_1 as a')
+    ->where('a.project_id', $proj_id)
+    ->when($service !== '_all', fn($q) => $q->where('a.s_name', $service))
+    ->when($group, fn($q) => $q->when($group !== '_all', fn($qq) => $qq->where('a.g_name', $group)))
+    ->when($subgroup, fn($q) => $q->when($subgroup !== '_all', fn($qq) => $qq->where('a.name', $subgroup)))
+    ->when($component !== '_all', fn($q) => $q->where('a.c_name', $component));
+
+$latestIdx = DB::table('iso_sec_2_2')
+    ->select('asset_id', 'project_id', 'sub_req', DB::raw('MAX(last_edited_at) as maxdt'))
+    ->where('project_id', $proj_id)
+    ->where('sub_req', $domain)
+    ->groupBy('asset_id', 'project_id', 'sub_req');
+
+$latestCompliance = DB::query()
+    ->fromSub($latestIdx, 'x')
+    ->join('iso_sec_2_2 as t', function ($join) {
+        $join->on('t.asset_id', '=', 'x.asset_id')
+             ->on('t.project_id', '=', 'x.project_id')
+             ->on('t.sub_req', '=', 'x.sub_req')
+             ->on('t.last_edited_at', '=', 'x.maxdt');
+    })
+    ->select([
+        't.assessment_id as compliance_id',
+        't.asset_id',
+        't.project_id',
+        't.sub_req',
+        't.comp_status',
+        't.last_edited_at',
+    ]);
+
+// ONE TABLE: only assets that HAVE a compliance row for this sub_req
+$results = (clone $assetsQuery)
+    ->joinSub($latestCompliance, 'b', fn($j) => $j->on('b.asset_id', '=', 'a.assessment_id'))
+    ->orderBy('a.c_name')
+    ->orderBy('a.assessment_id')
+    ->select([
+        DB::raw('TRIM(a.c_name) as c_name'),
+        'a.assessment_id as asset_id',
+        'b.compliance_id',
+        'b.comp_status',
+        'b.last_edited_at',
+    ])
+    ->get();
+
+        //dd($summary,$details);
+
+        $fileMap = [
+            7 => 'KSA_NCA_ECC.xlsx',
+            18 => 'COSO.xlsx',
+            19 => 'SOC2_Type2.xlsx',
+            5 => 'CY_SAMA.xlsx',
+            1 => 'PCI_DSS_4_Single_TSP.xlsx',
+            16 => 'COBIT_2019.xlsx',
+            2 => 'PCI_DSS_4_Multi_TSP.xlsx',
+            3 => 'PCI_DSS_4_Merchant_TSP.xlsx',
+            10 => 'ISA_62443_Part 3-2.xlsx',
+            12 => 'ISA 62443 Part 4-2.xlsx',
+            13 => 'ISA 62443 Part 3-3.xlsx',
+            11 => 'ISA 62443 Part 2-1.xlsx',
+            9 => 'ISA 62443 Part 4-1.xlsx',
+            4 => 'KM_ISO27K1_2022_Compliance_18Jul25.xlsx',
+            23 => 'NIST_CSF.xlsx',
+            24 => 'ISO27701_2019v2.xlsx'
+        ];
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
+
+        $filepath = public_path($fileMap[$project->project_type]);
+        $data = Excel::toArray([], $filepath); //with header
+        $rows = array_slice($data[0], 1); //without header(first row)
+
+
+
+        $filteredData = collect($rows)->filter(function ($row) use ($domain) {
+            return strval($row[4]) == $domain;
+        })->values()->all();
+
+
+        $MainDomainNum = $filteredData[0][0];
+        $MainDomainTitle = $filteredData[0][1];
+
+        $SubDomainNum = $filteredData[0][2];
+        $SubDomainTitle = $filteredData[0][3];
+
+        $SubReqNum = $filteredData[0][4];
+        $SubReqTitle = $filteredData[0][5];
+
+ 
+
+        return view('compliance_map.subreq_map_components', [
+            'project' => $project,
+            'rows'=>$results,
+            'domain' => $domain,
+            'service' => $service,
+            'component' => $component,
+            'group' => $group,
+            'subgroup' => $subgroup,
+            'MainDomainNum' => $MainDomainNum,
+            'MainDomainTitle' => $MainDomainTitle,
+            'SubDomainNum' => $SubDomainNum,
+            'SubDomainTitle' => $SubDomainTitle,
+            'SubReqNum' => $SubReqNum,
+            'SubReqTitle' => $SubReqTitle
+
+
+        ]);
+
+
+        // return view('compliance_map.subreq_map_components', [
+        //     'project' => $project,
+        //     'formattedResults' => $formattedResults,
+        //     'results' => $results,
+        //     'UniqueSubReqs' => $UniqueSubReqs,
+        //     'MainDomainTitle' => $MainDomainTitle,
+        //     'MainDomainNum' => $MainDomainNum,
+        //     'service' => $service,
+        //     'component' => $component,
+        //     'group' => $group,
+        //     'subgroup' => $subgroup,
+        //     'subdomainTitle' => $subdomainTitle,
+        //     'subdomainNum' => $subdomain,
+
+        // ]);
     }
 
     public function download_excel_compliance_map_subreq($proj_id, $user_id, Request $req)

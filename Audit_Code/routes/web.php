@@ -798,6 +798,9 @@ Route::middleware(['auth', 'is_user', 'role:end user'])->group(
         Route::get('download_excel_compliance_map_subdomain/{proj_id}/{user_id}', [ComplianceMap::class, 'download_excel_compliance_map_subdomain']);
 
         Route::get('compliance_map_sub_req/{domain}/{service}/{component}/{proj_id}', [ComplianceMap::class, 'compliance_map_sub_req'])->name('compliance_map_sub_req');
+        Route::get('compliance_map_sub_req_components/{domain}/{service}/{component}/{proj_id}', [ComplianceMap::class, 'compliance_map_sub_req_components'])->name('compliance_map_sub_req_components');
+
+
 
         Route::get('download_excel_compliance_map_subreq/{proj_id}/{user_id}', [ComplianceMap::class, 'download_excel_compliance_map_subreq']);
 
