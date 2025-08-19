@@ -373,10 +373,9 @@ class KSA_NCA extends Controller
     }
 
 
-    public function ksa_nca_sec2_2_sub_req_edit(Request $req, $sub_req, $title, $proj_id, $user_id, $asset_id, ?string $main_req = null)
+    public function ksa_nca_sec2_2_sub_req_edit(Request $req, $sub_req, $title, $proj_id, $user_id, $asset_id, ?string $main_req = null, ?string $readonly=null)
     {
-        //
-
+       
         if ($user_id == auth()->user()->id) {
 
             $checkpermission = Db::table('project_details')->select(
@@ -455,17 +454,23 @@ class KSA_NCA extends Controller
                 $data = Excel::toArray([], $filepath); //with header
                 $rows = array_slice($data[0], 1); //without header(first row)
 
-                if ($main_req == null) {
+                if ($main_req == null || $main_req=='-') {
                     $main_req_num = $req->session()->get('main_req_num');
                 } else {
                     $main_req_num = $main_req;
                 }
 
+                
+
+              
+             
+                
 
                 $filteredData = collect($rows)->filter(function ($row) use ($sub_req, $main_req_num) {
                     return strval($row[2]) === $main_req_num && strval($row[4]) === $sub_req;
                 })->values()->all();
 
+                
 
 
 
@@ -524,7 +529,8 @@ class KSA_NCA extends Controller
                     'subdomain' => $filteredData[0][2],
                     'org_documents' => $org_documents,
                     'attachedIds' => $attachedIds,
-                    'record' => $record
+                    'record' => $record,
+                    'readonly'=>$readonly
                 ]);
             }
         }

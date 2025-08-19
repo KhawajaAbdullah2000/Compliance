@@ -1680,22 +1680,37 @@ class ComplianceMap extends Controller
                 return strval($row[0]) == $title;
             })->values()->all();
 
-            //dd($filteredData);
+           
+
+            // $UniqueSubDomains = collect($filteredData)
+            //     ->unique(function ($row) {
+            //         return (string)$row[1]; // convert to string to keep 6.1, 6.2 separate
+            //     })
+            //     ->mapWithKeys(function ($row) {
+            //         return [(string)$row[1] => (string)$row[4]];
+            //     })
+            //     ->toArray();
 
             $UniqueSubDomains = collect($filteredData)
-                ->unique(function ($row) {
-                    return (string)$row[1]; // convert to string to keep 6.1, 6.2 separate
-                })
-                ->mapWithKeys(function ($row) {
-                    return [(string)$row[1] => $row[4]];
-                })
-                ->toArray();
+    // normalize the key once
+    ->map(function ($row) {
+        $row[1] = trim((string) $row[1]);   // e.g., "12.10"
+        $row[4] = trim((string) ($row[4] ?? ''));
+        return $row;
+    })
+    // unique by column 1, strict mode = true
+    ->unique('1', true)
+    // build key => label
+    ->mapWithKeys(function ($row) {
+        return [$row[1] => $row[4]];
+    })
+    ->toArray();
 
             $domainNames = config('domain-names')[$project->project_type] ?? [];
         }
 
 
-
+   
 
         return view('compliance_map.subdomains_map', [
             'project' => $project,
@@ -2436,7 +2451,7 @@ $results = (clone $assetsQuery)
         $SubReqNum = $filteredData[0][4];
         $SubReqTitle = $filteredData[0][5];
 
- 
+
 
         return view('compliance_map.subreq_map_components', [
             'project' => $project,

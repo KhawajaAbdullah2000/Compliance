@@ -7,15 +7,25 @@
 
 @include('iso_sec_nav')
 @php
-$permissions = json_decode($project_permissions);
+    // Decode as array (important for in_array)
+    $permissions = json_decode($project_permissions, true) ?? [];
 
-// User is editable if they have "Data Inputter"
-$isEditable = in_array('Data Inputter', $permissions) && ($result?->approved != 1);
+    $hasInputter  = in_array('Data Inputter', $permissions, true);
+    $hasViewer    = in_array('Data Viewer', $permissions, true);
+    $hasApprover  = in_array('Data Approver', $permissions, true);
+    $isApproved   = ($result?->approved == 1);
 
-// User is read-only ONLY IF they do NOT have "Data Inputter"
-$isReadOnly = !$isEditable && (in_array('Data Viewer', $permissions) || in_array('Data Approver', $permissions));
+    // Hard override: URL/query param forces read-only
+    $forceReadOnly = ($readonly === 'readonly');
 
-$isApprover=in_array('Data Approver', $permissions);
+    // Editable only if: not forced read-only, has Data Inputter, and not approved
+    $isEditable = !$forceReadOnly && $hasInputter && !$isApproved;
+
+    // Read-only if forced OR (not editable and user is viewer/approver)
+    $isReadOnly = $forceReadOnly || (!$isEditable && ($hasViewer || $hasApprover));
+
+    // If you still need this flag elsewhere:
+    $isApprover = $hasApprover;
 @endphp
 
 

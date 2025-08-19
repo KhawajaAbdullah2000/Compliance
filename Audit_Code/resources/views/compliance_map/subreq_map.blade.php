@@ -317,10 +317,12 @@
 
 </div>
 
-@section('scripts')
+{{-- @section('scripts')
 
 @if(session('comp_status'))
+
 <script>
+    console.log("IN comp status")
     Chart.register(ChartDataLabels);
 
     const ctx = document.getElementById('compliancePieChart').getContext('2d');
@@ -329,12 +331,12 @@
         type: 'pie'
         , data: {
             labels: {
-                !!json_encode($chartLabels) !!
+                !! json_encode($chartLabels) !!
             }
             , datasets: [{
                 label: '{{ $statusLabel }} by Sub Requirement'
                 , data: {
-                    !!json_encode($chartData) !!
+                    !! json_encode($chartData) !!
                 }
                 , backgroundColor: [
                     '#4caf50', '#2196f3', '#ff9800', '#9c27b0', '#00bcd4', '#e91e63'
@@ -375,12 +377,12 @@
         const downloadExcelButton2 = $('#downloadExcelButton2');
         const projectID = {
             {
-                $project - > project_id
+                $project->project_id
             }
         };
         const userID = {
             {
-                auth() - > user() - > id
+                auth()->user()-> id
             }
         };
         const formattedResult = @json($results);
@@ -402,6 +404,84 @@
 
 </script>
 
+@endsection --}}
+
+@section('scripts')
+
+@if(session('comp_status'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const canvas = document.getElementById('compliancePieChart');
+    if (!canvas) return;
+
+    // Register plugin only once (Chart.js 4)
+    if (typeof ChartDataLabels !== 'undefined') {
+        Chart.register(ChartDataLabels);
+    }
+
+    const ctx = canvas.getContext('2d');
+
+    // ✅ Proper JSON injection (arrays, not objects)
+    const labels = {!! json_encode($chartLabels ?? []) !!};
+    const data   = {!! json_encode($chartData ?? []) !!};
+
+    // Optional: skip rendering if no data
+    if (!data.length || data.every(v => v === 0)) return;
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '{{ $statusLabel ?? "Status" }} by Sub Requirement',
+                data: data,
+                backgroundColor: [
+                    '#4caf50','#2196f3','#ff9800','#9c27b0','#00bcd4','#e91e63',
+                    '#3f51b5','#ffc107','#8bc34a','#ff5722','#795548','#607d8b'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                datalabels: {
+                    color: '#000',
+                    font: { weight: 'bold', size: 14 },
+                    formatter: (value) => value
+                }
+            }
+        }
+    });
+});
+</script>
+@endif
+
+<script>
+$(function () {
+    const downloadExcelButton  = $('#downloadExcelButton');
+    const downloadExcelButton2 = $('#downloadExcelButton2');
+
+    // ✅ Correct Blade variables (no stray braces/spaces)
+    const projectID = {{ $project->project_id }};
+    const userID    = {{ auth()->user()->id }};
+
+    // Ensure $results exists; fall back to empty object/array if needed
+    const formattedResult = @json($results ?? []);
+
+    function updateDownloadLink() {
+        const formattedResultEncoded = encodeURIComponent(JSON.stringify(formattedResult));
+        const url = `/download_excel_compliance_map_subreq/${projectID}/${userID}?formattedResult=${formattedResultEncoded}`;
+        downloadExcelButton.attr('href', url);
+        downloadExcelButton2.attr('href', url);
+    }
+
+    updateDownloadLink();
+});
+</script>
+
 @endsection
+
 
 @endsection

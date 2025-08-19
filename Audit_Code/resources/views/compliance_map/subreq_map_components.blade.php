@@ -4,6 +4,23 @@
 
 @include('user-nav')
 
+@php
+     $statusColors = [
+    'yes' => 'bg-success text-white', // green
+    'no' => 'bg-danger text-white', // red
+    'partial' => 'bg-warning text-dark', // orange/yellow
+    'not_applicable' => 'bg-primary text-white', // blue
+    'not_tested' => 'bg-secondary text-white', // grey
+    ];
+       $statusLabels = [
+    'yes' => 'In Place', // green
+    'no' => 'Not in Place', // red
+    'partial' => 'Partial', // orange/yellow
+    'not_applicable' => 'Not Applicable', // blue
+    'not_tested' => 'Not Tested', // grey
+    ];
+@endphp
+
 <div class="container">
       <div class="row mt-5">
         <div class="col-lg-12">
@@ -96,55 +113,32 @@
     </div>
 
 
-    <h5 class="mb-3">Domain: {{$MainDomainNum}} - {{$MainDomainTitle}}</h5>
-    <h5 class="mb-3">Domain: {{$SubDomainNum}} - {{$SubDomainTitle}}</h5>
-{{-- <table class="table table-bordered table-striped align-middle">
-    <thead class="table-dark">
-        <tr>
-            <th>Component</th>
-            <th>Domain</th>
-            <th>Yes</th><th>No</th><th>Partial</th>
-            <th>Not Tested</th><th>Not Applicable</th>
-            <th>Total Assets</th><th>Missing</th>
-        </tr>
-    </thead>
-    <tbody>
-        @forelse($summary as $r)
-            <tr>
-                <td class="fw-semibold">{{ $r->c_name }}</td>
-                <td>{{$SubReqNum}}-{{$SubReqTitle}}</td>
-                <td>{{ $r->yes_count }}</td>
-                <td>{{ $r->no_count }}</td>
-                <td>{{ $r->partial_count }}</td>
-                <td>{{ $r->not_tested_count }}</td>
-                <td>{{ $r->not_applicable_count }}</td>
-                <td>{{ $r->total_assets }}</td>
-                <td>{{ $r->missing_count }}</td>
-            </tr>
-        @empty
-            <tr><td colspan="8" class="text-center">No data.</td></tr>
-        @endforelse
-    </tbody>
-</table> --}}
+    <h5 class="mb-3">Title: {{$MainDomainNum}} - {{$MainDomainTitle}}</h5>
+    <h5 class="mb-3">Sub Domain: {{$SubDomainNum}} - {{$SubDomainTitle}}</h5>
+
 <table class="table table-bordered table-striped align-middle">
     <thead class="table-dark">
         <tr>
             <th>Component</th>
-            <th>Asset ID</th>
-            <th>iso_sec_2_2 ID</th>
-            <th>Status</th>
+            <th>Domain</th>
+            {{-- <th>Asset ID</th>
+            <th>iso_sec_2_2 ID</th> --}}
+            <th>Compliance Status</th>
             <th>Last Edited</th>
         </tr>
     </thead>
     <tbody>
         @forelse($rows as $r)
-            <tr>
+          <tr onclick="window.location='/ksa_nca_sec2_2_sub_req_edit/{{ $SubReqNum }}/{{ $MainDomainNum }}/{{ $project->project_id }}/{{ auth()->id() }}/{{ $r->asset_id }}/{{$SubDomainNum}}/readonly'" style="cursor:pointer;">
+
                 <td class="fw-semibold">{{ $r->c_name }}</td>
-                <td>{{ $r->asset_id }}</td>
-                <td>{{ $r->compliance_id }}</td>
-                <td class="text-capitalize">{{ $r->comp_status }}</td>
+                <td>{{$SubReqNum}}- {{$SubReqTitle}} </td>
+                {{-- <td>{{ $r->asset_id }}</td>
+                <td>{{ $r->compliance_id }}</td> --}}
+                <td class="{{$statusColors[$r->comp_status]}}" >{{ $statusLabels[$r->comp_status] }}</td>
                 <td>{{ $r->last_edited_at }}</td>
             </tr>
+           
         @empty
             <tr><td colspan="5" class="text-center">No records found for selected filters.</td></tr>
         @endforelse
