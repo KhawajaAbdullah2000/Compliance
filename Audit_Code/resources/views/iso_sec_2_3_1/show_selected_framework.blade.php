@@ -45,7 +45,23 @@
 
         </div>
     </div>
-    <h3 class="fw-bold mt-2 text-center">Risk Assessment</h3>
+    
+    <p class="fs-5 fw-bold">Assess Risk Against Controls for: 
+        <span>
+             <table class="table table-bordered table-responsive">
+            <tr>
+                <td class="bg-dark text-white">Service</td>
+                <td>{{$asset->s_name}}</td>
+                <td class="bg-dark text-white">Asset Type</td>
+                <td>{{$asset->g_name}}</td>
+                <td class="bg-dark text-white">Asset Subtype</td>
+                <td>{{$asset->name}}</td>
+                <td class="bg-dark text-white">Asset Component</td>
+                <td>{{$asset->c_name}}</td>
+            </tr>
+        </table>
+        </span>
+    </p>
 
 
     <h3>The administrator has selected the risk assessment methodology : {{$framework_labels[$selected]}}
@@ -94,6 +110,25 @@
 
 
 
+    @if($project->risk_scheme!=null)
+
+        <form method="POST" action="/save_classification_level_by_enduser/{{auth()->user()->organization->id}}">
+                @csrf @method('PUT')
+                <select name="risk_scheme" class="form-select">
+                    @foreach(\App\Support\RiskScheme::all() as $key => $cfg)
+                    <option value="{{ $key }}" @selected($key==$project->risk_scheme)>
+                        {{ $cfg['label'] }}
+                    </option>
+                    @endforeach
+                </select>
+
+                <input type="hidden" name="selected_projects[]" value="{{ $project->id }}">
+       
+                <button class="btn btn-primary mt-2">Save</button>
+            </form>
+
+
+    @endif
 
 
 

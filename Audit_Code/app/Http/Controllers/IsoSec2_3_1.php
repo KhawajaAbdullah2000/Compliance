@@ -49,7 +49,8 @@ class IsoSec2_3_1 extends Controller
                 $global_risk_assessment_approaches = DB::table('global_risk_assessment_approach')->get();
 
 
-                //dd($project);
+            
+
 
                 return view('iso_sec_2_3_1.show_selected_framework', [
 

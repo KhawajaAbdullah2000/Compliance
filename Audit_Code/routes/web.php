@@ -542,6 +542,8 @@ Route::middleware(['auth', 'is_user', 'role:end user'])->group(
 
         route::get('proceed_to_risk_assessment/{asset_id}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'proceed_to_risk_assessment'])->name('proceed_to_risk_assessment');
 
+    route::put('save_classification_level_by_enduser/{org_id}', [RiskManagementFramework::class, 'save_classification_level_by_enduser']);
+
 
 
         route::put('iso_sec2_3_1_risk_selection/{asset_id}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'Risk_Selection_form_Submit']);

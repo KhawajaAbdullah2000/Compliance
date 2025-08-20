@@ -22,7 +22,15 @@ $permissions = json_decode($project_permissions);
 
         </div>
     </div>
-    <h2 class="text-center fw-bold mb-4">Services & Assets Register</h2>
+    <h2 class="text-center fw-bold mb-4">
+        @if($page_type=='services_register')
+        Services & Assets Register
+        @elseif($page_type=='assess_compliance')
+        Assess Compliance against Controls
+        @elseif($page_type=="risk_assessment")
+        Assess Risk against Controls
+        @endif
+    </h2>
 
     <!-- Service and Asset Management Section -->
 

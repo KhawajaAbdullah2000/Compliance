@@ -150,6 +150,23 @@ class RiskManagementFramework extends Controller
         return redirect()->route('user_home')->with('success','Classification level added successfully');
     }
 
+    public function save_classification_level_by_enduser($org_id,Request $req){
+      
+        foreach ($req->selected_projects as $proj) {
+            DB::table('project_types')
+                ->updateOrInsert(
+                    [
+                        'id' => $proj,
+                    ],
+                    [
+                        'risk_scheme' => $req->risk_scheme
+                    ]
+                );
+        }
+
+        return redirect()->back()->with('success','Classification level updated successfully');
+    }
+
     public function selected_framework_approach($org_id, Request $req)
     {
         $req->validate([
