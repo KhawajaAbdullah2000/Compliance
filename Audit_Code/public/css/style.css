@@ -706,8 +706,8 @@ thead.table-pointer {
     background: linear-gradient(135deg, #ca3333 0%, #ee9e0a 100%);
 }
 
-.btn-risk-register{
-   background: linear-gradient(135deg, #5b39f3 0%, #39e5fc 100%); 
+.btn-risk-register {
+    background: linear-gradient(135deg, #5b39f3 0%, #39e5fc 100%);
 }
 
 /* green → cyan */
@@ -793,3 +793,16 @@ thead.table-pointer {
 .btn-gradient:hover {
     filter: brightness(1.05);
 }
+
+  .flowchart { position: relative; height: 600px; background: #f7f9fb; }
+  .node{position:absolute;min-width:220px;max-width:260px;padding:14px 16px;border-radius:.5rem;background:#0d6efd;color:#fff;text-decoration:none;box-shadow:0 8px 18px rgba(13,110,253,.18)}
+  .node.slim{min-width:160px}
+  .node-tall{min-width:120px;height:360px;display:flex;align-items:center;justify-content:center}
+  /* positions (adjusted spacing) */
+  .p-service  { top:40px; left:40px;  width:150px; background:#343a40 }
+  .p-business { top:40px; left:350px; }         /* moved right to make room */
+  .p-risk     { top:40px; right:40px; width:140px; background:#0b5ed7 }
+  .p-asset    { top:280px; left:40px; width:150px; background:#343a40 }
+  .p-threats  { top:220px; left:360px; width:260px }
+  .p-vulns    { top:380px; left:360px; width:260px }
+  .p-like     { top:280px; left:710px; width:260px }

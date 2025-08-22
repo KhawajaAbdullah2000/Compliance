@@ -13,7 +13,7 @@
             @include('components.topTable')
         </div>
     </div>
-    <h3 class="fw-bold mt-2">Risk Register for</h3>
+    <h3 class="fw-bold mt-2">Assess Risk Sources (Threats) for</h3>
 
     <div class="col-12">
     @include('components.asset-summary_component', ['asset' => $asset])
@@ -22,17 +22,30 @@
 
 
     <div class="col-12">
-    @include('components.consequence_of_loss', ['asset' => $asset])
+    @include('components.consequence_of_loss', ['asset' => $asset,'project'=>$project])
     
     </div>
 
-        
-        <h4 class="fw-bold mt-4">Identify which risk sources (threats) could exploit vulnerabilities in the asset component 
+
+    <div class="row">
+        <div class="col-md-8">
+   <h4 class="fw-bold mt-4">Identify which risk sources (threats) could exploit vulnerabilities in the asset component 
         </h4>
+        </div>
+        <div class="col-md-4 text-end">
+                   <div class="text-end mt-2">
+       @include('components.back_to_flow_chart_btn',['asset'=>$asset,'project'=>$project])
+    </div>
+        </div>
+    </div>
+        
+     
+     
 
         <small class="text-warning fw-bold d-block mt-2 mb-2">
             <i class="fas fa-exclamation-triangle"></i> If at least one value for either Target Objective or Threat Posed is not selected, then the Risk Source will not be selected and saved for this asset component
         </small>
+
         <div class="col-md-8 mb-4">
 
             <table class="table table-bordered align-middle">
@@ -81,7 +94,7 @@
 
             <div class="mt-4 mb-4 d-flex justify-content-end gap-2">
                 
-                <a href="/iso_sec_2_3_1_risk_selection/{{$asset->assessment_id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-secondary">Back</a>
+                {{-- <a href="/iso_sec_2_3_1_risk_selection/{{$asset->assessment_id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-secondary">Back</a> --}}
                 <button type="submit" name="action" value="save_and_stay" class="btn btn-primary">
                     Save & Stay
                 </button>

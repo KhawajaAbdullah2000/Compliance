@@ -54,15 +54,18 @@ The organization will overcome the situation without too much difficulty (margin
 
         </div>
     </div>
-    <h3 class="fw-bold mt-2">Risk Assessment for:</h3>
+
+      
+    <h3 class="fw-bold mt-2">Select the business impact (consequence) on this service in case of:</h3>
 
     @include('components.asset-summary', ['asset' => $asset])
 
 
-    <h3 class="fw-bold mt-4">Select the consequence on this service in case of: </h3>
+      <div class="text-end mt-2">
+       @include('components.back_to_flow_chart_btn',['asset'=>$asset,'project'=>$project])
+    </div>
 
-
-    <div class="row">
+    <div class="row mt-4">
 
         @if($framework_approach->framework_approach_types_id==2)
         <div class="col-md-6">
@@ -73,63 +76,10 @@ The organization will overcome the situation without too much difficulty (margin
                 <form action="/iso_sec2_3_1_risk_selection/{{$asset->assessment_id}}/{{$project_id}}/{{auth()->user()->id}}" method="POST">
                     @csrf
                     @method('PUT')
-                    {{-- @php
-                    $riskOptions = [5,4,3,2,1];
-                    @endphp
-
-                    <table class="table table-bordered text-center align-middle">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Loss of Data Confidentiality</th>
-                                <th>Loss of Data Integrity</th>
-                                <th>Loss of Data Availability</th>
-                                <th>Score</th>
-                            </tr>
-                        </thead>
-                        @foreach($riskOptions as $option)
-                        <tr>
-
-
-                            <td>
-                                <input class="form-check-input" type="radio" name="risk_confidentiality" value="{{ $option }}" {{ (old('risk_confidentiality', $asset->risk_confidentiality ?? '') == $option) ? 'checked' : '' }}>
-                            </td>
-
-
-                            <td>
-                                <input class="form-check-input" type="radio" name="risk_integrity" value="{{ $option }}" {{ (old('risk_integrity', $asset->risk_integrity ?? '') == $option) ? 'checked' : '' }}>
-                            </td>
-
-
-                            <td>
-                                <input class="form-check-input" type="radio" name="risk_availability" value="{{ $option }}" {{ (old('risk_availability', $asset->risk_availability ?? '') == $option) ? 'checked' : '' }}>
-                            </td>
-
-
-                            <td class="score-cell">
-                                @if($option==5)
-                                5-Catastrophic
-                                @elseif($option==4)
-                                4-Critical
-                                @elseif($option==3)
-                                3-Serious
-                                @elseif($option==2)
-                                2-Significant
-                                @elseif($option==1)
-                                1-Minor
-                                @else
-                                UnKnown
-                                @endif
-                                <div class="hover-desc">
-                                    {{ $riskDescriptions[$option] }}
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                        </tbody>
-                    </table> --}}
+                
                     @php
     use App\Support\RiskScheme;
-    // $schemeKey, $scheme, $riskValues are provided from controller
+    
 @endphp
 
 @if(\App\Support\RiskScheme::isNone($schemeKey))
@@ -235,7 +185,7 @@ The organization will overcome the situation without too much difficulty (margin
 
                     <div class="mt-4 mb-4 d-flex justify-content-end gap-2">
                         <button type="submit" name="action" value="save_and_stay" class="btn btn-secondary">
-                            Save & Stay
+                            Save
                         </button>
                         <button type="submit" name="action" value="save_and_next" class="btn btn-primary">
                             Save & Next

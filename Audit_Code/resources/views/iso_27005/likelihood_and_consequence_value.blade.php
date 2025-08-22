@@ -40,11 +40,26 @@
             @include('components.topTable')
         </div>
     </div>
-    <h3 class="fw-bold mt-2">Risk Assessment for</h3>
+
+     
+<h3 class="fw-bold">Risk Assessment for</h3>
+    
 
     @include('components.asset-summary_component', ['asset' => $asset])
 
-    <h4 class="fw-bold mt-4">Assessment of Risk to 
+      <div class="col-12">
+    @include('components.consequence_of_loss', ['asset' => $asset,'project'=>$project])
+    </div>
+
+    @include('components.consolidated_threat_vulnerability',['asset'=>$asset,'project'=>$project])
+
+    <div class="text-end mt-2">
+        
+    </div>
+     
+<div class="row">
+    <div class="col-md-8">
+        <h4 class="fw-bold mt-4">Assessment of Risk to 
         @if($risk_type=='risk_confidentiality')
      Data Confidentiality
      @elseif($risk_type=='risk_integrity')
@@ -55,6 +70,12 @@
         @endif
     
     </h4>
+    </div>
+    <div class="col-md-4 text-end">
+     @include('components.back_to_flow_chart_btn',['asset'=>$asset,'project'=>$project])
+    </div>
+</div>
+    
 
 
 
@@ -65,19 +86,30 @@
                 <thead>
                     <tr>
                         <th class="header-left"></th> <!-- Empty corner -->
-                        <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood</th> <!-- Likelihood label spanning across -->
+                        <th colspan="{{ count($likelihoods) }}" class="header-top">
+                            
+                            <a href="/iso_27005_likelihood_value/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}/{{$risk_type}}">
+                            Likelihood ({{$likelihood_value}} days)
+                            </a>
+                        </th> 
                     </tr>
                     <tr>
-                        <th class="header-left">Consequence</th> <!-- Consequence label on the Y-axis -->
+                        <th class="header-left">Business Impact (Consequence)</th> <!-- Consequence label on the Y-axis -->
                         @foreach ($likelihoods as $l_key => $l_label)
-                            <th class="header-top">{{ $l_label }}</th> <!-- Likelihood values across top -->
+                     
+                            <th class="header-top">{{ $l_label }}</th>
+                        
                         @endforeach
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($consequences as $c_key => $c_label)
                         <tr>
-                            <th class="header-left">{{ $c_label }}</th> <!-- Consequence values along the Y-axis -->
+                            <th class="header-left">
+                                 <a href="/consequence_of_service/{{$asset->assessment_id}}/{{$project->project_id}}/{{auth()->user()->id}}">
+                                {{ $c_label }} 
+                                 </a>
+                            </th> <!-- Consequence values along the Y-axis -->
                             @foreach ($likelihoods as $l_key => $l_label)
                                 @php
                                     $cellValue = $riskMatrix[$l_key][$c_key]; // Note: matrix remains [likelihood][consequence]

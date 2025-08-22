@@ -11,13 +11,37 @@
             @include('components.topTable')
         </div>
     </div>
-    <h3 class="fw-bold mt-2">Risk Assessment for</h3>
+    <h3 class="fw-bold mt-2">Assess Vulnerabilities for</h3>
 
     @include('components.asset-summary_component', ['asset' => $asset])
+
+      <div class="col-12">
+    @include('components.consequence_of_loss', ['asset' => $asset,'project'=>$project])
     
+    </div>
+
+
+        @include('components.consolidated_threat', ['threat' => $threat,'project'=>$project,
+        'asset'=>$asset])
+
+      
+   
+<div class="row">
+    <div class="col-md-8">
+          <h5 class="fw-bold mt-4">By evaluating gaps in applicable controls, 
+    evaluate how vulnerable the asset component is to actions by risk sources in the environment 
+  </h5>
+    </div>
+    <div class="col-md-4">
+          <div class="text-end mt-2">
+       @include('components.back_to_flow_chart_btn',['asset'=>$asset,'project'=>$project])
+    </div>
+    </div>
+</div>
         
-        <h5 class="fw-bold mt-4">By evaluating gaps in applicable controls, evaluate how vulnerable the asset component is to actions by risk sources in the environment 
-        </h5>
+
+
+             
         
 
 
@@ -99,11 +123,11 @@
 
 <div class="mt-4 mb-4 d-flex justify-content-end gap-2">
     
-    <a href="{{route('route_for_risk_source',[
+    {{-- <a href="{{route('route_for_risk_source',[
         'proj_id'=>$project->project_id,
         'user_id'=>auth()->user()->id,
         'asset_id'=>$asset->assessment_id
-        ])}}" class="btn btn-secondary">Back</a>   
+        ])}}" class="btn btn-secondary">Back</a>    --}}
          <button type="submit" name="action" value="save_and_stay" class="btn btn-primary">
         Save & Stay
     </button>

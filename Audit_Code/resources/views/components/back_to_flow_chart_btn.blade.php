@@ -1,0 +1,1 @@
+ <a href="/proceed_to_risk_assessment/{{$asset->assessment_id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-secondary btn-md"><i class="bi bi-arrow-right-circle me-1"></i> To Flowchart</a

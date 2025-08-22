@@ -542,11 +542,13 @@ Route::middleware(['auth', 'is_user', 'role:end user'])->group(
 
         route::get('proceed_to_risk_assessment/{asset_id}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'proceed_to_risk_assessment'])->name('proceed_to_risk_assessment');
 
+        route::get('consequence_of_service/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'consequence_of_service'])->name('consequence_of_service');
     route::put('save_classification_level_by_enduser/{org_id}', [RiskManagementFramework::class, 'save_classification_level_by_enduser']);
 
 
 
         route::put('iso_sec2_3_1_risk_selection/{asset_id}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'Risk_Selection_form_Submit']);
+
         route::get('iso_sec_2_3_1/{asset_id}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'iso_sec_2_3_1'])->name('iso_sec_2_3_1');
         route::Post('iso_sec2_3_1_initial_add/{asset_id}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'iso_sec2_3_1_initial_add']);
         route::get("iso_27005_risk_assessment/{proj_id}/{user_id}/{asset_id}", [IsoSec2_3_1::class, 'iso_27005_risk_assessment'])->name('iso_27005_risk_assessment');
