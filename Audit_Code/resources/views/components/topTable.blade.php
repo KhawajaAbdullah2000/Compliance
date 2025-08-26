@@ -28,9 +28,7 @@
             
             <td class="fw-bold">Risk Management Methodology:</td>
             <td>
-                @if($complianceFramework->framework_name=="Default")
-                Default 
-                @endif
+              
                  {{$complianceFramework->framework_name ?? ''}} -
                 {{ $framework_approach->approach_name ?? '' }} -
                 {{ $risk_assessment_approach->global_assessment_approach ?? '' }} 

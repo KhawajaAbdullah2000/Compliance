@@ -23,9 +23,9 @@ return new class extends Migration
             $table->string('owner_dept', 300)->nullable();
             $table->string('physical_loc', 300)->nullable();
             $table->string('logical_loc', 300)->nullable();
-            $table->integer('risk_confidentiality')->default(10);
-            $table->integer('risk_integrity')->default(10);
-            $table->integer('risk_availability')->default(10);
+            $table->integer('risk_confidentiality')->nullable();
+            $table->integer('risk_integrity')->nullable();
+            $table->integer('risk_availability')->nullable();
             $table->unsignedBigInteger('last_edited_by')->nullable()->index('last_edited_by');
             $table->dateTime('last_edited_at');
         });

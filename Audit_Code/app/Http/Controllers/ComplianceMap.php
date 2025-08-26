@@ -2426,7 +2426,8 @@ $results = (clone $assetsQuery)
             9 => 'ISA 62443 Part 4-1.xlsx',
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25.xlsx',
             23 => 'NIST_CSF.xlsx',
-            24 => 'ISO27701_2019v2.xlsx'
+            24 => 'ISO27701_2019v2.xlsx',
+             6=>'SBP_ETGRMF.xlsx'
         ];
         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
             ->where('projects.project_id', $proj_id)->first();

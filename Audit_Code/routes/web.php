@@ -120,8 +120,8 @@ Route::middleware(['auth', 'is_user', 'role:super user'])->group(function () {
     route::get('/edit_global_role/{id}', [SuperUserController::class, 'edit_global_role']);
     route::put('edit_globalrole/{id}', [SuperUserController::class, 'edit_globalrole']);
 
-    route::get('select_projects_for_classification_level/{org_id}', [RiskManagementFramework::class, 'select_projects_for_classification_level']);
-    route::get('selected_projects_for_classification_level/{org_id}', [RiskManagementFramework::class, 'selected_projects_for_classification_level']);
+    route::get('select_projects_for_classification_level/{org_id}', [RiskManagementFramework::class, 'select_projects_for_classification_level'])->name('select_projects_for_classification_level');
+    route::get('selected_projects_for_classification_level/{proj_type_id}/{org_id}', [RiskManagementFramework::class, 'selected_projects_for_classification_level']);
     route::put('save_classification_level/{org_id}', [RiskManagementFramework::class, 'save_classification_level']);
 
     

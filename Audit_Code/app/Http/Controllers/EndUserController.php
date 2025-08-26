@@ -41,6 +41,7 @@ class EndUserController extends Controller
     }
     public function submit_create_project(Request $req, $user_id)
     {
+       
         $req->validate([
             'project_name' => 'required|max:80|min:5|unique:projects',
             'project_type' => 'required',
@@ -57,6 +58,17 @@ class EndUserController extends Controller
         $project->project_type = $req->project_type;
         $project->status_last_changed_by = $user_id;
         $project->save();
+
+         DB::table('org_projects_framework_selected')
+                ->updateOrInsert(
+                    [
+                        'org_id' => auth()->user()->org_id,
+                        'project_type_id' => $req->project_type,
+                    ],
+                    [
+                        'framework_selected' => 1 //default framework given
+                    ]
+                );
 
 
          DB::table('audit_projects')->insert([

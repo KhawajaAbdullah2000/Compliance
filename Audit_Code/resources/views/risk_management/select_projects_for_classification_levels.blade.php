@@ -11,9 +11,34 @@
        <h3 class="fw-bold">Set up project types</h3>
     
        <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-8">
 
-            <form action="/selected_projects_for_classification_level/{{auth()->user()->organization->id}}" method="GET">
+            <table class="table table-bordered table-responsive">
+                <thead class="table-dark">
+                    <th>Project Type</th>
+                    <th>Current Classification Level</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    @foreach($org_projects as $project)
+
+                    <tr>
+                        <td>{{$project->type}}</td>
+                        <td>@if($project->risk_scheme=="none")
+                            None (Default methodology)
+                            @else
+                       {{ \App\Support\RiskScheme::all()[$project->risk_scheme]['label'] ?? $project->risk_scheme }}
+
+                            @endif
+                        </td>
+                        <td><a href="/selected_projects_for_classification_level/{{$project->project_type_id}}/{{$project->org_id}}" class="btn btn-sm btn-primary">Set Classification Level</a></td>
+                    </tr>
+                        
+                    @endforeach
+                </tbody>
+            </table>
+
+            {{-- <form action="/selected_projects_for_classification_level/{{auth()->user()->organization->id}}" method="GET">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="checkAll">
                     <label class="form-check-label" for="checkAll">
@@ -33,7 +58,7 @@
 
                 <button type="submit" class="btn btn-primary btn-md">Select Classification Levels
                     </button>
-            </form>
+            </form> --}}
 
         </div>
        </div>

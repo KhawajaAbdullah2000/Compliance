@@ -11,17 +11,15 @@
 
         <div class="row">
             <div class="col-md-4 me-md-4">
-                <h5 class="fw-bold mb-3 mt-4">Project Types Selected</h5>
+                <h5 class="fw-bold mb-3 mt-4">Project Type Selected</h5>
 
                 <ul class="list-group shadow-sm rounded">
-                    @forelse ($projects as $proj)
+              
                     <li class="list-group-item d-flex align-items-center bg-light">
                         <i class="bi bi-check-circle-fill text-success me-2"></i>
-                        {{$proj->type}}
+                        {{$project->type}}
                     </li>
-                    @empty
-                    <li class="list-group-item text-muted">No project types selected.</li>
-                    @endforelse
+                  
                 </ul>
             </div>
 
@@ -30,15 +28,15 @@
                 @csrf @method('PUT')
                 <select name="risk_scheme" class="form-select">
                     @foreach(\App\Support\RiskScheme::all() as $key => $cfg)
-                    <option value="{{ $key }}" >
+                    <option value="{{ $key }}" {{ $project->risk_scheme === $key ? 'selected' : '' }} >
                         {{ $cfg['label'] }}
                     </option>
                     @endforeach
                 </select>
 
-                  @foreach ($projects as $proj)
-                <input type="hidden" name="selected_projects[]" value="{{ $proj->id }}">
-            @endforeach
+            
+                <input type="hidden" name="selected_project" value="{{ $project->id }}">
+          
                 <button class="btn btn-primary mt-2">Save</button>
             </form>
 

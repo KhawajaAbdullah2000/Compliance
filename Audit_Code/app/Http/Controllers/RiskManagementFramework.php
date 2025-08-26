@@ -31,8 +31,10 @@ class RiskManagementFramework extends Controller
         $org_projects = DB::table('organization_project_types')
             ->join('project_types', 'organization_project_types.project_type_id', 'project_types.id')
             ->where('org_id', $org_id)
-            ->select('project_type_id', 'type', 'org_id')
+            ->select('project_type_id', 'type', 'org_id','risk_scheme')
             ->get();
+
+           // dd($org_projects);
 
         return view('risk_management.select_projects_for_classification_levels', [
             'org_projects' => $org_projects
@@ -61,31 +63,22 @@ class RiskManagementFramework extends Controller
         ]);
     }
 
-    public function selected_projects_for_classification_level($org_id, Request $req)
+    public function selected_projects_for_classification_level($proj_type_id,$org_id)
     {
-        $req->validate([
-            'project_types' => 'required'
-        ]);
-
-
-        $project_types_selected = [];
-        foreach ($req->project_types as $proj_type) {
-            $project_types_selected[] = $proj_type; // append to array
-        }
-
-        $projects = DB::table('project_types')->whereIn("id", $project_types_selected)->get();
-        $frameworks = DB::table('risk_management_framework')->get();
-
+       
+        
+        $project = DB::table('project_types')->where("id", $proj_type_id)->first();
+      //dd($project);
 
         return view("risk_management.select_classification_levels_view", [
-            'projects' => $projects,
-            'frameworks' => $frameworks
+            'project' => $project,
+            
         ]);
     }
 
     public function selected_project_and_framework($org_id, Request $req)
     {
-
+    
         $req->validate([
             'framework' => 'required'
         ]);
@@ -135,19 +128,21 @@ class RiskManagementFramework extends Controller
 
     public function save_classification_level($org_id,Request $req){
       
-        foreach ($req->selected_projects as $proj) {
+
             DB::table('project_types')
                 ->updateOrInsert(
                     [
-                        'id' => $proj,
+                        'id' => $req->selected_project,
                     ],
                     [
                         'risk_scheme' => $req->risk_scheme
                     ]
                 );
-        }
+        
 
-        return redirect()->route('user_home')->with('success','Classification level added successfully');
+        return redirect()->route('select_projects_for_classification_level',[
+            'org_id'=>$org_id
+        ])->with('success','Classification level added successfully');
     }
 
     public function save_classification_level_by_enduser($org_id,Request $req){

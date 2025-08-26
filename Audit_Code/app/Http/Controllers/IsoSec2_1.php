@@ -255,14 +255,10 @@ class IsoSec2_1 extends Controller
 
         $req->validate(
             [
-                'g_name' => 'required',
-                'name' => 'required',
-                's_name' => 'required|string',
+                
                 'c_name' => 'required|array|min:1',
                 'c_name.*' => 'required|string|max:255',
-                'risk_confidentiality' => 'required',
-                'risk_integrity' => 'required',
-                'risk_availability' => 'required'
+                
             ],
             [
                 '*.required' => 'This field is required',
@@ -339,7 +335,7 @@ class IsoSec2_1 extends Controller
                         }
                     } catch (\Exception $e) {
                         $error = $e->getMessage();
-
+                        dd($error);
                         return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
                             ->with('error', $error);
                     }
@@ -597,9 +593,7 @@ class IsoSec2_1 extends Controller
             [
 
                 'c_name' => 'required',
-                'risk_confidentiality' => 'required',
-                'risk_integrity'       => ['required'],
-                'risk_availability'    => ['required'],
+           
 
             ],
             [
@@ -660,9 +654,6 @@ class IsoSec2_1 extends Controller
                             'owner_dept' => $req->owner_dept,
                             'physical_loc' => $req->physical_loc,
                             'logical_loc' => $req->logical_loc,
-                            'risk_confidentiality' => 10,
-                            'risk_integrity' => 10,
-                            'risk_availability' => 10,
                             'performed_at' => Carbon::now()->format('Y-m-d H:i:s'),
                             'risk_confidentiality' => $req->risk_confidentiality,
                             'risk_integrity' => $req->risk_integrity,
@@ -674,7 +665,7 @@ class IsoSec2_1 extends Controller
                             ->with('success', 'Record Updated successfully');
                     } catch (\Exception $e) {
                         $error = $e->getMessage();
-                        return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id])
+                        return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id,'page_type' => 'services_register'])
                             ->with('error', $error);
                     }
                 }

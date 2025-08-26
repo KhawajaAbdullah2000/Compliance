@@ -82,8 +82,8 @@ class KSA_NCA extends Controller
                 //  dd($finalApplicabilityByTitle);
 
 
-                 $domainNames = config('domain-names')[$project->project_type] ?? [];
-               
+                $domainNames = config('domain-names')[$project->project_type] ?? [];
+
 
 
                 return view('KSA_NCA.sec_2_2_subsections', [
@@ -93,8 +93,8 @@ class KSA_NCA extends Controller
                     'asset' => $asset,
                     'finalStatusByTitle' => $finalStatusByTitle,
                     'finalApplicabilityByTitle' => $finalApplicabilityByTitle,
-                    'domainNames'=>$domainNames,
-                    'project_permissions'=>$checkpermission->project_permissions
+                    'domainNames' => $domainNames,
+                    'project_permissions' => $checkpermission->project_permissions
                 ]);
             }
         }
@@ -161,6 +161,10 @@ class KSA_NCA extends Controller
 
                 if ($checkpermission->type_id == 16) {
                     $filepath = public_path('COBIT_2019.xlsx');
+                }
+
+                if ($checkpermission->type_id == 6) {
+                    $filepath = public_path('SBP_ETGRMF.xlsx');
                 }
 
 
@@ -316,6 +320,10 @@ class KSA_NCA extends Controller
                     $filepath = public_path('COBIT_2019.xlsx');
                 }
 
+                if ($checkpermission->type_id == 6) {
+                    $filepath = public_path('SBP_ETGRMF.xlsx');
+                }
+
                 $data = Excel::toArray([], $filepath); //with header
                 $rows = array_slice($data[0], 1); //without header(first row)
 
@@ -373,9 +381,9 @@ class KSA_NCA extends Controller
     }
 
 
-    public function ksa_nca_sec2_2_sub_req_edit(Request $req, $sub_req, $title, $proj_id, $user_id, $asset_id, ?string $main_req = null, ?string $readonly=null)
+    public function ksa_nca_sec2_2_sub_req_edit(Request $req, $sub_req, $title, $proj_id, $user_id, $asset_id, ?string $main_req = null, ?string $readonly = null)
     {
-       
+
         if ($user_id == auth()->user()->id) {
 
             $checkpermission = Db::table('project_details')->select(
@@ -450,27 +458,31 @@ class KSA_NCA extends Controller
                     $filepath = public_path('COBIT_2019.xlsx');
                 }
 
+                if ($checkpermission->type_id == 6) {
+                    $filepath = public_path('SBP_ETGRMF.xlsx');
+                }
+
 
                 $data = Excel::toArray([], $filepath); //with header
                 $rows = array_slice($data[0], 1); //without header(first row)
 
-                if ($main_req == null || $main_req=='-') {
+                if ($main_req == null || $main_req == '-') {
                     $main_req_num = $req->session()->get('main_req_num');
                 } else {
                     $main_req_num = $main_req;
                 }
 
-                
 
-              
-             
-                
+
+
+
+
 
                 $filteredData = collect($rows)->filter(function ($row) use ($sub_req, $main_req_num) {
                     return strval($row[2]) === $main_req_num && strval($row[4]) === $sub_req;
                 })->values()->all();
 
-                
+
 
 
 
@@ -530,7 +542,7 @@ class KSA_NCA extends Controller
                     'org_documents' => $org_documents,
                     'attachedIds' => $attachedIds,
                     'record' => $record,
-                    'readonly'=>$readonly
+                    'readonly' => $readonly
                 ]);
             }
         }
@@ -538,7 +550,7 @@ class KSA_NCA extends Controller
     }
     public function ksa_nca_sec_2_2_form(Request $req, $sub_req, $title, $proj_id, $user_id, $asset_id)
     {
-      
+
         $req->validate([
             'comp_status' => 'required'
         ]);
@@ -637,6 +649,10 @@ class KSA_NCA extends Controller
                         $filepath = public_path('COBIT_2019.xlsx');
                     }
 
+                    if ($checkpermission->type_id == 6) {
+                        $filepath = public_path('SBP_ETGRMF.xlsx');
+                    }
+
                     $docIds = collect($req->input('document_ids', []))
                         ->filter(fn($v) => $v !== null && $v !== '' && $v !== '0')
                         ->map(fn($v) => (int) $v)
@@ -700,7 +716,7 @@ class KSA_NCA extends Controller
                             }
                         }
 
-                        
+
 
 
                         // (optional) de-duplicate targets
@@ -709,10 +725,10 @@ class KSA_NCA extends Controller
                             $targets = array_map('json_decode', $targets, array_fill(0, count($targets), true));
                         }
 
-                
+
 
                         $affectedIds = [];
-                     
+
 
                         foreach ($targets as $attrs) {
                             $existing = DB::table('iso_sec_2_2')->where($attrs)->first();
@@ -729,8 +745,6 @@ class KSA_NCA extends Controller
 
                             //audit
                             Db::table('audit_iso_sec_2_2')->insert(array_merge($attrs, $data));
-
-                            
                         }
 
                         $affectedIds = array_values(array_unique($affectedIds));
@@ -1053,17 +1067,17 @@ class KSA_NCA extends Controller
                             $affectedIds[] = $newId;
                         }
                         //audit
-                           Db::table('audit_iso_sec_2_2')->insert(array_merge($attrs, $data));
+                        Db::table('audit_iso_sec_2_2')->insert(array_merge($attrs, $data));
                     }
 
                     $affectedIds = array_values(array_unique($affectedIds));
 
                     // ----- Sync attachments for ALL affected rows (only if field present) -----
                     if ($req->has('document_ids')) {
-                            DB::table('iso_sec_2_2_attachments')
-                                ->whereIn('iso_sec_2_2_id', $affectedIds)
-                                ->delete();
-                      
+                        DB::table('iso_sec_2_2_attachments')
+                            ->whereIn('iso_sec_2_2_id', $affectedIds)
+                            ->delete();
+
 
                         if (!empty($validDocIds) && !empty($affectedIds)) {
                             $now  = \Carbon\Carbon::now();
@@ -1597,6 +1611,10 @@ class KSA_NCA extends Controller
             $filepath = public_path('COBIT_2019_Modified.xlsx');
         }
 
+        if ($checkpermission->id == 6) {
+            $filepath = public_path('SBP_ETGRMF_Modified.xlsx');
+        }
+
 
 
         $evidenceLevel = $req->session()->get('evidenceLevel');
@@ -1663,14 +1681,14 @@ class KSA_NCA extends Controller
                         $data
                     );
 
-                     DB::table('audit_iso_sec_2_2')->Insert(
-                      array_merge(  [
+                    DB::table('audit_iso_sec_2_2')->Insert(
+                        array_merge([
                             'project_id' => $proj_id,
                             'asset_id' => $asset_id,
                             'title_num' => $innerArray[0],
                             'sub_req' => $innerArray[3],
                             'subdomain' => $innerArray[1]
-                        ],$data)
+                        ], $data)
                     );
                 }
             } else {
@@ -1687,16 +1705,16 @@ class KSA_NCA extends Controller
                             $data
                         );
 
-                         DB::table('audit_iso_sec_2_2')->Insert(
-                            array_merge( [
+                        DB::table('audit_iso_sec_2_2')->Insert(
+                            array_merge([
                                 'project_id' => $proj_id,
                                 'asset_id' => $ass->assessment_id,
                                 'title_num' => $innerArray[0],
                                 'sub_req' => $innerArray[3],
                                 'subdomain' => $innerArray[1]
-                            ],$data)
-                           
-                            
+                            ], $data)
+
+
                         );
                     }
                 }
@@ -1751,7 +1769,8 @@ class KSA_NCA extends Controller
             9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx',
             23 => 'NIST_CSF_Modified.xlsx',
-            24 => 'ISO27701_2019v2_Modified.xlsx'
+            24 => 'ISO27701_2019v2_Modified.xlsx',
+            6 => 'SBP_ETGRMF_Modified.xlsx'
         ];
 
 
@@ -1810,18 +1829,16 @@ class KSA_NCA extends Controller
                         $data
                     );
 
-                     DB::table('audit_iso_sec_2_2')->Insert(
-                       array_merge( [
+                    DB::table('audit_iso_sec_2_2')->Insert(
+                        array_merge([
                             'project_id' => $proj_id,
                             'asset_id' => $asset_id,
                             'title_num' => $innerArray[0],
                             'sub_req' => $innerArray[3],
                             'subdomain' => $innerArray[1]
-                        ],$data)
+                        ], $data)
 
                     );
-
-                      
                 }
             }
 
@@ -1883,15 +1900,17 @@ class KSA_NCA extends Controller
                         $data
                     );
 
-                       DB::table('audit_iso_sec_2_2')->updateOrInsert(
-                      array_merge(  [
-                            'project_id' => $proj_id,
-                            'asset_id' => $ass->assessment_id,
-                            'title_num' => $innerArray[0],
-                            'sub_req' => $innerArray[3],
-                            'subdomain' => $innerArray[1]
-                        ],
-                        $data)
+                    DB::table('audit_iso_sec_2_2')->updateOrInsert(
+                        array_merge(
+                            [
+                                'project_id' => $proj_id,
+                                'asset_id' => $ass->assessment_id,
+                                'title_num' => $innerArray[0],
+                                'sub_req' => $innerArray[3],
+                                'subdomain' => $innerArray[1]
+                            ],
+                            $data
+                        )
                     );
                 }
             }
@@ -1945,7 +1964,8 @@ class KSA_NCA extends Controller
             9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx',
             23 => 'NIST_CSF_Modified.xlsx',
-            24 => 'ISO27701_2019v2_Modified.xlsx'
+            24 => 'ISO27701_2019v2_Modified.xlsx',
+            6 => 'SBP_ETGRMF_Modified.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
@@ -2003,15 +2023,17 @@ class KSA_NCA extends Controller
                         $data
                     );
 
-                     DB::table('audit_iso_sec_2_2')->Insert(
-                       array_merge( [
-                            'project_id' => $proj_id,
-                            'asset_id' => $asset_id,
-                            'title_num' => $innerArray[0],
-                            'sub_req' => $innerArray[3],
-                            'subdomain' => $innerArray[1]
-                        ],
-                        $data)
+                    DB::table('audit_iso_sec_2_2')->Insert(
+                        array_merge(
+                            [
+                                'project_id' => $proj_id,
+                                'asset_id' => $asset_id,
+                                'title_num' => $innerArray[0],
+                                'sub_req' => $innerArray[3],
+                                'subdomain' => $innerArray[1]
+                            ],
+                            $data
+                        )
                     );
                 }
             }
@@ -2079,14 +2101,16 @@ class KSA_NCA extends Controller
                     );
 
                     DB::table('audit_iso_sec_2_2')->Insert(
-                        array_merge([
-                            'project_id' => $proj_id,
-                            'asset_id' => $ass->assessment_id,
-                            'title_num' => $innerArray[0],
-                            'sub_req' => $innerArray[3],
-                            'subdomain' => $innerArray[1]
-                        ],
-                        $data)
+                        array_merge(
+                            [
+                                'project_id' => $proj_id,
+                                'asset_id' => $ass->assessment_id,
+                                'title_num' => $innerArray[0],
+                                'sub_req' => $innerArray[3],
+                                'subdomain' => $innerArray[1]
+                            ],
+                            $data
+                        )
                     );
                 }
             }
@@ -2116,7 +2140,7 @@ class KSA_NCA extends Controller
         $permissions = json_decode($checkpermission->project_permissions);
 
 
-           $fileMap = [
+        $fileMap = [
             7 => 'KSA_NCA_ECC.xlsx',
             18 => 'COSO.xlsx',
             19 => 'SOC2_Type2.xlsx',
@@ -2132,7 +2156,8 @@ class KSA_NCA extends Controller
             9 => 'ISA 62443 Part 4-1.xlsx',
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25.xlsx',
             23 => 'NIST_CSF.xlsx',
-            24 => 'ISO27701_2019v2.xlsx'
+            24 => 'ISO27701_2019v2.xlsx',
+            6=>'SBP_ETGRMF.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
@@ -2207,8 +2232,8 @@ class KSA_NCA extends Controller
         }
 
 
-      
-           $fileMap = [
+
+        $fileMap = [
             7 => 'KSA_NCA_ECC.xlsx',
             18 => 'COSO.xlsx',
             19 => 'SOC2_Type2.xlsx',
@@ -2224,7 +2249,8 @@ class KSA_NCA extends Controller
             9 => 'ISA 62443 Part 4-1.xlsx',
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25.xlsx',
             23 => 'NIST_CSF.xlsx',
-            24 => 'ISO27701_2019v2.xlsx'
+            24 => 'ISO27701_2019v2.xlsx',
+            6=>'SBP_ETGRMF.xlsx'
         ];
 
 

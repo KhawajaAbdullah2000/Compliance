@@ -24,9 +24,9 @@ return new class extends Migration
             $table->string('owner_dept', 300)->nullable();
             $table->string('physical_loc', 300)->nullable();
             $table->string('logical_loc', 300)->nullable();
-            $table->integer('risk_confidentiality')->default(10);
-            $table->integer('risk_integrity')->default(10);
-            $table->integer('risk_availability')->default(10);
+            $table->integer('risk_confidentiality')->nullable();
+            $table->integer('risk_integrity')->nullable();
+            $table->integer('risk_availability')->nullable();
             $table->dateTime('performed_at');
             $table->foreign(['last_edited_by'])->references(['id'])->on('users')->onUpdate('CASCADE')->onDelete('SET NULL');
             $table->foreign(['project_id'])->references(['project_id'])->on('projects')->onUpdate('CASCADE')->onDelete('SET NULL');
