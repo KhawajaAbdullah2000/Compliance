@@ -34,8 +34,6 @@ class IsoSec2_1 extends Controller
                 ->first();
             if ($checkpermission) {
 
-
-
                 $data = DB::table('iso_sec_2_1')
                     ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
                     ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')

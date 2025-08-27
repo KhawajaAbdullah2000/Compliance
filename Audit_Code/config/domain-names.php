@@ -409,6 +409,14 @@ return [
         '4'=>'DSS',
         '5'=>'MEA'
 
+    ],
+
+    //DIgital banking security
+     25=>[
+        '1'=>'Governance',
+        '2'=>'Management Controls',
+        '3'=>'Operational Controls',
+        '4'=>'Liability Framework'
     ]
 
 ];

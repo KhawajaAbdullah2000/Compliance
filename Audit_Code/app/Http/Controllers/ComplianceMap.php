@@ -1649,7 +1649,35 @@ class ComplianceMap extends Controller
             ];
         }
 
-        if ($project->project_type == 1 || $project->project_type == 2 || $project->project_type == 3 || $project->project_type == 16 || $project->project_type == 19) {
+         if ($project->project_type == 25) {
+
+            $filepath = public_path('DigitalBankingSecurity_Modified.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+
+
+            $UniqueSubDomains = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [$row[1] => $row[4]]; // Map 1st index (key) to 4th index (value)
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+
+
+            $domainNames = [
+                1 => 'Governance',
+                2 => 'Management Controls',
+                3 => 'Operational Controls',
+                4 => 'LIability Framework',
+              
+            ];
+        }
+
+        if ($project->project_type == 1 || $project->project_type == 2 || $project->project_type == 3 || $project->project_type == 16 || $project->project_type == 19 || $project->project_type==25) {
 
             $fileMap = [
                 7 => 'KSA_NCA_ECC_Modified.xlsx',
@@ -1667,7 +1695,8 @@ class ComplianceMap extends Controller
                 9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
                 4 => 'KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx',
                 23 => 'NIST_CSF_Modified.xlsx',
-                24 => 'ISO27701_2019v2_Modified.xlsx'
+                24 => 'ISO27701_2019v2_Modified.xlsx',
+                25=>'DigitalBankingSecurity_Modified.xlsx'
             ];
 
 
@@ -2229,8 +2258,34 @@ class ComplianceMap extends Controller
 
         }
 
+        if ($project->project_type == 25) {
 
-        if ($project->project_type == 1 || $project->project_type == 2 || $project->project_type == 3 || $project->project_type == 16 || $project->project_type == 19) {
+            $filepath = public_path('SBP_ETGRMF_Modified.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+                return strval($row[1]) == $subdomain;
+            })->values()->all();
+
+
+            $MainDomainNum = $filteredData[0][0];
+            $MainDomainTitle = $filteredData[0][2]; //title
+
+            $subdomainTitle = $filteredData[0][4];
+
+
+            $UniqueSubReqs = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [$row[3] => $row[5]];
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+
+        }
+
+
+        if ($project->project_type == 1 || $project->project_type == 2 || $project->project_type == 3 || $project->project_type == 16 || $project->project_type == 19 || $project->project_type==25 || $project->project_type==24) {
 
             $fileMap = [
                 7 => 'KSA_NCA_ECC_Modified.xlsx',
@@ -2248,7 +2303,8 @@ class ComplianceMap extends Controller
                 9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
                 4 => 'KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx',
                 23 => 'NIST_CSF_Modified.xlsx',
-                24 => 'ISO27701_2019v2_Modified.xlsx'
+                24 => 'ISO27701_2019v2_Modified.xlsx',
+                25=>'DigitalBankingSecurity_Modified.xlsx'
             ];
 
 
@@ -2427,7 +2483,8 @@ $results = (clone $assetsQuery)
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25.xlsx',
             23 => 'NIST_CSF.xlsx',
             24 => 'ISO27701_2019v2.xlsx',
-             6=>'SBP_ETGRMF.xlsx'
+             6=>'SBP_ETGRMF.xlsx',
+             25=>'DigitalBankingSecurity.xlsx'
         ];
         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
             ->where('projects.project_id', $proj_id)->first();

@@ -20,6 +20,7 @@
 
         <div class="d-flex flex-column gap-2 mb-5">
             @foreach($titles as $number => $title)
+              @if(!empty($number) && !empty($title))
             <div class="d-flex align-items-center col-6">
                 <input type="checkbox" name="selected_titles[]" value="{{ $number }}" 
                        class="form-check-input me-3 item-checkbox" id="checkbox-{{ $number }}" checked>
@@ -28,6 +29,7 @@
                     {{ $number }}. {{ $title }}
                 </label>
             </div>
+            @endif
             @endforeach
         </div>
 

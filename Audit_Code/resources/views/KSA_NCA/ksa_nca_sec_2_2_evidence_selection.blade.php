@@ -60,11 +60,13 @@
                 <label class="form-check-label" for="project">Project</label>
             </div>
 
+            @if($asset->s_name!=null)
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="evidenceLevel" value="service" 
                        @if(!$isDataInputter) disabled @endif>
                 <label class="form-check-label" for="service">Service</label>
             </div>
+            @endif
 
             @if($asset->g_name != null)
             <div class="form-check">

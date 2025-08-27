@@ -167,6 +167,10 @@ class KSA_NCA extends Controller
                     $filepath = public_path('SBP_ETGRMF.xlsx');
                 }
 
+                if ($checkpermission->type_id == 25) {
+                    $filepath = public_path('DigitalBankingSecurity.xlsx');
+                }
+
 
 
                 $data = Excel::toArray([], $filepath); //with header
@@ -324,6 +328,10 @@ class KSA_NCA extends Controller
                     $filepath = public_path('SBP_ETGRMF.xlsx');
                 }
 
+                if ($checkpermission->type_id == 25) {
+                    $filepath = public_path('DigitalBankingSecurity.xlsx');
+                }
+
                 $data = Excel::toArray([], $filepath); //with header
                 $rows = array_slice($data[0], 1); //without header(first row)
 
@@ -383,7 +391,6 @@ class KSA_NCA extends Controller
 
     public function ksa_nca_sec2_2_sub_req_edit(Request $req, $sub_req, $title, $proj_id, $user_id, $asset_id, ?string $main_req = null, ?string $readonly = null)
     {
-
         if ($user_id == auth()->user()->id) {
 
             $checkpermission = Db::table('project_details')->select(
@@ -404,8 +411,11 @@ class KSA_NCA extends Controller
                 $record = null;
 
                 $result = Db::table('iso_sec_2_2')->join('users', 'iso_sec_2_2.last_edited_by', 'users.id')
-                    ->where('project_id', $proj_id)->where('sub_req', $sub_req)->where('asset_id', $asset_id)
+                    ->where('project_id', $proj_id)->where('sub_req', $sub_req)
+                    ->where('title_num', $title)
+                    ->where('asset_id', $asset_id)
                     ->first();
+
                 if ($result != null) {
                     $record = IsoSec22::find($result->assessment_id);
                     if ($record != null) {
@@ -414,6 +424,7 @@ class KSA_NCA extends Controller
                     }
                 }
 
+                //dd($result);
 
 
 
@@ -462,6 +473,10 @@ class KSA_NCA extends Controller
                     $filepath = public_path('SBP_ETGRMF.xlsx');
                 }
 
+                if ($checkpermission->type_id == 25) {
+                    $filepath = public_path('DigitalBankingSecurity.xlsx');
+                }
+
 
                 $data = Excel::toArray([], $filepath); //with header
                 $rows = array_slice($data[0], 1); //without header(first row)
@@ -471,8 +486,6 @@ class KSA_NCA extends Controller
                 } else {
                     $main_req_num = $main_req;
                 }
-
-
 
 
 
@@ -651,6 +664,10 @@ class KSA_NCA extends Controller
 
                     if ($checkpermission->type_id == 6) {
                         $filepath = public_path('SBP_ETGRMF.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 25) {
+                        $filepath = public_path('DigitalBankingSecurity.xlsx');
                     }
 
                     $docIds = collect($req->input('document_ids', []))
@@ -1118,6 +1135,7 @@ class KSA_NCA extends Controller
     {
         // dd($sub_req, $title, $proj_id, $user_id,$asset_id,$req->all());
 
+        // dd($req->all());
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -1182,6 +1200,10 @@ class KSA_NCA extends Controller
 
                     if ($checkpermission->type_id == 3) {
                         $filepath = public_path('PCI_DSS_4_Merchant.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 25) {
+                        $filepath = public_path('DigitalBankingSecurity.xlsx');
                     }
 
 
@@ -1615,6 +1637,11 @@ class KSA_NCA extends Controller
             $filepath = public_path('SBP_ETGRMF_Modified.xlsx');
         }
 
+        if ($checkpermission->id == 25) {
+            $filepath = public_path('DigitalBankingSecurity_Modified.xlsx');
+        }
+
+
 
 
         $evidenceLevel = $req->session()->get('evidenceLevel');
@@ -1770,7 +1797,8 @@ class KSA_NCA extends Controller
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx',
             23 => 'NIST_CSF_Modified.xlsx',
             24 => 'ISO27701_2019v2_Modified.xlsx',
-            6 => 'SBP_ETGRMF_Modified.xlsx'
+            6 => 'SBP_ETGRMF_Modified.xlsx',
+            25 => 'DigitalBankingSecurity_Modified.xlsx'
         ];
 
 
@@ -1965,7 +1993,8 @@ class KSA_NCA extends Controller
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx',
             23 => 'NIST_CSF_Modified.xlsx',
             24 => 'ISO27701_2019v2_Modified.xlsx',
-            6 => 'SBP_ETGRMF_Modified.xlsx'
+            6 => 'SBP_ETGRMF_Modified.xlsx',
+            25 => 'DigitalBankingSecurity_Modified.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
@@ -2157,7 +2186,8 @@ class KSA_NCA extends Controller
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25.xlsx',
             23 => 'NIST_CSF.xlsx',
             24 => 'ISO27701_2019v2.xlsx',
-            6=>'SBP_ETGRMF.xlsx'
+            6 => 'SBP_ETGRMF.xlsx',
+            25 => 'DigitalBankingSecurity.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
@@ -2165,9 +2195,13 @@ class KSA_NCA extends Controller
         $data2 = Excel::toArray([], $filepath);
         $rows = array_slice($data2[0], 1); // Skip header
 
+
+
         $titles = collect($rows)->mapWithKeys(function ($row) {
             return [$row[0] => $row[1]];
         })->unique();
+
+        //dd($titles);
 
 
         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
@@ -2250,7 +2284,8 @@ class KSA_NCA extends Controller
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25.xlsx',
             23 => 'NIST_CSF.xlsx',
             24 => 'ISO27701_2019v2.xlsx',
-            6=>'SBP_ETGRMF.xlsx'
+            6 => 'SBP_ETGRMF.xlsx',
+            25 => 'DigitalBankingSecurity.xlsx'
         ];
 
 
@@ -2265,13 +2300,14 @@ class KSA_NCA extends Controller
             ->get();
 
         $finalData = [];
-
+      
         foreach ($data as $record) {
             $matchingRow = collect($rows)->first(function ($row) use ($record) {
                 return strval($row[0]) === $record->title_num && // Title number
                     strval($row[2]) === $record->subdomain && // Subdomain number
                     strval($row[4]) === $record->sub_req;     // Sub req number
             });
+
 
             $finalData[] = [
                 'title_num' => $record->title_num,
