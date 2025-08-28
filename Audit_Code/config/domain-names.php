@@ -417,6 +417,14 @@ return [
         '2'=>'Management Controls',
         '3'=>'Operational Controls',
         '4'=>'Liability Framework'
+     ],
+
+     //SBP Payment card securityStandard
+     26=>[
+        '4'=>'Consumer Awareness & Record Retention',
+        '5'=>'Consumer Awareness & Record Retention',
+        '6'=>'Roadmap for EMV Compliance',
+        
     ]
 
 ];

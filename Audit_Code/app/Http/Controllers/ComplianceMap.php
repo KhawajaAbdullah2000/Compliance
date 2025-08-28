@@ -1649,7 +1649,7 @@ class ComplianceMap extends Controller
             ];
         }
 
-         if ($project->project_type == 25) {
+        if ($project->project_type == 25) {
 
             $filepath = public_path('DigitalBankingSecurity_Modified.xlsx');
             $data = Excel::toArray([], $filepath); //with header
@@ -1673,11 +1673,39 @@ class ComplianceMap extends Controller
                 2 => 'Management Controls',
                 3 => 'Operational Controls',
                 4 => 'LIability Framework',
-              
+
             ];
         }
 
-        if ($project->project_type == 1 || $project->project_type == 2 || $project->project_type == 3 || $project->project_type == 16 || $project->project_type == 19 || $project->project_type==25) {
+         if ($project->project_type == 26) {
+
+            $filepath = public_path('SBP_Payment_Card_Security_Standard_Modified.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+
+
+            $UniqueSubDomains = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [$row[1] => $row[4]]; // Map 1st index (key) to 4th index (value)
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+
+
+            $domainNames = [
+                4=>'Consumer Awareness & Record Retention',
+        5=>'Consumer Awareness & Record Retention',
+        6=>'Roadmap for EMV Compliance',
+              
+
+            ];
+        }
+
+        if ($project->project_type == 1 || $project->project_type == 2 || $project->project_type == 3 || $project->project_type == 16 || $project->project_type == 19 || $project->project_type == 25 ||  $project->project_type == 26) {
 
             $fileMap = [
                 7 => 'KSA_NCA_ECC_Modified.xlsx',
@@ -1696,7 +1724,8 @@ class ComplianceMap extends Controller
                 4 => 'KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx',
                 23 => 'NIST_CSF_Modified.xlsx',
                 24 => 'ISO27701_2019v2_Modified.xlsx',
-                25=>'DigitalBankingSecurity_Modified.xlsx'
+                25 => 'DigitalBankingSecurity_Modified.xlsx',
+                26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx'
             ];
 
 
@@ -1709,7 +1738,7 @@ class ComplianceMap extends Controller
                 return strval($row[0]) == $title;
             })->values()->all();
 
-           
+
 
             // $UniqueSubDomains = collect($filteredData)
             //     ->unique(function ($row) {
@@ -1721,32 +1750,32 @@ class ComplianceMap extends Controller
             //     ->toArray();
 
             $UniqueSubDomains = collect($filteredData)
-    // normalize the key once
-    ->map(function ($row) {
-        $row[1] = trim((string) $row[1]);   // e.g., "12.10"
-        $row[4] = trim((string) ($row[4] ?? ''));
-        return $row;
-    })
-    // unique by column 1, strict mode = true
-    ->unique('1', true)
-    // build key => label
-    ->mapWithKeys(function ($row) {
-        return [$row[1] => $row[4]];
-    })
-    ->toArray();
+                // normalize the key once
+                ->map(function ($row) {
+                    $row[1] = trim((string) $row[1]);   // e.g., "12.10"
+                    $row[4] = trim((string) ($row[4] ?? ''));
+                    return $row;
+                })
+                // unique by column 1, strict mode = true
+                ->unique('1', true)
+                // build key => label
+                ->mapWithKeys(function ($row) {
+                    return [$row[1] => $row[4]];
+                })
+                ->toArray();
 
             $domainNames = config('domain-names')[$project->project_type] ?? [];
         }
 
 
-   
+
 
         return view('compliance_map.subdomains_map', [
             'project' => $project,
             'formattedResults' => $formattedResults,
             'results' => $results,
             'UniqueSubDomains' => $UniqueSubDomains,
-            'domain' => $title,
+            'title' => $title, //changed from domain key
             'domainName' => $domainNames[$title],
             'service' => $service,
             'component' => $component,
@@ -1806,7 +1835,7 @@ class ComplianceMap extends Controller
         );
     }
 
-    public function compliance_map_sub_req($subdomain, $service, $component, $proj_id, Request $req)
+    public function compliance_map_sub_req($subdomain, $service, $component, $proj_id,$title=null, Request $req)
     {
         $group = $req->query('group');
         $subgroup = $req->query('subgroup');
@@ -1845,10 +1874,13 @@ class ComplianceMap extends Controller
                 ->where('assets.project_id', $proj_id)
                 ->whereIn('compliance.asset_id', $assetIds)
                 ->where('compliance.subdomain', $subdomain)
+                ->where('compliance.title_num', $title)
                 ->where('compliance.comp_status', $comp_status)
                 ->groupBy('compliance.sub_req', 'compliance.comp_status')
                 ->orderBy('compliance.sub_req')
                 ->get();
+
+               
         } else {
             $results = DB::table('iso_sec_2_1 AS assets')
                 ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
@@ -1860,6 +1892,7 @@ class ComplianceMap extends Controller
                 ->where('assets.project_id', $proj_id)
                 ->whereIn('compliance.asset_id', $assetIds)
                 ->where('compliance.subdomain', $subdomain)
+                   ->where('compliance.title_num', $title)
                 ->groupBy('compliance.sub_req', 'compliance.comp_status') // Group by service, component, and comp_status
                 ->orderby('compliance.sub_req')
                 ->get();
@@ -1869,6 +1902,7 @@ class ComplianceMap extends Controller
 
         $formattedResults = [];
         $totalCounts = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
+
 
         foreach ($results as $result) {
             $domain = $result->SubReq;
@@ -2260,7 +2294,7 @@ class ComplianceMap extends Controller
 
         if ($project->project_type == 25) {
 
-            $filepath = public_path('SBP_ETGRMF_Modified.xlsx');
+            $filepath = public_path('DigitalBankingSecurity_Modified.xlsx');
             $data = Excel::toArray([], $filepath); //with header
             $rows = array_slice($data[0], 1); //without header(first row)
 
@@ -2284,8 +2318,37 @@ class ComplianceMap extends Controller
 
         }
 
+         if ($project->project_type == 26) {
 
-        if ($project->project_type == 1 || $project->project_type == 2 || $project->project_type == 3 || $project->project_type == 16 || $project->project_type == 19 || $project->project_type==25 || $project->project_type==24) {
+            $filepath = public_path('SBP_Payment_Card_Security_Standard_Modified.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+          
+            $filteredData = collect($rows)->filter(function ($row) use ($subdomain,$title) {
+                return strval($row[1]) == $subdomain && strval($row[0])==$title;
+            })->values()->all();
+
+          
+            $MainDomainNum = $filteredData[0][0];
+            $MainDomainTitle = $filteredData[0][2]; //title
+
+            $subdomainTitle = $filteredData[0][4];
+
+
+            // $UniqueSubReqs = collect($filteredData)
+            //     ->mapWithKeys(function ($row) {
+            //         return [$row[3] => $row[5]];
+            //     })
+            //     ->unique() // Ensure unique keys (1st index)
+            //     ->toArray(); // Convert to array
+
+        }
+
+      
+
+
+        if ($project->project_type == 1 || $project->project_type == 2 || $project->project_type == 3 || $project->project_type == 16 || $project->project_type == 19 || $project->project_type == 25 || $project->project_type == 24 || $project->project_type == 26) {
 
             $fileMap = [
                 7 => 'KSA_NCA_ECC_Modified.xlsx',
@@ -2304,7 +2367,8 @@ class ComplianceMap extends Controller
                 4 => 'KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx',
                 23 => 'NIST_CSF_Modified.xlsx',
                 24 => 'ISO27701_2019v2_Modified.xlsx',
-                25=>'DigitalBankingSecurity_Modified.xlsx'
+                25 => 'DigitalBankingSecurity_Modified.xlsx',
+                26=>'SBP_Payment_Card_Security_Standard_Modified.xlsx'
             ];
 
 
@@ -2314,9 +2378,10 @@ class ComplianceMap extends Controller
             $data = Excel::toArray([], $filepath); //with header
             $rows = array_slice($data[0], 1); //without header(first row)
 
-            $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
-                return strval($row[1]) == $subdomain;
-            })->values()->all();
+            // $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+            //     return strval($row[1]) == $subdomain;
+            // })->values()->all();
+          
 
 
             $MainDomainNum = $filteredData[0][0];
@@ -2327,13 +2392,14 @@ class ComplianceMap extends Controller
 
             $UniqueSubReqs = collect($filteredData)
                 ->mapWithKeys(function ($row) {
-                    return [$row[3] => $row[5]];
+                    return [(string)$row[3] => (string)$row[5]];
                 })
                 ->unique() // Ensure unique keys (1st index)
                 ->toArray(); // Convert to array
 
-
         }
+
+      
 
 
 
@@ -2421,48 +2487,48 @@ class ComplianceMap extends Controller
         //     ])
         //     ->get();
         $assetsQuery = DB::table('iso_sec_2_1 as a')
-    ->where('a.project_id', $proj_id)
-    ->when($service !== '_all', fn($q) => $q->where('a.s_name', $service))
-    ->when($group, fn($q) => $q->when($group !== '_all', fn($qq) => $qq->where('a.g_name', $group)))
-    ->when($subgroup, fn($q) => $q->when($subgroup !== '_all', fn($qq) => $qq->where('a.name', $subgroup)))
-    ->when($component !== '_all', fn($q) => $q->where('a.c_name', $component));
+            ->where('a.project_id', $proj_id)
+            ->when($service !== '_all', fn($q) => $q->where('a.s_name', $service))
+            ->when($group, fn($q) => $q->when($group !== '_all', fn($qq) => $qq->where('a.g_name', $group)))
+            ->when($subgroup, fn($q) => $q->when($subgroup !== '_all', fn($qq) => $qq->where('a.name', $subgroup)))
+            ->when($component !== '_all', fn($q) => $q->where('a.c_name', $component));
 
-$latestIdx = DB::table('iso_sec_2_2')
-    ->select('asset_id', 'project_id', 'sub_req', DB::raw('MAX(last_edited_at) as maxdt'))
-    ->where('project_id', $proj_id)
-    ->where('sub_req', $domain)
-    ->groupBy('asset_id', 'project_id', 'sub_req');
+        $latestIdx = DB::table('iso_sec_2_2')
+            ->select('asset_id', 'project_id', 'sub_req', DB::raw('MAX(last_edited_at) as maxdt'))
+            ->where('project_id', $proj_id)
+            ->where('sub_req', $domain)
+            ->groupBy('asset_id', 'project_id', 'sub_req');
 
-$latestCompliance = DB::query()
-    ->fromSub($latestIdx, 'x')
-    ->join('iso_sec_2_2 as t', function ($join) {
-        $join->on('t.asset_id', '=', 'x.asset_id')
-             ->on('t.project_id', '=', 'x.project_id')
-             ->on('t.sub_req', '=', 'x.sub_req')
-             ->on('t.last_edited_at', '=', 'x.maxdt');
-    })
-    ->select([
-        't.assessment_id as compliance_id',
-        't.asset_id',
-        't.project_id',
-        't.sub_req',
-        't.comp_status',
-        't.last_edited_at',
-    ]);
+        $latestCompliance = DB::query()
+            ->fromSub($latestIdx, 'x')
+            ->join('iso_sec_2_2 as t', function ($join) {
+                $join->on('t.asset_id', '=', 'x.asset_id')
+                    ->on('t.project_id', '=', 'x.project_id')
+                    ->on('t.sub_req', '=', 'x.sub_req')
+                    ->on('t.last_edited_at', '=', 'x.maxdt');
+            })
+            ->select([
+                't.assessment_id as compliance_id',
+                't.asset_id',
+                't.project_id',
+                't.sub_req',
+                't.comp_status',
+                't.last_edited_at',
+            ]);
 
-// ONE TABLE: only assets that HAVE a compliance row for this sub_req
-$results = (clone $assetsQuery)
-    ->joinSub($latestCompliance, 'b', fn($j) => $j->on('b.asset_id', '=', 'a.assessment_id'))
-    ->orderBy('a.c_name')
-    ->orderBy('a.assessment_id')
-    ->select([
-        DB::raw('TRIM(a.c_name) as c_name'),
-        'a.assessment_id as asset_id',
-        'b.compliance_id',
-        'b.comp_status',
-        'b.last_edited_at',
-    ])
-    ->get();
+        // ONE TABLE: only assets that HAVE a compliance row for this sub_req
+        $results = (clone $assetsQuery)
+            ->joinSub($latestCompliance, 'b', fn($j) => $j->on('b.asset_id', '=', 'a.assessment_id'))
+            ->orderBy('a.c_name')
+            ->orderBy('a.assessment_id')
+            ->select([
+                DB::raw('TRIM(a.c_name) as c_name'),
+                'a.assessment_id as asset_id',
+                'b.compliance_id',
+                'b.comp_status',
+                'b.last_edited_at',
+            ])
+            ->get();
 
         //dd($summary,$details);
 
@@ -2483,8 +2549,9 @@ $results = (clone $assetsQuery)
             4 => 'KM_ISO27K1_2022_Compliance_18Jul25.xlsx',
             23 => 'NIST_CSF.xlsx',
             24 => 'ISO27701_2019v2.xlsx',
-             6=>'SBP_ETGRMF.xlsx',
-             25=>'DigitalBankingSecurity.xlsx'
+            6 => 'SBP_ETGRMF.xlsx',
+            25 => 'DigitalBankingSecurity.xlsx',
+            26=>'SBP_Payment_Card_Security_Standard.xlsx'
         ];
         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
             ->where('projects.project_id', $proj_id)->first();
@@ -2513,7 +2580,7 @@ $results = (clone $assetsQuery)
 
         return view('compliance_map.subreq_map_components', [
             'project' => $project,
-            'rows'=>$results,
+            'rows' => $results,
             'domain' => $domain,
             'service' => $service,
             'component' => $component,

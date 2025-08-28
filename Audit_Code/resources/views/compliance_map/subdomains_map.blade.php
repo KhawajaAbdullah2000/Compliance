@@ -43,7 +43,7 @@
         <div class="col-md-6">
 
     
-            <h4><span class="fw-bold mt-4">Domain {{$domain}} :</span>{{$domainName}}</h4>
+            <h4><span class="fw-bold mt-4">Domain {{$title}} :</span>{{$domainName}}</h4>
             <h4><span class="fw-bold">Service Selected : </span>
                 @if($service=='_all')
                 All services - All Controls
@@ -151,11 +151,14 @@
             <tr>
                 <td>
                     <a href="{{ route('compliance_map_sub_req', [
-                        'domain' => $domain,
-                        'service' => $service,
-                        'component' => $component,
-                        'proj_id' => $project->project_id
-                    ]) }}?group={{ $group }}&subgroup={{ $subgroup }}">
+    'domain'   => $domain,
+    'service'  => $service,
+    'component'=> $component,
+    'proj_id'  => $project->project_id,
+    'title'    => $title,
+    'group'    => $group,
+    'subgroup' => $subgroup
+]) }}">
                         {{ $domain }} - {{ $UniqueSubDomains[$domain] ?? '' }}
                     </a>
                 </td>
@@ -222,11 +225,14 @@
             @forelse($formattedResults as $domain => $statuses)
                 <tr>
                     <td><a href="{{ route('compliance_map_sub_req', [
-                        'domain' => $domain,
-                        'service' => $service,
-                        'component' => $component,
-                        'proj_id' => $project->project_id
-                    ]) }}?group={{ $group }}&subgroup={{ $subgroup }}">
+    'domain'   => $domain,
+    'service'  => $service,
+    'component'=> $component,
+    'proj_id'  => $project->project_id,
+    'title'    => $title,
+    'group'    => $group,
+    'subgroup' => $subgroup
+]) }}">
                         
                         {{ $domain }} - {{$UniqueSubDomains[$domain]}}
                   

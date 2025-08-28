@@ -213,6 +213,7 @@
 
             {{-- FOr row percentage --}}
             @foreach($formattedResults as $statuses)
+          
             @php
             // Calculate row total and add to grand total
             $rowTotal2 = array_sum($statuses);
@@ -224,9 +225,8 @@
             <tr>
                 <td>
                       
-                     
                     @foreach($UniqueSubReqs as $sub_req=>$value)
-
+                
                     @if ($sub_req==$domain)
                     <a href="{{ route('compliance_map_sub_req_components', [
                         'domain' => $domain,

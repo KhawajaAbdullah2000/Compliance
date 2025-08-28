@@ -171,6 +171,10 @@ class KSA_NCA extends Controller
                     $filepath = public_path('DigitalBankingSecurity.xlsx');
                 }
 
+                if ($checkpermission->type_id == 26) {
+                    $filepath = public_path('SBP_Payment_Card_Security_Standard.xlsx');
+                }
+
 
 
                 $data = Excel::toArray([], $filepath); //with header
@@ -224,8 +228,7 @@ class KSA_NCA extends Controller
                         return $item;
                     });
 
-
-
+            
 
                 $finalStatusBySubdomain = $results->groupBy('subdomain')->map(function ($items) {
                     $statuses = $items->pluck('comp_status')->filter()->unique();
@@ -330,6 +333,10 @@ class KSA_NCA extends Controller
 
                 if ($checkpermission->type_id == 25) {
                     $filepath = public_path('DigitalBankingSecurity.xlsx');
+                }
+
+                if ($checkpermission->type_id == 26) {
+                    $filepath = public_path('SBP_Payment_Card_Security_Standard.xlsx');
                 }
 
                 $data = Excel::toArray([], $filepath); //with header
@@ -475,6 +482,10 @@ class KSA_NCA extends Controller
 
                 if ($checkpermission->type_id == 25) {
                     $filepath = public_path('DigitalBankingSecurity.xlsx');
+                }
+
+                if ($checkpermission->type_id == 26) {
+                    $filepath = public_path('SBP_Payment_Card_Security_Standard.xlsx');
                 }
 
 
@@ -669,6 +680,12 @@ class KSA_NCA extends Controller
                     if ($checkpermission->type_id == 25) {
                         $filepath = public_path('DigitalBankingSecurity.xlsx');
                     }
+
+                     if ($checkpermission->type_id == 26) {
+                        $filepath = public_path('SBP_Payment_Card_Security_Standard.xlsx');
+                    }
+
+                    
 
                     $docIds = collect($req->input('document_ids', []))
                         ->filter(fn($v) => $v !== null && $v !== '' && $v !== '0')
@@ -1641,6 +1658,10 @@ class KSA_NCA extends Controller
             $filepath = public_path('DigitalBankingSecurity_Modified.xlsx');
         }
 
+            if ($checkpermission->id == 26) {
+            $filepath = public_path('SBP_Payment_Card_Security_Standard_Modified.xlsx');
+        }
+
 
 
 
@@ -1756,6 +1777,7 @@ class KSA_NCA extends Controller
 
     public function add_mandatory_all_domain_all_controls(Request $req, $proj_id, $user_id, $asset_id)
     {
+ 
         if ($user_id != auth()->user()->id) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
@@ -1798,7 +1820,8 @@ class KSA_NCA extends Controller
             23 => 'NIST_CSF_Modified.xlsx',
             24 => 'ISO27701_2019v2_Modified.xlsx',
             6 => 'SBP_ETGRMF_Modified.xlsx',
-            25 => 'DigitalBankingSecurity_Modified.xlsx'
+            25 => 'DigitalBankingSecurity_Modified.xlsx',
+            26=>'SBP_Payment_Card_Security_Standard_Modified.xlsx'
         ];
 
 
@@ -1845,7 +1868,10 @@ class KSA_NCA extends Controller
                     return strval($row[1]) === strval($domain);
                 });
 
+
+
                 foreach ($filteredData as $innerArray) {
+                    
                     DB::table('iso_sec_2_2')->updateOrInsert(
                         [
                             'project_id' => $proj_id,
@@ -1994,7 +2020,8 @@ class KSA_NCA extends Controller
             23 => 'NIST_CSF_Modified.xlsx',
             24 => 'ISO27701_2019v2_Modified.xlsx',
             6 => 'SBP_ETGRMF_Modified.xlsx',
-            25 => 'DigitalBankingSecurity_Modified.xlsx'
+            25 => 'DigitalBankingSecurity_Modified.xlsx',
+            26=>'SBP_Payment_Card_Security_Standard_modified.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
@@ -2187,7 +2214,8 @@ class KSA_NCA extends Controller
             23 => 'NIST_CSF.xlsx',
             24 => 'ISO27701_2019v2.xlsx',
             6 => 'SBP_ETGRMF.xlsx',
-            25 => 'DigitalBankingSecurity.xlsx'
+            25 => 'DigitalBankingSecurity.xlsx',
+            26=>'SBP_Payment_Card_Security_Standard.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
@@ -2237,13 +2265,6 @@ class KSA_NCA extends Controller
         ]);
 
 
-
-
-
-
-
-
-
         return redirect()->back()->with('success', 'All sub-requirements updated successfully.');
     }
 
@@ -2285,7 +2306,8 @@ class KSA_NCA extends Controller
             23 => 'NIST_CSF.xlsx',
             24 => 'ISO27701_2019v2.xlsx',
             6 => 'SBP_ETGRMF.xlsx',
-            25 => 'DigitalBankingSecurity.xlsx'
+            25 => 'DigitalBankingSecurity.xlsx',
+             26=>'SBP_Payment_Card_Security_Standard.xlsx'
         ];
 
 

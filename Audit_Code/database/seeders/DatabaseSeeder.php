@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
         $this->call(OneLink::class);
         $this->call(Nist_CSF::class);
         $this->call(ISO_27701_2029::class);
-        $this->call(DigitalBankingProjectType::class);//latest
+        $this->call(DigitalBankingProjectType::class);
+        $this->call(SBPPaymentCardSecurity::class);//latest
         $this->call(GlobalAssetCategories::class);
         $this->call(GlobalAssetTypes::class);
         $this->call(frameworkApproachTypes::class);
