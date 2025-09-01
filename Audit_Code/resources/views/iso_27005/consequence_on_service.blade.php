@@ -253,7 +253,7 @@ The organization will overcome the situation without too much difficulty (margin
                         </tbody>
                     </table>
 
-                    <button class="btn btn-primary btn-md mb-2" type="submit">Submit</button>
+                    <button class="btn btn-secondary btn-md mb-2" type="submit">Save</button>
 
 
                 </form>

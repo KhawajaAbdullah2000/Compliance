@@ -57,7 +57,7 @@
                     
                         @endforeach
                         <input type="hidden" name="framework_approach" value="{{ $framework_approach }}">
-        
+              
         
                         <button type="submit" class="btn btn-primary btn-lg">Back</button>
         
@@ -79,6 +79,7 @@
                     @csrf
 
                     @foreach($global_risk_assessment_approaches as $g)
+                    @if($g->global_risk_assessment_approach_id==2)
                     <div class="form-check">
                         <input 
                             class="form-check-input" 
@@ -88,9 +89,10 @@
                             value="{{ $g->global_risk_assessment_approach_id }}">
                             
                         <label class="form-check-label" for="approach-{{ $g->global_risk_assessment_approach_id }}">
-                            {{ $g->global_assessment_approach }}
+                            {{ $g->global_assessment_approach }} 
                         </label>
                     </div>
+                    @endif
                 @endforeach
                     @foreach ($projects as $proj)
                     <input type="hidden" name="selected_projects[]" value="{{ $proj->id }}">

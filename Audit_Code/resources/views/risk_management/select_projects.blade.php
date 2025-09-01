@@ -8,7 +8,7 @@
 <section class="min-h-100">
     <div class="container py-5">
        <h4 class="fw-bold">Organization: {{auth()->user()->organization->name}}</h4>
-       <h3 class="fw-bold">Set up project types</h3>
+       <h3 class="fw-bold">Set up Risk Management Methodology</h3>
     
        <div class="row">
         <div class="col-md-4">
@@ -22,13 +22,14 @@
                 </div>
             
                 @foreach ($org_projects as $proj)
-                @if($proj->project_type_id!=14 && $proj->project_type_id!=15 )
+                @if($proj->project_type_id!=14 && $proj->project_type_id!=15 && $proj->project_type_id!=1 && $proj->project_type_id!=2 && $proj->project_type_id!=3  )
                 <div class="form-check">
                     <input class="form-check-input project-checkbox" value="{{$proj->project_type_id}}" type="checkbox" name="risk_management_methodology[]">
                     <label class="form-check-label">
                       {{$proj->type}}
                     </label>
-                </div>@endif
+                </div>
+                @endif
                 @endforeach
 
                 <button type="submit" class="btn btn-primary btn-md">Select Risk Management Methodology

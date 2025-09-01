@@ -128,11 +128,11 @@
         'user_id'=>auth()->user()->id,
         'asset_id'=>$asset->assessment_id
         ])}}" class="btn btn-secondary">Back</a>    --}}
-         <button type="submit" name="action" value="save_and_stay" class="btn btn-primary">
-        Save & Stay
+         <button type="submit" name="action" value="save_and_stay" class="btn btn-secondary">
+        Save
     </button>
     <button type="submit" name="action" value="save_and_next" class="btn btn-primary">
-        Save & go to next step
+        Save & Next
     </button>
 
 </div>

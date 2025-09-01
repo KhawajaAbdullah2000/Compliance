@@ -283,16 +283,24 @@ class RiskManagementFramework extends Controller
             ->where('approach_name', $req->framework_approach)
             ->first();
 
+            $qualitative_risk_acceptance_criteria=DB::table('qualitative_risk_acceptance_criteria')
+            ->whereIn('project_type_id',$selected_project_ids)
+            ->where('org_id',$org_id)
+            ->first();
+           
+
         //Qualitative
         return view('risk_management.qualitative_info_security_risk_criteria', [
             'projects' => $projects,
             'framework_name' => $risk_management_framework->framework_name,
-            'framework_approach' => $framework_approach->approach_name
+            'framework_approach' => $framework_approach->approach_name,
+            'qualitative_risk_acceptance_criteria'=>$qualitative_risk_acceptance_criteria
         ]);
     }
 
     public function qualitative_risk_acceptance_criteria($org_id, Request $req)
     {
+        
         $req->validate([
             'risk_acceptance_criteria' => 'required'
         ]);
@@ -312,6 +320,7 @@ class RiskManagementFramework extends Controller
                     ]
                 );
         }
+        
 
         $projects = DB::table('project_types')->whereIn("id", $req->selected_projects)->get();
 

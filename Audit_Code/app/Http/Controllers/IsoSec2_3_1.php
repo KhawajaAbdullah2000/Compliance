@@ -179,7 +179,23 @@ class IsoSec2_3_1 extends Controller
 
                     $global_currency = DB::table('global_currency')->get();
 
-                    return view("iso_27005.consequence_on_service", [
+                    // return view("iso_27005.consequence_on_service", [
+                    //     'project_id' => $checkpermission->project_id,
+                    //     'project_name' => $checkpermission->project_name,
+                    //     'project_permissions' => $checkpermission->project_permissions,
+                    //     'project' => $project,
+                    //     'asset' => $asset,
+                    //     'complianceFramework' => $frameworkDetails['complianceFramework'],
+                    //     'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
+                    //     'framework_approach' => $frameworkDetails['framework_approach'],
+                    //     'consequence_scale' => $consequence_scale,
+                    //     'global_currency' => $global_currency,
+                    //     'schemeKey'   => $schemeKey,
+                    //     'scheme'      => $scheme,
+                    //     'riskValues'  => $riskValues,
+                    // ]);
+
+                     return view("iso_27005.flow_chart", [
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
                         'project_permissions' => $checkpermission->project_permissions,
@@ -188,8 +204,6 @@ class IsoSec2_3_1 extends Controller
                         'complianceFramework' => $frameworkDetails['complianceFramework'],
                         'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
                         'framework_approach' => $frameworkDetails['framework_approach'],
-                        'consequence_scale' => $consequence_scale,
-                        'global_currency' => $global_currency,
                         'schemeKey'   => $schemeKey,
                         'scheme'      => $scheme,
                         'riskValues'  => $riskValues,
@@ -2829,6 +2843,22 @@ class IsoSec2_3_1 extends Controller
                 ->where('asset_id', $asset_id)
                 ->value('global_vulnerability');
 
+                $likelihood_timeframe_confidentialilty = DB::table('proj_asset_likelihood_timeframe')
+                ->where('project_id', $proj_id)
+                ->where('asset_id', $asset_id)
+                ->value('timeframe_risk_confidentiality');
+
+                $likelihood_timeframe_integrity = DB::table('proj_asset_likelihood_timeframe')
+                ->where('project_id', $proj_id)
+                ->where('asset_id', $asset_id)
+                ->value('timeframe_risk_integrity');
+
+                $likelihood_timeframe_availability = DB::table('proj_asset_likelihood_timeframe')
+                ->where('project_id', $proj_id)
+                ->where('asset_id', $asset_id)
+                ->value('timeframe_risk_availability');
+
+
             if (
                 $frameworkDetails['complianceFramework']->framework_selected == 2
                 && $frameworkDetails['framework_approach']->framework_approach_types_id == 1
@@ -2852,6 +2882,9 @@ class IsoSec2_3_1 extends Controller
 
                 $likelihood_value_availability = DB::table('proj_asset_likelihood_value')->where('asset_id', $asset_id)->value('qualitative_likelihood_risk_availability_selected');
 
+                
+            
+
                 return view("iso_27005.all_likelihood_and_consequence_value", [
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
@@ -2868,7 +2901,10 @@ class IsoSec2_3_1 extends Controller
                     'likelihood_value_integrity' => $likelihood_value_integrity,
                     'likelihood_value_availability' => $likelihood_value_availability,
                     'vulnerability'=>$vulnerability,
-                    'threat'=>$threat
+                    'threat'=>$threat,
+                    'likelihood_timeframe_confidentialilty'=>$likelihood_timeframe_confidentialilty,
+                    'likelihood_timeframe_availability'=>$likelihood_timeframe_availability,
+                    'likelihood_timeframe_integrity'=>$likelihood_timeframe_integrity
 
                 ]);
             }
@@ -2896,6 +2932,19 @@ class IsoSec2_3_1 extends Controller
 
                 $likelihood_value_availability = DB::table('proj_asset_likelihood_value')->where('asset_id', $asset_id)->value('quantitative_likelihood_risk_availability_selected');
 
+                    $threat = DB::table('proj_asset_selected_level_of_threat')
+                ->join('global_level_of_threats', 'proj_asset_selected_level_of_threat.threat_selected', 'global_level_of_threats.global_level_of_threats_id')
+                ->where('project_id', $proj_id)
+                ->where('asset_id', $asset_id)
+                ->value('global_threat');
+                
+
+            $vulnerability = DB::table('proj_asset_selected_level_of_vulnerability')
+                ->join('global_level_of_vulnerability', 'proj_asset_selected_level_of_vulnerability.vulnerability_selected', 'global_level_of_vulnerability.global_level_of_vulnerability_id')
+                ->where('project_id', $proj_id)
+                ->where('asset_id', $asset_id)
+                ->value('global_vulnerability');
+
                 return view("iso_27005.quantitative_all_likelihood_and_consequence_value", [
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
@@ -2910,7 +2959,13 @@ class IsoSec2_3_1 extends Controller
                     'consequence_value_availability' => $consequence_value_availability,
                     'likelihood_value_confidentiality' => $likelihood_value_confidentiality,
                     'likelihood_value_integrity' => $likelihood_value_integrity,
-                    'likelihood_value_availability' => $likelihood_value_availability
+                    'likelihood_value_availability' => $likelihood_value_availability,
+                    'likelihood_timeframe_confidentialilty'=>$likelihood_timeframe_confidentialilty,
+                    'likelihood_timeframe_availability'=>$likelihood_timeframe_availability,
+                    'likelihood_timeframe_integrity'=>$likelihood_timeframe_integrity,
+                    'vulnerability'=>$vulnerability,
+                    'threat'=>$threat
+
 
                 ]);
             }
@@ -2993,6 +3048,8 @@ class IsoSec2_3_1 extends Controller
             ]
         );
 
+   
+
 
         return redirect()->route('iso_27005_likelihood_value', [
             'proj_id' => $proj_id,
@@ -3018,6 +3075,16 @@ class IsoSec2_3_1 extends Controller
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
+
+              if ($req->action == 'save_next') {
+           
+        return redirect()->route('likelihood_and_consequence', [
+            'risk_type' => $req->risk_type_input,
+            'proj_id'   => $proj_id,
+            'user_id'   => $user_id,
+            'asset_id'  => $asset_id
+        ])->with('success', 'Data Saved Successfully');
+    }
 
 
         return redirect()->route('iso_27005_likelihood_value', [
@@ -3104,6 +3171,12 @@ class IsoSec2_3_1 extends Controller
                 ->where('project_id', $proj_id)
                 ->where('asset_id', $asset_id)
                 ->value('global_vulnerability');
+
+                   $likelihood_timeframe = DB::table('proj_asset_likelihood_timeframe')
+                ->where('project_id', $proj_id)
+                ->where('asset_id', $asset_id)
+                ->value('timeframe_' . $risk_type);
+
             if (
                 $frameworkDetails['complianceFramework']->framework_selected == 2
                 && $frameworkDetails['framework_approach']->framework_approach_types_id == 1
@@ -3114,11 +3187,7 @@ class IsoSec2_3_1 extends Controller
                 ->value('qualitative_likelihood_' . $risk_type . '_selected');
 
                 
-            // $likelihood_timeframe = DB::table('proj_asset_likelihood_timeframe')
-            //     ->where('project_id', $proj_id)
-            //     ->where('asset_id', $asset_id)
-            //     ->value('timeframe_' . $risk_type);
-
+         
             
             
                 
@@ -3135,7 +3204,8 @@ class IsoSec2_3_1 extends Controller
                     'likelihood_value' => $likelihood_value,
                     'risk_type' => $risk_type,
                     'threat'=>$threat,
-                    'vulnerability'=>$vulnerability
+                    'vulnerability'=>$vulnerability,
+                    'likelihood_timeframe'=>$likelihood_timeframe
                 ]);
             }
 
@@ -3160,7 +3230,8 @@ class IsoSec2_3_1 extends Controller
                     'likelihood_value' => $likelihood_value,
                     'risk_type' => $risk_type,
                     'threat'=>$threat,
-                    'vulnerability'=>$vulnerability
+                    'vulnerability'=>$vulnerability,
+                    'likelihood_timeframe'=>$likelihood_timeframe
                 ]);
             }
         }

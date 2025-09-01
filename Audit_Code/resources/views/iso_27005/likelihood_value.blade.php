@@ -17,10 +17,10 @@ $isEditable = in_array('Data Inputter', $permissions);
         </div>
     </div>
 
-      
+
     <div class="row">
         <div class="col-md-8">
-    <h3 class="fw-bold mt-2">Assess Incident Likelihood (when Threat exploits Vulnerability) for</h3>
+            <h3 class="fw-bold mt-2">Assess Incident Likelihood (when Threat exploits Vulnerability) for</h3>
 
         </div>
 
@@ -34,19 +34,19 @@ $isEditable = in_array('Data Inputter', $permissions);
 
 
     <div class="col-12">
-    @include('components.consequence_of_loss', ['asset' => $asset,'project'=>$project])
+        @include('components.consequence_of_loss', ['asset' => $asset,'project'=>$project])
     </div>
 
-    
-      @include('components.consolidated_threat_vulnerability', ['threat' => $threat,'project'=>$project,
-        'asset'=>$asset,'vulnerability'=>$vulnerability])
+
+    @include('components.consolidated_threat_vulnerability', ['threat' => $threat,'project'=>$project,
+    'asset'=>$asset,'vulnerability'=>$vulnerability])
 
     <p class="fs-6 mt-2">By considering both the threats in the environment of an asset component and the vulnerabilities of the asset component, evaluate the likelihood that a DATA CONFIDENTIALITY exploit will occur in a finite timeframe
     </p>
 
 
-        
-       
+
+
 
     <div class="col-md-6 mt-4">
         <form action="/qualitative_asset_likelihood_confidentiality_timeframe/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="POST">
@@ -123,7 +123,7 @@ $isEditable = in_array('Data Inputter', $permissions);
                             <td>{{ $info['desc'] }}</td>
                             <td class="text-center">
                                 <div class="form-check d-flex justify-content-center">
-                                    <input class="form-check-input" type="radio" name="likelihood_value" value="{{ $value }}" id="likelihood_{{ $value }}" {{ (isset($likelihood_value) && $likelihood_value == $value) ? 'checked' : '' }} {{ !$isEditable ? 'disabled' : '' }}>
+                                    <input required class="form-check-input" type="radio" name="likelihood_value" value="{{ $value }}" id="likelihood_{{ $value }}" {{ (isset($likelihood_value) && $likelihood_value == $value) ? 'checked' : '' }} {{ !$isEditable ? 'disabled' : '' }}>
                                 </div>
                             </td>
                         </tr>
@@ -136,13 +136,22 @@ $isEditable = in_array('Data Inputter', $permissions);
             <input type="hidden" name="approach_type" value="{{"qualitative"}}">
 
 
-            <div class="text-end">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <a href="/likelihood_and_consequence/{{$risk_type}}/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary">Next</a>
-            </div>
+            {{-- <div class="text-end">
+                <button type="submit" class="btn btn-secondary">Save</button>
+                <a href="/likelihood_and_consequence/{{$risk_type}}/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary">Save & Next</a>
+    </div> --}}
 
-        </form>
+    <div class="text-end">
+        <button type="submit" name="action" value="save" class="btn btn-secondary">
+            Save
+        </button>
+        <button type="submit" name="action" value="save_next" class="btn btn-primary">
+            Save & Next
+        </button>
     </div>
+
+    </form>
+</div>
 
 
 

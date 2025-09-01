@@ -54,7 +54,7 @@
                 <thead>
                     <tr>
                         <th class="header-left"></th> <!-- Empty corner cell -->
-                        <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood</th>
+                        <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood ({{$likelihood_timeframe}} days)</th>
                     </tr>
                     <tr>
                         <th class="header-left">Consequence</th> <!-- Consequence label -->

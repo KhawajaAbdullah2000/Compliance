@@ -43,6 +43,17 @@
 
     @include('components.asset-summary_component', ['asset' => $asset])
 
+          <div class="col-12">
+    @include('components.consequence_of_loss', ['asset' => $asset,'project'=>$project])
+    </div>
+
+    @include('components.consolidated_threat_vulnerability',['asset'=>$asset,'project'=>$project])
+
+    <div class="text-end mt-2">
+       @include('components.back_to_flow_chart_btn',['asset'=>$asset,'project'=>$project])
+    </div>
+
+
 
     <div class="row mt-4 justify-content-center">
         <div class="col-md-6">
@@ -55,7 +66,7 @@
                 <thead>
                     <tr>
                         <th class="header-left"></th> <!-- Empty corner cell -->
-                        <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood</th>
+                        <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood ({{$likelihood_timeframe_confidentialilty}} days)</th>
                     </tr>
                     <tr>
                         <th class="header-left">Consequence</th> <!-- Consequence label -->
@@ -96,7 +107,7 @@
                     <thead>
                         <tr>
                             <th class="header-left"></th> <!-- Empty corner cell -->
-                            <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood</th>
+                            <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood ({{$likelihood_timeframe_integrity}} days)</th>
                         </tr>
                         <tr>
                             <th class="header-left">Consequence</th> <!-- Consequence label -->
@@ -136,7 +147,7 @@
                     <thead>
                         <tr>
                             <th class="header-left"></th> <!-- Empty corner cell -->
-                            <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood</th>
+                            <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood ({{$likelihood_timeframe_availability}} days)</th>
                         </tr>
                         <tr>
                             <th class="header-left">Consequence</th> <!-- Consequence label -->

@@ -71,7 +71,7 @@
                     <thead>
                         <tr>
                             <th class="header-left"></th> <!-- Empty corner -->
-                            <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood ({{$likelihood_value_confidentiality}} days )</th> <!-- Likelihood label spanning across -->
+                            <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood ({{$likelihood_timeframe_confidentialilty}} days )</th> <!-- Likelihood label spanning across -->
                         </tr>
                         <tr>
                             <th class="header-left">Business Impact (Consequence)</th> <!-- Consequence label on the Y-axis -->
@@ -122,7 +122,7 @@
                     <thead>
                         <tr>
                             <th class="header-left"></th> 
-                            <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood ({{$likelihood_value_integrity}}) days</th> 
+                            <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood ({{$likelihood_timeframe_integrity}}) days</th> 
                         </tr>
                         <tr>
                             <th class="header-left">
@@ -174,7 +174,7 @@
                     <thead>
                         <tr>
                             <th class="header-left"></th> <!-- Empty corner -->
-                            <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood {{$likelihood_value_availability}} days</th> <!-- Likelihood label spanning across -->
+                            <th colspan="{{ count($likelihoods) }}" class="header-top">Likelihood {{$likelihood_timeframe_availability}} days</th> <!-- Likelihood label spanning across -->
                         </tr>
                         <tr>
                             <th class="header-left">Business Impact (Consequence)</th> <!-- Consequence label on the Y-axis -->

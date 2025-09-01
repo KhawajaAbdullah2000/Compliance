@@ -8,7 +8,7 @@
 <section class="min-h-100">
     <div class="container py-5">
        <h4 class="fw-bold">Organization: {{auth()->user()->organization->name}}</h4>
-       <h3 class="fw-bold">Set up Risk Management methodology by project type</h3>
+       <h3 class="fw-bold">Set up Risk Management Methodology by project type</h3>
     
        <div class="row">
         <div class="col-md-4 me-md-4">
@@ -32,6 +32,8 @@
                 <h4 class="fw-bold mb-3">Select a Framework</h4>
         
                 @forelse ($frameworks as $framework)
+
+                @if($framework->framework_id==1 ||$framework->framework_id==2 || $framework->framework_id==5 )
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="radio" 
                                name="framework" 
@@ -41,6 +43,7 @@
                             {{$framework->framework_name}}
                         </label>
                     </div>
+                    @endif
                 @empty
                     <p class="text-muted">No frameworks available.</p>
                 @endforelse

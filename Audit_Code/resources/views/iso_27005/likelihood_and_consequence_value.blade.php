@@ -89,7 +89,7 @@
                         <th colspan="{{ count($likelihoods) }}" class="header-top">
                             
                             <a href="/iso_27005_likelihood_value/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}/{{$risk_type}}">
-                            Likelihood ({{$likelihood_value}} days)
+                            Likelihood ({{$likelihood_timeframe}} days)
                             </a>
                         </th> 
                     </tr>

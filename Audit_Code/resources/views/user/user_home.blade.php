@@ -236,7 +236,7 @@
             </a>
 
             <a href="/view_risk_register_from_home/{{ auth()->user()->organization->id }}" class="btn btn-tile btn-risk-register">
-              <span class="label"><i class="bi bi-projector"></i> View Risk Register</span>
+              <span class="label"><i class="bi bi-projector"></i>Risk Register</span>
               <i class="bi bi-arrow-right"></i>
             </a>
 
@@ -317,7 +317,7 @@
         </div>
         <div class="col-12 col-lg-6">
           <a href="/select_projects_for_framework/{{auth()->user()->organization->id}}" class="btn btn-primary w-100">
-            Set up Project Types
+            Set up Risk Management Methodology
           </a>
         </div>
         <div class="col-12 col-lg-6">
