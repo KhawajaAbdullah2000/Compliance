@@ -542,6 +542,7 @@ Route::middleware(['auth', 'is_user', 'role:end user'])->group(
 
         route::get('proceed_to_risk_assessment/{asset_id}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'proceed_to_risk_assessment'])->name('proceed_to_risk_assessment');
 
+        route::get('qual_event_flowchart/{proj_id}/{user_id}',[IsoSec2_3_1::class,'qual_event_flowchart'])->name('qual_event_flowchart');
         route::get('consequence_of_service/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'consequence_of_service'])->name('consequence_of_service');
     route::put('save_classification_level_by_enduser/{org_id}', [RiskManagementFramework::class, 'save_classification_level_by_enduser']);
 

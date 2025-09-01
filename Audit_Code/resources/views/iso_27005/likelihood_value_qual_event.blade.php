@@ -21,8 +21,7 @@ $isEditable = in_array('Data Inputter', $permissions);
 <div class="row">
 
 <div class="col-md-8">
-<p class="fs-6 mt-2">Estimate the likelihood of strategic scenarios
-    </p>
+
     </div>
 
     <div class="col-md-4">
@@ -52,6 +51,9 @@ $isEditable = in_array('Data Inputter', $permissions);
 
               
     </div>
+
+    <p class="fs-6 mt-2">Estimate the likelihood of strategic scenarios
+    </p>
 
       <table class="table mt-4 table-responsive table-bordered table-striped">
     <thead class="table-dark">

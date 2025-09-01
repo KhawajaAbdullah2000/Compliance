@@ -40,7 +40,7 @@ class IsoSec2_3_1 extends Controller
 
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
-                // dd($frameworkDetails);
+                 //dd($frameworkDetails);
 
                 $risk_management_frameworks = DB::table('risk_management_framework')->get();
 
@@ -251,6 +251,66 @@ class IsoSec2_3_1 extends Controller
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
+
+    public function qual_event_flowchart($proj_id,$user_id)
+    {
+
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+                    
+
+                $frameworkDetails = $this->getProjectFrameworkDetails($project);
+                //dd($frameworkDetails);
+                $schemeKey = $project->risk_scheme ?? 'none';
+                $scheme = RiskScheme::for($schemeKey);
+                $riskValues = RiskScheme::values($schemeKey);
+
+
+
+                if ($frameworkDetails['complianceFramework'] == null) {
+                    return redirect()->back()->with('error', 'No risk assessment methodology has been selected');
+                }
+
+
+            //quantitative event based
+
+        return view("iso_27005.qual_event_flow_chart", [
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project' => $project,
+                     
+                        'complianceFramework' => $frameworkDetails['complianceFramework'],
+                        'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
+                        'framework_approach' => $frameworkDetails['framework_approach'],
+                        'schemeKey'   => $schemeKey,
+                        'scheme'      => $scheme,
+                       
+                    ]);
+                }
+            
+
+    
+        
+        }
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+        
+    }
+       
+    
 
     public function consequence_of_service($asset_id,$proj_id,$user_id)
        {

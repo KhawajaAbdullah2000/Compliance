@@ -30,17 +30,23 @@ default => ['label' => 'Unknown', 'class' => 'text-muted'],
 
         </div>
     </div>
-    <h3 class="fw-bold mt-2">Assess Risk against Controls for:</h3>
+    <h3 class="fw-bold mt-2 mb-2">Assess Risk against Controls for:</h3>
 
     @include('components.asset-summary_component', ['asset' => $asset])
 
 
-    {{-- @if($complianceFramework->framework_id==2 && $risk_assessment_approach->global_risk_assessment_approach_id==2 && $framework_approach->framework_approach_types_id==1) --}}
+    @if($complianceFramework->framework_id==2 && $risk_assessment_approach->global_risk_assessment_approach_id==2 && $framework_approach->framework_approach_types_id==1) 
 
     <p class="fs-4 mt-4"><span class="fw-bold">Methodology:</span> Qualitative Asset Based</p>
+    @endif
+
+     @if($complianceFramework->framework_id==2 && $risk_assessment_approach->global_risk_assessment_approach_id==2 && $framework_approach->framework_approach_types_id==2) 
+
+    <p class="fs-4 mt-4"><span class="fw-bold">Methodology:</span> Quantitative Asset Based</p>
+    @endif
 
 
-    <div class="container-fluid">
+    <div class="container-fluid mt-4">
 
 
         <div class="flowchart border rounded">

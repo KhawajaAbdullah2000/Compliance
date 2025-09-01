@@ -117,7 +117,7 @@ $framework_labels=[
 
 </h3>
 
-<p class="fs-4">You can select a different CLassification Level from the list below:
+<p class="fs-4">You can select a different Classification Level from the list below:
 </p>
 
         <form method="POST" action="/save_classification_level_by_enduser/{{auth()->user()->organization->id}}">

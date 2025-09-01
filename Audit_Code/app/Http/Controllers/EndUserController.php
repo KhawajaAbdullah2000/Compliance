@@ -59,16 +59,16 @@ class EndUserController extends Controller
         $project->status_last_changed_by = $user_id;
         $project->save();
 
-         DB::table('org_projects_framework_selected')
-                ->updateOrInsert(
-                    [
-                        'org_id' => auth()->user()->org_id,
-                        'project_type_id' => $req->project_type,
-                    ],
-                    [
-                        'framework_selected' => 1 //default framework given
-                    ]
-                );
+        //  DB::table('org_projects_framework_selected')
+        //         ->updateOrInsert(
+        //             [
+        //                 'org_id' => auth()->user()->org_id,
+        //                 'project_type_id' => $req->project_type,
+        //             ],
+        //             [
+        //                 'framework_selected' => 1 //default framework given
+        //             ]
+        //         );
 
 
          DB::table('audit_projects')->insert([

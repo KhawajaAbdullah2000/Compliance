@@ -19,7 +19,7 @@ $permissions = json_decode($project_permissions);
 
 
     
-    <h4 class="">(Optional)Identify parties and the adverse impacts they can have on the organization’s information services and assets
+    <h4 class="">(Optional)Identify parties that can impact the organization’s information services and assets
 </h4>
 
 
@@ -78,7 +78,7 @@ $permissions = json_decode($project_permissions);
 </table>
 
 
-<a href="/iso_sec_2_3_1_qual_event_scenarios/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-primary float-end mb-2">Go to Next</a>
+<a href="/iso_sec_2_3_1_qual_event_scenarios/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md float-end mb-2">Save & Next</a>
 
 {{-- <a href="/iso_sec_2_3_1_risk_selection_qual_event/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-lg btn-primary float-end mb-2">Go to Next</a> --}}
 

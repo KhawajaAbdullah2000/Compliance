@@ -11,21 +11,21 @@
             @include('components.topTable')
         </div>
     </div>
-    <h3 class="fw-bold mt-2">Risk Assessment for {{auth()->user()->organization->id}}</h3>
+    <h3 class="fw-bold mt-2">Risk Assessment for {{auth()->user()->organization->name}}</h3>
 
    <span class="fw-bold">Services: </span> {{ $services->pluck('s_name')->implode(', ') }}
     
         
-        <h5 class="fw-bold mt-4">Evaluate gaps in applicable controls 
+        <h5 class="fw-bold mt-4">Evaluate vulnerability against each control
         </h5>
         
 
-@if($project->project_type==18)
-{{-- only in coso --}}
+{{-- @if($project->project_type==18)
+
 <div class="text-end">
      <a href="/ai_input_submit_risk_assessment_qual_event/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary btn-md" style="max-width: 200px;min-width:100px;">AI Input</a>
 </div>
-@endif
+@endif --}}
 
 <div class="col-md-10">
     <form action="/iso_27005_submit_risk_assessment_qual_event/{{$project->project_id}}/{{auth()->user()->id}}" method="POST">
@@ -62,7 +62,7 @@
             <td>
                 <div class="d-flex gap-2 align-items-center">
     <select class="form-select" name="vulnerability_due_to[]" style="min-width: 150px;max-width:150px;">
-        @foreach (['Very High', 'High', 'Medium', 'Low', 'Very Low'] as $level)
+        @foreach (['Very High', 'High', 'Medium', 'Low', 'Very Low','Not Applicable'] as $level)
             <option value="{{ $level }}" {{ $selectedValue == $level ? 'selected' : '' }}>{{ $level }}</option>
         @endforeach
     </select>
@@ -112,11 +112,11 @@
         'user_id'=>auth()->user()->id,
    
         ])}}" class="btn btn-secondary">Back</a>   
-         <button type="submit" name="action" value="save_and_stay" class="btn btn-primary">
-        Save & Stay
+         <button type="submit" name="action" value="save_and_stay" class="btn btn-secondary">
+        Save
     </button>
     <button type="submit" name="action" value="save_and_next" class="btn btn-primary">
-        Save & go to next step
+        Save & Next
     </button>
 
 </div>

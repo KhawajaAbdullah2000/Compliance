@@ -19,11 +19,7 @@
     <h3 class="fw-bold mt-2">Risk Assessment for {{ auth()->user()->organization->name }}</h3>
     <span class="fw-bold">Services: </span>{{ $services->pluck('s_name')->implode(', ') }}
 
-       <div class="float-end mb-4">
-        <a href="{{route('initiaite_risk_assessment_qual_event',[
-        'proj_id'=>$project->project_id,
-        'user_id'=>auth()->user()->id])}}" class="btn btn-md btn-secondary">Back</a>
-    </div>
+      
 
   <div class="row col-md-6">
 
@@ -48,11 +44,11 @@
         'user_id'=>auth()->user()->id,
    
         ])}}" class="btn btn-secondary">Back</a>   
-         <button type="submit" name="action" value="save_and_stay" class="btn btn-primary">
-        Save & Stay
+         <button type="submit" name="action" value="save_and_stay" class="btn btn-secondary">
+        Save
     </button>
     <button type="submit" name="action" value="save_and_next" class="btn btn-primary">
-        Save & go to next step
+        Save & Next
     </button>
 
 </div>
@@ -65,10 +61,9 @@
 
 
     
-    <a href="{{route('iso_27005_risk_assessment_qual_event',[
+    {{-- <a href="{{route('iso_27005_risk_assessment_qual_event',[
     'proj_id'=>$project->project_id,
-    'user_id'=>auth()->user()->id])}}" class="btn btn-primary btn-md float-end">Go to Next</a>
-
+    'user_id'=>auth()->user()->id])}}" class="btn btn-primary btn-md float-end">Go to Next</a> --}}
 
 </div>
 

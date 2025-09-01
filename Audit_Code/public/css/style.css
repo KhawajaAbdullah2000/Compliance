@@ -806,3 +806,29 @@ thead.table-pointer {
   .p-threats  { top:220px; left:360px; width:260px }
   .p-vulns    { top:380px; left:360px; width:260px }
   .p-like     { top:280px; left:710px; width:260px }
+
+
+  .flowchart-alt {
+  position: relative;
+  height: 600px;
+}
+
+.flowchart-alt .node-alt {
+  position: absolute;
+  display: block;
+  width: 200px;
+  padding: 12px;
+  background: #0b5ed7;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+    text-decoration: none; 
+}
+
+/* Specific positions */
+.flowchart-alt .p-org { top: 50px; left: 120px; }
+.flowchart-alt .p-parties { top: 220px; left: 120px; }
+.flowchart-alt .p-scenarios { top: 220px; left: 440px; }
+.flowchart-alt .p-threats { top: 160px; left: 720px; }
+.flowchart-alt .p-vulns { top: 260px; left: 745px; }
+.flowchart-alt .p-like { top: 200px; left: 1010px; width: 240px; }
