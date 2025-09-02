@@ -82,7 +82,8 @@ class RiskRegisterController extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-    public function view_risk_register_from_home($org_id){
+    public function view_risk_register_from_home($org_id)
+    {
         return view('risk_register.view_risk_register_from_home');
     }
 
@@ -120,18 +121,50 @@ class RiskRegisterController extends Controller
                 ['key' => 's_name',        'label' => 'Service'],
                 ['key' => 'project_name',  'label' => 'Project'],
                 ['key' => 'status',        'label' => 'Status'],
+                ['key' => 'type',        'label' => 'Project Type'],
+                ['key' => 'data_confidentiality',        'label' => 'Data Confidentiality'],
+                ['key' => 'data_integrity',        'label' => 'Data Integrity'],
+                 ['key' => 'data_availability',        'label' => 'Data Availability'],
+
+                ['key' => 'qualitative_likelihood_risk_confidentiality_selected', 'label' => 'qualitative_likelihood_risk_confidentiality_selected'],
+                 ['key' => 'qualitative_likelihood_risk_integrity_selected', 'label' => 'qualitative_likelihood_risk_integrity_selected'],
+                  ['key' => 'qualitative_likelihood_risk_availability_selected', 'label' => 'qualitative_likelihood_risk_availability_selected'],
+
+                ['key' => 'framework_selected', 'label' => 'Framework Selected'],
+                ['key' => "assessment_approach_selected", 'label' => "Assessment Approach Selected"],
+                ['key' => 'framework_approach_types', 'label' => "Framework Approach Type"],
+                //qual_asset
+                [
+                    'key' => 'qual_asset_risk_confidentiality_calculated_matrix',
+                    'label' => 'Data Confidentiality Risk',
+                ],
+
+                  [
+                    'key' => 'qual_asset_risk_integrity_calculated_matrix',
+                    'label' => 'Data Integrity Risk',
+                ],
+
+                  [
+                    'key' => 'qual_asset_risk_availability_calculated_matrix',
+                    'label' => 'Data Availability Risk',
+                ],
+                 
             ],
         ];
 
         abort_unless(isset($columnSets[$dimension]), 404);
 
-     
+
         $q = DB::table('iso_sec_2_1 as i')
             ->join('projects as p', 'p.project_id', '=', 'i.project_id')
+            ->join('project_types', 'p.project_type', 'project_types.id')
+            ->join('org_projects_framework_selected', 'org_projects_framework_selected.project_type_id', 'project_types.id')
+            ->join('org_risk_assessment_approach', 'org_risk_assessment_approach.project_type_id', 'project_types.id')
+            ->join('org_framework_approach_selected', 'org_framework_approach_selected.project_type_id', 'project_types.id')
+            ->leftjoin('proj_asset_likelihood_value', 'proj_asset_likelihood_value.project_id', 'p.project_id')
             ->where('p.org_id', $orgId);
 
-        // Require relevant levels to be present for each non-project view
-        // (component is mandatory; others are optional otherwise)
+
         switch ($dimension) {
             case 'services':
                 $q->whereNotNull('i.s_name');
@@ -151,18 +184,119 @@ class RiskRegisterController extends Controller
                 break;
         }
 
-        // Select only the needed columns for this view + distinct tuples
+
         $selects = collect($columnSets[$dimension])->pluck('key')->map(function ($k) {
-            // qualify columns
-            if (in_array($k, ['project_name', 'status'])) return "p.$k as $k";
+            if (in_array($k, ['project_name', 'status'])) {
+                return "p.$k as $k";
+            }
+            if ($k === 'type') {
+                return "project_types.type as type";
+            }
+
+    
+            if ($k == 'framework_selected') {
+                return "org_projects_framework_selected.framework_selected as framework_selected";
+            }
+
+            if ($k == 'assessment_approach_selected') {
+                return "org_risk_assessment_approach.assessment_approach_selected";
+            }
+
+            if ($k == "framework_approach_types") {
+                return "org_framework_approach_selected.framework_approach_types";
+            }
+
+               if ($k === 'data_confidentiality') {
+                return "i.risk_confidentiality as data_confidentiality";
+            }
+
+            if ($k == 'qualitative_likelihood_risk_confidentiality_selected') {
+                return "proj_asset_likelihood_value.qualitative_likelihood_risk_confidentiality_selected";
+            }
+
+               if ($k == 'qual_asset_risk_confidentiality_calculated_matrix') {
+                  return DB::raw("'N/A' as qual_asset_risk_confidentiality_calculated_matrix");
+            }
+
+               if ($k === 'data_integrity') {
+                return "i.risk_integrity as data_integrity";
+            }
+
+            if ($k == 'qualitative_likelihood_risk_integrity_selected') {
+                return "proj_asset_likelihood_value.qualitative_likelihood_risk_integrity_selected";
+            }
+
+            if($k=='qual_asset_risk_integrity_calculated_matrix'){
+                 return DB::raw("'N/A' as qual_asset_risk_integrity_calculated_matrix");
+            }
+
+
+            if ($k === 'data_availability') {
+                return "i.risk_availability as data_availability";
+            }
+
+            if ($k == 'qualitative_likelihood_risk_availability_selected') {
+                return "proj_asset_likelihood_value.qualitative_likelihood_risk_availability_selected";
+            }
+
+            if($k=='qual_asset_risk_availability_calculated_matrix'){
+                 return DB::raw("'N/A' as qual_asset_risk_availability_calculated_matrix");
+            }
+            // Default → iso_sec_2_1 columns
             return "i.$k as $k";
         })->all();
 
         $rows = $q->select($selects)
             ->distinct()
             ->orderBy('p.project_name')
-            ->paginate(25)
-            ->appends(request()->query()); // keep query params in pagination links
+            ->get();
+
+        $matrix = $this->qualitativeRiskMatrix();
+
+        $rows->transform(function ($row) use ($matrix) {
+            if (
+                $row->framework_selected == 2 &&
+                $row->assessment_approach_selected == 2 &&
+                $row->framework_approach_types == 1
+            ) {
+                //qual-asset based
+                $impact_data_confidentiality = $row->data_confidentiality; 
+                $impact_data_integrity = $row->data_integrity; 
+                 $impact_data_availability = $row->data_availability; 
+               
+                $likelihood_confidentiality = $row->qualitative_likelihood_risk_confidentiality_selected; 
+                $likelihood_integrity = $row->qualitative_likelihood_risk_integrity_selected; 
+                 $likelihood_availability = $row->qualitative_likelihood_risk_availability_selected; 
+
+            
+
+                if (isset($matrix[$impact_data_confidentiality][$likelihood_confidentiality])) {
+                    $row->qual_asset_risk_confidentiality_calculated_matrix = $matrix[$impact_data_confidentiality][$likelihood_confidentiality];
+                } else {
+                    $row->qual_asset_risk_confidentiality_calculated_matrix = 'N/A';
+                }
+
+                 if (isset($matrix[$impact_data_integrity][$likelihood_integrity])) {
+                    $row->qual_asset_risk_integrity_calculated_matrix = $matrix[$impact_data_integrity][$likelihood_integrity];
+                } else {
+                    $row->qual_asset_risk_integrity_calculated_matrix = 'N/A';
+                }
+
+                 if (isset($matrix[$impact_data_availability][$likelihood_availability])) {
+                    $row->qual_asset_risk_availability_calculated_matrix = $matrix[$impact_data_availability][$likelihood_availability];
+                } else {
+                    $row->qual_asset_risk_availability_calculated_matrix = 'N/A';
+                }
+            } else {
+                $row->qual_asset_risk_confidentiality_calculated_matrix = null; // not applicable
+                $row->qual_asset_risk_integrity_calculated_matrix=null;
+                $row->qual_asset_risk_availability_calculated_matrix=null;
+            }
+
+            return $row;
+        });
+
+       //dd($dimension, $columnSets[$dimension], $rows);
 
         return view('risk_register.index', [
             'dimension' => $dimension,
@@ -172,6 +306,47 @@ class RiskRegisterController extends Controller
         ]);
     }
 
+
+    private function qualitativeRiskMatrix()
+    {
+        return [
+            5 => [ // Catastrophic
+                5 => 'Very high', // Almost certain
+                4 => 'Very high', // Very likely
+                3 => 'High',      // Likely
+                2 => 'Medium',    // Rather unlikely
+                1 => 'Low',       // Unlikely
+            ],
+            4 => [ // Critical
+                5 => 'Very high',
+                4 => 'High',
+                3 => 'High',
+                2 => 'Medium',
+                1 => 'Low',
+            ],
+            3 => [ // Serious
+                5 => 'High',
+                4 => 'High',
+                3 => 'Medium',
+                2 => 'Low',
+                1 => 'Low',
+            ],
+            2 => [ // Significant
+                5 => 'High',
+                4 => 'Medium',
+                3 => 'Low',
+                2 => 'Low',
+                1 => 'Very low',
+            ],
+            1 => [ // Minor
+                5 => 'Medium',
+                4 => 'Low',
+                3 => 'Low',
+                2 => 'Very low',
+                1 => 'Very low',
+            ],
+        ];
+    }
 
     function getProjectFrameworkDetails($project)
     {
@@ -197,6 +372,4 @@ class RiskRegisterController extends Controller
 
         return compact('complianceFramework', 'risk_assessment_approach', 'framework_approach');
     }
-
-
 }

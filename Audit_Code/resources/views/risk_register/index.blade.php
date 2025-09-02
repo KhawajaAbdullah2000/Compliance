@@ -13,26 +13,42 @@
             </h5>
         </div>
 
+
+
         <div class="card border-0 shadow-sm">
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover table-striped align-middle">
+
+                        @php
+                        $hiddenKeys = [
+                        'data_confidentiality',
+                        'data_integrity',
+                         'data_availability',
+                        'qualitative_likelihood_risk_confidentiality_selected',
+                        'qualitative_likelihood_risk_integrity_selected',
+                        'qualitative_likelihood_risk_availability_selected',
+                        'framework_selected',
+                        'assessment_approach_selected',
+                        'framework_approach_types'
+                        ];
+                        @endphp
+
                         <thead class="table-dark">
                             <tr>
                                 @foreach ($columns as $col)
+                                @if (!in_array($col['key'], $hiddenKeys))
                                 <th class="text-nowrap fw-semibold">{{ $col['label'] }}</th>
+                                @endif
                                 @endforeach
-                                <th>Data Confidentiality Risk</th>
-                                <th>Data Integrity Risk</th>
-                                <th>Data Availability Risk</th>
                             </tr>
-
                         </thead>
                         <tbody>
                             @forelse ($rows as $row)
                             <tr>
                                 @foreach ($columns as $col)
                                 @php $key = $col['key']; @endphp
+                                @if (!in_array($key, $hiddenKeys))
                                 <td>
                                     @if ($key === 'status')
                                     @php
@@ -52,15 +68,12 @@
                                     {{ $row->$key ?: '—' }}
                                     @endif
                                 </td>
+                                @endif
                                 @endforeach
-                                <td></td>
-                                <td></td>
-                                <td></td>
                             </tr>
-
                             @empty
                             <tr>
-                                <td colspan="{{ count($columns)+3 }}" class="text-center text-muted py-4">
+                                <td colspan="{{ count($columns) + 3 }}" class="text-center text-muted py-4">
                                     <i class="bi bi-inboxes fs-2 d-block mb-2"></i>
                                     No records found
                                 </td>
@@ -69,12 +82,11 @@
                         </tbody>
                     </table>
                 </div>
-
-                <div class="mt-3 d-flex justify-content-center">
-                    {{ $rows->links() }}
-                </div>
             </div>
         </div>
+
+
+
 
     </div>
 </div>
