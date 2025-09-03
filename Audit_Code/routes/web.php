@@ -583,9 +583,12 @@ Route::middleware(['auth', 'is_user', 'role:end user'])->group(
         route::get('qual_event_consolidated_threat/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'qual_event_consolidated_threat'])->name('qual_event_consolidated_threat');
         route::get('qual_event_add_scenario_form/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'qual_event_add_scenario_form']);
         route::post('submit_new_scenario/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'submit_new_scenario']);
+        route::put('submit_edit_scenario/{scenario_id}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'submit_edit_scenario']);
+
         route::get('strategic_scenarios/{party_id}/{risk_type}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'strategic_scenarios'])->name('strategic_scenarios');
         route::post('party_strategic_scenario_submit/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'party_strategic_scenario_submit']);
         route::get('delete_strategic_scenario/{scenario_id}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'delete_strategic_scenario']);
+                route::get('edit_strategic_scenario/{scenario_id}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'edit_strategic_scenario']);
 
         route::post('proj_assets_selected_risk_source_and_target/{proj_id}/{user_id}/{asset_id}/{g_risk_source_num}', [IsoSec2_3_1::class, 'proj_assets_selected_risk_source_and_target']);
         route::post('proj_selected_risk_source_and_target_qual_event/{proj_id}/{user_id}/{g_risk_source_num}', [IsoSec2_3_1::class, 'proj_selected_risk_source_and_target_qual_event']);

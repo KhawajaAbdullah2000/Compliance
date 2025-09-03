@@ -40,7 +40,7 @@ class IsoSec2_3_1 extends Controller
 
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
-                 //dd($frameworkDetails);
+                //dd($frameworkDetails);
 
                 $risk_management_frameworks = DB::table('risk_management_framework')->get();
 
@@ -49,7 +49,7 @@ class IsoSec2_3_1 extends Controller
                 $global_risk_assessment_approaches = DB::table('global_risk_assessment_approach')->get();
 
 
-            
+
 
 
                 return view('iso_sec_2_3_1.show_selected_framework', [
@@ -110,7 +110,7 @@ class IsoSec2_3_1 extends Controller
 
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
-                    
+
 
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
                 //dd($frameworkDetails);
@@ -145,8 +145,8 @@ class IsoSec2_3_1 extends Controller
                     //     'scheme'      => $scheme,
                     //     'riskValues'  => $riskValues,
                     // ]);
-                   
-                  
+
+
 
                     return view("iso_27005.flow_chart", [
                         'project_id' => $checkpermission->project_id,
@@ -195,7 +195,7 @@ class IsoSec2_3_1 extends Controller
                     //     'riskValues'  => $riskValues,
                     // ]);
 
-                     return view("iso_27005.flow_chart", [
+                    return view("iso_27005.flow_chart", [
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
                         'project_permissions' => $checkpermission->project_permissions,
@@ -252,7 +252,7 @@ class IsoSec2_3_1 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-    public function qual_event_flowchart($proj_id,$user_id)
+    public function qual_event_flowchart($proj_id, $user_id)
     {
 
         if ($user_id == auth()->user()->id) {
@@ -270,7 +270,7 @@ class IsoSec2_3_1 extends Controller
             if ($checkpermission) {
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
-                    
+
 
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
                 //dd($frameworkDetails);
@@ -285,35 +285,30 @@ class IsoSec2_3_1 extends Controller
                 }
 
 
-            //quantitative event based
+                //quantitative event based
 
-        return view("iso_27005.qual_event_flow_chart", [
-                        'project_id' => $checkpermission->project_id,
-                        'project_name' => $checkpermission->project_name,
-                        'project_permissions' => $checkpermission->project_permissions,
-                        'project' => $project,
-                     
-                        'complianceFramework' => $frameworkDetails['complianceFramework'],
-                        'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
-                        'framework_approach' => $frameworkDetails['framework_approach'],
-                        'schemeKey'   => $schemeKey,
-                        'scheme'      => $scheme,
-                       
-                    ]);
-                }
-            
+                return view("iso_27005.qual_event_flow_chart", [
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'project' => $project,
 
-    
-        
+                    'complianceFramework' => $frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
+                    'framework_approach' => $frameworkDetails['framework_approach'],
+                    'schemeKey'   => $schemeKey,
+                    'scheme'      => $scheme,
+
+                ]);
+            }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
-        
     }
-       
-    
 
-    public function consequence_of_service($asset_id,$proj_id,$user_id)
-       {
+
+
+    public function consequence_of_service($asset_id, $proj_id, $user_id)
+    {
 
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -349,7 +344,7 @@ class IsoSec2_3_1 extends Controller
 
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
-                    
+
 
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
                 //dd($frameworkDetails);
@@ -384,10 +379,6 @@ class IsoSec2_3_1 extends Controller
                         'scheme'      => $scheme,
                         'riskValues'  => $riskValues,
                     ]);
-                   
-                  
-
-                   
                 }
 
                 if (
@@ -588,7 +579,7 @@ class IsoSec2_3_1 extends Controller
                     );
 
                 if ($req->input('action') === 'save_and_stay') {
-                  //  return redirect()->back()->with('success','Consequence Updated successfully');
+                    //  return redirect()->back()->with('success','Consequence Updated successfully');
                     return redirect()->route('proceed_to_risk_assessment', [
                         'asset_id' => $asset_id,
                         'proj_id' => $proj_id,
@@ -681,8 +672,8 @@ class IsoSec2_3_1 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
-    
-   
+
+
 
 
     public function target_objective_of_risk_source($proj_id, $user_id, $asset_id, $g_risk_source_num)
@@ -1882,7 +1873,7 @@ class IsoSec2_3_1 extends Controller
 
     public function iso_27005_risk_assessment($proj_id, $user_id, $asset_id)
     {
-       
+
         //route for risk assesment quality asset based with controls
         $checkpermission = Db::table('project_details')->select(
             'project_types.id as type_id',
@@ -1967,13 +1958,13 @@ class IsoSec2_3_1 extends Controller
                     ->where('asset_id', $asset_id)
                     ->value('vulnerability_selected');
 
-                     $threat = DB::table('proj_asset_selected_level_of_threat')
-                ->join('global_level_of_threats', 'proj_asset_selected_level_of_threat.threat_selected', 'global_level_of_threats.global_level_of_threats_id')
-                ->where('project_id', $proj_id)
-                ->where('asset_id', $asset_id)
-                ->value('global_threat');
+                $threat = DB::table('proj_asset_selected_level_of_threat')
+                    ->join('global_level_of_threats', 'proj_asset_selected_level_of_threat.threat_selected', 'global_level_of_threats.global_level_of_threats_id')
+                    ->where('project_id', $proj_id)
+                    ->where('asset_id', $asset_id)
+                    ->value('global_threat');
 
-          
+
 
 
 
@@ -1990,8 +1981,8 @@ class IsoSec2_3_1 extends Controller
                     'savedData' => $savedData,
                     'global_level_of_vulnerabilities' => $global_level_of_vulnerabilities,
                     'selected_level_of_vulnerability' => $selected_level_of_vulnerability,
-                    'threat'=>$threat,
-                  
+                    'threat' => $threat,
+
 
                 ]);
             }
@@ -2631,7 +2622,7 @@ class IsoSec2_3_1 extends Controller
 
     public function iso_27005_likelihood_value($proj_id, $user_id, $asset_id, $risk_type = '')
     {
-        
+
         $checkpermission = Db::table('project_details')->select(
             'project_types.id as type_id',
             'project_details.project_code',
@@ -2689,7 +2680,7 @@ class IsoSec2_3_1 extends Controller
                 ->where('project_id', $proj_id)
                 ->where('asset_id', $asset_id)
                 ->value('global_threat');
-                
+
 
             $vulnerability = DB::table('proj_asset_selected_level_of_vulnerability')
                 ->join('global_level_of_vulnerability', 'proj_asset_selected_level_of_vulnerability.vulnerability_selected', 'global_level_of_vulnerability.global_level_of_vulnerability_id')
@@ -2710,7 +2701,7 @@ class IsoSec2_3_1 extends Controller
                 && $frameworkDetails['framework_approach']->framework_approach_types_id == 1
                 && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 2
             ) {
-             
+
                 return view("iso_27005.likelihood_value", [
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
@@ -2889,13 +2880,13 @@ class IsoSec2_3_1 extends Controller
 
             $frameworkDetails = $this->getProjectFrameworkDetails($project);
 
-               //ISo 27005:2022 Qualitative and Quantitiave Asset based
+            //ISo 27005:2022 Qualitative and Quantitiave Asset based
             $threat = DB::table('proj_asset_selected_level_of_threat')
                 ->join('global_level_of_threats', 'proj_asset_selected_level_of_threat.threat_selected', 'global_level_of_threats.global_level_of_threats_id')
                 ->where('project_id', $proj_id)
                 ->where('asset_id', $asset_id)
                 ->value('global_threat');
-                
+
 
             $vulnerability = DB::table('proj_asset_selected_level_of_vulnerability')
                 ->join('global_level_of_vulnerability', 'proj_asset_selected_level_of_vulnerability.vulnerability_selected', 'global_level_of_vulnerability.global_level_of_vulnerability_id')
@@ -2903,17 +2894,17 @@ class IsoSec2_3_1 extends Controller
                 ->where('asset_id', $asset_id)
                 ->value('global_vulnerability');
 
-                $likelihood_timeframe_confidentialilty = DB::table('proj_asset_likelihood_timeframe')
+            $likelihood_timeframe_confidentialilty = DB::table('proj_asset_likelihood_timeframe')
                 ->where('project_id', $proj_id)
                 ->where('asset_id', $asset_id)
                 ->value('timeframe_risk_confidentiality');
 
-                $likelihood_timeframe_integrity = DB::table('proj_asset_likelihood_timeframe')
+            $likelihood_timeframe_integrity = DB::table('proj_asset_likelihood_timeframe')
                 ->where('project_id', $proj_id)
                 ->where('asset_id', $asset_id)
                 ->value('timeframe_risk_integrity');
 
-                $likelihood_timeframe_availability = DB::table('proj_asset_likelihood_timeframe')
+            $likelihood_timeframe_availability = DB::table('proj_asset_likelihood_timeframe')
                 ->where('project_id', $proj_id)
                 ->where('asset_id', $asset_id)
                 ->value('timeframe_risk_availability');
@@ -2942,8 +2933,8 @@ class IsoSec2_3_1 extends Controller
 
                 $likelihood_value_availability = DB::table('proj_asset_likelihood_value')->where('asset_id', $asset_id)->value('qualitative_likelihood_risk_availability_selected');
 
-                
-            
+
+
 
                 return view("iso_27005.all_likelihood_and_consequence_value", [
                     'project_id' => $checkpermission->project_id,
@@ -2960,11 +2951,11 @@ class IsoSec2_3_1 extends Controller
                     'likelihood_value_confidentiality' => $likelihood_value_confidentiality,
                     'likelihood_value_integrity' => $likelihood_value_integrity,
                     'likelihood_value_availability' => $likelihood_value_availability,
-                    'vulnerability'=>$vulnerability,
-                    'threat'=>$threat,
-                    'likelihood_timeframe_confidentialilty'=>$likelihood_timeframe_confidentialilty,
-                    'likelihood_timeframe_availability'=>$likelihood_timeframe_availability,
-                    'likelihood_timeframe_integrity'=>$likelihood_timeframe_integrity
+                    'vulnerability' => $vulnerability,
+                    'threat' => $threat,
+                    'likelihood_timeframe_confidentialilty' => $likelihood_timeframe_confidentialilty,
+                    'likelihood_timeframe_availability' => $likelihood_timeframe_availability,
+                    'likelihood_timeframe_integrity' => $likelihood_timeframe_integrity
 
                 ]);
             }
@@ -2992,18 +2983,18 @@ class IsoSec2_3_1 extends Controller
 
                 $likelihood_value_availability = DB::table('proj_asset_likelihood_value')->where('asset_id', $asset_id)->value('quantitative_likelihood_risk_availability_selected');
 
-                    $threat = DB::table('proj_asset_selected_level_of_threat')
-                ->join('global_level_of_threats', 'proj_asset_selected_level_of_threat.threat_selected', 'global_level_of_threats.global_level_of_threats_id')
-                ->where('project_id', $proj_id)
-                ->where('asset_id', $asset_id)
-                ->value('global_threat');
-                
+                $threat = DB::table('proj_asset_selected_level_of_threat')
+                    ->join('global_level_of_threats', 'proj_asset_selected_level_of_threat.threat_selected', 'global_level_of_threats.global_level_of_threats_id')
+                    ->where('project_id', $proj_id)
+                    ->where('asset_id', $asset_id)
+                    ->value('global_threat');
 
-            $vulnerability = DB::table('proj_asset_selected_level_of_vulnerability')
-                ->join('global_level_of_vulnerability', 'proj_asset_selected_level_of_vulnerability.vulnerability_selected', 'global_level_of_vulnerability.global_level_of_vulnerability_id')
-                ->where('project_id', $proj_id)
-                ->where('asset_id', $asset_id)
-                ->value('global_vulnerability');
+
+                $vulnerability = DB::table('proj_asset_selected_level_of_vulnerability')
+                    ->join('global_level_of_vulnerability', 'proj_asset_selected_level_of_vulnerability.vulnerability_selected', 'global_level_of_vulnerability.global_level_of_vulnerability_id')
+                    ->where('project_id', $proj_id)
+                    ->where('asset_id', $asset_id)
+                    ->value('global_vulnerability');
 
                 return view("iso_27005.quantitative_all_likelihood_and_consequence_value", [
                     'project_id' => $checkpermission->project_id,
@@ -3020,11 +3011,11 @@ class IsoSec2_3_1 extends Controller
                     'likelihood_value_confidentiality' => $likelihood_value_confidentiality,
                     'likelihood_value_integrity' => $likelihood_value_integrity,
                     'likelihood_value_availability' => $likelihood_value_availability,
-                    'likelihood_timeframe_confidentialilty'=>$likelihood_timeframe_confidentialilty,
-                    'likelihood_timeframe_availability'=>$likelihood_timeframe_availability,
-                    'likelihood_timeframe_integrity'=>$likelihood_timeframe_integrity,
-                    'vulnerability'=>$vulnerability,
-                    'threat'=>$threat
+                    'likelihood_timeframe_confidentialilty' => $likelihood_timeframe_confidentialilty,
+                    'likelihood_timeframe_availability' => $likelihood_timeframe_availability,
+                    'likelihood_timeframe_integrity' => $likelihood_timeframe_integrity,
+                    'vulnerability' => $vulnerability,
+                    'threat' => $threat
 
 
                 ]);
@@ -3108,7 +3099,7 @@ class IsoSec2_3_1 extends Controller
             ]
         );
 
-   
+
 
 
         return redirect()->route('iso_27005_likelihood_value', [
@@ -3136,15 +3127,15 @@ class IsoSec2_3_1 extends Controller
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
 
-              if ($req->action == 'save_next') {
-           
-        return redirect()->route('likelihood_and_consequence', [
-            'risk_type' => $req->risk_type_input,
-            'proj_id'   => $proj_id,
-            'user_id'   => $user_id,
-            'asset_id'  => $asset_id
-        ])->with('success', 'Data Saved Successfully');
-    }
+        if ($req->action == 'save_next') {
+
+            return redirect()->route('likelihood_and_consequence', [
+                'risk_type' => $req->risk_type_input,
+                'proj_id'   => $proj_id,
+                'user_id'   => $user_id,
+                'asset_id'  => $asset_id
+            ])->with('success', 'Data Saved Successfully');
+        }
 
 
         return redirect()->route('iso_27005_likelihood_value', [
@@ -3219,12 +3210,12 @@ class IsoSec2_3_1 extends Controller
 
             $consequence_value = DB::table('iso_sec_2_1')->where('assessment_id', $asset_id)->value($risk_type);
 
-               $threat = DB::table('proj_asset_selected_level_of_threat')
+            $threat = DB::table('proj_asset_selected_level_of_threat')
                 ->join('global_level_of_threats', 'proj_asset_selected_level_of_threat.threat_selected', 'global_level_of_threats.global_level_of_threats_id')
                 ->where('project_id', $proj_id)
                 ->where('asset_id', $asset_id)
                 ->value('global_threat');
-                
+
 
             $vulnerability = DB::table('proj_asset_selected_level_of_vulnerability')
                 ->join('global_level_of_vulnerability', 'proj_asset_selected_level_of_vulnerability.vulnerability_selected', 'global_level_of_vulnerability.global_level_of_vulnerability_id')
@@ -3232,7 +3223,7 @@ class IsoSec2_3_1 extends Controller
                 ->where('asset_id', $asset_id)
                 ->value('global_vulnerability');
 
-                   $likelihood_timeframe = DB::table('proj_asset_likelihood_timeframe')
+            $likelihood_timeframe = DB::table('proj_asset_likelihood_timeframe')
                 ->where('project_id', $proj_id)
                 ->where('asset_id', $asset_id)
                 ->value('timeframe_' . $risk_type);
@@ -3244,13 +3235,13 @@ class IsoSec2_3_1 extends Controller
             ) {
                 //QUalitative asset based
                 $likelihood_value = DB::table('proj_asset_likelihood_value')->where('asset_id', $asset_id)
-                ->value('qualitative_likelihood_' . $risk_type . '_selected');
+                    ->value('qualitative_likelihood_' . $risk_type . '_selected');
 
-                
-         
-            
-            
-                
+
+
+
+
+
                 return view("iso_27005.likelihood_and_consequence_value", [
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
@@ -3263,9 +3254,9 @@ class IsoSec2_3_1 extends Controller
                     'consequence_value' => $consequence_value,
                     'likelihood_value' => $likelihood_value,
                     'risk_type' => $risk_type,
-                    'threat'=>$threat,
-                    'vulnerability'=>$vulnerability,
-                    'likelihood_timeframe'=>$likelihood_timeframe
+                    'threat' => $threat,
+                    'vulnerability' => $vulnerability,
+                    'likelihood_timeframe' => $likelihood_timeframe
                 ]);
             }
 
@@ -3289,9 +3280,9 @@ class IsoSec2_3_1 extends Controller
                     'consequence_value' => $consequence_value,
                     'likelihood_value' => $likelihood_value,
                     'risk_type' => $risk_type,
-                    'threat'=>$threat,
-                    'vulnerability'=>$vulnerability,
-                    'likelihood_timeframe'=>$likelihood_timeframe
+                    'threat' => $threat,
+                    'vulnerability' => $vulnerability,
+                    'likelihood_timeframe' => $likelihood_timeframe
                 ]);
             }
         }
@@ -3691,6 +3682,41 @@ class IsoSec2_3_1 extends Controller
         }
     }
 
+     public function submit_edit_scenario($scenario_id,$proj_id, $user_id, Request $req)
+    {
+
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+
+            Db::table('party_scenarios')
+            ->where('project_id',$proj_id)
+            ->where('id',$scenario_id)
+            ->update([
+                'title' => $req->title,
+                'risk_type' => $req->risk_type,
+                'party_type' => $req->party_type,
+                'last_edited_by' => $user_id,
+                'scenario' => $req->scenario,
+                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]);
+
+            return redirect()->route('iso_sec_2_3_1_qual_event_scenarios', [
+                'proj_id' => $proj_id,
+                'user_id' => $user_id
+            ])->with('success', 'Scenario Updated Successfully');
+        }
+    }
+
     public function party_strategic_scenario_submit($proj_id, $user_id, Request $req)
     {
         $checkpermission = Db::table('project_details')->select(
@@ -3745,6 +3771,70 @@ class IsoSec2_3_1 extends Controller
 
                 DB::table('party_scenarios')->where('id', $scenario_id)->delete();
                 return redirect()->back()->with('success', 'Deleted Successfully');
+            }
+        }
+
+        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+    }
+
+    public function edit_strategic_scenario($scenario_id, $proj_id, $user_id)
+    {
+        $checkpermission = Db::table('project_details')->select(
+            'project_types.id as type_id',
+            'project_details.project_code',
+            'project_details.project_permissions',
+            'projects.project_name',
+            'projects.project_id'
+        )
+            ->join('projects', 'project_details.project_code', 'projects.project_id')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+            ->first();
+        if ($checkpermission) {
+            $permissions = json_decode($checkpermission->project_permissions);
+            if (in_array('Data Inputter', $permissions)) {
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+
+                $party = DB::table('party')->where('project_id', $proj_id)
+                    ->get();
+
+
+                $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+                $services = DB::table('iso_sec_2_1')
+                    ->where('project_id', $proj_id)
+                    ->select('s_name')
+                    ->distinct()
+                    ->get();
+
+
+                $scenario = DB::table('party_scenarios')
+                    ->join('party', 'party_scenarios.party_type', '=', 'party.id')
+                    ->where('party_scenarios.project_id', $proj_id)
+                    ->where('party_scenarios.id', $scenario_id)
+                    ->select(
+                        'party_scenarios.id as scenario_id',
+                        'party_scenarios.*',
+                        'party.party_name',
+                        'party.party_type as party_type_party',
+                        'party.party_category'
+                    )
+                    ->first();
+
+                return view('iso_27005.qual_event_edit_form_strategic_scenarios', [
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'project' => $project,
+                    'complianceFramework' => $frameworkDetails['complianceFramework'],
+                    'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
+                    'framework_approach' => $frameworkDetails['framework_approach'],
+                    'services' => $services,
+                    'party' => $party,
+                    'scenario' => $scenario
+
+                ]);
             }
         }
 

@@ -57,7 +57,7 @@
                             </div>
 
                             <div class="col-md-12">
-                                <label for="">Party Type</label>
+                                <label for="">Party Name</label>
                         <select name="party_type" class="form-select">
                            @foreach ($party as $p )
                            <option value="{{$p->id}}">{{$p->party_name}}</option>

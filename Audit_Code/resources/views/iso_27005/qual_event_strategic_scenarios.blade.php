@@ -48,12 +48,12 @@ $permissions = json_decode($project_permissions);
         <thead class="table-dark">
             <tr>
                 <th>Scenario Title</th>
-                <th>Party</th>
+                <th>Party Name</th>
                 <th>party Type</th>
                 <th>Party Category</th>
-                <th>Adverse Impact on</th>
+                <th>Risk Type</th>
                 <th>Description</th>
-                <th>Delete</th>
+                <th>Actions</th>
             </tr>
         </thead>
 
@@ -71,15 +71,20 @@ $permissions = json_decode($project_permissions);
                     Data Integrity
                     @elseif($s->risk_type=='risk_availability')
                     Data Availability
+
+                     @elseif($s->risk_type=='all')
+                    All
                     @endif
                 </td>
                 <td>{{$s->scenario}}</td>
                 <td>
                     @if (in_array('Data Inputter', $permissions))
 
-
                     <a href="/delete_strategic_scenario/{{$s->scenario_id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-danger btn-md mb-2" role="button">
                         <i class="fas fa-trash"></i></a>
+
+                         <a href="/edit_strategic_scenario/{{$s->scenario_id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-success btn-md mb-2" role="button">
+                        <i class="fas fa-edit"></i></a>
 
                     @else
 
