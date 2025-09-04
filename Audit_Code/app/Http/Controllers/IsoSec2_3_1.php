@@ -2750,9 +2750,8 @@ class IsoSec2_3_1 extends Controller
         }
     }
 
-    public function iso_27005_likelihood_value_qual_event($proj_id, $user_id)
+    public function iso_27005_likelihood_value_qual_event($proj_id, $user_id, $risk_type = null)
     {
-
 
         $checkpermission = Db::table('project_details')->select(
             'project_types.id as type_id',
@@ -2777,19 +2776,14 @@ class IsoSec2_3_1 extends Controller
                 && ($frameworkDetails['framework_approach']->framework_approach_types_id == 1)
                 && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 1
             ) {
-                //Qualitative Event Based
-                //     $likelihood_value=DB::table('proj_asset_likelihood_value')
-                //     ->where('project_id',$proj_id)
-                //     ->value('qualitative_likelihood_'.$risk_type.'_selected');
-                //    }
-
+            
+            
                 //ISo 27005:2022 Qualitative and Quantitiave Event based
                 $threat = DB::table('proj_asset_selected_level_of_threat')
                     ->join('global_level_of_threats', 'proj_asset_selected_level_of_threat.threat_selected', 'global_level_of_threats.global_level_of_threats_id')
                     ->where('project_id', $proj_id)
 
                     ->value('global_threat');
-
 
 
                 $vulnerability = DB::table('proj_asset_selected_level_of_vulnerability')
@@ -2806,19 +2800,36 @@ class IsoSec2_3_1 extends Controller
                 ) {
 
 
-                    $scenarios = DB::table('party_scenarios')
-                        ->join('party', 'party_scenarios.party_type', '=', 'party.id')
-                        ->leftjoin('proj_scenario_likelihood_value', 'party_scenarios.id', 'proj_scenario_likelihood_value.scenario')
-                        ->where('party_scenarios.project_id', $proj_id)
-                        ->select(
-                            'party_scenarios.id as scenario_id',
-                            'party_scenarios.*',
-                            'party.party_name',
-                            'party.party_type as party_type_party',
-                            'party.party_category',
-                            'proj_scenario_likelihood_value.likelihood_selected'
-                        )
-                        ->get();
+                    // $scenarios = DB::table('party_scenarios')
+                    //     ->join('party', 'party_scenarios.party_type', '=', 'party.id')
+                    //     ->leftjoin('proj_scenario_likelihood_value', 'party_scenarios.id', 'proj_scenario_likelihood_value.scenario')
+                    //     ->where('party_scenarios.project_id', $proj_id)
+                    //     ->select(
+                    //         'party_scenarios.id as scenario_id',
+                    //         'party_scenarios.*',
+                    //         'party.party_name',
+                    //         'party.party_type as party_type_party',
+                    //         'party.party_category',
+                    //         'proj_scenario_likelihood_value.likelihood_selected'
+                    //     )
+                    //     ->get();
+                    $scenariosQuery = DB::table('party_scenarios')
+                ->join('party', 'party_scenarios.party_type', '=', 'party.id')
+                ->leftJoin('proj_scenario_likelihood_value', 'party_scenarios.id', 'proj_scenario_likelihood_value.scenario')
+                ->where('party_scenarios.project_id', $proj_id);
+
+            if ($risk_type) {
+                $scenariosQuery->where('party_scenarios.risk_type', $risk_type);
+            }
+
+            $scenarios = $scenariosQuery->select(
+                'party_scenarios.id as scenario_id',
+                'party_scenarios.*',
+                'party.party_name',
+                'party.party_type as party_type_party',
+                'party.party_category',
+                'proj_scenario_likelihood_value.likelihood_selected'
+            )->get();
 
 
 

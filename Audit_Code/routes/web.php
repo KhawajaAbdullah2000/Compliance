@@ -225,9 +225,21 @@ Route::middleware(['auth', 'is_user', 'role:end user'])->group(
 
 
         Route::get('view_risk_register_from_home/{org_id}', [RiskRegisterController::class, 'view_risk_register_from_home']);
+
         Route::get(
             '/risk_register/{dimension}/{orgId}',
             [RiskRegisterController::class, 'index']
+        )->whereIn('dimension', [
+            'project',
+            'services',
+            'asset_types',
+            'asset_sub_types',
+            'components'
+        ]);
+
+         Route::get(
+            '/risk_register_by_project/{dimension}/{orgId}/{proj_id}',
+            [RiskRegisterController::class, 'index_project']
         )->whereIn('dimension', [
             'project',
             'services',
@@ -615,7 +627,8 @@ Route::middleware(['auth', 'is_user', 'role:end user'])->group(
         route::get('add_risk_scenario/{proj_id}/{user_id}/{asset_id}', [IsoSec2_3_1::class, 'add_risk_scenario']);
         route::post('proj_asset_risk_scenario/{proj_id}/{user_id}/{asset_id}', [IsoSec2_3_1::class, 'proj_asset_risk_scenario']);
         route::get('iso_27005_likelihood_value/{proj_id}/{user_id}/{asset_id}/{risk_type?}', [IsoSec2_3_1::class, 'iso_27005_likelihood_value'])->name('iso_27005_likelihood_value');
-        route::get('iso_27005_likelihood_value_qual_event/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'iso_27005_likelihood_value_qual_event'])->name('iso_27005_likelihood_value_qual_event');
+
+        route::get('iso_27005_likelihood_value_qual_event/{proj_id}/{user_id}/{risk_type?}', [IsoSec2_3_1::class, 'iso_27005_likelihood_value_qual_event'])->name('iso_27005_likelihood_value_qual_event');
 
 
         route::post('qualitative_asset_likelihood_confidentiality_timeframe/{proj_id}/{user_id}/{asset_id}', [IsoSec2_3_1::class, 'qualitative_asset_likelihood_confidentiality_timeframe']);

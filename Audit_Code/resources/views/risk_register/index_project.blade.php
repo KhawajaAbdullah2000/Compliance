@@ -9,7 +9,7 @@
     <div class="card">
         <div class="card-header d-flex align-items-center justify-content-between">
             <h5 class="mb-0 text-capitalize">
-                View Risk Register by {{ str_replace('_', ' ', $dimension) }}
+                View Risk Register by {{ str_replace('_', ' ', $dimension) }} for Project: {{$rows[0]->project_name}}
             </h5>
         </div>
 
@@ -48,7 +48,6 @@
                                  <th class="text-nowrap fw-semibold">Data Confidentiality</th>
                                   <th class="text-nowrap fw-semibold">Data Integrity</th>
                                    <th class="text-nowrap fw-semibold">Data Availability</th>
-                                   <th>All</th>
                                  
                                 @endif
                             
@@ -93,26 +92,14 @@
                                 @endforeach
 
                                  @if($dimension=="project")
-            @if($row->contains_assets=="Yes")
+                                 @if($row->contains_assets=="Yes")
             <td><a href="/risk_register_by_project/components/{{auth()->user()->organization->id}}/{{$row->project_id}}">View</a></td>
               <td><a href="/risk_register_by_project/components/{{auth()->user()->organization->id}}/{{$row->project_id}}">View</a></td>
              <td><a href="/risk_register_by_project/components/{{auth()->user()->organization->id}}/{{$row->project_id}}">View</a></td>
-             <td></td>
-            @elseif($row->contains_assets=="No")
-                {{-- Dont contains assets --}}
-            @if($row->framework_selected==2 && $row->assessment_approach_selected==1 && $row->framework_approach_types==1)
-            {{-- QUalitative Event Based --}}
-            <td><a href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_confidentiality">View</a></td>
-               <td><a href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_integrity">View</a></td>
-              <td><a href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_integrity">View</a></td>
-            <td><a href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}">View</a></td>
-              @else
-              {{-- not qualittave asset and doesnt have a asset --}}
-              <td>No Assets Available</td>
-                 <td>No Assets Available</td>
-                    <td>No Assets Available</td>
-                    <td>No Assets Available</td>
-            @endif
+            @else
+            <td><a href="#">View</a></td>
+            <td><a href="#">View</a></td>
+             <td><a href="#">View</a></td>
             @endif
         @endif
                                 
