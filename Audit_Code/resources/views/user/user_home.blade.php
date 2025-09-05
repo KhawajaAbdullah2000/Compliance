@@ -244,6 +244,12 @@
               <span class="label"><i class="bi bi-clipboard-plus"></i> Create Project</span>
               <i class="bi bi-arrow-right"></i>
             </a>
+
+
+             <a href="/scanner_results/{{ auth()->user()->organization->id }}" class="btn btn-tile btn-scanner">
+              <span class="label"><i class="bi bi-upc-scan"></i> Scanner Results</span>
+              <i class="bi bi-arrow-right"></i>
+            </a>
           </div>
         </div>
       </div>

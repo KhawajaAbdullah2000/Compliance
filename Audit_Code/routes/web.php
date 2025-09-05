@@ -35,6 +35,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RiskManagementFramework;
 use App\Http\Controllers\RiskRegisterController;
 use App\Http\Controllers\SBP_ETGRMF;
+use App\Http\Controllers\ScannerController;
 use App\Http\Controllers\v3_2_s2_Controller;
 use App\Http\Controllers\v3_2_s3_Controller;
 use App\Http\Controllers\v3_2_s4_Controller;
@@ -214,6 +215,7 @@ Route::middleware(['auth', 'is_user', 'role:end user'])->group(
         //Project controller for v3_2 section 1
         route::get('assigned_projects/{user_id}', [ProjectController::class, 'assigned_projects'])->name('assigned_projects');
 
+        route::get('scanner_results/{org_id}',[ScannerController::class,'scanner_results']);
         //ISO Project
         route::get('iso_sections/{proj_id}/{user_id}', [ProjectController::class, 'iso_sections'])->name('iso_sections');
         // route::get("/meta_data/{proj_id}/{user_id}",[ProjectController::class,'metaData'])->name('meta_data');

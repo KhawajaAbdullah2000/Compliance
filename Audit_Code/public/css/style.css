@@ -706,6 +706,10 @@ thead.table-pointer {
     background: linear-gradient(135deg, #ca3333 0%, #ee9e0a 100%);
 }
 
+.btn-scanner{
+        background: linear-gradient(135deg, #62fa43 0%, #1e6808 100%);
+}
+
 .btn-risk-register {
     background: linear-gradient(135deg, #5b39f3 0%, #39e5fc 100%);
 }

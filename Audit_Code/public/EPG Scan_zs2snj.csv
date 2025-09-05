@@ -1,0 +1,383 @@
+Plugin ID,CVE,CVSS v2.0 Base Score,Risk,Host,Protocol,Port,Name,Synopsis,Description,Solution,See Also,Plugin Output,STIG Severity,CVSS v4.0 Base Score,CVSS v4.0 Base+Threat Score,CVSS v3.0 Base Score,CVSS v2.0 Temporal Score,CVSS v3.0 Temporal Score,VPR Score,EPSS Score,Risk Factor,BID,XREF,MSKB,Plugin Publication Date,Plugin Modification Date,Metasploit,Core Impact,CANVAS
+"10107","","","None","ipg.comtrust.ae","tcp","443","HTTP Server Type and Version","A web server is running on the remote host.","This plugin attempts to determine the type and the version of the
+  remote web server.","n/a","","The remote web server type is :
+
+Microsoft-IIS/10.0","","","","","","","","","None","","IAVT:0001-T-0931","","2000/01/04","2020/10/30","","",""
+"10107","","","None","ipg.comtrust.ae","tcp","2443","HTTP Server Type and Version","A web server is running on the remote host.","This plugin attempts to determine the type and the version of the
+  remote web server.","n/a","","The remote web server type is :
+
+Microsoft-IIS/10.0","","","","","","","","","None","","IAVT:0001-T-0931","","2000/01/04","2020/10/30","","",""
+"10386","","","None","ipg.comtrust.ae","tcp","443","Web Server No 404 Error Code Check","The remote web server does not return 404 error codes.","The remote web server is configured such that it does not return '404
+Not Found' error codes when a nonexistent file is requested, perhaps
+returning instead a site map, search page or authentication page.
+
+Nessus has enabled some counter measures for this.  However, they
+might be insufficient.  If a great number of security holes are
+produced for this port, they might not all be accurate.","n/a","","
+
+CGI scanning will be disabled for this host because the host responds
+to requests for non-existent URLs with HTTP code 302
+rather than 404. The requested URL was : 
+
+    https://ipg.comtrust.ae/AuIPJGDzvFQS.html
+","","","","","","","","","None","","","","2000/04/28","2022/06/17","","",""
+"10386","","","None","ipg.comtrust.ae","tcp","2443","Web Server No 404 Error Code Check","The remote web server does not return 404 error codes.","The remote web server is configured such that it does not return '404
+Not Found' error codes when a nonexistent file is requested, perhaps
+returning instead a site map, search page or authentication page.
+
+Nessus has enabled some counter measures for this.  However, they
+might be insufficient.  If a great number of security holes are
+produced for this port, they might not all be accurate.","n/a","","
+Unfortunately, Nessus has been unable to find a way to recognize this
+page so some CGI-related checks have been disabled.
+","","","","","","","","","None","","","","2000/04/28","2022/06/17","","",""
+"11219","","","None","ipg.comtrust.ae","tcp","443","Nessus SYN scanner","It is possible to determine which TCP ports are open.","This plugin is a SYN 'half-open' port scanner.  It shall be reasonably
+quick even against a firewalled target. 
+
+Note that SYN scans are less intrusive than TCP (full connect) scans
+against broken services, but they might cause problems for less robust
+firewalls and also leave unclosed connections on the remote target, if
+the network is loaded.","Protect your target with an IP filter.","","Port 443/tcp was found to be open","","","","","","","","","None","","","","2009/02/04","2025/07/14","","",""
+"11219","","","None","ipg.comtrust.ae","tcp","2443","Nessus SYN scanner","It is possible to determine which TCP ports are open.","This plugin is a SYN 'half-open' port scanner.  It shall be reasonably
+quick even against a firewalled target. 
+
+Note that SYN scans are less intrusive than TCP (full connect) scans
+against broken services, but they might cause problems for less robust
+firewalls and also leave unclosed connections on the remote target, if
+the network is loaded.","Protect your target with an IP filter.","","Port 2443/tcp was found to be open","","","","","","","","","None","","","","2009/02/04","2025/07/14","","",""
+"19506","","","None","ipg.comtrust.ae","tcp","0","Nessus Scan Information","This plugin displays information about the Nessus scan.","This plugin displays, for each tested host, information about the
+scan itself :
+
+  - The version of the plugin set.
+  - The type of scanner (Nessus or Nessus Home).
+  - The version of the Nessus Engine.
+  - The port scanner(s) used.
+  - The port range scanned.
+  - The ping round trip time 
+  - Whether credentialed or third-party patch management
+    checks are possible.
+  - Whether the display of superseded patches is enabled
+  - The date of the scan.
+  - The duration of the scan.
+  - The number of hosts scanned in parallel.
+  - The number of checks done in parallel.","n/a","","Information about this scan : 
+
+Nessus version : 10.8.3
+Nessus build : 20010
+Plugin feed version : 202508070100
+Scanner edition used : Nessus Home
+Scanner OS : WINDOWS
+Scanner distribution : win-x86-64
+Scan type : Normal
+Scan name : EPG Scan
+Scan policy used : Web Application Tests
+Scanner IP : 192.168.100.3
+Port scanner(s) : nessus_syn_scanner 
+Port range : default
+Ping RTT : 31.481 ms
+Thorough tests : yes
+Experimental tests : no
+Scan for Unpatched Vulnerabilities : no
+Plugin debugging enabled : no
+Paranoia level : 1
+Report verbosity : 1
+Safe checks : yes
+Optimize the test : yes
+Credentialed checks : no
+Patch management checks : None
+Display superseded patches : yes (supersedence plugin did not launch)
+CGI scanning : enabled
+Web application tests : enabled
+Web app tests -  Test mode : all_pairs
+Web app tests -  Try all HTTP methods : yes
+Web app tests -  Maximum run time : 10 minutes.
+Web app tests -  Stop at first flaw : param
+Max hosts : 30
+Max checks : 4
+Recv timeout : 5
+Backports : None
+Allow post-scan editing : Yes
+Nessus Plugin Signature Checking : Enabled
+Audit File Signature Checking : Disabled
+Scan Start Date : 2025/8/19 14:22 Pakistan Standard Time (UTC +05:00)
+Scan duration : 2022 sec
+Scan for malware : no
+","","","","","","","","","None","","","","2005/08/26","2025/06/25","","",""
+"24242","","","None","ipg.comtrust.ae","tcp","443","Microsoft .NET Handlers Enumeration","It is possible to enumerate the remote .NET handlers used by the
+remote web server.","It is possible to obtain the list of handlers the remote ASP.NET web
+server supports.","None","https://support.microsoft.com/en-us/help/815145","
+The remote extensions are handled by the remote ASP.NET server :
+
+ - .ashx
+ - .aspx
+ - .asmx
+","","","","","","","","","None","","","","2007/01/26","2018/11/15","","",""
+"24260","","","None","ipg.comtrust.ae","tcp","443","HyperText Transfer Protocol (HTTP) Information","Some information about the remote HTTP configuration can be extracted.","This test gives some information about the remote HTTP protocol - the
+version used, whether HTTP Keep-Alive is enabled, etc... 
+
+This test is informational only and does not denote any security
+problem.","n/a","","
+Response Code : HTTP/1.1 302 Redirect
+
+Protocol version : HTTP/1.1
+HTTP/2 TLS Support: No
+HTTP/2 Cleartext Support: No
+SSL : yes
+Keep-Alive : no
+Options allowed : OPTIONS, TRACE, GET, HEAD, POST
+Headers :
+
+  Content-Type: text/html; charset=UTF-8
+  Location: https://ipg.comtrust.ae/EPG.aspx/
+  Server: Microsoft-IIS/10.0
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Date: Tue, 19 Aug 2025 09:36:17 GMT
+  Content-Length: 156
+  
+Response Body :
+
+<head><title>Document Moved</title></head>
+<body><h1>Object Moved</h1>This document may be found <a HREF=""https://ipg.comtrust.ae/EPG.aspx/"">here</a></body>","","","","","","","","","None","","","","2007/01/30","2024/02/26","","",""
+"24260","","","None","ipg.comtrust.ae","tcp","2443","HyperText Transfer Protocol (HTTP) Information","Some information about the remote HTTP configuration can be extracted.","This test gives some information about the remote HTTP protocol - the
+version used, whether HTTP Keep-Alive is enabled, etc... 
+
+This test is informational only and does not denote any security
+problem.","n/a","","
+Response Code : HTTP/1.1 200 OK
+
+Protocol version : HTTP/1.1
+HTTP/2 TLS Support: No
+HTTP/2 Cleartext Support: No
+SSL : yes
+Keep-Alive : no
+Options allowed : OPTIONS, TRACE, GET, HEAD, POST
+Headers :
+
+  Cache-Control: private,no-store
+  Pragma: no-cache
+  Server: Microsoft-IIS/10.0
+  Content-Security-Policy: <empty/single space - any valid value is not showing payment page so I keep it empty>
+  Public-Key-Pins: pin-sha256=base64+primary==""; pin-sha256=""base64+backup==""; max-age=5184000; includeSubDomains""
+  Strict-Transport-Security: max-age=86400; includeSubDomains;
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Access-Control-Allow-Headers: Content-Type
+  Access-Control-Allow-Origin: https://ipg.comtrust.ae
+  Date: Tue, 19 Aug 2025 09:36:17 GMT
+  Connection: close
+  Content-Length: 0
+  
+Response Body :
+
+","","","","","","","","","None","","","","2007/01/30","2024/02/26","","",""
+"43111","","","None","ipg.comtrust.ae","tcp","443","HTTP Methods Allowed (per directory)","This plugin determines which HTTP methods are allowed on various CGI
+directories.","By calling the OPTIONS method, it is possible to determine which HTTP
+methods are allowed on each directory.
+
+The following HTTP methods are considered insecure:
+  PUT, DELETE, CONNECT, TRACE, HEAD
+
+Many frameworks and languages treat 'HEAD' as a 'GET' request, albeit
+one without any body in the response. If a security constraint was
+set on 'GET' requests such that only 'authenticatedUsers' could
+access GET requests for a particular servlet or resource, it would be
+bypassed for the 'HEAD' version. This allowed unauthorized blind
+submission of any privileged GET request.
+
+As this list may be incomplete, the plugin also tests - if 'Thorough
+tests' are enabled or 'Enable web applications tests' is set to 'yes'
+in the scan policy - various known HTTP methods on each directory and
+considers them as unsupported if it receives a response code of 400,
+403, 405, or 501.
+
+Note that the plugin output is only informational and does not
+necessarily indicate the presence of any security vulnerabilities.","n/a","http://www.nessus.org/u?d9c03a9a
+http://www.nessus.org/u?b019cbdb
+https://www.owasp.org/index.php/Test_HTTP_Methods_(OTG-CONFIG-006)","Based on the response to an OPTIONS request :
+
+  - HTTP methods  GET  HEAD  POST  TRACE OPTIONS are allowed on : 
+
+    /
+    /EPG.aspx
+
+
+Based on tests of each method : 
+
+  - HTTP methods ACL BASELINE-CONTROL BCOPY BDELETE BMOVE BPROPFIND 
+    BPROPPATCH CHECKIN CHECKOUT CONNECT COPY DEBUG DELETE GET HEAD 
+    INDEX LABEL LOCK MERGE MKACTIVITY MKCOL MKWORKSPACE MOVE NOTIFY 
+    OPTIONS ORDERPATCH PATCH POLL POST PROPFIND PROPPATCH PUT REPORT 
+    RPC_IN_DATA RPC_OUT_DATA SEARCH SUBSCRIBE UNCHECKOUT UNLOCK 
+    UNSUBSCRIBE UPDATE VERSION-CONTROL X-MS-ENUMATTS are allowed on : 
+
+    /
+    /EPG.aspx
+
+  - Invalid/unknown HTTP methods are allowed on :
+
+    /
+    /EPG.aspx
+","","","","","","","","","None","","","","2009/12/10","2022/04/11","","",""
+"43111","","","None","ipg.comtrust.ae","tcp","2443","HTTP Methods Allowed (per directory)","This plugin determines which HTTP methods are allowed on various CGI
+directories.","By calling the OPTIONS method, it is possible to determine which HTTP
+methods are allowed on each directory.
+
+The following HTTP methods are considered insecure:
+  PUT, DELETE, CONNECT, TRACE, HEAD
+
+Many frameworks and languages treat 'HEAD' as a 'GET' request, albeit
+one without any body in the response. If a security constraint was
+set on 'GET' requests such that only 'authenticatedUsers' could
+access GET requests for a particular servlet or resource, it would be
+bypassed for the 'HEAD' version. This allowed unauthorized blind
+submission of any privileged GET request.
+
+As this list may be incomplete, the plugin also tests - if 'Thorough
+tests' are enabled or 'Enable web applications tests' is set to 'yes'
+in the scan policy - various known HTTP methods on each directory and
+considers them as unsupported if it receives a response code of 400,
+403, 405, or 501.
+
+Note that the plugin output is only informational and does not
+necessarily indicate the presence of any security vulnerabilities.","n/a","http://www.nessus.org/u?d9c03a9a
+http://www.nessus.org/u?b019cbdb
+https://www.owasp.org/index.php/Test_HTTP_Methods_(OTG-CONFIG-006)","Based on the response to an OPTIONS request :
+
+  - HTTP methods  GET  HEAD  POST  TRACE OPTIONS are allowed on : 
+
+    /
+
+
+Based on tests of each method : 
+
+  - HTTP methods ACL BASELINE-CONTROL BCOPY BDELETE BMOVE BPROPFIND 
+    BPROPPATCH CHECKIN CHECKOUT CONNECT COPY DEBUG DELETE GET HEAD 
+    INDEX LABEL LOCK MERGE MKACTIVITY MKCOL MKWORKSPACE MOVE NOTIFY 
+    OPTIONS ORDERPATCH PATCH POLL POST PROPFIND PROPPATCH PUT REPORT 
+    RPC_IN_DATA RPC_OUT_DATA SEARCH SUBSCRIBE UNCHECKOUT UNLOCK 
+    UNSUBSCRIBE UPDATE VERSION-CONTROL X-MS-ENUMATTS are allowed on : 
+
+    /
+
+  - Invalid/unknown HTTP methods are allowed on :
+
+    /
+","","","","","","","","","None","","","","2009/12/10","2022/04/11","","",""
+"50344","","","None","ipg.comtrust.ae","tcp","443","Missing or Permissive Content-Security-Policy frame-ancestors HTTP Response Header","The remote web server does not take steps to mitigate a class of web
+application vulnerabilities.","The remote web server in some responses sets a permissive
+Content-Security-Policy (CSP) frame-ancestors response header or does
+not set one at all.
+
+The CSP frame-ancestors header has been proposed by the W3C Web
+Application Security Working Group as a way to mitigate cross-site
+scripting and clickjacking attacks.","Set a non-permissive Content-Security-Policy frame-ancestors header
+for all requested resources.","http://www.nessus.org/u?55aa8f57
+http://www.nessus.org/u?07cc2a06
+https://content-security-policy.com/
+https://www.w3.org/TR/CSP2/","
+The following pages do not set a Content-Security-Policy frame-ancestors response header or set a permissive policy:
+
+  - https://ipg.comtrust.ae/EPG.aspx
+  - https://ipg.comtrust.ae/EPG.aspx/
+","","","","","","","","","None","","","","2010/10/26","2021/01/19","","",""
+"50345","","","None","ipg.comtrust.ae","tcp","443","Missing or Permissive X-Frame-Options HTTP Response Header","The remote web server does not take steps to mitigate a class of web
+application vulnerabilities.","The remote web server in some responses sets a permissive
+X-Frame-Options response header or does not set one at all.
+
+The X-Frame-Options header has been proposed by Microsoft as a way to
+mitigate clickjacking attacks and is currently supported by all major
+browser vendors","Set a properly configured X-Frame-Options header for all requested
+resources.","https://en.wikipedia.org/wiki/Clickjacking
+http://www.nessus.org/u?399b1f56","
+The following pages do not set a X-Frame-Options response header or set a permissive policy:
+
+  - https://ipg.comtrust.ae/EPG.aspx
+  - https://ipg.comtrust.ae/EPG.aspx/
+","","","","","","","","","None","","","","2010/10/26","2021/01/19","","",""
+"84502","","","None","ipg.comtrust.ae","tcp","443","HSTS Missing From HTTPS Server","The remote web server is not enforcing HSTS.","The remote HTTPS server is not enforcing HTTP Strict Transport Security (HSTS). 
+HSTS is an optional response header that can be configured on the server to instruct 
+the browser to only communicate via HTTPS. The lack of HSTS allows downgrade attacks,
+SSL-stripping man-in-the-middle attacks, and weakens cookie-hijacking protections.","Configure the remote web server to use HSTS.","https://tools.ietf.org/html/rfc6797","
+HTTP/1.1 302 Redirect
+Content-Type: text/html; charset=UTF-8
+Location: https://ipg.comtrust.ae/EPG.aspx/
+Server: Microsoft-IIS/10.0
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Date: Tue, 19 Aug 2025 09:24:42 GMT
+Connection: close
+Content-Length: 156
+
+
+The remote HTTPS server does not send the HTTP
+""Strict-Transport-Security"" header.
+","","","","","","","","","None","","","","2015/07/02","2024/08/09","","",""
+"91634","","","None","ipg.comtrust.ae","tcp","443","HyperText Transfer Protocol (HTTP) Redirect Information","The remote web server redirects requests to the root directory.","The remote web server issues an HTTP redirect when requesting the root
+directory of the web server.
+
+This plugin is informational only and does not denote a security
+problem.","Analyze the redirect(s) to verify that this is valid operation for
+your web server and/or application.","","
+  Request         : https://ipg.comtrust.ae/
+  HTTP response   : HTTP/1.1 302 Redirect
+  Redirect to     : https://ipg.comtrust.ae/EPG.aspx/
+  Redirect type   : 30x redirect
+
+
+Note that Nessus did not receive a 200 OK response from the
+last examined redirect.
+","","","","","","","","","None","","","","2016/06/16","2017/10/12","","",""
+"91634","","","None","ipg.comtrust.ae","tcp","443","HyperText Transfer Protocol (HTTP) Redirect Information","The remote web server redirects requests to the root directory.","The remote web server issues an HTTP redirect when requesting the root
+directory of the web server.
+
+This plugin is informational only and does not denote a security
+problem.","Analyze the redirect(s) to verify that this is valid operation for
+your web server and/or application.","","
+  Request         : https://ipg.comtrust.ae/
+  HTTP response   : HTTP/1.1 302 Redirect
+  Redirect to     : https://ipg.comtrust.ae/EPG.aspx/
+  Redirect type   : 30x redirect
+
+  Final page      : https://ipg.comtrust.ae/EPG.aspx/
+  HTTP response   : HTTP/1.1 200 OK
+
+","","","","","","","","","None","","","","2016/06/16","2017/10/12","","",""
+"91815","","","None","ipg.comtrust.ae","tcp","443","Web Application Sitemap","The remote web server hosts linkable content that can be crawled by
+Nessus.","The remote web server contains linkable content that can be used to
+gather information about a target.","n/a","http://www.nessus.org/u?5496c8d9","
+The following sitemap was created from crawling linkable content on the target host :
+
+  - https://ipg.comtrust.ae/EPG.aspx
+  - https://ipg.comtrust.ae/EPG.aspx/
+
+Attached is a copy of the sitemap file.
+","","","","","","","","","None","","","","2016/06/24","2016/06/24","","",""
+"91815","","","None","ipg.comtrust.ae","tcp","2443","Web Application Sitemap","The remote web server hosts linkable content that can be crawled by
+Nessus.","The remote web server contains linkable content that can be used to
+gather information about a target.","n/a","http://www.nessus.org/u?5496c8d9","
+The following sitemap was created from crawling linkable content on the target host :
+
+  - https://ipg.comtrust.ae:2443/
+
+Attached is a copy of the sitemap file.
+","","","","","","","","","None","","","","2016/06/24","2016/06/24","","",""
+"142960","","5.8","Medium","ipg.comtrust.ae","tcp","443","HSTS Missing From HTTPS Server (RFC 6797)","The remote web server is not enforcing HSTS, as defined by RFC 6797.","The remote web server is not enforcing HSTS, as defined by RFC 6797. 
+HSTS is an optional response header that can be configured on the server to instruct 
+the browser to only communicate via HTTPS. The lack of HSTS allows downgrade attacks,
+SSL-stripping man-in-the-middle attacks, and weakens cookie-hijacking protections.","Configure the remote web server to use HSTS.","https://tools.ietf.org/html/rfc6797","
+HTTP/1.1 302 Redirect
+Content-Type: text/html; charset=UTF-8
+Location: https://ipg.comtrust.ae/EPG.aspx/
+Server: Microsoft-IIS/10.0
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Date: Tue, 19 Aug 2025 09:24:42 GMT
+Connection: close
+Content-Length: 156
+
+
+The remote HTTPS server does not send the HTTP
+""Strict-Transport-Security"" header.
+","","","","6.5","","","","","Medium","","","","2020/11/17","2024/03/22","","",""
