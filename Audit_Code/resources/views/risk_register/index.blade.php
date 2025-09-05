@@ -76,13 +76,27 @@
                                         {{ $status ?: '—' }}
                                     </span>
                                     @elseif($key=='data_confidentiality_risk' && $dimension=="components")
+                                    @if($row->risk_assessment!='Qualitative Event Based')
                                     <a href="/likelihood_and_consequence/risk_confidentiality/{{$row->project_id}}/{{auth()->user()->id}}/{{$row->assessment_id}}" target="_blank">{{ $row->$key ?: '—' }}</a>
-
+                                    @else
+                                    <a target="_blank" href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_confidentiality">View</a>
+                                    @endif
                                     @elseif($key=='data_integrity_risk' && $dimension=="components")
+                                     @if($row->risk_assessment!='Qualitative Event Based')
                                     <a href="/likelihood_and_consequence/risk_integrity/{{$row->project_id}}/{{auth()->user()->id}}/{{$row->assessment_id}}" target="_blank">{{ $row->$key ?: '—' }}</a>
+                                    @else
+                                    <a target="_blank" href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_integrity">View</a>
+
+                                    @endif
 
                                     @elseif($key=='data_availability_risk' && $dimension=="components")
+                                       @if($row->risk_assessment!='Qualitative Event Based')
                                     <a href="/likelihood_and_consequence/risk_availability/{{$row->project_id}}/{{auth()->user()->id}}/{{$row->assessment_id}}" target="_blank">{{ $row->$key ?: '—' }}</a>
+                                 @else
+                                 <a target="_blank" href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_availability">View</a>
+
+
+                                 @endif
                                     @else
                                     {{ $row->$key ?: '—' }}
                                     @endif
@@ -91,6 +105,8 @@
                                
                                 @endif
                                 @endforeach
+
+                              
 
                                  @if($dimension=="project")
             @if($row->contains_assets=="Yes")
