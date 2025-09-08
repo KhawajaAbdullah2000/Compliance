@@ -233,16 +233,47 @@ class IsoSec2_1 extends Controller
 
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
                 if ($frameworkDetails['complianceFramework']->framework_name == 'Default') {
+                 
                     return view('risk_treatment.serviceslist', [
                         'data' => $data,
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
                         'project_permissions' => $checkpermission->project_permissions,
-                        'project' => $project
+                        'project' => $project,
+                        
                     ]);
-                } else {
-                    dd("Risk treatment only configured for Default framework. Choose default framework in risk treatment to access risk treatment");
                 }
+                
+          
+
+                if($frameworkDetails['complianceFramework']->framework_id==2 and $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2 and $frameworkDetails['framework_approach']->framework_approach_types==1){
+                    //qual-asset based
+                    //dd($data);
+                
+                    return view('risk_treatment.assets',[
+                        'data'=>$data,
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project' => $project,
+                    ]);
+                }
+
+
+                 if($frameworkDetails['complianceFramework']->framework_id==2 and $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2 and $frameworkDetails['framework_approach']->framework_approach_types==2){
+                    //quan-asset based
+                    //dd($data);
+                
+                    return view('risk_treatment.assets',[
+                        'data'=>$data,
+                        'project_id' => $checkpermission->project_id,
+                        'project_name' => $checkpermission->project_name,
+                        'project_permissions' => $checkpermission->project_permissions,
+                        'project' => $project,
+                    ]);
+                }
+
+                
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);

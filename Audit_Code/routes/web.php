@@ -1,6 +1,7 @@
 <?php
 
 use App\Exports\RiskRegister;
+use App\Exports\RiskTreatmentReport;
 use App\Http\Controllers\ActionPlanController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\Cobit;
@@ -34,6 +35,7 @@ use App\Http\Controllers\PCI_Single_Sheet;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RiskManagementFramework;
 use App\Http\Controllers\RiskRegisterController;
+use App\Http\Controllers\RiskTreatmentController;
 use App\Http\Controllers\SBP_ETGRMF;
 use App\Http\Controllers\ScannerController;
 use App\Http\Controllers\v3_2_s2_Controller;
@@ -508,7 +510,9 @@ Route::middleware(['auth', 'is_user', 'role:end user'])->group(
         route::put('submit_edit_sec2_4_a8/{control_num}/{asset_id}/{proj_id}/{user_id}', [IsoSec2_4_A8::class, 'submit_edit_sec2_4_a8']);
 
 
+        route::get('asset_based_risk_treatment/{asset_id}/{proj_id}/{user_id}',[RiskTreatmentController::class,'asset_based_risk_treatment'])->name('asset_based_risk_treatment');
 
+        route::post('iso_27005_risk_treatment_vulnerability/{proj_id}/{user_id}/{asset_id}',[RiskTreatmentController::class,'iso_27005_risk_treatment_vulnerability']);
 
 
         //ISO sec2.1
@@ -630,16 +634,31 @@ Route::middleware(['auth', 'is_user', 'role:end user'])->group(
         route::post('proj_asset_risk_scenario/{proj_id}/{user_id}/{asset_id}', [IsoSec2_3_1::class, 'proj_asset_risk_scenario']);
         route::get('iso_27005_likelihood_value/{proj_id}/{user_id}/{asset_id}/{risk_type?}', [IsoSec2_3_1::class, 'iso_27005_likelihood_value'])->name('iso_27005_likelihood_value');
 
+             route::get('iso_27005_likelihood_value_risk_treatment/{proj_id}/{user_id}/{asset_id}/{risk_type?}', [RiskTreatmentController::class, 'iso_27005_likelihood_value_risk_treatment'])->name('iso_27005_likelihood_value_risk_treatment');
+
+        
+
         route::get('iso_27005_likelihood_value_qual_event/{proj_id}/{user_id}/{risk_type?}', [IsoSec2_3_1::class, 'iso_27005_likelihood_value_qual_event'])->name('iso_27005_likelihood_value_qual_event');
 
 
         route::post('qualitative_asset_likelihood_confidentiality_timeframe/{proj_id}/{user_id}/{asset_id}', [IsoSec2_3_1::class, 'qualitative_asset_likelihood_confidentiality_timeframe']);
+
+        route::post('qualitative_asset_likelihood_confidentiality_timeframe_risk_treatment/{proj_id}/{user_id}/{asset_id}', [RiskTreatmentController::class, 'qualitative_asset_likelihood_confidentiality_timeframe_risk_treatment']);
+
+
         route::post('save_likelihood_value/{proj_id}/{user_id}/{asset_id}', [IsoSec2_3_1::class, 'save_likelihood_value']);
+
+
+        route::post('save_likelihood_value_risk_treatment/{proj_id}/{user_id}/{asset_id}', [RiskTreatmentController::class, 'save_likelihood_value_risk_treatment']);
 
 
         route::get('likelihood_and_consequence/{risk_type}/{proj_id}/{user_id}/{asset_id}', [IsoSec2_3_1::class, 'likelihood_and_consequence'])->name('likelihood_and_consequence');
 
+         route::get('likelihood_and_consequence_risk_treatment/{risk_type}/{proj_id}/{user_id}/{asset_id}', [RiskTreatmentController::class, 'likelihood_and_consequence_risk_treatment'])->name('likelihood_and_consequence_risk_treatment');
+
         route::get('iso_27005_likelihood_value_all/{proj_id}/{user_id}/{asset_id}', [IsoSec2_3_1::class, 'iso_27005_likelihood_value_all'])->name('iso_27005_likelihood_value_all');
+
+        route::get('iso_27005_likelihood_value_all_risk_treatment/{proj_id}/{user_id}/{asset_id}', [RiskTreatmentController::class, 'iso_27005_likelihood_value_all_risk_treatment'])->name('iso_27005_likelihood_value_all_risk_treatment');
 
 
         route::Post('quantitave_consequence_scale_amount_entered/{asset_id}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'quantitave_consequence_scale_amount_entered']);

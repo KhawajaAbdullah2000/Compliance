@@ -1070,11 +1070,13 @@ class ComplianceMap extends Controller
                 ->get();
         }
 
+       
 
 
         $formattedResults = [];
         $totalCounts = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
 
+    
         foreach ($results as $result) {
             $domain = $result->SubDomain;
             $status = $result->comp_status;
@@ -2378,9 +2380,9 @@ class ComplianceMap extends Controller
             $data = Excel::toArray([], $filepath); //with header
             $rows = array_slice($data[0], 1); //without header(first row)
 
-            // $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
-            //     return strval($row[1]) == $subdomain;
-            // })->values()->all();
+            $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+                return strval($row[1]) == $subdomain;
+            })->values()->all();
           
 
 

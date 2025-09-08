@@ -1745,7 +1745,7 @@ class IsoSec2_3_1 extends Controller
             && ($frameworkDetails['framework_approach']->framework_approach_types_id == 1 || $frameworkDetails['framework_approach']->framework_approach_types_id == 2)
             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 2
         ) {
-            return redirect()->route('iso_27005_risk_assessment', [
+            return redirect()->route('iso_27005_risk_treatment_vulnerability', [
                 'proj_id' => $proj_id,
                 'user_id' => $user_id,
                 'asset_id' => $asset_id
@@ -1944,11 +1944,14 @@ class IsoSec2_3_1 extends Controller
                     ->where('asset_id', $asset->assessment_id)
                     ->pluck('vulnerability_due_to', 'control_num');
 
+              
                 $savedData = [];
                 foreach ($savedDataRaw as $key => $value) {
                     $normalizedKey = trim((string) $key); // only trim, no number_format
                     $savedData[$normalizedKey] = $value;
                 }
+
+           
 
                 $global_level_of_vulnerabilities = DB::table('global_level_of_vulnerability')
                     ->orderBy('global_level_of_vulnerability_id', 'desc')->get();
@@ -2672,6 +2675,8 @@ class IsoSec2_3_1 extends Controller
                     ->where('asset_id', $asset_id)
                     ->value('qualitative_likelihood_' . $risk_type . '_selected');
             }
+
+        
 
 
             //ISo 27005:2022 Qualitative and Quantitiave Asset based

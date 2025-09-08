@@ -158,6 +158,7 @@ class OrganizationController extends Controller
 
     public function user_action_all_projects_in_org($org_id)
     {
+
         $users = User::with(['permissions'])
             ->leftJoin('projects', 'users.id', '=', 'projects.created_by')
             ->leftJoin('audit_projects', 'users.id', '=', 'audit_projects.created_by')
@@ -180,7 +181,7 @@ class OrganizationController extends Controller
                 'users.status',
 
                 DB::raw('COUNT(DISTINCT projects.project_id) as created_projects'),
-                DB::raw('COUNT(DISTINCT ap_deleted.project_id) as deleted_projects'),
+                DB::raw('COUNT(DISTINCT st_changed.project_id) as deleted_projects'),
                  DB::raw('COUNT(DISTINCT st_changed.project_id) as status_changed_projects'),
                 DB::raw('COUNT(DISTINCT project_details.project_code) as assigned_projects')
             )
