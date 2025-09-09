@@ -116,8 +116,6 @@ class RiskTreatmentController extends Controller
 
 
 
-
-
                 return view("risk_treatment.vulnerability", [
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
@@ -232,7 +230,6 @@ class RiskTreatmentController extends Controller
 
 
 
-
             if (
                 $frameworkDetails['complianceFramework']->framework_selected == 2
                 && $frameworkDetails['framework_approach']->framework_approach_types_id == 1
@@ -274,13 +271,24 @@ class RiskTreatmentController extends Controller
                 && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 2
             ) {
 
+                
                 //Quantitative Asset based
-                $likelihood_value = DB::table('proj_asset_likelihood_value')
+                $risk_assessment_likelihood_value = DB::table('proj_asset_likelihood_value')
                     ->where('project_id', $proj_id)
                     ->where('asset_id', $asset_id)
                     ->value('quantitative_likelihood_' . $risk_type . '_selected');
 
-                return view("iso_27005.quantitative_likelihood_value", [
+                
+
+                 $risk_treatment_likelihood_value = DB::table('proj_asset_likelihood_value')
+                    ->where('project_id', $proj_id)
+                    ->where('asset_id', $asset_id)
+                    ->value('risk_treatment_likelihood_' . $risk_type);
+                  
+                    
+           
+
+                return view("risk_treatment.quantitative_likelihood_value", [
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
                     'project_permissions' => $checkpermission->project_permissions,
@@ -289,9 +297,9 @@ class RiskTreatmentController extends Controller
                     'complianceFramework' => $frameworkDetails['complianceFramework'],
                     'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
                     'framework_approach' => $frameworkDetails['framework_approach'],
-               
                     'likelihood_timeframe' => $likelihood_timeframe,
-                    'likelihood_value' => $likelihood_value,
+                    'risk_treatment_likelihood_value' => $risk_treatment_likelihood_value,
+                    'risk_assessment_likelihood_value'=>$risk_assessment_likelihood_value,
                     'risk_type' => $risk_type
                 ]);
             }
@@ -428,7 +436,6 @@ class RiskTreatmentController extends Controller
                     ->value('risk_treatment_likelihood_' . $risk_type);
 
 
-
                 return view("risk_treatment.likelihood_and_consequence_value_risk_treatment", [
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
@@ -451,9 +458,11 @@ class RiskTreatmentController extends Controller
                 && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 2
             ) {
                 //Quantitative Asset based
-                $likelihood_value = DB::table('proj_asset_likelihood_value')->where('asset_id', $asset_id)->value('quantitative_likelihood_' . $risk_type . '_selected');
-
-                return view("iso_27005.quantitative_likelihood_and_consequence_value", [
+               $likelihood_value = DB::table('proj_asset_likelihood_value')->where('asset_id', $asset_id)
+                    ->value('risk_treatment_likelihood_' . $risk_type);
+                    
+            
+                return view("risk_treatment.quantitative_likelihood_and_consequence_value_risk_treatment", [
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
                     'project_permissions' => $checkpermission->project_permissions,
@@ -595,28 +604,17 @@ class RiskTreatmentController extends Controller
 
                 $consequence_value_availability = DB::table('iso_sec_2_1')->where('assessment_id', $asset_id)->value('risk_availability');
 
-                $likelihood_value_confidentiality = DB::table('proj_asset_likelihood_value')->where('asset_id', $asset_id)->value('quantitative_likelihood_risk_confidentiality_selected');
+                $likelihood_value_confidentiality = DB::table('proj_asset_likelihood_value')->where('asset_id', $asset_id)->value('risk_treatment_likelihood_risk_confidentiality');
 
 
-                $likelihood_value_integrity = DB::table('proj_asset_likelihood_value')->where('asset_id', $asset_id)->value('quantitative_likelihood_risk_integrity_selected');
+                $likelihood_value_integrity = DB::table('proj_asset_likelihood_value')->where('asset_id', $asset_id)->value('risk_treatment_likelihood_risk_integrity');
 
 
-                $likelihood_value_availability = DB::table('proj_asset_likelihood_value')->where('asset_id', $asset_id)->value('quantitative_likelihood_risk_availability_selected');
+                $likelihood_value_availability = DB::table('proj_asset_likelihood_value')->where('asset_id', $asset_id)->value('risk_treatment_likelihood_risk_availability');
 
-                $threat = DB::table('proj_asset_selected_level_of_threat')
-                    ->join('global_level_of_threats', 'proj_asset_selected_level_of_threat.threat_selected', 'global_level_of_threats.global_level_of_threats_id')
-                    ->where('project_id', $proj_id)
-                    ->where('asset_id', $asset_id)
-                    ->value('global_threat');
+                
 
-
-                $vulnerability = DB::table('proj_asset_selected_level_of_vulnerability')
-                    ->join('global_level_of_vulnerability', 'proj_asset_selected_level_of_vulnerability.vulnerability_selected', 'global_level_of_vulnerability.global_level_of_vulnerability_id')
-                    ->where('project_id', $proj_id)
-                    ->where('asset_id', $asset_id)
-                    ->value('global_vulnerability');
-
-                return view("iso_27005.quantitative_all_likelihood_and_consequence_value", [
+                return view("risk_treatment.quantitative_all_likelihood_and_consequence_value", [
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
                     'project_permissions' => $checkpermission->project_permissions,
@@ -634,8 +632,7 @@ class RiskTreatmentController extends Controller
                     'likelihood_timeframe_confidentialilty' => $likelihood_timeframe_confidentialilty,
                     'likelihood_timeframe_availability' => $likelihood_timeframe_availability,
                     'likelihood_timeframe_integrity' => $likelihood_timeframe_integrity,
-                    'vulnerability' => $vulnerability,
-                    'threat' => $threat
+                  
 
 
                 ]);

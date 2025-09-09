@@ -1745,7 +1745,7 @@ class IsoSec2_3_1 extends Controller
             && ($frameworkDetails['framework_approach']->framework_approach_types_id == 1 || $frameworkDetails['framework_approach']->framework_approach_types_id == 2)
             && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 2
         ) {
-            return redirect()->route('iso_27005_risk_treatment_vulnerability', [
+            return redirect()->route('iso_27005_risk_assessment', [
                 'proj_id' => $proj_id,
                 'user_id' => $user_id,
                 'asset_id' => $asset_id
