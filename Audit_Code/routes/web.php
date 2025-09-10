@@ -217,7 +217,10 @@ Route::middleware(['auth', 'is_user', 'role:end user'])->group(
         //Project controller for v3_2 section 1
         route::get('assigned_projects/{user_id}', [ProjectController::class, 'assigned_projects'])->name('assigned_projects');
 
-        route::get('scanner_results/{org_id}',[ScannerController::class,'scanner_results']);
+        route::get('nessus_results/{org_id}',[ScannerController::class,'nessus_results']);
+      route::get('types_of_testing_list/{org_id}',[ScannerController::class,'types_of_testing_list'])->name('types_of_testing_list');
+      
+      route::get('select_tools/{org_id}/{type_of_test}',[ScannerController::class,'select_tools'])->name('select_tools');
         //ISO Project
         route::get('iso_sections/{proj_id}/{user_id}', [ProjectController::class, 'iso_sections'])->name('iso_sections');
         // route::get("/meta_data/{proj_id}/{user_id}",[ProjectController::class,'metaData'])->name('meta_data');

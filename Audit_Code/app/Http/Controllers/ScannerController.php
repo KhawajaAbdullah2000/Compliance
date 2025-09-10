@@ -9,7 +9,7 @@ use Maatwebsite\Excel\HeadingRowImport;
 
 class ScannerController extends Controller
 {
-    public function scanner_results($org_id)
+    public function nessus_results($org_id)
     {
         $path = public_path('EPG Scan_zs2snj.csv');
 
@@ -27,5 +27,20 @@ class ScannerController extends Controller
         //dd($headers,$values);
 
         return view('scanner.csv_table', compact('headers', 'values'));
+    }
+
+    public function types_of_testing_list($org_id)
+    {
+
+        return view('scanner.types_of_testing');
+    }
+
+    public function select_tools($org_id, $type_of_test)
+    {
+        
+            return view('scanner.types_of_tools', [
+                'type_of_test' => $type_of_test
+            ]);
+        
     }
 }

@@ -246,8 +246,8 @@
             </a>
 
 
-             <a href="/scanner_results/{{ auth()->user()->organization->id }}" class="btn btn-tile btn-scanner">
-              <span class="label"><i class="bi bi-upc-scan"></i> Scanner Results</span>
+             <a href="/types_of_testing_list/{{ auth()->user()->organization->id }}" class="btn btn-tile btn-scanner">
+              <span class="label"><i class="bi bi-upc-scan"></i> Automated Testing Register</span>
               <i class="bi bi-arrow-right"></i>
             </a>
           </div>

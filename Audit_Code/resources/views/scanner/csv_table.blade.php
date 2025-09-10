@@ -4,9 +4,16 @@
 
 @include('user-nav')
 
-<h3 class="fw-bold text-center mt-4">Scanner Results for : {{auth()->user()->organization->name}}</h3>
+
+
+    <h3 class="fw-bold text-center mt-4">Scanner Results for : {{auth()->user()->organization->name}}</h3>
+ 
+
 
 <div class="container">
+    <div class="text-end mb-2">
+    <a href="/select_tools/{{auth()->user()->organization->id}}/vapt" class="btn btn-secondary">Back</a>
+</div>
 {{-- Column Visibility Section --}}
 
 <div class="mb-4">
