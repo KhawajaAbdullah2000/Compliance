@@ -46,7 +46,7 @@ $framework_labels=[
         </div>
     </div>
 
-    <p class="fs-5 fw-bold">Assess Risk Against Controls for:
+    <p class="fs-5 fw-bold">Assess Risk  for:
         <span>
             <table class="table table-bordered table-responsive">
                 <tr>

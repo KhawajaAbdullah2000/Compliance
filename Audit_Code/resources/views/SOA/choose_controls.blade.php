@@ -37,7 +37,7 @@
         <div class="mt-4 fs-4 fw-bold"><p>Select an Asset</p></div>
 
         <table class="table table-bordered table-hover text-center table-secondary align-middle">
-            <thead class="table-dark">
+            <thead class="table-secondary">
                 <tr>
                     <th>Select</th>
                     <th>Service</th>

@@ -136,7 +136,7 @@
     <div class="col-md-6">
 
 <table class="table table-bordered mt-4">
-    <thead class="table-dark">
+    <thead class="table-secondary">
         <tr>
             <th>Domain</th>
    <th class="{{ $statusClass }}">{{ $statusLabel }}</th>
@@ -193,7 +193,7 @@
     <a id="downloadExcelButton" href="#" class="btn btn-success btn-md float-end mb-2">Download Excel</a>
 
     <table class="table table-bordered mt-4">
-        <thead class="table-dark">
+        <thead class="table-secondary">
             <tr>
                 <th>Domain</th>
                 <th class="bg-success">In Place</th>

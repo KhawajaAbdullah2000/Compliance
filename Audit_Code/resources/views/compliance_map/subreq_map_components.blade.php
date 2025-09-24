@@ -117,7 +117,7 @@
     <h5 class="mb-3">Sub Domain: {{$SubDomainNum}} - {{$SubDomainTitle}}</h5>
 
 <table class="table table-bordered table-striped align-middle">
-    <thead class="table-dark">
+    <thead class="table-secondary">
         <tr>
             <th>Component</th>
             <th>Domain</th>

@@ -47,7 +47,7 @@
 
     <h3 class="fw-bold text-center mt-2">Risk and Compliance Details for Project: {{$project->project_name}}</h3>
     <table class='table table-hover table-responsive'>
-        <thead class="table-dark">
+        <thead class="table-secondary">
             <tr>
                 <th>Service Name</th>
                 <th>Compliance %</th>

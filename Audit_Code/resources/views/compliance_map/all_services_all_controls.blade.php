@@ -73,7 +73,7 @@
             </a>
 
             <table class="table table-bordered mt-4">
-                <thead class="table-dark">
+                <thead class="table-secondary">
                     <tr>
                         <th>Domain</th>
                         <th class="bg-success">In Place</th>
@@ -169,7 +169,7 @@
                 {{-- ── Left: compact table ── --}}
                 <div class="col-md-6">
                     <table class="table table-bordered mt-4">
-                        <thead class="table-dark">
+                        <thead class="table-secondary">
                             <tr>
                                 <th>Domain</th>
                                 <th class="{{ $statusClass }}">{{ $statusLabel }}</th>

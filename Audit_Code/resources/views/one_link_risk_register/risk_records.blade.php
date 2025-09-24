@@ -34,7 +34,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="riskTable" class="table table-bordered table-hover text-center align-middle">
-                                <thead class="table-dark">
+                                <thead class="table-secondary">
                                    <tr>
                             <th onclick="sortTable(0, 'numeric')">S.NO</th>
                             <th onclick="sortTable(1, 'alpha')">Risk Id</th>

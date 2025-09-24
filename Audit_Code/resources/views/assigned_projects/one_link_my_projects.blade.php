@@ -16,7 +16,7 @@
     <div class="card shadow-lg border-0">
         <div class="card-body">
             <table class="table table-hover text-center" id="myTable">
-                <thead class="table-dark">
+                <thead class="table-secondary">
                     <tr>
                         <th style='text-align:center'>Project Name</th>
                         <th style='text-align:center'>Project Type</th>

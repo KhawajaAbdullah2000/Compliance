@@ -15,7 +15,7 @@
 
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered table-secondary">
+            <table class="table table-bordered table-warning">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -76,7 +76,9 @@ If you choose to select values for “Applicable” and “Compliance Status” 
 
     </h4> --}}
 
-
+@if($project->project_type==27)
+<a href="/add_non_standard_control/{{$project->project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-primary btn-md">Add a Custom Control</a>
+@endif
 <div class="row h-100 w-100 mb-2">
     <form action="/add_mandatory_all_title_all_controls/{{ $project_id }}/{{ auth()->user()->id }}/{{ $asset->assessment_id }}" method="POST">
         @csrf

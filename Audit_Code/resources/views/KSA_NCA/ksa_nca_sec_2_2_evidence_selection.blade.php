@@ -101,7 +101,7 @@
         <div class="row mt-2" >
             <div class="col-12">
 
-         <a href="/ksa_nca_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Assess compliance against controls
+         <a href="/ksa_nca_sec_2_2_subsections/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" class="btn btn-lg btn-warning w-100"><p class="fw-bold" style="text-align: left;">Assess compliance 
             @if($project->project_type==7)
            for KSA National Cybersecurity Authority (NCA)
             @elseif($project->project_type==18)

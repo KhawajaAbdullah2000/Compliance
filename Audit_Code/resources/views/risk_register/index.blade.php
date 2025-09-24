@@ -36,7 +36,7 @@
                         ];
                         @endphp
 
-                        <thead class="table-dark">
+                        <thead class="table-secondary">
                             <tr>
                                 @foreach ($columns as $col)
                                 @if (!in_array($col['key'], $hiddenKeys))

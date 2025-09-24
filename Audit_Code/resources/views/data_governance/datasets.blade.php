@@ -48,7 +48,7 @@ $isEditable = in_array('Data Inputter', $permissions);
     @forelse($datasets as $dataset)
     <h5 class="mt-4">Dataset #{{ $dataset->id }}</h5>
     <table id="dataCatalogTable" class="table table-bordered table-striped">
-        <thead class="table-dark">
+        <thead class="table-secondary">
             <tr class="text-center">
                 @foreach($dataset->attributes as $attribute)
                     <th>{{ $attribute->attribute_name }}</th>

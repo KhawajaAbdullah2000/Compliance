@@ -48,7 +48,7 @@
     {{-- Table --}}
     <div class="table-responsive">
         <table class="table table-bordered table-striped table-hover" id="csvTable">
-            <thead class="table-dark">
+            <thead class="table-secondary">
                 <tr>
                     @foreach($headers as $header)
                         <th>{{ $header }}</th>

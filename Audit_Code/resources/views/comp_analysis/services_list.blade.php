@@ -19,7 +19,7 @@
 
    <div class="mt-4">
     <table class="table table-responsive table-bordered table-hover table-striped">
-           <thead class="table-dark">
+           <thead class="table-secondary">
         <tr>
             <th>Service Name</th>
             <th>Group Name</th>

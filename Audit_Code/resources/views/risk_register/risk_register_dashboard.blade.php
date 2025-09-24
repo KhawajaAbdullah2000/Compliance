@@ -36,7 +36,7 @@ $likelihoodLevels = [
         <h3 class="fw-bold text-center">View Risk Register</h3>
 
         <table class="table table-responsive table-bordered table-hover text-center align-middle">
-            <thead class="table-dark">
+            <thead class="table-secondary">
                 <tr>
                     <th rowspan="2">Asset <br> Component</th>
                     <th colspan="3">Consequence</th>

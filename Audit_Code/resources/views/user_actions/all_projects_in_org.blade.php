@@ -39,7 +39,7 @@
         <div class="card-body">
 
             <table class="table table-hover table-bordered text-center table-striped">
-                <thead class="table-dark">
+                <thead class="table-secondary">
                     <tr>
                         <th>User</th>
                         <th>Created Projects</th>

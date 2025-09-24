@@ -35,7 +35,7 @@
             </div>
 
             <table class="table table-bordered table-hover text-center align-middle mt-2">
-                <thead class="table-dark">
+                <thead class="table-secondary">
                     <tr>
                         <th>Risk Id</th>
                         <th>Date of Risk Identification</th>

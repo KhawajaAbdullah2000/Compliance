@@ -83,7 +83,7 @@ $isEditable = in_array('Data Inputter', $permissions);
 
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
-                    <thead class="table-dark">
+                    <thead class="table-secondary">
                         <tr>
                             <th>Likelihood</th>
                             <th>Description</th>

@@ -11,7 +11,7 @@
     <div class="card shadow-lg border-0">
         <div class="card-body">
             <table class="table table-hover table-bordered align-middle" id="myTable">
-                <thead class="table-dark">
+                <thead class="table-secondary">
                     <tr>
                         
                         <th class="text-center">Name</th>

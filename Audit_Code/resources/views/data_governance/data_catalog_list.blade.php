@@ -33,7 +33,7 @@ $isEditable = in_array('Data Inputter', $permissions);
         </div>
     </div>
     <table id="dataCatalogTable" class="table table-bordered table-striped">
-        <thead class="table-dark">
+        <thead class="table-secondary">
             <tr>
                 <th>Name</th>
                 <th>Data Source</th>

@@ -55,7 +55,7 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
 </a>
 
   <table class="table table-responsive table-bordered">
-                <thead class="table-dark">
+                <thead class="table-secondary">
             <tr>
                 <th>Auditable unit or activity or function or process</th>
                 <th>Planned Start</th>

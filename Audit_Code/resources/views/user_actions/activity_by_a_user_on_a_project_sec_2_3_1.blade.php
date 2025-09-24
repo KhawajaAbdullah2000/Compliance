@@ -40,7 +40,7 @@
     <div class="card shadow-lg border-0 mt-4">
         <div class="card-body">
             <table class="table table-bordered table-striped">
-                <thead class="table-dark">
+                <thead class="table-secondary">
                     <tr>
                         <th>Service</th>
                         <th>Group</th>

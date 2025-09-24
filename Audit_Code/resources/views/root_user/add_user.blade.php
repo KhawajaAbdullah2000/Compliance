@@ -60,7 +60,7 @@
         <div class="card-body p-4">
             <div class="table-responsive">
                 <table class="table table-hover table-bordered text-center align-middle">
-                    <thead class="table-dark">
+                    <thead class="table-secondary">
                         <tr>
                             <th class="py-3">Organization Name</th>
                             <th class="py-3">Actions</th>

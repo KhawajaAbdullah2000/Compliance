@@ -45,7 +45,7 @@ $permissions = json_decode($project_permissions);
     @endif
 
     <table class="table table-responsive table-bordered table-striped">
-        <thead class="table-dark">
+        <thead class="table-secondary">
             <tr>
                 <th>Scenario Title</th>
                 <th>Party Name</th>

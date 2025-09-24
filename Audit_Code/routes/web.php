@@ -747,6 +747,10 @@ Route::middleware(['auth', 'is_user', 'role:end user'])->group(
 
 
 
+        //nonstandrd
+        ROute::get('add_non_standard_control/{proj_id}/{user_id}/{asset_id}',[KSA_NCA::class,'add_non_standard_control'])->name('add_non_standard_control');
+        Route::post('save_non_standard_custom_form/{proj_id}/{asset_id}',[KSA_NCA::class,'save_non_standard_custom_form']);
+
 
         //CY SAMA
         route::get("cy_sama_subsections/{proj_id}/{user_id}/{asset_id}", [CY_SAMA::class, 'cy_sama_subsections'])->name('cy_sama_subsections');

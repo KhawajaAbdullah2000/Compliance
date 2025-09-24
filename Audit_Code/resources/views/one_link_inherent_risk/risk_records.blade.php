@@ -43,7 +43,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover text-center align-middle">
-                                <thead class="table-dark">
+                                <thead class="table-secondary">
                                     <tr>
                                         <th>S.NO</th>
                                         <th>Risk Id</th>

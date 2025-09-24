@@ -56,7 +56,7 @@ $isEditable = in_array('Data Inputter', $permissions);
     </p>
 
       <table class="table mt-4 table-responsive table-bordered table-striped">
-    <thead class="table-dark">
+    <thead class="table-secondary">
         <tr>
             <th>Strategic No.</th>
             <th>Scenario Title</th>
@@ -154,7 +154,7 @@ $isEditable = in_array('Data Inputter', $permissions);
     
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
-                    <thead class="table-dark">
+                    <thead class="table-secondary">
                         <tr>
                             <th>Likelihood</th>
                             <th>Description</th>

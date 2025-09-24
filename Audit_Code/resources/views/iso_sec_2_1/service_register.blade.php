@@ -15,7 +15,7 @@
 
     <!-- Data Table -->
     <table id="myTable2" class="table table-bordered table-hover table-striped align-middle">
-        <thead class="table-dark ">
+        <thead class="table-secondary">
             <tr style="cursor: pointer" class="text-center">
                 <th onclick="sortTable(0)">Service</th>
                 <th onclick="sortTable(1)">Asset Type</th>

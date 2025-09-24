@@ -17,7 +17,7 @@
         <h4 class="fw-bold text-primary mt-4">{{ $titleNum }}. {{ $records->first()['title'] }}</h4>
 
         <table class="table table-bordered table-hover text-center align-middle mt-3">
-            <thead class="table-dark">
+            <thead class="table-secondary">
                 <tr>
                     <th>Subdomain</th>
                     <th>Sub Req</th>
@@ -78,7 +78,7 @@
     Annex A Control: {{ $subdomain }} - {{ $annexControls->first()['subdomain_heading'] }}
 </h5>
                 <table class="table table-bordered table-hover text-center align-middle mt-2">
-                    <thead class="table-dark">
+                    <thead class="table-secondary">
                         <tr>
                             <th>Sub Req</th>
                             <th>Requirement</th>
@@ -102,7 +102,7 @@
         @else
 
             <table class="table table-bordered table-hover text-center align-middle mt-3">
-                <thead class="table-dark">
+                <thead class="table-secondary">
                     <tr>
                         <th>Subdomain</th>
                         <th>Sub Req</th>

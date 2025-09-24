@@ -48,7 +48,7 @@
 
                     <div class="table-responsive">
                         <table class="table table-striped table-hover align-middle text-center">
-                            <thead class="table-dark">
+                            <thead class="table-secondary">
                                 <tr>
                                     <th scope="col">Department</th>
                                     <th scope="col">Add Unit</th>

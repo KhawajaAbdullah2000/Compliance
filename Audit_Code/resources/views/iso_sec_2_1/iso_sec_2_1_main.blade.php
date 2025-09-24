@@ -26,9 +26,9 @@ $permissions = json_decode($project_permissions);
         @if($page_type=='services_register')
         Services & Assets Register
         @elseif($page_type=='assess_compliance')
-        Assess Compliance against Controls
+        Assess Compliance 
         @elseif($page_type=="risk_assessment")
-        Assess Risk against Controls
+        Assess Risk 
         @endif
     </h2>
 

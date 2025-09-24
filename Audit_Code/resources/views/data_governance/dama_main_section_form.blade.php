@@ -43,7 +43,7 @@ $isEditable = in_array('Data Inputter', $permissions);
 </p>
 
 <table class="table table-bordered align-middle">
-    <thead class="table-dark">
+    <thead class="table-secondary">
         <tr>
             <th style="width: 50%">KPI</th>
             <th style="width: 10%">Actual Measured Value</th>

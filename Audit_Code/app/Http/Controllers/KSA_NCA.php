@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use APP\Models\User;
 use APP\Models\DocumentRepository;
 use App\Models\IsoSec22;
+use Illuminate\Validation\Rule;
 
 class KSA_NCA extends Controller
 {
@@ -79,10 +80,23 @@ class KSA_NCA extends Controller
                 });
 
 
+                if ($checkpermission->type_id == 27) {
+
+                    $domainNames = DB::table('non_standard_custom_data')
+                        ->where('project_id', $proj_id)
+                        ->select('domain_num', 'domain_title')
+                        ->distinct()
+                        ->pluck('domain_title', 'domain_num')
+                        ->toArray();
+                } else {
+                    $domainNames = config('domain-names')[$project->project_type] ?? [];
+                }
+
                 //  dd($finalApplicabilityByTitle);
 
 
-                $domainNames = config('domain-names')[$project->project_type] ?? [];
+
+
 
 
 
@@ -101,10 +115,174 @@ class KSA_NCA extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
+    public function add_non_standard_control($proj_id, $user_id, $asset_id)
+    {
+        if ($user_id == auth()->user()->id) {
+            $checkpermission = Db::table('project_details')->select(
+                'project_types.id as type_id',
+                'project_details.project_code',
+                'project_details.project_permissions',
+                'projects.project_name',
+                'projects.project_id'
+            )
+                ->join('projects', 'project_details.project_code', 'projects.project_id')
+                ->join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
+                ->first();
+            if ($checkpermission) {
+
+                $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                    ->where('projects.project_id', $proj_id)->first();
+
+                $domains = DB::table('non_standard_custom_data')
+                    ->where('project_id', $proj_id)
+                    ->select('domain_num', 'domain_title')
+                    ->distinct()
+                    ->get();
+
+                $subdomains = DB::table('non_standard_custom_data')
+                    ->where('project_id', $proj_id)
+                    ->select('sub_domain_num', 'sub_domain_title', 'domain_num')
+                    ->distinct()
+                    ->get();
+
+                $subreqs = DB::table('non_standard_custom_data')
+                    ->where('project_id', $proj_id)
+                    ->select('sub_req_num', 'sub_req_title', 'sub_domain_num', 'domain_num')
+                    ->distinct()
+                    ->get();
+                return view('KSA_NCA.add_non_standard_control', [
+                    'project_id' => $checkpermission->project_id,
+                    'project_name' => $checkpermission->project_name,
+                    'project' => $project,
+                    'project_permissions' => $checkpermission->project_permissions,
+                    'domains' => $domains,
+                    'subdomains' => $subdomains,
+                    'subreqs' => $subreqs,
+                    'asset_id' => $asset_id
+
+                ]);
+            }
+        }
+    }
+
+    public function save_non_standard_custom_form($proj_id, $asset_id, Request $req)
+    {
+
+        // $validated = $req->validate([
+        //     'project_id' => 'required|exists:projects,project_id',
+        //     'domain_title' => 'required|string',
+        //     'sub_domain_title' => 'required|string',
+        //     'sub_req_title' => 'required|string',
+        // ]);
+        $validated = $req->validate([
+            'project_id' => 'required|exists:projects,project_id',
+
+            // Only require title if user is creating a NEW domain
+            'domain_title' => [
+                Rule::requiredIf(function () use ($req) {
+                    return empty($req->domain_num) && !empty($req->domain_num_new);
+                }),
+                'string',
+                'nullable'
+            ],
+
+            // Only require if NEW subdomain
+            'sub_domain_title' => [
+                Rule::requiredIf(function () use ($req) {
+                    return empty($req->sub_domain_num) && !empty($req->sub_domain_num_new);
+                }),
+                'string',
+                'nullable'
+            ],
+
+            // Only require if NEW subreq
+            'sub_req_title' => [
+                Rule::requiredIf(function () use ($req) {
+                    return empty($req->sub_req_num) && !empty($req->sub_req_num_new);
+                }),
+                'string',
+                'nullable'
+            ],
+        ]);
+
+
+        // Determine domain num (existing or new)
+        $domainNum = $req->domain_num ?: $req->domain_num_new;
+        $subDomainNum = $req->sub_domain_num ?: $req->sub_domain_num_new;
+        $subReqNum = $req->sub_req_num_new;
+
+
+
+
+        // Ensure unique
+        $exists = DB::table('non_standard_custom_data')
+            ->where('project_id', $req->project_id)
+            ->where('domain_num', $domainNum)
+            ->where('sub_domain_num', $subDomainNum)
+            ->where('sub_req_num', $subReqNum)
+            ->exists();
+
+        if ($exists) {
+            return back()->withErrors(['duplicate' => 'This combination already exists!'])->withInput();
+        }
+
+        if ($req->domain_num) {
+            // Existing domain → fetch its title
+            $domainTitle = DB::table('non_standard_custom_data')
+                ->where('project_id', $req->project_id)
+                ->where('domain_num', $domainNum)
+                ->value('domain_title');
+        } else {
+            // New domain → use user input
+            $domainTitle = $req->domain_title;
+        }
+
+        // --- Subdomain Title ---
+        if ($req->sub_domain_num) {
+            $subDomainTitle = DB::table('non_standard_custom_data')
+                ->where('project_id', $req->project_id)
+                ->where('domain_num', $domainNum)
+                ->where('sub_domain_num', $subDomainNum)
+                ->value('sub_domain_title');
+        } else {
+            $subDomainTitle = $req->sub_domain_title;
+        }
+
+        // --- Subreq Title ---
+        if ($req->sub_req_num) {
+            $subReqTitle = DB::table('non_standard_custom_data')
+                ->where('project_id', $req->project_id)
+                ->where('domain_num', $domainNum)
+                ->where('sub_domain_num', $subDomainNum)
+                ->where('sub_req_num', $subReqNum)
+                ->value('sub_req_title');
+        } else {
+            $subReqTitle = $req->sub_req_title;
+        }
+
+        DB::table('non_standard_custom_data')->insert([
+            'project_id' => $req->project_id,
+            'domain_num' => $domainNum,
+            'sub_domain_num' => $subDomainNum,
+            'sub_req_num' => $subReqNum,
+            'domain_title'      => $domainTitle,
+            'sub_domain_title'  => $subDomainTitle,
+            'sub_req_title'     => $subReqTitle,
+        ]);
+
+
+        return redirect()->route('ksa_nca_subsections', [
+            'proj_id' => $proj_id,
+            'user_id' => auth()->user()->id,
+            'asset_id' => $asset_id
+
+        ])->with('success', 'Control added successfully!');
+    }
+
 
     public function ksa_nca_section_2_2($title_num, $proj_id, $user_id, $asset_id)
     {
-
 
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -177,8 +355,7 @@ class KSA_NCA extends Controller
 
 
 
-                $data = Excel::toArray([], $filepath); //with header
-                $rows = array_slice($data[0], 1); //without header(first row)
+
 
 
 
@@ -186,10 +363,36 @@ class KSA_NCA extends Controller
                     ->where('projects.project_id', $proj_id)->first();
 
 
+                if ($checkpermission->type_id == 27) {
+                    $filteredData = DB::table('non_standard_custom_data')
+                        ->where('project_id', $proj_id)
+                        ->where('domain_num', $title_num)
+                        ->distinct()
+                        ->get()
+                        ->map(function ($item) {
+                            return [
+                                $item->domain_num,
+                                $item->domain_title,
+                                $item->sub_domain_num,
+                                $item->sub_domain_title,
+                                $item->sub_req_num,
+                                $item->sub_req_title,
+                                null
+                            ];
+                        })
+                        ->toArray();
 
-                $filteredData = collect($rows)->filter(function ($row) use ($title_num) {
-                    return strval($row[0]) === $title_num;
-                })->values()->all();
+
+                } else {
+                    $data = Excel::toArray([], $filepath); //with header
+                    $rows = array_slice($data[0], 1); //without header(first row)
+                    $filteredData = collect($rows)->filter(function ($row) use ($title_num) {
+                        return strval($row[0]) === $title_num;
+                    })->values()->all();
+               
+                }
+
+
 
 
 
@@ -228,7 +431,7 @@ class KSA_NCA extends Controller
                         return $item;
                     });
 
-            
+
 
                 $finalStatusBySubdomain = $results->groupBy('subdomain')->map(function ($items) {
                     $statuses = $items->pluck('comp_status')->filter()->unique();
@@ -681,11 +884,11 @@ class KSA_NCA extends Controller
                         $filepath = public_path('DigitalBankingSecurity.xlsx');
                     }
 
-                     if ($checkpermission->type_id == 26) {
+                    if ($checkpermission->type_id == 26) {
                         $filepath = public_path('SBP_Payment_Card_Security_Standard.xlsx');
                     }
 
-                    
+
 
                     $docIds = collect($req->input('document_ids', []))
                         ->filter(fn($v) => $v !== null && $v !== '' && $v !== '0')
@@ -1590,6 +1793,7 @@ class KSA_NCA extends Controller
     public function add_mandatory_all_title_all_controls(Request $req, $proj_id, $user_id, $asset_id)
     {
 
+
         if ($user_id != auth()->user()->id) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
@@ -1616,6 +1820,24 @@ class KSA_NCA extends Controller
         $statuses = $req->input('comp_statuses');
         $applicabilities = $req->input('applicabilities');
         $justifications = $req->input('justifications');
+
+
+
+        $evidenceLevel = $req->session()->get('evidenceLevel');
+
+        $assetDetails = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
+
+        $assets = collect();
+
+        if ($evidenceLevel === 'name') {
+            $assets = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('name', $assetDetails->name)->get();
+        } elseif ($evidenceLevel === 'group') {
+            $assets = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('g_name', $assetDetails->g_name)->get();
+        } elseif ($evidenceLevel === 'service') {
+            $assets = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('s_name', $assetDetails->s_name)->get();
+        } elseif ($evidenceLevel === 'project') {
+            $assets = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->get();
+        }
 
         $filepath = "";
         if ($checkpermission->id == 4) {
@@ -1658,33 +1880,13 @@ class KSA_NCA extends Controller
             $filepath = public_path('DigitalBankingSecurity_Modified.xlsx');
         }
 
-            if ($checkpermission->id == 26) {
+        if ($checkpermission->id == 26) {
             $filepath = public_path('SBP_Payment_Card_Security_Standard_Modified.xlsx');
         }
 
 
-
-
-        $evidenceLevel = $req->session()->get('evidenceLevel');
-
-        $assetDetails = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('assessment_id', $asset_id)->first();
-
-        $assets = collect();
-
-        if ($evidenceLevel === 'name') {
-            $assets = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('name', $assetDetails->name)->get();
-        } elseif ($evidenceLevel === 'group') {
-            $assets = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('g_name', $assetDetails->g_name)->get();
-        } elseif ($evidenceLevel === 'service') {
-            $assets = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->where('s_name', $assetDetails->s_name)->get();
-        } elseif ($evidenceLevel === 'project') {
-            $assets = DB::table('iso_sec_2_1')->where('project_id', $proj_id)->get();
-        }
-
-        $data2 = Excel::toArray([], $filepath);
-        $rows = array_slice($data2[0], 1);
-
         foreach ($titles as $index => $title) {
+
 
             $compStatus = $statuses[$index];
             $applicability = $applicabilities[$index];
@@ -1712,40 +1914,83 @@ class KSA_NCA extends Controller
                 $data['justification'] = $justification;
             }
 
-            $filteredData = collect($rows)->filter(function ($row) use ($title) {
-                return strval($row[0]) === (string)$title;
-            })->values();
+            if ($checkpermission->id == 27) {
 
-            if ($evidenceLevel === 'component') {
-                foreach ($filteredData as $innerArray) {
-                    DB::table('iso_sec_2_2')->updateOrInsert(
-                        [
-                            'project_id' => $proj_id,
-                            'asset_id' => $asset_id,
-                            'title_num' => $innerArray[0],
-                            'sub_req' => $innerArray[3],
-                            'subdomain' => $innerArray[1]
-                        ],
-                        $data
-                    );
+                $filteredData = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
+                    ->where('domain_num', $title)
+                    ->get();
 
-                    DB::table('audit_iso_sec_2_2')->Insert(
-                        array_merge([
-                            'project_id' => $proj_id,
-                            'asset_id' => $asset_id,
-                            'title_num' => $innerArray[0],
-                            'sub_req' => $innerArray[3],
-                            'subdomain' => $innerArray[1]
-                        ], $data)
-                    );
+
+                if ($evidenceLevel === 'component') {
+                    foreach ($filteredData as $innerArray) {
+
+                        DB::table('iso_sec_2_2')->updateOrInsert(
+                            [
+                                'project_id' => $proj_id,
+                                'asset_id' => $asset_id,
+                                'title_num' => $innerArray->domain_num,
+                                'sub_req' => $innerArray->sub_req_num,
+                                'subdomain' => $innerArray->sub_domain_num
+                            ],
+                            $data
+                        );
+
+                        DB::table('audit_iso_sec_2_2')->Insert(
+                            array_merge([
+                                'project_id' => $proj_id,
+                                'asset_id' => $asset_id,
+                                'title_num' => $innerArray->domain_num,
+                                'sub_req' => $innerArray->sub_req_num,
+                                'subdomain' => $innerArray->sub_domain_num
+                            ], $data)
+                        );
+                    }
+                } else {
+                    //evidence level not component
+                    foreach ($assets as $ass) {
+                        foreach ($filteredData as $innerArray) {
+                            DB::table('iso_sec_2_2')->updateOrInsert(
+                                [
+                                    'project_id' => $proj_id,
+                                    'asset_id' => $ass->assessment_id,
+                                    'title_num' => $innerArray->domain_num,
+                                    'sub_req' => $innerArray->sub_req_num,
+                                    'subdomain' => $innerArray->sub_domain_num
+                                ],
+                                $data
+                            );
+
+                            DB::table('audit_iso_sec_2_2')->Insert(
+                                array_merge([
+                                    'project_id' => $proj_id,
+                                    'asset_id' => $ass->assessment_id,
+                                    'title_num' => $innerArray->domain_num,
+                                    'sub_req' => $innerArray->sub_req_num,
+                                    'subdomain' => $innerArray->sub_domain_num
+                                ], $data)
+
+
+                            );
+                        }
+                    }
                 }
+                //return redirect()->back()->with('success', 'All controls updated successfully.');
             } else {
-                foreach ($assets as $ass) {
+                $data2 = Excel::toArray([], $filepath);
+                $rows = array_slice($data2[0], 1);
+
+                $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                    return strval($row[0]) === (string)$title;
+                })->values();
+
+
+
+                if ($evidenceLevel === 'component') {
                     foreach ($filteredData as $innerArray) {
                         DB::table('iso_sec_2_2')->updateOrInsert(
                             [
                                 'project_id' => $proj_id,
-                                'asset_id' => $ass->assessment_id,
+                                'asset_id' => $asset_id,
                                 'title_num' => $innerArray[0],
                                 'sub_req' => $innerArray[3],
                                 'subdomain' => $innerArray[1]
@@ -1756,14 +2001,39 @@ class KSA_NCA extends Controller
                         DB::table('audit_iso_sec_2_2')->Insert(
                             array_merge([
                                 'project_id' => $proj_id,
-                                'asset_id' => $ass->assessment_id,
+                                'asset_id' => $asset_id,
                                 'title_num' => $innerArray[0],
                                 'sub_req' => $innerArray[3],
                                 'subdomain' => $innerArray[1]
                             ], $data)
-
-
                         );
+                    }
+                } else {
+                    foreach ($assets as $ass) {
+                        foreach ($filteredData as $innerArray) {
+                            DB::table('iso_sec_2_2')->updateOrInsert(
+                                [
+                                    'project_id' => $proj_id,
+                                    'asset_id' => $ass->assessment_id,
+                                    'title_num' => $innerArray[0],
+                                    'sub_req' => $innerArray[3],
+                                    'subdomain' => $innerArray[1]
+                                ],
+                                $data
+                            );
+
+                            DB::table('audit_iso_sec_2_2')->Insert(
+                                array_merge([
+                                    'project_id' => $proj_id,
+                                    'asset_id' => $ass->assessment_id,
+                                    'title_num' => $innerArray[0],
+                                    'sub_req' => $innerArray[3],
+                                    'subdomain' => $innerArray[1]
+                                ], $data)
+
+
+                            );
+                        }
                     }
                 }
             }
@@ -1777,7 +2047,7 @@ class KSA_NCA extends Controller
 
     public function add_mandatory_all_domain_all_controls(Request $req, $proj_id, $user_id, $asset_id)
     {
- 
+
         if ($user_id != auth()->user()->id) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
@@ -1821,7 +2091,7 @@ class KSA_NCA extends Controller
             24 => 'ISO27701_2019v2_Modified.xlsx',
             6 => 'SBP_ETGRMF_Modified.xlsx',
             25 => 'DigitalBankingSecurity_Modified.xlsx',
-            26=>'SBP_Payment_Card_Security_Standard_Modified.xlsx'
+            26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx'
         ];
 
 
@@ -1871,7 +2141,7 @@ class KSA_NCA extends Controller
 
 
                 foreach ($filteredData as $innerArray) {
-                    
+
                     DB::table('iso_sec_2_2')->updateOrInsert(
                         [
                             'project_id' => $proj_id,
@@ -2021,7 +2291,7 @@ class KSA_NCA extends Controller
             24 => 'ISO27701_2019v2_Modified.xlsx',
             6 => 'SBP_ETGRMF_Modified.xlsx',
             25 => 'DigitalBankingSecurity_Modified.xlsx',
-            26=>'SBP_Payment_Card_Security_Standard_modified.xlsx'
+            26 => 'SBP_Payment_Card_Security_Standard_modified.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
@@ -2215,7 +2485,7 @@ class KSA_NCA extends Controller
             24 => 'ISO27701_2019v2.xlsx',
             6 => 'SBP_ETGRMF.xlsx',
             25 => 'DigitalBankingSecurity.xlsx',
-            26=>'SBP_Payment_Card_Security_Standard.xlsx'
+            26 => 'SBP_Payment_Card_Security_Standard.xlsx'
         ];
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
@@ -2307,7 +2577,7 @@ class KSA_NCA extends Controller
             24 => 'ISO27701_2019v2.xlsx',
             6 => 'SBP_ETGRMF.xlsx',
             25 => 'DigitalBankingSecurity.xlsx',
-             26=>'SBP_Payment_Card_Security_Standard.xlsx'
+            26 => 'SBP_Payment_Card_Security_Standard.xlsx'
         ];
 
 
@@ -2322,7 +2592,7 @@ class KSA_NCA extends Controller
             ->get();
 
         $finalData = [];
-      
+
         foreach ($data as $record) {
             $matchingRow = collect($rows)->first(function ($row) use ($record) {
                 return strval($row[0]) === $record->title_num && // Title number

@@ -49,7 +49,7 @@
 
     <h4 class="fw-bold">{{$service_name}}</h4>
     <table class='table table-hover table-responsive'>
-        <thead class="table-dark">
+        <thead class="table-secondary">
             <tr>
                 <th>Asset</th>
                 <th>Compliance %</th>

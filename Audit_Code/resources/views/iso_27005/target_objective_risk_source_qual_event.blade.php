@@ -29,7 +29,7 @@
             @csrf
             
             <table class="table table-bordered align-middle table-hover">
-                <thead class="table-dark">
+                <thead class="table-secondary">
                     <tr>
                         <th>
                             <input type="checkbox" id="selectAllCheckbox">

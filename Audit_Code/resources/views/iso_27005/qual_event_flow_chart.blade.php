@@ -14,7 +14,7 @@
 
         </div>
     </div>
-    <h3 class="fw-bold mt-2">Assess Risk against Controls for:</h3>
+    <h3 class="fw-bold mt-2">Assess Risk  for:</h3>
 
     @if($complianceFramework->framework_id==2 && $risk_assessment_approach->global_risk_assessment_approach_id==1 && $framework_approach->framework_approach_types_id==1)
     <p class="fs-4 mt-4"><span class="fw-bold">Methodology:</span> Qualitative Event Based</p>

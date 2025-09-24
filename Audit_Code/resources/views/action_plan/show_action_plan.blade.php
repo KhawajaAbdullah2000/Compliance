@@ -99,7 +99,7 @@
     @if($action_plan_type=='Mandatory'|| $action_plan_type=='Both')
 
     <table class="table table-bordered mt-4">
-        <thead class="table-dark">
+        <thead class="table-secondary">
             <tr>
                 <th>Req No.</th>
                 <th>Compliance Status</th>
@@ -161,7 +161,7 @@
 
     @if($action_plan_type=='Treatment'|| $action_plan_type=='Both')
     <table class="table table-bordered mt-4">
-        <thead class="table-dark">
+        <thead class="table-secondary">
             <tr>
                 <th>Req No.</th>
                 <th>Action</th>

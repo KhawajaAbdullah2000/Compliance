@@ -14,7 +14,7 @@
         <div class="col-md-8">
 
             <table class="table table-bordered table-responsive">
-                <thead class="table-dark">
+                <thead class="table-secondary">
                     <th>Project Type</th>
                     <th>Current Classification Level</th>
                     <th>Action</th>

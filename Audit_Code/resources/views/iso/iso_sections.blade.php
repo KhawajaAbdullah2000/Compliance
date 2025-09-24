@@ -104,7 +104,7 @@ class="btn btn-lg my_bg_color text-white w-100 text-start py-3">
                     <i class="fas fa-shield-alt fa-lg me-3 text-success"></i>
                     <div>
                         <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}/assess_compliance" class="stretched-link text-decoration-none text-dark fw-bold">
-                            Assess compliance against controls
+                            Assess compliance 
                         </a>
 
                     </div>
@@ -117,7 +117,7 @@ class="btn btn-lg my_bg_color text-white w-100 text-start py-3">
                     <i class="fas fa-tools fa-lg me-3 text-secondary"></i>
                     <div>
                         <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}/risk_assessment" class="stretched-link text-decoration-none text-dark fw-bold">
-                            Assess Risk against Controls
+                            Assess Risk 
                         </a>
                     </div>
                 </div>

@@ -25,7 +25,7 @@
 <h3 class="fw-bold mt-4">Sub-Organizations in {{$org->name}}</h3>
  
 <table class="table table-responsive table-striped border rounded">
-    <thead class="table-dark">
+    <thead class="table-secondary">
         <tr>
             <th>Sub-Organization Name</th>
             <th class="text-center">Actions</th>

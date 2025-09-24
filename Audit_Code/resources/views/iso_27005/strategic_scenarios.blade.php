@@ -88,7 +88,7 @@
 
     <h4 class="fw-bold">Scenarios Added so far</h4>
     <table class="table table-responsive table-bordered table-striped">
-        <thead class="table-dark">
+        <thead class="table-secondary">
             <tr>
                 <th>Scenario</th>
                 <th>Delete</th>

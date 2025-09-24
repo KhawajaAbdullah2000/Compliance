@@ -30,7 +30,7 @@ default => ['label' => 'Unknown', 'class' => 'text-muted'],
 
         </div>
     </div>
-    <h3 class="fw-bold mt-2 mb-2">Assess Risk against Controls for:</h3>
+    <h3 class="fw-bold mt-2 mb-2">Assess Risk  for:</h3>
 
     @include('components.asset-summary_component', ['asset' => $asset])
 

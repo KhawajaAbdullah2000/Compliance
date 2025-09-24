@@ -89,7 +89,7 @@ The organization will overcome the situation without too much difficulty (margin
                     @endphp
 
                     <table class="table table-bordered text-center align-middle">
-                        <thead class="table-dark">
+                        <thead class="table-secondary">
                             <tr>
                                 <th>Loss of Data Confidentiality</th>
                                 <th>Loss of Data Integrity</th>
@@ -141,7 +141,7 @@ The organization will overcome the situation without too much difficulty (margin
     </div>
 @else
     <table class="table table-bordered text-center align-middle">
-        <thead class="table-dark">
+        <thead class="table-secondary">
             <tr>
                 <th>Loss of Data Confidentiality</th>
                 <th>Loss of Data Integrity</th>

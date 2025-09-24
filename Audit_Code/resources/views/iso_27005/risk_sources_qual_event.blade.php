@@ -28,7 +28,7 @@
         <div class="col-md-8 mb-4">
 
             <table class="table table-bordered align-middle">
-                <thead class="table-dark">
+                <thead class="table-secondary">
                     <tr>
                         <th scope="col">Risk Source (Threats)</th>
                         <th scope="col">Target Objective of Risk Source</th>

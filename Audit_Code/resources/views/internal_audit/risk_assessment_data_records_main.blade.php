@@ -56,7 +56,7 @@ class="btn btn-md btn-secondary float-end me-2 mb-2">
 </a>
 
   <table class="table table-responsive table-bordered">
-                <thead class="table-dark">
+                <thead class="table-secondary">
             <tr>
                 <th>Record</th>
                 <th>Audit Approach</th>

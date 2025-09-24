@@ -54,7 +54,7 @@
                 </p>
 
                 <table class="table table-bordered table-striped text-center">
-                    <thead class="table-dark">
+                    <thead class="table-secondary">
                         <tr>
                             <th>Approximate average frequency</th>
                             <th>Log expression</th>
