@@ -7,25 +7,25 @@
 
 @include('iso_sec_nav')
 @php
-    // Decode as array (important for in_array)
-    $permissions = json_decode($project_permissions, true) ?? [];
+// Decode as array (important for in_array)
+$permissions = json_decode($project_permissions, true) ?? [];
 
-    $hasInputter  = in_array('Data Inputter', $permissions, true);
-    $hasViewer    = in_array('Data Viewer', $permissions, true);
-    $hasApprover  = in_array('Data Approver', $permissions, true);
-    $isApproved   = ($result?->approved == 1);
+$hasInputter = in_array('Data Inputter', $permissions, true);
+$hasViewer = in_array('Data Viewer', $permissions, true);
+$hasApprover = in_array('Data Approver', $permissions, true);
+$isApproved = ($result?->approved == 1);
 
-    // Hard override: URL/query param forces read-only
-    $forceReadOnly = ($readonly === 'readonly');
+// Hard override: URL/query param forces read-only
+$forceReadOnly = ($readonly === 'readonly');
 
-    // Editable only if: not forced read-only, has Data Inputter, and not approved
-    $isEditable = !$forceReadOnly && $hasInputter && !$isApproved;
+// Editable only if: not forced read-only, has Data Inputter, and not approved
+$isEditable = !$forceReadOnly && $hasInputter && !$isApproved;
 
-    // Read-only if forced OR (not editable and user is viewer/approver)
-    $isReadOnly = $forceReadOnly || (!$isEditable && ($hasViewer || $hasApprover));
+// Read-only if forced OR (not editable and user is viewer/approver)
+$isReadOnly = $forceReadOnly || (!$isEditable && ($hasViewer || $hasApprover));
 
-    // If you still need this flag elsewhere:
-    $isApprover = $hasApprover;
+// If you still need this flag elsewhere:
+$isApprover = $hasApprover;
 @endphp
 
 
@@ -67,7 +67,7 @@
 
     @if(Session('evidenceLevel')=='project')
 
-    <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}">View Services and Assets in this Project</a>
+    <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}/assess_compliance">View Services and Assets in this Project</a>
 
     @endif
 
@@ -117,217 +117,215 @@
                     </div>
 
                     <!-- Attachment -->
-                     <div class="mb-4">
-                            <label for="attachment" class="form-label fw-semibold">Attachment (Optional)</label>
-                            @if($isEditable)
-                                <input type="file" name="attachment" class="form-control">
-                            @endif
-                            @if(isset($result->attachment))
-                                <p class="mt-3">Current Attachment: 
-                                    <a href="{{ asset('ksa_nca_sec_2_2/'.$result->attachment) }}" download>{{ $result->attachment }}</a>
-                    </p>
+                    <div class="mb-4">
+                        <label for="attachment" class="form-label fw-semibold">Attachment (Optional)</label>
+                        @if($isEditable)
+                        <input type="file" name="attachment" class="form-control">
+                        @endif
+                        @if(isset($result->attachment))
+                        <p class="mt-3">Current Attachment:
+                            <a href="{{ asset('ksa_nca_sec_2_2/'.$result->attachment) }}" download>{{ $result->attachment }}</a>
+                        </p>
+                        @endif
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold d-flex align-items-center">
+                            Attach from Document Repository
+                            <small class="ms-2 text-muted">(hold Ctrl/Cmd to select multiple)</small>
+                        </label>
+
+                        <select name="document_ids[]" class="form-select" multiple size="5" {{ $isReadOnly ? 'disabled' : '' }}>
+                            @foreach($org_documents as $d)
+                            @php
+                            $ext = strtoupper(pathinfo($d->path, PATHINFO_EXTENSION));
+                            @endphp
+                            <option value="{{ $d->id }}" {{ in_array($d->id, old('document_ids', $attachedIds ?? [])) ? 'selected' : '' }}>
+                                {{ $d->name }} — {{ $ext }}
+                            </option>
+                            @endforeach
+                        </select>
+
+                        <div class="form-text">
+                            Selected documents will be linked to this control.
+                        </div>
+
+                        @if(!empty($attachedIds))
+                        <div class="mt-2">
+                            <span class="fw-semibold">Currently attached:</span>
+                            <div class="mt-2 d-flex flex-wrap gap-2">
+                                @foreach($org_documents->whereIn('id',$attachedIds) as $d)
+                                <a class="badge bg-secondary text-decoration-none" href="{{ asset('storage/'.$d->path) }}" target="_blank" rel="noopener">
+                                    {{ $d->name }}
+                                </a>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
+
+
+                    </div>
+
+
+
+
+
+
+                    <h3 class="fw-bold">Action Plan</h3>
+
+                    <!-- Treatment Action -->
+                    <div class="form-group mb-4">
+                        <label for="treatment_action">Action</label>
+                        <textarea name="treatment_action" cols="70" rows="5" class="form-control" {{ $isReadOnly ? 'readonly' : '' }}>{{ old('treatment_action', $result->treatment_action ?? '') }}</textarea>
+                        @error('treatment_action')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Target Date -->
+                    <div class="form-group mb-4">
+                        <label for="treatment_target_date">Target Date</label>
+                        <input type="date" name="treatment_target_date" class="form-control" value="{{ old('treatment_target_date', $result->treatment_target_date ?? '') }}" {{ $isReadOnly ? 'disabled' : '' }}>
+                        @error('treatment_target_date')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Completion Date -->
+                    <div class="form-group mb-4">
+                        <label for="treatment_comp_date">Completion Date</label>
+                        <input type="date" name="treatment_comp_date" class="form-control" value="{{ old('treatment_comp_date', $result->treatment_comp_date ?? '') }}" {{ $isReadOnly ? 'disabled' : '' }}>
+                        @error('treatment_comp_date')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Actual Acceptance Date -->
+                    <div class="form-group mb-4">
+                        <label for="acceptance_actual_date">Actual Acceptance Date</label>
+                        <input type="date" name="acceptance_actual_date" class="form-control" value="{{ old('acceptance_actual_date', $result->acceptance_actual_date ?? '') }}" {{ $isReadOnly ? 'disabled' : '' }}>
+                        @error('acceptance_actual_date')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Responsibility Assignment -->
+                    <div class="form-group mb-4">
+                        <label for="responsibility_for_treatment">Responsibility of:</label>
+                        <select class="boxstyling form-select" name="responsibility_for_treatment" {{ $isReadOnly ? 'disabled' : '' }}>
+                            <option value="">Select User</option>
+                            @foreach ($users as $user)
+                            <option value="{{ $user->id }}" {{ old('responsibility_for_treatment', $result->responsibility_for_treatment ?? '') == $user->id ? 'selected' : '' }}>
+                                {{ $user->first_name }} {{ $user->last_name }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('responsibility_for_treatment')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    @if($isEditable)
+                    <!-- Submit Buttons -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-success px-5 rounded-pill h-100" name="action" value="1">Apply only to this mandatory requirement and save changes</button>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-success px-5 rounded-pill h-100" name="action" value="2">Apply to all mandatory requirements in the sub-domain of which this requirement is part of and save changes</button>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-success px-5 rounded-pill h-100" name="action" value="3">Apply to all mandatory requirements in the domain holding the sub-domain of which this requirement is a part and save changes</button>
+                        </div>
+                    </div>
                     @endif
-            </div> 
 
-            <div class="mb-4">
-                <label class="form-label fw-semibold d-flex align-items-center">
-                    Attach from Document Repository
-                    <small class="ms-2 text-muted">(hold Ctrl/Cmd to select multiple)</small>
-                </label>
-
-                <select name="document_ids[]" class="form-select" multiple size="5" {{ $isReadOnly ? 'disabled' : '' }}>
-                    @foreach($org_documents as $d)
-                    @php
-                    $ext = strtoupper(pathinfo($d->path, PATHINFO_EXTENSION));
-                    @endphp
-                    <option value="{{ $d->id }}" {{ in_array($d->id, old('document_ids', $attachedIds ?? [])) ? 'selected' : '' }}>
-                        {{ $d->name }} — {{ $ext }}
-                    </option>
-                    @endforeach
-                </select>
-
-                <div class="form-text">
-                    Selected documents will be linked to this control.
-                </div>
-
-                @if(!empty($attachedIds))
-  <div class="mt-2">
-    <span class="fw-semibold">Currently attached:</span>
-    <div class="mt-2 d-flex flex-wrap gap-2">
-      @foreach($org_documents->whereIn('id',$attachedIds) as $d)
-        <a class="badge bg-secondary text-decoration-none"
-           href="{{ asset('storage/'.$d->path) }}" target="_blank" rel="noopener">
-           {{ $d->name }}
-        </a>
-      @endforeach
-    </div>
-  </div>
-@endif
-
-
+                </form>
             </div>
-
-
-
-
-
-
-            <h3 class="fw-bold">Action Plan</h3>
-
-            <!-- Treatment Action -->
-            <div class="form-group mb-4">
-                <label for="treatment_action">Action</label>
-                <textarea name="treatment_action" cols="70" rows="5" class="form-control" {{ $isReadOnly ? 'readonly' : '' }}>{{ old('treatment_action', $result->treatment_action ?? '') }}
-                </textarea>
-                @error('treatment_action')
-                <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <!-- Target Date -->
-            <div class="form-group mb-4">
-                <label for="treatment_target_date">Target Date</label>
-                <input type="date" name="treatment_target_date" class="form-control" value="{{ old('treatment_target_date', $result->treatment_target_date ?? '') }}" {{ $isReadOnly ? 'disabled' : '' }}>
-                @error('treatment_target_date')
-                <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <!-- Completion Date -->
-            <div class="form-group mb-4">
-                <label for="treatment_comp_date">Completion Date</label>
-                <input type="date" name="treatment_comp_date" class="form-control" value="{{ old('treatment_comp_date', $result->treatment_comp_date ?? '') }}" {{ $isReadOnly ? 'disabled' : '' }}>
-                @error('treatment_comp_date')
-                <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <!-- Actual Acceptance Date -->
-            <div class="form-group mb-4">
-                <label for="acceptance_actual_date">Actual Acceptance Date</label>
-                <input type="date" name="acceptance_actual_date" class="form-control" value="{{ old('acceptance_actual_date', $result->acceptance_actual_date ?? '') }}" {{ $isReadOnly ? 'disabled' : '' }}>
-                @error('acceptance_actual_date')
-                <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <!-- Responsibility Assignment -->
-            <div class="form-group mb-4">
-                <label for="responsibility_for_treatment">Responsibility of:</label>
-                <select class="boxstyling form-select" name="responsibility_for_treatment" {{ $isReadOnly ? 'disabled' : '' }}>
-                    <option value="">Select User</option>
-                    @foreach ($users as $user)
-                    <option value="{{ $user->id }}" {{ old('responsibility_for_treatment', $result->responsibility_for_treatment ?? '') == $user->id ? 'selected' : '' }}>
-                        {{ $user->first_name }} {{ $user->last_name }}
-                    </option>
-                    @endforeach
-                </select>
-                @error('responsibility_for_treatment')
-                <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            @if($isEditable)
-            <!-- Submit Buttons -->
-            <div class="row">
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-success px-5 rounded-pill h-100" name="action" value="1">Apply only to this mandatory requirement and save changes</button>
-                </div>
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-success px-5 rounded-pill h-100" name="action" value="2">Apply to all mandatory requirements in the sub-domain of which this requirement is part of and save changes</button>
-                </div>
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-success px-5 rounded-pill h-100" name="action" value="3">Apply to all mandatory requirements in the domain holding the sub-domain of which this requirement is a part and save changes</button>
-                </div>
-            </div>
-            @endif
-
-            </form>
         </div>
     </div>
-</div>
 
-@if($isApprover && isset($result))
-<div class="container d-flex justify-content-center">
-    <div class="card shadow-lg border-0 mt-5 mb-5" style="max-width: 1000px; width: 100%;">
-        <div class="card-header text-white text-center" style="background-color: rgb(121, 173, 44)">
-            <h3 class="text-center">Approve</h3>
+    @if($isApprover && isset($result))
+    <div class="container d-flex justify-content-center">
+        <div class="card shadow-lg border-0 mt-5 mb-5" style="max-width: 1000px; width: 100%;">
+            <div class="card-header text-white text-center" style="background-color: rgb(121, 173, 44)">
+                <h3 class="text-center">Approve</h3>
+            </div>
+
+            <div class="card-body">
+
+                <p class="fw-bold">Current Status:
+                    @if(isset($result) && ($result->approved == 0 || is_null($result->approved)))
+                    Not worked on by approver
+                    @endif
+                    @if(isset($result) && ($result->approved == 1 ) )
+                    Approved
+                    @endif
+
+                    @if(isset($result) && ($result->approved == 2 ) )
+                    Not Approved
+                    @endif
+
+                </p>
+                <form action="/approve_sec_2_2/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" id="approvalForm">
+                    @csrf
+
+                    <input type="hidden" name="subdomain" value="{{ $subdomain }}">
+
+                    <div class="row">
+                        <div class="col-md-4 d-flex">
+                            <button type="submit" class="btn btn-success px-5 rounded-pill w-80 h-100" name="action" value="1">
+                                Apply Approve only this control and save changes
+                            </button>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <button type="submit" class="btn btn-success px-5 rounded-pill w-80 h-100" name="action" value="2">
+                                Apply to Approve all controls in this domain and save changes
+                            </button>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <button type="submit" class="btn btn-success px-5 rounded-pill w-80 h-100" name="action" value="3">
+                                Apply to Approve all controls in all domains and save changes
+                            </button>
+                        </div>
+                    </div>
+
+
+                    <div class="mb-4 mt-4">
+                        <label for="approver_comments" class="form-label"> <span class=" fw-semibold">Approver Comments</span> (Comments are mandatory if not approved)</label>
+                        <textarea name="approver_comments" id="approver_comments" rows="4" class="form-control rounded">{{ old('approver_comments', $result->approver_comments ?? '') }}</textarea>
+                        <div class="text-danger small mt-2 d-none" id="commentError">Approver comments are required when rejecting.</div>
+                        @error('approver_comments')
+                        <div class="text-danger small mt-2">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 d-flex">
+                            <button type="submit" class="btn btn-danger px-5 rounded-pill w-80 h-100 reject-button" name="action" value="4">
+                                Do not Approve only this control and save changes
+                            </button>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <button type="submit" class="btn btn-danger px-5 rounded-pill w-80 h-100 reject-button" name="action" value="5">
+                                Do not Approve all controls in this domain and save changes
+                            </button>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <button type="submit" class="btn btn-danger px-5 rounded-pill w-80 h-100 reject-button" name="action" value="6">
+                                Do not Approve all controls in all domains and save changes
+                            </button>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+
         </div>
-
-        <div class="card-body">
-
-            <p class="fw-bold">Current Status:
-                @if(isset($result) && ($result->approved == 0 || is_null($result->approved)))
-                Not worked on by approver
-                @endif
-                @if(isset($result) && ($result->approved == 1 ) )
-                Approved
-                @endif
-
-                @if(isset($result) && ($result->approved == 2 ) )
-                Not Approved
-                @endif
-
-            </p>
-            <form action="/approve_sec_2_2/{{$sub_req}}/{{$title}}/{{$project_id}}/{{auth()->user()->id}}/{{$asset->assessment_id}}" method="post" id="approvalForm">
-                @csrf
-
-                <input type="hidden" name="subdomain" value="{{ $subdomain }}">
-
-                <div class="row">
-                    <div class="col-md-4 d-flex">
-                        <button type="submit" class="btn btn-success px-5 rounded-pill w-80 h-100" name="action" value="1">
-                            Apply Approve only this control and save changes
-                        </button>
-                    </div>
-                    <div class="col-md-4 d-flex">
-                        <button type="submit" class="btn btn-success px-5 rounded-pill w-80 h-100" name="action" value="2">
-                            Apply to Approve all controls in this domain and save changes
-                        </button>
-                    </div>
-                    <div class="col-md-4 d-flex">
-                        <button type="submit" class="btn btn-success px-5 rounded-pill w-80 h-100" name="action" value="3">
-                            Apply to Approve all controls in all domains and save changes
-                        </button>
-                    </div>
-                </div>
-
-
-                <div class="mb-4 mt-4">
-                    <label for="approver_comments" class="form-label"> <span class=" fw-semibold">Approver Comments</span> (Comments are mandatory if not approved)</label>
-                    <textarea name="approver_comments" id="approver_comments" rows="4" class="form-control rounded">{{ old('approver_comments', $result->approver_comments ?? '') }}</textarea>
-                    <div class="text-danger small mt-2 d-none" id="commentError">Approver comments are required when rejecting.</div>
-                    @error('approver_comments')
-                    <div class="text-danger small mt-2">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4 d-flex">
-                        <button type="submit" class="btn btn-danger px-5 rounded-pill w-80 h-100 reject-button" name="action" value="4">
-                            Do not Approve only this control and save changes
-                        </button>
-                    </div>
-                    <div class="col-md-4 d-flex">
-                        <button type="submit" class="btn btn-danger px-5 rounded-pill w-80 h-100 reject-button" name="action" value="5">
-                            Do not Approve all controls in this domain and save changes
-                        </button>
-                    </div>
-                    <div class="col-md-4 d-flex">
-                        <button type="submit" class="btn btn-danger px-5 rounded-pill w-80 h-100 reject-button" name="action" value="6">
-                            Do not Approve all controls in all domains and save changes
-                        </button>
-                    </div>
-                </div>
-
-
-            </form>
-        </div>
-
     </div>
-</div>
 
-@endif
+    @endif
 
 </div>
 

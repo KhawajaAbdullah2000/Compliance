@@ -7,14 +7,14 @@
 @include('iso_sec_nav')
 
 @php
-    $permissions = json_decode($project_permissions, true);
-    $isDataInputter = in_array('Data Inputter', $permissions ?? []);
+$permissions = json_decode($project_permissions, true);
+$isDataInputter = in_array('Data Inputter', $permissions ?? []);
 @endphp
 
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered table-secondary">
+            <table class="table table-bordered table-warning">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>
@@ -54,6 +54,8 @@
     <a href="/iso_section2_1/{{$project_id}}/{{auth()->user()->id}}">View Services and Assets in this Project</a>
 
     @endif
+
+
 
 
     @if($project->project_type==7)
@@ -126,6 +128,10 @@ If you choose to select values for “Applicable” and “Compliance Status” 
                     <h2 class="fw-bold">
                         {{$data[0][0]}}. {{$data[0][1]}}
                     </h2>
+                    @endif
+                    @if($project->project_type==27)
+
+                    <p class="fw-bold fs-4">{{$title}}. {{$data[0][1]}}</p>
                     @endif
                 </div>
                 <div class="col-md-4 text-end">
@@ -213,7 +219,7 @@ If you choose to select values for “Applicable” and “Compliance Status” 
         </form>
 
 
-       
+
 
 </div>
 @section('scripts')
