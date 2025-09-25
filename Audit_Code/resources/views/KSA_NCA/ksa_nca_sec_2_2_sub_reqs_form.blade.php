@@ -32,7 +32,7 @@ $isApprover = $hasApprover;
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-12">
-            <table class="table table-bordered table-secondary">
+            <table class="table table-bordered table-warning">
                 <tbody>
                     <tr>
                         <td class="fw-bold">Project Name:</td>

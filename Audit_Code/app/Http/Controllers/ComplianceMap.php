@@ -192,7 +192,19 @@ class ComplianceMap extends Controller
 
 
 
-        $domainNames = config('domain-names')[$project->project_type] ?? [];
+        if ($project->project_type != 27) {
+            $domainNames = config('domain-names')[$project->project_type] ?? [];
+        } else {
+            $allDomains = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
+                ->get();
+            $domainNamesArray = $allDomains
+                ->pluck('domain_title', 'domain_num') // key = domain_num, value = domain_title
+                ->unique(); // ensure no duplicates
+
+            $domainNames = $domainNamesArray->toArray();
+        }
+
+
 
 
 
@@ -561,7 +573,20 @@ class ComplianceMap extends Controller
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
 
-            $domainNames = config('domain-names')[$project->project_type] ?? [];
+            if ($project->project_type!= 27) {
+                $domainNames = config('domain-names')[$project->project_type] ?? [];
+            } else {
+
+                $allDomains = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
+                    ->get();
+                $domainNamesArray = $allDomains
+                    ->pluck('domain_title', 'domain_num') 
+                    ->unique(); 
+
+                $domainNames = $domainNamesArray->toArray();
+            }
+
+
 
             $results = DB::table('iso_sec_2_1 AS assets')
                 ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
@@ -690,7 +715,18 @@ class ComplianceMap extends Controller
         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
             ->where('projects.project_id', $proj_id)->first();
 
-        $domainNames = config('domain-names')[$project->project_type] ?? [];
+        if ($project->project_type != 27) {
+            $domainNames = config('domain-names')[$project->project_type] ?? [];
+        } else {
+            $allDomains = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
+                ->get();
+            $domainNamesArray = $allDomains
+                ->pluck('domain_title', 'domain_num') // key = domain_num, value = domain_title
+                ->unique(); // ensure no duplicates
+
+            $domainNames = $domainNamesArray->toArray();
+        }
+
 
 
 
@@ -727,7 +763,18 @@ class ComplianceMap extends Controller
                 ->get();
 
 
-            $domainNames = config('domain-names')[$project->project_type] ?? [];
+            if ($project->project_type != 27) {
+                $domainNames = config('domain-names')[$project->project_type] ?? [];
+            } else {
+                $allDomains = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
+                    ->get();
+                $domainNamesArray = $allDomains
+                    ->pluck('domain_title', 'domain_num') // key = domain_num, value = domain_title
+                    ->unique(); // ensure no duplicates
+
+                $domainNames = $domainNamesArray->toArray();
+            }
+
 
 
 
@@ -768,7 +815,19 @@ class ComplianceMap extends Controller
                 ->distinct()
                 ->get();
 
-            $domainNames = config('domain-names')[$project->project_type] ?? [];
+           
+                  if ($project->project_type!= 27) {
+                $domainNames = config('domain-names')[$project->project_type] ?? [];
+            } else {
+
+                $allDomains = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
+                    ->get();
+                $domainNamesArray = $allDomains
+                    ->pluck('domain_title', 'domain_num') 
+                    ->unique(); 
+
+                $domainNames = $domainNamesArray->toArray();
+            }
 
 
 
@@ -798,7 +857,18 @@ class ComplianceMap extends Controller
             ->distinct()
             ->get();
 
-        $domainNames = config('domain-names')[$project->project_type] ?? [];
+        if ($project->project_type != 27) {
+            $domainNames = config('domain-names')[$project->project_type] ?? [];
+        } else {
+            $allDomains = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
+                ->get();
+            $domainNamesArray = $allDomains
+                ->pluck('domain_title', 'domain_num') // key = domain_num, value = domain_title
+                ->unique(); // ensure no duplicates
+
+            $domainNames = $domainNamesArray->toArray();
+        }
+
 
 
 
@@ -843,7 +913,18 @@ class ComplianceMap extends Controller
             ->distinct()
             ->get();
 
-        $domainNames = config('domain-names')[$project->project_type] ?? [];
+        if ($project->project_type != 27) {
+            $domainNames = config('domain-names')[$project->project_type] ?? [];
+        } else {
+            $allDomains = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
+                ->get();
+            $domainNamesArray = $allDomains
+                ->pluck('domain_title', 'domain_num') // key = domain_num, value = domain_title
+                ->unique(); // ensure no duplicates
+
+            $domainNames = $domainNamesArray->toArray();
+        }
+
 
 
 
@@ -905,9 +986,17 @@ class ComplianceMap extends Controller
             ->distinct()
             ->get();
 
-        $domainNames = config('domain-names')[$project->project_type] ?? [];
+        if ($project->project_type != 27) {
+            $domainNames = config('domain-names')[$project->project_type] ?? [];
+        } else {
+            $allDomains = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
+                ->get();
+            $domainNamesArray = $allDomains
+                ->pluck('domain_title', 'domain_num') // key = domain_num, value = domain_title
+                ->unique(); // ensure no duplicates
 
-
+            $domainNames = $domainNamesArray->toArray();
+        }
 
 
 
@@ -1070,13 +1159,13 @@ class ComplianceMap extends Controller
                 ->get();
         }
 
-       
+
 
 
         $formattedResults = [];
         $totalCounts = ['yes' => 0, 'no' => 0, 'not_applicable' => 0, 'not_tested' => 0, 'partial' => 0];
 
-    
+
         foreach ($results as $result) {
             $domain = $result->SubDomain;
             $status = $result->comp_status;
@@ -1570,6 +1659,44 @@ class ComplianceMap extends Controller
         }
 
 
+        if ($project->project_type == 27) {
+
+            $filteredData = DB::table('non_standard_custom_data')
+                ->where('project_id', $proj_id)
+                ->where('domain_num', $title)
+                ->get()
+                ->values()   // reset keys (like Excel's collection->values())
+                ->all();
+
+            //dd($filteredData);
+
+            $UniqueSubDomains = collect($filteredData)
+                // normalize the key once
+                ->map(function ($row) {
+
+                    $row->sub_domain_num = trim((string) $row->sub_domain_num);   // e.g., "12.10"
+                    $row->sub_domain_title = trim((string) ($row->sub_domain_title ?? ''));
+                    return $row;
+                })
+                // unique by column 1, strict mode = true
+                ->unique('sub_domain_num', true)
+                // build key => label
+                ->mapWithKeys(function ($row) {
+                    return [$row->sub_domain_num => $row->sub_domain_title];
+                })
+                ->toArray();
+
+
+            $allDomains = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
+                ->get();
+            $domainNamesArray = $allDomains
+                ->pluck('domain_title', 'domain_num') // key = domain_num, value = domain_title
+                ->unique(); // ensure no duplicates
+
+            $domainNames = $domainNamesArray->toArray();
+        }
+
+
         if ($project->project_type == 23) {
 
             $filepath = public_path('NIST_CSF_Modified.xlsx');
@@ -1679,7 +1806,7 @@ class ComplianceMap extends Controller
             ];
         }
 
-         if ($project->project_type == 26) {
+        if ($project->project_type == 26) {
 
             $filepath = public_path('SBP_Payment_Card_Security_Standard_Modified.xlsx');
             $data = Excel::toArray([], $filepath); //with header
@@ -1699,10 +1826,10 @@ class ComplianceMap extends Controller
 
 
             $domainNames = [
-                4=>'Consumer Awareness & Record Retention',
-        5=>'Consumer Awareness & Record Retention',
-        6=>'Roadmap for EMV Compliance',
-              
+                4 => 'Consumer Awareness & Record Retention',
+                5 => 'Consumer Awareness & Record Retention',
+                6 => 'Roadmap for EMV Compliance',
+
 
             ];
         }
@@ -1740,16 +1867,6 @@ class ComplianceMap extends Controller
                 return strval($row[0]) == $title;
             })->values()->all();
 
-
-
-            // $UniqueSubDomains = collect($filteredData)
-            //     ->unique(function ($row) {
-            //         return (string)$row[1]; // convert to string to keep 6.1, 6.2 separate
-            //     })
-            //     ->mapWithKeys(function ($row) {
-            //         return [(string)$row[1] => (string)$row[4]];
-            //     })
-            //     ->toArray();
 
             $UniqueSubDomains = collect($filteredData)
                 // normalize the key once
@@ -1837,7 +1954,7 @@ class ComplianceMap extends Controller
         );
     }
 
-    public function compliance_map_sub_req($subdomain, $service, $component, $proj_id,$title=null, Request $req)
+    public function compliance_map_sub_req($subdomain, $service, $component, $proj_id, $title = null, Request $req)
     {
         $group = $req->query('group');
         $subgroup = $req->query('subgroup');
@@ -1881,8 +1998,6 @@ class ComplianceMap extends Controller
                 ->groupBy('compliance.sub_req', 'compliance.comp_status')
                 ->orderBy('compliance.sub_req')
                 ->get();
-
-               
         } else {
             $results = DB::table('iso_sec_2_1 AS assets')
                 ->join('iso_sec_2_2 AS compliance', 'assets.assessment_id', '=', 'compliance.asset_id')
@@ -1894,7 +2009,7 @@ class ComplianceMap extends Controller
                 ->where('assets.project_id', $proj_id)
                 ->whereIn('compliance.asset_id', $assetIds)
                 ->where('compliance.subdomain', $subdomain)
-                   ->where('compliance.title_num', $title)
+                ->where('compliance.title_num', $title)
                 ->groupBy('compliance.sub_req', 'compliance.comp_status') // Group by service, component, and comp_status
                 ->orderby('compliance.sub_req')
                 ->get();
@@ -2182,35 +2297,35 @@ class ComplianceMap extends Controller
 
 
 
-        if ($project->project_type == 4) {
+        // if ($project->project_type == 4) {
 
-            $filepath = public_path('ISO_SEC_2_2.xlsx');
-            $data = Excel::toArray([], $filepath); //with header
-            $rows = array_slice($data[0], 1); //without header(first row)
+        //     $filepath = public_path('ISO_SEC_2_2.xlsx');
+        //     $data = Excel::toArray([], $filepath); //with header
+        //     $rows = array_slice($data[0], 1); //without header(first row)
 
-            $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
-                $my_subdomain = explode(' ', $row[2]);
+        //     $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
+        //         $my_subdomain = explode(' ', $row[2]);
 
-                return strval($my_subdomain[0]) === $subdomain;
-            })->values()->all();
-
-
-
-            $MainDomainNum = $filteredData[0][0];
-            $MainDomainTitle = $filteredData[0][1]; //title
-
-            $subdomainTitle = $filteredData[0][2];
+        //         return strval($my_subdomain[0]) === $subdomain;
+        //     })->values()->all();
 
 
-            $UniqueSubReqs = collect($filteredData)
-                ->mapWithKeys(function ($row) {
-                    return [$row[3] => $row[4]];
-                })
-                ->unique() // Ensure unique keys (1st index)
-                ->toArray(); // Convert to array
+
+        //     $MainDomainNum = $filteredData[0][0];
+        //     $MainDomainTitle = $filteredData[0][1]; //title
+
+        //     $subdomainTitle = $filteredData[0][2];
 
 
-        }
+        //     $UniqueSubReqs = collect($filteredData)
+        //         ->mapWithKeys(function ($row) {
+        //             return [$row[3] => $row[4]];
+        //         })
+        //         ->unique() // Ensure unique keys (1st index)
+        //         ->toArray(); // Convert to array
+
+
+        // }
 
         if ($project->project_type == 18) {
 
@@ -2320,18 +2435,18 @@ class ComplianceMap extends Controller
 
         }
 
-         if ($project->project_type == 26) {
+        if ($project->project_type == 26) {
 
             $filepath = public_path('SBP_Payment_Card_Security_Standard_Modified.xlsx');
             $data = Excel::toArray([], $filepath); //with header
             $rows = array_slice($data[0], 1); //without header(first row)
 
-          
-            $filteredData = collect($rows)->filter(function ($row) use ($subdomain,$title) {
-                return strval($row[1]) == $subdomain && strval($row[0])==$title;
+
+            $filteredData = collect($rows)->filter(function ($row) use ($subdomain, $title) {
+                return strval($row[1]) == $subdomain && strval($row[0]) == $title;
             })->values()->all();
 
-          
+
             $MainDomainNum = $filteredData[0][0];
             $MainDomainTitle = $filteredData[0][2]; //title
 
@@ -2347,10 +2462,38 @@ class ComplianceMap extends Controller
 
         }
 
-      
+        if ($project->project_type == 27) {
 
 
-        if ($project->project_type == 1 || $project->project_type == 2 || $project->project_type == 3 || $project->project_type == 16 || $project->project_type == 19 || $project->project_type == 25 || $project->project_type == 24 || $project->project_type == 26) {
+            $filteredData = DB::table('non_standard_custom_data')
+                ->where('project_id', $proj_id)
+                ->where('sub_domain_num', $subdomain)
+                ->get()
+                ->values()   // reset keys (like Excel's collection->values())
+                ->all();
+
+
+
+            $MainDomainNum = $filteredData[0]->domain_num;
+            $MainDomainTitle = $filteredData[0]->domain_title; //title
+
+            $subdomainTitle = $filteredData[0]->sub_domain_title;
+
+
+            $UniqueSubReqs = collect($filteredData)
+                ->mapWithKeys(function ($row) {
+                    return [$row->sub_req_num => $row->sub_req_title];
+                })
+                ->unique() // Ensure unique keys (1st index)
+                ->toArray(); // Convert to array
+
+
+        }
+
+
+
+
+        if ($project->project_type == 1 || $project->project_type == 4  || $project->project_type == 2 || $project->project_type == 3 || $project->project_type == 16 || $project->project_type == 19 || $project->project_type == 25 || $project->project_type == 24 || $project->project_type == 26) {
 
             $fileMap = [
                 7 => 'KSA_NCA_ECC_Modified.xlsx',
@@ -2366,11 +2509,11 @@ class ComplianceMap extends Controller
                 13 => 'ISA 62443 Part 3-3 - Modified.xlsx',
                 11 => 'ISA 62443 Part 2-1 - Modified.xlsx',
                 9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
-                4 => 'KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx',
+                4 => 'KM_ISO27K1_2022_Compliance_18Jul25_Modified.xlsx',
                 23 => 'NIST_CSF_Modified.xlsx',
                 24 => 'ISO27701_2019v2_Modified.xlsx',
                 25 => 'DigitalBankingSecurity_Modified.xlsx',
-                26=>'SBP_Payment_Card_Security_Standard_Modified.xlsx'
+                26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx'
             ];
 
 
@@ -2383,7 +2526,8 @@ class ComplianceMap extends Controller
             $filteredData = collect($rows)->filter(function ($row) use ($subdomain) {
                 return strval($row[1]) == $subdomain;
             })->values()->all();
-          
+
+
 
 
             $MainDomainNum = $filteredData[0][0];
@@ -2401,7 +2545,7 @@ class ComplianceMap extends Controller
 
         }
 
-      
+
 
 
 
@@ -2427,67 +2571,7 @@ class ComplianceMap extends Controller
         $group = $req->query('group');
         $subgroup = $req->query('subgroup');
 
-        // $assetsQuery = DB::table('iso_sec_2_1 as a')
-        //     ->where('a.project_id', $proj_id)
-        //     ->when($service !== '_all', fn($q) => $q->where('a.s_name', $service))
-        //     ->when($group, fn($q) => $q->when($group !== '_all', fn($qq) => $qq->where('a.g_name', $group)))
-        //     ->when($subgroup, fn($q) => $q->when($subgroup !== '_all', fn($qq) => $qq->where('a.name', $subgroup)))
-        //     ->when($component !== '_all', fn($q) => $q->where('a.c_name', $component));
 
-        // // Latest iso_sec_2_2 per asset/sub_req for this project
-        // $latestIdx = DB::table('iso_sec_2_2')
-        //     ->select('asset_id', 'project_id', 'sub_req', DB::raw('MAX(last_edited_at) as maxdt'))
-        //     ->where('project_id', $proj_id)
-        //     ->where('sub_req', $domain)
-        //     ->groupBy('asset_id', 'project_id', 'sub_req');
-
-        // $latestCompliance = DB::query()
-        //     ->fromSub($latestIdx, 'x')
-        //     ->join('iso_sec_2_2 as t', function ($join) {
-        //         $join->on('t.asset_id', '=', 'x.asset_id')
-        //             ->on('t.project_id', '=', 'x.project_id')
-        //             ->on('t.sub_req', '=', 'x.sub_req')
-        //             ->on('t.last_edited_at', '=', 'x.maxdt');
-        //     })
-        //     ->select([
-        //         't.assessment_id as compliance_id',
-        //         't.asset_id',
-        //         't.project_id',
-        //         't.sub_req',
-        //         't.comp_status',
-        //         't.last_edited_at',
-        //     ]);
-
-        // // --- DETAILS: one row per asset (with IDs) ---
-        // $details = (clone $assetsQuery)
-        //     ->leftJoinSub($latestCompliance, 'b', fn($j) => $j->on('b.asset_id', '=', 'a.assessment_id'))
-        //     ->orderBy('a.c_name')
-        //     ->orderBy('a.assessment_id')
-        //     ->select([
-        //         'a.c_name',
-        //         'a.assessment_id as asset_id',   // <-- asset id
-        //         'b.compliance_id',               // <-- iso_sec_2_2 id
-        //         'b.comp_status',
-        //         'b.last_edited_at',
-        //     ])
-        //     ->get();
-
-        // // --- SUMMARY: counts per component (using same deduped join) ---
-        // $summary = (clone $assetsQuery)
-        //     ->leftJoinSub($latestCompliance, 'b', fn($j) => $j->on('b.asset_id', '=', 'a.assessment_id'))
-        //     ->groupBy('a.c_name')
-        //     ->orderBy('a.c_name')
-        //     ->select([
-        //         'a.c_name',
-        //         DB::raw("SUM(CASE WHEN b.comp_status = 'yes' THEN 1 ELSE 0 END)            AS yes_count"),
-        //         DB::raw("SUM(CASE WHEN b.comp_status = 'no' THEN 1 ELSE 0 END)             AS no_count"),
-        //         DB::raw("SUM(CASE WHEN b.comp_status = 'partial' THEN 1 ELSE 0 END)        AS partial_count"),
-        //         DB::raw("SUM(CASE WHEN b.comp_status = 'not_tested' THEN 1 ELSE 0 END)     AS not_tested_count"),
-        //         DB::raw("SUM(CASE WHEN b.comp_status = 'not_applicable' THEN 1 ELSE 0 END) AS not_applicable_count"),
-        //         DB::raw("COUNT(DISTINCT a.assessment_id)                                   AS total_assets"),
-        //         DB::raw("SUM(CASE WHEN b.compliance_id IS NULL THEN 1 ELSE 0 END)          AS missing_count")
-        //     ])
-        //     ->get();
         $assetsQuery = DB::table('iso_sec_2_1 as a')
             ->where('a.project_id', $proj_id)
             ->when($service !== '_all', fn($q) => $q->where('a.s_name', $service))
@@ -2553,30 +2637,44 @@ class ComplianceMap extends Controller
             24 => 'ISO27701_2019v2.xlsx',
             6 => 'SBP_ETGRMF.xlsx',
             25 => 'DigitalBankingSecurity.xlsx',
-            26=>'SBP_Payment_Card_Security_Standard.xlsx'
+            26 => 'SBP_Payment_Card_Security_Standard.xlsx'
         ];
         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
             ->where('projects.project_id', $proj_id)->first();
 
-        $filepath = public_path($fileMap[$project->project_type]);
-        $data = Excel::toArray([], $filepath); //with header
-        $rows = array_slice($data[0], 1); //without header(first row)
+
+        if ($project->project_type != 27) {
+            $filepath = public_path($fileMap[$project->project_type]);
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($domain) {
+                return strval($row[4]) == $domain;
+            })->values()->all();
+
+            $MainDomainNum = $filteredData[0][0];
+            $MainDomainTitle = $filteredData[0][1];
+
+            $SubDomainNum = $filteredData[0][2];
+            $SubDomainTitle = $filteredData[0][3];
+
+            $SubReqNum = $filteredData[0][4];
+            $SubReqTitle = $filteredData[0][5];
+        } else {
+            $filteredData = DB::table('non_standard_custom_data')->where('project_id', $proj_id)->where('sub_req_num', $domain)->get()->values();
+            $MainDomainNum = $filteredData[0]->domain_num;
+            $MainDomainTitle = $filteredData[0]->domain_title;
+
+            $SubDomainNum = $filteredData[0]->sub_domain_num;
+            $SubDomainTitle = $filteredData[0]->sub_domain_title;
+
+            $SubReqNum = $filteredData[0]->sub_req_num;
+            $SubReqTitle = $filteredData[0]->sub_req_title;
+        }
 
 
 
-        $filteredData = collect($rows)->filter(function ($row) use ($domain) {
-            return strval($row[4]) == $domain;
-        })->values()->all();
 
-
-        $MainDomainNum = $filteredData[0][0];
-        $MainDomainTitle = $filteredData[0][1];
-
-        $SubDomainNum = $filteredData[0][2];
-        $SubDomainTitle = $filteredData[0][3];
-
-        $SubReqNum = $filteredData[0][4];
-        $SubReqTitle = $filteredData[0][5];
 
 
 
