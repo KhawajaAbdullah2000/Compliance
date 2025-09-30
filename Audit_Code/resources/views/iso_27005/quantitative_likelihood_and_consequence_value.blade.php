@@ -11,7 +11,7 @@
         4 => 'Twice a week', 
         3 => 'Once a month', 
         2 => 'Once a year', 
-        1 => 'Once a decade',
+        1 => 'Once a decade',-
     ];
 
     $consequences = [

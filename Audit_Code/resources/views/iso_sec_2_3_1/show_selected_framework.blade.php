@@ -64,11 +64,11 @@ $framework_labels=[
     </p>
 
 
-    <h3>The administrator has selected the risk assessment methodology : {{$framework_labels[$selected]}}
+      <p class="fs-5">The administrator has selected the risk assessment methodology : {{$framework_labels[$selected]}}
 
-    </h3>
+      </p>
 
-    <p class="fs-4">You can select a different methodology from the list below:
+    <p class="fs-5">You can select a different methodology from the list below:
     </p>
 
 
@@ -113,11 +113,11 @@ $framework_labels=[
     @if($project->risk_scheme!=null)
     <div class="col-md-6">
 
-          <h3>The administrator has selected the CLassification Level : {{$project->risk_scheme}}
+          <p class='fs-5'>The administrator has selected the CLassification Level : {{$project->risk_scheme}}
 
-</h3>
+          </p>
 
-<p class="fs-4">You can select a different Classification Level from the list below:
+<p class="fs-5">You can select a different Classification Level from the list below:
 </p>
 
         <form method="POST" action="/save_classification_level_by_enduser/{{auth()->user()->organization->id}}">
