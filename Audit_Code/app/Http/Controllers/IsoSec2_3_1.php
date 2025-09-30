@@ -3255,9 +3255,6 @@ class IsoSec2_3_1 extends Controller
 
 
 
-
-
-
                 return view("iso_27005.likelihood_and_consequence_value", [
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
@@ -4028,38 +4025,6 @@ class IsoSec2_3_1 extends Controller
 
 
 
-        //  $my_filter = array_filter($req->input('risk_level'), function($value) {
-        //     return $value !== null;
-        // });
-        // $req->merge(['risk_level' => $my_filter]);
-        // $risk_level = $req->input('risk_level');
-        // $filtered_risk_confidentiality= array_filter($risk_level, function($value) {
-        //     return $value !== null;
-        // });
-
-
-        // $my_filter = array_filter($req->input('risk_integrity'), function($value) {
-        //     return $value !== null;
-        // });
-        // $req->merge(['risk_integrity' => $my_filter]);
-        // $risk_level = $req->input('risk_integrity');
-        // $filtered_risk_integrity= array_filter($risk_level, function($value) {
-        //     return $value !== null;
-        // });
-
-
-        // $my_filter = array_filter($req->input('risk_availability'), function($value) {
-        //     return $value !== null;
-        // });
-        // $req->merge(['risk_availability' => $my_filter]);
-        // $risk_level = $req->input('risk_availability');
-        // $filtered_risk_availability= array_filter($risk_level, function($value) {
-        //     return $value !== null;
-        // });
-
-
-
-
         $inputArray = $filtered_applicability;
         $yesNoArray = [];
         $numberArray = [];
@@ -4079,10 +4044,12 @@ class IsoSec2_3_1 extends Controller
 
         // try {
         foreach ($yesNoArray as $key => $value) {
+             //only to this asset component
 
-
-            //only to this asset component
+           
+             //confidentiality
             $risk_level = ((100 - $filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value;
+            
             $risk_integrity = ((100 - $filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value;
 
             $risk_availability = ((100 - $filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value;

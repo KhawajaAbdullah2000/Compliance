@@ -1,5 +1,5 @@
   <table  class="table table-bordered table-hover text-center table-secondary align-middle">
-        <thead class="table-dark ">
+        <thead class="table-info">
             <tr>
                 <th>Service</th>
                     <th>Asset Type</th>

@@ -600,16 +600,34 @@ input::-webkit-inner-spin-button {
 }
 
 .risk-table .header-top {
-    background-color: #000;
-    color: #fff;
+    background-color: #90ec73;
+    color: black;
     font-weight: bold;
+    text-decoration: none;
 }
 
 .risk-table .header-left {
-    background-color: #000;
-    color: #fff;
+    background-color: #e66dd5;
+    color: #000000;
     font-weight: bold;
     width: 120px;
+   
+}
+
+.risk-table .header-top a:link,
+.risk-table .header-top a:visited,
+.risk-table .header-top a:hover,
+.risk-table .header-top a:active {
+    color: black;
+    
+}
+
+.risk-table .header-left a:link,
+.risk-table .header-left a:visited,
+.risk-table .header-left a:hover,
+.risk-table .header-left a:active {
+    color: black;
+    
 }
 
 .section3_subsections {

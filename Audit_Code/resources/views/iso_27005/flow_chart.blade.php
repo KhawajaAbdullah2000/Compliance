@@ -24,10 +24,8 @@ default => ['label' => 'Unknown', 'class' => 'text-muted'],
 
 <div class="container">
     <div class="row mt-5">
-        <div class="col-lg-12">
-
+        <div class="col-md-12">
             @include('components.topTable')
-
         </div>
     </div>
     <h3 class="fw-bold mt-2 mb-2">Assess Risk  for:</h3>

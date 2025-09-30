@@ -158,6 +158,7 @@ class OrganizationController extends Controller
 
     public function user_action_all_projects_in_org($org_id)
     {
+     
 
         $users = User::with(['permissions'])
             ->leftJoin('projects', 'users.id', '=', 'projects.created_by')

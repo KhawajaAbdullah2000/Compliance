@@ -315,7 +315,7 @@
 
       {{-- Super User admin links under the card --}}
       @role('super user')
-      <div class="row g-2 mt-3">
+      {{-- <div class="row g-2 mt-3">
         <div class="col-12 col-lg-6">
           <a href="/select_assets/{{auth()->user()->organization->id}}" class="btn btn-primary w-100">
             Set up asset types & subtypes
@@ -331,7 +331,35 @@
             Set up Classification Levels
           </a>
         </div>
-      </div>
+      </div> --}}
+
+      <div class="row g-3 mt-3 align-items-stretch">
+  <div class="col-12 col-lg-4">
+    <a href="/select_assets/{{auth()->user()->organization->id}}" 
+       class="btn btn-primary w-100 h-100 d-flex align-items-center justify-content-center gap-2 rounded-pill shadow-sm">
+      <i class="bi bi-box-seam"></i>
+      Asset Types & Subtypes
+    </a>
+  </div>
+
+  <div class="col-12 col-lg-4">
+    <a href="/select_projects_for_framework/{{auth()->user()->organization->id}}" 
+       class="btn btn-success w-100 h-100 d-flex align-items-center justify-content-center gap-2 rounded-pill shadow-sm">
+      <i class="bi bi-shield-check"></i>
+      Risk Management
+    </a>
+  </div>
+
+  <div class="col-12 col-lg-4">
+    <a href="/select_projects_for_classification_level/{{auth()->user()->organization->id}}" 
+       class="btn btn-warning w-100 h-100 d-flex align-items-center justify-content-center gap-2 rounded-pill shadow-sm text-dark">
+      <i class="bi bi-layers-half"></i>
+      Classification Levels
+    </a>
+  </div>
+</div>
+
+
 
       {{-- 1LINK ERM specific --}}
       <div class="d-flex flex-wrap gap-2 mt-3">

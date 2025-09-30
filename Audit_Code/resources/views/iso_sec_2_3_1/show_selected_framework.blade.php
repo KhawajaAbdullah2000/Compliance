@@ -50,13 +50,13 @@ $framework_labels=[
         <span>
             <table class="table table-bordered table-responsive">
                 <tr>
-                    <td class="bg-dark text-white">Service</td>
+                    <td class="bg-primary text-white">Service</td>
                     <td>{{$asset->s_name}}</td>
-                    <td class="bg-dark text-white">Asset Type</td>
+                    <td class="bg-primary text-white">Asset Type</td>
                     <td>{{$asset->g_name}}</td>
-                    <td class="bg-dark text-white">Asset Subtype</td>
+                    <td class="bg-primary text-white">Asset Subtype</td>
                     <td>{{$asset->name}}</td>
-                    <td class="bg-dark text-white">Asset Component</td>
+                    <td class="bg-primary text-white">Asset Component</td>
                     <td>{{$asset->c_name}}</td>
                 </tr>
             </table>

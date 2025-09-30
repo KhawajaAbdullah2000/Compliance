@@ -174,7 +174,7 @@ $permissions = json_decode($project_permissions);
 
     <!-- Data Table -->
     <table id="myTable2" class="table table-bordered table-hover table-striped align-middle table-responsive">
-        <thead class="table-dark ">
+        <thead class="table-info">
             <tr style="cursor: pointer" class="text-center">
                 <th onclick="sortTable(0)">Service</th>
                 <th onclick="sortTable(1)">Asset Type</th>

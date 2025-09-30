@@ -36,7 +36,7 @@
         {{-- Asset Selection --}}
         <div class="mt-4 fs-4 fw-bold"><p>Select an Asset</p></div>
 
-        <table class="table table-bordered table-hover text-center table-secondary align-middle">
+        <table class="table table-bordered table-hover text-center align-middle">
             <thead class="table-secondary">
                 <tr>
                     <th>Select</th>
