@@ -275,17 +275,17 @@ $isApprover = $hasApprover;
                     <div class="row">
                         <div class="col-md-4 d-flex">
                             <button type="submit" class="btn btn-success px-5 rounded-pill w-80 h-100" name="action" value="1">
-                                Apply Approve only this control and save changes
+                                Apply Approve only to this mandatory requirement and save changes
                             </button>
                         </div>
                         <div class="col-md-4 d-flex">
                             <button type="submit" class="btn btn-success px-5 rounded-pill w-80 h-100" name="action" value="2">
-                                Apply to Approve all controls in this domain and save changes
+                                Apply to Approve all mandatory requirements in the subdomain of which this requirement is part of and save changes
                             </button>
                         </div>
                         <div class="col-md-4 d-flex">
                             <button type="submit" class="btn btn-success px-5 rounded-pill w-80 h-100" name="action" value="3">
-                                Apply to Approve all controls in all domains and save changes
+                               Apply to Approve all mandatory requirements in the domain holding the subdomain of which this requirement is part of and save changes
                             </button>
                         </div>
                     </div>
@@ -308,12 +308,12 @@ $isApprover = $hasApprover;
                         </div>
                         <div class="col-md-4 d-flex">
                             <button type="submit" class="btn btn-danger px-5 rounded-pill w-80 h-100 reject-button" name="action" value="5">
-                                Do not Approve all controls in this domain and save changes
+                                Do not Approve all mandatory requirements in the subdomain of which this requirement is part of and save changes
                             </button>
                         </div>
                         <div class="col-md-4 d-flex">
                             <button type="submit" class="btn btn-danger px-5 rounded-pill w-80 h-100 reject-button" name="action" value="6">
-                                Do not Approve all controls in all domains and save changes
+                                Do not Approve  all mandatory requirements in the domain holding the subdomain of which this requirement is part of and save changes
                             </button>
                         </div>
                     </div>

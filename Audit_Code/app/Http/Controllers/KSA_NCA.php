@@ -788,6 +788,7 @@ class KSA_NCA extends Controller
                     ->orderByDesc('created_at')
                     ->get();
 
+                   // dd($filteredData[0][2]);
 
                 return view('KSA_NCA.ksa_nca_sec_2_2_sub_reqs_form', [
                     'project_id' => $checkpermission->project_id,
@@ -1294,6 +1295,7 @@ class KSA_NCA extends Controller
     {
         // dd($sub_req, $title, $proj_id, $user_id,$asset_id,$req->all());
 
+ 
         // dd($req->all());
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -1309,8 +1311,6 @@ class KSA_NCA extends Controller
                 ->first();
             if ($checkpermission) {
                 $permissions = json_decode($checkpermission->project_permissions);
-
-
 
 
                 $evidenceLevel = $req->session()->get('evidenceLevel');
@@ -1340,30 +1340,54 @@ class KSA_NCA extends Controller
                         ];
                     }
 
-                    if ($checkpermission->type_id == 7) {
-                        //ksa Nca
-                        $filepath = public_path('KSA_NCA_ECC_Modified.xlsx');
-                    }
+                    $fileMap = [
+                7 => 'KSA_NCA_ECC_Modified.xlsx',
+                18 => 'COSO_Modified.xlsx',
+                19 => 'SOC2_Type2_Modified.xlsx',
+                5 => 'CY_SAMA_Modified.xlsx',
+                1 => 'PCI_DSS_4_Single_TSP_Modified.xlsx',
+                2 => 'PCI_DSS_4_Multi_TSP_Modified.xlsx',
+                3 => 'PCI_DSS_4_Merchant_TSP_Modified.xlsx',
+                16 => 'COBIT_2019_Modified.xlsx',
+                10 => 'ISA_62443_Part 3-2_Modified.xlsx',
+                12 => 'ISA 62443 Part 4-2 -Modified.xlsx',
+                13 => 'ISA 62443 Part 3-3 - Modified.xlsx',
+                11 => 'ISA 62443 Part 2-1 - Modified.xlsx',
+                9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
+                4 => 'KM_ISO27K1_2022_Compliance_18Jul25_Modified.xlsx',
+                23 => 'NIST_CSF_Modified.xlsx',
+                24 => 'ISO27701_2019v2_Modified.xlsx',
+                25 => 'DigitalBankingSecurity_Modified.xlsx',
+                26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx'
+            ];
 
-                    if ($checkpermission->type_id == 1) {
-                        $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
-                    }
+            $filepath=$fileMap[$checkpermission->type_id];
+           // dd($filepath);
 
-                    if ($checkpermission->type_id == 2) {
-                        $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
-                    }
+                    // if ($checkpermission->type_id == 7) {
+                    //     //ksa Nca
+                    //     $filepath = public_path('KSA_NCA_ECC_Modified.xlsx');
+                    // }
 
-                    if ($checkpermission->type_id == 4) {
-                        $filepath = public_path('ISO27K1_2022_Compliance_Updated.xlsx');
-                    }
+                    // if ($checkpermission->type_id == 1) {
+                    //     $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
+                    // }
 
-                    if ($checkpermission->type_id == 3) {
-                        $filepath = public_path('PCI_DSS_4_Merchant.xlsx');
-                    }
+                    // if ($checkpermission->type_id == 2) {
+                    //     $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                    // }
 
-                    if ($checkpermission->type_id == 25) {
-                        $filepath = public_path('DigitalBankingSecurity.xlsx');
-                    }
+                    // if ($checkpermission->type_id == 4) {
+                    //     $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25_Modified.xlsx');
+                    // }
+
+                    // if ($checkpermission->type_id == 3) {
+                    //     $filepath = public_path('PCI_DSS_4_Merchant.xlsx');
+                    // }
+
+                    // if ($checkpermission->type_id == 25) {
+                    //     $filepath = public_path('DigitalBankingSecurity.xlsx');
+                    // }
 
 
                     if ($evidenceLevel == 'component') {
@@ -1372,14 +1396,12 @@ class KSA_NCA extends Controller
                             $data2 = Excel::toArray([], $filepath); //with header
                             $rows = array_slice($data2[0], 1); //without header(first row)
 
-                            //all controls in this domain
-                            $filteredData = collect($rows)->filter(function ($row) use ($title) {
-                                return strval($row[0]) === $title;
+    
+                            $filteredData = collect($rows)->filter(function ($row) use ($req) {
+                                return strval((string)$row[1]) === (string)$req->subdomain;
                             })->values()->all();
 
-
-
-
+                
 
                             foreach ($filteredData as $innerArray) {
                                 // Access specific value from the inner array
@@ -1404,9 +1426,12 @@ class KSA_NCA extends Controller
                             $data2 = Excel::toArray([], $filepath); //with header
                             $rows = array_slice($data2[0], 1); //without header(first row)
 
+                             $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                                return strval((string)$row[0]) === (string)$title;
+                            })->values()->all();
+                         
 
-
-                            foreach ($rows as $innerArray2) {
+                            foreach ($filteredData as $innerArray2) {
                                 // Access specific value from the inner array
                                 $fetch_sub_req = $innerArray2['3'];
                                 $fetch_title = $innerArray2['0'];
@@ -1473,9 +1498,9 @@ class KSA_NCA extends Controller
                             $data2 = Excel::toArray([], $filepath); //with header
                             $rows = array_slice($data2[0], 1); //without header(first row)
 
-                            //all controls in this domain
-                            $filteredData = collect($rows)->filter(function ($row) use ($title) {
-                                return strval($row[0]) === $title;
+    
+                            $filteredData = collect($rows)->filter(function ($row) use ($req) {
+                                return strval((string)$row[1]) === (string)$req->subdomain;
                             })->values()->all();
 
 
@@ -1504,8 +1529,11 @@ class KSA_NCA extends Controller
                             $data2 = Excel::toArray([], $filepath); //with header
                             $rows = array_slice($data2[0], 1); //without header(first row)
 
+                                $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                                return strval((string)$row[0]) === (string)$title;
+                            })->values()->all();
 
-                            foreach ($rows as $innerArray) {
+                            foreach ($filteredData as $innerArray) {
 
                                 // Access specific value from the inner array
                                 $fetch_title = $innerArray['0'];
