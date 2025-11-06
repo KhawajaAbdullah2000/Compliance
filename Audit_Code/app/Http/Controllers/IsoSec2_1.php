@@ -56,6 +56,7 @@ class IsoSec2_1 extends Controller
                     ->get();
 
 
+                   // dd($data);
 
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
@@ -439,6 +440,7 @@ class IsoSec2_1 extends Controller
                     $isNamed    = $scheme['named'];
 
 
+                    
 
                     return view('iso_sec_2_1.iso_sec_2_1_new', [
                         'project_id' => $checkpermission->project_id,
@@ -596,6 +598,15 @@ class IsoSec2_1 extends Controller
             $departments = DB::table('departments')->where('org_id', auth()->user()->organization->id)
                 ->get();
 
+                $allSchemes = config('risk_schemes');
+                    $schemeKey  = 'none';
+                    $scheme     = $allSchemes[$schemeKey] ?? $allSchemes['none'];
+
+                    $riskValues = $scheme['values'];
+                    $riskMap    = $scheme['map'] ?? [];
+                    $isNamed    = $scheme['named'] ?? false;
+
+
 
 
             return view('iso_sec_2_1.iso_sec_2_1_asset_catalog_edit', [
@@ -605,7 +616,10 @@ class IsoSec2_1 extends Controller
                 'selected_type' => $selected_type->name,
                 'selected_category' => $selected_type->g_name,
                 'users' => $users,
-                'departments' => $departments
+                'departments' => $departments,
+                'riskValues'=>$riskValues,
+                'riskMap'=>$riskMap,
+                'isNamed'=>$isNamed
             ]);
 
 
@@ -736,7 +750,10 @@ class IsoSec2_1 extends Controller
                         'service_risk_owner' => $req->service_risk_owner,
                         'component_risk_owner' => $req->component_risk_owner,
                         'service_custodian' => $req->service_custodian,
-                        'component_custodian' => $req->component_custodian
+                        'component_custodian' => $req->component_custodian,
+                        'risk_confidentiality' => $req->risk_confidentiality,
+                                'risk_integrity' => $req->risk_integrity,
+                                'risk_availability' => $req->risk_availability
                     ]);
 
 
@@ -1255,6 +1272,7 @@ class IsoSec2_1 extends Controller
                                 ->where('id', $asset)
                                 ->first();
 
+                            
                             DB::table('iso_sec_2_1')->insert([
                                 'project_id' => $proj_to_copy,
                                 'g_name' => $ass->g_name,
@@ -1269,7 +1287,10 @@ class IsoSec2_1 extends Controller
                                 'service_risk_owner' => $ass->service_risk_owner,
                                 'component_risk_owner' => $ass->component_risk_owner,
                                 'service_custodian' => $ass->service_custodian,
-                                'component_custodian' => $ass->component_custodian
+                                'component_custodian' => $ass->component_custodian,
+                                'risk_confidentiality'=>$ass->risk_confidentiality,
+                                'risk_integrity'=>$ass->risk_integrity,
+                                'risk_availability'=>$ass->risk_availability
                             ]);
 
                             DB::table('audit_trail_for_services')->insert([
@@ -1392,6 +1413,7 @@ class IsoSec2_1 extends Controller
             )
             ->where('organization_id', $org_id)
             ->get();
+           // dd($data);
 
         $organizationData = DB::table("organizations")->where('id', $org_id)->first();
 
@@ -1427,18 +1449,33 @@ class IsoSec2_1 extends Controller
         $departments = DB::table('departments')->where('org_id', auth()->user()->organization->id)
             ->get();
 
+              $schemeKey = 'none';
+
+                    $allSchemes = config('risk_schemes');
+
+                    $scheme = $allSchemes[$schemeKey] ?? $allSchemes['none'];
+
+
+                    $riskValues = $scheme['values']; // e.g., [5,4,3,2,1]
+                    $riskMap    = $scheme['map'] ?? null;    // name map if named
+                    $isNamed    = $scheme['named'];
+
 
         return view('iso_sec_2_1.service_register_new', [
 
             'selectedCategories' => $selectedCategories,
             'users' => $users,
-            'departments' => $departments
+            'departments' => $departments,
+            'riskValues'=>$riskValues,
+            'riskMap'=>$riskMap,
+            'isNamed'=>$isNamed
 
         ]);
     }
 
     public function new_service_register_2_1_submit($org_id, $user_id, Request $req)
     {
+        
         $req->validate(
             [
                 'c_name' => 'required|array|min:1',
@@ -1470,7 +1507,10 @@ class IsoSec2_1 extends Controller
                     'service_risk_owner' => $req->service_risk_owner,
                     'component_risk_owner' => $req->component_risk_owner,
                     'service_custodian' => $req->service_custodian,
-                    'component_custodian' => $req->component_custodian
+                    'component_custodian' => $req->component_custodian,
+                    'risk_confidentiality' => $req->risk_confidentiality,
+                                'risk_integrity' => $req->risk_integrity,
+                                'risk_availability' => $req->risk_availability,
                 ]);
 
                 Db::table('audit_trail_for_services')->insert([
@@ -1484,9 +1524,9 @@ class IsoSec2_1 extends Controller
                     'owner_dept' => $req->owner_dept,
                     'physical_loc' => $req->physical_loc,
                     'logical_loc' => $req->logical_loc,
-                    'risk_confidentiality' => 10,
-                    'risk_integrity' => 10,
-                    'risk_availability' => 10,
+                    'risk_confidentiality' => $req->risk_confidentiality,
+                                'risk_integrity' => $req->risk_integrity,
+                                'risk_availability' => $req->risk_availability,
                     'performed_at' => Carbon::now()->format('Y-m-d H:i:s')
                 ]);
             }

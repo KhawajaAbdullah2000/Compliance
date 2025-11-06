@@ -67,6 +67,60 @@
                             @endforeach
                         </div>
 
+
+
+                          {{-- Risk classification dropdowns --}}
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Confidentiality Classification</label>
+                            <select name="risk_confidentiality" class="form-select">
+                                <option value="">-- Select --</option>
+                                @foreach($riskValues as $val)
+                                @php
+                                $optLabel = $isNamed ? ($riskMap[$val]['label'] ?? $val) : $val;
+                                @endphp
+                                <option value="{{ $val }}" {{ (string)old('risk_confidentiality') === (string)$val ? 'selected' : '' }}>
+                                    {{ $isNamed ? "$val — $optLabel" : $optLabel }}
+                                </option>
+                                @endforeach
+                            </select>
+                            @error('risk_confidentiality') <div class="text-danger small mt-2">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Integrity Classification</label>
+                            <select name="risk_integrity" class="form-select">
+                                <option value="">-- Select --</option>
+                                @foreach($riskValues as $val)
+                                @php
+                                $optLabel = $isNamed ? ($riskMap[$val]['label'] ?? $val) : $val;
+                                @endphp
+                                <option value="{{ $val }}" {{ (string)old('risk_integrity') === (string)$val ? 'selected' : '' }}>
+                                    {{ $isNamed ? "$val — $optLabel" : $optLabel }}
+                                </option>
+                                @endforeach
+                            </select>
+                            @error('risk_integrity') <div class="text-danger small mt-2">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Availability Classification</label>
+                            <select name="risk_availability" class="form-select">
+                                <option value="">-- Select --</option>
+                                @foreach($riskValues as $val)
+                                @php
+                                $optLabel = $isNamed ? ($riskMap[$val]['label'] ?? $val) : $val;
+                                @endphp
+                                <option value="{{ $val }}" {{ (string)old('risk_availability') === (string)$val ? 'selected' : '' }}>
+                                    {{ $isNamed ? "$val — $optLabel" : $optLabel }}
+                                </option>
+                                @endforeach
+                            </select>
+                            @error('risk_availability') <div class="text-danger small mt-2">{{ $message }}</div> @enderror
+                        </div>
+
+                        
+
+
                         <!-- Asset Owner Sub-Organization -->
                         <div class="mb-4">
                             <label for="owner_dept" class="form-label fw-semibold">Asset Component Owner Dept</label>
