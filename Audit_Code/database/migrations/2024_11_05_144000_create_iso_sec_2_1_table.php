@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('iso_sec_2_1', function (Blueprint $table) {
-            $table->integer('assessment_id', true);
+            $table->integer('assessment_id');
             $table->integer('project_id')->nullable()->index('project_id');
             $table->string('g_name', 100)->nullable();
             $table->string('name', 100)->nullable();
@@ -28,6 +28,8 @@ return new class extends Migration
             $table->integer('risk_availability')->nullable();
             $table->unsignedBigInteger('last_edited_by')->nullable()->index('last_edited_by');
             $table->dateTime('last_edited_at');
+          $table->unique(['assessment_id', 'project_id']);
+
         });
     }
 

@@ -16,8 +16,34 @@
     </a>
 </div>
 
+<div class="mb-3">
+    <label class="fw-bold me-2">Toggle Columns:</label>
+    @php
+        $columns = [
+            'Service','Asset Type','Asset SubType','Asset Component',
+            'Risk Confidentiality','Risk Integrity','Risk Availability',
+            'Owner Dept','Physical Location','Logical Location',
+            'Service Risk Owner','Component Risk Owner','Service Custodian','Component Custodian','Actions','Asset Component History'
+        ];
 
-    <!-- Responsive Table Wrapper -->
+            $hiddenByDefault = [7, 8, 9, 10, 11, 12, 13]; 
+
+    @endphp
+
+@foreach ($columns as $index => $col)
+    <div class="form-check form-check-inline">
+        <input class="form-check-input toggle-column"
+               type="checkbox"
+               id="col-{{ $index }}"
+               data-column="{{ $index }}"
+               {{ in_array($index, $hiddenByDefault) ? '' : 'checked' }}>
+        <label class="form-check-label" for="col-{{ $index }}">{{ $col }}</label>
+    </div>
+@endforeach
+</div>
+
+
+
    <!-- Responsive Table Wrapper -->
 <div class="table-responsive" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
     <table id="myTable2" class="table table-bordered table-hover table-striped text-center align-middle">
@@ -38,6 +64,7 @@
                 <th onclick="sortTable(12)">Service Custodian</th>
                 <th onclick="sortTable(13)">Component Custodian</th>
                 <th>Actions</th>
+                <th>Asset Component History</th>
             </tr>
         </thead>
 
@@ -66,8 +93,13 @@
                     <a href="/asset_catalog_2_1_edit/{{ $d->id }}/{{ auth()->user()->organization->id }}/{{ auth()->user()->id }}">
                         <i class="fas fa-edit text-success"></i>
                     </a>
-                    <a href="/asset_catalog_2_1_delete/{{ $d->id }}/{{ $d->id }}/{{ auth()->user()->id }}">
+                    <a href="/asset_catalog_2_1_delete/{{ $d->id }}/{{ auth()->user()->id }}">
                         <i class="fas fa-trash text-danger"></i>
+                    </a>
+                </td>
+                <td>
+                      <a href="/asset_component_history_main/{{ $d->id }}/{{ auth()->user()->id }}">
+           <i class="bi bi-clock-fill fs-3"></i> 
                     </a>
                 </td>
             </tr>
@@ -161,6 +193,27 @@ function sortTable(n) {
     }
 }
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.toggle-column').forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            var colIndex = this.getAttribute('data-column');
+            var table = document.getElementById("myTable2");
+            for (var i = 0; i < table.rows.length; i++) {
+                if (table.rows[i].cells[colIndex]) {
+                    table.rows[i].cells[colIndex].style.display = this.checked ? '' : 'none';
+                }
+            }
+        });
+
+        // ✅ Apply the visibility state immediately when page loads
+        checkbox.dispatchEvent(new Event('change'));
+    });
+});
+</script>
+
+
 
 
 

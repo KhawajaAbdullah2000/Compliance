@@ -56,7 +56,7 @@ class IsoSec2_1 extends Controller
                     ->get();
 
 
-                   // dd($data);
+                // dd($data);
 
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                     ->where('projects.project_id', $proj_id)->first();
@@ -234,25 +234,25 @@ class IsoSec2_1 extends Controller
 
                 $frameworkDetails = $this->getProjectFrameworkDetails($project);
                 if ($frameworkDetails['complianceFramework']->framework_name == 'Default') {
-                 
+
                     return view('risk_treatment.serviceslist', [
                         'data' => $data,
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
                         'project_permissions' => $checkpermission->project_permissions,
                         'project' => $project,
-                        
+
                     ]);
                 }
-                
-          
 
-                if($frameworkDetails['complianceFramework']->framework_id==2 and $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2 and $frameworkDetails['framework_approach']->framework_approach_types==1){
+
+
+                if ($frameworkDetails['complianceFramework']->framework_id == 2 and $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 2 and $frameworkDetails['framework_approach']->framework_approach_types == 1) {
                     //qual-asset based
                     //dd($data);
-                
-                    return view('risk_treatment.assets',[
-                        'data'=>$data,
+
+                    return view('risk_treatment.assets', [
+                        'data' => $data,
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
                         'project_permissions' => $checkpermission->project_permissions,
@@ -261,20 +261,18 @@ class IsoSec2_1 extends Controller
                 }
 
 
-                 if($frameworkDetails['complianceFramework']->framework_id==2 and $frameworkDetails['risk_assessment_approach']->assessment_approach_selected==2 and $frameworkDetails['framework_approach']->framework_approach_types==2){
+                if ($frameworkDetails['complianceFramework']->framework_id == 2 and $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 2 and $frameworkDetails['framework_approach']->framework_approach_types == 2) {
                     //quan-asset based
                     //dd($data);
-                
-                    return view('risk_treatment.assets',[
-                        'data'=>$data,
+
+                    return view('risk_treatment.assets', [
+                        'data' => $data,
                         'project_id' => $checkpermission->project_id,
                         'project_name' => $checkpermission->project_name,
                         'project_permissions' => $checkpermission->project_permissions,
                         'project' => $project,
                     ]);
                 }
-
-                
             }
         }
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
@@ -285,10 +283,10 @@ class IsoSec2_1 extends Controller
 
         $req->validate(
             [
-                
+
                 'c_name' => 'required|array|min:1',
                 'c_name.*' => 'required|string|max:255',
-                
+
             ],
             [
                 '*.required' => 'This field is required',
@@ -440,7 +438,7 @@ class IsoSec2_1 extends Controller
                     $isNamed    = $scheme['named'];
 
 
-                    
+
 
                     return view('iso_sec_2_1.iso_sec_2_1_new', [
                         'project_id' => $checkpermission->project_id,
@@ -598,13 +596,13 @@ class IsoSec2_1 extends Controller
             $departments = DB::table('departments')->where('org_id', auth()->user()->organization->id)
                 ->get();
 
-                $allSchemes = config('risk_schemes');
-                    $schemeKey  = 'none';
-                    $scheme     = $allSchemes[$schemeKey] ?? $allSchemes['none'];
+            $allSchemes = config('risk_schemes');
+            $schemeKey  = 'none';
+            $scheme     = $allSchemes[$schemeKey] ?? $allSchemes['none'];
 
-                    $riskValues = $scheme['values'];
-                    $riskMap    = $scheme['map'] ?? [];
-                    $isNamed    = $scheme['named'] ?? false;
+            $riskValues = $scheme['values'];
+            $riskMap    = $scheme['map'] ?? [];
+            $isNamed    = $scheme['named'] ?? false;
 
 
 
@@ -617,9 +615,9 @@ class IsoSec2_1 extends Controller
                 'selected_category' => $selected_type->g_name,
                 'users' => $users,
                 'departments' => $departments,
-                'riskValues'=>$riskValues,
-                'riskMap'=>$riskMap,
-                'isNamed'=>$isNamed
+                'riskValues' => $riskValues,
+                'riskMap' => $riskMap,
+                'isNamed' => $isNamed
             ]);
 
 
@@ -636,7 +634,7 @@ class IsoSec2_1 extends Controller
             [
 
                 'c_name' => 'required',
-           
+
 
             ],
             [
@@ -708,7 +706,7 @@ class IsoSec2_1 extends Controller
                             ->with('success', 'Record Updated successfully');
                     } catch (\Exception $e) {
                         $error = $e->getMessage();
-                        return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id,'page_type' => 'services_register'])
+                        return redirect()->route('iso_section2_1', ['proj_id' => $proj_id, 'user_id' => $user_id, 'page_type' => 'services_register'])
                             ->with('error', $error);
                     }
                 }
@@ -752,8 +750,8 @@ class IsoSec2_1 extends Controller
                         'service_custodian' => $req->service_custodian,
                         'component_custodian' => $req->component_custodian,
                         'risk_confidentiality' => $req->risk_confidentiality,
-                                'risk_integrity' => $req->risk_integrity,
-                                'risk_availability' => $req->risk_availability
+                        'risk_integrity' => $req->risk_integrity,
+                        'risk_availability' => $req->risk_availability
                     ]);
 
 
@@ -826,6 +824,399 @@ class IsoSec2_1 extends Controller
 
         return redirect()->route('org_services_register', ['org_id' => auth()->user()->organization->id])
             ->with('success', 'Record Deleted successfully');
+    }
+
+    public function asset_component_history_main($asset_id, $user_id)
+    {
+        $complianceProjectCount = DB::table('iso_sec_2_1')
+            ->join('projects', 'iso_sec_2_1.project_id', 'projects.project_id')
+            ->join('project_types', 'project_types.id', 'projects.project_type')
+            ->where('assessment_id', $asset_id)
+            ->distinct('iso_sec_2_1.project_id')
+            ->count('iso_sec_2_1.project_id');
+
+        $asset = DB::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
+
+        return view('component_history.projects_count_used', [
+            'complianceProjectCount' => $complianceProjectCount,
+            'asset' => $asset
+        ]);
+    }
+
+    public function compliance_comp_history_projects_list($asset_id, $user_id)
+    {
+
+        $asset = DB::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
+
+        $projectIds = DB::table('iso_sec_2_1')
+            ->where('assessment_id', $asset_id)
+            ->pluck('project_id')
+            ->filter() // remove null project_ids
+            ->toArray();
+
+        if (empty($projectIds)) {
+            return collect(); // no projects found for this asset
+        }
+
+        // Fetch compliance summary for all these projects
+        $complianceSummary = DB::table('projects')
+            ->join('project_types', 'projects.project_type', '=', 'project_types.id')
+            ->join('iso_sec_2_2', 'projects.project_id', '=', 'iso_sec_2_2.project_id')
+            ->whereIn('projects.project_id', $projectIds) // filter by asset's projects
+            ->where('iso_sec_2_2.applicability', 'yes')
+            ->where('iso_sec_2_2.asset_id', $asset_id)
+            ->where('iso_sec_2_2.comp_status', '!=', 'not_tested')
+            ->select(
+                'projects.project_id',
+                'projects.project_name',
+                'project_types.type as project_type',
+                DB::raw('COUNT(DISTINCT iso_sec_2_2.title_num) as domains_assessed'),
+                DB::raw('COUNT(DISTINCT iso_sec_2_2.subdomain) as subdomains_assessed'),
+                DB::raw('COUNT(DISTINCT iso_sec_2_2.sub_req) as controls_assessed')
+            )
+            ->groupBy('projects.project_id', 'projects.project_name', 'project_types.type')
+            ->orderBy('projects.project_name')
+            ->get();
+        // dd($complianceSummary);
+
+        return view('component_history.projects_domains_list', [
+            'complianceSummary' => $complianceSummary,
+            'asset' => $asset
+        ]);
+    }
+
+    public function compliance_domains_assessed_history($proj_id, $asset_id)
+    {
+        $asset = DB::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
+
+        $typeId = $project->project_type;
+        $filepath = null;
+
+        switch ($typeId) {
+            case 7:
+                $filepath = public_path('KSA_NCA_ECC.xlsx');
+                break;
+            case 18:
+                $filepath = public_path('COSO.xlsx');
+                break;
+            case 19:
+                $filepath = public_path('SOC2_Type2.xlsx');
+                break;
+            case 4:
+                $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
+                break;
+            case 23:
+                $filepath = public_path('NIST_CSF.xlsx');
+                break;
+            case 24:
+                $filepath = public_path('ISO27701_2019v2.xlsx');
+                break;
+            case 1:
+                $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
+                break;
+            case 2:
+                $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                break;
+            case 3:
+                $filepath = public_path('PCI_DSS_4_Merchant_TSP.xlsx');
+                break;
+            case 16:
+                $filepath = public_path('COBIT_2019.xlsx');
+                break;
+            case 6:
+                $filepath = public_path('SBP_ETGRMF.xlsx');
+                break;
+            case 25:
+                $filepath = public_path('DigitalBankingSecurity.xlsx');
+                break;
+            case 26:
+                $filepath = public_path('SBP_Payment_Card_Security_Standard.xlsx');
+                break;
+        }
+
+
+
+        $data = Excel::toArray([], $filepath); //with header
+        $rows = array_slice($data[0], 1); //without header(first row)
+
+        $domainMapping = [];
+        foreach ($rows as $row) {
+            // Assuming first column has title_num and second column has domain text
+            if (isset($row[0]) && isset($row[1])) {
+                $domainMapping[$row[0]] = $row[1];
+            }
+        }
+
+        $projectDomains = DB::table('iso_sec_2_2')
+            ->where('project_id', $proj_id)
+            ->where('asset_id', $asset_id)
+            ->where('applicability', 'yes')
+            ->select(
+                'title_num',
+                DB::raw('GROUP_CONCAT(applicability) as applicability_values'),
+                DB::raw('GROUP_CONCAT(comp_status) as comp_status_values')
+            )
+            ->groupBy('title_num')
+            ->get();
+
+
+        $domainSummary = $projectDomains->map(function ($domain) use ($domainMapping) {
+            $compStatuses = explode(',', $domain->comp_status_values);
+
+            // Compliance logic
+            if (count(array_unique($compStatuses)) === 1 && $compStatuses[0] === 'not_tested') {
+                $compliance = 'No';
+            } elseif (!in_array('not_tested', $compStatuses)) {
+                $compliance = 'Yes';
+            } else {
+                $compliance = 'Values differ';
+            }
+
+            $domainText = $domainMapping[$domain->title_num] ?? '';
+            $fullDomain = $domain->title_num . ' - ' . $domainText;
+            return [
+                'domain' => $fullDomain,
+                'compliance' => $compliance
+            ];
+        });
+
+
+
+        return view('component_history.compliance_domains_assessed', [
+            'domainSummary' => $domainSummary,
+            'project' => $project,
+            'asset' => $asset
+        ]);
+    }
+
+    public function compliance_subdomains_assessed_history($proj_id, $asset_id)
+    {
+        $asset = DB::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
+
+        $typeId = $project->project_type;
+        $filepath = null;
+
+        switch ($typeId) {
+            case 7:
+                $filepath = public_path('KSA_NCA_ECC.xlsx');
+                break;
+            case 18:
+                $filepath = public_path('COSO.xlsx');
+                break;
+            case 19:
+                $filepath = public_path('SOC2_Type2.xlsx');
+                break;
+            case 4:
+                $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
+                break;
+            case 23:
+                $filepath = public_path('NIST_CSF.xlsx');
+                break;
+            case 24:
+                $filepath = public_path('ISO27701_2019v2.xlsx');
+                break;
+            case 1:
+                $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
+                break;
+            case 2:
+                $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                break;
+            case 3:
+                $filepath = public_path('PCI_DSS_4_Merchant_TSP.xlsx');
+                break;
+            case 16:
+                $filepath = public_path('COBIT_2019.xlsx');
+                break;
+            case 6:
+                $filepath = public_path('SBP_ETGRMF.xlsx');
+                break;
+            case 25:
+                $filepath = public_path('DigitalBankingSecurity.xlsx');
+                break;
+            case 26:
+                $filepath = public_path('SBP_Payment_Card_Security_Standard.xlsx');
+                break;
+        }
+
+
+
+        $data = Excel::toArray([], $filepath); //with header
+        $rows = array_slice($data[0], 1); //without header(first row)
+
+        $domainMapping = [];
+        foreach ($rows as $row) {
+            // assuming column C (index 2) has title_num, and column D (index 3) has title text
+            if (isset($row[2]) && isset($row[3])) {
+                $key = trim((string)$row[2]);   // keeps "4.1" as "4.1" not 4.099999
+                $value = trim((string)$row[3]); // ensures string value for title
+                $domainMapping[$key] = $value;
+            }
+        }
+
+
+        $projectDomains = DB::table('iso_sec_2_2')
+            ->where('project_id', $proj_id)
+            ->where('asset_id', $asset_id)
+            ->where('applicability', 'yes')
+            ->select(
+                'subdomain',
+                DB::raw('GROUP_CONCAT(applicability) as applicability_values'),
+                DB::raw('GROUP_CONCAT(comp_status) as comp_status_values')
+            )
+            ->groupBy('subdomain')
+            ->get();
+
+
+        $domainSummary = $projectDomains->map(function ($domain) use ($domainMapping) {
+            $compStatuses = explode(',', $domain->comp_status_values);
+
+            // Compliance logic
+            if (count(array_unique($compStatuses)) === 1 && $compStatuses[0] === 'not_tested') {
+                $compliance = 'No';
+            } elseif (!in_array('not_tested', $compStatuses)) {
+                $compliance = 'Yes';
+            } else {
+                $compliance = 'Values differ';
+            }
+
+            $domainText = $domainMapping[$domain->subdomain] ?? '';
+            $fullDomain = $domain->subdomain . ' - ' . $domainText;
+            return [
+                'subdomain' => $fullDomain,
+                'compliance' => $compliance
+            ];
+        });
+
+
+
+
+        return view('component_history.compliance_subdomains_assessed', [
+            'domainSummary' => $domainSummary,
+            'project' => $project,
+            'asset' => $asset
+        ]);
+    }
+
+    public function compliance_controls_assessed_history($proj_id, $asset_id)
+    {
+        $asset = DB::table('iso_sec_2_1')->where('assessment_id', $asset_id)->first();
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
+
+        $typeId = $project->project_type;
+        $filepath = null;
+
+        switch ($typeId) {
+            case 7:
+                $filepath = public_path('KSA_NCA_ECC.xlsx');
+                break;
+            case 18:
+                $filepath = public_path('COSO.xlsx');
+                break;
+            case 19:
+                $filepath = public_path('SOC2_Type2.xlsx');
+                break;
+            case 4:
+                $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25.xlsx');
+                break;
+            case 23:
+                $filepath = public_path('NIST_CSF.xlsx');
+                break;
+            case 24:
+                $filepath = public_path('ISO27701_2019v2.xlsx');
+                break;
+            case 1:
+                $filepath = public_path('PCI_DSS_4_Single_TSP.xlsx');
+                break;
+            case 2:
+                $filepath = public_path('PCI_DSS_4_Multi_TSP.xlsx');
+                break;
+            case 3:
+                $filepath = public_path('PCI_DSS_4_Merchant_TSP.xlsx');
+                break;
+            case 16:
+                $filepath = public_path('COBIT_2019.xlsx');
+                break;
+            case 6:
+                $filepath = public_path('SBP_ETGRMF.xlsx');
+                break;
+            case 25:
+                $filepath = public_path('DigitalBankingSecurity.xlsx');
+                break;
+            case 26:
+                $filepath = public_path('SBP_Payment_Card_Security_Standard.xlsx');
+                break;
+        }
+
+
+
+        $data = Excel::toArray([], $filepath); //with header
+        $rows = array_slice($data[0], 1); //without header(first row)
+
+        $domainMapping = [];
+        foreach ($rows as $row) {
+           
+            if (isset($row[4]) && isset($row[5])) {
+                $key = trim((string)$row[4]);
+                $value = trim((string)$row[5]);
+                $domainMapping[$key] = $value;
+            }
+        }
+
+        //dd($domainMapping);
+
+
+        $projectDomains = DB::table('iso_sec_2_2')
+            ->where('project_id', $proj_id)
+            ->where('asset_id', $asset_id)
+            ->where('applicability', 'yes')
+            ->select(
+                'sub_req',
+                DB::raw('GROUP_CONCAT(applicability) as applicability_values'),
+                DB::raw('GROUP_CONCAT(comp_status) as comp_status_values')
+            )
+            ->groupBy('sub_req')
+            ->get();
+
+
+        $domainSummary = $projectDomains->map(function ($domain) use ($domainMapping) {
+            $compStatuses = explode(',', $domain->comp_status_values);
+
+            // Compliance logic
+            if (count(array_unique($compStatuses)) === 1 && $compStatuses[0] === 'not_tested') {
+                $compliance = 'No';
+            } elseif (!in_array('not_tested', $compStatuses)) {
+                $compliance = 'Yes';
+            } else {
+                $compliance = 'Values differ';
+            }
+
+             $key = trim((string)$domain->sub_req);
+    $key = str_replace([' ', '_'], ['', '-'], $key);
+
+             $domainText = $domainMapping[$key]
+        ?? collect($domainMapping)
+            ->first(function ($value, $mapKey) use ($key) {
+                return str_starts_with($mapKey, $key);
+            })
+        ?? '';
+            $fullDomain = $domain->sub_req . ' - ' . $domainText;
+            return [
+                'sub_req' => $fullDomain,
+                'compliance' => $compliance
+            ];
+        });
+
+
+        return view('component_history.compliance_controls_assessed', [
+            'domainSummary' => $domainSummary,
+            'project' => $project,
+            'asset' => $asset
+        ]);
     }
 
 
@@ -1272,8 +1663,10 @@ class IsoSec2_1 extends Controller
                                 ->where('id', $asset)
                                 ->first();
 
-                            
+
+
                             DB::table('iso_sec_2_1')->insert([
+                                'assessment_id' => $ass->id,
                                 'project_id' => $proj_to_copy,
                                 'g_name' => $ass->g_name,
                                 'name' => $ass->name,
@@ -1288,12 +1681,13 @@ class IsoSec2_1 extends Controller
                                 'component_risk_owner' => $ass->component_risk_owner,
                                 'service_custodian' => $ass->service_custodian,
                                 'component_custodian' => $ass->component_custodian,
-                                'risk_confidentiality'=>$ass->risk_confidentiality,
-                                'risk_integrity'=>$ass->risk_integrity,
-                                'risk_availability'=>$ass->risk_availability
+                                'risk_confidentiality' => $ass->risk_confidentiality,
+                                'risk_integrity' => $ass->risk_integrity,
+                                'risk_availability' => $ass->risk_availability
                             ]);
 
                             DB::table('audit_trail_for_services')->insert([
+                                'asset_id' => $ass->id,
                                 'project_id' => $proj_to_copy,
                                 'g_name' => $ass->g_name,
                                 'name' => $ass->name,
@@ -1309,6 +1703,7 @@ class IsoSec2_1 extends Controller
                             ]);
                         }
                     } catch (\Exception $e) {
+
                         return redirect()->route('iso_section2_1', [
                             'proj_id' => $proj_to_copy,
                             'user_id' => $user_id,
@@ -1413,7 +1808,7 @@ class IsoSec2_1 extends Controller
             )
             ->where('organization_id', $org_id)
             ->get();
-           // dd($data);
+        // dd($data);
 
         $organizationData = DB::table("organizations")->where('id', $org_id)->first();
 
@@ -1449,16 +1844,16 @@ class IsoSec2_1 extends Controller
         $departments = DB::table('departments')->where('org_id', auth()->user()->organization->id)
             ->get();
 
-              $schemeKey = 'none';
+        $schemeKey = 'none';
 
-                    $allSchemes = config('risk_schemes');
+        $allSchemes = config('risk_schemes');
 
-                    $scheme = $allSchemes[$schemeKey] ?? $allSchemes['none'];
+        $scheme = $allSchemes[$schemeKey] ?? $allSchemes['none'];
 
 
-                    $riskValues = $scheme['values']; // e.g., [5,4,3,2,1]
-                    $riskMap    = $scheme['map'] ?? null;    // name map if named
-                    $isNamed    = $scheme['named'];
+        $riskValues = $scheme['values']; // e.g., [5,4,3,2,1]
+        $riskMap    = $scheme['map'] ?? null;    // name map if named
+        $isNamed    = $scheme['named'];
 
 
         return view('iso_sec_2_1.service_register_new', [
@@ -1466,16 +1861,16 @@ class IsoSec2_1 extends Controller
             'selectedCategories' => $selectedCategories,
             'users' => $users,
             'departments' => $departments,
-            'riskValues'=>$riskValues,
-            'riskMap'=>$riskMap,
-            'isNamed'=>$isNamed
+            'riskValues' => $riskValues,
+            'riskMap' => $riskMap,
+            'isNamed' => $isNamed
 
         ]);
     }
 
     public function new_service_register_2_1_submit($org_id, $user_id, Request $req)
     {
-        
+
         $req->validate(
             [
                 'c_name' => 'required|array|min:1',
@@ -1508,9 +1903,9 @@ class IsoSec2_1 extends Controller
                     'component_risk_owner' => $req->component_risk_owner,
                     'service_custodian' => $req->service_custodian,
                     'component_custodian' => $req->component_custodian,
-                    'risk_confidentiality' => $req->risk_confidentiality,
-                                'risk_integrity' => $req->risk_integrity,
-                                'risk_availability' => $req->risk_availability,
+                    'risk_confidentiality' => $req->risk_confidentiality ?? 10,
+                    'risk_integrity' => $req->risk_integrity ?? 10,
+                    'risk_availability' => $req->risk_availability ?? 10,
                 ]);
 
                 Db::table('audit_trail_for_services')->insert([
@@ -1525,13 +1920,14 @@ class IsoSec2_1 extends Controller
                     'physical_loc' => $req->physical_loc,
                     'logical_loc' => $req->logical_loc,
                     'risk_confidentiality' => $req->risk_confidentiality,
-                                'risk_integrity' => $req->risk_integrity,
-                                'risk_availability' => $req->risk_availability,
+                    'risk_integrity' => $req->risk_integrity,
+                    'risk_availability' => $req->risk_availability,
                     'performed_at' => Carbon::now()->format('Y-m-d H:i:s')
                 ]);
             }
         } catch (\Exception $e) {
             $error = $e->getMessage();
+            dd($error);
 
 
             return redirect()->route('org_services_register', ['org_id' => $org_id])

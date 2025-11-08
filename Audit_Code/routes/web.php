@@ -534,6 +534,12 @@ Route::middleware(['auth', 'is_user', 'role:end user'])->group(
         route::get('iso_sec_2_1_delete/{assessment_id}/{proj_id}/{user_id}', [IsoSec2_1::class, 'iso_sec_2_1_delete']);
         route::get('asset_catalog_2_1_delete/{asset_id}/{user_id}', [IsoSec2_1::class, 'asset_catalog_2_1_delete']);
         Route::get('get-asset-types/{category_id}', [IsoSec2_1::class, 'getAssetTypes']);
+        Route::get('asset_component_history_main/{asset_id}/{user_id}',[IsoSec2_1::class,'asset_component_history_main'])->name('asset_component_history_main');
+        Route::get('compliance_comp_history_projects_list/{asset_id}/{user_id}',[IsoSec2_1::class,'compliance_comp_history_projects_list']);
+        Route::get('compliance_domains_assessed_history/{proj_id}/{asset_id}',[IsoSec2_1::class,'compliance_domains_assessed_history']);
+        Route::get('compliance_subdomains_assessed_history/{proj_id}/{asset_id}',[IsoSec2_1::class,'compliance_subdomains_assessed_history']);
+        Route::get('compliance_controls_assessed_history/{proj_id}/{asset_id}',[IsoSec2_1::class,'compliance_controls_assessed_history']);
+
 
         ROute::get('org_doc_repo/{org_id}', [IsoSec2_1::class, 'org_doc_repo'])->name('org_doc_repo');
         route::Post('org_doc_repo_submit/{org_id}', [IsoSec2_1::class, 'org_doc_repo_submit']);

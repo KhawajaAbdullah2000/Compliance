@@ -166,11 +166,11 @@ $permissions = json_decode($project_permissions);
         </div>
     </div>
 
-    @if (in_array('Data Inputter', $permissions) && $page_type=="services_register")
+    {{-- @if (in_array('Data Inputter', $permissions) && $page_type=="services_register")
     <a class="btn btn-success btn-md float-end mb-2" href="/iso_sec_2_1_new/{{ $project_id }}/{{ auth()->user()->id }}" role="button">Enter Service or
         Asset
         <i class="fas fa-plus"></i></a>
-    @endif
+    @endif --}}
 
     <!-- Data Table -->
     <table id="myTable2" class="table table-bordered table-hover table-striped align-middle table-responsive">
@@ -252,9 +252,9 @@ $permissions = json_decode($project_permissions);
                 @if($page_type=="services_register")
                 <td class="text-center">
                     @if (in_array('Data Inputter', $permissions) )
-                    <a href="/iso_sec_2_1_edit/{{ $d->assessment_id }}/{{ $d->project_id }}/{{ auth()->user()->id }}">
+                    {{-- <a href="/iso_sec_2_1_edit/{{ $d->assessment_id }}/{{ $d->project_id }}/{{ auth()->user()->id }}">
                         <i class="fas fa-edit text-success"></i>
-                    </a>
+                    </a> --}}
                     <a href="/iso_sec_2_1_delete/{{ $d->assessment_id }}/{{ $d->project_id }}/{{ auth()->user()->id }}">
                         <i class="fas fa-trash text-danger"></i>
                     </a>
@@ -281,7 +281,7 @@ $permissions = json_decode($project_permissions);
     @endif
 
     <!-- Upload Section -->
-    @if (in_array('Data Inputter', $permissions) && $page_type=="services_register")
+    {{-- @if (in_array('Data Inputter', $permissions) && $page_type=="services_register")
     <div class="mt-4">
         <a href="{{ route('download_asset_template') }}" class="text-decoration-underline text-primary">Download
             Excel Template</a>
@@ -297,7 +297,7 @@ $permissions = json_decode($project_permissions);
             <button type="submit" class="btn btn-success btn-sm rounded-pill mt-2">Upload</button>
         </form>
     </div>
-    @endif
+    @endif --}}
 </div>
 
 @section('scripts')
