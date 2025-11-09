@@ -46,7 +46,7 @@ $framework_labels=[
         </div>
     </div>
 
-    <p class="fs-5 fw-bold">Assess Risk  for:
+    <p class="fs-5 fw-bold">Assess Risk for:
         <span>
             <table class="table table-bordered table-responsive">
                 <tr>
@@ -64,9 +64,9 @@ $framework_labels=[
     </p>
 
 
-      <p class="fs-5">The administrator has selected the risk assessment methodology : {{$framework_labels[$selected]}}
+    <p class="fs-5">The administrator has selected the risk assessment methodology : {{$framework_labels[$selected]}}
 
-      </p>
+    </p>
 
     <p class="fs-5">You can select a different methodology from the list below:
     </p>
@@ -92,12 +92,12 @@ $framework_labels=[
 
         <label>
             <input class="form-check-input" type="radio" name="framework_option" value="qualitative_event" {{ $selected == 'qualitative_event' ? 'checked' : '' }} {{ !$canEdit ? 'disabled' : '' }}>
-        Qualitative - Event Based
-        </label><br> 
+            Qualitative - Event Based
+        </label><br>
 
         {{-- <label>
             <input class="form-check-input" type="radio" name="framework_option" value="quantitative_event" {{ $selected == 'quantitative_event' ? 'checked' : '' }} {{ !$canEdit ? 'disabled' : '' }}>
-            Quantitative - Event Based
+        Quantitative - Event Based
         </label><br> --}}
 
         <button {{ !$canEdit ? 'disabled' : '' }} type="submit" class="btn btn-success mt-2 btn-sm">Update Changes</button>
@@ -110,15 +110,15 @@ $framework_labels=[
 
 
 
-    @if($project->risk_scheme!=null)
+    {{-- @if($project->risk_scheme!=null)
     <div class="col-md-6">
 
-          <p class='fs-5'>The administrator has selected the CLassification Level : {{$project->risk_scheme}}
+        <p class='fs-5'>The administrator has selected the CLassification Level : {{$project->risk_scheme}}
 
-          </p>
+        </p>
 
-<p class="fs-5">You can select a different Classification Level from the list below:
-</p>
+        <p class="fs-5">You can select a different Classification Level from the list below:
+        </p>
 
         <form method="POST" action="/save_classification_level_by_enduser/{{auth()->user()->organization->id}}">
             @csrf @method('PUT')
@@ -137,7 +137,7 @@ $framework_labels=[
     </div>
 
 
-    @endif
+    @endif --}}
 
 
 

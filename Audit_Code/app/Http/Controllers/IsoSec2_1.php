@@ -597,7 +597,8 @@ class IsoSec2_1 extends Controller
                 ->get();
 
             $allSchemes = config('risk_schemes');
-            $schemeKey  = 'none';
+            $schemeKey = DB::table('organizations')->where('id',$org_id)->value('risk_scheme');
+
             $scheme     = $allSchemes[$schemeKey] ?? $allSchemes['none'];
 
             $riskValues = $scheme['values'];
@@ -1844,11 +1845,14 @@ class IsoSec2_1 extends Controller
         $departments = DB::table('departments')->where('org_id', auth()->user()->organization->id)
             ->get();
 
-        $schemeKey = 'none';
+        $schemeKey = DB::table('organizations')->where('id',$org_id)->value('risk_scheme');
+        //dd($schemeKey);
 
         $allSchemes = config('risk_schemes');
+       // dd($allSchemes,$schemeKey);
 
         $scheme = $allSchemes[$schemeKey] ?? $allSchemes['none'];
+       
 
 
         $riskValues = $scheme['values']; // e.g., [5,4,3,2,1]

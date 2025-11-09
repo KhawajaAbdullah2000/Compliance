@@ -28,16 +28,18 @@ class RiskManagementFramework extends Controller
     public function select_projects_for_classification_level($org_id)
     {
 
-        $org_projects = DB::table('organization_project_types')
-            ->join('project_types', 'organization_project_types.project_type_id', 'project_types.id')
-            ->where('org_id', $org_id)
-            ->select('project_type_id', 'type', 'org_id','risk_scheme')
-            ->get();
+        // $org_projects = DB::table('organization_project_types')
+        //     ->join('project_types', 'organization_project_types.project_type_id', 'project_types.id')
+        //     ->where('org_id', $org_id)
+        //     ->select('project_type_id', 'type', 'org_id','risk_scheme')
+        //     ->get();
+         $organization=DB::table('organizations')->where('id',$org_id)->first();
+        // dd($organization);
 
            // dd($org_projects);
 
         return view('risk_management.select_projects_for_classification_levels', [
-            'org_projects' => $org_projects
+            'organization' => $organization
         ]);
     }
 
@@ -129,10 +131,10 @@ class RiskManagementFramework extends Controller
     public function save_classification_level($org_id,Request $req){
       
 
-            DB::table('project_types')
+            DB::table('organizations')
                 ->updateOrInsert(
                     [
-                        'id' => $req->selected_project,
+                        'id' => $org_id,
                     ],
                     [
                         'risk_scheme' => $req->risk_scheme

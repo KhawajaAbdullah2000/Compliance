@@ -82,7 +82,7 @@ The organization will overcome the situation without too much difficulty (margin
     
 @endphp
 
-@if(\App\Support\RiskScheme::isNone($schemeKey))
+{{-- @if(\App\Support\RiskScheme::isNone($schemeKey)) --}}
     <div class="alert alert-info">
           @php
                     $riskOptions = [5,4,3,2,1];
@@ -139,7 +139,7 @@ The organization will overcome the situation without too much difficulty (margin
                         </tbody>
                     </table>
     </div>
-@else
+{{-- @else
     <table class="table table-bordered text-center align-middle">
         <thead class="table-secondary">
             <tr>
@@ -181,7 +181,7 @@ The organization will overcome the situation without too much difficulty (margin
         @endforeach
         </tbody>
     </table>
-@endif
+@endif --}}
 
                     <div class="mt-4 mb-4 d-flex justify-content-end gap-2">
                         <button type="submit" name="action" value="save_and_stay" class="btn btn-secondary">
