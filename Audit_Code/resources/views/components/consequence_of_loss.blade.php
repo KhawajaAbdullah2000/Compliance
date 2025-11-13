@@ -1,8 +1,11 @@
+
+
 @php
 // Get active scheme
 $allSchemes = config('risk_schemes');
 $schemeKey = $project->risk_scheme ?? 'none';
 $scheme = $allSchemes[$schemeKey] ?? $allSchemes['none'];
+
 
 $isNamed = $scheme['named'] ?? false; // true => use map labels
 $schemeMap = $scheme['map'] ?? []; // e.g. [5 => ['label'=>'Critical','class'=>'text-danger'], ...]
@@ -24,26 +27,7 @@ return e($v);
 
 @endphp
 
-{{-- <div class="mt-4">
-    <div class="table-responsive">
-        <table class="table table-bordered text-center align-middle mb-0">
-            <thead class="table-primary text-white fw-bold">
-                <tr>
-                    <th>Business Impact (Consequence) of Loss of Data Confidentiality</th>
-                    <th>Business Impact (Consequence) of Loss of Data Integrity</th>
-                    <th>Business Impact (Consequence) of Loss of Data Availability</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="bg-light">
-                    <td>{{ $labels[(int)$asset->risk_confidentiality] ?? 'N/A' }}</td>
-<td>{{ $labels[(int)$asset->risk_integrity] ?? 'N/A' }}</td>
-<td>{{ $labels[(int)$asset->risk_availability] ?? 'N/A' }}</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div> --}}
+
 <div class="mt-4">
     <div class="table-responsive">
         <table class="table table-bordered text-center align-middle mb-0">

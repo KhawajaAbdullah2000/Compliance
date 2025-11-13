@@ -353,7 +353,6 @@ class IsoSec2_3_1 extends Controller
                 $riskValues = RiskScheme::values($schemeKey);
 
 
-
                 if ($frameworkDetails['complianceFramework'] == null) {
                     return redirect()->back()->with('error', 'No risk assessment methodology has been selected');
                 }
@@ -364,6 +363,7 @@ class IsoSec2_3_1 extends Controller
                     && $frameworkDetails['framework_approach']->framework_approach_types_id == 1
                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 2
                 ) {
+                    
 
                     //ISo 27005:2022 Qualitative Asset based
                     return view("iso_27005.consequence_on_service", [
@@ -529,6 +529,7 @@ class IsoSec2_3_1 extends Controller
 
     public function Risk_Selection_form_Submit(Request $req, $asset_id, $proj_id, $user_id)
     {
+
 
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(

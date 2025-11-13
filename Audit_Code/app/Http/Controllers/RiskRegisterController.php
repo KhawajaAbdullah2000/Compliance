@@ -252,6 +252,7 @@ class RiskRegisterController extends Controller
                 'org_framework_approach_selected.framework_approach_types',
             ];
         } else {
+          
             $selects = collect($columnSets[$dimension])->pluck('key')->map(function ($k) {
                 if (in_array($k, ['project_name', 'status'])) {
                     return "p.$k as $k";
@@ -329,6 +330,7 @@ class RiskRegisterController extends Controller
         }
 
 
+
         // Ensure quantitative likelihood columns are always present (alias them explicitly)
         if ($dimension !== 'project') {
             $forceQuantitative = [
@@ -358,11 +360,29 @@ class RiskRegisterController extends Controller
                 return $row;
             }
 
+            $hasQualInputs =
+        !is_null($row->data_confidentiality) &&
+        !is_null($row->data_integrity) &&
+        !is_null($row->data_availability) &&
+        !is_null($row->qualitative_likelihood_risk_confidentiality_selected) &&
+        !is_null($row->qualitative_likelihood_risk_integrity_selected) &&
+        !is_null($row->qualitative_likelihood_risk_availability_selected);
+
+    $hasQuantInputs =
+        !is_null($row->data_confidentiality) &&
+        !is_null($row->data_integrity) &&
+        !is_null($row->data_availability) &&
+        !is_null($row->quantitative_likelihood_risk_confidentiality_selected) &&
+        !is_null($row->quantitative_likelihood_risk_integrity_selected) &&
+        !is_null($row->quantitative_likelihood_risk_availability_selected);
+
+
+
 
             if (
                 $row->framework_selected == 2 &&
                 $row->assessment_approach_selected == 2 &&
-                $row->framework_approach_types == 1
+                $row->framework_approach_types == 1  && $hasQualInputs
             ) {
 
                 $row->risk_assessment = 'Qualitative Asset Based';
@@ -413,8 +433,8 @@ class RiskRegisterController extends Controller
             return $row;
         });
 
-        //  dd($rows);
-        // dd($dimension);
+
+       
 
         return view('risk_register.index', [
             'dimension' => $dimension,
@@ -425,7 +445,7 @@ class RiskRegisterController extends Controller
     }
 
 
-       public function index_project(string $dimension, int $orgId,int $proj_id)
+    public function index_project(string $dimension, int $orgId, int $proj_id)
     {
         // Map each dimension to the columns we want to show (order matters)
         $columnSets = [
@@ -548,7 +568,7 @@ class RiskRegisterController extends Controller
             ->leftJoin('iso_sec_2_1 as i', 'i.project_id', '=', 'p.project_id') // 👈 flipped to LEFT JOIN
             ->leftJoin('proj_asset_likelihood_value', 'proj_asset_likelihood_value.project_id', '=', 'p.project_id')
             ->where('p.org_id', $orgId)
-            ->where('p.project_id',$proj_id);
+            ->where('p.project_id', $proj_id);
 
 
 
@@ -1083,6 +1103,7 @@ class RiskRegisterController extends Controller
 
     private function qualitativeRiskMatrix()
     {
+
         return [
             5 => [ // Catastrophic
                 5 => 'Very high', // Almost certain
