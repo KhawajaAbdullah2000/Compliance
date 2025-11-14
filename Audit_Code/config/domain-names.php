@@ -425,6 +425,18 @@ return [
         '5'=>'Consumer Awareness & Record Retention',
         '6'=>'Roadmap for EMV Compliance',
         
+     ],
+
+     //ISO 22301:2019
+     29=>[
+        '4'=>'Context of the organization',
+        '5'=>'Leadership',
+        '6'=>'Planning',
+        '7'=>'Support',
+        '8'=>'Operation',
+        '9'=>'Performance evaluation',
+        '10'=>'Improvement'
+        
     ]
 
 ];

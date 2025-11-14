@@ -156,7 +156,7 @@
                         <td>
                             {{ $subReq }}
                             @if(isset($UniqueSubReqs[$subReq]))
-                            – {{ $UniqueSubReqs[$subReq] }}
+                            – {{ $UniqueSubReqs[$subReq] }} 
                             @endif
                         </td>
                         <td>{{ $count }}</td>

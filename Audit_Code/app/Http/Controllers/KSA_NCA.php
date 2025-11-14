@@ -353,6 +353,10 @@ class KSA_NCA extends Controller
                     $filepath = public_path('SBP_Payment_Card_Security_Standard.xlsx');
                 }
 
+                if ($checkpermission->type_id == 29) {
+                    $filepath = public_path('ISO_22301.xlsx');
+                }
+
 
 
 
@@ -379,13 +383,14 @@ class KSA_NCA extends Controller
                         })
                         ->toArray();
                 } else {
+                  
                     $data = Excel::toArray([], $filepath); //with header
                     $rows = array_slice($data[0], 1); //without header(first row)
                     $filteredData = collect($rows)->filter(function ($row) use ($title_num) {
                         return strval($row[0]) === $title_num;
                     })->values()->all();
                 }
-
+              
 
 
                 $asset = DB::table('iso_sec_2_1')
@@ -405,9 +410,10 @@ class KSA_NCA extends Controller
                         DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
                     )
                     ->where('iso_sec_2_1.assessment_id', $asset_id)
+                    ->where('project_id',$proj_id)
                     ->first();
 
-
+                 
                 // $results = DB::table('iso_sec_2_2')->where('project_id', $proj_id)
                 //     ->where('asset_id', $asset_id)->where('title_num', $title_num)
                 //     ->get();
@@ -423,6 +429,7 @@ class KSA_NCA extends Controller
                         return $item;
                     });
 
+                  
 
 
                 $finalStatusBySubdomain = $results->groupBy('subdomain')->map(function ($items) {
@@ -431,7 +438,7 @@ class KSA_NCA extends Controller
                     return $statuses->count() === 1 ? $statuses->first() : 'different';
                 });
 
-                //  dd($finalStatusBySubdomain);
+    
 
 
                 $finalApplicabilityByTitle = $results->groupBy('subdomain')->map(function ($items) {
@@ -441,7 +448,7 @@ class KSA_NCA extends Controller
                 });
 
 
-                // dd($finalStatusBySubdomain,$finalApplicabilityByTitle);
+                 //dd($finalStatusBySubdomain,$finalApplicabilityByTitle);
 
 
                 return view('KSA_NCA.ksa_nca_2_2_main', [
@@ -534,6 +541,10 @@ class KSA_NCA extends Controller
 
                 if ($checkpermission->type_id == 26) {
                     $filepath = public_path('SBP_Payment_Card_Security_Standard.xlsx');
+                }
+
+                if ($checkpermission->type_id == 29) {
+                    $filepath = public_path('ISO_22301.xlsx');
                 }
 
                 if ($checkpermission->type_id != 27) {
@@ -706,6 +717,10 @@ class KSA_NCA extends Controller
 
                 if ($checkpermission->type_id == 26) {
                     $filepath = public_path('SBP_Payment_Card_Security_Standard.xlsx');
+                }
+
+                 if ($checkpermission->type_id == 29) {
+                    $filepath = public_path('ISO_22301.xlsx');
                 }
 
 
@@ -923,6 +938,10 @@ class KSA_NCA extends Controller
 
                     if ($checkpermission->type_id == 26) {
                         $filepath = public_path('SBP_Payment_Card_Security_Standard.xlsx');
+                    }
+
+                      if ($checkpermission->type_id == 29) {
+                        $filepath = public_path('ISO_22301.xlsx');
                     }
 
 
@@ -1358,7 +1377,8 @@ class KSA_NCA extends Controller
                 23 => 'NIST_CSF_Modified.xlsx',
                 24 => 'ISO27701_2019v2_Modified.xlsx',
                 25 => 'DigitalBankingSecurity_Modified.xlsx',
-                26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx'
+                26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx',
+                29=>'ISO_22301_Modified.xlsx'
             ];
 
             $filepath=$fileMap[$checkpermission->type_id];
@@ -1851,6 +1871,10 @@ class KSA_NCA extends Controller
             $filepath = public_path('SBP_Payment_Card_Security_Standard_Modified.xlsx');
         }
 
+        if ($checkpermission->id == 29) {
+            $filepath = public_path('ISO_22301_Modified.xlsx');
+        }
+
 
         foreach ($titles as $index => $title) {
 
@@ -2059,7 +2083,8 @@ class KSA_NCA extends Controller
             24 => 'ISO27701_2019v2_Modified.xlsx',
             6 => 'SBP_ETGRMF_Modified.xlsx',
             25 => 'DigitalBankingSecurity_Modified.xlsx',
-            26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx'
+            26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx',
+            29=>'ISO_22301_Modified.xlsx'
         ];
 
 
@@ -2071,6 +2096,7 @@ class KSA_NCA extends Controller
         $statuses = $req->input('comp_statuses');
         $applicabilities = $req->input('applicabilities');
         $justifications = $req->input('justifications');
+
 
         if ($checkpermission->project_type != 27) {
             $filepath = public_path($fileMap[$checkpermission->project_type]);

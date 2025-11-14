@@ -573,15 +573,15 @@ class ComplianceMap extends Controller
             $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
                 ->where('projects.project_id', $proj_id)->first();
 
-            if ($project->project_type!= 27) {
+            if ($project->project_type != 27) {
                 $domainNames = config('domain-names')[$project->project_type] ?? [];
             } else {
 
                 $allDomains = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
                     ->get();
                 $domainNamesArray = $allDomains
-                    ->pluck('domain_title', 'domain_num') 
-                    ->unique(); 
+                    ->pluck('domain_title', 'domain_num')
+                    ->unique();
 
                 $domainNames = $domainNamesArray->toArray();
             }
@@ -815,16 +815,16 @@ class ComplianceMap extends Controller
                 ->distinct()
                 ->get();
 
-           
-                  if ($project->project_type!= 27) {
+
+            if ($project->project_type != 27) {
                 $domainNames = config('domain-names')[$project->project_type] ?? [];
             } else {
 
                 $allDomains = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
                     ->get();
                 $domainNamesArray = $allDomains
-                    ->pluck('domain_title', 'domain_num') 
-                    ->unique(); 
+                    ->pluck('domain_title', 'domain_num')
+                    ->unique();
 
                 $domainNames = $domainNamesArray->toArray();
             }
@@ -1659,6 +1659,43 @@ class ComplianceMap extends Controller
         }
 
 
+        if ($project->project_type == 29) {
+
+            $filepath = public_path('ISO_22301.xlsx');
+            $data = Excel::toArray([], $filepath); //with header
+            $rows = array_slice($data[0], 1); //without header(first row)
+
+            $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                return strval($row[0]) == $title;
+            })->values()->all();
+
+
+            $UniqueSubDomains = collect($filteredData)
+                ->mapWithKeys(function ($item) {
+                    $words = explode(" ", $item[2]);
+                    $subdomain = array_shift($words); // Get the first word
+                    $value = implode(" ", $words); // Join the remaining words
+                    return [$subdomain => $value];
+                })
+                ->unique(function ($value, $key) {
+                    // Ensure uniqueness based on the key
+                    return $key;
+                })
+                ->all(); // Convert to array
+
+
+            $domainNames = [
+                4 => 'Context of the Organization',
+                5 => 'Leadership',
+                6 => 'Planning',
+                7 => 'Support',
+                8 => 'Operation',
+                9 => 'Performance Evaluation',
+                10 => 'Improvement'
+            ];
+        }
+
+
         if ($project->project_type == 27) {
 
             $filteredData = DB::table('non_standard_custom_data')
@@ -1834,7 +1871,7 @@ class ComplianceMap extends Controller
             ];
         }
 
-        if ($project->project_type == 1 || $project->project_type == 2 || $project->project_type == 3 || $project->project_type == 16 || $project->project_type == 19 || $project->project_type == 25 ||  $project->project_type == 26) {
+        if ($project->project_type == 1 || $project->project_type == 2 || $project->project_type == 3 || $project->project_type == 16 || $project->project_type == 19 || $project->project_type == 25 ||  $project->project_type == 26 ||  $project->project_type == 29) {
 
             $fileMap = [
                 7 => 'KSA_NCA_ECC_Modified.xlsx',
@@ -1854,7 +1891,8 @@ class ComplianceMap extends Controller
                 23 => 'NIST_CSF_Modified.xlsx',
                 24 => 'ISO27701_2019v2_Modified.xlsx',
                 25 => 'DigitalBankingSecurity_Modified.xlsx',
-                26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx'
+                26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx',
+                29 => 'ISO_22301_Modified.xlsx'
             ];
 
 
@@ -1885,6 +1923,7 @@ class ComplianceMap extends Controller
 
             $domainNames = config('domain-names')[$project->project_type] ?? [];
         }
+    
 
 
 
@@ -2493,7 +2532,7 @@ class ComplianceMap extends Controller
 
 
 
-        if ($project->project_type == 1 || $project->project_type == 4  || $project->project_type == 2 || $project->project_type == 3 || $project->project_type == 16 || $project->project_type == 19 || $project->project_type == 25 || $project->project_type == 24 || $project->project_type == 26) {
+        if ($project->project_type == 1 || $project->project_type == 4  || $project->project_type == 2 || $project->project_type == 3 || $project->project_type == 16 || $project->project_type == 19 || $project->project_type == 25 || $project->project_type == 24 || $project->project_type == 26 || $project->project_type == 29) {
 
             $fileMap = [
                 7 => 'KSA_NCA_ECC_Modified.xlsx',
@@ -2513,7 +2552,8 @@ class ComplianceMap extends Controller
                 23 => 'NIST_CSF_Modified.xlsx',
                 24 => 'ISO27701_2019v2_Modified.xlsx',
                 25 => 'DigitalBankingSecurity_Modified.xlsx',
-                26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx'
+                26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx',
+                29 => 'ISO_22301_Modified.xlsx'
             ];
 
 
@@ -2544,7 +2584,6 @@ class ComplianceMap extends Controller
                 ->toArray(); // Convert to array
 
         }
-
 
 
 
@@ -2637,7 +2676,8 @@ class ComplianceMap extends Controller
             24 => 'ISO27701_2019v2.xlsx',
             6 => 'SBP_ETGRMF.xlsx',
             25 => 'DigitalBankingSecurity.xlsx',
-            26 => 'SBP_Payment_Card_Security_Standard.xlsx'
+            26 => 'SBP_Payment_Card_Security_Standard.xlsx',
+            29=>'ISO_22301.xlsx'
         ];
         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
             ->where('projects.project_id', $proj_id)->first();
@@ -2651,6 +2691,7 @@ class ComplianceMap extends Controller
             $filteredData = collect($rows)->filter(function ($row) use ($domain) {
                 return strval($row[4]) == $domain;
             })->values()->all();
+
 
             $MainDomainNum = $filteredData[0][0];
             $MainDomainTitle = $filteredData[0][1];

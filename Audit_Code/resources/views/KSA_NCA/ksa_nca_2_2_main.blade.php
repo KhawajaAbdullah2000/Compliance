@@ -89,6 +89,12 @@ $isDataInputter = in_array('Data Inputter', $permissions ?? []);
         </h2>
         @endif
 
+            @if($project->project_type==29)
+        <p class="fw-bold fs-4 mt-4 mb-2">
+            {{$data[0][0]}} - {{$data[0][1]}}
+        </p>
+        @endif
+
 
         <div class="text-end">
             <a href="{{route('ksa_nca_subsections',[
