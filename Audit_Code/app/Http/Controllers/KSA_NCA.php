@@ -97,9 +97,6 @@ class KSA_NCA extends Controller
 
 
 
-
-
-
                 return view('KSA_NCA.sec_2_2_subsections', [
                     'project_id' => $checkpermission->project_id,
                     'project_name' => $checkpermission->project_name,
@@ -357,6 +354,10 @@ class KSA_NCA extends Controller
                     $filepath = public_path('ISO_22301.xlsx');
                 }
 
+                if ($checkpermission->type_id == 30) {
+                    $filepath = public_path('ISO_27701_2025.xlsx');
+                }
+
 
 
 
@@ -547,6 +548,10 @@ class KSA_NCA extends Controller
                     $filepath = public_path('ISO_22301.xlsx');
                 }
 
+                if ($checkpermission->type_id == 30) {
+                    $filepath = public_path('ISO_27701_2025.xlsx');
+                }
+
                 if ($checkpermission->type_id != 27) {
                     $data = Excel::toArray([], $filepath); //with header
                     $rows = array_slice($data[0], 1); //without header(first row)
@@ -722,6 +727,11 @@ class KSA_NCA extends Controller
                  if ($checkpermission->type_id == 29) {
                     $filepath = public_path('ISO_22301.xlsx');
                 }
+
+                if ($checkpermission->type_id == 30) {
+                    $filepath = public_path('ISO_27701_2025.xlsx');
+                }
+
 
 
                 if ($main_req == null || $main_req == '-') {
@@ -942,6 +952,10 @@ class KSA_NCA extends Controller
 
                       if ($checkpermission->type_id == 29) {
                         $filepath = public_path('ISO_22301.xlsx');
+                    }
+
+                     if ($checkpermission->type_id == 30) {
+                        $filepath = public_path('ISO_27701_2025.xlsx');
                     }
 
 
@@ -1827,6 +1841,11 @@ class KSA_NCA extends Controller
         }
 
         $filepath = "";
+
+          if ($checkpermission->id == 7) {
+            $filepath = public_path('KSA_NCA_ECC_Modified.xlsx');
+        }
+
         if ($checkpermission->id == 4) {
             $filepath = public_path('KM_ISO27K1_2022_Compliance_18Jul25_updated.xlsx');
         }
@@ -1875,7 +1894,12 @@ class KSA_NCA extends Controller
             $filepath = public_path('ISO_22301_Modified.xlsx');
         }
 
+        if ($checkpermission->id == 30) {
+            $filepath = public_path('ISO_27701_2025_Modified.xlsx');
+        }
 
+
+    
         foreach ($titles as $index => $title) {
 
 
@@ -1967,6 +1991,7 @@ class KSA_NCA extends Controller
                 }
                 //return redirect()->back()->with('success', 'All controls updated successfully.');
             } else {
+           
                 $data2 = Excel::toArray([], $filepath);
                 $rows = array_slice($data2[0], 1);
 
@@ -2084,7 +2109,9 @@ class KSA_NCA extends Controller
             6 => 'SBP_ETGRMF_Modified.xlsx',
             25 => 'DigitalBankingSecurity_Modified.xlsx',
             26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx',
-            29=>'ISO_22301_Modified.xlsx'
+            29=>'ISO_22301_Modified.xlsx',
+            30=>'ISO_27701_2025_Modified.xlsx',
+
         ];
 
 
@@ -2353,8 +2380,11 @@ class KSA_NCA extends Controller
             24 => 'ISO27701_2019v2_Modified.xlsx',
             6 => 'SBP_ETGRMF_Modified.xlsx',
             25 => 'DigitalBankingSecurity_Modified.xlsx',
-            26 => 'SBP_Payment_Card_Security_Standard_modified.xlsx'
+            26 => 'SBP_Payment_Card_Security_Standard_modified.xlsx',
+            29=>'ISO_22301_Modified',
+            30=>'ISO_27701_2025_Modified.xlsx'
         ];
+
 
 
 

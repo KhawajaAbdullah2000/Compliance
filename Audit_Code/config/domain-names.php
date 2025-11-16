@@ -437,6 +437,16 @@ return [
         '9'=>'Performance evaluation',
         '10'=>'Improvement'
         
-    ]
+     ],
+     30=>[
+         '4'=>'Context of the organization',
+        '5'=>'Leadership',
+        '6'=>'Planning',
+        '7'=>'Support',
+        '8'=>'Operation',
+        '9'=>'Performance evaluation',
+        '10'=>'Improvement'
+
+     ]
 
 ];
