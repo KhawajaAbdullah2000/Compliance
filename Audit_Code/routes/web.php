@@ -574,6 +574,12 @@ Route::middleware(['auth', 'is_user', 'role:end user'])->group(
     route::put('save_classification_level_by_enduser/{org_id}', [RiskManagementFramework::class, 'save_classification_level_by_enduser']);
 
 
+    route::get('multistandard_cause_of_likelihood_events/{asset_id}{proj_id}/{user_id}',[IsoSec2_3_1::class,'multistandard_cause_of_likelihood_events'])->name('multistandard_cause_of_likelihood_events');
+
+    Route::post(
+    '/iso-27005/multistandard/likelihood/store',
+    [IsoSec2_3_1::class, 'storeMultistandardLikelihood']
+)->name('multistandard.likelihood.store');
 
         route::put('iso_sec2_3_1_risk_selection/{asset_id}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'Risk_Selection_form_Submit']);
 

@@ -340,6 +340,7 @@ class IsoSec2_3_1 extends Controller
                         DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
                     )
                     ->where('iso_sec_2_1.assessment_id', $asset_id)
+                    ->where('iso_sec_2_1.project_id', $proj_id)
                     ->first();
 
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
@@ -363,7 +364,9 @@ class IsoSec2_3_1 extends Controller
                     && $frameworkDetails['framework_approach']->framework_approach_types_id == 1
                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 2
                 ) {
-                    
+
+
+
 
                     //ISo 27005:2022 Qualitative Asset based
                     return view("iso_27005.consequence_on_service", [
@@ -530,7 +533,6 @@ class IsoSec2_3_1 extends Controller
     public function Risk_Selection_form_Submit(Request $req, $asset_id, $proj_id, $user_id)
     {
 
-
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
                 'project_types.id as type_id',
@@ -597,6 +599,7 @@ class IsoSec2_3_1 extends Controller
                     && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 2
                 ) {
 
+
                     //ISo 27005:2022 Qualitative Asset based
                     $global_risk_sources = DB::table('qualitative_asset_based_risk_sources')->get();
                     $global_level_of_threats = DB::table('global_level_of_threats')
@@ -607,6 +610,16 @@ class IsoSec2_3_1 extends Controller
                         ->where('project_id', $proj_id)
                         ->where('asset_id', $asset_id)
                         ->value('threat_selected');
+
+
+                    if ($project->project_type == 28) {
+                        return redirect()->route('multistandard_cause_of_likelihood_events', [
+                            'asset_id' => $service->assessment_id,
+                            'proj_id' => $project->project_id,
+                            'user_id' => $user_id,
+
+                        ])->with('success', 'Data saved. Proceed to the next step');
+                    }
 
 
 
@@ -673,6 +686,81 @@ class IsoSec2_3_1 extends Controller
         return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
     }
 
+
+    public function multistandard_cause_of_likelihood_events($asset_id, $proj_id, $user_id)
+    {
+        $service =  DB::table('iso_sec_2_1')
+            ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+            ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+            ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+            ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+            ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+            ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+            ->select(
+                'iso_sec_2_1.*',
+                DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+                DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+                DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+                DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+                DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+                DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+            )
+            ->where('iso_sec_2_1.assessment_id', $asset_id)
+            ->first();
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
+
+        $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+        if (
+            $frameworkDetails['complianceFramework']->framework_selected == 2
+            && ($frameworkDetails['framework_approach']->framework_approach_types_id == 1)
+            && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 2
+        ) {
+            $global_adverse_events_likelihood = DB::table('global_multistandard_likelihood_adverse_events')->get();
+
+            $proj_adverse_events_likelihood_selected = DB::table('proj_multistandard_likelihood_adverse_event_selected')->where('project_id', $proj_id)->where('asset_id', $asset_id)
+                ->first();
+
+            return view('iso_27005.multistandard_adverse_events_likelihood', [
+                'complianceFramework' => $frameworkDetails['complianceFramework'],
+                'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
+                'framework_approach' => $frameworkDetails['framework_approach'],
+                'project' => $project,
+                'asset' => $service,
+                'global_adverse_events_likelihood' => $global_adverse_events_likelihood,
+                'proj_adverse_events_likelihood_selected' => $proj_adverse_events_likelihood_selected
+
+
+            ]);
+        }
+    }
+
+    public function storeMultistandardLikelihood(Request $request)
+    {
+        $data = $request->validate([
+            'project_id' => 'required|integer',
+            'asset_id' => 'required|integer',
+            'likelihood_adverse_event_selected' => 'required|exists:global_multistandard_likelihood_adverse_events,id',
+        ]);
+
+        // Either insert a new row or update the existing one for this project + asset
+        DB::table('proj_multistandard_likelihood_adverse_event_selected')
+            ->updateOrInsert(
+                [
+                    'project_id' => $data['project_id'],
+                    'asset_id'   => $data['asset_id'],
+                ],
+                [
+                    'likelihood_adverse_event_selected' => $data['likelihood_adverse_event_selected'],
+                    'last_edited_by' => auth()->id(), // or $request->user_id if you prefer
+                ]
+            );
+
+        return redirect()
+            ->back()
+            ->with('success', 'Likelihood of adverse events saved successfully.');
+    }
 
 
 
@@ -1945,14 +2033,14 @@ class IsoSec2_3_1 extends Controller
                     ->where('asset_id', $asset->assessment_id)
                     ->pluck('vulnerability_due_to', 'control_num');
 
-              
+
                 $savedData = [];
                 foreach ($savedDataRaw as $key => $value) {
                     $normalizedKey = trim((string) $key); // only trim, no number_format
                     $savedData[$normalizedKey] = $value;
                 }
 
-           
+
 
                 $global_level_of_vulnerabilities = DB::table('global_level_of_vulnerability')
                     ->orderBy('global_level_of_vulnerability_id', 'desc')->get();
@@ -2677,7 +2765,7 @@ class IsoSec2_3_1 extends Controller
                     ->value('qualitative_likelihood_' . $risk_type . '_selected');
             }
 
-        
+
 
 
             //ISo 27005:2022 Qualitative and Quantitiave Asset based
@@ -2782,8 +2870,8 @@ class IsoSec2_3_1 extends Controller
                 && ($frameworkDetails['framework_approach']->framework_approach_types_id == 1)
                 && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 1
             ) {
-            
-            
+
+
                 //ISo 27005:2022 Qualitative and Quantitiave Event based
                 $threat = DB::table('proj_asset_selected_level_of_threat')
                     ->join('global_level_of_threats', 'proj_asset_selected_level_of_threat.threat_selected', 'global_level_of_threats.global_level_of_threats_id')
@@ -2820,22 +2908,22 @@ class IsoSec2_3_1 extends Controller
                     //     )
                     //     ->get();
                     $scenariosQuery = DB::table('party_scenarios')
-                ->join('party', 'party_scenarios.party_type', '=', 'party.id')
-                ->leftJoin('proj_scenario_likelihood_value', 'party_scenarios.id', 'proj_scenario_likelihood_value.scenario')
-                ->where('party_scenarios.project_id', $proj_id);
+                        ->join('party', 'party_scenarios.party_type', '=', 'party.id')
+                        ->leftJoin('proj_scenario_likelihood_value', 'party_scenarios.id', 'proj_scenario_likelihood_value.scenario')
+                        ->where('party_scenarios.project_id', $proj_id);
 
-            if ($risk_type) {
-                $scenariosQuery->where('party_scenarios.risk_type', $risk_type);
-            }
+                    if ($risk_type) {
+                        $scenariosQuery->where('party_scenarios.risk_type', $risk_type);
+                    }
 
-            $scenarios = $scenariosQuery->select(
-                'party_scenarios.id as scenario_id',
-                'party_scenarios.*',
-                'party.party_name',
-                'party.party_type as party_type_party',
-                'party.party_category',
-                'proj_scenario_likelihood_value.likelihood_selected'
-            )->get();
+                    $scenarios = $scenariosQuery->select(
+                        'party_scenarios.id as scenario_id',
+                        'party_scenarios.*',
+                        'party.party_name',
+                        'party.party_type as party_type_party',
+                        'party.party_category',
+                        'proj_scenario_likelihood_value.likelihood_selected'
+                    )->get();
 
 
 
@@ -3696,7 +3784,7 @@ class IsoSec2_3_1 extends Controller
         }
     }
 
-     public function submit_edit_scenario($scenario_id,$proj_id, $user_id, Request $req)
+    public function submit_edit_scenario($scenario_id, $proj_id, $user_id, Request $req)
     {
 
         $checkpermission = Db::table('project_details')->select(
@@ -3713,16 +3801,16 @@ class IsoSec2_3_1 extends Controller
         if ($checkpermission) {
 
             Db::table('party_scenarios')
-            ->where('project_id',$proj_id)
-            ->where('id',$scenario_id)
-            ->update([
-                'title' => $req->title,
-                'risk_type' => $req->risk_type,
-                'party_type' => $req->party_type,
-                'last_edited_by' => $user_id,
-                'scenario' => $req->scenario,
-                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
-            ]);
+                ->where('project_id', $proj_id)
+                ->where('id', $scenario_id)
+                ->update([
+                    'title' => $req->title,
+                    'risk_type' => $req->risk_type,
+                    'party_type' => $req->party_type,
+                    'last_edited_by' => $user_id,
+                    'scenario' => $req->scenario,
+                    'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+                ]);
 
             return redirect()->route('iso_sec_2_3_1_qual_event_scenarios', [
                 'proj_id' => $proj_id,
@@ -4045,12 +4133,12 @@ class IsoSec2_3_1 extends Controller
 
         // try {
         foreach ($yesNoArray as $key => $value) {
-             //only to this asset component
+            //only to this asset component
 
-           
-             //confidentiality
+
+            //confidentiality
             $risk_level = ((100 - $filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_confidentiality_value;
-            
+
             $risk_integrity = ((100 - $filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_integrity_value;
 
             $risk_availability = ((100 - $filtered_control_compliance[$key]) / 100.0) * ($filtered_threat[$key] / 100.0) * $req->risk_availability_value;
