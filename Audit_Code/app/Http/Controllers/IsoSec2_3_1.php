@@ -147,6 +147,14 @@ class IsoSec2_3_1 extends Controller
                     // ]);
 
 
+                    if($project->project_type==28){
+                   
+                        return redirect()->route('consequence_of_service',[
+                            'asset_id'=>$asset->assessment_id,
+                            'proj_id'=>$project->project_id,
+                            'user_id'=>auth()->user()->id
+                        ]);
+                }
 
                     return view("iso_27005.flow_chart", [
                         'project_id' => $checkpermission->project_id,
@@ -736,7 +744,219 @@ class IsoSec2_3_1 extends Controller
         }
     }
 
+    public function multistandard_risk_levels($proj_id, $asset_id)
+    {
+        $service =  DB::table('iso_sec_2_1')
+            ->join('users as editor', 'iso_sec_2_1.last_edited_by', '=', 'editor.id')
+            ->leftJoin('users as service_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_owner.id')
+            ->leftJoin('users as component_owner', 'iso_sec_2_1.component_risk_owner', '=', 'component_owner.id')
+            ->leftJoin('users as service_custodian', 'iso_sec_2_1.service_custodian', '=', 'service_custodian.id')
+            ->leftJoin('users as component_custodian', 'iso_sec_2_1.component_custodian', '=', 'component_custodian.id')
+            ->leftJoin('users as service_risk_owner', 'iso_sec_2_1.service_risk_owner', '=', 'service_risk_owner.id')
+            ->select(
+                'iso_sec_2_1.*',
+                DB::raw("CONCAT(editor.first_name, ' ', editor.last_name) as edited_by_name"),
+                DB::raw("CONCAT(service_owner.first_name, ' ', service_owner.last_name) as service_risk_owner_name"),
+                DB::raw("CONCAT(component_owner.first_name, ' ', component_owner.last_name) as component_risk_owner_name"),
+                DB::raw("CONCAT(service_custodian.first_name, ' ', service_custodian.last_name) as service_custodian_name"),
+                DB::raw("CONCAT(component_custodian.first_name, ' ', component_custodian.last_name) as component_custodian_name"),
+                DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
+            )
+            ->where('iso_sec_2_1.assessment_id', $asset_id)
+            ->first();
+        $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('projects.project_id', $proj_id)->first();
+
+        $frameworkDetails = $this->getProjectFrameworkDetails($project);
+
+        if (
+            $frameworkDetails['complianceFramework']->framework_selected == 2
+            && ($frameworkDetails['framework_approach']->framework_approach_types_id == 1)
+            && $frameworkDetails['risk_assessment_approach']->assessment_approach_selected == 2
+        ) {
+
+            $global_threats = DB::table('qualitative_asset_based_risk_sources')->get();
+
+
+            $global_vulnerabilities = DB::table('vul_desc_for_global_vul')->get();
+               
+            $existing_multistandard_risk_levels=DB::table('multistandard_risk_levels')->where('project_id',$proj_id)
+            ->where('asset_id',$asset_id)->get();
+
+            return view('iso_27005.multistandard_risk_levels', [
+                'complianceFramework' => $frameworkDetails['complianceFramework'],
+                'risk_assessment_approach' => $frameworkDetails['risk_assessment_approach'],
+                'framework_approach' => $frameworkDetails['framework_approach'],
+                'project' => $project,
+                'asset' => $service,
+                'global_threats' => $global_threats,
+                'global_vulnerabilities' => $global_vulnerabilities,
+                'existing_multistandard_risk_levels'=>$existing_multistandard_risk_levels
+
+
+            ]);
+        }
+    }
+
+    public function storeMultistandardRiskLevel(Request $request)
+{
+    //dd($request->all());
+    // 1) Validate input
+    $validated = $request->validate([
+        'project_id'            => 'required|integer|exists:projects,project_id',
+        'asset_id'              => 'required|integer|exists:iso_sec_2_1,assessment_id',
+
+        'threat_selected'       => 'nullable|integer|exists:qualitative_asset_based_risk_sources,qualitative_asset_based_risk_sources_id',
+        'vulnerability_selected'=> 'nullable|integer|exists:vul_desc_for_global_vul,vul_desc_for_global_vul_id',
+
+        'threat_free_text'      => 'nullable|string|max:255',
+        'vulnerability_free_text'=> 'nullable|string|max:255',
+
+        'threat_level'          => 'required|integer|min:1|max:5',
+        'vulnerability_level'   => 'required|integer|min:1|max:5',
+
+        // In your schema risk_description is integer. If you change it to string/text,
+        // update this validation rule accordingly.
+        'risk_description'      => 'nullable|string|max:255',
+    ]);
+
+    // 2) Calculate risk_level = threat_level * vulnerability_level
+    $validated['risk_level'] = $validated['threat_level'] * $validated['vulnerability_level'];
+
+    // 3) Set last_edited_by (if you’re using auth)
+    $validated['last_edited_by'] = auth()->id();
+
+    // 4) Insert into DB
+    DB::table('multistandard_risk_levels')->insert([
+        'project_id'            => $validated['project_id'],
+        'asset_id'              => $validated['asset_id'],
+        'last_edited_by'        => $validated['last_edited_by'],
+
+        'threat_selected'       => $validated['threat_selected'] ?? null,
+        'vulnerability_selected'=> $validated['vulnerability_selected'] ?? null,
+
+        'threat_free_text'      => $validated['threat_free_text'] ?? null,
+        'vulnerability_free_text'=> $validated['vulnerability_free_text'] ?? null,
+
+        'threat_level'          => $validated['threat_level'],
+        'vulnerability_level'   => $validated['vulnerability_level'],
+        'risk_level'            => $validated['risk_level'],
+
+        'risk_description'      => $validated['risk_description'] ?? null,
+    ]);
+
+    // 5) Redirect back to the same multistandard_risk_levels screen
+    //    Adjust route name/params to whatever you actually use for the GET page.
+    return redirect()
+        ->route('multistandard_risk_levels', [
+            'proj_id'  => $validated['project_id'],
+            'asset_id' => $validated['asset_id'],
+        ])
+        ->with('success', 'Risk level added successfully.');
+}
+
+
+public function editMultistandardRiskLevel($id)
+{
+    $risk = DB::table('multistandard_risk_levels')->where('id', $id)->first();
+
+    if (!$risk) {
+        abort(404);
+    }
+
+   $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $risk->project_id)->first();
+    $service = DB::table('iso_sec_2_1')->where('assessment_id', $risk->asset_id)->first();
+
+    $global_threats = DB::table('qualitative_asset_based_risk_sources')->get();
+    $global_vulnerabilities = DB::table('vul_desc_for_global_vul')->get();
+
+
+    return view('iso_27005.multistandard_risk_levels_edit', [
+        'risk'                  => $risk,
+        'project'               => $project,
+        'asset'                 => $service,
+        'global_threats'        => $global_threats,
+        'global_vulnerabilities'=> $global_vulnerabilities,
+    ]);
+}
+
+public function updateMultistandardRiskLevel(Request $request, $id)
+{
+    $risk = DB::table('multistandard_risk_levels')->where('id', $id)->first();
+    if (!$risk) {
+        abort(404);
+    }
+
+    $validated = $request->validate([
+        'project_id'              => 'required|integer|exists:projects,project_id',
+        'asset_id'                => 'required|integer|exists:iso_sec_2_1,assessment_id',
+
+        'threat_selected'         => 'nullable|integer|exists:qualitative_asset_based_risk_sources,qualitative_asset_based_risk_sources_id',
+        'vulnerability_selected'  => 'nullable|integer|exists:vul_desc_for_global_vul,vul_desc_for_global_vul_id',
+
+        'threat_free_text'        => 'nullable|string|max:255',
+        'vulnerability_free_text' => 'nullable|string|max:255',
+
+        'threat_level'            => 'required|integer|min:1|max:5',
+        'vulnerability_level'     => 'required|integer|min:1|max:5',
+
+        'risk_description'        => 'nullable|string|max:255',
+    ]);
+
+    $validated['risk_level']     = $validated['threat_level'] * $validated['vulnerability_level'];
+    $validated['last_edited_by'] = auth()->id();
+
+    DB::table('multistandard_risk_levels')
+        ->where('id', $id)
+        ->update([
+            'project_id'              => $validated['project_id'],
+            'asset_id'                => $validated['asset_id'],
+            'last_edited_by'          => $validated['last_edited_by'],
+
+            'threat_selected'         => $validated['threat_selected'] ?? null,
+            'vulnerability_selected'  => $validated['vulnerability_selected'] ?? null,
+
+            'threat_free_text'        => $validated['threat_free_text'] ?? null,
+            'vulnerability_free_text' => $validated['vulnerability_free_text'] ?? null,
+
+            'threat_level'            => $validated['threat_level'],
+            'vulnerability_level'     => $validated['vulnerability_level'],
+            'risk_level'              => $validated['risk_level'],
+
+            'risk_description'        => $validated['risk_description'] ?? null,
+        ]);
+
+    return redirect()
+        ->route('multistandard_risk_levels', [
+            'proj_id'  => $validated['project_id'],
+            'asset_id' => $validated['asset_id'],
+        ])
+        ->with('success', 'Risk level updated successfully.');
+}
+
+
+public function destroyMultistandardRiskLevel($id)
+{
+    $risk = DB::table('multistandard_risk_levels')->where('id', $id)->first();
+    if (!$risk) {
+        abort(404);
+    }
+
+    DB::table('multistandard_risk_levels')->where('id', $id)->delete();
+
+    return redirect()
+        ->route('multistandard_risk_levels', [
+            'proj_id'  => $risk->project_id,
+            'asset_id' => $risk->asset_id,
+        ])
+        ->with('success', 'Risk level deleted successfully.');
+}
+
+
+
     public function storeMultistandardLikelihood(Request $request)
+
     {
         $data = $request->validate([
             'project_id' => 'required|integer',

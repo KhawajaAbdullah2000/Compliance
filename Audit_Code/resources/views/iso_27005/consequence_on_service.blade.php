@@ -61,9 +61,11 @@ The organization will overcome the situation without too much difficulty (margin
     @include('components.asset-summary', ['asset' => $asset])
 
 
+    @if($project->project_type!=28)
       <div class="text-end mt-2">
        @include('components.back_to_flow_chart_btn',['asset'=>$asset,'project'=>$project])
     </div>
+    @endif
 
     <div class="row mt-4">
 

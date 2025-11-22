@@ -574,14 +574,32 @@ Route::middleware(['auth', 'is_user', 'role:end user'])->group(
     route::put('save_classification_level_by_enduser/{org_id}', [RiskManagementFramework::class, 'save_classification_level_by_enduser']);
 
 
-    route::get('multistandard_cause_of_likelihood_events/{asset_id}{proj_id}/{user_id}',[IsoSec2_3_1::class,'multistandard_cause_of_likelihood_events'])->name('multistandard_cause_of_likelihood_events');
+    route::get('multistandard_cause_of_likelihood_events/{asset_id}/{proj_id}/{user_id}',[IsoSec2_3_1::class,'multistandard_cause_of_likelihood_events'])->name('multistandard_cause_of_likelihood_events');
+
+    route::get('multistandard_risk_levels/{proj_id}/{asset_id}',[IsoSec2_3_1::class,'multistandard_risk_levels'])->name('multistandard_risk_levels');
 
     Route::post(
     '/iso-27005/multistandard/likelihood/store',
     [IsoSec2_3_1::class, 'storeMultistandardLikelihood']
 )->name('multistandard.likelihood.store');
 
+Route::post('/multistandard-risk-levels', [IsoSec2_3_1::class, 'storeMultistandardRiskLevel'])
+    ->name('multistandard_risk_levels.store');
         route::put('iso_sec2_3_1_risk_selection/{asset_id}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'Risk_Selection_form_Submit']);
+
+        Route::get('/multistandard-risk-levels/{id}/edit', 
+    [IsoSec2_3_1::class, 'editMultistandardRiskLevel']
+)->name('multistandard_risk_levels.edit');
+
+// update
+Route::put('/multistandard-risk-levels/{id}', 
+    [IsoSec2_3_1::class, 'updateMultistandardRiskLevel']
+)->name('multistandard_risk_levels.update');
+
+// delete
+Route::delete('/multistandard-risk-levels/{id}', 
+    [IsoSec2_3_1::class, 'destroyMultistandardRiskLevel']
+)->name('multistandard_risk_levels.destroy');
 
         route::get('iso_sec_2_3_1/{asset_id}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'iso_sec_2_3_1'])->name('iso_sec_2_3_1');
         route::Post('iso_sec2_3_1_initial_add/{asset_id}/{proj_id}/{user_id}', [IsoSec2_3_1::class, 'iso_sec2_3_1_initial_add']);

@@ -14,13 +14,11 @@
 
 
     <div class="row">
-        <div class="col-md-8">
-            <h3 class="fw-bold mt-2">likelihood of Adverse Events</h3>
+        
 
-        </div>
-
-        <div class="col-md-4 text-end">
-            @include('components.back_to_flow_chart_btn',['asset'=>$asset,'project'=>$project])
+        <div class="col-md-12 text-end">
+             <a href="/proceed_to_risk_assessment/{{$asset->assessment_id}}/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-secondary btn-md"><i class="bi bi-arrow-right-circle me-1"></i> Back</a>
+      
         </div>
     </div>
 
@@ -36,7 +34,7 @@
        {{-- Likelihood of Adverse Events selection --}}
     <div class="card mt-4">
         <div class="card-header">
-            <h5 class="mb-0">Select Likelihood of Adverse Events</h5>
+            <h5 class="mb-0">Estimate Likelihood of Adverse Events that could cause compromise of:</h5>
         </div>
         <div class="card-body">
             <form action="{{ route('multistandard.likelihood.store') }}" method="POST">
@@ -77,6 +75,10 @@
         </div>
     </div>
 
+
+<div class="text-end mt-2">
+    <a href="/multistandard_risk_levels/{{$project->project_id}}/{{$asset->assessment_id}}" class="btn btn-md btn-primary">Next</a>
+</div>
 
 
 
