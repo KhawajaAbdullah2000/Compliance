@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('g_name', 100)->nullable();
             $table->string('name', 100)->nullable();
             $table->string('c_name', 100);
-            $table->string('s_name', 100)->nullable();
+            $table->string('s_name', 100)->nullable()->default('None');
             $table->string('owner_dept', 300)->nullable();
             $table->string('physical_loc', 300)->nullable();
             $table->string('logical_loc', 300)->nullable();

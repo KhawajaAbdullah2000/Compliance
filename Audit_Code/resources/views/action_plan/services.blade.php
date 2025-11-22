@@ -52,13 +52,14 @@
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
-                        @foreach($services as $service)
+                        @forelse($services as $service)
                             <li class="list-group-item">
                                 <a href="{{ route('action_plan.service.groups', ['service' => $service->s_name,'proj_id'=>$project->project_id]) }}" class="btn btn-primary">
                                     {{ $service->s_name }}
                                 </a>
                             </li>
-                        @endforeach
+                            @empty
+                        @endforelse
 
                         <li class="list-group-item">
                             <a href="{{ route('action_plan.service.groups', ['service' => '_all','proj_id'=>$project->project_id]) }}" class="btn btn-primary">

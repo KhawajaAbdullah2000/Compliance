@@ -132,7 +132,7 @@ $permissions = json_decode($project_permissions);
 
 
 
-            @if ($org_projects->count() > 0 && in_array('Data Inputter', $permissions) && $page_type=='services_register' )
+            {{-- @if ($org_projects->count() > 0 && in_array('Data Inputter', $permissions) && $page_type=='services_register' )
             <div class="col-md-4">
                 <form action="/copy_assets/{{ $project_id }}/{{ auth()->user()->id }}" method="get" class="d-flex align-items-center">
                     <div class="form-group w-50">
@@ -155,7 +155,7 @@ $permissions = json_decode($project_permissions);
                 </form>
             </div>
 
-            @endif
+            @endif --}}
 
             @if (in_array('Data Inputter', $permissions) && $page_type=="services_register")
             <div class="col-md-2">
