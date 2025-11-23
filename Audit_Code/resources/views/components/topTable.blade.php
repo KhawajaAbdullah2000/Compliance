@@ -9,7 +9,7 @@
             <td>{{auth()->user()->email}}</td>
         </tr>
         <tr>
-            <td class="fw-bold">Project Type:</td>
+            <td class="fw-bold">Standard:</td>
             <td>{{$project->type}}</td>
             <td class="fw-bold">Organization Name:</td>
             <td>{{auth()->user()->organization->name}}</td>
