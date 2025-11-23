@@ -31,7 +31,8 @@ class ProjectController extends Controller
                     'project_types.id as type_id',
                     'projects.status',
                     'project_details.project_permissions',
-                    'projects.created_by'
+                    'projects.created_by',
+                    'projects.objective'
 
                 ]
             );
@@ -42,6 +43,8 @@ class ProjectController extends Controller
         if ($type22Project || $projects->count() == 0) {
             return view('assigned_projects.one_link_my_projects', ['projects' => $projects]);
         }
+
+        
 
 
         return view('assigned_projects.my_projects', ['projects' => $projects]);

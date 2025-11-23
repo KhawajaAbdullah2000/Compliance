@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\User;
 use App\Models\Project;
 
@@ -19,7 +20,9 @@ class EndUserController extends Controller
     {
         $projects = Project::join('project_types', 'projects.project_type', 'project_types.id')
             ->where('projects.created_by', $user_id)->latest('project_creation_date')->get();
-            return view('project.projects', ['projects' => $projects]);
+
+        $objectives = config('project-objectives');
+        return view('project.projects', ['projects' => $projects, 'objectives' => $objectives]);
     }
 
     public function editProject($id)
@@ -27,27 +30,37 @@ class EndUserController extends Controller
         $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
             ->where('projects.project_id', $id)->first();
         $project_types = DB::table('project_types')->get();
-        return view('project.editProject', ['project' => $project, 'types' => $project_types]);
+        $objectives = config('project-objectives');   // <── Add this
+
+        return view('project.editProject', ['project' => $project, 'types' => $project_types, 'objectives' => $objectives]);
     }
 
-    public function create_project($userid)
+    public function create_project($userid, $objective = null)
     {
-        $user_org=Db::table('users')->where('id',$userid)->first('org_id');
-        $selected_projects=DB::table('organization_project_types')->where('org_id',$user_org->org_id)->pluck('project_type_id')
-        ->toArray();
-        $project_types = DB::table('project_types')->whereIn('id',$selected_projects)->get();
-        return view('project.create_project', ['types' => $project_types]);
 
+        $user_org = Db::table('users')->where('id', $userid)->first('org_id');
+        $selected_projects = DB::table('organization_project_types')->where('org_id', $user_org->org_id)->pluck('project_type_id')
+            ->toArray();
+        $project_types = DB::table('project_types')->whereIn('id', $selected_projects)->get();
+
+        $objectives_dropdown = config('project-objectives');
+        $selected_objective = $objective;
+        // dd($objectives_dropdown,$selected_objective);
+        return view('project.create_project', [
+            'types' => $project_types,
+            'objectives'        => $objectives_dropdown,
+            'selectedObjective' => $selected_objective,
+        ]);
     }
     public function submit_create_project(Request $req, $user_id)
     {
-       
+
         $req->validate([
             'project_name' => 'required|max:80|min:5|unique:projects',
             'project_type' => 'required',
         ]);
 
- 
+
         $project = new Project();
         $project->project_name = $req->project_name;
         $project->created_by = $user_id;
@@ -57,6 +70,7 @@ class EndUserController extends Controller
         $project->project_creation_time = Carbon::now()->format('H:i:s');
         $project->project_type = $req->project_type;
         $project->status_last_changed_by = $user_id;
+        $project->objective = $req->objective;
         $project->save();
 
         //  DB::table('org_projects_framework_selected')
@@ -71,42 +85,42 @@ class EndUserController extends Controller
         //         );
 
 
-         DB::table('audit_projects')->insert([
-                    'project_name' => $project->project_name,
-                    'org_id' => $project->org_id,
-                    'project_type' => $project->project_type,
-                    'dept_id' => $project->dept_id,
-                    'status_changed_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'status_changed_by'=>$user_id,
-                    'status'=>'Not submitted for approval'
+        DB::table('audit_projects')->insert([
+            'project_name' => $project->project_name,
+            'org_id' => $project->org_id,
+            'project_type' => $project->project_type,
+            'dept_id' => $project->dept_id,
+            'status_changed_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'status_changed_by' => $user_id,
+            'status' => 'Not submitted for approval'
 
-                ]);
+        ]);
         $projectId = $project->project_id;
 
-        DB::table('party')->insert([
-              'project_id'=>$projectId,
-            'party_name'=>'All',
-            'party_type'=>'None',
-            'party_category'=>'None',
-            'last_edited_by'=>$user_id,
-            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
-        ],
+        DB::table('party')->insert(
+            [
+                'project_id' => $projectId,
+                'party_name' => 'All',
+                'party_type' => 'None',
+                'party_category' => 'None',
+                'last_edited_by' => $user_id,
+                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
         );
 
         DB::table('party')->insert(
             [
-            'project_id'=>$projectId,
-            'party_name'=>'None',
-            'party_type'=>'None',
-            'party_category'=>'None',
-            'last_edited_by'=>$user_id,
-            'last_edited_at'=>Carbon::now()->format('Y-m-d H:i:s')
+                'project_id' => $projectId,
+                'party_name' => 'None',
+                'party_type' => 'None',
+                'party_category' => 'None',
+                'last_edited_by' => $user_id,
+                'last_edited_at' => Carbon::now()->format('Y-m-d H:i:s')
 
-        ]
-            );
+            ]
+        );
 
         return redirect()->route('projects', ['user_id' => $user_id])->with('success', 'Project Created Successfully');
-
     }
     public function edit_my_project($id)
     {
@@ -127,40 +141,39 @@ class EndUserController extends Controller
             'status' => 'required',
         ]);
 
-        
+
 
         $project = Project::where('project_id', $id)->where('created_by', auth()->user()->id)->first();
-      
-          if($project->status!=$req->status){
-        //audit for project status changed
-         DB::table('audit_projects')->insert([
-                    'project_name' => $project->project_name,
-                    'org_id' => $project->org_id,
-                    'project_type' => $project->project_type,
-                    'dept_id' => $project->dept_id,
-                    'status_changed_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'status_changed_by'=>auth()->user()->id,
-                    'status'=>$req->status
 
-                ]);
-       }
+        if ($project->status != $req->status) {
+            //audit for project status changed
+            DB::table('audit_projects')->insert([
+                'project_name' => $project->project_name,
+                'org_id' => $project->org_id,
+                'project_type' => $project->project_type,
+                'dept_id' => $project->dept_id,
+                'status_changed_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'status_changed_by' => auth()->user()->id,
+                'status' => $req->status
+
+            ]);
+        }
 
         if ($project) {
             $project->project_name = $req->project_name;
             $project->project_type = $req->project_type;
             $project->status = $req->status;
             $project->status_last_changed_by = auth()->user()->id;
+            $project->objective=$req->objective;
             $project->save();
 
-           
+
 
 
             return redirect()->route('projects', ['user_id' => auth()->user()->id])->with('success', 'Project edited successfully');
         } else {
             return redirect()->route('projects', ['user_id' => auth()->user()->id])->with('error', 'Couldnt edit the project');
-
         }
-
     }
 
     public function deleteUser($proj_id, $user_id)
@@ -178,7 +191,6 @@ class EndUserController extends Controller
         $endusers = Db::table('project_details')->join('users', 'project_details.assigned_enduser', 'users.id')
             ->where('project_details.project_code', $id)->get(['users.first_name', 'users.last_name', 'project_details.project_permissions', 'project_details.assigned_enduser']);
         return view('project.assigned_endusers', ['project_id' => $id, 'endusers' => $endusers, 'project' => $project]);
-
     }
 
     public function assign_end_user($id)
@@ -200,7 +212,6 @@ class EndUserController extends Controller
         $permissions = Permission::all();
         $project = Db::table('projects')->where('project_id', $id)->first();
         return view('project.assign_enduser_form', ['users' => $users, 'project_id' => $id, 'permissions' => $permissions, 'project' => $project]);
-
     }
     public function submit_end_user(Request $req, $proj_id)
     {
@@ -230,8 +241,7 @@ class EndUserController extends Controller
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ]
             );
-            return redirect()->route('assigned_endusers', ['id' => $proj_id])->with('success','User Assigned to the project Successfully');
-
+            return redirect()->route('assigned_endusers', ['id' => $proj_id])->with('success', 'User Assigned to the project Successfully');
         } else {
             return redirect()->route('projects', ['user_id' => auth()->user()->id])->with('error', 'Couldnot find the project');
         }
@@ -275,10 +285,8 @@ class EndUserController extends Controller
                     ]
                 );
             return redirect()->route('assigned_endusers', ['id' => $proj_id])->with('success', 'Permissions Updated');
-
         } else {
             return redirect()->back()->with('error', 'Project not found');
         }
-
     }
 }

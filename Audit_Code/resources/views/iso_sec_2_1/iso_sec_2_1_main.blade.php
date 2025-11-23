@@ -26,9 +26,11 @@ $permissions = json_decode($project_permissions);
         @if($page_type=='services_register')
         Services & Assets Register
         @elseif($page_type=='assess_compliance')
-        Assess Compliance 
+        Assess Compliance
         @elseif($page_type=="risk_assessment")
-        Assess Risk 
+        Assess Risk
+        @elseif($page_type=="implementation")
+        Implement
         @endif
     </h2>
 
@@ -135,169 +137,184 @@ $permissions = json_decode($project_permissions);
             {{-- @if ($org_projects->count() > 0 && in_array('Data Inputter', $permissions) && $page_type=='services_register' )
             <div class="col-md-4">
                 <form action="/copy_assets/{{ $project_id }}/{{ auth()->user()->id }}" method="get" class="d-flex align-items-center">
-                    <div class="form-group w-50">
-                        <label for="project_to_copy" class="form-label fw-semibold">Copy Assets
-                            from</label>
-                        <select class="form-select rounded-pill" name="project_to_copy">
-                            @foreach ($org_projects as $proj)
-                            <option value="{{ $proj->project_id }}" {{ old('project_to_copy') == $proj->project_id ? 'selected' : '' }}>
-                                {{ $proj->project_name }}
-                            </option>
-                            @endforeach
-                        </select>
-                        @if ($errors->has('project_to_copy'))
-                        <div class="text-danger small mt-2">{{ $errors->first('project_to_copy') }}</div>
-                        @endif
-                        <button type="submit" class="btn btn-success btn-sm rounded-pill mt-2">Copy</button>
+            <div class="form-group w-50">
+                <label for="project_to_copy" class="form-label fw-semibold">Copy Assets
+                    from</label>
+                <select class="form-select rounded-pill" name="project_to_copy">
+                    @foreach ($org_projects as $proj)
+                    <option value="{{ $proj->project_id }}" {{ old('project_to_copy') == $proj->project_id ? 'selected' : '' }}>
+                        {{ $proj->project_name }}
+                    </option>
+                    @endforeach
+                </select>
+                @if ($errors->has('project_to_copy'))
+                <div class="text-danger small mt-2">{{ $errors->first('project_to_copy') }}</div>
+                @endif
+                <button type="submit" class="btn btn-success btn-sm rounded-pill mt-2">Copy</button>
 
-                    </div>
-
-                </form>
             </div>
 
-            @endif --}}
-
-            @if (in_array('Data Inputter', $permissions) && $page_type=="services_register")
-            <div class="col-md-2">
-                <p class="form-label fw-bold">Copy Assets from</p>
-                <a href="/assets_to_copy_from_register/{{$project_id}}/{{auth()->user()->organization->id}}" class="btn btn-warning">Service Register</a>
-            </div>
-            @endif
+            </form>
         </div>
+
+        @endif --}}
+
+        @if (in_array('Data Inputter', $permissions) && $page_type=="services_register")
+        <div class="col-md-2">
+            <p class="form-label fw-bold">Copy Assets from</p>
+            <a href="/assets_to_copy_from_register/{{$project_id}}/{{auth()->user()->organization->id}}" class="btn btn-warning">Service Register</a>
+        </div>
+        @endif
     </div>
+</div>
 
-    {{-- @if (in_array('Data Inputter', $permissions) && $page_type=="services_register")
+{{-- @if (in_array('Data Inputter', $permissions) && $page_type=="services_register")
     <a class="btn btn-success btn-md float-end mb-2" href="/iso_sec_2_1_new/{{ $project_id }}/{{ auth()->user()->id }}" role="button">Enter Service or
-        Asset
-        <i class="fas fa-plus"></i></a>
-    @endif --}}
+Asset
+<i class="fas fa-plus"></i></a>
+@endif --}}
 
-    <!-- Data Table -->
-    <table id="myTable2" class="table table-bordered table-hover table-striped align-middle table-responsive">
-        <thead class="table-info">
-            <tr style="cursor: pointer" class="text-center">
-                <th onclick="sortTable(0)">Service</th>
-                <th onclick="sortTable(1)">Asset Type</th>
-                <th onclick="sortTable(2)">Asset SubType</th>
-                <th onclick="sortTable(3)">Asset Component</th>
-                <th onclick="sortTable(4)">Confidentiality Classification</th>
-                <th onclick="sortTable(5)">Integrity Classification</th>
-                <th onclick="sortTable(6)">Availability Classification</th>
-                <th onclick="sortTable(7)">Asset Component Owner Dept</th>
-                <th onclick="sortTable(8)">Asset Component Physical Location</th>
-                <th onclick="sortTable(9)">Asset Component Logical Location</th>
-                <th onclick="sortTable(10)">Service Risk Owner</th>
-                <th onclick="sortTable(11)">Asset Component Risk Owner</th>
-                <th onclick="sortTable(12)">Service Custodian</th>
-                <th onclick="sortTable(13)">Asset Component Custodian</th>
-                @if($page_type=="assess_compliance")
-                <th>Assess Compliance</th>
+<!-- Data Table -->
+<table id="myTable2" class="table table-bordered table-hover table-striped align-middle table-responsive">
+    <thead class="table-info">
+        <tr style="cursor: pointer" class="text-center">
+            <th onclick="sortTable(0)">Service</th>
+            <th onclick="sortTable(1)">Asset Type</th>
+            <th onclick="sortTable(2)">Asset SubType</th>
+            <th onclick="sortTable(3)">Asset Component</th>
+            <th onclick="sortTable(4)">Confidentiality Classification</th>
+            <th onclick="sortTable(5)">Integrity Classification</th>
+            <th onclick="sortTable(6)">Availability Classification</th>
+            <th onclick="sortTable(7)">Asset Component Owner Dept</th>
+            <th onclick="sortTable(8)">Asset Component Physical Location</th>
+            <th onclick="sortTable(9)">Asset Component Logical Location</th>
+            <th onclick="sortTable(10)">Service Risk Owner</th>
+            <th onclick="sortTable(11)">Asset Component Risk Owner</th>
+            <th onclick="sortTable(12)">Service Custodian</th>
+            <th onclick="sortTable(13)">Asset Component Custodian</th>
+            @if($page_type=="assess_compliance")
+            <th>Assess Compliance</th>
+            @endif
+            @if($page_type=="risk_assessment")
+            <th>Assess Risk</th>
+            @endif
+
+            @if($page_type=="risk_treatment")
+            <th>Risk Treatment</th>
+            @endif
+
+            @if($page_type=="implementation")
+            <th>Implement</th>
+            @endif
+
+            @if($page_type=="services_register")
+            <th>Actions</th>
+            @endif
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($data as $d)
+        <tr class="service-row" data-service="{{ $d->s_name }}" data-group="{{ $d->g_name }}" data-name="{{ $d->name }}" data-c_name="{{ $d->c_name }}">
+            <td>{{ $d->s_name }}</td>
+            <td>{{ $d->g_name }}</td>
+            <td>{{ $d->name }}</td>
+            <td>{{ $d->c_name }}</td>
+            <td>{{ $d->risk_confidentiality }}</td>
+            <td>{{ $d->risk_integrity }}</td>
+            <td>{{ $d->risk_availability }}</td>
+            <td>{{ $d->owner_dept }}</td>
+            <td>{{ $d->physical_loc }}</td>
+            <td>{{ $d->logical_loc }}</td>
+            <td>{{ $d->service_risk_owner_name }}</td>
+            <td>{{ $d->component_risk_owner_name }}</td>
+            <td>{{ $d->service_custodian_name }}</td>
+            <td>{{ $d->component_custodian_name }}</td>
+            @if($page_type=="assess_compliance")
+            <td class="text-center">
+                <a href="/iso_sec_2_2_evidence/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}" class="btn btn-warning btn-sm rounded-pill">Enter</a>
+            </td>
+            @endif
+
+            @if($page_type=="risk_assessment")
+
+            @if (
+            !(optional($complianceFramework)->framework_id == 2 &&
+            optional($framework_approach)->framework_approach_types_id == 1 &&
+            optional($risk_assessment_approach)->global_risk_assessment_approach_id == 1
+            ))
+
+            <td class="text-center">
+                <a href="/iso_sec_2_3_1_risk_selection/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}" class="btn btn-primary btn-sm rounded-pill">Initiate</a>
+
                 @endif
-                @if($page_type=="risk_assessment")
-                <th>Assess Risk</th>
-                @endif
-
-                @if($page_type=="risk_treatment")
-                <th>Risk Treatment</th>
-                @endif
-
-                @if($page_type=="services_register")
-                <th>Actions</th>
-                @endif
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($data as $d)
-            <tr class="service-row" data-service="{{ $d->s_name }}" data-group="{{ $d->g_name }}" data-name="{{ $d->name }}" data-c_name="{{ $d->c_name }}">
-                <td>{{ $d->s_name }}</td>
-                <td>{{ $d->g_name }}</td>
-                <td>{{ $d->name }}</td>
-                <td>{{ $d->c_name }}</td>
-                <td>{{ $d->risk_confidentiality }}</td>
-                <td>{{ $d->risk_integrity }}</td>
-                <td>{{ $d->risk_availability }}</td>
-                <td>{{ $d->owner_dept }}</td>
-                <td>{{ $d->physical_loc }}</td>
-                <td>{{ $d->logical_loc }}</td>
-                <td>{{ $d->service_risk_owner_name }}</td>
-                <td>{{ $d->component_risk_owner_name }}</td>
-                <td>{{ $d->service_custodian_name }}</td>
-                <td>{{ $d->component_custodian_name }}</td>
-                @if($page_type=="assess_compliance")
-                <td class="text-center">
-                    <a href="/iso_sec_2_2_evidence/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}" class="btn btn-warning btn-sm rounded-pill">Enter</a>
-                </td>
-                @endif
-
-                @if($page_type=="risk_assessment")
-
-                @if (
-                !(optional($complianceFramework)->framework_id == 2 &&
-                optional($framework_approach)->framework_approach_types_id == 1 &&
-                optional($risk_assessment_approach)->global_risk_assessment_approach_id == 1
-                ))
-
-                <td class="text-center">
-                    <a href="/iso_sec_2_3_1_risk_selection/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}" class="btn btn-primary btn-sm rounded-pill">Initiate</a>
-
-                    @endif
-                </td>
-                @endif
+            </td>
+            @endif
 
 
-                {{-- <td class="text-center">
+            {{-- <td class="text-center">
                             <a href="/iso_sec_2_2_evidence/{{ $d->assessment_id }}/{{ $project_id }}/{{ auth()->user()->id }}"
-                class="btn btn-warning btn-sm rounded-pill">Enter</a>
-                </td> --}}
-                @if($page_type=="services_register")
-                <td class="text-center">
-                    @if (in_array('Data Inputter', $permissions) )
-                    {{-- <a href="/iso_sec_2_1_edit/{{ $d->assessment_id }}/{{ $d->project_id }}/{{ auth()->user()->id }}">
-                        <i class="fas fa-edit text-success"></i>
-                    </a> --}}
-                    <a href="/iso_sec_2_1_delete/{{ $d->assessment_id }}/{{ $d->project_id }}/{{ auth()->user()->id }}">
-                        <i class="fas fa-trash text-danger"></i>
-                    </a>
-                    @else
-                    <i class="fas fa-lock text-secondary"></i>
-                    @endif
-                </td>
+            class="btn btn-warning btn-sm rounded-pill">Enter</a>
+            </td> --}}
+            @if($page_type=="services_register")
+            <td class="text-center">
+                @if (in_array('Data Inputter', $permissions) )
+                {{-- <a href="/iso_sec_2_1_edit/{{ $d->assessment_id }}/{{ $d->project_id }}/{{ auth()->user()->id }}">
+                <i class="fas fa-edit text-success"></i>
+                </a> --}}
+                <a href="/iso_sec_2_1_delete/{{ $d->assessment_id }}/{{ $d->project_id }}/{{ auth()->user()->id }}">
+                    <i class="fas fa-trash text-danger"></i>
+                </a>
+                @else
+                <i class="fas fa-lock text-secondary"></i>
                 @endif
+            </td>
+            @endif
 
-                @if($page_type=="risk_treatment")
+
+            @if($page_type=="implementation")
+            <td>
+                <a href="" class="btn btn-primary btn-md">Implement</a>
+            </td>
+            @endif
+
+
+
+            @if($page_type=="risk_treatment")
+            <td>
                 <a href="" class="btn btn-primary btn-md">Treat Risk (stop for now)</a>
 
-                @endif
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </td>
+            @endif
+        </tr>
+        @endforeach
+    </tbody>
+</table>
 
-    @if (
-    (optional($complianceFramework)->framework_id == 2 || optional($complianceFramework)->framework_id == 6) &&
-    optional($framework_approach)->framework_approach_types_id == 1 &&
-    optional($risk_assessment_approach)->global_risk_assessment_approach_id == 1)
-    <a href="/qual_event_flowchart/{{ $project->project_id }}/{{ auth()->user()->id }}" class="btn btn-primary btn-md float-end">Assess Risk</a>
-    @endif
+@if (
+(optional($complianceFramework)->framework_id == 2 || optional($complianceFramework)->framework_id == 6) &&
+optional($framework_approach)->framework_approach_types_id == 1 &&
+optional($risk_assessment_approach)->global_risk_assessment_approach_id == 1)
+<a href="/qual_event_flowchart/{{ $project->project_id }}/{{ auth()->user()->id }}" class="btn btn-primary btn-md float-end">Assess Risk</a>
+@endif
 
-    <!-- Upload Section -->
-    {{-- @if (in_array('Data Inputter', $permissions) && $page_type=="services_register")
+<!-- Upload Section -->
+{{-- @if (in_array('Data Inputter', $permissions) && $page_type=="services_register")
     <div class="mt-4">
         <a href="{{ route('download_asset_template') }}" class="text-decoration-underline text-primary">Download
-            Excel Template</a>
-        <form action="/upload_assets/{{ $project_id }}/{{ auth()->user()->id }}" method="POST" enctype="multipart/form-data" class="mt-3">
-            @csrf
-            <div class="form-group col-md-3">
-                <label for="file" class="form-label fw-bold">Upload a Populated Excel Sheet</label>
-                <input type="file" name="file" id="file" class="form-control">
-                @error('file')
-                <div class="text-danger small">{{ $message }}</div>
-                @enderror
-            </div>
-            <button type="submit" class="btn btn-success btn-sm rounded-pill mt-2">Upload</button>
-        </form>
+Excel Template</a>
+<form action="/upload_assets/{{ $project_id }}/{{ auth()->user()->id }}" method="POST" enctype="multipart/form-data" class="mt-3">
+    @csrf
+    <div class="form-group col-md-3">
+        <label for="file" class="form-label fw-bold">Upload a Populated Excel Sheet</label>
+        <input type="file" name="file" id="file" class="form-control">
+        @error('file')
+        <div class="text-danger small">{{ $message }}</div>
+        @enderror
     </div>
-    @endif --}}
+    <button type="submit" class="btn btn-success btn-sm rounded-pill mt-2">Upload</button>
+</form>
+</div>
+@endif --}}
 </div>
 
 @section('scripts')

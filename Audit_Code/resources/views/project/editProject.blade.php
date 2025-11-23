@@ -32,7 +32,7 @@
                         <div class="col-md-6">
                             <label for="project_type" class="form-label fw-semibold">Project Type</label>
                             <select class="form-select rounded-pill" name="project_type">
-                                <option value="">Select Project Type</option>
+                                <option value="">Select Standard</option>
                                 @foreach ($types as $t)
                                 <option value="{{ $t->id }}" {{ old('project_type', $project->project_type) == $t->id ? 'selected' : '' }}>{{ $t->type }}</option>
                                 @endforeach
@@ -41,6 +41,25 @@
                             <div class="text-danger small mt-2">{{ $errors->first('project_type') }}</div>
                             @endif
                         </div>
+
+                        <!-- Objective -->
+<div class="col-md-6">
+    <label class="form-label fw-semibold">Objective</label>
+    <select name="objective" class="form-select rounded-pill">
+        <option value="">Select Objective</option>
+        @foreach($objectives as $key => $label)
+            <option value="{{ $key }}"
+                {{ old('objective', $project->objective) == $key ? 'selected' : '' }}>
+                {{ $label }}
+            </option>
+        @endforeach
+    </select>
+
+    @if($errors->has('objective'))
+        <div class="text-danger small mt-2">{{ $errors->first('objective') }}</div>
+    @endif
+</div>
+
 
                         <!-- Project Status -->
                         <div class="col-md-6">

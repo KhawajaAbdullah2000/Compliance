@@ -20,6 +20,7 @@
     <!-- Projects Table -->
     <div class="card shadow-lg border-0">
         <div class="card-body">
+                <div class="table-responsive" style="overflow-x:auto;">
             <table class="table table-hover text-center" id="myTable">
                 <thead class="table-secondary">
                     <tr>
@@ -27,6 +28,11 @@
                         <th style='text-align:center'>Project Type</th>
                         <th style='text-align:center'>Project Status</th>
                         <th style='text-align:center'>My Permissions on Project</th>
+                        <th style='text-align:center'>Edit Services/Asset Register</th>
+                        <th class="text-center">Compliance</th>
+                        <th class="text-center">Risk Assessment</th>
+                        <th class="text-center">Implementation</th>
+
                         <th style='text-align:center'>Data</th>
                         <th style='text-align:center'>Metadata</th>
                         <th style='text-align:center'>View SOA</th>
@@ -44,8 +50,8 @@
 
                         <th class="text-center">Duplicate Project</th>
                         <th class="text-center">User Actions</th>
-            
-              
+
+
 
 
                     </tr>
@@ -76,6 +82,65 @@
                             {{ $per }}@unless($loop->last), @endunless
                             @endforeach
                         </td>
+
+                        <!-- Edit services/Asset register -->
+                        <td style='text-align:center'>
+                            <a href="/iso_section2_1/{{$pro->project_code}}/{{auth()->user()->id}}/services_register" data-toggle="tooltip" title="Edit Services">
+                                <i class="bi bi-pencil-square" style="font-size: 1.8rem;"></i>
+                            </a>
+
+                        </td>
+
+
+                        <td style="text-align:center">
+                            @if(in_array($pro->objective, [
+                            'compliance',
+                            'compliance_and_risk_assessment',
+                            'compliance_and_risk_assessment_implementation'
+                            ]))
+                            <a href="/iso_section2_1/{{$pro->project_code}}/{{auth()->user()->id}}/assess_compliance" data-toggle="tooltip" title="Compliance">
+                                <i class="bi bi-amd" style="font-size: 1.3rem;color:red;"></i>
+                            </a>
+                            @else
+                            -
+                            @endif
+                        </td>
+
+
+                        <td style="text-align:center">
+                            @if(in_array($pro->objective, [
+                            'risk_assessment',
+                            'compliance_and_risk_assessment',
+                            'compliance_and_risk_assessment_implementation'
+                            ]))
+                            <a href="/iso_section2_1/{{$pro->project_code}}/{{auth()->user()->id}}/risk_assessment" data-toggle="tooltip" title="Risk Assessment">
+                                <i class="bi bi-usb-symbol" style="font-size: 1.5rem;color:rgb(209, 81, 209)"></i>
+                            </a>
+                            @else
+                            -
+                            @endif
+                        </td>
+
+                        <td style="text-align:center">
+                            @if(in_array($pro->objective, [
+                            'implementation',
+                            'compliance_and_risk_assessment_implementation'
+                            ]))
+                            <a href="/iso_section2_1/{{$pro->project_code}}/{{auth()->user()->id}}/implementation" data-toggle="tooltip" title="Implementation">
+                                <i class="bi bi-wrench-adjustable-circle-fill" style="font-size: 1.5rem;color:orange"></i>
+
+                            </a>
+                            @else
+                            -
+                            @endif
+                        </td>
+
+
+
+
+
+
+
 
                         <!-- Edit Project -->
                         <td style='text-align:center'>
@@ -257,8 +322,8 @@
                         <td style="text-align:center">
 
                             <a href="/data_catalog_sections/{{ $pro->project_code }}/{{ auth()->user()->id }}">
-                                <i class="fas fa-address-card fa-lg" style="color: rgb(71, 16, 173);"></i>
-                            </a>
+                        <i class="fas fa-address-card fa-lg" style="color: rgb(71, 16, 173);"></i>
+                        </a>
 
                         </td>
                         @endif --}}
@@ -269,6 +334,7 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
 
 
         </div>

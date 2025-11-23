@@ -190,7 +190,7 @@ Route::middleware(['auth', 'is_user', 'role:super user'])->group(function () {
 //for project creator end user
 Route::middleware(['auth', 'is_user', 'permission:Project Creator'])->group(
     function () {
-        route::get('create_project/{id}', [EndUserController::class, 'create_project']);
+        route::get('create_project/{id}/{obj?}', [EndUserController::class, 'create_project']);
         route::post('create_project/{id}', [EndUserController::class, 'submit_create_project']);
         route::get('create_one_link_erm_project/{user_id}/{org_id}', [OneLinkEndUserController::class, 'create_one_link_erm_project']);
 
