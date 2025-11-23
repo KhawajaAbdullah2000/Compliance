@@ -5,7 +5,7 @@
 @include('user-nav')
 
 @php
-    $actionPlanType = Session('action_plan_type') == "Mandatory" ? 'Compliance' : Session('action_plan_type');
+$actionPlanType = Session('action_plan_type') == "Mandatory" ? 'Compliance' : Session('action_plan_type');
 @endphp
 
 <div class="container my-2">
@@ -43,7 +43,7 @@
     <div class="row">
         <div class="col-md-6">
 
-    
+
             <h4><span class="fw-bold">Service Selected : </span>
                 @if($service=='_all')
                 All services - All Controls
@@ -51,8 +51,8 @@
                 {{$service}} - All Controls
                 @endif
             </h4>
-        
-            <h4><span class="fw-bold">Assets Selected : </span> 
+
+            <h4><span class="fw-bold">Assets Selected : </span>
                 @isset($group)
                 @if($group=='_all')
                 All Asset Types -
@@ -60,25 +60,25 @@
                 {{$group}} -
                 @endif
                 @endisset
-        
-        
-            @isset($subgroup)
-            @if($subgroup=='_all')
-            All Asset Sub Types -
-            @else
-            {{$subgroup}} -
-            @endif
-            @endisset
-        
-        @if($component=='_all')
-        
-        All Asset Components 
-        
-        @else
-        
-        {{$component}}
-        @endif
-        </h4>
+
+
+                @isset($subgroup)
+                @if($subgroup=='_all')
+                All Asset Sub Types -
+                @else
+                {{$subgroup}} -
+                @endif
+                @endisset
+
+                @if($component=='_all')
+
+                All Asset Components
+
+                @else
+
+                {{$component}}
+                @endif
+            </h4>
         </div>
 
         <div class="col-md-6 position-relative">
@@ -88,9 +88,81 @@
 
 
     <a href="/action_plan_download/{{$project->project_id}}/{{$service}}/{{$component}}?group={{ $group }}&subgroup={{ $subgroup }}" class="btn btn-success float-end mb-4">Download Action Plan</a>
-    
 
-    @if($action_plan_type=='Both')
+    @if($action_plan_type=='Mandatory'|| $action_plan_type=='Both')
+
+    <table class="table table-bordered mt-4">
+        <thead class="table-secondary">
+            <tr>
+                <th>Domain No.</th>
+                <th>Domain Name</th>
+                <th>Sub-Domain No.</th>
+                <th>Sub-Domain Name</th>
+                <th>Req No.</th>
+                <th>Control</th>
+                <th>Compliance Status</th>
+                <th>Action</th>
+                <th>Attachment</th>
+                <th>Target Date</th>
+                <th>Completion Date</th>
+                <th>Actual Acceptance Date</th>
+                <th>Responsibility</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach ($mandatory_action_plan as $mand)
+            <tr>
+                {{-- From Excel if available; otherwise fall back to DB values --}}
+                <td>{{ $mand->domain_no ?? $mand->title_num }}</td>
+                <td>{{ $mand->domain_name ?? '' }}</td>
+
+                <td>{{ $mand->subdomain_no ?? $mand->subdomain }}</td>
+                <td>{{ $mand->subdomain_name ?? '' }}</td>
+
+                {{-- Hierarchical requirement number, e.g. 1.1.1 --}}
+                <td>{{ $mand->sub_req_no ?? $mand->sub_req }}</td>
+
+                {{-- Control number + control name / description from Excel --}}
+                <td>{{ $mand->control_full ?? '' }}</td>
+
+                <td>
+                    @if($mand->comp_status == 'not_applicable')
+                    Not applicable
+                    @elseif($mand->comp_status == 'yes')
+                    Inplace
+                    @elseif($mand->comp_status == 'no')
+                    Not In Place
+                    @elseif($mand->comp_status == 'not_tested')
+                    Not Tested
+                    @elseif($mand->comp_status == 'partial')
+                    Partial
+                    @else
+                    {{ $mand->comp_status }}
+                    @endif
+                </td>
+
+                <td>{{ $mand->treatment_action }}</td>
+                <td>
+                    <a href="{{ asset('ksa_nca_sec_2_2/' . $mand->attachment) }}">
+                        {{ $mand->attachment }}
+                    </a>
+                </td>
+                <td>{{ $mand->treatment_target_date }}</td>
+                <td>{{ $mand->treatment_comp_date }}</td>
+                <td>{{ $mand->acceptance_actual_date }}</td>
+                <td>{{ $mand->first_name }} {{ $mand->last_name }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    {{ $mandatory_action_plan->appends(['treatment_page' => request('treatment_page')])->links() }}
+
+    @endif
+
+
+    {{-- @if($action_plan_type=='Both')
 
     <h3 class="fw-bold mt-4">View or Download Action Plan for Compliance</h3>
 
@@ -118,31 +190,31 @@
 
     <tr>
         <td>{{$mand->sub_req}}</td>
-        <td>
-            @if($mand->comp_status == 'not_applicable')
-                Not applicable
-            @elseif($mand->comp_status == 'yes')
-                Inplace
-            @elseif($mand->comp_status == 'no')
-                Not In Place
-                 @elseif($mand->comp_status == 'not_tested')
-                Not Tested
-                @elseif($mand->comp_status == 'partial')
-                Partial 
-                @else
-                {{$mand->comp_status}}
-            @endif
-        </td>
-        <td>{{$mand->treatment_action}}</td>
-        <td>{{$mand->treatment_target_date}}</td>
-        <td>{{$mand->treatment_comp_date}}</td>
-        <td>{{$mand->acceptance_actual_date}}</td>
-        <td>{{$mand->first_name}} {{$mand->last_name}}</td>
+    <td>
+        @if($mand->comp_status == 'not_applicable')
+        Not applicable
+        @elseif($mand->comp_status == 'yes')
+        Inplace
+        @elseif($mand->comp_status == 'no')
+        Not In Place
+        @elseif($mand->comp_status == 'not_tested')
+        Not Tested
+        @elseif($mand->comp_status == 'partial')
+        Partial
+        @else
+        {{$mand->comp_status}}
+        @endif
+    </td>
+    <td>{{$mand->treatment_action}}</td>
+    <td>{{$mand->treatment_target_date}}</td>
+    <td>{{$mand->treatment_comp_date}}</td>
+    <td>{{$mand->acceptance_actual_date}}</td>
+    <td>{{$mand->first_name}} {{$mand->last_name}}</td>
     </tr>
-    
+
     @endforeach
 
-        </tbody>
+    </tbody>
 
 
     </table>
@@ -157,7 +229,7 @@
 
     <h3 class="fw-bold">View or Download Action Plan for Risk Treatment</h3>
 
-    @endif
+    @endif --}}
 
     @if($action_plan_type=='Treatment'|| $action_plan_type=='Both')
     <table class="table table-bordered mt-4">
@@ -185,8 +257,8 @@
                 <td>{{$treat->acceptance_actual_date}}</td>
                 <td>{{$treat->first_name}} {{$treat->last_name}}</td>
             </tr>
-    
-    @endforeach
+
+            @endforeach
         </tbody>
 
 
@@ -197,15 +269,15 @@
 
     @endif
 
-    
 
 
 
 
 
-        <a href="/action_plan_download/{{$project->project_id}}/{{$service}}/{{$component}}?group={{ $group }}&subgroup={{ $subgroup }}" class="btn btn-success float-end mb-4">Download Action Plan</a>
 
-        <a href="/action_plan/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary float-end mb-4 mx-2">View or Download another Action Plan</a>
+    <a href="/action_plan_download/{{$project->project_id}}/{{$service}}/{{$component}}?group={{ $group }}&subgroup={{ $subgroup }}" class="btn btn-success float-end mb-4">Download Action Plan</a>
+
+    <a href="/action_plan/{{$project->project_id}}/{{auth()->user()->id}}" class="btn btn-primary float-end mb-4 mx-2">View or Download another Action Plan</a>
 
 
 </div>
