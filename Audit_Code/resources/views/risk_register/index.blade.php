@@ -24,7 +24,7 @@
                         $hiddenKeys = [
                         'data_confidentiality',
                         'data_integrity',
-                         'data_availability',
+                        'data_availability',
                         'qualitative_likelihood_risk_confidentiality_selected',
                         'qualitative_likelihood_risk_integrity_selected',
                         'qualitative_likelihood_risk_availability_selected',
@@ -45,13 +45,13 @@
                                 @endforeach
 
                                 @if($dimension=="project")
-                                 <th class="text-nowrap fw-semibold">Data Confidentiality</th>
-                                  <th class="text-nowrap fw-semibold">Data Integrity</th>
-                                   <th class="text-nowrap fw-semibold">Data Availability</th>
-                                   <th>All</th>
-                                 
+                                <th class="text-nowrap fw-semibold">Data Confidentiality</th>
+                                <th class="text-nowrap fw-semibold">Data Integrity</th>
+                                <th class="text-nowrap fw-semibold">Data Availability</th>
+                                <th>All</th>
+
                                 @endif
-                            
+
                             </tr>
                         </thead>
                         <tbody>
@@ -75,63 +75,106 @@
                                     <span class="badge rounded-pill {{ $badgeClass }}">
                                         {{ $status ?: '—' }}
                                     </span>
-                                    @elseif($key=='data_confidentiality_risk' && $dimension=="components")
+                                    {{-- @elseif($key=='data_confidentiality_risk' && $dimension=="components")
                                     @if($row->risk_assessment!='Qualitative Event Based')
                                     <a href="/likelihood_and_consequence/risk_confidentiality/{{$row->project_id}}/{{auth()->user()->id}}/{{$row->assessment_id}}" target="_blank">{{ $row->$key ?: '—' }}</a>
                                     @else
                                     <a target="_blank" href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_confidentiality">View</a>
                                     @endif
                                     @elseif($key=='data_integrity_risk' && $dimension=="components")
-                                     @if($row->risk_assessment!='Qualitative Event Based')
+                                    @if($row->risk_assessment!='Qualitative Event Based')
                                     <a href="/likelihood_and_consequence/risk_integrity/{{$row->project_id}}/{{auth()->user()->id}}/{{$row->assessment_id}}" target="_blank">{{ $row->$key ?: '—' }}</a>
                                     @else
                                     <a target="_blank" href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_integrity">View</a>
 
+                                    @endif --}}
+
+                                    @elseif($key=='data_confidentiality_risk' && $dimension=="components")
+                                    @if($row->risk_assessment === 'Default')
+                                    {{-- For Default, show base data_confidentiality value --}}
+                                   <a href="/iso_sec_2_3_1/{{ $row->assessment_id }}/{{ $row->project_id }}/{{ auth()->user()->id }}" target="_blank">
+            {{ $row->data_confidentiality ?? '—' }}
+        </a>
+                                    @elseif($row->risk_assessment != 'Qualitative Event Based')
+                                    {{-- Other non-qualitative assessments: use risk field with link --}}
+                                    <a href="/likelihood_and_consequence/risk_confidentiality/{{$row->project_id}}/{{auth()->user()->id}}/{{$row->assessment_id}}" target="_blank">
+                                        {{ $row->$key ?: '—' }}
+                                    </a>
+                                    @else
+                                    {{-- Qualitative Event Based --}}
+                                    <a target="_blank" href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_confidentiality">View</a>
+                                    @endif
+
+                                    @elseif($key=='data_integrity_risk' && $dimension=="components")
+                                    @if($row->risk_assessment === 'Default')
+                                    <a href="/iso_sec_2_3_1/{{ $row->assessment_id }}/{{ $row->project_id }}/{{ auth()->user()->id }}" target="_blank">
+                                        {{ $row->data_integrity ?? '—' }}
+                                    </a>
+                                    @elseif($row->risk_assessment != 'Qualitative Event Based')
+                                    <a href="/likelihood_and_consequence/risk_integrity/{{$row->project_id}}/{{auth()->user()->id}}/{{$row->assessment_id}}" target="_blank">
+                                        {{ $row->$key ?: '—' }}
+                                    </a>
+                                    @else
+                                    <a target="_blank" href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_integrity">View</a>
                                     @endif
 
                                     @elseif($key=='data_availability_risk' && $dimension=="components")
-                                       @if($row->risk_assessment!='Qualitative Event Based')
+                                    @if($row->risk_assessment === 'Default')
+                              <a href="/iso_sec_2_3_1/{{ $row->assessment_id }}/{{ $row->project_id }}/{{ auth()->user()->id }}" target="_blank">
+            {{ $row->data_availability ?? '—' }}
+        </a>
+                                    @elseif($row->risk_assessment != 'Qualitative Event Based')
+                                    <a href="/likelihood_and_consequence/risk_availability/{{$row->project_id}}/{{auth()->user()->id}}/{{$row->assessment_id}}" target="_blank">
+                                        {{ $row->$key ?: '—' }}
+                                    </a>
+                                    @else
+                                    <a target="_blank" href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_availability">View</a>
+                                    @endif
+
+
+                                    @elseif($key=='data_availability_risk' && $dimension=="components")
+                                    @if($row->risk_assessment!='Qualitative Event Based')
                                     <a href="/likelihood_and_consequence/risk_availability/{{$row->project_id}}/{{auth()->user()->id}}/{{$row->assessment_id}}" target="_blank">{{ $row->$key ?: '—' }}</a>
-                                 @else
-                                 <a target="_blank" href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_availability">View</a>
+                                    @else
+                                    <a target="_blank" href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_availability">View</a>
 
 
-                                 @endif
+                                    @endif
                                     @else
                                     {{ $row->$key ?: '—' }}
                                     @endif
                                 </td>
 
-                               
+
                                 @endif
                                 @endforeach
 
-                              
 
-                                 @if($dimension=="project")
-            @if($row->contains_assets=="Yes")
-            <td><a href="/risk_register_by_project/components/{{auth()->user()->organization->id}}/{{$row->project_id}}">View</a></td>
-              <td><a href="/risk_register_by_project/components/{{auth()->user()->organization->id}}/{{$row->project_id}}">View</a></td>
-             <td><a href="/risk_register_by_project/components/{{auth()->user()->organization->id}}/{{$row->project_id}}">View</a></td>
-             <td></td>
-            @elseif($row->contains_assets=="No")
-                {{-- Dont contains assets --}}
-            @if($row->framework_selected==2 && $row->assessment_approach_selected==1 && $row->framework_approach_types==1)
-            {{-- QUalitative Event Based --}}
-            <td><a href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_confidentiality">View</a></td>
-               <td><a href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_integrity">View</a></td>
-              <td><a href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_integrity">View</a></td>
-            <td><a href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}">View</a></td>
-              @else
-              {{-- not qualittave asset and doesnt have a asset --}}
-              <td>No Assets Available</td>
-                 <td>No Assets Available</td>
-                    <td>No Assets Available</td>
-                    <td>No Assets Available</td>
-            @endif
-            @endif
-        @endif
-                                
+
+                                @if($dimension=="project")
+                                @if($row->contains_assets=="Yes")
+                                <td><a href="/risk_register_by_project/components/{{auth()->user()->organization->id}}/{{$row->project_id}}">View</a></td>
+                                <td><a href="/risk_register_by_project/components/{{auth()->user()->organization->id}}/{{$row->project_id}}">View</a></td>
+                                <td><a href="/risk_register_by_project/components/{{auth()->user()->organization->id}}/{{$row->project_id}}">View</a></td>
+                                <td></td>
+                                @elseif($row->contains_assets=="No")
+                                {{-- Dont contains assets --}}
+                                @if($row->framework_selected==2 && $row->assessment_approach_selected==1 && $row->framework_approach_types==1)
+                                {{-- QUalitative Event Based --}}
+                                <td><a href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_confidentiality">View</a></td>
+                                <td><a href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_integrity">View</a></td>
+                                <td><a href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}/risk_integrity">View</a></td>
+                                <td><a href="/iso_27005_likelihood_value_qual_event/{{$row->project_id}}/{{auth()->user()->id}}">View</a></td>
+                                @else
+                                {{-- not qualittave asset and doesnt have a asset --}}
+                                <td>No Assets Available</td>
+                                <td>No Assets Available</td>
+                                <td>No Assets Available</td>
+                                <td>No Assets Available</td>
+                                @endif
+                                @endif
+                                @endif
+
                             </tr>
                             @empty
                             <tr>

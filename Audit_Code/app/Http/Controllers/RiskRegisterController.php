@@ -434,6 +434,8 @@ class RiskRegisterController extends Controller
         });
 
 
+      // dd($rows);
+
        
 
         return view('risk_register.index', [
