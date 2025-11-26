@@ -106,6 +106,7 @@ class IsoSec2_3_1 extends Controller
                         DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
                     )
                     ->where('iso_sec_2_1.assessment_id', $asset_id)
+                    ->where('project_id',$proj_id)
                     ->first();
 
                 $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
@@ -4402,9 +4403,9 @@ public function destroyMultistandardRiskLevel($id)
 
 
 
-
                         DB::table('iso_sec_2_3_1')->where('project_id', $proj_id)->where('asset_id', $asset_id)
                             ->where('control_num', $numberArray[$key])
+                            ->where('project_id',$proj_id)
                             ->update([
                                 'applicability' => "yes",
                                 'control_num' => $numberArray[$key],

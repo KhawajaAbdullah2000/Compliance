@@ -39,7 +39,7 @@ return new class extends Migration
             $table->unsignedBigInteger('last_edited_by')->nullable()->index('last_edited_by');
             $table->dateTime('last_edited_at');
 
-            $table->unique(['asset_id', 'control_num'], 'asset_id_2');
+            $table->unique(['asset_id', 'control_num','project_id'], 'asset_id_2');
         });
     }
 
