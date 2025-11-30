@@ -215,7 +215,8 @@ Route::middleware(['auth', 'is_user', 'permission:Project Creator'])->group(
 Route::middleware(['auth', 'is_user', 'role:end user'])->group(
     function () {
         //Project controller for v3_2 section 1
-        route::get('assigned_projects/{user_id}', [ProjectController::class, 'assigned_projects'])->name('assigned_projects');
+        route::get('assigned_projects/{user_id}/{proj_type?}', [ProjectController::class, 'assigned_projects'])->name('assigned_projects');
+        route::get('dashboard_projects/{user_id}',[ProjectController::class,'dashboard_projects'])->name('dashboard_projects');
 
         route::get('nessus_results/{org_id}',[ScannerController::class,'nessus_results']);
       route::get('types_of_testing_list/{org_id}',[ScannerController::class,'types_of_testing_list'])->name('types_of_testing_list');
@@ -952,6 +953,7 @@ Route::delete('/multistandard-risk-levels/{id}',
         Route::get('projects_deleted_by/{org_id}/{user_id}', [OrganizationController::class, 'projects_deleted_by']);
         Route::get('projects_status_changed_by/{org_id}/{user_id}', [OrganizationController::class, 'projects_status_changed_by']);
 
+        Route::get('health_of_controls/{proj_id}',[ProjectController::class,'health_of_controls'])->name('health_of_controls');
 
         Route::get('user_actions_on_project/{proj_id}/{user_id}', [ProjectController::class, 'user_actions_on_project']);
         Route::get('total_activities_on_project_sec_2_2/{proj_id}/{user_id}', [ProjectController::class, 'total_activities_on_project_sec_2_2']);

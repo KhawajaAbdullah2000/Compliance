@@ -54,7 +54,7 @@
             </a>
         </div>
         <div class="col-md-3 mb-4">
-            <a href="">
+            <a href="/health_of_controls/{{$project->project_id}}">
                 <img src="{{ asset('health-controls.png') }}" alt="Health of Controls" class="img-fluid" style="height: 100px;">
                 <p class="fw-bold mt-2">Health of Controls</p>
             </a>

@@ -712,6 +712,10 @@ thead.table-pointer {
     background: linear-gradient(135deg, #22c55e 0%, #06b6d4 100%);
 }
 
+.btn-dashboard {
+    background: linear-gradient(135deg, #701ff1 0%, #d4bf06 100%);
+}
+
 .btn-comp-register {
     background: linear-gradient(135deg, #f8809e 0%, #851b85 100%);
 }

@@ -158,6 +158,8 @@ class OrganizationController extends Controller
 
     public function user_action_all_projects_in_org($org_id)
     {
+        $audit_projects=Db::table('audit_projects')->get();
+        //dd($audit_projects);
      
 
         $users = User::with(['permissions'])

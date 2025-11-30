@@ -18,25 +18,29 @@ use App\Exports\ComplianceStatusExport;
 
 class ProjectController extends Controller
 {
-    public function assigned_projects($user_id)
+    public function assigned_projects($user_id, $proj_type = null)
     {
-        $projects = Project::join('project_details', 'projects.project_id', 'project_details.project_code')
-            ->join('project_types', 'projects.project_type', 'project_types.id')
-            ->where('project_details.assigned_enduser', $user_id)->orderBy('projects.project_creation_date', 'desc')
-            ->get(
-                [
-                    'project_details.project_code',
-                    'projects.project_name',
-                    'project_types.type',
-                    'project_types.id as type_id',
-                    'projects.status',
-                    'project_details.project_permissions',
-                    'projects.created_by',
-                    'projects.objective'
 
-                ]
+        $query = Project::join('project_details', 'projects.project_id', '=', 'project_details.project_code')
+            ->join('project_types', 'projects.project_type', '=', 'project_types.id')
+            ->orderBy('projects.project_creation_date', 'desc')
+            ->select(
+                'projects.*',
+                'project_types.id as type_id',
+                'project_types.type as project_type_name',
+                'project_details.*'
             );
 
+        // If proj_type is given → filter by project type id
+        if (!is_null($proj_type)) {
+            $query->where('project_types.id', $proj_type);
+        }
+        // Else → filter by assigned_enduser
+        else {
+            $query->where('project_details.assigned_enduser', $user_id);
+        }
+
+        $projects = $query->get();
 
         $type22Project = $projects->firstWhere('type_id', 22);
 
@@ -44,38 +48,49 @@ class ProjectController extends Controller
             return view('assigned_projects.one_link_my_projects', ['projects' => $projects]);
         }
 
-        
+
 
 
         return view('assigned_projects.my_projects', ['projects' => $projects]);
     }
 
-    //go to subsections of section 1 for v3_2
-    public function v_3_2_section1_subsections($proj_id, $user_id)
+    public function dashboard_projects($user_id)
     {
-        if ($user_id == auth()->user()->id) {
-            $checkpermission = Db::table('project_details')->select(
-                'project_types.id as type_id',
-                'project_details.project_code',
-                'project_details.project_permissions',
-                'projects.project_name'
-            )
-                ->join('projects', 'project_details.project_code', 'projects.project_id')
-                ->join('project_types', 'projects.project_type', 'project_types.id')
-                ->where('project_code', $proj_id)->where('assigned_enduser', $user_id)
-                ->first();
-            if ($checkpermission) {
-                $permissions = json_decode($checkpermission->project_permissions);
-                if ($checkpermission->type_id == 2) {
-                    return view(
-                        'assigned_projects.v_3_2_section1_subsections',
-                        ['project_id' => $proj_id, 'project_name' => $checkpermission->project_name]
-                    );
-                }
-            }
-        }
-        return redirect()->route('assigned_projects', ['user_id' => auth()->user()->id]);
+        $projects = Project::join('project_details', 'projects.project_id', 'project_details.project_code')
+            ->join('project_types', 'projects.project_type', 'project_types.id')
+            ->where('org_id', auth()->user()->organization->id)
+            ->orderBy('projects.project_creation_date', 'desc')->get();
+
+        $project_types = DB::table('project_types')->get();
+
+
+
+        return view('assigned_projects.dashboard_projects', ['project_types' => $project_types]);
     }
+
+    public function health_of_controls($proj_id){
+           $project = Project::join('project_types', 'projects.project_type', 'project_types.id')
+                ->where('projects.project_id', $proj_id)->first();
+            
+                $proj_type=$project->project_type;
+                if($proj_type==4){
+                    $domainNames = config('domain-names')['iso_health_of_controls'] ?? [];
+
+                }else{
+            $domainNames = config('domain-names')[$project->project_type] ?? [];dd($domainNames);
+
+                }
+           
+
+            
+            return view('assigned_projects.health_of_controls',[
+                'project'=>$project,
+                'domainNames'=>$domainNames
+            ]);
+
+    }
+
+   
 
     //ISO
     public function iso_sections(Request $req, $proj_id, $user_id)
@@ -3792,7 +3807,7 @@ class ProjectController extends Controller
                     'project_type' => $check->project_type,
                     'dept_id' => $check->dept_id,
                     'deleted_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'deleted_by'=>$user_id
+                    'deleted_by' => $user_id
                 ]);
 
 

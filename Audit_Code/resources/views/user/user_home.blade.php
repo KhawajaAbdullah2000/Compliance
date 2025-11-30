@@ -19,6 +19,13 @@
           <div class="qa-sub small mb-4">Manage your services, assets, and documents</div>
 
           <div class="d-grid gap-3">
+
+            
+            <a href="/dashboard_projects/{{ auth()->user()->id }}" class="btn btn-tile btn-dashboard">
+              <span class="label"><i class="bi bi-folder2"></i> Dashboard</span>
+              <i class="bi bi-arrow-right"></i>
+            </a>
+
             <a href="/assigned_projects/{{ auth()->user()->id }}" class="btn btn-tile btn-proj-register">
               <span class="label"><i class="bi bi-kanban"></i> Project Register</span>
               <i class="bi bi-arrow-right"></i>

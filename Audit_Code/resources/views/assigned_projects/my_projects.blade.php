@@ -11,10 +11,10 @@
     </h1>
 
 
-    <a href="/user_action_all_projects_in_org/{{auth()->user()->organization->id}}" class="btn btn-primary btn-md mb-4">View User Action on All Projects</a>
+    {{-- <a href="/user_action_all_projects_in_org/{{auth()->user()->organization->id}}" class="btn btn-primary btn-md mb-4">View User Action on All Projects</a>
     <a href="/compliances_all_projects_in_org/{{auth()->user()->organization->id}}" class="btn btn-primary btn-md mb-4">View Compliances on All Projects</a>
     <a href="/action_plan_all_projects_in_org/{{auth()->user()->organization->id}}" class="btn btn-primary btn-md mb-4">View Action Plan on All Projects</a>
-    <a href="/comp_risk_analysis_menu/{{auth()->user()->organization->id}}" class="btn btn-primary btn-md mb-4">Compliance and Risk Analysis Menu</a>
+    <a href="/comp_risk_analysis_menu/{{auth()->user()->organization->id}}" class="btn btn-primary btn-md mb-4">Compliance and Risk Analysis Menu</a> --}}
 
 
     <!-- Projects Table -->
@@ -37,7 +37,7 @@
                         <th style='text-align:center'>Metadata</th>
                         <th style='text-align:center'>View SOA</th>
                         {{-- <th style='text-align:center'>View Compliance(to be deleted)</th> --}}
-                        <th style='text-align:center'>View Compliance or Risk</th>
+                        <th style='text-align:center'>Analytics</th>
                         <th style='text-align:center'>View Action Plan</th>
 
                         {{-- <th style='text-align:center'>Risk & Compliance Heatmap</th>  --}}
@@ -50,6 +50,7 @@
 
                         <th class="text-center">Duplicate Project</th>
                         <th class="text-center">User Actions</th>
+                        <th class="text-center">Delete</th>
 
 
 
@@ -134,9 +135,6 @@
                             -
                             @endif
                         </td>
-
-
-
 
 
 
@@ -317,6 +315,19 @@
                             <a href="/user_actions_on_project/{{ $pro->project_code }}/{{ auth()->user()->id }}" data-toggle="tooltip" title="User Actions">
                                 <i class="fas fa-eye fa-lg" style="color: rgb(235, 23, 147)"></i>
                             </a>
+                        </td>
+
+                        
+                        <td style='text-align:center'>
+                            @if($pro->created_by==auth()->user()->id)
+                            <a href="/delete_my_project/{{ $pro->project_code }}/{{auth()->user()->id}}" data-toggle="tooltip" data-placement="top" title="Delete Project">
+                                <i class="fas fa-trash fa-lg text-danger"></i>
+                            </a>
+                            @else
+                            <i class="fas fa-lock fa-lg" style="color: #cc0f0f;"></i>
+
+
+                            @endif
                         </td>
                         {{-- @if($pro->type_id == 14 || $pro->type_id == 15)
                         <td style="text-align:center">

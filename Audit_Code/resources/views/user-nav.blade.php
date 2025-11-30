@@ -41,11 +41,15 @@
                 @role('end user')
                 @can('Project Creator')
                 <li class="nav-item">
-                    <a class="nav-link" href="/projects/{{ auth()->user()->id }}">Projects Created</a>
+                    <a class="nav-link" href="/projects/{{ auth()->user()->id }}">Projects Created by me</a>
                 </li>
                 @endcan
                 <li class="nav-item">
-                    <a class="nav-link" href="/assigned_projects/{{ auth()->user()->id }}">Go to Dashboard</a>
+                    <a class="nav-link" href="/assigned_projects/{{ auth()->user()->id }}">Project Register</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard_projects/{{ auth()->user()->id }}">Dashboard</a>
                 </li>
                 @endrole
             </ul>

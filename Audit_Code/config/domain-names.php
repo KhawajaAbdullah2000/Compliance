@@ -84,6 +84,21 @@ return [
         8  => 'Operation',
         9  => 'Performance Evaluation',
         10 => 'Improvement',
+        11 => 'Annex-A',
+    ],
+
+    'iso_health_of_controls' => [
+        4  => 'Context of the Organization',
+        5  => 'Leadership',
+        6  => 'Planning',
+        7  => 'Support',
+        8  => 'Operation',
+        9  => 'Performance Evaluation',
+        10 => 'Improvement',
+        11 => 'Annex-A 5. Organization Controls',
+        12 => 'Annex-A 6. People Controls',
+        13 => 'Annex-A 7. Physical Controls',
+        14=> 'Annex-A 8. Technological Controls',
     ],
 
     /*
@@ -402,51 +417,51 @@ return [
     ],
 
     // COBIT 2019
-    16=>[
-        '1'=>'EDM',
-        '2'=>'APO',
-        '3'=>'BAI',
-        '4'=>'DSS',
-        '5'=>'MEA'
+    16 => [
+        '1' => 'EDM',
+        '2' => 'APO',
+        '3' => 'BAI',
+        '4' => 'DSS',
+        '5' => 'MEA'
 
     ],
 
     //DIgital banking security
-     25=>[
-        '1'=>'Governance',
-        '2'=>'Management Controls',
-        '3'=>'Operational Controls',
-        '4'=>'Liability Framework'
-     ],
+    25 => [
+        '1' => 'Governance',
+        '2' => 'Management Controls',
+        '3' => 'Operational Controls',
+        '4' => 'Liability Framework'
+    ],
 
-     //SBP Payment card securityStandard
-     26=>[
-        '4'=>'Consumer Awareness & Record Retention',
-        '5'=>'Consumer Awareness & Record Retention',
-        '6'=>'Roadmap for EMV Compliance',
-        
-     ],
+    //SBP Payment card securityStandard
+    26 => [
+        '4' => 'Consumer Awareness & Record Retention',
+        '5' => 'Consumer Awareness & Record Retention',
+        '6' => 'Roadmap for EMV Compliance',
 
-     //ISO 22301:2019
-     29=>[
-        '4'=>'Context of the organization',
-        '5'=>'Leadership',
-        '6'=>'Planning',
-        '7'=>'Support',
-        '8'=>'Operation',
-        '9'=>'Performance evaluation',
-        '10'=>'Improvement'
-        
-     ],
-     30=>[
-         '4'=>'Context of the organization',
-        '5'=>'Leadership',
-        '6'=>'Planning',
-        '7'=>'Support',
-        '8'=>'Operation',
-        '9'=>'Performance evaluation',
-        '10'=>'Improvement'
+    ],
 
-     ]
+    //ISO 22301:2019
+    29 => [
+        '4' => 'Context of the organization',
+        '5' => 'Leadership',
+        '6' => 'Planning',
+        '7' => 'Support',
+        '8' => 'Operation',
+        '9' => 'Performance evaluation',
+        '10' => 'Improvement'
+
+    ],
+    30 => [
+        '4' => 'Context of the organization',
+        '5' => 'Leadership',
+        '6' => 'Planning',
+        '7' => 'Support',
+        '8' => 'Operation',
+        '9' => 'Performance evaluation',
+        '10' => 'Improvement'
+
+    ]
 
 ];
