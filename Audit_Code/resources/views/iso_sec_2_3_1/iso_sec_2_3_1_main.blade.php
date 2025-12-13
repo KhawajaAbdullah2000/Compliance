@@ -201,7 +201,7 @@ $permissions=json_decode($project_permissions);
             <tbody>
 
         @for ($i = 0; $i < count($sec2_4_a5_rows); $i++)
-        <tr style="vertical-align: middle;text-align:center" class="control-row-5">
+        <tr style="vertical-align: middle;" class="control-row-5">
                     @foreach ($sec2_4_a5_rows[$i] as $col)
                     @if(isset($col))
                     @if($loop->index != 2)
@@ -522,7 +522,7 @@ $permissions=json_decode($project_permissions);
     {{-- sec2_4_a6rows --}}
 
     @for ($i = 0; $i < count($sec2_4_a6_rows); $i++)
-    <tr style="vertical-align: middle;text-align:center" class="control-row-6">
+    <tr style="vertical-align: middle;" class="control-row-6">
                 @foreach ($sec2_4_a6_rows[$i] as $col)
                 @if(isset($col))
                 @if($loop->index != 2)
@@ -832,7 +832,7 @@ $permissions=json_decode($project_permissions);
  {{-- sec2_4_a7rows --}}
 
  @for ($i = 0; $i < count($sec2_4_a7_rows); $i++)
- <tr style="vertical-align: middle;text-align:center" class="control-row-7">
+ <tr style="vertical-align: middle;" class="control-row-7">
              @foreach ($sec2_4_a7_rows[$i] as $col)
              @if(isset($col))
              @if($loop->index != 2)
@@ -1132,7 +1132,7 @@ $permissions=json_decode($project_permissions);
 {{-- sec2_4_a8rows --}}
 
 @for ($i = 0; $i < count($sec2_4_a8_rows); $i++)
-<tr style="vertical-align: middle;text-align:center" class="control-row-8">
+<tr style="vertical-align: middle;" class="control-row-8">
             @foreach ($sec2_4_a8_rows[$i] as $col)
             @if(isset($col))
             @if($loop->index != 2)

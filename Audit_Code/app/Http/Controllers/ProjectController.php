@@ -27,7 +27,7 @@ class ProjectController extends Controller
             ->select(
                 'projects.*',
                 'project_types.id as type_id',
-                'project_types.type as project_type_name',
+                'project_types.type as type',
                 'project_details.*'
             );
 
@@ -39,6 +39,7 @@ class ProjectController extends Controller
         else {
             $query->where('project_details.assigned_enduser', $user_id);
         }
+      
 
         $projects = $query->get();
 
