@@ -4,7 +4,7 @@
 @include('user-nav')
 
 <div class="container my-2">
-    <h3 class="fw-bold mt-4">Service/Asset register for {{ $organizationData->name }}</h3>
+
 
   
    <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
