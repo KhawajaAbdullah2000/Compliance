@@ -92,6 +92,7 @@ class KSA_NCA extends Controller
                     $domainNames = config('domain-names')[$project->project_type] ?? [];
                 }
 
+
                 //  dd($finalApplicabilityByTitle);
 
 
@@ -358,6 +359,26 @@ class KSA_NCA extends Controller
                     $filepath = public_path('ISO_27701_2025.xlsx');
                 }
 
+                if ($checkpermission->type_id == 9) {
+                    $filepath = public_path('ISA 62443 Part 4-1.xlsx');
+                }
+
+                if ($checkpermission->type_id == 10) {
+                    $filepath = public_path('ISA 62443 Part 3-2.xlsx');
+                }
+
+                if ($checkpermission->type_id == 11) {
+                    $filepath = public_path('ISA 62443 Part 2-1.xlsx');
+                }
+
+                if ($checkpermission->type_id == 12) {
+                    $filepath = public_path('ISA 62443 Part 4-2.xlsx');
+                }
+
+                if ($checkpermission->type_id == 13) {
+                    $filepath = public_path('ISA 62443 Part 3-3.xlsx');
+                }
+
 
 
 
@@ -384,14 +405,14 @@ class KSA_NCA extends Controller
                         })
                         ->toArray();
                 } else {
-                  
+
                     $data = Excel::toArray([], $filepath); //with header
                     $rows = array_slice($data[0], 1); //without header(first row)
                     $filteredData = collect($rows)->filter(function ($row) use ($title_num) {
                         return strval($row[0]) === $title_num;
                     })->values()->all();
                 }
-              
+
 
 
                 $asset = DB::table('iso_sec_2_1')
@@ -411,10 +432,10 @@ class KSA_NCA extends Controller
                         DB::raw("CONCAT(service_risk_owner.first_name, ' ', service_risk_owner.last_name) as service_risk_owner")
                     )
                     ->where('iso_sec_2_1.assessment_id', $asset_id)
-                    ->where('project_id',$proj_id)
+                    ->where('project_id', $proj_id)
                     ->first();
 
-                 
+
                 // $results = DB::table('iso_sec_2_2')->where('project_id', $proj_id)
                 //     ->where('asset_id', $asset_id)->where('title_num', $title_num)
                 //     ->get();
@@ -430,7 +451,7 @@ class KSA_NCA extends Controller
                         return $item;
                     });
 
-                  
+
 
 
                 $finalStatusBySubdomain = $results->groupBy('subdomain')->map(function ($items) {
@@ -439,7 +460,7 @@ class KSA_NCA extends Controller
                     return $statuses->count() === 1 ? $statuses->first() : 'different';
                 });
 
-    
+
 
 
                 $finalApplicabilityByTitle = $results->groupBy('subdomain')->map(function ($items) {
@@ -449,7 +470,7 @@ class KSA_NCA extends Controller
                 });
 
 
-                 //dd($finalStatusBySubdomain,$finalApplicabilityByTitle);
+                //dd($finalStatusBySubdomain,$finalApplicabilityByTitle);
 
 
                 return view('KSA_NCA.ksa_nca_2_2_main', [
@@ -494,6 +515,27 @@ class KSA_NCA extends Controller
 
                 if ($checkpermission->type_id == 7) {
                     $filepath = public_path('KSA_NCA_ECC.xlsx');
+                }
+
+                if ($checkpermission->type_id == 9) {
+                    // ISA 4-1
+                    $filepath = public_path('ISA 62443 Part 4-1.xlsx');
+                }
+
+                if ($checkpermission->type_id == 10) {
+                    $filepath = public_path('ISA 62443 Part 3-2.xlsx');
+                }
+
+                if ($checkpermission->type_id == 11) {
+                    $filepath = public_path('ISA 62443 Part 2-1.xlsx');
+                }
+
+                if ($checkpermission->type_id == 12) {
+                    $filepath = public_path('ISA 62443 Part 4-2.xlsx');
+                }
+
+                if ($checkpermission->type_id == 13) {
+                    $filepath = public_path('ISA 62443 Part 3-3.xlsx');
                 }
 
                 if ($checkpermission->type_id == 18) {
@@ -676,6 +718,28 @@ class KSA_NCA extends Controller
                     $filepath = public_path('KSA_NCA_ECC.xlsx');
                 }
 
+
+                if ($checkpermission->type_id == 9) {
+                    //ISA 4-1
+                    $filepath = public_path('ISA 62443 Part 4-1.xlsx');
+                }
+
+                if ($checkpermission->type_id == 10) {
+                    $filepath = public_path('ISA 62443 Part 3-2.xlsx');
+                }
+
+                if ($checkpermission->type_id == 11) {
+                    $filepath = public_path('ISA 62443 Part 2-1.xlsx');
+                }
+
+                if ($checkpermission->type_id == 12) {
+                    $filepath = public_path('ISA 62443 Part 4-2.xlsx');
+                }
+
+                if ($checkpermission->type_id == 13) {
+                    $filepath = public_path('ISA 62443 Part 3-3.xlsx');
+                }
+
                 if ($checkpermission->type_id == 18) {
                     $filepath = public_path('COSO.xlsx');
                 }
@@ -724,7 +788,7 @@ class KSA_NCA extends Controller
                     $filepath = public_path('SBP_Payment_Card_Security_Standard.xlsx');
                 }
 
-                 if ($checkpermission->type_id == 29) {
+                if ($checkpermission->type_id == 29) {
                     $filepath = public_path('ISO_22301.xlsx');
                 }
 
@@ -813,7 +877,7 @@ class KSA_NCA extends Controller
                     ->orderByDesc('created_at')
                     ->get();
 
-                   // dd($filteredData[0][2]);
+                // dd($filteredData[0][2]);
 
                 return view('KSA_NCA.ksa_nca_sec_2_2_sub_reqs_form', [
                     'project_id' => $checkpermission->project_id,
@@ -902,6 +966,27 @@ class KSA_NCA extends Controller
                         $filepath = public_path('KSA_NCA_ECC.xlsx');
                     }
 
+                    if ($checkpermission->type_id == 9) {
+                        //ISA 4-1
+                        $filepath = public_path('ISA 62443 Part 4-1.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 10) {
+                        $filepath = public_path('ISA 62443 Part 3-2.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 11) {
+                        $filepath = public_path('ISA 62443 Part 2-1.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 12) {
+                        $filepath = public_path('ISA 62443 Part 4-2.xlsx');
+                    }
+
+                    if ($checkpermission->type_id == 13) {
+                        $filepath = public_path('ISA 62443 Part 3-3.xlsx');
+                    }
+
                     if ($checkpermission->type_id == 18) {
                         $filepath = public_path('COSO.xlsx');
                     }
@@ -950,11 +1035,11 @@ class KSA_NCA extends Controller
                         $filepath = public_path('SBP_Payment_Card_Security_Standard.xlsx');
                     }
 
-                      if ($checkpermission->type_id == 29) {
+                    if ($checkpermission->type_id == 29) {
                         $filepath = public_path('ISO_22301.xlsx');
                     }
 
-                     if ($checkpermission->type_id == 30) {
+                    if ($checkpermission->type_id == 30) {
                         $filepath = public_path('ISO_27701_2025.xlsx');
                     }
 
@@ -1184,74 +1269,68 @@ class KSA_NCA extends Controller
                     }
 
                     if ((int) $req->action === 2) {
-                        if($checkpermission->type_id!=27){
-                             $filtered = array_values(array_filter($rows, fn($r) => (string) $r[2] === (string) $req->subdomain));
-                        foreach ($assets as $ass) {
-                            foreach ($filtered as $r) {
-                                $targets[] = [
-                                    'project_id' => $proj_id,
-                                    'asset_id'   => $ass->assessment_id,
-                                    'title_num'  => $r[0],
-                                    'sub_req'    => $r[4],
-                                    'subdomain'  => $r[2],
-                                ];
+                        if ($checkpermission->type_id != 27) {
+                            $filtered = array_values(array_filter($rows, fn($r) => (string) $r[2] === (string) $req->subdomain));
+                            foreach ($assets as $ass) {
+                                foreach ($filtered as $r) {
+                                    $targets[] = [
+                                        'project_id' => $proj_id,
+                                        'asset_id'   => $ass->assessment_id,
+                                        'title_num'  => $r[0],
+                                        'sub_req'    => $r[4],
+                                        'subdomain'  => $r[2],
+                                    ];
+                                }
+                            }
+                        } else {
+                            $filtered = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
+                                ->where('sub_domain_num', (string) $req->subdomain)
+                                ->get();
+                            foreach ($assets as $ass) {
+                                foreach ($filtered as $r) {
+                                    $targets[] = [
+                                        'project_id' => $proj_id,
+                                        'asset_id'   => $ass->assessment_id,
+                                        'title_num'  => $r->domain_num,
+                                        'sub_req'    => $r->sub_req_num,
+                                        'subdomain'  => $r->sub_domain_num,
+                                    ];
+                                }
                             }
                         }
-
-                        }else{
-                              $filtered = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
-                                    ->where('sub_domain_num', (string) $req->subdomain)
-                                    ->get();
-                                      foreach ($assets as $ass) {
-                            foreach ($filtered as $r) {
-                                $targets[] = [
-                                    'project_id' => $proj_id,
-                                    'asset_id'   => $ass->assessment_id,
-                                    'title_num'  => $r->domain_num,
-                                    'sub_req'    => $r->sub_req_num,
-                                    'subdomain'  => $r->sub_domain_num,
-                                ];
-                            }
-                        }
-
-
-                        }
-                       
                     }
 
                     if ((int) $req->action === 3) {
                         // all controls in this title, for every asset
-                        if($checkpermission->type_id!=27){
-                             $filtered = array_values(array_filter($rows, fn($r) => (string) $r[0] === (string) $title));
-                        foreach ($assets as $ass) {
-                            foreach ($filtered as $r) {
-                                $targets[] = [
-                                    'project_id' => $proj_id,
-                                    'asset_id'   => $ass->assessment_id,
-                                    'title_num'  => $r[0],
-                                    'sub_req'    => $r[4],
-                                    'subdomain'  => $r[2],
-                                ];
+                        if ($checkpermission->type_id != 27) {
+                            $filtered = array_values(array_filter($rows, fn($r) => (string) $r[0] === (string) $title));
+                            foreach ($assets as $ass) {
+                                foreach ($filtered as $r) {
+                                    $targets[] = [
+                                        'project_id' => $proj_id,
+                                        'asset_id'   => $ass->assessment_id,
+                                        'title_num'  => $r[0],
+                                        'sub_req'    => $r[4],
+                                        'subdomain'  => $r[2],
+                                    ];
+                                }
+                            }
+                        } else {
+                            $filtered = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
+                                ->where('domain_num', (string) $title)
+                                ->get();
+                            foreach ($assets as $ass) {
+                                foreach ($filtered as $r) {
+                                    $targets[] = [
+                                        'project_id' => $proj_id,
+                                        'asset_id'   => $ass->assessment_id,
+                                        'title_num'  => $r->domain_num,
+                                        'sub_req'    => $r->sub_req_num,
+                                        'subdomain'  => $r->sub_domain_num,
+                                    ];
+                                }
                             }
                         }
-
-                        }else{
-                             $filtered = Db::table('non_standard_custom_data')->where('project_id', $proj_id)
-                                    ->where('domain_num', (string) $title)
-                                    ->get();
-                                     foreach ($assets as $ass) {
-                            foreach ($filtered as $r) {
-                                $targets[] = [
-                                    'project_id' => $proj_id,
-                                    'asset_id'   => $ass->assessment_id,
-                                    'title_num'  => $r->domain_num,
-                                    'sub_req'    => $r->sub_req_num,
-                                    'subdomain'  => $r->sub_domain_num,
-                                ];
-                            }
-                        }
-                        }
-                       
                     }
 
                     // ----- De-duplicate targets (avoid double upserts) -----
@@ -1328,7 +1407,7 @@ class KSA_NCA extends Controller
     {
         // dd($sub_req, $title, $proj_id, $user_id,$asset_id,$req->all());
 
- 
+
         // dd($req->all());
         if ($user_id == auth()->user()->id) {
             $checkpermission = Db::table('project_details')->select(
@@ -1374,29 +1453,29 @@ class KSA_NCA extends Controller
                     }
 
                     $fileMap = [
-                7 => 'KSA_NCA_ECC_Modified.xlsx',
-                18 => 'COSO_Modified.xlsx',
-                19 => 'SOC2_Type2_Modified.xlsx',
-                5 => 'CY_SAMA_Modified.xlsx',
-                1 => 'PCI_DSS_4_Single_TSP_Modified.xlsx',
-                2 => 'PCI_DSS_4_Multi_TSP_Modified.xlsx',
-                3 => 'PCI_DSS_4_Merchant_TSP_Modified.xlsx',
-                16 => 'COBIT_2019_Modified.xlsx',
-                10 => 'ISA_62443_Part 3-2_Modified.xlsx',
-                12 => 'ISA 62443 Part 4-2 -Modified.xlsx',
-                13 => 'ISA 62443 Part 3-3 - Modified.xlsx',
-                11 => 'ISA 62443 Part 2-1 - Modified.xlsx',
-                9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
-                4 => 'KM_ISO27K1_2022_Compliance_18Jul25_Modified.xlsx',
-                23 => 'NIST_CSF_Modified.xlsx',
-                24 => 'ISO27701_2019v2_Modified.xlsx',
-                25 => 'DigitalBankingSecurity_Modified.xlsx',
-                26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx',
-                29=>'ISO_22301_Modified.xlsx'
-            ];
+                        7 => 'KSA_NCA_ECC_Modified.xlsx',
+                        18 => 'COSO_Modified.xlsx',
+                        19 => 'SOC2_Type2_Modified.xlsx',
+                        5 => 'CY_SAMA_Modified.xlsx',
+                        1 => 'PCI_DSS_4_Single_TSP_Modified.xlsx',
+                        2 => 'PCI_DSS_4_Multi_TSP_Modified.xlsx',
+                        3 => 'PCI_DSS_4_Merchant_TSP_Modified.xlsx',
+                        16 => 'COBIT_2019_Modified.xlsx',
+                        10 => 'ISA_62443_Part 3-2_Modified.xlsx',
+                        12 => 'ISA 62443 Part 4-2 -Modified.xlsx',
+                        13 => 'ISA 62443 Part 3-3 - Modified.xlsx',
+                        11 => 'ISA 62443 Part 2-1 - Modified.xlsx',
+                        9 => 'ISA 62443 Part 4-1 - Modified.xlsx',
+                        4 => 'KM_ISO27K1_2022_Compliance_18Jul25_Modified.xlsx',
+                        23 => 'NIST_CSF_Modified.xlsx',
+                        24 => 'ISO27701_2019v2_Modified.xlsx',
+                        25 => 'DigitalBankingSecurity_Modified.xlsx',
+                        26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx',
+                        29 => 'ISO_22301_Modified.xlsx'
+                    ];
 
-            $filepath=$fileMap[$checkpermission->type_id];
-           // dd($filepath);
+                    $filepath = $fileMap[$checkpermission->type_id];
+                    // dd($filepath);
 
                     // if ($checkpermission->type_id == 7) {
                     //     //ksa Nca
@@ -1430,12 +1509,12 @@ class KSA_NCA extends Controller
                             $data2 = Excel::toArray([], $filepath); //with header
                             $rows = array_slice($data2[0], 1); //without header(first row)
 
-    
+
                             $filteredData = collect($rows)->filter(function ($row) use ($req) {
                                 return strval((string)$row[1]) === (string)$req->subdomain;
                             })->values()->all();
 
-                
+
 
                             foreach ($filteredData as $innerArray) {
                                 // Access specific value from the inner array
@@ -1460,10 +1539,10 @@ class KSA_NCA extends Controller
                             $data2 = Excel::toArray([], $filepath); //with header
                             $rows = array_slice($data2[0], 1); //without header(first row)
 
-                             $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                            $filteredData = collect($rows)->filter(function ($row) use ($title) {
                                 return strval((string)$row[0]) === (string)$title;
                             })->values()->all();
-                         
+
 
                             foreach ($filteredData as $innerArray2) {
                                 // Access specific value from the inner array
@@ -1532,7 +1611,7 @@ class KSA_NCA extends Controller
                             $data2 = Excel::toArray([], $filepath); //with header
                             $rows = array_slice($data2[0], 1); //without header(first row)
 
-    
+
                             $filteredData = collect($rows)->filter(function ($row) use ($req) {
                                 return strval((string)$row[1]) === (string)$req->subdomain;
                             })->values()->all();
@@ -1563,7 +1642,7 @@ class KSA_NCA extends Controller
                             $data2 = Excel::toArray([], $filepath); //with header
                             $rows = array_slice($data2[0], 1); //without header(first row)
 
-                                $filteredData = collect($rows)->filter(function ($row) use ($title) {
+                            $filteredData = collect($rows)->filter(function ($row) use ($title) {
                                 return strval((string)$row[0]) === (string)$title;
                             })->values()->all();
 
@@ -1842,8 +1921,29 @@ class KSA_NCA extends Controller
 
         $filepath = "";
 
-          if ($checkpermission->id == 7) {
+        if ($checkpermission->id == 7) {
             $filepath = public_path('KSA_NCA_ECC_Modified.xlsx');
+        }
+
+        if ($checkpermission->id == 9) {
+            //ISA 4-1
+            $filepath = public_path('ISA 62443 Part 4-1 - Modified.xlsx');
+        }
+
+        if ($checkpermission->id == 10) {
+            $filepath = public_path('ISA 62443 Part 3-2 - Modified.xlsx');
+        }
+
+        if ($checkpermission->id == 11) {
+            $filepath = public_path('ISA 62443 Part 2-1 - Modified.xlsx');
+        }
+
+        if ($checkpermission->id == 12) {
+            $filepath = public_path('ISA 62443 Part 4-2 - Modified.xlsx');
+        }
+
+        if ($checkpermission->id == 13) {
+            $filepath = public_path('ISA 62443 Part 3-3 - Modified.xlsx');
         }
 
         if ($checkpermission->id == 4) {
@@ -1899,7 +1999,7 @@ class KSA_NCA extends Controller
         }
 
 
-    
+
         foreach ($titles as $index => $title) {
 
 
@@ -1991,7 +2091,7 @@ class KSA_NCA extends Controller
                 }
                 //return redirect()->back()->with('success', 'All controls updated successfully.');
             } else {
-           
+
                 $data2 = Excel::toArray([], $filepath);
                 $rows = array_slice($data2[0], 1);
 
@@ -2109,8 +2209,8 @@ class KSA_NCA extends Controller
             6 => 'SBP_ETGRMF_Modified.xlsx',
             25 => 'DigitalBankingSecurity_Modified.xlsx',
             26 => 'SBP_Payment_Card_Security_Standard_Modified.xlsx',
-            29=>'ISO_22301_Modified.xlsx',
-            30=>'ISO_27701_2025_Modified.xlsx',
+            29 => 'ISO_22301_Modified.xlsx',
+            30 => 'ISO_27701_2025_Modified.xlsx',
 
         ];
 
@@ -2381,8 +2481,8 @@ class KSA_NCA extends Controller
             6 => 'SBP_ETGRMF_Modified.xlsx',
             25 => 'DigitalBankingSecurity_Modified.xlsx',
             26 => 'SBP_Payment_Card_Security_Standard_modified.xlsx',
-            29=>'ISO_22301_Modified',
-            30=>'ISO_27701_2025_Modified.xlsx'
+            29 => 'ISO_22301_Modified',
+            30 => 'ISO_27701_2025_Modified.xlsx'
         ];
 
 

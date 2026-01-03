@@ -3803,6 +3803,7 @@ class ProjectController extends Controller
             if ($check) {
 
                 DB::table('audit_projects')->insert([
+                    'project_id' => $check->project_id,
                     'project_name' => $check->project_name,
                     'org_id' => $check->org_id,
                     'project_type' => $check->project_type,

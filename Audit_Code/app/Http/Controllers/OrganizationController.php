@@ -119,15 +119,15 @@ class OrganizationController extends Controller
 
         try {
             DB::table('organizations')->where('id', $org_id)->update([
-                    'name' => $req->name,
-                    'type' => $req->type,
-                    'country' => $req->country,
-                    'city' => $req->city,
-                    'state' => $req->state,
-                    'zip_code' => $req->zip_code,
-                    'address' => $req->address,
-                    'status' => $req->status
-                ]);
+                'name' => $req->name,
+                'type' => $req->type,
+                'country' => $req->country,
+                'city' => $req->city,
+                'state' => $req->state,
+                'zip_code' => $req->zip_code,
+                'address' => $req->address,
+                'status' => $req->status
+            ]);
 
             DB::table('organization_project_types')->where('org_id', $org_id)->delete();
             $projectTypeData = [];
@@ -158,23 +158,24 @@ class OrganizationController extends Controller
 
     public function user_action_all_projects_in_org($org_id)
     {
-        $audit_projects=Db::table('audit_projects')->get();
+        $audit_projects = Db::table('audit_projects')->get();
         //dd($audit_projects);
-     
+
 
         $users = User::with(['permissions'])
             ->leftJoin('projects', 'users.id', '=', 'projects.created_by')
             ->leftJoin('audit_projects', 'users.id', '=', 'audit_projects.created_by')
-           ->leftJoin('audit_projects as ap_deleted', function ($join) {
-        $join->on('ap_deleted.deleted_by', '=', 'users.id')
-             ->where('ap_deleted.deleted_at', '!=', null); // adjust if your column/value differ
-    })
+            ->leftJoin('audit_projects as ap_deleted', function ($join) {
+                $join->on('ap_deleted.deleted_by', '=', 'users.id')
+                    ->where('ap_deleted.deleted_at', '!=', null); // adjust if your column/value differ
+            })
 
-     ->leftJoin('audit_projects as st_changed', function ($join) {
-        $join->on('st_changed.status_changed_by', '=', 'users.id')
-             ->where('st_changed.status_changed_at', '!=', null); // adjust if your column/value differ
-    })
+            ->leftJoin('audit_projects as st_changed', function ($join) {
+                $join->on('st_changed.status_changed_by', '=', 'users.id')
+                    ->where('st_changed.status_changed_at', '!=', null); // adjust if your column/value differ
+            })
             ->leftJoin('project_details', 'users.id', '=', 'project_details.assigned_enduser')
+
             ->select(
                 'users.id',
                 'users.email',
@@ -184,13 +185,14 @@ class OrganizationController extends Controller
                 'users.status',
 
                 DB::raw('COUNT(DISTINCT projects.project_id) as created_projects'),
-                DB::raw('COUNT(DISTINCT st_changed.project_id) as deleted_projects'),
-                 DB::raw('COUNT(DISTINCT st_changed.project_id) as status_changed_projects'),
+                DB::raw('COUNT(DISTINCT ap_deleted.project_id) as deleted_projects'),
+                DB::raw('COUNT(DISTINCT st_changed.project_id) as status_changed_projects'),
                 DB::raw('COUNT(DISTINCT project_details.project_code) as assigned_projects')
             )
             ->where('users.org_id', $org_id)
             ->groupBy('users.id', 'users.first_name', 'users.last_name', 'users.privilege_id', 'users.status')
             ->get();
+
 
 
 
@@ -239,8 +241,8 @@ class OrganizationController extends Controller
         $projects = DB::table('audit_projects')
             ->join('project_types', 'audit_projects.project_type', '=', 'project_types.id')
             ->where('audit_projects.org_id', $org_id)
-            ->where('audit_projects.deleted_at','!=',null)
-            ->where('audit_projects.deleted_by',$user_id)
+            ->where('audit_projects.deleted_at', '!=', null)
+            ->where('audit_projects.deleted_by', $user_id)
             ->select(
                 'audit_projects.*',
                 'project_types.type as project_type_name',
@@ -258,13 +260,13 @@ class OrganizationController extends Controller
         ]);
     }
 
-      public function projects_status_changed_by($org_id, $user_id)
+    public function projects_status_changed_by($org_id, $user_id)
     {
         $projects = DB::table('audit_projects')
             ->join('project_types', 'audit_projects.project_type', '=', 'project_types.id')
             ->where('audit_projects.org_id', $org_id)
-            ->where('audit_projects.status_changed_at','!=',null)
-            ->where('audit_projects.status_changed_by',$user_id)
+            ->where('audit_projects.status_changed_at', '!=', null)
+            ->where('audit_projects.status_changed_by', $user_id)
             ->select(
                 'audit_projects.*',
                 'project_types.type as project_type_name',
@@ -284,7 +286,7 @@ class OrganizationController extends Controller
 
 
 
-    
+
 
     public function projects_assigned($org_id, $user_id)
     {

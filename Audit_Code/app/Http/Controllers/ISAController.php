@@ -41,6 +41,7 @@ class ISAController extends Controller
 
                         //part 2-1
                 if ($checkpermission->type_id == 11) {
+                   
 
                     return view('isa.isa_2_1_sec_2_2_subsections', [
                         'project_id' => $checkpermission->project_id,
@@ -82,6 +83,7 @@ class ISAController extends Controller
 
                      //ISa part 4-1
                      if ($checkpermission->type_id == 9) {
+                     
                         return view('isa.isa_4_1_sec_2_2_subsections', [
                             'project_id' => $checkpermission->project_id,
                             'project_name' => $checkpermission->project_name,
@@ -208,7 +210,6 @@ class ISAController extends Controller
                 if ($checkpermission->type_id ==9) {
                     $filepath = public_path('ISA 62443 Part 4-1.xlsx');
                 }
-
 
 
                     $data = Excel::toArray([], $filepath); //with header

@@ -28,12 +28,14 @@
     <h4 class="fw-bold">Projects by Standard</h4>
    <ul class="list-group">
     @foreach($project_types as $t)
+
         <a href="/assigned_projects/{{auth()->user()->id}}/{{$t->id}}" 
            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
             <span>{{ $t->type }}</span>
             <span class="badge bg-primary rounded-pill">{{ $t->id }}</span>
         </a>
     @endforeach
+  
     </ul>
 
 </div>

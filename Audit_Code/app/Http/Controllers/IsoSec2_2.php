@@ -164,7 +164,7 @@ class IsoSec2_2 extends Controller
                 }
 
               
-                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23 || $checkpermission->type_id == 24 || $checkpermission->type_id == 1 || $checkpermission->type_id == 2 || $checkpermission->type_id == 3 ||$checkpermission->type_id==16|| $checkpermission->type_id==6 || $checkpermission->type_id==25 || $checkpermission->type_id==26 ||$checkpermission->type_id==27 ||$checkpermission->type_id==29 || $checkpermission->type_id==30 ) {
+                if ($checkpermission->type_id == 7 || $checkpermission->type_id == 18 || $checkpermission->type_id == 19 || $checkpermission->type_id == 4 || $checkpermission->type_id == 23 || $checkpermission->type_id == 24 || $checkpermission->type_id == 1 || $checkpermission->type_id == 2 || $checkpermission->type_id == 3 ||$checkpermission->type_id==16|| $checkpermission->type_id==6 || $checkpermission->type_id==25 || $checkpermission->type_id==26 ||$checkpermission->type_id==27 ||$checkpermission->type_id==29 || $checkpermission->type_id==30|| $checkpermission->type_id == 9 || $checkpermission->type_id==10 || $checkpermission->type_id==11 || $checkpermission->type_id==12 || $checkpermission->type_id==13) {
             
 
                     return view('KSA_NCA.ksa_nca_sec_2_2_evidence_selection', [
