@@ -2837,18 +2837,21 @@ class KSA_NCA extends Controller
             25 => 'DigitalBankingSecurity.xlsx',
             26 => 'SBP_Payment_Card_Security_Standard.xlsx'
         ];
+      
 
 
         $filepath = public_path($fileMap[$checkpermission->type_id]);
+    
 
         $data2 = Excel::toArray([], $filepath);
         $rows = array_slice($data2[0], 1); // Skip header
-
+    
         $data = Db::table('iso_sec_2_2')->whereIn('title_num', $req->selected_titles)
             ->where('asset_id', $req->selected_asset)
+            ->where('project_id', $proj_id)
             ->orderBy('title_num', 'asc')
             ->get();
-
+            
         $finalData = [];
 
         foreach ($data as $record) {
@@ -2857,6 +2860,7 @@ class KSA_NCA extends Controller
                     strval($row[2]) === $record->subdomain && // Subdomain number
                     strval($row[4]) === $record->sub_req;     // Sub req number
             });
+            
 
 
             $finalData[] = [

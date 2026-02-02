@@ -26,7 +26,7 @@ class RootAdminSeeder extends Seeder
                 'state'=>'Sindh',
                 'country'=>'country',
                 'zip_code'=>12,
-                'password'=>Hash::make('12345'),
+                'password'=>Hash::make('Baniazsun007.'),
                 'privilege_id'=>4,
                 'status'=>'active',
                 '2FA'=>'N'
